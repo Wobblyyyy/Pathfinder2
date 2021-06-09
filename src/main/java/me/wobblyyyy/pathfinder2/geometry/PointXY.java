@@ -1,6 +1,8 @@
 package me.wobblyyyy.pathfinder2.geometry;
 
-public class PointXY {
+import java.io.Serializable;
+
+public class PointXY implements Serializable {
     private final double x;
 
     private final double y;
@@ -125,6 +127,10 @@ public class PointXY {
     public static PointXY midpoint(PointXY a,
                                    PointXY b) {
         return avg(a, b);
+    }
+
+    public static PointXY zeroIfNull(PointXY point) {
+        return point == null ? new PointXY(0, 0) : point;
     }
 
     public double x() {

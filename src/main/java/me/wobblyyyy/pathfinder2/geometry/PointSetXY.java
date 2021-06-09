@@ -1,10 +1,11 @@
 package me.wobblyyyy.pathfinder2.geometry;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 // MUTABLE
-public class PointSetXY {
+public class PointSetXY implements Serializable {
     private final List<PointXY> points;
 
     public PointSetXY() {

@@ -69,6 +69,10 @@ public class PointXYZ extends PointXY {
         ).withHeading(point.z());
     }
 
+    public static PointXYZ zeroIfNull(PointXYZ point) {
+        return point == null ? new PointXYZ(0, 0, Angle.zero()) : point;
+    }
+
     public Angle z() {
         return this.z;
     }
