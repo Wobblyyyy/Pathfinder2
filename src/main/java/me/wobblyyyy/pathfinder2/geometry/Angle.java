@@ -727,6 +727,79 @@ public class Angle implements Comparable<Angle>, Serializable {
     }
 
     /**
+     * Fix the current angle.
+     *
+     * <p>
+     * If the current angle meets the following conditions:
+     * <ul>
+     *     <li>Radian measure is outside of the bounds 0-2pi.</li>
+     *     <li>Degree measure is outside of the bounds 0-360.</li>
+     * </ul>
+     * ... the angle will be adjusted so that neither of those statements are
+     * true anymore. Pretty cool, right?
+     * </p>
+     *
+     * @return a newly fixed angle.
+     */
+    public Angle fix() {
+        return Angle.fromDeg(fixDeg(deg));
+    }
+
+    /**
+     * Rotate the angle by 45 degrees.
+     *
+     * @return the angle, but rotated by 45 degrees.
+     */
+    public Angle rotate45Deg() {
+        return rotateDeg(45);
+    }
+
+    /**
+     * Rotate the angle by 90 degrees.
+     *
+     * @return the angle, but rotated by 90 degrees.
+     */
+    public Angle rotate90Deg() {
+        return rotateDeg(90);
+    }
+
+    /**
+     * Rotate the angle by 180 degrees.
+     *
+     * @return the angle, but rotated by 180 degrees.
+     */
+    public Angle rotate180Deg() {
+        return rotateDeg(180);
+    }
+
+    /**
+     * Rotate the angle by 45 degrees and then call the fix method.
+     *
+     * @return the angle, rotated by 45 degrees.
+     */
+    public Angle fixedRotate45Deg() {
+        return fixedRotateDeg(45);
+    }
+
+    /**
+     * Rotate the angle by 90 degrees and then call the fix method.
+     *
+     * @return the angle, rotated by 90 degrees.
+     */
+    public Angle fixedRotate90Deg() {
+        return fixedRotateDeg(90);
+    }
+
+    /**
+     * Rotate the angle by 180 degrees and then call the fix method.
+     *
+     * @return the angle, rotated by 180 degrees.
+     */
+    public Angle fixedRotate180Deg() {
+        return fixedRotateDeg(180);
+    }
+
+    /**
      * Format like so.
      *
      * @return "? rad"
@@ -766,7 +839,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * Compare!
      *
      * @param o yeah.
-     * @retun yup.
+     * @return yup.
      */
     @Override
     public int compareTo(Angle o) {
