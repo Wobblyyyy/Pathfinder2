@@ -13,6 +13,16 @@ package me.wobblyyyy.pathfinder2.robot;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
+/**
+ * A system capable of reporting the position of a robot. Several odometry
+ * systems available for use are provided with Pathfinder. If you'd like to
+ * create your own implementation of the {@code Odometry} interface, it's
+ * suggested you make use of the {@link AbstractOdometry} class instead - it
+ * abstracts away many of the tedious methods.
+ *
+ * @author Colin Robertson
+ * @since 0.0.0
+ */
 public interface Odometry {
     /**
      * Get the raw position reported by the odometry system.

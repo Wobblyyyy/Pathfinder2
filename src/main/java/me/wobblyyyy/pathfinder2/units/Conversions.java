@@ -12,11 +12,26 @@ package me.wobblyyyy.pathfinder2.units;
 
 import static me.wobblyyyy.pathfinder2.units.Unit.*;
 
+/**
+ * Unit conversions based on the {@link Unit} enum.
+ *
+ * @author Colin Robertson
+ * @since 0.0.0
+ */
 public class Conversions {
     private Conversions() {
 
     }
 
+    /**
+     * Convert a measurement from {@code current} unit into {@code target}
+     * unit. Pretty darn cool, right?
+     *
+     * @param current the base unit.
+     * @param target  the target unit.
+     * @param value   the value to convert.
+     * @return the converted value.
+     */
     public static double convert(Unit current,
                                  Unit target,
                                  double value) {
