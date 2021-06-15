@@ -1,16 +1,22 @@
-# Pathfinder2
-Autonomous motion planning library for wheeled mobile robots.
+<p align="center">
+<img width="300" height="300" src="media/logo.png" alt="Pathfinder2">
+<br>
+<i>Autonomous motion planning and control library for wheeled mobile robots.</i>
+<br>
+<i>Successor to <a href="https://github.com/Wobblyyyy/Pathfinder">Pathfinder</a>.</i>
+</p>
 
+## Description
 Pathfinder2 is a continuation of the original [Pathfinder](https://github.com/Wobblyyyy/Pathfinder)
 library - an autonomous motion planning and control system designed for FIRST Robotics environments,
 such as the [FIRST Robotics Competition](https://www.firstinspires.org/robotics/frc) and the 
 [FIRST Tech Challenge](https://www.firstinspires.org/robotics/ftc). Pathfinder2, colliqually denoted
 as "Pathfinder," is an efficient and expansive library written in Java, making use of the Java
 [JDK version 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html).
-
+  
 ## Documentation Style
-Okay. I'm gonna be real with you. Although yes, I could type out all of the documentation for this project
-exactly as I would if I was to hand in an AP Literature essay, I'm not going to. A lot of the text
+Okay. I'm gonna be real with you. Although, yes - I could type out all of the documentation for this project
+exactly as I would if I was to hand in an AP Literature essay - I'm not going to. A lot of the text
 available surrounding the Pathfinder project is not meant to be taken literally. There's quite a bit of
 sarcasm. And quite a few terrible jokes. I'm putting this out here so we're all on the same page here.
 
