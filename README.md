@@ -8,6 +8,12 @@ such as the [FIRST Robotics Competition](https://www.firstinspires.org/robotics/
 as "Pathfinder," is an efficient and expansive library written in Java, making use of the Java
 [JDK version 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html).
 
+## Documentation Style
+Okay. I'm gonna be real with you. Although yes, I could type out all of the documentation for this project
+exactly as I would if I was to hand in an AP Literature essay, I'm not going to. A lot of the text
+available surrounding the Pathfinder project is not meant to be taken literally. There's quite a bit of
+sarcasm. And quite a few terrible jokes. I'm putting this out here so we're all on the same page here.
+
 ## Quickstart
 Tired of reading? Don't want to do much more if it? Well... I hate to be the one to tell you this... but that
 sucks for you, now doesn't it? Pathfinder is a gigantic library, (not really gigantic, but cool words make the
