@@ -9,6 +9,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Pathfinder2" />
+            <option value="$PROJECT_DIR$/pathfinder2-core" />
+            <option value="$PROJECT_DIR$/pathfinder2-geometry" />
           </set>
         </option>
       </GradleProjectSettings>
