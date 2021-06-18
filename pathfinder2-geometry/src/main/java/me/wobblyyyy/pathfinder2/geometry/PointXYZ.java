@@ -117,4 +117,26 @@ public class PointXYZ extends PointXY {
                                 Angle angle) {
         return PointXYZ.inDirection(this, distance, angle);
     }
+
+    /**
+     * Create a new point with the same Y value as this point and whatever
+     * X value you provide.
+     *
+     * @param x the X value the new point should have.
+     * @return a new point with the X value you specified.
+     */
+    public PointXYZ withX(double x) {
+        return new PointXYZ(x, y(), this.z);
+    }
+
+    /**
+     * Create a new point with the same X value as this point and whatever
+     * Y value you provide.
+     *
+     * @param y the Y value the new point should have.
+     * @return a new point with the Y value you specified.
+     */
+    public PointXYZ withY(double y) {
+        return new PointXYZ(x(), y, this.z);
+    }
 }

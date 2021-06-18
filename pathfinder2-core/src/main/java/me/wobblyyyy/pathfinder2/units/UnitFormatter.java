@@ -16,10 +16,6 @@ import java.util.Map;
 import static me.wobblyyyy.pathfinder2.units.Unit.*;
 
 public class UnitFormatter {
-    private UnitFormatter() {
-
-    }
-
     private static final Map<Unit, String> NAMES_SHORT =
             new EnumMap<>(Unit.class) {{
                 put(INCH, "in");
@@ -58,6 +54,10 @@ public class UnitFormatter {
                 put(FOOT, "feet");
                 put(NAUTICAL_MILE, "nautical miles");
             }};
+
+    private UnitFormatter() {
+
+    }
 
     public static String getShortName(Unit unit) {
         return NAMES_SHORT.get(unit);

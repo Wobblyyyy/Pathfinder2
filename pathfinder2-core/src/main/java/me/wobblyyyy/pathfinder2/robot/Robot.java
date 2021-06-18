@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.robot;
 
 public class Robot {
     private final Drive drive;
+
     private final Odometry odometry;
 
     public Robot(Drive drive,

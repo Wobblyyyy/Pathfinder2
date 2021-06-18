@@ -27,6 +27,11 @@ public abstract class AbstractOdometry implements Odometry {
     }
 
     @Override
+    public void setOffset(PointXYZ offset) {
+        this.offset = offset;
+    }
+
+    @Override
     public double getOffsetX() {
         return offset.x();
     }
@@ -39,11 +44,6 @@ public abstract class AbstractOdometry implements Odometry {
     @Override
     public Angle getOffsetZ() {
         return offset.z();
-    }
-
-    @Override
-    public void setOffset(PointXYZ offset) {
-        this.offset = offset;
     }
 
     @Override

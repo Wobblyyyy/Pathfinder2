@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -87,5 +88,25 @@ public class TestPointXY {
     @Test
     public void testCollinear() {
         assert PointXY.areCollinear(G, A, D);
+    }
+
+    @Test
+    public void testInDistance() {
+        Assertions.assertEquals(
+                A.inDirection(1, Angle.zero()).x(),
+                B.x()
+        );
+        Assertions.assertEquals(
+                A.inDirection(-1, Angle.zero()).x(),
+                E.x()
+        );
+        Assertions.assertEquals(
+                A.inDirection(1, Angle.zero()).y(),
+                B.y()
+        );
+        Assertions.assertEquals(
+                A.inDirection(-1, Angle.zero()).y(),
+                E.y()
+        );
     }
 }

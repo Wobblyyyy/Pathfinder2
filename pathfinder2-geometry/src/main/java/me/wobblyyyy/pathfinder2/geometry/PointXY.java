@@ -460,4 +460,26 @@ public class PointXY implements Serializable {
     public PointXY midpoint(PointXY a) {
         return midpoint(this, a);
     }
+
+    /**
+     * Create a new point with the same Y value as this point and whatever
+     * X value you provide.
+     *
+     * @param x the X value the new point should have.
+     * @return a new point with the X value you specified.
+     */
+    public PointXY withX(double x) {
+        return new PointXY(x, this.y);
+    }
+
+    /**
+     * Create a new point with the same X value as this point and whatever
+     * Y value you provide.
+     *
+     * @param y the Y value the new point should have.
+     * @return a new point with the Y value you specified.
+     */
+    public PointXY withY(double y) {
+        return new PointXY(this.x, y);
+    }
 }

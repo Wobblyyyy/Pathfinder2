@@ -47,6 +47,14 @@ public interface Odometry {
     PointXYZ getOffset();
 
     /**
+     * Set the odometry system's offset.
+     *
+     * @param offset the new offset. This offset value will replace whatever
+     *               the old offset value was.
+     */
+    void setOffset(PointXYZ offset);
+
+    /**
      * Get the X value of the offset.
      *
      * @return the X value of the offset.
@@ -66,14 +74,6 @@ public interface Odometry {
      * @return the Z value of the offset.
      */
     Angle getOffsetZ();
-
-    /**
-     * Set the odometry system's offset.
-     *
-     * @param offset the new offset. This offset value will replace whatever
-     *               the old offset value was.
-     */
-    void setOffset(PointXYZ offset);
 
     /**
      * Modify the existing offset by whatever offset you provide.
