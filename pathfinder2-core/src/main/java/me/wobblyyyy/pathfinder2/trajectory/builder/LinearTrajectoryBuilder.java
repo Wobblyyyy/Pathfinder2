@@ -22,6 +22,13 @@ import java.util.List;
  * Simple trajectory builder used in creating trajectory groupings made solely
  * from linear trajectories.
  *
+ * <p>
+ * Some of the more useful features of this constructor include the
+ * {@link #setSpeed(double)} method. If you want to execute one route at
+ * a slow speed, and then suddenly go a lot faster for the next route, you
+ * can call this method to do exactly that.
+ * </p>
+ *
  * @author Colin Robertson
  * @see LinearTrajectory
  * @since 0.0.0
@@ -35,14 +42,30 @@ public class LinearTrajectoryBuilder {
 
     private static final Angle BACKWARDS = Angle.DEG_270;
 
+    /**
+     * A list of all of the trajectories.
+     */
     private final List<Trajectory> trajectories = new ArrayList<>();
 
+    /**
+     * The speed at which new followers should be created. This is a mutable
+     * value.
+     */
     private double speed;
 
+    /**
+     * Positional tolerance. Once again - mutable.
+     */
     private double tolerance;
 
+    /**
+     * Angle tolerance. You guessed it - mutable!
+     */
     private Angle angleTolerance;
 
+    /**
+     * Last recorded target point. Used for calculating new trajectories.
+     */
     private PointXYZ last;
 
     /**
@@ -71,28 +94,28 @@ public class LinearTrajectoryBuilder {
         this.last = start;
     }
 
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
     public double getSpeed() {
         return this.speed;
     }
 
-    public void setTolerance(double tolerance) {
-        this.tolerance = tolerance;
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 
     public double getTolerance() {
         return this.tolerance;
     }
 
-    public void setAngleTolerance(Angle angleTolerance) {
-        this.angleTolerance = angleTolerance;
+    public void setTolerance(double tolerance) {
+        this.tolerance = tolerance;
     }
 
     public Angle getAngleTolerance() {
         return this.angleTolerance;
+    }
+
+    public void setAngleTolerance(Angle angleTolerance) {
+        this.angleTolerance = angleTolerance;
     }
 
     /**
@@ -129,22 +152,48 @@ public class LinearTrajectoryBuilder {
         rotateLine(distance, last.z(), angle);
     }
 
+    /**
+     * Relative to the robot, move forwards.
+     *
+     * @param distance how far to move.
+     */
     public void forwards(double distance) {
         this.line(distance, FORWARDS.add(last.z()));
     }
 
+    /**
+     * Relative to the robot, move rightwards.
+     *
+     * @param distance how far to move.
+     */
     public void rightwards(double distance) {
         this.line(distance, RIGHTWARDS.add(last.z()));
     }
 
+    /**
+     * Relative to the robot, move leftwards.
+     *
+     * @param distance how far to move.
+     */
     public void leftwards(double distance) {
         this.line(distance, LEFTWARDS.add(last.z()));
     }
 
+    /**
+     * Relative to the robot, move backwards.
+     *
+     * @param distance how far to move.
+     */
     public void backwards(double distance) {
         this.line(distance, BACKWARDS.add(last.z()));
     }
 
+    /**
+     * Relative to the robot, move forwards and rotate by a specified amount.
+     *
+     * @param distance   how far to move.
+     * @param toRotateBy how much to rotate.
+     */
     public void rotateForwards(double distance,
                                Angle toRotateBy) {
         rotateLine(
@@ -154,6 +203,12 @@ public class LinearTrajectoryBuilder {
         );
     }
 
+    /**
+     * Relative to the robot, move rightwards and rotate by a specified amount.
+     *
+     * @param distance   how far to move.
+     * @param toRotateBy how much to rotate.
+     */
     public void rotateRightwards(double distance,
                                  Angle toRotateBy) {
         rotateLine(
@@ -163,6 +218,12 @@ public class LinearTrajectoryBuilder {
         );
     }
 
+    /**
+     * Relative to the robot, move leftwards and rotate by a specified amount.
+     *
+     * @param distance   how far to move.
+     * @param toRotateBy how much to rotate.
+     */
     public void rotateLeftwards(double distance,
                                 Angle toRotateBy) {
         rotateLine(
@@ -172,6 +233,12 @@ public class LinearTrajectoryBuilder {
         );
     }
 
+    /**
+     * Relative to the robot, move backwards and rotate by a specified amount.
+     *
+     * @param distance   how far to move.
+     * @param toRotateBy how much to rotate.
+     */
     public void rotateBackwards(double distance,
                                 Angle toRotateBy) {
         rotateLine(
@@ -181,6 +248,11 @@ public class LinearTrajectoryBuilder {
         );
     }
 
+    /**
+     * Go to a specific point.
+     *
+     * @param target the target point.
+     */
     public void goTo(PointXYZ target) {
         trajectories.add(new LinearTrajectory(
                 target,
@@ -192,19 +264,41 @@ public class LinearTrajectoryBuilder {
         last = target;
     }
 
+    /**
+     * Go to a specified X value.
+     *
+     * @param x the X value.
+     */
     public void goToX(double x) {
         goTo(last.withX(x));
     }
 
+    /**
+     * Go to a specified Y value.
+     *
+     * @param y the Y value.
+     */
     public void goToY(double y) {
         goTo(last.withY(y));
     }
 
+    /**
+     * Go to a specified X and Y coordinate without paying any attention
+     * to the heading of the robot.
+     *
+     * @param x target X coordinate.
+     * @param y target Y coordinate.
+     */
     public void goTo(double x,
                      double y) {
         goTo(new PointXYZ(x, y, last.z()));
     }
 
+    /**
+     * Get a list of all of the trajectories that have been generated.
+     *
+     * @return a list of all of the generated trajectories.
+     */
     public List<Trajectory> getTrajectories() {
         return this.trajectories;
     }

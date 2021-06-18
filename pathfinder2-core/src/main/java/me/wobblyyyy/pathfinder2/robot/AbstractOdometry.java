@@ -13,6 +13,19 @@ package me.wobblyyyy.pathfinder2.robot;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
+/**
+ * An abstract implementation of the {@link Odometry} interface. This
+ * abstract class provides many of the methods that are incredibly tedious
+ * to write. All that's left for you to do, in fact, is implement the
+ * {@link Odometry#getRawPosition()} method, which should return a raw position
+ * directly from the odometry system. It's strongly suggested that you don't
+ * do any offsetting yourself and allow Pathfinder to handle all of that for
+ * you, but I'm not your mother. I'd like to insert some other words here,
+ * but, unfortunately, my future employers might read this.
+ *
+ * @author Colin Robertson
+ * @since 0.0.0
+ */
 public abstract class AbstractOdometry implements Odometry {
     private PointXYZ offset = PointXYZ.zero();
 

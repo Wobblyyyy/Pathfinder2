@@ -10,6 +10,18 @@
 
 package me.wobblyyyy.pathfinder2.exceptions;
 
+/**
+ * Exception to be thrown whenever a speed value is invalid.
+ *
+ * <p>
+ * In most cases, speed values should always fit within the range of 0.0
+ * to 1.0. If you're getting this exception during program execution, actually,
+ * it's fairly likely the cause is a speed value outside of that range.
+ * </p>
+ *
+ * @author Colin Robertson
+ * @since 0.0.0
+ */
 public class InvalidSpeedException extends RuntimeException {
     public InvalidSpeedException(String s) {
         super(s);

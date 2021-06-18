@@ -43,6 +43,16 @@ import java.io.Serializable;
  * </p>
  *
  * <p>
+ * It's strongly suggested that you use the {@code Angle} class just about
+ * anywhere you would use an angle. Although yes, it is technically slower
+ * and requires more memory to use objects instead of just using primitives,
+ * such as {@code double}, it keeps your code readable and makes it easier
+ * to modify down the line. Also, if you're planning on making any changes
+ * to Pathfinder2's source code, ALL angles should be denoted using the
+ * {@code Angle} class. There should be next to no primitives whatsoever.
+ * </p>
+ *
+ * <p>
  * Finally, one of the key features of the {@code Angle} class is the ability
  * to create so-called "fixed" angles. A fixed angle is an angle that fits
  * within some certain bounds. Both the degree and radian representations of
@@ -64,6 +74,23 @@ import java.io.Serializable;
  * @since 0.0.0
  */
 public class Angle implements Comparable<Angle>, Serializable {
+    /*
+     * Just as a style note - entirely apart from any API-related stuff -
+     * any math you're doing inside the Angle class should be done in
+     * degrees unless there's a pretty good reason it shouldn't be. This
+     * is entirely just my personal preference and there's absolutely no
+     * other valid reasoning for it. It helps to keep code cleaner - if
+     * everything is done the same way, it's easier to understand.
+     *
+     * Also, this class is starting to get pretty bloated. I mean... it's
+     * nearly a thousand lines long, and all it does is provide some stuff
+     * related to angles. With that being said - feel free to add more!
+     * Any angle-related methods you've made use of would be a great addition.
+     * The core concepts of angles is pretty simple, and anything beyond that
+     * would only really be used by someone who knows what they're trying to
+     * do anyways.
+     */
+
     /**
      * "rad"
      */
@@ -411,6 +438,59 @@ public class Angle implements Comparable<Angle>, Serializable {
                                      Angle b,
                                      double tolerance) {
         return Math.abs(a.deg() - b.deg()) <= tolerance;
+    }
+
+    /**
+     * Get the minimum delta between two angles.
+     *
+     * <p>
+     * The way this works is a little bit confusing, so I'll do my best to
+     * explain. Here we go. A robot is capable of rotating rightwards and
+     * leftwards around its center - that's pretty simple, right? However,
+     * if every angle we use is fixed, we run into some issues. Say we're at
+     * 0 degrees and we want to turn to 270 degrees. The obvious solution is
+     * to turn 270 degrees. However, you can get to the same angle by turning
+     * -90 degrees. This method will always calculate the minimum delta
+     * between two angles.
+     * </p>
+     *
+     * @param a the initial angle. In most applications, this is a robot's
+     *          current heading. There are some situations where this isn't
+     *          the case, but as a rule of thumb, this should almost definitely
+     *          be the robot's current heading.
+     * @param b the target angle. This one should not be the robot's heading.
+     *          Well, I mean, it can be, but I don't know why you'd want it to
+     *          be. It's up to you, dawg!
+     * @return the minimum delta between these two angles.
+     */
+    public static double minimumDelta(Angle a,
+                                      Angle b) {
+        // Fix both of the angles (so we have easy-to-work-with numbers) and
+        // convert them into degrees.
+        double a_deg = a.fix().deg();
+        double b_deg = b.fix().deg();
+
+        // Determine the current delta. We assume angle B is the target
+        // angle and angle A is the initial angle.
+        double delta = b_deg - a_deg;
+
+        // If the delta is above 180 degrees, which it never should be,
+        // there has to be a shorter way to get there.
+        if (Math.abs(delta) > 180) {
+            // Fix and flip both angles a and b. Flipping an angle just
+            // adds 180 degrees to it, and fixing it ensures it's within
+            // our lovely 0-360 range.
+            a_deg = a.fixedFlip().deg();
+            b_deg = b.fixedFlip().deg();
+
+            // Recalculate the delta. Once again, we assume b is the target
+            // and a is the initial. This delta should always be below
+            // 180 - if it's not, something's gone seriously wrong.
+            delta = b_deg - a_deg;
+        }
+
+        // And we're done! Would you look at that. Truly incredible, isn't it?
+        return delta;
     }
 
     /**
@@ -862,11 +942,25 @@ public class Angle implements Comparable<Angle>, Serializable {
     public enum AngleUnit {
         /**
          * Radians. Very cool, right?
+         *
+         * <p>
+         * <ul>
+         *     <li>Short formatting: "rad"</li>
+         *     <li>Long formatting: "radians"</li>
+         * </ul>
+         * </p>
          */
         RADIANS,
 
         /**
          * Degrees. Even cooler, I know.
+         *
+         * <p>
+         * <ul>
+         *     <li>Short formatting: "deg"</li>
+         *     <li>Long formatting: "degrees"</li>
+         * </ul>
+         * </p>
          */
         DEGREES
     }

@@ -11,6 +11,8 @@
 package me.wobblyyyy.pathfinder2.trajectory;
 
 import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
+import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
+import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
@@ -61,14 +63,36 @@ public class LinearTrajectory implements Trajectory {
                             double speed,
                             double tolerance,
                             Angle angleTolerance) {
+        // If the provided target point isn't actually a target point, throw
+        // an exception, because, well, it's not exactly a target point.
+        if (target == null) {
+            throw new NullPointException(
+                    "Attempted to create a LinearTrajectory instance with " +
+                            "a null target point. Target points can't be " +
+                            "null - crazy, I know!"
+            );
+        }
+
         // If the speed value isn't within a range of 0.0 to 1.0, throw a
         // runtime exception basically telling the user they're an idiot.
         // Haha. Nerd!
         if (speed < 0 || speed > 1) {
             throw new InvalidSpeedException(
-                    "Attempted to create LinearFollower instance with speed " +
+                    "Attempted to create LinearTrajectory instance with speed " +
                             "(" + speed + "). Speed values must be greater " +
                             "than 0. and less than 1.0."
+            );
+        }
+
+        // If the provided angle tolerance is null, we need to - yet again -
+        // throw an exception informing the user that they have a room
+        // temperature IQ.
+        if (angleTolerance == null) {
+            throw new NullAngleException(
+                    "Attempted to create a LinearTrajectory instance with " +
+                            "a null angle tolerance value. Make sure whatever " +
+                            "angle tolerance you pass isn't null next time, " +
+                            "okay? Cool."
             );
         }
 

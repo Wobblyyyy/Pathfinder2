@@ -116,8 +116,14 @@ public class Translation {
      */
     public static Translation absoluteToRelative(Translation translation,
                                                  Angle heading) {
+        // Create a new angle by adding the translation's angle to the
+        // robot's heading. Once again - pretty swaggy.
         Angle newAngle = translation.angle().add(heading);
 
+        // Return a new translation by using some fancy trig or something.
+        // Remember: COS = X, SIN = Y.
+        // Also, this code roughly corresponds with the stuff in the
+        // PointXY class' rotation method. Just as a heads-up.
         return new Translation(
                 newAngle.cos() * translation.magnitude(),
                 newAngle.sin() * translation.magnitude(),

@@ -23,6 +23,13 @@ public interface Motor {
      * Get a power value from the motor. This method should return whatever
      * power the motor is currently operating at.
      *
+     * <p>
+     * In some cases, it may be preferable to store a value inside of the
+     * program instead of polling the motor to determine the power it's
+     * operating at. This can preserve some CPU cycles, but to be honest,
+     * the difference is minimal.
+     * </p>
+     *
      * @return the motor's current power.
      */
     double getPower();

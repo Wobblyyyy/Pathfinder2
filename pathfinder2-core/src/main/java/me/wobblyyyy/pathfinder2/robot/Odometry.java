@@ -20,12 +20,28 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
  * suggested you make use of the {@link AbstractOdometry} class instead - it
  * abstracts away many of the tedious methods.
  *
+ * <p>
+ * It's strongly suggested that you don't perform any offsetting on the
+ * odometry's reported positioning outside of the methods provided in this
+ * class. This helps to ensure that positions are only modified from a single
+ * source, making debugging a lot easier.
+ * </p>
+ *
  * @author Colin Robertson
+ * @see AbstractOdometry
  * @since 0.0.0
  */
 public interface Odometry {
     /**
      * Get the raw position reported by the odometry system.
+     *
+     * <p>
+     * I'd also like to suggest that you make use of the method
+     * {@link PointXYZ#zeroIfNull(PointXYZ)}. Doing so will ensure your
+     * odometry never reports a null position. I personally have had some
+     * issues with exactly that, so I'm putting this warning here so I
+     * can possibly save someone a bit of a headache.
+     * </p>
      *
      * @return the raw position reported by the odometry system.
      */

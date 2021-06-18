@@ -26,6 +26,24 @@ import java.io.Serializable;
  * @since 0.0.0
  */
 public class PointXY implements Serializable {
+    /*
+     * Another non-JavaDoc comment - if you're only browsing the API, you
+     * can skip over all of this, as it contains nothing that's in any way,
+     * shape nor form, useful to you.
+     *
+     * Using PointXY can make code rather confusing. Because PointXYZ extends
+     * it and can be used in place of it, there's very few applications in
+     * which it's ever useful. Not only that, but it makes maintenance a
+     * total nightmare - if you add a method to the PointXY class, you have
+     * to add an analogous method to the PointXYZ class, otherwise things
+     * can go wrong pretty quickly.
+     *
+     * I guess what I'm trying to say here is that you should keep the
+     * PointXY and PointXYZ classes on the same page. If you make any
+     * modifications to the PointXY class, go check the PointXYZ class and
+     * see if there's anything you need to modify there.
+     */
+
     /**
      * The point's X value.
      */
@@ -135,6 +153,10 @@ public class PointXY implements Serializable {
      */
     public static double distance(PointXY a,
                                   PointXY b) {
+        // The distance formula is essentially as follows:
+        // sqrt((Bx-Ax)^2+(By-Ay)^2)
+        // Obviously, there's some minor formatting issues there, but you
+        // get the general idea.
         return Math.sqrt(
                 Math.pow(b.x() - a.x(), 2) +
                         Math.pow(b.y() - a.y(), 2)
@@ -175,12 +197,11 @@ public class PointXY implements Serializable {
      */
     public static Angle angleTo(PointXY a,
                                 PointXY b) {
-        return Angle.fromRad(
-                Math.atan2(
-                        distanceY(a, b),
-                        distanceX(a, b)
-                )
-        );
+        // We used to use a bit of a messier implementation, but since
+        // the Angle class has gotten the atan2 static method, there's no
+        // point. I'll preserve the old code just in case it's useful some day.
+        // return Angle.fromRad(Math.atan2(distanceY(a,b), distanceX(a, b)));
+        return Angle.atan2(distanceY(a, b), distanceX(a, b));
     }
 
     /**
@@ -198,6 +219,10 @@ public class PointXY implements Serializable {
     public static PointXY inDirection(PointXY base,
                                       double distance,
                                       Angle angle) {
+        // Look at that! Making use of those sexy angle trig functions.
+        // On a more serious note, remember:
+        // COS corresponds with X
+        // SIN corresponds with Y
         return new PointXY(
                 base.x() + (distance * angle.cos()),
                 base.y() + (distance * angle.sin())
@@ -217,6 +242,8 @@ public class PointXY implements Serializable {
     public static boolean isNear(PointXY a,
                                  PointXY b,
                                  double tolerance) {
+        // Get the distance between the two points, make sure it's absolute,
+        // and check to see if it's less than the tolerance value.
         return Math.abs(distance(a, b)) <= Math.abs(tolerance);
     }
 
@@ -231,24 +258,20 @@ public class PointXY implements Serializable {
     public static PointXY rotate(PointXY point,
                                  PointXY center,
                                  Angle angle) {
-        /*
-         * 1. Calculate the angle between the center point and the target
-         * point. Add the provided angle to this angle to determine
-         * the new angle.
-         * 2. Calculate the distance between the two points.
-         * 3. Create a new point ^that^ distance away from the center at
-         * whatever the new angle is.
-         */
+        // Okay. I know for sure this is a bit confusing-looking at the very
+        // Thankfully, it's actually pretty simple.
+        // Firstly, we need to calculate the angle between the center point
+        // and the target point. We'll call this our base angle.
+        // Secondly, we need to determine how far away the target point is
+        // from the center point - kind of like a magnitude.
+        // Thirdly, we'll need to create another angle by adding the base
+        // angle with our rotation angle.
+        // And finally, we'll create a new point that's the right distance
+        // away from the center point using the new angle.
         return inDirection(
                 center,
-                distance(
-                        center,
-                        point
-                ),
-                angleTo(
-                        center,
-                        point
-                ).add(angle)
+                distance(center, point),
+                angleTo(center, point).add(angle)
         );
     }
 
@@ -263,6 +286,9 @@ public class PointXY implements Serializable {
     public static boolean areCollinear(PointXY a,
                                        PointXY b,
                                        PointXY c) {
+        // I'll be 100% honest here - I think I copied this code from
+        // a stackoverflow answer somewhere. So I can't offer too much insight
+        // into how it works. Sorry!
         double dx1 = b.x() - a.x();
         double dy1 = b.y() - a.y();
         double dx2 = c.x() - a.x();
