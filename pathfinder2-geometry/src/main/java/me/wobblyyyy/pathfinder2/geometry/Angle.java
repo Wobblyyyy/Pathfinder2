@@ -13,7 +13,11 @@ package me.wobblyyyy.pathfinder2.geometry;
 import java.io.Serializable;
 
 /**
- * An angle, represented both in degrees and radians.
+ * An angle, represented both in degrees and radians. {@code Angle} objects
+ * are designed to replace primitives, such as {@code double}s, wherever
+ * any angles are used. Because Pathfinder is so heavily focused on geometry,
+ * the {@code Angle} class is designed to accommodate for just about whatever
+ * angle-related things you can think of. Super cool!
  *
  * <p>
  * This class was created primarily to simplify operations related to angles.
@@ -50,6 +54,17 @@ import java.io.Serializable;
  * to modify down the line. Also, if you're planning on making any changes
  * to Pathfinder2's source code, ALL angles should be denoted using the
  * {@code Angle} class. There should be next to no primitives whatsoever.
+ * </p>
+ *
+ * <p>
+ * In addition to tons of cool and very epic math stuff, the {@code Angle}
+ * class provides some formatting utilities. See:
+ * <ul>
+ *     <li>{@link #formatAsDegLong()}</li>
+ *     <li>{@link #formatAsDegShort()}</li>
+ *     <li>{@link #formatAsRadLong()}</li>
+ *     <li>{@link #formatAsRadShort()}</li>
+ * </ul>
  * </p>
  *
  * <p>
@@ -465,6 +480,9 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public static double minimumDelta(Angle a,
                                       Angle b) {
+        // There's definitely a much better way to do this, but for now,
+        // there aren't any problems with this method being too slow.
+
         // Fix both of the angles (so we have easy-to-work-with numbers) and
         // convert them into degrees.
         double a_deg = a.fix().deg();
@@ -498,6 +516,9 @@ public class Angle implements Comparable<Angle>, Serializable {
      *
      * @param a the value to create the angle from.
      * @return a new angle.
+     * @see #asin(double)
+     * @see #atan(double)
+     * @see #atan2(double, double)
      */
     public static Angle acos(double a) {
         return Angle.fromRad(Math.acos(a));
@@ -508,6 +529,9 @@ public class Angle implements Comparable<Angle>, Serializable {
      *
      * @param a the value to create the angle from.
      * @return a new angle.
+     * @see #acos(double)
+     * @see #atan(double)
+     * @see #atan2(double, double)
      */
     public static Angle asin(double a) {
         return Angle.fromRad(Math.asin(a));
@@ -518,6 +542,9 @@ public class Angle implements Comparable<Angle>, Serializable {
      *
      * @param a the value to create the angle from.
      * @return a new angle.
+     * @see #asin(double)
+     * @see #acos(double)
+     * @see #atan2(double, double)
      */
     public static Angle atan(double a) {
         return Angle.fromRad(Math.atan(a));
@@ -529,6 +556,9 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param y y value
      * @param x x value
      * @return a new angle.
+     * @see #asin(double)
+     * @see #acos(double)
+     * @see #atan(double)
      */
     public static Angle atan2(double y, double x) {
         return Angle.fromRad(Math.atan2(y, x));
@@ -540,6 +570,9 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param a   angle to rotate
      * @param rad how much to rotate the angle by.
      * @return rotated angle.
+     * @see #rotateDeg(Angle, double)
+     * @see #fixedRotateRad(Angle, double)
+     * @see #fixedRotateDeg(Angle, double)
      */
     public static Angle rotateRad(Angle a,
                                   double rad) {
@@ -552,6 +585,9 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param a   angle to rotate
      * @param deg how much to rotate the angle by.
      * @return rotated angle.
+     * @see #rotateRad(Angle, double)
+     * @see #fixedRotateRad(Angle, double)
+     * @see #fixedRotateDeg(Angle, double)
      */
     public static Angle rotateDeg(Angle a,
                                   double deg) {
@@ -564,6 +600,9 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param a   angle to rotate
      * @param rad how much to rotate the angle by.
      * @return rotated angle.
+     * @see #rotateRad(Angle, double)
+     * @see #rotateDeg(Angle, double)
+     * @see #fixedRotateDeg(Angle, double)
      */
     public static Angle fixedRotateRad(Angle a,
                                        double rad) {
@@ -576,6 +615,9 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param a   angle to rotate
      * @param deg how much to rotate the angle by.
      * @return rotated angle.
+     * @see #rotateRad(Angle, double)
+     * @see #rotateDeg(Angle, double)
+     * @see #fixedRotateRad(Angle, double)
      */
     public static Angle fixedRotateDeg(Angle a,
                                        double deg) {
@@ -644,6 +686,11 @@ public class Angle implements Comparable<Angle>, Serializable {
      * Get the sine of the angle.
      *
      * @return the sine of the angle.
+     * @see #cos()
+     * @see #tan()
+     * @see #csc()
+     * @see #sec()
+     * @see #cot()
      */
     public double sin() {
         return Math.sin(rad);
@@ -653,6 +700,11 @@ public class Angle implements Comparable<Angle>, Serializable {
      * Get the cosine of the angle.
      *
      * @return the cosine of the angle.
+     * @see #sin()
+     * @see #tan()
+     * @see #csc()
+     * @see #sec()
+     * @see #cot()
      */
     public double cos() {
         return Math.cos(rad);
@@ -662,6 +714,11 @@ public class Angle implements Comparable<Angle>, Serializable {
      * Get the tangent of the angle.
      *
      * @return the tangent of the angle.
+     * @see #sin()
+     * @see #cos()
+     * @see #csc()
+     * @see #sec()
+     * @see #cot()
      */
     public double tan() {
         return Math.tan(rad);
@@ -671,6 +728,11 @@ public class Angle implements Comparable<Angle>, Serializable {
      * Get the cosecant of the angle.
      *
      * @return the cosecant of the angle.
+     * @see #sin()
+     * @see #cos()
+     * @see #tan()
+     * @see #sec()
+     * @see #cot()
      */
     public double csc() {
         return 1 / sin();
@@ -680,6 +742,11 @@ public class Angle implements Comparable<Angle>, Serializable {
      * Get the secant of the angle.
      *
      * @return the secant of the angle.
+     * @see #sin()
+     * @see #cos()
+     * @see #tan()
+     * @see #csc()
+     * @see #cot()
      */
     public double sec() {
         return 1 / cos();
@@ -689,6 +756,11 @@ public class Angle implements Comparable<Angle>, Serializable {
      * Get the cotangent of the angle.
      *
      * @return the cotangent of the angle.
+     * @see #sin()
+     * @see #cos()
+     * @see #tan()
+     * @see #csc()
+     * @see #sec()
      */
     public double cot() {
         return 1 / tan();

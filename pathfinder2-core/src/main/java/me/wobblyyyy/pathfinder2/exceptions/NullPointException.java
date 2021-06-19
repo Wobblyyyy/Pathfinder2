@@ -29,6 +29,14 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
  * {@link PointXY#zero()} method.
  * </p>
  *
+ * <p>
+ * This exception is typically caused by an odometry subsystem reporting a
+ * null value. If you keep getting this exception, there's always the chance
+ * it's being caused by... an odometry subsystem. Regardless of the cause,
+ * these exceptions are widely known as being "not very cool" and "kind of
+ * lame," so you should definitely fix them. Good luck!
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.0.0
  */
