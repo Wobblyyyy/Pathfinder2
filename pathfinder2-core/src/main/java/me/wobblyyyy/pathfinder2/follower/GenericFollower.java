@@ -10,7 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.follower;
 
-import me.wobblyyyy.pathfinder2.controller.Controller;
+import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
