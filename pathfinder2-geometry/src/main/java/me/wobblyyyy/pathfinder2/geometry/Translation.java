@@ -132,6 +132,21 @@ public class Translation {
     }
 
     /**
+     * Create a new {@code Translation} with the following values:
+     *
+     * <ul>
+     *     <li>vX: 0</li>
+     *     <li>vY: 0</li>
+     *     <li>vZ: 0</li>
+     * </ul>
+     *
+     * @return a new translation with vX, vY, and vZ values of 0.
+     */
+    public static Translation zero() {
+        return new Translation(0, 0, 0);
+    }
+
+    /**
      * Get the translation's X component.
      *
      * @return the translation's X component.

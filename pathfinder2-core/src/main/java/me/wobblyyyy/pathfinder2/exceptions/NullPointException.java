@@ -44,4 +44,11 @@ public class NullPointException extends RuntimeException {
     public NullPointException(String s) {
         super(s);
     }
+
+    public static void throwIfInvalid(String message,
+                                      PointXY point) {
+        if (point == null) {
+            throw new NullPointException(message);
+        }
+    }
 }
