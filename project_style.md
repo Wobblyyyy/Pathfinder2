@@ -14,6 +14,28 @@ how I would have. But I would *strongly prefer* if you were to adhere to these g
 Lines should be no longer than 80 characters long, unless splitting the line would significantly decrease readability.
 In other words, just try to keep your line lengths below 80 characters. It's really annoying trying to split-screen
 two different editors and not being able to read a line because it's incredibly long. So yeah.
+```java
+public class Demo {
+    /*
+     * Here's an example of a bad line (over 80 characters).
+     */
+    public static double multiply(double a, double b, double c, double d, double e, double f) {
+        return a * b * c * d * e * f;
+    }
+    
+    /*
+     * And here's an example of a good line (under 80 characters).
+     */
+    public static double multiply(double a,
+                                  double b,
+                                  double c,
+                                  double d,
+                                  double e,
+                                  double f) {
+        return a * b * c * d * e * f;
+    }
+}
+```
 
 Also - related - method parameters. Parameters *should* get their own lines, but I'm okay if they don't. Just make
 sure nothing runs over 80 characters unless there's some seriously good reasoning why it can.
