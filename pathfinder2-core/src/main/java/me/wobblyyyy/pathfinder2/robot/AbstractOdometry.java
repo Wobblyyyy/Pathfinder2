@@ -13,6 +13,8 @@ package me.wobblyyyy.pathfinder2.robot;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
+import java.util.function.Function;
+
 /**
  * An abstract implementation of the {@link Odometry} interface. This
  * abstract class provides many of the methods that are incredibly tedious
@@ -28,10 +30,11 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
  */
 public abstract class AbstractOdometry implements Odometry {
     private PointXYZ offset = PointXYZ.zero();
+    private Function<PointXYZ, PointXYZ> modifier = p -> p;
 
     @Override
     public PointXYZ getPosition() {
-        return getRawPosition().add(offset);
+        return modifier.apply(getRawPosition().add(offset));
     }
 
     @Override
@@ -127,5 +130,15 @@ public abstract class AbstractOdometry implements Odometry {
     @Override
     public double getRawDeg() {
         return getRawPosition().z().deg();
+    }
+
+    @Override
+    public Function<PointXYZ, PointXYZ> getModifier() {
+        return this.modifier;
+    }
+
+    @Override
+    public void setModifier(Function<PointXYZ, PointXYZ> modifier) {
+        this.modifier = modifier;
     }
 }

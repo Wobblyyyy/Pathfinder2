@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.robot;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.robot.modifiers.Modifiable;
 
 /**
  * A system capable of reporting the position of a robot. Several odometry
@@ -31,7 +32,7 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
  * @see AbstractOdometry
  * @since 0.0.0
  */
-public interface Odometry {
+public interface Odometry extends Modifiable<PointXYZ> {
     /**
      * Get the raw position reported by the odometry system.
      *

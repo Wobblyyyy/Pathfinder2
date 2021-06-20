@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.robot;
 
 import me.wobblyyyy.pathfinder2.geometry.Translation;
+import me.wobblyyyy.pathfinder2.robot.modifiers.Modifiable;
 
 /**
  * One of the two major components of your robot - firstly, there's odometry,
@@ -19,7 +20,7 @@ import me.wobblyyyy.pathfinder2.geometry.Translation;
  * @author Colin Robertson
  * @since 0.0.0
  */
-public interface Drive {
+public interface Drive extends Modifiable<Translation> {
     /**
      * Get the drive train's current translation. This shouldn't be determined
      * based on what the robot's actually doing, but rather, whatever the last
