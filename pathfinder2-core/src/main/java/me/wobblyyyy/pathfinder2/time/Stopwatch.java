@@ -150,6 +150,20 @@ public class Stopwatch {
         );
     }
 
+    public List<Timestamp> getTimestamps() {
+        return this.timestamps;
+    }
+
+    public List<Double> getTimes() {
+        List<Double> list = new ArrayList<>();
+
+        for (Timestamp timestamp : timestamps) {
+            list.add(timestamp.value());
+        }
+
+        return list;
+    }
+
     /**
      * Convert the timestamp to a string.
      *
