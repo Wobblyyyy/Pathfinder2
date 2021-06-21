@@ -10,6 +10,14 @@
 
 package me.wobblyyyy.pathfinder2.exceptions;
 
+/**
+ * Exception to be thrown whenever a provided tolerance value is invalid.
+ * This exception will almost exclusively be thrown when a tolerance value is
+ * negative - all tolerance values must be positive.
+ *
+ * @author Colin Robertson
+ * @since 0.0.0
+ */
 public class InvalidToleranceException extends RuntimeException {
     public InvalidToleranceException(String s) {
         super(s);

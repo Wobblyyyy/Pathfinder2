@@ -18,11 +18,39 @@ import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 
 import java.util.function.Consumer;
 
+/**
+ * A generic implementation of the {@link Follower} interface. For almost all
+ * use cases, this implementation should work fairly well. This implementation
+ * of the {@link Follower} interface depends on a "turn controller" - in
+ * essence, a {@link Controller} that determines the speed at which the robot
+ * is turning.
+ *
+ * @author Colin Robertson
+ * @since 0.0.0
+ */
 public class GenericFollower implements Follower {
+    /**
+     * The follower's trajectory.
+     */
     private final Trajectory trajectory;
 
+    /**
+     * The follower's turn controller.
+     */
     private final Controller turnController;
 
+    /**
+     * Create a new {@code GenericFollower}.
+     *
+     * <p>
+     * In addition to creating a {@code GenericFollower}, this constructor will
+     * set the turn controller's target to 0.
+     * </p>
+     *
+     * @param trajectory     the trajectory the follower should follow.
+     * @param turnController a turn controller, responsible for determining
+     *                       turn values.
+     */
     public GenericFollower(Trajectory trajectory,
                            Controller turnController) {
         this.trajectory = trajectory;
@@ -31,6 +59,11 @@ public class GenericFollower implements Follower {
         turnController.setTarget(0);
     }
 
+    /**
+     * Get the follower's trajectory.
+     *
+     * @return the follower's trajectory.
+     */
     @Override
     public Trajectory getTrajectory() {
         return this.trajectory;

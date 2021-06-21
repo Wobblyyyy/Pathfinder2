@@ -24,6 +24,17 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
  * it. Yeah. There's really not much more to it.
  * </p>
  *
+ * <p>
+ * Each {@code Trajectory} is executed via a {@link me.wobblyyyy.pathfinder2.follower.Follower}.
+ * A follower is responsible for interpreting a trajectory, as well as the
+ * robot's current position, to determine how the robot should move. Long
+ * story short, {@code Trajectory} instances cannot directly control how
+ * Pathfinder operates the robot - rather, you'll have to encapsulate each
+ * trajectory in an individual follower. These followers are then executed
+ * via a {@link me.wobblyyyy.pathfinder2.execution.FollowerExecutor}, which,
+ * in turn, are managed via a {@link me.wobblyyyy.pathfinder2.execution.ExecutorManager}.
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.0.0
  */
@@ -31,6 +42,14 @@ public interface Trajectory {
     /**
      * Get the next marker that the robot should attempt to navigate to. This
      * should always be a point along the trajectory.
+     *
+     * <p>
+     * A marker position should provide the robot with a "target." The robot
+     * should then calculate how it should move to reach that target point.
+     * In essence, a holonomic robot should calculate the angle between its
+     * own position and the next target point, and, from there, determine
+     * how to move in that angle.
+     * </p>
      *
      * @param current the robot's current position. This position is used in
      *                determining the next marker position.
@@ -41,6 +60,14 @@ public interface Trajectory {
     /**
      * Has the robot finished executing this trajectory?
      *
+     * <p>
+     * Each trajectory follower can only be marked as "completed" if this
+     * method returns true. Also note that as soon as this method returns
+     * true, the follower responsible for executing that trajectory will
+     * be de-queued, meaning that this trajectory will no longer be
+     * executed. Scary.
+     * </p>
+     *
      * @param current the robot's current position.
      * @return true if the robot has finished executing the trajectory, false
      * if it has not.
@@ -50,6 +77,14 @@ public interface Trajectory {
     /**
      * Determine the speed at which the robot should be moving while executing
      * this section of the trajectory.
+     *
+     * <p>
+     * Trajectories can have different speeds at different points. This method
+     * CAN return the same value constantly, regardless of the position of
+     * the robot. However, if you'd like to have some more control over the
+     * speed of your robot at different points throughout the trajectory,
+     * you're more than free to do so.
+     * </p>
      *
      * @param current the robot's current position. This position is used in
      *                determining how fast the robot should move from here.
