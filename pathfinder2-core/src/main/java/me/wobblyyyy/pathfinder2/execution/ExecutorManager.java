@@ -115,17 +115,21 @@ public class ExecutorManager {
      * there are still remaining executors.
      */
     public boolean tick() {
-        if (executors.size() > 0) {
+        // If there's at least 1 executor in the queue...
+        if (howManyExecutors() > 0) {
             FollowerExecutor executor = executors.get(0);
 
+            // Tick the executor. The tick method returns a boolean result.
+            // If true, the executor is finished. If false, it's not finished.
             if (executor.tick()) {
+                // If the executor's finished, we no longer need it.
                 executors.remove(executor);
             }
-
-            return true;
         }
 
-        return false;
+        // Return true if there's 0 remaining executors (meaning we're entirely
+        // finished) and false if there's 1 or more.
+        return howManyExecutors() == 0;
     }
 
     /**

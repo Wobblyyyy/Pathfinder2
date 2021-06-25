@@ -91,14 +91,11 @@ public class FollowerExecutor {
                 // statement here, other than telling the compiler that
                 // it better execute this "else" statement.
             }
-
-            // Returning FALSE indicates that the follower executor has NOT
-            // finished executing all of its followers.
-            return false;
         }
 
-        // Returning TRUE indicates that the follower executor has finished
-        // executing all of its followers.
-        return true;
+        // Now that we've ticked whatever follower there is to tick (or not)
+        // we can return TRUE if there are 0 remaining followers and FALSE
+        // if there are 1 or more.
+        return followers.size() == 0;
     }
 }
