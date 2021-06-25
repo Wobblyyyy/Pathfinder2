@@ -512,6 +512,47 @@ public class Angle implements Comparable<Angle>, Serializable {
     }
 
     /**
+     * Get the minimum delta between two angles.
+     *
+     * @param a the first of the two angles.
+     * @param b the second of the two angles.
+     * @return the minimum delta between the two angles.
+     * @see #minimumDelta(Angle, Angle)
+     */
+    public static Angle angleDelta(Angle a,
+                                   Angle b) {
+        return fromDeg(minimumDelta(a, b));
+    }
+
+    /**
+     * Get the minimum delta between two angles, in degrees.
+     *
+     * @param a the first of the two angles.
+     * @param b the second of the two angles.
+     * @return the minimum delta between the two angles.
+     * @see #minimumDelta(Angle, Angle)
+     * @see #angleDelta(Angle, Angle)
+     */
+    public static double angleDeltaDeg(Angle a,
+                                       Angle b) {
+        return angleDelta(a, b).deg();
+    }
+
+    /**
+     * Get the minimum delta between two angles, in radians.
+     *
+     * @param a the first of the two angles.
+     * @param b the second of the two angles.
+     * @return the minimum delta between the two angles.
+     * @see #minimumDelta(Angle, Angle)
+     * @see #angleDelta(Angle, Angle)
+     */
+    public static double angleDeltaRad(Angle a,
+                                       Angle b) {
+        return angleDelta(a, b).rad();
+    }
+
+    /**
      * Create a new angle from the {@link Math#acos(double)} method.
      *
      * @param a the value to create the angle from.
