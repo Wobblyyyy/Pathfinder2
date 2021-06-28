@@ -1,4 +1,5 @@
 rootProject.name = 'Pathfinder2'
 include 'pathfinder2-geometry', 'Pathfinder2'
 include 'pathfinder2-core', 'Pathfinder2'
+include 'pathfinder2-kinematics'
 
