@@ -84,6 +84,13 @@ public class ExecutorManager {
 
     /**
      * Clear the list of {@link FollowerExecutor}s.
+     *
+     * <p>
+     * This will, in effect, stop the robot. Because there's no longer any
+     * followers to execute, Pathfinder will do... just about nothing. It's
+     * still important that you actually tick Pathfinder after clearing the
+     * executors - this will stop the robot from moving.
+     * </p>
      */
     public void clearExecutors() {
         executors.clear();
