@@ -23,75 +23,125 @@ import java.util.function.Function;
 /**
  * A very simple (and very lovely) swerve drive implementation.
  *
+ * <p>
+ * A swerve drive (or at least this type of swerve drive) is a type of
+ * drive system that has eight motors in total. The swerve chassis is
+ * composed of four {@link SwerveModule}s, each of which contain two
+ * motors. One of these motors controls the direction the module is facing,
+ * and the other motor controls the robot's actual movement on the ground.
+ * Most simply, a swerve chassis works by rotating all of the swerve
+ * modules to the angle that corresponds with the direction it should move
+ * in and then moving in that direction.
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.0.0
  */
 public class SwerveDrive implements Drive {
-    private final SwerveModule fr;
-    private final SwerveModule fl;
-    private final SwerveModule br;
-    private final SwerveModule bl;
+    /**
+     * The chassis' front right module.
+     */
+    private final SwerveModule frontRightModule;
 
-    private final SwerveModuleKinematics frk;
-    private final SwerveModuleKinematics flk;
-    private final SwerveModuleKinematics brk;
-    private final SwerveModuleKinematics blk;
+    /**
+     * The chassis' front left module.
+     */
+    private final SwerveModule frontLeftModule;
 
-    private final Controller moduleController;
+    /**
+     * The chassis' back right module.
+     */
+    private final SwerveModule backRightModule;
 
+    /**
+     * The chassis' back left module.
+     */
+    private final SwerveModule backLeftModule;
+
+    /**
+     * The translation the chassis is moving according to.
+     */
     private Translation translation = Translation.zero();
+
+    /**
+     * The chassis' modifier - basically, a function that modifies any
+     * inputted translations.
+     */
     private Function<Translation, Translation> modifier = s -> s;
 
-    private RelativeSwerveDriveKinematics kinematics;
+    /**
+     * The chassis' kinematics.
+     */
+    private final RelativeSwerveDriveKinematics kinematics;
 
     /**
      * Create a new swerve drive.
      *
-     * @param fr               front-right swerve module.
-     * @param fl               front-left swerve module.
-     * @param br               back-right swerve module.
-     * @param bl               back-left swerve module.
+     * @param frontRightModule front-right swerve module.
+     * @param frontLeftModule  front-left swerve module.
+     * @param backRightModule  back-right swerve module.
+     * @param backLeftModule   back-left swerve module.
      * @param moduleController the turn controller used to control the swerve
      *                         module's turn angle. This controller accepts
      *                         degrees as input and as the target.
+     * @param turnCoefficient  the coefficient used in calculating how fast
+     *                         the chassis should turn. Higher values make
+     *                         the robot turn faster, and lower values make
+     *                         the robot turn slower. This value should usually
+     *                         be around 0.1, but it'll take some testing to
+     *                         figure out what number works best for you.
      */
-    public SwerveDrive(SwerveModule fr,
-                       SwerveModule fl,
-                       SwerveModule br,
-                       SwerveModule bl,
-                       Controller moduleController) {
-        this.fr = fr;
-        this.fl = fl;
-        this.br = br;
-        this.bl = bl;
-
-        this.moduleController = moduleController;
-
-        this.frk = new SwerveModuleKinematics(moduleController);
-        this.flk = new SwerveModuleKinematics(moduleController);
-        this.brk = new SwerveModuleKinematics(moduleController);
-        this.blk = new SwerveModuleKinematics(moduleController);
+    public SwerveDrive(SwerveModule frontRightModule,
+                       SwerveModule frontLeftModule,
+                       SwerveModule backRightModule,
+                       SwerveModule backLeftModule,
+                       Controller moduleController,
+                       double turnCoefficient) {
+        this.frontRightModule = frontRightModule;
+        this.frontLeftModule = frontLeftModule;
+        this.backRightModule = backRightModule;
+        this.backLeftModule = backLeftModule;
 
         this.kinematics = new RelativeSwerveDriveKinematics(
-                this.frk,
-                this.flk,
-                this.brk,
-                this.blk,
-                this.fr::getAngle,
-                this.fl::getAngle,
-                this.br::getAngle,
-                this.bl::getAngle,
-                1.0
+                new SwerveModuleKinematics(moduleController),
+                frontRightModule::getAngle,
+                frontLeftModule::getAngle,
+                backRightModule::getAngle,
+                backLeftModule::getAngle,
+                turnCoefficient
         );
     }
 
+    /**
+     * Get the last translation that was set to the robot.
+     *
+     * @return the last translation that was set to the robot.
+     */
     @Override
     public Translation getTranslation() {
         return translation;
     }
 
+    /**
+     * Set a translation to the robot. In the case of this swerve chassis,
+     * this does a couple of things. Firstly, it applies the modifier to
+     * the inputted translation. Secondly, it calculates a swerve chassis
+     * state based on the translation. Thirdly, it determines the swerve
+     * module states of each individual module. And finally, it sets the
+     * state to each of these modules, making the robot move.
+     *
+     * @param translation a translation the robot should act upon. This
+     *                    translation should always be <em>relative</em>,
+     *                    meaning whatever the translation says should make
+     *                    the robot act accordingly according to the robot's
+     *                    position and the robot's current heading. I'm
+     *                    currently really tired and just about entirely unable
+     *                    to type, so this isn't coherent, but guess what -
+     */
     @Override
     public void setTranslation(Translation translation) {
+        translation = modifier.apply(translation);
+
         this.translation = translation;
 
         RelativeSwerveState state = kinematics.calculate(translation);
@@ -101,17 +151,31 @@ public class SwerveDrive implements Drive {
         SwerveModuleState brState = state.br();
         SwerveModuleState blState = state.bl();
 
-        this.fr.set(frState);
-        this.fl.set(flState);
-        this.br.set(brState);
-        this.bl.set(blState);
+        this.frontRightModule.set(frState);
+        this.frontLeftModule.set(flState);
+        this.backRightModule.set(brState);
+        this.backLeftModule.set(blState);
     }
 
+    /**
+     * Get the modifier.
+     *
+     * @return the modifier.
+     */
     @Override
     public Function<Translation, Translation> getModifier() {
         return this.modifier;
     }
 
+    /**
+     * Set the modifier.
+     *
+     * @param modifier the modifier. This modifier... well, it literally just
+     *                 modifies any translations that the robot is given.
+     *                 For example, if you want to invert the X and Y values
+     *                 of any given translation, you could do so by using
+     *                 a modifier.
+     */
     @Override
     public void setModifier(Function<Translation, Translation> modifier) {
         this.modifier = modifier;
