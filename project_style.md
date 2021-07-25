@@ -281,3 +281,27 @@ public class Demo {
     }
 }
 ```
+
+## Method Definitions
+Methods should have each of their parameters on a separate line. This is done for two reasons - it improves
+readability, and it helps code to be under 80 characters in length.
+
+### Bad Method Definition
+```java
+public class MethodDefinitions {
+    public void add(double a, double b, double c) {
+        return a + b + c;
+    }
+}
+```
+
+### Good Method Definition
+```java
+public class MethodDefinitions {
+    public void add(double a,
+                    double b,
+                    double c) {
+        return a + b + c;
+    }
+}
+```
