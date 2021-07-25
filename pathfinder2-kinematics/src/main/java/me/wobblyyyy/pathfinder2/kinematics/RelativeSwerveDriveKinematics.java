@@ -21,6 +21,15 @@ import java.util.function.Supplier;
  * instance responsible for controlling the module's angle and power. The
  * only thing this class does differently is incorporating turn values.
  *
+ * <p>
+ * Unlike other popular swerve drive implementations, turning is not handled
+ * by rotating the wheels - rather, turning is handled by adjusting the power
+ * of each of the wheels. This, functionally, doesn't have very much of
+ * a difference - it does make it a bit more challenging to do complex math
+ * related to the robot's center of rotation and all that, but it works
+ * quite simply and quite well.
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.0.0
  */

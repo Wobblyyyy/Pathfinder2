@@ -11,7 +11,9 @@
 package me.wobblyyyy.pathfinder2.scheduler;
 
 import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.time.Time;
+import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -102,12 +104,19 @@ public class Scheduler {
         queueTasks(Arrays.asList(tasks));
     }
 
+    private void dequeueTask(Task task) {
+        this.tasks.remove(task);
+        this.pathfinder.clear();
+    }
+
     /**
      * Tick the scheduler once.
      *
      * @see Scheduler
      */
     public void tick() {
+        if (this.tasks.size() == 0) return;
+
         Task currentTask = this.tasks.get(0);
 
         double currentTimeMilliseconds = Time.ms();
@@ -116,14 +125,26 @@ public class Scheduler {
             currentTask.start(currentTimeMilliseconds);
 
             this.pathfinder.followTrajectory(currentTask.getTrajectory());
-        }
+        } else {
+            if (!(Math.abs(currentTask.getMinTimeMilliseconds()) > 1_000_000)) {
+                if (!currentTask.isMinimumTimeLimitValid(currentTimeMilliseconds)) {
+                    this.pathfinder.tick();
+                    return;
+                }
 
-        if (!currentTask.isMaximumTimeLimitValid(currentTimeMilliseconds)) {
-            this.pathfinder.clear();
-            this.tasks.remove(currentTask);
-        }
+                Trajectory currentTrajectory = currentTask.getTrajectory();
+                PointXYZ currentRobotPosition = this.pathfinder.getOdometry().getPosition();
 
-        pathfinder.tick();
+                boolean isMaximumTimeInvalid = !currentTask.isMaximumTimeLimitValid(currentTimeMilliseconds);
+                boolean isTrajectoryCompleted = currentTrajectory.isDone(currentRobotPosition);
+
+                if (isMaximumTimeInvalid || isTrajectoryCompleted) {
+                    this.dequeueTask(currentTask);
+                } else {
+                    this.pathfinder.tick();
+                }
+            }
+        }
     }
 
     /**
