@@ -290,6 +290,15 @@ public class Pathfinder {
      *#######################################################################*/
 
     /**
+     * "Tick" Pathfinder once. This will tell Pathfinder's execution manager
+     * to check to see what Pathfinder should be doing right now, and based
+     * on that, move your robot.
+     */
+    public void tick() {
+        this.getExecutorManager().tick();
+    }
+
+    /**
      * Follow a single trajectory.
      *
      * @param trajectory the trajectory to follow.

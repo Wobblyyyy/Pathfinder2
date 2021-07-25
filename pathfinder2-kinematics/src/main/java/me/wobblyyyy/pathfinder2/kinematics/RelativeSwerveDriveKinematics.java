@@ -50,28 +50,28 @@ public class RelativeSwerveDriveKinematics implements ForwardsKinematics<Relativ
      * When the {@link Supplier#get()} method is called on this, this should
      * return the module's angle, 0 degrees being straight forwards.
      */
-    private final Supplier<Angle> frModuleAngle;
+    private final Supplier<Angle> frontRightModuleAngle;
 
     /**
      * The front left module's angle.
      * When the {@link Supplier#get()} method is called on this, this should
      * return the module's angle, 0 degrees being straight forwards.
      */
-    private final Supplier<Angle> flModuleAngle;
+    private final Supplier<Angle> frontLeftModuleAngle;
 
     /**
      * The back right module's angle.
      * When the {@link Supplier#get()} method is called on this, this should
      * return the module's angle, 0 degrees being straight forwards.
      */
-    private final Supplier<Angle> brModuleAngle;
+    private final Supplier<Angle> backRightModuleAngle;
 
     /**
      * The back left module's angle.
      * When the {@link Supplier#get()} method is called on this, this should
      * return the module's angle, 0 degrees being straight forwards.
      */
-    private final Supplier<Angle> blModuleAngle;
+    private final Supplier<Angle> backLeftModuleAngle;
 
     /**
      * The chassis' turn multiplier. See the documentation provided in this
@@ -158,10 +158,10 @@ public class RelativeSwerveDriveKinematics implements ForwardsKinematics<Relativ
         this.backRightKinematics = backRightKinematics;
         this.backLeftKinematics = backLeftKinematics;
 
-        this.frModuleAngle = frontRightModuleAngle;
-        this.flModuleAngle = frontLeftModuleAngle;
-        this.brModuleAngle = backRightModuleAngle;
-        this.blModuleAngle = backLeftModuleAngle;
+        this.frontRightModuleAngle = frontRightModuleAngle;
+        this.frontLeftModuleAngle = frontLeftModuleAngle;
+        this.backRightModuleAngle = backRightModuleAngle;
+        this.backLeftModuleAngle = backLeftModuleAngle;
 
         this.turnMultiplier = turnMultiplier;
     }
@@ -178,27 +178,27 @@ public class RelativeSwerveDriveKinematics implements ForwardsKinematics<Relativ
     public RelativeSwerveState calculate(Translation translation) {
         Angle angle = translation.angle();
 
-        double frTurn = frontRightKinematics.calculate(frModuleAngle.get(), angle);
-        double flTurn = frontLeftKinematics.calculate(flModuleAngle.get(), angle);
-        double brTurn = backRightKinematics.calculate(brModuleAngle.get(), angle);
-        double blTurn = backLeftKinematics.calculate(blModuleAngle.get(), angle);
+        double frontRightTurn = frontRightKinematics.calculate(frontRightModuleAngle.get(), angle);
+        double frontLeftTurn = frontLeftKinematics.calculate(frontLeftModuleAngle.get(), angle);
+        double backRightTurn = backRightKinematics.calculate(backRightModuleAngle.get(), angle);
+        double backLeftTurn = backLeftKinematics.calculate(backLeftModuleAngle.get(), angle);
 
         double vz = translation.vz() * turnMultiplier;
-        double frDrive = translation.magnitude() + vz;
-        double flDrive = translation.magnitude() - vz;
-        double brDrive = translation.magnitude() + vz;
-        double blDrive = translation.magnitude() - vz;
+        double frontRightDrive = translation.magnitude() + vz;
+        double frontLeftDrive = translation.magnitude() - vz;
+        double backRightDrive = translation.magnitude() + vz;
+        double backLeftDrive = translation.magnitude() - vz;
 
-        SwerveModuleState frState = new SwerveModuleState(frTurn, frDrive);
-        SwerveModuleState flState = new SwerveModuleState(flTurn, flDrive);
-        SwerveModuleState brState = new SwerveModuleState(brTurn, brDrive);
-        SwerveModuleState blState = new SwerveModuleState(blTurn, blDrive);
+        SwerveModuleState frontRightState = new SwerveModuleState(frontRightTurn, frontRightDrive);
+        SwerveModuleState frontLeftState = new SwerveModuleState(frontLeftTurn, frontLeftDrive);
+        SwerveModuleState backRightState = new SwerveModuleState(backRightTurn, backRightDrive);
+        SwerveModuleState backLeftState = new SwerveModuleState(backLeftTurn, backLeftDrive);
 
         return new RelativeSwerveState(
-                frState,
-                flState,
-                brState,
-                blState
+                frontRightState,
+                frontLeftState,
+                backRightState,
+                backLeftState
         );
     }
 
@@ -219,47 +219,47 @@ public class RelativeSwerveDriveKinematics implements ForwardsKinematics<Relativ
     public RelativeSwerveState calculateOptimized(Translation translation) {
         Angle angle = translation.angle();
 
-        double frTurn = frontRightKinematics.calculate(frModuleAngle.get(), angle);
-        double flTurn = frontLeftKinematics.calculate(flModuleAngle.get(), angle);
-        double brTurn = backRightKinematics.calculate(brModuleAngle.get(), angle);
-        double blTurn = backLeftKinematics.calculate(blModuleAngle.get(), angle);
+        double frontRightTurn = frontRightKinematics.calculate(frontRightModuleAngle.get(), angle);
+        double frontLeftTurn = frontLeftKinematics.calculate(frontLeftModuleAngle.get(), angle);
+        double backRightTurn = backRightKinematics.calculate(backRightModuleAngle.get(), angle);
+        double backLeftTurn = backLeftKinematics.calculate(backLeftModuleAngle.get(), angle);
 
         double vz = translation.vz() * turnMultiplier;
-        double frDrive = translation.magnitude() + vz;
-        double flDrive = translation.magnitude() - vz;
-        double brDrive = translation.magnitude() + vz;
-        double blDrive = translation.magnitude() - vz;
+        double frontRightDrive = translation.magnitude() + vz;
+        double frontLeftDrive = translation.magnitude() - vz;
+        double backRightDrive = translation.magnitude() + vz;
+        double backLeftDrive = translation.magnitude() - vz;
 
-        SwerveModuleState frState = SwerveModuleState.optimized(
+        SwerveModuleState frontRightState = SwerveModuleState.optimized(
                 angle,
-                frDrive,
-                frModuleAngle.get(),
+                frontRightDrive,
+                frontRightModuleAngle.get(),
                 frontRightKinematics
         );
-        SwerveModuleState flState = SwerveModuleState.optimized(
+        SwerveModuleState frontLeftState = SwerveModuleState.optimized(
                 angle,
-                flDrive,
-                flModuleAngle.get(),
+                frontLeftDrive,
+                frontLeftModuleAngle.get(),
                 frontLeftKinematics
         );
-        SwerveModuleState brState = SwerveModuleState.optimized(
+        SwerveModuleState backRightState = SwerveModuleState.optimized(
                 angle,
-                brDrive,
-                brModuleAngle.get(),
+                backRightDrive,
+                backRightModuleAngle.get(),
                 backRightKinematics
         );
-        SwerveModuleState blState = SwerveModuleState.optimized(
+        SwerveModuleState backLeftState = SwerveModuleState.optimized(
                 angle,
-                blDrive,
-                blModuleAngle.get(),
+                backLeftDrive,
+                backLeftModuleAngle.get(),
                 backLeftKinematics
         );
 
         return new RelativeSwerveState(
-                frState,
-                flState,
-                brState,
-                blState
+                frontRightState,
+                frontLeftState,
+                backRightState,
+                backLeftState
         );
     }
 }
