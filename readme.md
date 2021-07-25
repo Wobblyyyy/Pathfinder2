@@ -59,7 +59,7 @@ some of the more advanced concepts, as well as covering full-fledged implementat
 <h2 align="center">Design Goals</h2>
 
 Pathfinder's design is extensively
-documented [here](https://docs.google.com/document/d/1BSUX14pQgTdC7Rce1tWTELQSHRKI-J-myRml7rBbgRA/edit?usp=sharing). For
+documented [here](https://google.com). For
 the purpose of accessibility, many of the design intentions will be reiterated here.
 
 - Create an expansive library capable of handling all motion-related tasks for FTC and FRC environments. This library
