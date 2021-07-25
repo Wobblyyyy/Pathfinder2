@@ -3,6 +3,107 @@ Ahh. Everyone's favorite topic. Not really, but yeah. Code style. All the code I
 simple style guidelines, but the issue is, nobody knows what they are except for me, because I've never written them
 down somewhere. Don't worry, I'll try to keep this short.
 
+# General Code Style
+There's not a lot of rules for how code here should look. Code is supposed to do one thing - function. Good code,
+however, is supposed to function and be easy to maintain and understand.
+
+## Comment Style
+There are three types of comments. Styling them can be important.
+
+### End-of-line Comments
+```java
+//bad example (no spacing)
+// good example (nice spacing)
+```
+
+### JavaDoc Comments
+```java
+/**
+ *bad example (no spacing)
+ */
+
+/**
+ * good example (nice spacing)
+ */
+```
+
+### C-style Comments
+```java
+/*bad example (no spacing)*/
+
+/*
+*bad example (not lined up, no spacing)        
+ */
+
+/* good example (clear spacing, this shouldn\'t really be used tho) */
+
+/*
+ * good example
+ * (clear spacing)
+ */
+```
+
+## Choosing Readable Identifiers
+Avoid shortening words as much as possible. Unless there's a widely-used abbreviation (such as USB/Universal Serial
+Bus) you should spell each word out to maximize the clarity of what things are supposed to represent.
+
+Choose names that accurately describe the functionality of that identifier. Ex:
+
+### Bad Identifiers
+```java
+public class Identifiers {
+    /*
+     * Doesn't describe the unit the time is measured in.
+     * Doesn't describe what the time value actually means.
+     * 
+     * A better name would be elapsedTimeMilliseconds, as it clearly expresses the unit
+     * and the purpose of the field.
+     */
+    public double time;
+
+    /*
+     * Isn't very descriptive. Booleans should usually be prefixed with "is".
+     * 
+     * A better name would be isEnabled.
+     */
+    public boolean enabled;
+
+    /*
+     * Confusing and impossible to understand without reading into the code.
+     * Useless parameter name.
+     * 
+     * A better name is demonstrated below.
+     */
+    public void update(double ms) {
+        this.time = ms;
+    }
+}
+```
+
+### Good Identifiers 
+```java
+public class Identifiers {
+    /*
+     * Describes the unit of time and the purpose of that measurement. 
+     * Uses complete words - you can't not understand what it says.
+     */
+    public double elapsedTimeMilliseconds;
+
+    /*
+     * Uses "is" before the boolean to indicate a state. 
+     */
+    public boolean isEnabled;
+
+    /*
+     * Descriptive method name.
+     * Descriptive parameter name.
+     */
+    public void updateElapsedTime(double elapsedTimeMilliseconds) {
+        this.elapsedTimeMilliseconds = elapsedTimeMilliseconds;
+    }
+}
+```
+
 # Java
 Any code written in Java only needs to follow a couple style guidelines. To be honest, you can probably figure out what
 most of those are by just reading some source code.
