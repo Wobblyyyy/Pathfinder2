@@ -1,3 +1,7 @@
+## NOTICE
+This library is still in active development. There's a lot of placeholders and a lot of missing documentation.
+You will most certainly encounter one or two bugs. 
+
 <p align="center">
 <img width="300" height="300" src="media/logo.png" alt="Pathfinder2">
 <br>
