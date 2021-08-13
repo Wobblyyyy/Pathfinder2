@@ -114,7 +114,7 @@ public interface Follower {
         // Convert the target point into a translation by getting its X
         // and Y values. The turn value comes from an external source,
         // so we don't have to worry about it.
-        return new Translation(target.x(), target.y(), turn);
+        return new Translation(targetPoint.x(), targetPoint.y(), turn);
     }
 
     /**

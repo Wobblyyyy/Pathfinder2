@@ -107,18 +107,20 @@ public class GenericFollower implements Follower {
         // a value that will minimize that aforementioned delta.
         double turn = turnController.calculate(angleDelta);
 
+        Translation translation = Follower.getRelativeTranslation(
+                current,
+                nextMarker,
+                speed,
+                turn
+        );
+
         // Use the consumer to accept a translation we create.
         // Instead of creating an absolute translation, which would only help
         // if the robot is facing straight forwards, we have to use a relative
         // translation. The Follower interface's static method that we
         // call here (getRelativeTranslation) first generates an absolute
         // translation and then converts it to a relative one. Epic sauce.
-        consumer.accept(Follower.getRelativeTranslation(
-                current,
-                nextMarker,
-                speed,
-                turn
-        ));
+        consumer.accept(translation);
 
         // We're not done yet, so return false.
         return false;

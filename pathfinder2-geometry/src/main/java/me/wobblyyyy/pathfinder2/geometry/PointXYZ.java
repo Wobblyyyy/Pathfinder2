@@ -63,6 +63,19 @@ public class PointXYZ extends PointXY {
     }
 
     /**
+     * Create a new {@code PointXYZ} instance.
+     *
+     * @param x        the X coordinate of the point.
+     * @param y        the Y coordinate of the point.
+     * @param zDegrees the point's heading, IN DEGREES.
+     */
+    public PointXYZ(double x,
+                    double y,
+                    double zDegrees) {
+        this(x, y, Angle.fromDeg(zDegrees));
+    }
+
+    /**
      * Add two points together.
      *
      * @param a one of the two points to add.

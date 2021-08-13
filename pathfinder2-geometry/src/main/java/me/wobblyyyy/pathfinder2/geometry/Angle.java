@@ -452,7 +452,7 @@ public class Angle implements Comparable<Angle>, Serializable {
     public static boolean isCloseDeg(Angle a,
                                      Angle b,
                                      double tolerance) {
-        return Math.abs(a.deg() - b.deg()) <= tolerance;
+        return Math.abs(a.deg() - b.deg()) <= Math.abs(tolerance);
     }
 
     /**
