@@ -1,3 +1,11 @@
+<p align="center">
+<img src="../media/pathfinder2-logo.png" alt="Pathfinder2">
+<br>
+<i>Autonomous motion planning and control library for wheeled mobile robots.</i>
+<br>
+<i>Successor to <a href="https://github.com/Wobblyyyy/Pathfinder">Pathfinder</a>.</i>
+</p>
+
 # pathfinder2-geometry
 Geometry! My favorite. It might not be yours, but it's certainly mine. The memories I have of 9th grade geometry
 class... man, those were the days, am I right? Of course I'm right, I always am.
