@@ -91,5 +91,6 @@ GitHub provides a [handy little guide](https://github.com/Wobblyyyy/Pathfinder2/
 GPL V3, and I'd suggest you give it a quick read if you're unfamiliar with the terms and conditions of the license.
 
 <h3 align="center">More Licensing Stuff</h3>
+
 Pathfinder2 depends on several other open source projects, most (all?) of which are licensed under their own terms.
 - [OdometryCore](https://github.com/tmthecoder/OdometryCore), licensed under the [MIT License](https://opensource.org/licenses/MIT)
