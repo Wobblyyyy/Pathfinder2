@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
+
 import java.io.Serializable;
 
 /**
@@ -242,6 +244,12 @@ public class PointXY implements Serializable {
     public static boolean isNear(PointXY a,
                                  PointXY b,
                                  double tolerance) {
+        if (tolerance < 0) {
+            throw new InvalidToleranceException(
+                    "Cannot have a tolerance below 0!"
+            );
+        }
+
         // Get the distance between the two points, make sure it's absolute,
         // and check to see if it's less than the tolerance value.
         return Math.abs(distance(a, b)) <= Math.abs(tolerance);

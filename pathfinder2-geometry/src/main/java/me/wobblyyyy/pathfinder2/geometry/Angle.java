@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
+
 import java.io.Serializable;
 
 /**
@@ -89,23 +91,6 @@ import java.io.Serializable;
  * @since 0.0.0
  */
 public class Angle implements Comparable<Angle>, Serializable {
-    /*
-     * Just as a style note - entirely apart from any API-related stuff -
-     * any math you're doing inside the Angle class should be done in
-     * degrees unless there's a pretty good reason it shouldn't be. This
-     * is entirely just my personal preference and there's absolutely no
-     * other valid reasoning for it. It helps to keep code cleaner - if
-     * everything is done the same way, it's easier to understand.
-     *
-     * Also, this class is starting to get pretty bloated. I mean... it's
-     * nearly a thousand lines long, and all it does is provide some stuff
-     * related to angles. With that being said - feel free to add more!
-     * Any angle-related methods you've made use of would be a great addition.
-     * The core concepts of angles is pretty simple, and anything beyond that
-     * would only really be used by someone who knows what they're trying to
-     * do anyways.
-     */
-
     /**
      * "rad"
      */
@@ -438,6 +423,12 @@ public class Angle implements Comparable<Angle>, Serializable {
     public static boolean isCloseRad(Angle a,
                                      Angle b,
                                      double tolerance) {
+        if (tolerance < 0) {
+            throw new InvalidToleranceException(
+                    "Cannot have a tolerance below 0!"
+            );
+        }
+
         return Math.abs(a.rad() - b.rad()) <= tolerance;
     }
 
@@ -452,6 +443,12 @@ public class Angle implements Comparable<Angle>, Serializable {
     public static boolean isCloseDeg(Angle a,
                                      Angle b,
                                      double tolerance) {
+        if (tolerance < 0) {
+            throw new InvalidToleranceException(
+                    "Cannot have a tolerance below 0!"
+            );
+        }
+
         return Math.abs(a.deg() - b.deg()) <= Math.abs(tolerance);
     }
 

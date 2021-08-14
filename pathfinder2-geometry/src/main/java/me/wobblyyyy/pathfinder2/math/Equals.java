@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.math;
 
+import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
+
 /**
  * Simple utilities for determining if numbers are equal to another.
  *
@@ -29,6 +31,75 @@ public class Equals {
     public static boolean soft(double a,
                                double b,
                                double tolerance) {
+        if (tolerance < 0) {
+            throw new InvalidToleranceException(
+                    "Cannot have a tolerance value less than 0!"
+            );
+        }
+
+        return Math.abs(a - b) <= tolerance;
+    }
+
+    /**
+     * Soft-equals - are two numbers within a given distance of another?
+     *
+     * @param a         the first of the two numbers.
+     * @param b         the second of the two numbers.
+     * @param tolerance the maximum allowable value that's still considered
+     *                  to be "equal."
+     * @return true if the numbers are "equal" and false if not.
+     */
+    public static boolean soft(int a,
+                               int b,
+                               int tolerance) {
+        if (tolerance < 0) {
+            throw new InvalidToleranceException(
+                    "Cannot have a tolerance value less than 0!"
+            );
+        }
+
+        return Math.abs(a - b) <= tolerance;
+    }
+
+    /**
+     * Soft-equals - are two numbers within a given distance of another?
+     *
+     * @param a         the first of the two numbers.
+     * @param b         the second of the two numbers.
+     * @param tolerance the maximum allowable value that's still considered
+     *                  to be "equal."
+     * @return true if the numbers are "equal" and false if not.
+     */
+    public static boolean soft(float a,
+                               float b,
+                               float tolerance) {
+        if (tolerance < 0) {
+            throw new InvalidToleranceException(
+                    "Cannot have a tolerance value less than 0!"
+            );
+        }
+
+        return Math.abs(a - b) <= tolerance;
+    }
+
+    /**
+     * Soft-equals - are two numbers within a given distance of another?
+     *
+     * @param a         the first of the two numbers.
+     * @param b         the second of the two numbers.
+     * @param tolerance the maximum allowable value that's still considered
+     *                  to be "equal."
+     * @return true if the numbers are "equal" and false if not.
+     */
+    public static boolean soft(long a,
+                               long b,
+                               long tolerance) {
+        if (tolerance < 0) {
+            throw new InvalidToleranceException(
+                    "Cannot have a tolerance value less than 0!"
+            );
+        }
+
         return Math.abs(a - b) <= tolerance;
     }
 }
