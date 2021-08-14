@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.robot;
 
+import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
@@ -34,7 +35,17 @@ public abstract class AbstractOdometry implements Odometry {
 
     @Override
     public PointXYZ getPosition() {
-        return modifier.apply(getRawPosition().add(offset));
+        PointXYZ rawPosition = getRawPosition();
+
+        if (rawPosition == null) {
+            throw new NullPointException(
+                    "An Odometry system reported a null position, please " +
+                            "ensure the getRawPosition() method is always " +
+                            "returning a non-null object!"
+            );
+        }
+
+        return modifier.apply(rawPosition.add(offset));
     }
 
     @Override
@@ -44,6 +55,12 @@ public abstract class AbstractOdometry implements Odometry {
 
     @Override
     public void setOffset(PointXYZ offset) {
+        if (offset == null) {
+            throw new NullPointException(
+                    "Attempted to set an offset using a null point!"
+            );
+        }
+
         this.offset = offset;
     }
 
@@ -74,6 +91,13 @@ public abstract class AbstractOdometry implements Odometry {
 
     @Override
     public void offsetSoPositionIs(PointXYZ targetPosition) {
+        if (targetPosition == null) {
+            throw new NullPointException(
+                    "Attempted to apply an offset using a null target " +
+                            "position!"
+            );
+        }
+
         setOffset(getRawPosition().multiply(-1).add(targetPosition));
     }
 

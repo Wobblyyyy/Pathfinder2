@@ -10,6 +10,12 @@
 
 package me.wobblyyyy.pathfinder2.exceptions;
 
+/**
+ * Exception thrown when a required {@code Drive} is null.
+ *
+ * @author Colin Robertson
+ * @since 0.0.0
+ */
 public class NullDriveException extends RuntimeException {
     public NullDriveException(String message) {
         super(message);

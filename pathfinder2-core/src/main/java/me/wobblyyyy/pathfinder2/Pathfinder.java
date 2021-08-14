@@ -394,54 +394,13 @@ public class Pathfinder {
         ));
     }
 
-    /*#########################################################################
-     * STOPWATCH-RELATED METHODS
+    /**
+     * Get Pathfinder's {@code Stopwatch}.
      *
-     * This is mostly included for testing purposes, but there's no harm in
-     * putting all of this inside the Pathfinder class. Most users will never
-     * have any need for this.
-     *
-     * It might be a good idea to remove all of this before any actual
-     * public releases, as it just makes the class more bloated.
-     *#######################################################################*/
-
-    /**
-     * Start Pathfinder's stopwatch.
+     * @return Pathfinder's {@code Stopwatch} instance.
      */
-    public void startStopwatch() {
-        stopwatch.start();
-    }
-
-    /**
-     * Stop Pathfinder's stopwatch.
-     */
-    public void stopStopwatch() {
-        stopwatch.stop();
-    }
-
-    /**
-     * Record a lap on Pathfinder's stopwatch.
-     */
-    public void lapStopwatch() {
-        stopwatch.lap();
-    }
-
-    /**
-     * Get the amount of time elapsed in Pathfinder's stopwatch.
-     *
-     * @return the amount of time elapsed during Pathfinder's stopwatch.
-     */
-    public double getStopwatchElapsedMs() {
-        return stopwatch.elapsed();
-    }
-
-    /**
-     * Get a list of timestamps from the stopwatch.
-     *
-     * @return a list of timestamps from the stopwatch.
-     */
-    public List<Double> getStopwatchTimestamps() {
-        return stopwatch.getTimes();
+    public Stopwatch stopwatch() {
+        return this.stopwatch;
     }
 
     /**

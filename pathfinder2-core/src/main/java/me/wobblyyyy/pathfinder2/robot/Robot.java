@@ -10,6 +10,9 @@
 
 package me.wobblyyyy.pathfinder2.robot;
 
+import me.wobblyyyy.pathfinder2.exceptions.NullDriveException;
+import me.wobblyyyy.pathfinder2.exceptions.NullOdometryException;
+
 /**
  * A representation of a physical robot. Robots are defined by their drive
  * and odometry systems - the odometry system should report the robot's
@@ -39,6 +42,22 @@ public class Robot {
      */
     public Robot(Drive drive,
                  Odometry odometry) {
+        if (drive == null) {
+            throw new NullDriveException(
+                    "Attempted to create a robot with a null instance of the " +
+                            "Drive interface, please ensure you're passing " +
+                            "a non-null object to the Robot constructor!"
+            );
+        }
+
+        if (odometry == null) {
+            throw new NullOdometryException(
+                    "Attempted to create a robot with a null instance of the " +
+                            "Odometry interface, please ensure you're passing " +
+                            "a non-null object to the Robot constructor!"
+            );
+        }
+
         this.drive = drive;
         this.odometry = odometry;
     }

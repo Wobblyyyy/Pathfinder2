@@ -10,6 +10,12 @@
 
 package me.wobblyyyy.pathfinder2.exceptions;
 
+/**
+ * Exception thrown when a required {@code Controller} is null.
+ *
+ * @author Colin Robertson
+ * @since 0.0.0
+ */
 public class NullControllerException extends RuntimeException {
     public NullControllerException(String message) {
         super(message);

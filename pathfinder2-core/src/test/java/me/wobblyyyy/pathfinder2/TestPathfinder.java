@@ -10,11 +10,5 @@
 
 package me.wobblyyyy.pathfinder2;
 
-import me.wobblyyyy.pathfinder2.execution.ExecutorManager;
-import org.junit.jupiter.api.Test;
-
 public class TestPathfinder {
-    @Test
-    public void testFollowerExecution() {
-    }
 }

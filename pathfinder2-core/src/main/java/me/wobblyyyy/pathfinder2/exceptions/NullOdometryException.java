@@ -10,6 +10,12 @@
 
 package me.wobblyyyy.pathfinder2.exceptions;
 
+/**
+ * Exception thrown when a required {@code Odometry} is null.
+ *
+ * @author Colin Robertson
+ * @since 0.0.0
+ */
 public class NullOdometryException extends RuntimeException {
     public NullOdometryException(String message) {
         super(message);
