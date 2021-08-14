@@ -76,6 +76,7 @@ the purpose of accessibility, many of the design intentions will be reiterated h
   autonomous motion.
 
 <h2 align="center">Licensing</h2>
+
 I know, I know... nobody likes licenses or whatever. I'll make it quick. Any file contained in this repository is
 a part of the "Pathfinder2" project, which is licensed under the GNU General Public License V3. Any contributors 
 grant the Pathfinder2 project the right to any contributed code. You're allowed to use this project commercially,
@@ -88,3 +89,7 @@ rest of the FTC and FRC community - that's the whole point of the library, reall
 
 GitHub provides a [handy little guide](https://github.com/Wobblyyyy/Pathfinder2/blob/master/license.md) to the GNU
 GPL V3, and I'd suggest you give it a quick read if you're unfamiliar with the terms and conditions of the license.
+
+<h3 align="center">More Licensing Stuff</h3>
+Pathfinder2 depends on several other open source projects, most (all?) of which are licensed under their own terms.
+- [OdometryCore](https://github.com/tmthecoder/OdometryCore), licensed under the [MIT License](https://opensource.org/licenses/MIT)
