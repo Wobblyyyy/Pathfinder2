@@ -30,6 +30,12 @@ is an efficient and expansive library written in Java, making use of the Java
 This library is still in active development. There's a lot of placeholders and a lot of missing documentation.
 You will most certainly encounter one or two bugs. Actually, maybe a little more than one or two.
 
+<h2 align="Center">Documentation</h2>
+
+Please see the [Pathfinder2 Documentation Portal](https://google.com), or continue scrolling to access the quickstart.
+The documentation portal should contain just about everything you need to know, and it's probably the best place to
+start if you're confused.
+
 <h2 align="center">Documentation Style</h2>
 
 Okay. I'm gonna be real with you. Although, yes - I could type out all the documentation for this project exactly as I
