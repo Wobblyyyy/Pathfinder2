@@ -11,6 +11,9 @@
 package me.wobblyyyy.pathfinder2.follower;
 
 import me.wobblyyyy.pathfinder2.control.Controller;
+import me.wobblyyyy.pathfinder2.exceptions.NullControllerException;
+import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
+import me.wobblyyyy.pathfinder2.exceptions.NullTrajectoryException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
@@ -53,6 +56,18 @@ public class GenericFollower implements Follower {
      */
     public GenericFollower(Trajectory trajectory,
                            Controller turnController) {
+        if (trajectory == null) {
+            throw new NullTrajectoryException(
+                    "Can't create a generic follower with a null trajectory!"
+            );
+        }
+
+        if (turnController == null) {
+            throw new NullControllerException(
+                    "Can't create a generic follower with a null turn controller!"
+            );
+        }
+
         this.trajectory = trajectory;
         this.turnController = turnController;
 
@@ -72,6 +87,14 @@ public class GenericFollower implements Follower {
     @Override
     public boolean tick(PointXYZ current,
                         Consumer<Translation> consumer) {
+        if (current == null) {
+            throw new NullPointException(
+                    "Attempted to tick a generic follower with a NULL " +
+                            "current point; make sure your position is never " +
+                            "null!"
+            );
+        }
+
         // If the trajectory is done, we should stop executing this method
         // right here.
         if (trajectory.isDone(current)) {

@@ -3,7 +3,7 @@ This library is still in active development. There's a lot of placeholders and a
 You will most certainly encounter one or two bugs. Actually, maybe a little bit more than one or two.
 
 <p align="center">
-<img width="300" height="300" src="media/logo.png" alt="Pathfinder2">
+<img width="300" height="300" src="media/pathfinder2-logo.png" alt="Pathfinder2">
 <br>
 <i>Autonomous motion planning and control library for wheeled mobile robots.</i>
 <br>

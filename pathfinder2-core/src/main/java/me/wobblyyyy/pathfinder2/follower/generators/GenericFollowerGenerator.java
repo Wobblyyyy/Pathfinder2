@@ -11,6 +11,10 @@
 package me.wobblyyyy.pathfinder2.follower.generators;
 
 import me.wobblyyyy.pathfinder2.control.Controller;
+import me.wobblyyyy.pathfinder2.exceptions.NullControllerException;
+import me.wobblyyyy.pathfinder2.exceptions.NullDriveException;
+import me.wobblyyyy.pathfinder2.exceptions.NullOdometryException;
+import me.wobblyyyy.pathfinder2.exceptions.NullTrajectoryException;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.follower.FollowerGenerator;
 import me.wobblyyyy.pathfinder2.follower.GenericFollower;
@@ -43,6 +47,12 @@ public class GenericFollowerGenerator implements FollowerGenerator {
      *                       {@link GenericFollower}s.
      */
     public GenericFollowerGenerator(Controller turnController) {
+        if (turnController == null) {
+            throw new NullControllerException(
+                    "Can't create a generic follower generator with " +
+                        "a null turn controller!"
+            );
+        }
         this.turnController = turnController;
     }
 
@@ -56,6 +66,24 @@ public class GenericFollowerGenerator implements FollowerGenerator {
     @Override
     public Follower generate(Robot robot,
                              Trajectory trajectory) {
+        if (robot.odometry() == null) {
+            throw new NullOdometryException(
+                    "Can't generate a follower with null Odometry!"
+            );
+        }
+
+        if (robot.drive() == null) {
+            throw new NullDriveException(
+                    "Can't generate a follower with null Drive"
+            );
+        }
+
+        if (trajectory == null) {
+            throw new NullTrajectoryException(
+                    "Can't generate a follower with a null Trajectory!"
+            );
+        }
+
         return new GenericFollower(
                 trajectory,
                 turnController
