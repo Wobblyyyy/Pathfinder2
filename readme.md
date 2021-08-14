@@ -1,7 +1,3 @@
-## NOTICE
-This library is still in active development. There's a lot of placeholders and a lot of missing documentation.
-You will most certainly encounter one or two bugs. Actually, maybe a little bit more than one or two.
-
 <p align="center">
 <img src="media/pathfinder2-logo.png" alt="Pathfinder2">
 <br>
@@ -28,6 +24,11 @@ the [FIRST Robotics Competition](https://www.firstinspires.org/robotics/frc) and
 [FIRST Tech Challenge](https://www.firstinspires.org/robotics/ftc). Pathfinder2, colloquially denoted as "Pathfinder,"
 is an efficient and expansive library written in Java, making use of the Java
 [JDK version 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html).
+
+<h2 align="center">Important Notice</h2>
+
+This library is still in active development. There's a lot of placeholders and a lot of missing documentation.
+You will most certainly encounter one or two bugs. Actually, maybe a little more than one or two.
 
 <h2 align="center">Documentation Style</h2>
 
