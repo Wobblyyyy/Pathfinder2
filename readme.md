@@ -74,3 +74,17 @@ the purpose of accessibility, many of the design intentions will be reiterated h
   features are incredibly useful in constructing advanced autonomous routines, but are very inaccessible to all, but the
   most experienced programmers, Pathfinder seeks to provide an easy-to-use interface for working with advanced
   autonomous motion.
+
+<h2 align="center">Licensing</h2>
+I know, I know... nobody likes licenses or whatever. I'll make it quick. Any file contained in this repository is
+a part of the "Pathfinder2" project, which is licensed under the GNU General Public License V3. Any contributors 
+grant the Pathfinder2 project the right to any contributed code. You're allowed to use this project commercially,
+privately, publicly - really, however you want, SO LONG AS you provide the source code for your program and include
+a copy of the GNU General Public License V3 in your repository. 
+
+I don't actually care all that much if you "steal" my code - I love the open source community. This project is
+licensed the way it is so that any FTC or FRC teams making use of it share their contributions and ideas with the
+rest of the FTC and FRC community - that's the whole point of the library, really. 
+
+GitHub provides a [handy little guide](https://github.com/Wobblyyyy/Pathfinder2/blob/master/license.md) to the GNU
+GPL V3, and I'd suggest you give it a quick read if you're unfamiliar with the terms and conditions of the license.
