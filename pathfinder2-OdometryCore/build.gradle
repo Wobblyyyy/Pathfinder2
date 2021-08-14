@@ -10,9 +10,9 @@ repositories {
 }
 
 dependencies {
-    compile project(':pathfinder2-geometry')
-    compile project(':pathfinder2-kinematics')
-    compile project(':pathfinder2-core')
+    implementation project(':pathfinder2-geometry')
+    implementation project(':pathfinder2-kinematics')
+    implementation project(':pathfinder2-core')
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }

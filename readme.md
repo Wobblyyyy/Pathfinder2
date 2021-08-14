@@ -10,6 +10,16 @@ You will most certainly encounter one or two bugs. Actually, maybe a little bit 
 <i>Successor to <a href="https://github.com/Wobblyyyy/Pathfinder">Pathfinder</a>.</i>
 </p>
 
+<div align="center">
+<img alt="GNU GPL V3" src="https://img.shields.io/github/license/Wobblyyyy/Pathfinder2">
+<img alt="Top Language" src="https://img.shields.io/github/languages/top/wobblyyyy/Pathfinder2">
+<img alt="Issues" src="https://img.shields.io/github/issues/Wobblyyyy/Pathfinder2">
+<img alt="Forks" src="https://img.shields.io/github/forks/Wobblyyyy/Pathfinder2">
+<img alt="Stars" src="https://img.shields.io/github/stars/Wobblyyyy/Pathfinder2">
+<img alt="Latest Release (Bleeding)" src="https://img.shields.io/github/v/release/wobblyyyy/Pathfinder2?include_prereleases">
+<img alt="Latest Release" src="https://img.shields.io/github/v/release/wobblyyyy/Pathfinder2">
+</div>
+
 <h1 align="center">Description</h1>
 
 Pathfinder2 is a continuation of the original [Pathfinder](https://github.com/Wobblyyyy/Pathfinder)
