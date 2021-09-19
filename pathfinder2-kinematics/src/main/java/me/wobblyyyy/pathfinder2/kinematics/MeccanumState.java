@@ -10,17 +10,41 @@
 
 package me.wobblyyyy.pathfinder2.kinematics;
 
-import java.util.stream.DoubleStream;
-
+/**
+ * A state for a meccanum chassis.
+ *
+ * @author Colin Robertson
+ * @since 0.0.0
+ */
 public class MeccanumState {
+    /**
+     * The front-left motor state.
+     */
     private final double fl;
 
+    /**
+     * The front-right motor state.
+     */
     private final double fr;
 
+    /**
+     * The back-left motor state.
+     */
     private final double bl;
 
+    /**
+     * The back-right motor state.
+     */
     private final double br;
 
+    /**
+     * Create a new meccanum state.
+     *
+     * @param fl the front-left motor.
+     * @param fr the front-right motor.
+     * @param bl the back-left motor.
+     * @param br the back-right motor.
+     */
     public MeccanumState(double fl,
                          double fr,
                          double bl,
@@ -31,39 +55,61 @@ public class MeccanumState {
         this.br = br;
     }
 
+    /**
+     * Get the front-left motor's value.
+     *
+     * @return the front-left motor's value.
+     */
     public double fl() {
         return this.fl;
     }
 
+    /**
+     * Get the front-right motor's value.
+     *
+     * @return the front-right motor's value.
+     */
     public double fr() {
         return this.fr;
     }
 
+    /**
+     * Get the back-left motor's value.
+     *
+     * @return the back-left motor's value.
+     */
     public double bl() {
         return this.bl;
     }
 
+    /**
+     * Get the back-right motor's value.
+     *
+     * @return the back-right motor's value.
+     */
     public double br() {
         return this.br;
     }
 
+    /**
+     * Get the max power value out of all the motor power values.
+     *
+     * @return the maximum power value.
+     */
     public double maxPower() {
-        double[] values = new double[]{
-                fl,
-                fr,
-                bl,
-                br
-        };
-
-        double[] newValues = new double[4];
-
-        for (int i = 0; i < values.length; i++) {
-            newValues[i] = Math.abs(values[i]);
-        }
-
-        return DoubleStream.of(newValues).max().getAsDouble();
+        return Math.max(
+                Math.max(fl, fr),
+                Math.max(bl, br)
+        );
     }
 
+    /**
+     * Create a new (normalized) meccanum state.
+     *
+     * @param max the maximum power value. This is the highest value the
+     *            normalized state can have for any individual power value.
+     * @return a normalized meccanum state.
+     */
     public MeccanumState normalize(double max) {
         double realMax = maxPower();
 
@@ -82,12 +128,26 @@ public class MeccanumState {
         return new MeccanumState(_fl, _fr, _bl, _br);
     }
 
+    /**
+     * Normalize the meccanum state from the state's maximum power value.
+     * If the state's maximum power value is greater than 1.0, 1.0 will
+     * be used in place of the maximum power value.
+     *
+     * @return a normalized meccanum state.
+     */
     public MeccanumState normalizeFromMaxUnderOne() {
         double max = maxPower();
 
         return normalize(max > 1 ? 1.0 : max);
     }
 
+    /**
+     * Add two meccanum states together. I have absolutely no idea why anybody
+     * would literally ever use this method ever.
+     *
+     * @param state the state to add.
+     * @return the sum of the two states.
+     */
     public MeccanumState add(MeccanumState state) {
         return new MeccanumState(
                 fl + state.fl,
@@ -97,6 +157,12 @@ public class MeccanumState {
         );
     }
 
+    /**
+     * Multiply two meccanum states together.
+     *
+     * @param state the state to multiply by.
+     * @return the product of the two states.
+     */
     public MeccanumState multiply(MeccanumState state) {
         return new MeccanumState(
                 fl * state.fl,
@@ -106,6 +172,13 @@ public class MeccanumState {
         );
     }
 
+    /**
+     * Multiply a meccanum state's four motor values based on a multiplier.
+     *
+     * @param multiplier the multiplier to multiply each of the power values
+     *                   by.
+     * @return the multiplied meccanum state.
+     */
     public MeccanumState multiply(double multiplier) {
         return multiply(new MeccanumState(
                 multiplier,

@@ -13,7 +13,18 @@ package me.wobblyyyy.pathfinder2.kinematics;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 
+/**
+ * The most simple implementation of meccanum kinematics. For most use
+ * cases, this should suffice. If you need more advanced meccanum kinematics,
+ * this class isn't for you.
+ *
+ * @author Colin Robertson
+ * @since 0.0.0
+ */
 public class RelativeMeccanumKinematics implements ForwardsKinematics<MeccanumState> {
+    /**
+     * The angles of each of the wheels.
+     */
     private static final Angle[] WHEEL_ANGLES = new Angle[]{
             Angle.DEG_45,                  // FRONT LEFT
             Angle.DEG_315,                 // FRONT RIGHT
@@ -21,12 +32,28 @@ public class RelativeMeccanumKinematics implements ForwardsKinematics<MeccanumSt
             Angle.DEG_45                   // BACK RIGHT
     };
 
+    /**
+     * The kinematics' minimum magnitude.
+     */
     private final double minMagnitude;
 
+    /**
+     * The kinematics' maximum magnitude.
+     */
     private final double maxMagnitude;
 
+    /**
+     * The kinematic's angle offset.
+     */
     private final Angle angleOffset;
 
+    /**
+     * Create a new instance of the {@code RelativeMeccanumKinematics} class.
+     *
+     * @param minMagnitude the minimum magnitude.
+     * @param maxMagnitude the maximum magnitude.
+     * @param angleOffset  the angle offset for the kinematics.
+     */
     public RelativeMeccanumKinematics(double minMagnitude,
                                       double maxMagnitude,
                                       Angle angleOffset) {
@@ -65,12 +92,17 @@ public class RelativeMeccanumKinematics implements ForwardsKinematics<MeccanumSt
                 maxMagnitude
         ), minMagnitude);
 
-        double fl = calculatePower(angle, WHEEL_ANGLES[0]) + turn;
-        double fr = calculatePower(angle, WHEEL_ANGLES[1]) - turn;
-        double bl = calculatePower(angle, WHEEL_ANGLES[2]) + turn;
-        double br = calculatePower(angle, WHEEL_ANGLES[3]) - turn;
+        double frontLeft = calculatePower(angle, WHEEL_ANGLES[0]) + turn;
+        double frontRight = calculatePower(angle, WHEEL_ANGLES[1]) - turn;
+        double backLeft = calculatePower(angle, WHEEL_ANGLES[2]) + turn;
+        double backRight = calculatePower(angle, WHEEL_ANGLES[3]) - turn;
 
-        return new MeccanumState(fl, fr, bl, br)
+        return new MeccanumState(
+                frontLeft,
+                frontRight,
+                backLeft,
+                backRight
+        )
                 .normalizeFromMaxUnderOne()
                 .multiply(magnitude);
     }

@@ -12,6 +12,20 @@ package me.wobblyyyy.pathfinder2.kinematics;
 
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 
+/**
+ * Based on a translation, calculate a value of type E.
+ *
+ * @param <E>
+ * @author Colin Robertson
+ * @since 0.0.0
+ */
 public interface ForwardsKinematics<E> {
+    /**
+     * Calculate a value of type E based on a translation.
+     *
+     * @param translation the translation to calculate a value of type E
+     *                    based on.
+     * @return a calculated value based on the provided translation.
+     */
     E calculate(Translation translation);
 }

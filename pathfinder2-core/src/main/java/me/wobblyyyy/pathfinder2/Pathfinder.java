@@ -435,4 +435,15 @@ public class Pathfinder {
     public void clear() {
         manager.clearExecutors();
     }
+
+    /**
+     * Use the {@link #getOdometry()} method in combination with the
+     * odometry class' {@link Odometry#getPosition()} to access the
+     * robot's current position.
+     *
+     * @return the robot's current position.
+     */
+    public PointXYZ getPosition() {
+        return getOdometry().getPosition();
+    }
 }
