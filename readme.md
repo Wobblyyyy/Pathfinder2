@@ -1,7 +1,7 @@
 <p align="center">
 <img src="media/pathfinder2-logo.png" alt="Pathfinder2">
 <br>
-<i>Autonomous motion planning and control library for wheeled mobile robots.</i>
+<b>Autonomous motion planning and control library for wheeled mobile robots.</b>
 <br>
 <i>Successor to <a href="https://github.com/Wobblyyyy/Pathfinder">Pathfinder</a>.</i>
 </p>
@@ -28,7 +28,16 @@ is an efficient and expansive library written in Java, making use of the Java
 <h2 align="center">Important Notice</h2>
 
 This library is still in active development. There's a lot of placeholders and a lot of missing documentation.
-You will most certainly encounter one or two bugs. Actually, maybe a little more than one or two.
+You will most certainly encounter one or two bugs. Actually, maybe a little more than one or two. 
+
+As of now, Pathfinder aims to have a stable release as early into the FTC season as possible. Pathfinder will
+have a release before the FRC season begins. 
+
+If you'd like to contribute, send me an email ([wobblyyyy@gmail.com](mailto:wobblyyyy@gmail.com)) and I'll
+let you know what you can help with. Some of the most important work you can do is testing the software and
+reporting any issues or bugs you encounter - if you notice an issue, if you notice some missing or confusing 
+documentation, if you find some code that's running really slowly - report the issue, and I'll try and fix
+it as soon as I can.
 
 <h2 align="Center">Documentation</h2>
 
