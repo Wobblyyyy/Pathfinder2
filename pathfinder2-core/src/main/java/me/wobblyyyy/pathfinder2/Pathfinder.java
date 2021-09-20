@@ -19,6 +19,7 @@ import me.wobblyyyy.pathfinder2.follower.FollowerGenerator;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.robot.Robot;
@@ -42,15 +43,6 @@ import java.util.List;
  * @since 0.0.0
  */
 public class Pathfinder {
-    /*#########################################################################
-     * PRIVATE FIELDS
-     *
-     * These fields are very thinly documented because they're not visible
-     * to users - they're private, they're internal. If you'd like to learn
-     * a bit more about these fields, you can probably go look at the getters
-     * and setters section. Better yet - official documentation.
-     *#######################################################################*/
-
     /**
      * The {@code Robot} (made up of {@code Drive} and {@code Odometry}) that
      * Pathfinder operates.
@@ -88,15 +80,6 @@ public class Pathfinder {
      */
     private Angle angleTolerance;
 
-    /*#########################################################################
-     * CONSTRUCTOR
-     *
-     * There's not much I can say here... sorry...
-     *
-     * As a future idea - should there be more constructors? Or is one
-     * good enough?
-     *#######################################################################*/
-
     /**
      * Create a new {@code Pathfinder} instance.
      *
@@ -113,6 +96,11 @@ public class Pathfinder {
      */
     public Pathfinder(Robot robot,
                       FollowerGenerator generator) {
+        if (robot == null) 
+            throw new NullPointerException("Robot cannot be null!");
+        if (generator == null)
+            throw new NullPointerException("Follower generator cannot be null!");
+        
         this.robot = robot;
         this.generator = generator;
 
@@ -124,19 +112,6 @@ public class Pathfinder {
                 robot.drive()
         );
     }
-
-    /*#########################################################################
-     * GETTERS & SETTERS
-     *
-     * Some fields do not have setters:
-     * - Robot
-     * - Odometry
-     * - Drive
-     *
-     * Most other fields have both a getter and setter. If the documentation
-     * for one of these is changed, the other should be changed as well - not
-     * keeping both of them up to date can make the code rather confusing.
-     *#######################################################################*/
 
     /**
      * Get the {@code Pathfinder} instance's {@link Robot}. This is a final
@@ -277,18 +252,6 @@ public class Pathfinder {
         this.angleTolerance = angleTolerance;
     }
 
-    /*#########################################################################
-     * "COMMAND" METHODS (TELL PATHFINDER WHAT TO DO)
-     *
-     * These methods are the main method of operation for Pathfinder. Without
-     * these methods, you can't really do much... anything, actually. Most
-     * of these methods funnel into another and are different "options."
-     *
-     * If you have a suggestion for more "command" methods that can be
-     * added, you're more than welcome to go ahead. So long as it functions
-     * in a similar manner to all of the other "command" methods, you're good!
-     *#######################################################################*/
-
     /**
      * "Tick" Pathfinder once. This will tell Pathfinder's execution manager
      * to check to see what Pathfinder should be doing right now, and based
@@ -304,6 +267,9 @@ public class Pathfinder {
      * @param trajectory the trajectory to follow.
      */
     public void followTrajectory(Trajectory trajectory) {
+        if (trajectory == null)
+            throw new NullPointerException("Cannot follow a null trajectory!");
+
         List<Trajectory> list = new ArrayList<>() {{
             add(trajectory);
         }};
@@ -317,6 +283,9 @@ public class Pathfinder {
      * @param trajectories a list of trajectories to follow.
      */
     public void followTrajectories(List<Trajectory> trajectories) {
+        if (trajectories == null)
+            throw new NullPointerException("Cannot follow null trajectories!");
+
         List<Follower> followers = new ArrayList<>();
 
         for (Trajectory trajectory : trajectories) {
@@ -414,12 +383,6 @@ public class Pathfinder {
         return manager.isActive();
     }
 
-    /*#########################################################################
-     * MISC. STUFF
-     *
-     * That's a good description, I know.
-     *#######################################################################*/
-
     /**
      * Get this instance of {@code Pathfinder}'s {@link ExecutorManager}.
      *
@@ -445,5 +408,23 @@ public class Pathfinder {
      */
     public PointXYZ getPosition() {
         return getOdometry().getPosition();
+    }
+
+    /**
+     * Get the robot's raw position.
+     *
+     * @return the robot's raw position.
+     */
+    public PointXYZ getRawPosition() {
+        return getOdometry().getRawPosition();
+    }
+
+    /**
+     * Get the robot's current translation.
+     *
+     * @return the robot's current translation.
+     */
+    public Translation getTranslation() {
+        return getDrive().getTranslation();
     }
 }

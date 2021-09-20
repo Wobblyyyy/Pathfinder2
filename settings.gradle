@@ -13,3 +13,5 @@ include 'pathfinder2-geometry', 'Pathfinder2'
 include 'pathfinder2-core', 'Pathfinder2'
 include 'pathfinder2-kinematics', 'Pathfinder2'
 include 'pathfinder2-OdometryCore', 'Pathfinder2'
+include 'pathfinder2-examples'
+

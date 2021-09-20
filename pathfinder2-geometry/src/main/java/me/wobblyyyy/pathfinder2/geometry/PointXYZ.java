@@ -59,6 +59,10 @@ public class PointXYZ extends PointXY {
                     double y,
                     Angle z) {
         super(x, y);
+
+        if (z == null)
+            throw new NullPointerException("Cannot have a null Z value!");
+
         this.z = z;
     }
 
@@ -100,6 +104,9 @@ public class PointXYZ extends PointXY {
      */
     public static PointXYZ multiply(PointXYZ a,
                                     PointXYZ b) {
+        if (a == null || b == null)
+            throw new NullPointerException("Cannot multiply a null point!");
+
         return new PointXYZ(
                 a.x() * b.x(),
                 a.y() * b.y(),
@@ -116,6 +123,9 @@ public class PointXYZ extends PointXY {
      */
     public static PointXYZ multiply(PointXYZ a,
                                     double b) {
+        if (a == null)
+            throw new NullPointerException("Cannot multiply a null point!");
+
         return new PointXYZ(
                 a.x() * b,
                 a.y() * b,
@@ -158,6 +168,11 @@ public class PointXYZ extends PointXY {
     public static PointXYZ inDirection(PointXYZ base,
                                        double distance,
                                        Angle angle) {
+        if (base == null)
+            throw new NullPointerException("Cannot have a null base point!");
+        if (angle == null)
+            throw new NullPointerException("Cannot have a null direction!");
+
         return new PointXYZ(
                 base.x() + (distance * angle.cos()),
                 base.y() + (distance * angle.sin()),

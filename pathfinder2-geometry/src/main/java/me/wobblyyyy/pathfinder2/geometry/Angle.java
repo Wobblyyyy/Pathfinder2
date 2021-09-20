@@ -1026,6 +1026,69 @@ public class Angle implements Comparable<Angle>, Serializable {
     }
 
     /**
+     * Is this angle less than the provided angle?
+     *
+     * @param angle the angle to compare.
+     * @return true if this angle is less than the provided angle,
+     * otherwise, false.
+     */
+    public boolean lessThan(Angle angle) {
+        return fixDeg(deg()) < fixDeg(angle.deg());
+    }
+
+    /**
+     * Is this angle greater than the provided angle?
+     *
+     * @param angle the angle to compare.
+     * @return true if this angle is greater than the provided angle,
+     * otherwise, false.
+     */
+    public boolean greaterThan(Angle angle) {
+        return fixDeg(deg()) < fixDeg(angle.deg());
+    }
+
+    /**
+     * Is this angle less than or equal to the provided angle?
+     *
+     * @param angle the angle to compare.
+     * @return true if this angle is less than or equal to the provided angle,
+     * otherwise, false.
+     */
+    public boolean lessThanOrEqualTo(Angle angle) {
+        return fixDeg(deg()) <= fixDeg(angle.deg());
+    }
+
+    /**
+     * Is this angle greater than or equal to the provided angle?
+     *
+     * @param angle the angle to compare.
+     * @return true if this angle is greater than or equal to the provided angle,
+     * otherwise, false.
+     */
+    public boolean greaterThanOrEqualTo(Angle angle) {
+        return fixDeg(deg()) >= fixDeg(angle.deg());
+    }
+
+    /**
+     * The description is too long for a single sentence, so keep reading.
+     * If this angle is less than the minimum angle, return the minimum
+     * angle. If this angle is greater than the maximum angle, return the
+     * maximum angle. If this angle is neither, return this angle.
+     *
+     * @param minimum the minimum angle.
+     * @param maximum the maximum angle.
+     * @return if this angle is less than the minimum angle, return the
+     * minimum angle; if this angle is greater than the maximum angle, return
+     * the maximum angle; otherwise, return this angle.
+     */
+    public Angle angleWithMinAndMax(Angle minimum,
+                                    Angle maximum) {
+        if (greaterThan(maximum)) return maximum;
+        else if (lessThan(minimum)) return minimum;
+        else return this;
+    }
+
+    /**
      * Compare!
      *
      * @param o yeah.

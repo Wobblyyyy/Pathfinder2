@@ -171,7 +171,7 @@ public class Scheduler {
      * fairly personal choice.
      * </p>
      *
-     * @param shouldContinueTicking a supplier to indicate whether or not the
+     * @param shouldContinueTicking a supplier to indicate whether the
      *                              thread should continue ticking. If this
      *                              supplier returns false at any point,
      *                              the thread will automatically be stopped,

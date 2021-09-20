@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/Pathfinder2" />
             <option value="$PROJECT_DIR$/pathfinder2-OdometryCore" />
             <option value="$PROJECT_DIR$/pathfinder2-core" />
+            <option value="$PROJECT_DIR$/pathfinder2-examples" />
             <option value="$PROJECT_DIR$/pathfinder2-geometry" />
             <option value="$PROJECT_DIR$/pathfinder2-kinematics" />
           </set>

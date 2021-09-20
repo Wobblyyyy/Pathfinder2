@@ -10,10 +10,12 @@
 
 package me.wobblyyyy.pathfinder2.prebuilt;
 
-import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
+import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.trajectory.FastTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 
@@ -29,122 +31,312 @@ import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
  * </p>
  *
  * @author Colin Robertson
- * @since 0.0.0
+ * @since 0.1.0
  */
 public class CircleSurround {
-    public final Pathfinder pathfinder;
-    public PointXY target;
-    public double radius = Double.POSITIVE_INFINITY;
-    public double speed = Double.POSITIVE_INFINITY;
-    public double tolerance = Double.POSITIVE_INFINITY;
-    public Angle angleTolerance;
+    /**
+     * Utility classes can not be instantiated.
+     */
+    private CircleSurround() {
 
-    public CircleSurround(Pathfinder pathfinder) {
-        this.pathfinder = pathfinder;
     }
 
     /**
-     * If, for some reason, you'd like to get the Pathfinder instance
-     * that's being used by this class, you can do exactly that.
+     * Get the point along a circle closest to the robot.
      *
-     * @return the Pathfinder instance.
+     * @param robotPosition the robot's current position.
+     * @param center        the circle's center point.
+     * @param radius        the radius of the circle.
+     * @return the point along a circle closest to the robot. This point's
+     * heading will be facing towards the center of the circle.
      */
-    public Pathfinder getPathfinder() {
-        return this.pathfinder;
-    }
+    public static PointXYZ closestPoint(PointXYZ robotPosition,
+                                        PointXY center,
+                                        double radius) {
+        if (robotPosition == null)
+            throw new NullPointException("Robot position may not be null!");
+        if (center == null)
+            throw new NullPointException("Center point may not be null!");
+        if (radius < 0)
+            throw new IllegalArgumentException("Radius values must be greater than 0!");
 
-    public static PointXYZ getClosestPointToRobot(Pathfinder pathfinder,
-                                                  PointXY center,
-                                                  double radius) {
-        PointXYZ robotPosition = pathfinder.getPosition();
-        Angle angleFromCenterToRobot = center.angleTo(robotPosition);
-        Angle angleFromRobotToCenter = robotPosition.angleTo(center);
+        Angle centerToRobot = center.angleTo(robotPosition);
+        Angle robotToCenter = robotPosition.angleTo(center);
 
         return center.inDirection(
                 radius,
-                angleFromCenterToRobot
-        ).withHeading(angleFromRobotToCenter);
+                centerToRobot
+        ).withHeading(robotToCenter);
     }
 
-    public static Trajectory getTrajectoryToClosestPointAlongCircle(Pathfinder pathfinder,
-                                                                    PointXY center,
-                                                                    double radius,
-                                                                    double speed,
-                                                                    double tolerance,
-                                                                    Angle angleTolerance) {
-        PointXY robotPosition = pathfinder.getPosition();
-        PointXYZ closestPointToRobot = getClosestPointToRobot(
-                pathfinder,
+    /**
+     * Get the closest point along a circle between two given angles.
+     * I don't really know how to explain this, so if you're confused,
+     * just look at the code and try and figure it out.
+     *
+     * @param robotPosition the robot's current position.
+     * @param center        the circle's center point.
+     * @param radius        the radius of the circle.
+     * @param minimumAngle  the minimum angle.
+     * @param maximumAngle  the maximum angle.
+     * @return the point along a circle closest to the robot. This point's
+     * heading will be facing towards the center of the circle.
+     */
+    public static PointXYZ closestPointBetweenAngles(PointXYZ robotPosition,
+                                                     PointXY center,
+                                                     double radius,
+                                                     Angle minimumAngle,
+                                                     Angle maximumAngle) {
+        if (robotPosition == null)
+            throw new NullPointException("Robot position may not be null!");
+        if (center == null)
+            throw new NullPointException("Center point may not be null!");
+        if (radius < 0)
+            throw new IllegalArgumentException("Radius values must be greater than 0!");
+
+        Angle centerToRobot = center
+                .angleTo(robotPosition)
+                .angleWithMinAndMax(
+                        minimumAngle,
+                        maximumAngle
+                );
+        Angle robotToCenter = robotPosition.angleTo(center);
+
+        return center.inDirection(
+                radius,
+                centerToRobot
+        ).withHeading(robotToCenter);
+    }
+
+    /**
+     * Get the point along a circle closest to the robot. The returned point
+     * will have the same heading as the robot's position.
+     *
+     * @param robotPosition the robot's current position.
+     * @param center        the circle's center point.
+     * @param radius        the radius of the circle.
+     * @return the point along a circle closest to the robot. This point's
+     * heading will be the same as the robot position.
+     */
+    public static PointXYZ closestPointWithoutHeading(PointXYZ robotPosition,
+                                                      PointXY center,
+                                                      double radius) {
+        return CircleSurround.closestPoint(
+                robotPosition,
+                center,
+                radius
+        ).withHeading(robotPosition.z());
+    }
+
+    /**
+     * Get the point along a circle closest to the robot. The returned point
+     * will have a custom heading, provided as a parameter.
+     *
+     * @param robotPosition the robot's current position.
+     * @param center        the circle's center point.
+     * @param radius        the radius of the circle.
+     * @param customHeading the custom heading for the point to have.
+     * @return the point along a circle closest to the robot.
+     */
+    public static PointXYZ closestPointWithCustomHeading(PointXYZ robotPosition,
+                                                         PointXY center,
+                                                         double radius,
+                                                         Angle customHeading) {
+        if (customHeading == null)
+            throw new NullAngleException("Custom heading may not be null!");
+
+        return closestPoint(
+                robotPosition,
+                center,
+                radius
+        ).withHeading(customHeading);
+    }
+
+    /**
+     * Get a {@link LinearTrajectory} from the robot's current position
+     * to the closest point along the circle. This trajectory will make
+     * the robot face towards the center of the circle.
+     *
+     * @param robotPosition  the robot's current position.
+     * @param center         the center of the target circle.
+     * @param radius         the radius of the target circle.
+     * @param speed          the speed the trajectory should operate at.
+     * @param tolerance      the distance tolerance for the trajectory.
+     * @param angleTolerance the angle tolerance for the trajectory.
+     * @return a {@link LinearTrajectory} from the robot's current position to
+     * the closest point along the circle.
+     */
+    public static Trajectory trajectoryToClosestPoint(PointXYZ robotPosition,
+                                                      PointXY center,
+                                                      double radius,
+                                                      double speed,
+                                                      double tolerance,
+                                                      Angle angleTolerance) {
+        PointXYZ closestPoint = closestPoint(
+                robotPosition,
                 center,
                 radius
         );
 
         return new LinearTrajectory(
-                closestPointToRobot,
+                closestPoint,
                 speed,
                 tolerance,
                 angleTolerance
         );
     }
 
-    public PointXYZ getClosestPointToRobot() {
-        if (pathfinder == null)
-            throw new NullPointerException("Pathfinder may not be null!");
-        if (target == null)
-            throw new NullPointerException("Target point may not be null!");
-        if (radius == Double.POSITIVE_INFINITY)
-            throw new NullPointerException("Radius value has to be initialized!");
-
-        return CircleSurround.getClosestPointToRobot(
-                pathfinder,
-                target,
+    /**
+     * Get a {@link LinearTrajectory} from the robot's current position
+     * to the closest point along the circle. This trajectory will make
+     * the robot face the same direction that it started the trajectory in.
+     * In other words, it will keep the same heading.
+     *
+     * @param robotPosition  the robot's current position.
+     * @param center         the center of the target circle.
+     * @param radius         the radius of the target circle.
+     * @param speed          the speed the trajectory should operate at.
+     * @param tolerance      the distance tolerance for the trajectory.
+     * @param angleTolerance the angle tolerance for the trajectory.
+     * @return a {@link LinearTrajectory} from the robot's current position to
+     * the closest point along the circle.
+     */
+    public static Trajectory trajectoryToClosestPointWithoutHeading(PointXYZ robotPosition,
+                                                                    PointXY center,
+                                                                    double radius,
+                                                                    double speed,
+                                                                    double tolerance,
+                                                                    Angle angleTolerance) {
+        PointXYZ closestPointWithoutHeading = closestPointWithoutHeading(
+                robotPosition,
+                center,
                 radius
         );
-    }
 
-    public Trajectory getTrajectoryToClosestPointAlongCircle() {
-        if (pathfinder == null)
-            throw new NullPointerException("Pathfinder may not be null!");
-        if (target == null)
-            throw new NullPointerException("Target point may not be null!");
-        if (radius == Double.POSITIVE_INFINITY)
-            throw new NullPointerException("Radius value has to be initialized!");
-        if (speed == Double.POSITIVE_INFINITY)
-            throw new NullPointerException("Speed value has to to be initialized!");
-        if (tolerance == Double.POSITIVE_INFINITY)
-            throw new NullPointerException("Tolerance value has to be initialized!");
-        if (angleTolerance == null)
-            throw new NullPointerException("Angle tolerance but has to not be null!");
-
-        return CircleSurround.getTrajectoryToClosestPointAlongCircle(
-                pathfinder,
-                target,
-                radius,
+        return new LinearTrajectory(
+                closestPointWithoutHeading,
                 speed,
                 tolerance,
                 angleTolerance
         );
     }
 
-    public void setTarget(PointXY target) {
-        this.target = target;
-    }
-
-    public PointXY getTarget() {
-        return this.target;
-    }
-
-    public Trajectory getTrajectoryToClosestPointAlongCircleWithoutHeading() {
-        // this is some disgusting pathfinder hacking
-        // i am very sorry for what you're about to see
-        PointXYZ originalPosition = pathfinder.getPosition();
-        PointXYZ closestPoint = getClosestPointToRobot();
+    /**
+     * Get a {@link LinearTrajectory} from the robot's current position
+     * to the closest point along the circle. This trajectory will make
+     * the robot face towards whatever heading you provide.
+     *
+     * @param robotPosition  the robot's current position.
+     * @param center         the center of the target circle.
+     * @param radius         the radius of the target circle.
+     * @param speed          the speed the trajectory should operate at.
+     * @param tolerance      the distance tolerance for the trajectory.
+     * @param angleTolerance the angle tolerance for the trajectory.
+     * @param customHeading  the angle the robot should face.
+     * @return a {@link LinearTrajectory} from the robot's current position to
+     * the closest point along the circle.
+     */
+    public static Trajectory trajectoryToClosestPointWithHeading(PointXYZ robotPosition,
+                                                                 PointXY center,
+                                                                 double radius,
+                                                                 double speed,
+                                                                 double tolerance,
+                                                                 Angle angleTolerance,
+                                                                 Angle customHeading) {
+        PointXYZ closestPointWithCustomHeading = closestPoint(
+                robotPosition,
+                center,
+                radius
+        ).withHeading(customHeading);
 
         return new LinearTrajectory(
-                closestPoint.withHeading(originalPosition.z()),
+                closestPointWithCustomHeading,
                 speed,
                 tolerance,
                 angleTolerance
+        );
+    }
+
+    /**
+     * Do the same thing as {@link #trajectoryToClosestPoint(PointXYZ, PointXY, double, double, double, Angle)},
+     * but with a fast trajectory.
+     *
+     * @param robotPosition the robot's current position.
+     * @param center        the center of the target circle.
+     * @param radius        the radius of the target circle.
+     * @param speed         the speed at which the trajectory should operate at.
+     * @return a {@link FastTrajectory}.
+     */
+    public static Trajectory fastTrajectoryToClosestPoint(PointXYZ robotPosition,
+                                                          PointXY center,
+                                                          double radius,
+                                                          double speed) {
+        PointXYZ closestPoint = closestPoint(
+                robotPosition,
+                center,
+                radius
+        );
+
+        return new FastTrajectory(
+                robotPosition,
+                closestPoint,
+                speed
+        );
+    }
+
+    /**
+     * Do the same thing as {@link #trajectoryToClosestPointWithoutHeading(PointXYZ, PointXY, double, double, double, Angle)},
+     * but with a fast trajectory.
+     *
+     * @param robotPosition the robot's current position.
+     * @param center        the center of the target circle.
+     * @param radius        the radius of the target circle.
+     * @param speed         the speed at which the trajectory should operate at.
+     * @return a {@link FastTrajectory}.
+     */
+    public static Trajectory fastTrajectoryToClosestPointWithoutHeading(PointXYZ robotPosition,
+                                                                        PointXY center,
+                                                                        double radius,
+                                                                        double speed) {
+        PointXYZ closestPointWithoutHeading = closestPointWithoutHeading(
+                robotPosition,
+                center,
+                radius
+        );
+
+        return new FastTrajectory(
+                robotPosition,
+                closestPointWithoutHeading,
+                speed
+        );
+    }
+
+    /**
+     * Do the same thing as {@link #trajectoryToClosestPointWithHeading(PointXYZ, PointXY, double, double, double, Angle, Angle)},
+     * but with a fast trajectory.
+     *
+     * @param robotPosition the robot's current position.
+     * @param center        the center of the target circle.
+     * @param radius        the radius of the target circle.
+     * @param speed         the speed at which the trajectory should operate at.
+     * @param customHeading the heading the robot should face.
+     * @return a {@link FastTrajectory}.
+     */
+    public static Trajectory fastTrajectoryToClosestPointWithHeading(PointXYZ robotPosition,
+                                                                     PointXY center,
+                                                                     double radius,
+                                                                     double speed,
+                                                                     Angle customHeading) {
+        PointXYZ closestPointWithCustomHeading = closestPoint(
+                robotPosition,
+                center,
+                radius
+        ).withHeading(customHeading);
+
+        return new FastTrajectory(
+                robotPosition,
+                closestPointWithCustomHeading,
+                radius
         );
     }
 }
