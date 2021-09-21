@@ -17,4 +17,12 @@
     <i>Forwards and inverse kinematics. Tank, swerve, meccanum - etc. This module
     contains kinematics and odometry for most major types of drivetrains.</i>
   </li>
+  <li>
+    <code>pathfinder2-OdometryCore</code><br>
+    <i>Three-wheel odometry specific algorithm written by Tejas Mehta.</i>
+  </li>
+  <li>
+    <code>pathfinder2-examples</code><br>
+    <i>Examples of Pathfinder code - how to use it, etc.</i>
+  </li>
 </ul>
