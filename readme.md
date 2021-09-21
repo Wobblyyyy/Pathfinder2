@@ -56,8 +56,6 @@ You'll want to navigate to the TeamCode folder (`org.firstinspires...`) and
 check out the classes there. This may be useful if you're in FTC or FRC.
 There will be an FRC-specific repository in the near future!
 
-a pretty simple tutorial!
-
 <h2 align="center">Documentation Style</h2>
 
 Okay. I'm gonna be real with you. Although, yes - I could type out all the documentation for this project exactly as I
