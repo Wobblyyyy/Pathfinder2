@@ -39,7 +39,7 @@ reporting any issues or bugs you encounter - if you notice an issue, if you noti
 documentation, if you find some code that's running really slowly - report the issue, and I'll try and fix
 it as soon as I can.
 
-<h2 align="Center">Documentation</h2>
+<h2 align="center">Documentation</h2>
 
 Please see the [Pathfinder2 Documentation Portal](https://google.com), or continue scrolling to access the quickstart.
 The documentation portal should contain just about everything you need to know, and it's probably the best place to
