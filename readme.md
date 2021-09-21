@@ -46,9 +46,11 @@ The documentation portal should contain just about everything you need to know, 
 start if you're confused.
 
 <h3 align="center">Generic Quickstart</h3>
+
 Check out the file named [`project_tutorial.md`](https://github.com/Wobblyyyy/Pathfinder2/blob/master/project_tutorial.md) for
 
 <h3 align="center">FTC Quickstart and Example</h3>
+
 We now have an example project! Check it out [here](https://github.com/Wobblyyyy/Pathfinder2Ftc).
 You'll want to navigate to the TeamCode folder (`org.firstinspires...`) and
 check out the classes there.
