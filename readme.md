@@ -45,7 +45,7 @@ Please see the [Pathfinder2 Documentation Portal](https://google.com), or contin
 The documentation portal should contain just about everything you need to know, and it's probably the best place to
 start if you're confused.
 
-Check out the file named [`project_tutorial.md`](https://github.com/Wobblyyyy/Pathfinder2/project_tutorial.md) for
+Check out the file named [`project_tutorial.md`](https://github.com/Wobblyyyy/Pathfinder2/blob/master/project_tutorial.md) for
 a pretty simple tutorial!
 
 <h2 align="center">Documentation Style</h2>
