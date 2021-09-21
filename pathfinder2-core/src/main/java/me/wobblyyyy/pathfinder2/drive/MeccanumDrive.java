@@ -16,6 +16,7 @@ import me.wobblyyyy.pathfinder2.kinematics.MeccanumState;
 import me.wobblyyyy.pathfinder2.kinematics.RelativeMeccanumKinematics;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.components.Motor;
+import me.wobblyyyy.pathfinder2.robot.modifiers.DriveModifier;
 
 import java.util.function.Function;
 
@@ -31,6 +32,12 @@ import java.util.function.Function;
  * Additionally, motor powers are all normalized before being multiplied
  * by a magnitude - this means if you want to drive straight forwards at
  * full speed, your robot will only travel at ~0.71 speed.
+ * </p>
+ *
+ * <p>
+ * If, no matter what you do, you can't get your chassis to drive in the
+ * right direction, try using a modifier - this will change the inputted
+ * {@link Translation}s so your robot can correctly follow them.
  * </p>
  *
  * @author Colin Robetson
@@ -86,19 +93,87 @@ public class MeccanumDrive implements Drive {
                          Motor fl,
                          Motor br,
                          Motor bl) {
+        this(fr, fl, br, bl, Angle.zero());
+    }
+
+    /**
+     * Create a new meccanum drive. Crazy!
+     *
+     * @param fr          the front-right motor.
+     * @param fl          the front-left motor.
+     * @param br          the back-right motor.
+     * @param bl          the back-left motor.
+     * @param angleOffset the angle offset to use for applying translations.
+     */
+    public MeccanumDrive(Motor fr,
+                         Motor fl,
+                         Motor br,
+                         Motor bl,
+                         Angle angleOffset) {
+        this(fr, fl, br, bl, angleOffset, false, false, false);
+    }
+
+    /**
+     * Create a new {@code MeccanumDrive} with a modifier.
+     *
+     * @param fr          the front-right motor.
+     * @param fl          the front-left motor.
+     * @param br          the back-right motor.
+     * @param bl          the back-left motor.
+     * @param angleOffset the angle offset to apply to any inputted translations.
+     * @param swapXY      should input translations have their X and Y
+     *                    values swapped? This is the very first modifier that
+     *                    gets applied - if X and Y values are swapped, and
+     *                    you set reflectX to true, you'll be reflecting what
+     *                    were originally Y values.
+     * @param reflectX    should X values be reflected across the Y axis?
+     *                    Try changing this if your robot isn't moving in
+     *                    the right direction.
+     * @param reflectY    should Y values be reflected across the X axis?
+     *                    Try changing this if your robot isn't moving in
+     *                    the right direction.
+     */
+    public MeccanumDrive(Motor fr,
+                         Motor fl,
+                         Motor br,
+                         Motor bl,
+                         Angle angleOffset,
+                         boolean swapXY,
+                         boolean reflectX,
+                         boolean reflectY) {
+        DriveModifier modBuilder = new DriveModifier();
+        modBuilder.swapXY(swapXY).invertX(reflectX).invertY(reflectY);
+        this.modifier = modBuilder::modify;
+
         this.fr = fr;
         this.fl = fl;
         this.br = br;
         this.bl = bl;
 
-        kinematics = new RelativeMeccanumKinematics(0, 1, Angle.zero());
+        kinematics = new RelativeMeccanumKinematics(0, 1, angleOffset);
     }
 
+    /**
+     * Get the last translation that was set to the drivetrain.
+     *
+     * @return the last translation that was set to the drivetrain.
+     */
     @Override
     public Translation getTranslation() {
         return this.translation;
     }
 
+    /**
+     * Set a translation to the drivetrain. This translation should
+     * always be relative to the robot, not relative to the field,
+     * yourself, or any other stationary object.
+     *
+     * @param translation a translation the robot should act upon. This
+     *                    translation should always be <em>relative</em>,
+     *                    meaning whatever the translation says should make
+     *                    the robot act accordingly according to the robot's
+     *                    position and the robot's current heading.
+     */
     @Override
     public void setTranslation(Translation translation) {
         this.translation = translation;

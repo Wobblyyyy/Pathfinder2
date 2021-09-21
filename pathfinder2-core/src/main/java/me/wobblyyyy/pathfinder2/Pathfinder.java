@@ -39,8 +39,27 @@ import java.util.List;
  * into everything that's going on here.
  * </p>
  *
+ * <p>
+ * This object is the main method of interacting with the Pathfinder library.
+ * With it, you'll be able to control all of your robot's movement from a
+ * single object - both autonomous and teleop movement included. For advanced
+ * use of the library, you'll need to become familiar with the concept behind
+ * {@link Trajectory}. For simple use, however, you can simply use the
+ * {@link #goTo(PointXY)} or {@link #goTo(PointXYZ)} methods to get the job
+ * done. This isn't all Pathfinder can do, however - trajectories provide
+ * a lot of flexibility and allow you to control your robot's movement
+ * quite precisely and quite easily.
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.0.0
+ * @see #goTo(PointXY)
+ * @see #goTo(PointXYZ)
+ * @see #setTranslation(Translation)
+ * @see #followTrajectory(Trajectory)
+ * @see #followTrajectories(List)
+ * @see #follow(Follower)
+ * @see #follow(List)
  */
 public class Pathfinder {
     /**
@@ -86,13 +105,15 @@ public class Pathfinder {
      * @param robot     the {@code Pathfinder} instance's robot. This robot
      *                  should have an odometry system that can report the
      *                  position of the robot and a drive system that can
-     *                  respond to drive commands.
+     *                  respond to drive commands. This object may not be
+     *                  null or, an exception will be thrown.
      * @param generator a generator used in creating followers. This generator
      *                  functions by accepting a {@link Trajectory} and a
      *                  {@link Robot} and returning a follower. If you're
      *                  unsure of what this means, or what you should do here,
      *                  you should probably use the "generic follower
-     *                  generator," as it's the simplest.
+     *                  generator," as it's the simplest. This object may not
+     *                  be null, or an exception will be thrown.
      */
     public Pathfinder(Robot robot,
                       FollowerGenerator generator) {
@@ -270,7 +291,7 @@ public class Pathfinder {
         if (trajectory == null)
             throw new NullPointerException("Cannot follow a null trajectory!");
 
-        List<Trajectory> list = new ArrayList<>() {{
+        List<Trajectory> list = new ArrayList<>(1) {{
             add(trajectory);
         }};
 
@@ -426,5 +447,18 @@ public class Pathfinder {
      */
     public Translation getTranslation() {
         return getDrive().getTranslation();
+    }
+
+    /**
+     * Set a translation to the robot. This is how to manually move your robot.
+     * If, for example, you're in TeleOp, and you'd like to drive your robot
+     * according to some joystick inputs, this is the method you should use.
+     *
+     * @param translation the translation to set to the robot. This translation
+     *                    should be RELATIVE, meaning forwards is forwards for
+     *                    the robot, not forwards relative to you.
+     */
+    public void setTranslation(Translation translation) {
+        getDrive().setTranslation(translation);
     }
 }

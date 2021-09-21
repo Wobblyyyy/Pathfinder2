@@ -17,6 +17,43 @@ import me.wobblyyyy.pathfinder2.robot.modifiers.Modifiable;
  * One of the two major components of your robot - firstly, there's odometry,
  * and secondly, there's the drive train!
  *
+ * <p>
+ * The Drive interface works quite simply. Let's imagine that your robot
+ * has a constant state it's in - a translation. This translation has three
+ * values:
+ * <ul>
+ *     <li>forwards/backwards movement (Y)</li>
+ *     <li>right/left movement (X)</li>
+ *     <li>turning (around the center of the robot) (Z)</li>
+ * </ul>
+ * At any given point, your robot has one of these translations as its "state."
+ * If the robot is stopped, your translation has X, Y, and Z values of
+ * 0, 0, and 0 respectively. If your robot is moving 1 forwards, you'd have
+ * 1, 0, and 0. If your robot is moving at a 45 degree angle, you'd have
+ * 1, 1, and 0 - you're still not turning, but now you're moving along both
+ * the X and Y axes.
+ * </p>
+ *
+ * <p>
+ * In order for Pathfinder to control your robot, it needs to be able to
+ * apply translations to the robot. So every Pathfinder instance requires a
+ * Drive instance as well - the drive interface provides a way for Pathfinder
+ * to tell your robot which direction to move in and how fast.
+ * </p>
+ *
+ * <p>
+ * It doesn't matter HOW your drive interface is implemented. There are
+ * several prebuilt options, such as...
+ * <ul>
+ *     <li>{@link me.wobblyyyy.pathfinder2.drive.MeccanumDrive}</li>
+ *     <li>{@link me.wobblyyyy.pathfinder2.drive.SwerveDrive}</li>
+ * </ul>
+ * ... but it doesn't exactly matter how your drivetrain is implemented, so
+ * long as it works. The drivetrain must actually set power to motors - if
+ * it doesn't, Pathfinder won't think it's moving, and it thus won't be able
+ * to determine where it is.
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.0.0
  */
@@ -39,7 +76,7 @@ public interface Drive extends Modifiable<Translation> {
      *                    meaning whatever the translation says should make
      *                    the robot act accordingly according to the robot's
      *                    position and the robot's current heading. I'm
-     *                    currently really tired and just about entirely unable
+     *                    currently exhausted and just about entirely unable
      *                    to type, so this isn't coherent, but guess what -
      *                    that really sucks for you, doesn't it?
      */
