@@ -383,7 +383,7 @@ public class PointXY implements Serializable {
         return point;
     }
 
-    public static PointXY getFarthestPoint(PointXY reference,
+    public static PointXY getFurthestPoint(PointXY reference,
                                            PointXY... points) {
         double distance = Double.NEGATIVE_INFINITY;
         PointXY point = points[0];
@@ -400,7 +400,7 @@ public class PointXY implements Serializable {
         return point;
     }
 
-    public static PointXY getFarthestPoint(PointXY reference,
+    public static PointXY getFurthestPoint(PointXY reference,
                                            List<PointXY> points) {
         double distance = Double.NEGATIVE_INFINITY;
         PointXY point = points.get(0);
@@ -473,6 +473,46 @@ public class PointXY implements Serializable {
         }
 
         return map;
+    }
+
+    public static double minimumX(PointXY... points) {
+        double v = points[0].x();
+
+        for (PointXY point : points) {
+            v = Math.min(v, point.x());
+        }
+
+        return v;
+    }
+
+    public static double minimumY(PointXY... points) {
+        double v = points[0].y();
+
+        for (PointXY point : points) {
+            v = Math.min(v, point.y());
+        }
+
+        return v;
+    }
+
+    public static double maximumX(PointXY... points) {
+        double v = points[0].x();
+
+        for (PointXY point : points) {
+            v = Math.max(v, point.x());
+        }
+
+        return v;
+    }
+
+    public static double maximumY(PointXY... points) {
+        double v = points[0].y();
+
+        for (PointXY point : points) {
+            v = Math.max(v, point.y());
+        }
+
+        return v;
     }
 
     /**
@@ -731,6 +771,6 @@ public class PointXY implements Serializable {
      * @return the farthest point contained in the shape.
      */
     public PointXY farthestPoint(Shape shape) {
-        return shape.getFarthestPoint(this);
+        return shape.getFurthestPoint(this);
     }
 }

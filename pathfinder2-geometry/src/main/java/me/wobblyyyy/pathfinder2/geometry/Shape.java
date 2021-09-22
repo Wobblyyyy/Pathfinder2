@@ -60,7 +60,7 @@ public interface Shape {
      * @param referencePoint the point to use for comparison.
      * @return the farthest point from the reference point.
      */
-    PointXY getFarthestPoint(PointXY referencePoint);
+    PointXY getFurthestPoint(PointXY referencePoint);
 
     /**
      * Does this shape collide with another shape?

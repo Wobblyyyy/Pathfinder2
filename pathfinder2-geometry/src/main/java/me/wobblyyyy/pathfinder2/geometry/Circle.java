@@ -33,7 +33,7 @@ public class Circle implements Shape {
     }
 
     @Override
-    public PointXY getFarthestPoint(PointXY referencePoint) {
+    public PointXY getFurthestPoint(PointXY referencePoint) {
         Angle referenceToCircle = referencePoint.angleTo(center);
 
         return center.inDirection(radius, referenceToCircle);

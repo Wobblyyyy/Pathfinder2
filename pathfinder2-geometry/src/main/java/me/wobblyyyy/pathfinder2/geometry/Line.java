@@ -34,6 +34,13 @@ public class Line {
      */
     public Line(PointXY startPoint,
                 PointXY endPoint) {
+        if (startPoint == null)
+            throw new IllegalArgumentException("Start point cannot be null!");
+        if (endPoint == null)
+            throw new IllegalArgumentException("End point cannot be null!");
+        if (startPoint.x() == endPoint.x() && startPoint.y() == endPoint.y())
+            throw new IllegalArgumentException("Cannot create a line between two of the same point!");
+
         this.startPoint = startPoint;
         // calculate the midpoint only once, memory usage isn't really a problem
         this.midPoint = PointXY.avg(startPoint, endPoint);
@@ -188,22 +195,8 @@ public class Line {
         return Angle.fixedRad(Math.abs(rad1) - Math.abs(rad2));
     }
 
-    /**
-     * Get the point of intersection between two lines. If the lines are
-     * parallel, this will return a point with {@link Double#MAX_VALUE} as
-     * both the X and Y positions. If the lines do not intersect, this method
-     * will return null. If the lines do intersect, this method will
-     * return the point of intersection between the two lines.
-     *
-     * @param line1 the first of the two lines.
-     * @param line2 the second of the two lines.
-     * @return the point of intersection between the two lines. If the lines
-     * do not intersect, this will be null.
-     * @see #doLinesIntersect(Line, Line)
-     * @see #doLinesIntersect(PointXY, PointXY, PointXY, PointXY)
-     */
-    public static PointXY pointOfIntersection(Line line1,
-                                              Line line2) {
+    public static PointXY unboundedPointOfIntersection(Line line1,
+                                                       Line line2) {
         PointXY p1 = line1.getStartPoint();
         PointXY q1 = line1.getEndPoint();
         PointXY p2 = line2.getStartPoint();
@@ -228,14 +221,33 @@ public class Line {
             double x = ((b2 * c1) - (b1 * c2)) / determinant;
             double y = ((a1 * c2) - (a2 * c1)) / determinant;
 
-            PointXY point = new PointXY(x, y);
-
-            if (line1.isPointOnSegment(point) || line2.isPointOnSegment(point)) {
-                return point;
-            } else {
-                return null;
-            }
+            return new PointXY(x, y);
         }
+    }
+
+    /**
+     * Get the point of intersection between two lines. If the lines are
+     * parallel, this will return a point with {@link Double#MAX_VALUE} as
+     * both the X and Y positions. If the lines do not intersect, this method
+     * will return null. If the lines do intersect, this method will
+     * return the point of intersection between the two lines.
+     *
+     * @param line1 the first of the two lines.
+     * @param line2 the second of the two lines.
+     * @return the point of intersection between the two lines. If the lines
+     * do not intersect, this will be null.
+     * @see #doLinesIntersect(Line, Line)
+     * @see #doLinesIntersect(PointXY, PointXY, PointXY, PointXY)
+     */
+    public static PointXY pointOfIntersection(Line line1,
+                                              Line line2) {
+        PointXY point = unboundedPointOfIntersection(line1, line2);
+
+        boolean existsOnLine1 = line1.isPointOnSegment(point);
+        boolean existsOnLine2 = line2.isPointOnSegment(point);
+
+        if (existsOnLine1 || existsOnLine2) return point;
+        else return null;
     }
 
     /**
@@ -464,6 +476,14 @@ public class Line {
 
     public double maximumY() {
         return Math.max(startPoint.y(), endPoint.y());
+    }
+
+    public boolean doesIntersectWith(Line line) {
+        return doLinesIntersect(this, line);
+    }
+
+    public PointXY getIntersectionPoint(Line line) {
+        return pointOfIntersection(this, line);
     }
 
     public enum Orientation {
