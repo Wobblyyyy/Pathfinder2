@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+import java.util.List;
+
 /**
  * A 2d coordinate with an X value, a Y value, and a value "Z" representing
  * a heading angle.
@@ -159,6 +161,12 @@ public class PointXYZ extends PointXY {
      * Create a new {@code PointXYZ} a given distance away from a base point
      * in a specified direction.
      *
+     * <p>
+     * As an example... if you have a point at (0, 0, 0) and were to do
+     * {@code inDirection} with a distance of 1 and an angle of 0 degrees,
+     * you'd get (1, 0, 0) as your output.
+     * </p>
+     *
      * @param base     the base/origin point.
      * @param distance how far away the new point should be from the origin.
      * @param angle    the angle at which the new point should be drawn.
@@ -172,6 +180,8 @@ public class PointXYZ extends PointXY {
             throw new NullPointerException("Cannot have a null base point!");
         if (angle == null)
             throw new NullPointerException("Cannot have a null direction!");
+        if (Double.isNaN(distance))
+            throw new RuntimeException("Invalid distance!");
 
         return new PointXYZ(
                 base.x() + (distance * angle.cos()),
@@ -206,6 +216,44 @@ public class PointXYZ extends PointXY {
      */
     public static PointXYZ zeroIfNull(PointXYZ point) {
         return point == null ? new PointXYZ(0, 0, Angle.zero()) : point;
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    public static PointXYZ average(List<PointXYZ> points) {
+        double totalX = 0;
+        double totalY = 0;
+        double totalZ = 0;
+
+        for (PointXYZ point : points) {
+            totalX += point.x();
+            totalY += point.y();
+            totalZ += point.z().deg();
+        }
+
+        return new PointXYZ(
+                totalX / points.size(),
+                totalY / points.size(),
+                Angle.fromDeg(totalZ / points.size())
+        );
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    public static PointXY average(PointXYZ... points) {
+        double totalX = 0;
+        double totalY = 0;
+        double totalZ = 0;
+
+        for (PointXYZ point : points) {
+            totalX += point.x();
+            totalY += point.y();
+            totalZ += point.z().deg();
+        }
+
+        return new PointXYZ(
+                totalX / points.length,
+                totalY / points.length,
+                Angle.fromDeg(totalZ / points.length)
+        );
     }
 
     /**
@@ -281,6 +329,12 @@ public class PointXYZ extends PointXY {
 
     /**
      * Create a new point a specified distance away from this point.
+     *
+     * <p>
+     * As an example... if you have a point at (0, 0, 0) and were to do
+     * {@code inDirection} with a distance of 1 and an angle of 0 degrees,
+     * you'd get (1, 0, 0) as your output.
+     * </p>
      *
      * @param distance the distance the new point should be created at.
      * @param angle    the angle the new point should be created at.

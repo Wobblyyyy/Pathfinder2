@@ -226,6 +226,12 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     private final double deg;
 
+    private final double cos;
+
+    private final double sin;
+
+    private final double tan;
+
     /**
      * Private constructor - angles can only be created with static methods.
      * We do this so we don't have to convert degrees to radians and so
@@ -238,6 +244,10 @@ public class Angle implements Comparable<Angle>, Serializable {
                   double deg) {
         this.rad = rad;
         this.deg = deg;
+
+        this.cos = Math.cos(rad);
+        this.sin = Math.sin(rad);
+        this.tan = Math.tan(rad);
     }
 
     /**
@@ -731,7 +741,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @see #cot()
      */
     public double sin() {
-        return Math.sin(rad);
+        return this.sin;
     }
 
     /**
@@ -745,7 +755,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @see #cot()
      */
     public double cos() {
-        return Math.cos(rad);
+        return this.cos;
     }
 
     /**
@@ -759,7 +769,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @see #cot()
      */
     public double tan() {
-        return Math.tan(rad);
+        return this.tan;
     }
 
     /**

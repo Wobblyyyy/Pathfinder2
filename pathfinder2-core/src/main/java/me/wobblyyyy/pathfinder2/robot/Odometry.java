@@ -28,6 +28,19 @@ import me.wobblyyyy.pathfinder2.robot.modifiers.Modifiable;
  * source, making debugging a lot easier.
  * </p>
  *
+ * <p>
+ * Some of the most common forms of odometry include...
+ * <ul>
+ *     <li>Vision-based odometry</li>
+ *     <li>Three-wheel odometry</li>
+ *     <li>Two-wheel odometry</li>
+ * </ul>
+ * Optimally, you should use as many odometry systems as you can to maintain
+ * the best positional accuracy. However, that's not really very realistic,
+ * is it? An odometry system's only job is to provide information on the
+ * position of the robot it belongs to.
+ * </p>
+ *
  * @author Colin Robertson
  * @see AbstractOdometry
  * @since 0.0.0

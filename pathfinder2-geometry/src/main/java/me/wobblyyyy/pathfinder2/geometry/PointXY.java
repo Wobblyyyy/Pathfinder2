@@ -13,6 +13,10 @@ package me.wobblyyyy.pathfinder2.geometry;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A 2d coordinate with an X and Y value.
@@ -27,6 +31,7 @@ import java.io.Serializable;
  * @author Colin Robertson
  * @since 0.0.0
  */
+@SuppressWarnings("DuplicatedCode")
 public class PointXY implements Serializable {
     /*
      * Another non-JavaDoc comment - if you're only browsing the API, you
@@ -206,6 +211,22 @@ public class PointXY implements Serializable {
         return Angle.atan2(distanceY(a, b), distanceX(a, b));
     }
 
+    public static boolean areDuplicatesPresent(PointXY... points) {
+        List<PointXY> ps = new ArrayList<>(points.length);
+
+        for (PointXY p : points) {
+            for (PointXY x : ps) {
+                if (x.x() == p.x() && x.y() == p.y()) {
+                    return true;
+                }
+            }
+
+            ps.add(p);
+        }
+
+        return false;
+    }
+
     /**
      * Create a new point a given distance and angle away from a base point.
      *
@@ -328,6 +349,132 @@ public class PointXY implements Serializable {
         return point == null ? zero() : point;
     }
 
+    public static PointXY getClosestPoint(PointXY reference,
+                                          PointXY... points) {
+        double distance = Double.POSITIVE_INFINITY;
+        PointXY point = points[0];
+
+        for (PointXY p : points) {
+            double d = reference.absDistance(p);
+
+            if (d < distance) {
+                distance = d;
+                point = p;
+            }
+        }
+
+        return point;
+    }
+
+    public static PointXY getClosestPoint(PointXY reference,
+                                          List<PointXY> points) {
+        double distance = Double.POSITIVE_INFINITY;
+        PointXY point = points.get(0);
+
+        for (PointXY p : points) {
+            double d = reference.absDistance(p);
+
+            if (d < distance) {
+                distance = d;
+                point = p;
+            }
+        }
+
+        return point;
+    }
+
+    public static PointXY getFarthestPoint(PointXY reference,
+                                           PointXY... points) {
+        double distance = Double.NEGATIVE_INFINITY;
+        PointXY point = points[0];
+
+        for (PointXY p : points) {
+            double d = reference.absDistance(p);
+
+            if (d > distance) {
+                distance = d;
+                point = p;
+            }
+        }
+
+        return point;
+    }
+
+    public static PointXY getFarthestPoint(PointXY reference,
+                                           List<PointXY> points) {
+        double distance = Double.NEGATIVE_INFINITY;
+        PointXY point = points.get(0);
+
+        for (PointXY p : points) {
+            double d = reference.absDistance(p);
+
+            if (d > distance) {
+                distance = d;
+                point = p;
+            }
+        }
+
+        return point;
+    }
+
+    public static PointXY avg(List<PointXY> points) {
+        double totalX = 0;
+        double totalY = 0;
+
+        for (PointXY point : points) {
+            totalX += point.x();
+            totalY += point.y();
+        }
+
+        return new PointXY(
+                totalX / points.size(),
+                totalY / points.size()
+        );
+    }
+
+    public static PointXY avg(PointXY... points) {
+        double totalX = 0;
+        double totalY = 0;
+
+        for (PointXY point : points) {
+            totalX += point.x();
+            totalY += point.y();
+        }
+
+        return new PointXY(
+                totalX / points.length,
+                totalY / points.length
+        );
+    }
+
+    public static Map<PointXY, Double> mapDistances(PointXY reference,
+                                                    PointXY... points) {
+        Map<PointXY, Double> map = new HashMap<>(points.length);
+
+        for (PointXY p : points) {
+            map.put(
+                    p,
+                    reference.distance(p)
+            );
+        }
+
+        return map;
+    }
+
+    public static Map<PointXY, Double> mapDistances(PointXY reference,
+                                                    List<PointXY> points) {
+        Map<PointXY, Double> map = new HashMap<>(points.size());
+
+        for (PointXY p : points) {
+            map.put(
+                    p,
+                    reference.distance(p)
+            );
+        }
+
+        return map;
+    }
+
     /**
      * Get the point's X value.
      *
@@ -397,6 +544,24 @@ public class PointXY implements Serializable {
     }
 
     /**
+     * Create a {@link PointXYZ} by adding a heading value to this point.
+     *
+     * @param point the heading that should be added to the new point.
+     * @return a new {@code PointXYZ}.
+     */
+    public PointXYZ withHeading(PointXYZ point) {
+        return new PointXYZ(x(), y(), point.z());
+    }
+
+    public PointXYZ withHeadingDegrees(double degrees) {
+        return new PointXYZ(x(), y(), Angle.fromDeg(degrees));
+    }
+
+    public PointXYZ withHeadingRadians(double radians) {
+        return new PointXYZ(x(), y(), Angle.fromDeg(radians));
+    }
+
+    /**
      * Get the distance between this point and {@code a}.
      *
      * @param a the point to calculate the distance between.
@@ -404,6 +569,10 @@ public class PointXY implements Serializable {
      */
     public double distance(PointXY a) {
         return distance(this, a);
+    }
+
+    public double absDistance(PointXY a) {
+        return Math.abs(distance(this, a));
     }
 
     /**
@@ -416,6 +585,10 @@ public class PointXY implements Serializable {
         return distanceX(this, a);
     }
 
+    public double absDistanceX(PointXY a) {
+        return Math.abs(distanceX(this, a));
+    }
+
     /**
      * Get the Y difference between this point and {@code a}.
      *
@@ -424,6 +597,10 @@ public class PointXY implements Serializable {
      */
     public double distanceY(PointXY a) {
         return distanceY(this, a);
+    }
+
+    public double absDistanceY(PointXY a) {
+        return Math.abs(distanceY(this, a));
     }
 
     /**
@@ -515,5 +692,45 @@ public class PointXY implements Serializable {
      */
     public PointXY withY(double y) {
         return new PointXY(this.x, y);
+    }
+
+    /**
+     * Is this point inside a given shape?
+     *
+     * @param shape the shape to test.
+     * @return true if the point is inside the shape, otherwise, false.
+     */
+    public boolean isInside(Shape shape) {
+        return shape.isPointInShape(this);
+    }
+
+    /**
+     * Is this point not inside a given shape?
+     *
+     * @param shape the shape to test.
+     * @return false if the point is inside the shape, otherwise, true.
+     */
+    public boolean isNotInside(Shape shape) {
+        return !shape.isPointInShape(this);
+    }
+
+    /**
+     * Get the shape's closest point to this.
+     *
+     * @param shape the shape to use.
+     * @return the closest point contained in the shape.
+     */
+    public PointXY closestPoint(Shape shape) {
+        return shape.getClosestPoint(this);
+    }
+
+    /**
+     * Get the shape's farthest point from this.
+     *
+     * @param shape the shape to use.
+     * @return the farthest point contained in the shape.
+     */
+    public PointXY farthestPoint(Shape shape) {
+        return shape.getFarthestPoint(this);
     }
 }
