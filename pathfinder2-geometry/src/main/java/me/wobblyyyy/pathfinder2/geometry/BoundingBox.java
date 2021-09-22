@@ -12,6 +12,13 @@ package me.wobblyyyy.pathfinder2.geometry;
 
 import java.util.function.Supplier;
 
+/**
+ * A bounding box allows you to check if geometrical objects fit inside a
+ * given range of X and Y values.
+ *
+ * @author Colin Robertson
+ * @since 0.1.0
+ */
 public class BoundingBox {
     private final double minimumX;
     private final double minimumY;
@@ -66,6 +73,43 @@ public class BoundingBox {
                 PointXY.maximumX(boxPoint1, boxPoint2),
                 PointXY.maximumY(boxPoint1, boxPoint2)
         );
+    }
+
+    public static boolean isInBox(Line line,
+                                  PointXY boxPoint1,
+                                  PointXY boxPoint2) {
+        boolean isStartValid = isInBox(
+                line.getStartPoint(),
+                boxPoint1,
+                boxPoint2
+        );
+
+        boolean isEndValid = isInBox(
+                line.getEndPoint(),
+                boxPoint1,
+                boxPoint2
+        );
+
+        return isStartValid && isEndValid;
+    }
+
+    public static boolean isInBox(Shape shape,
+                                  PointXY boxPoint1,
+                                  PointXY boxPoint2) {
+        double minX = PointXY.minimumX(boxPoint1, boxPoint2);
+        double minY = PointXY.minimumY(boxPoint1, boxPoint2);
+        double maxX = PointXY.maximumX(boxPoint1, boxPoint2);
+        double maxY = PointXY.maximumY(boxPoint1, boxPoint1);
+
+        PointXY center = new PointXY(
+                (minX + maxX) / 2,
+                (minY + maxY) / 2
+        );
+
+        return new Rectangle(
+                new PointXY(minX, minY),
+                new PointXY(maxX, maxY)
+        ).isPointInShape(shape.getClosestPoint(center));
     }
 
     public double getMinimumX() {

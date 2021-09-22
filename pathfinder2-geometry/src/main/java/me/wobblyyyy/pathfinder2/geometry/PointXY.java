@@ -11,21 +11,29 @@
 package me.wobblyyyy.pathfinder2.geometry;
 
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
+import me.wobblyyyy.pathfinder2.math.Equals;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
- * A 2d coordinate with an X and Y value.
+ * A 2d coordinate with X and Y values. The base for which Pathfinder's
+ * geometry is based upon.
  *
  * <p>
  * A point is defined as a pair of X and Y values. These values are stored
  * as doubles. Points are immutable objects, meaning they can not be modified
  * once created. Many methods in the {@code PointXY} class will return a new
  * {@code PointXY} based on whatever modifications you will have made.
+ * </p>
+ *
+ * <p>
+ * Points will be one of the most important concepts in using Pathfinder -
+ * all of the advanced geometry (rectangles, circles, shapes, etc) is based
+ * on lines and points. And you know what lines are based on? Points. Because
+ * they're used all over the place, there's a ton of very specific or
+ * "niche" methods in this class to accomplish very specific goals.
  * </p>
  *
  * @author Colin Robertson
@@ -204,13 +212,18 @@ public class PointXY implements Serializable {
      */
     public static Angle angleTo(PointXY a,
                                 PointXY b) {
-        // We used to use a bit of a messier implementation, but since
-        // the Angle class has gotten the atan2 static method, there's no
-        // point. I'll preserve the old code just in case it's useful some day.
-        // return Angle.fromRad(Math.atan2(distanceY(a,b), distanceX(a, b)));
         return Angle.atan2(distanceY(a, b), distanceX(a, b));
     }
 
+    /**
+     * Check a set of points for any duplicates. If there are any duplicate
+     * points (points that have the same X and Y values), return true.
+     * If duplicates are not present, return false.
+     *
+     * @param points the set of points to check for duplicates.
+     * @return if there are no duplicates, return false. If there are
+     * duplicates, return true.
+     */
     public static boolean areDuplicatesPresent(PointXY... points) {
         List<PointXY> ps = new ArrayList<>(points.length);
 
@@ -349,6 +362,15 @@ public class PointXY implements Serializable {
         return point == null ? zero() : point;
     }
 
+    /**
+     * Based on a reference point, return the point in the set of points
+     * that is provided that's closest to the reference point.
+     *
+     * @param reference the point to use for reference.
+     * @param points    a set of points to test against the reference.
+     * @return out of the set of points provided, the point that is closest
+     * to the reference point.
+     */
     public static PointXY getClosestPoint(PointXY reference,
                                           PointXY... points) {
         double distance = Double.POSITIVE_INFINITY;
@@ -366,6 +388,15 @@ public class PointXY implements Serializable {
         return point;
     }
 
+    /**
+     * Based on a reference point, return the point in the set of points
+     * that is provided that's closest to the reference point.
+     *
+     * @param reference the point to use for reference.
+     * @param points    a set of points to test against the reference.
+     * @return out of the set of points provided, the point that is closest
+     * to the reference point.
+     */
     public static PointXY getClosestPoint(PointXY reference,
                                           List<PointXY> points) {
         double distance = Double.POSITIVE_INFINITY;
@@ -383,6 +414,15 @@ public class PointXY implements Serializable {
         return point;
     }
 
+    /**
+     * Based on a reference point, return the point in the set of points
+     * that is provided that's furthest from the reference point.
+     *
+     * @param reference the point to use for reference.
+     * @param points    a set of points to test against the reference.
+     * @return out of the set of points provided, the point that is furthest
+     * from the reference point.
+     */
     public static PointXY getFurthestPoint(PointXY reference,
                                            PointXY... points) {
         double distance = Double.NEGATIVE_INFINITY;
@@ -400,6 +440,15 @@ public class PointXY implements Serializable {
         return point;
     }
 
+    /**
+     * Based on a reference point, return the point in the set of points
+     * that is provided that's furthest from the reference point.
+     *
+     * @param reference the point to use for reference.
+     * @param points    a set of points to test against the reference.
+     * @return out of the set of points provided, the point that is furthest
+     * from the reference point.
+     */
     public static PointXY getFurthestPoint(PointXY reference,
                                            List<PointXY> points) {
         double distance = Double.NEGATIVE_INFINITY;
@@ -417,6 +466,13 @@ public class PointXY implements Serializable {
         return point;
     }
 
+    /**
+     * Get a point by averaging all the X and Y values in the set of
+     * provided points.
+     *
+     * @param points the points to average.
+     * @return an averaged point.
+     */
     public static PointXY avg(List<PointXY> points) {
         double totalX = 0;
         double totalY = 0;
@@ -432,6 +488,13 @@ public class PointXY implements Serializable {
         );
     }
 
+    /**
+     * Get a point by averaging all the X and Y values in the set of
+     * provided points.
+     *
+     * @param points the points to average.
+     * @return an averaged point.
+     */
     public static PointXY avg(PointXY... points) {
         double totalX = 0;
         double totalY = 0;
@@ -447,34 +510,12 @@ public class PointXY implements Serializable {
         );
     }
 
-    public static Map<PointXY, Double> mapDistances(PointXY reference,
-                                                    PointXY... points) {
-        Map<PointXY, Double> map = new HashMap<>(points.length);
-
-        for (PointXY p : points) {
-            map.put(
-                    p,
-                    reference.distance(p)
-            );
-        }
-
-        return map;
-    }
-
-    public static Map<PointXY, Double> mapDistances(PointXY reference,
-                                                    List<PointXY> points) {
-        Map<PointXY, Double> map = new HashMap<>(points.size());
-
-        for (PointXY p : points) {
-            map.put(
-                    p,
-                    reference.distance(p)
-            );
-        }
-
-        return map;
-    }
-
+    /**
+     * For a set of points, get the minimum X value.
+     *
+     * @param points the points to iterate over.
+     * @return the minimum X value.
+     */
     public static double minimumX(PointXY... points) {
         double v = points[0].x();
 
@@ -485,6 +526,12 @@ public class PointXY implements Serializable {
         return v;
     }
 
+    /**
+     * For a set of points, get the minimum Y value.
+     *
+     * @param points the points to iterate over.
+     * @return the minimum Y value.
+     */
     public static double minimumY(PointXY... points) {
         double v = points[0].y();
 
@@ -495,6 +542,12 @@ public class PointXY implements Serializable {
         return v;
     }
 
+    /**
+     * For a set of points, get the maximum X value.
+     *
+     * @param points the points to iterate over.
+     * @return the maximum X value.
+     */
     public static double maximumX(PointXY... points) {
         double v = points[0].x();
 
@@ -505,6 +558,12 @@ public class PointXY implements Serializable {
         return v;
     }
 
+    /**
+     * For a set of points, get the maximum Y value.
+     *
+     * @param points the points to iterate over.
+     * @return the maximum Y value.
+     */
     public static double maximumY(PointXY... points) {
         double v = points[0].y();
 
@@ -611,6 +670,12 @@ public class PointXY implements Serializable {
         return distance(this, a);
     }
 
+    /**
+     * Get the absolute value of the distance from a given point.
+     *
+     * @param a the point to get the difference from.
+     * @return the absolute value of the distance between two points.
+     */
     public double absDistance(PointXY a) {
         return Math.abs(distance(this, a));
     }
@@ -625,6 +690,12 @@ public class PointXY implements Serializable {
         return distanceX(this, a);
     }
 
+    /**
+     * Get the absolute value of the distance from a given point.
+     *
+     * @param a the point to get the difference from.
+     * @return the absolute value of the distance between two points.
+     */
     public double absDistanceX(PointXY a) {
         return Math.abs(distanceX(this, a));
     }
@@ -639,12 +710,20 @@ public class PointXY implements Serializable {
         return distanceY(this, a);
     }
 
+    /**
+     * Get the absolute value of the distance from a given point.
+     *
+     * @param a the point to get the difference from.
+     * @return the absolute value of the distance between two points.
+     */
     public double absDistanceY(PointXY a) {
         return Math.abs(distanceY(this, a));
     }
 
     /**
-     * Determine the angle to {@code a} from this point.
+     * Determine the angle to {@code a} from this point. To reiterate,
+     * this method gets the angle FROM the calling point TO the provided
+     * point (parameter {@code a}).
      *
      * @param a the point to determine the angle to.
      * @return the angle from this point to {@code a}.
@@ -671,7 +750,7 @@ public class PointXY implements Serializable {
      *
      * @param a         the point to compare.
      * @param tolerance the maximum distance value.
-     * @return whether or not the two points are near.
+     * @return whether the two points are near.
      */
     public boolean isNear(PointXY a,
                           double tolerance) {
@@ -695,7 +774,7 @@ public class PointXY implements Serializable {
      *
      * @param a one of the points to check.
      * @param b one of the points to check.
-     * @return whether or not all three points are collinear.
+     * @return whether all three points are collinear.
      */
     public boolean isCollinearWith(PointXY a,
                                    PointXY b) {
@@ -772,5 +851,19 @@ public class PointXY implements Serializable {
      */
     public PointXY farthestPoint(Shape shape) {
         return shape.getFurthestPoint(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof PointXY) {
+            PointXY point = (PointXY) obj;
+
+            boolean sameX = Equals.soft(x, point.x(), 0.01);
+            boolean sameY = Equals.soft(y, point.y(), 0.01);
+
+            return sameX && sameY;
+        }
+
+        return super.equals(obj);
     }
 }

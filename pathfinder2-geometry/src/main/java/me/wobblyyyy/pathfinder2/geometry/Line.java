@@ -17,6 +17,10 @@ import me.wobblyyyy.pathfinder2.math.Equals;
  * There's some pretty neat things you can do with lines if that's your cup
  * of tea, but there's a fundamental part of geometry beyond single points.
  *
+ * <p>
+ * This is not actually a LINE, but rather, a LINE SEGMENT.
+ * </p>
+ *
  * @author Colin Robertson
  * @see #isPointOnLine(PointXY)
  * @since 0.1.0
@@ -441,7 +445,6 @@ public class Line {
 
         if (Line.doLinesIntersect(this, ray)) return Line.pointOfIntersection(this, ray);
         else return closestEndPoint(referencePoint);
-
     }
 
     public PointXY getFurthestPoint(PointXY referencePoint) {
@@ -462,18 +465,38 @@ public class Line {
         return toStart > toEnd ? startPoint : endPoint;
     }
 
+    /**
+     * Get the line's min X value.
+     *
+     * @return the line's min X value.
+     */
     public double minimumX() {
         return Math.min(startPoint.x(), endPoint.x());
     }
 
+    /**
+     * Get the line's min Y value.
+     *
+     * @return the line's min Y value.
+     */
     public double minimumY() {
         return Math.min(startPoint.y(), endPoint.y());
     }
 
+    /**
+     * Get the line's max Y value.
+     *
+     * @return the line's max Y value.
+     */
     public double maximumX() {
         return Math.max(startPoint.x(), endPoint.x());
     }
 
+    /**
+     * Get the line's max Y value.
+     *
+     * @return the line's max Y value.
+     */
     public double maximumY() {
         return Math.max(startPoint.y(), endPoint.y());
     }

@@ -213,35 +213,24 @@ public class Rectangle implements Shape {
         );
     }
 
-    private Ray createRay(PointXY point) {
-        PointXY targetPoint = !PointXY.areDuplicatesPresent(point, center) ?
-                center :
-                PointXY.midpoint(aPoint, bPoint);
-
-        return new Ray(
+    @Override
+    public boolean isPointInShape(PointXY point) {
+        return Ray.intersectsOdd(
                 point,
-                point.angleTo(targetPoint)
+                center,
+                abLine.getMidPoint(),
+                lines
         );
     }
 
     @Override
-    public boolean isPointInShape(PointXY point) {
-        Ray ray = createRay(point);
-
-        return Ray.howManyIntersections(
-                ray,
-                lines
-        ) % 2 == 1;
-    }
-
-    @Override
     public boolean isPointNotInShape(PointXY point) {
-        Ray ray = createRay(point);
-
-        return Ray.howManyIntersections(
-                ray,
+        return Ray.intersectsEven(
+                point,
+                center,
+                abLine.getMidPoint(),
                 lines
-        ) % 2 == 0;
+        );
     }
 
     @Override
