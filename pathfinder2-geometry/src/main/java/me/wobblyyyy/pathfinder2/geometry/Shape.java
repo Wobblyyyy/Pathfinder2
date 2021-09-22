@@ -70,4 +70,11 @@ public interface Shape {
      * BOTH shapes are collisions) and false if there are not.
      */
     boolean collidesWith(Shape shape);
+
+    /**
+     * Get the center point of the shape.
+     *
+     * @return the shape's center.
+     */
+    PointXY getCenter();
 }

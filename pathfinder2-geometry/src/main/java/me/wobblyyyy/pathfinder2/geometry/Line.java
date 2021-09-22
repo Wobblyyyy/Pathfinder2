@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+import me.wobblyyyy.pathfinder2.math.Equals;
+
 /**
  * A line is a two-dimensional entity that exists between two {@code PointXY}s.
  * There's some pretty neat things you can do with lines if that's your cup
@@ -93,6 +95,149 @@ public class Line {
         return !isBetweenLines(point, line1, line2);
     }
 
+    public static double perpendicularTo(double slope) {
+        return -(slope * -1);
+    }
+
+    public static Orientation getOrientation(PointXY p,
+                                             PointXY q,
+                                             PointXY r) {
+        double v = (q.y() - p.y()) * (r.x() - q.x()) -
+                (q.x() - p.x()) * (r.y() - q.y());
+
+        if (Equals.soft(v, 0.0, 0.1)) return Orientation.COLLINEAR;
+        else if (v > 0) return Orientation.CLOCKWISE;
+        else return Orientation.COUNTERCLOCKWISE;
+    }
+
+    public static boolean doLinesIntersect(PointXY firstLineStartPoint,
+                                           PointXY firstLineEndPoint,
+                                           PointXY secondLineStartPoint,
+                                           PointXY secondLineEndPoint) {
+        Orientation o1 = getOrientation(
+                firstLineStartPoint,
+                firstLineEndPoint,
+                secondLineStartPoint
+        );
+        Orientation o2 = getOrientation(
+                firstLineStartPoint,
+                firstLineEndPoint,
+                secondLineEndPoint
+        );
+        Orientation o3 = getOrientation(
+                secondLineStartPoint,
+                secondLineEndPoint,
+                firstLineStartPoint
+        );
+        Orientation o4 = getOrientation(
+                secondLineStartPoint,
+                secondLineEndPoint,
+                firstLineEndPoint
+        );
+
+        boolean collinear1 = o1 == Orientation.COLLINEAR && PointXY.areCollinear(
+                firstLineStartPoint,
+                firstLineEndPoint,
+                secondLineStartPoint
+        );
+        boolean collinear2 = o2 == Orientation.COLLINEAR && PointXY.areCollinear(
+                firstLineStartPoint,
+                secondLineEndPoint,
+                firstLineEndPoint
+        );
+        boolean collinear3 = o3 == Orientation.COLLINEAR && PointXY.areCollinear(
+                secondLineStartPoint,
+                firstLineStartPoint,
+                secondLineEndPoint
+        );
+        boolean collinear4 = o4 == Orientation.COLLINEAR && PointXY.areCollinear(
+                secondLineStartPoint,
+                firstLineStartPoint,
+                secondLineEndPoint
+        );
+
+        return (o1 != o2 && o3 != o4) ||
+                collinear1 ||
+                collinear2 ||
+                collinear3 ||
+                collinear4;
+    }
+
+    public static boolean doLinesIntersect(Line line1,
+                                           Line line2) {
+        return doLinesIntersect(
+                line1.getStartPoint(),
+                line1.getEndPoint(),
+                line2.getStartPoint(),
+                line2.getEndPoint()
+        );
+    }
+
+    public static Angle angleBetweenLines(Line line1,
+                                          Line line2) {
+        double rad1 = Math.atan2(
+                line1.deltaY() * -1,
+                line1.deltaX() * -1
+        );
+
+        double rad2 = Math.atan2(
+                line2.deltaY() * -1,
+                line2.deltaX() * -1
+        );
+
+        return Angle.fixedRad(Math.abs(rad1) - Math.abs(rad2));
+    }
+
+    /**
+     * Get the point of intersection between two lines. If the lines are
+     * parallel, this will return a point with {@link Double#MAX_VALUE} as
+     * both the X and Y positions. If the lines do not intersect, this method
+     * will return null. If the lines do intersect, this method will
+     * return the point of intersection between the two lines.
+     *
+     * @param line1 the first of the two lines.
+     * @param line2 the second of the two lines.
+     * @return the point of intersection between the two lines. If the lines
+     * do not intersect, this will be null.
+     * @see #doLinesIntersect(Line, Line)
+     * @see #doLinesIntersect(PointXY, PointXY, PointXY, PointXY)
+     */
+    public static PointXY pointOfIntersection(Line line1,
+                                              Line line2) {
+        PointXY p1 = line1.getStartPoint();
+        PointXY q1 = line1.getEndPoint();
+        PointXY p2 = line2.getStartPoint();
+        PointXY q2 = line2.getEndPoint();
+
+        double a1 = PointXY.distanceY(p1, q1);
+        double b1 = PointXY.distanceX(p1, q1);
+        double c1 = (a1 * p1.x()) + (b1 * p1.y());
+
+        double a2 = PointXY.distanceY(p2, q2);
+        double b2 = PointXY.distanceX(p2, q2);
+        double c2 = (a2 * p2.x()) + (b2 * p2.y());
+
+        double determinant = (a1 * b2) - (a2 * b1);
+
+        if (determinant == 0) {
+            return new PointXY(
+                    Double.MAX_VALUE,
+                    Double.MAX_VALUE
+            );
+        } else {
+            double x = ((b2 * c1) - (b1 * c2)) / determinant;
+            double y = ((a1 * c2) - (a2 * c1)) / determinant;
+
+            PointXY point = new PointXY(x, y);
+
+            if (line1.isPointOnSegment(point) || line2.isPointOnSegment(point)) {
+                return point;
+            } else {
+                return null;
+            }
+        }
+    }
+
     /**
      * Get the line's start point.
      *
@@ -141,6 +286,15 @@ public class Line {
         );
     }
 
+    public boolean isPointOnSegment(PointXY point) {
+        boolean validX = point.x() <= maximumX() && point.x() >= minimumX();
+        boolean validY = point.y() <= maximumY() && point.y() >= minimumY();
+
+        boolean isPointOnLine = isPointOnLine(point);
+
+        return validX && validY && isPointOnLine;
+    }
+
     /**
      * Get the change in X (end point X - start point X).
      *
@@ -167,6 +321,30 @@ public class Line {
      */
     public double slope() {
         return deltaY() / deltaX();
+    }
+
+    public double perpendicularSlope() {
+        return perpendicularTo(slope());
+    }
+
+    public Angle angleSlope() {
+        return Angle.atan2(
+                deltaY(),
+                deltaX()
+        );
+    }
+
+    public Angle perpendicularAngleSlope() {
+        return angleSlope().fixedRotate90Deg();
+    }
+
+    /**
+     * Get the length of the line as determined by the distance formula.
+     *
+     * @return the length of the line.
+     */
+    public double length() {
+        return PointXY.distance(startPoint, endPoint);
     }
 
     /**
@@ -201,15 +379,96 @@ public class Line {
         return !isPointAbove(point);
     }
 
+    /**
+     * Get the distance from the reference point to the line's
+     * start point.
+     *
+     * @param referencePoint the point to use.
+     * @return the distance from {@code referencePoint} to this line's
+     * start point.
+     */
+    public double distanceToStart(PointXY referencePoint) {
+        return referencePoint.distance(startPoint);
+    }
+
+    /**
+     * Get the distance from the reference point to the line's
+     * end point.
+     *
+     * @param referencePoint the point to use.
+     * @return the distance from {@code referencePoint} to this line's
+     * end point.
+     */
+    public double distanceToEnd(PointXY referencePoint) {
+        return referencePoint.distance(endPoint);
+    }
+
+    /**
+     * Get the point on the line that's closest to the provided reference
+     * point.
+     *
+     * @param referencePoint the point to use.
+     * @return the line that's closest to the reference point.
+     */
     public PointXY getClosestPoint(PointXY referencePoint) {
-        double distance1 = referencePoint.distance(startPoint);
-        double distance2 = referencePoint.distance(endPoint);
-        return distance1 > distance2 ? endPoint : startPoint;
+        if (referencePoint.isCollinearWith(startPoint, endPoint)) {
+            return closestEndPoint(referencePoint);
+        }
+
+        double toStart = distanceToStart(referencePoint);
+        double toEnd = distanceToEnd(referencePoint);
+        double sum = toStart + toEnd; // sum of two legs is always longer than the third side
+
+        Line ray = new Line(
+                referencePoint,
+                referencePoint.inDirection(
+                        sum,
+                        perpendicularAngleSlope()
+                )
+        );
+
+        if (Line.doLinesIntersect(this, ray)) return Line.pointOfIntersection(this, ray);
+        else return closestEndPoint(referencePoint);
+
     }
 
     public PointXY getFurthestPoint(PointXY referencePoint) {
-        double distance1 = referencePoint.distance(startPoint);
-        double distance2 = referencePoint.distance(endPoint);
-        return distance1 < distance2 ? endPoint : startPoint;
+        return furthestEndPoint(referencePoint);
+    }
+
+    public PointXY closestEndPoint(PointXY referencePoint) {
+        double toStart = distanceToStart(referencePoint);
+        double toEnd = distanceToEnd(referencePoint);
+
+        return toStart < toEnd ? startPoint : endPoint;
+    }
+
+    public PointXY furthestEndPoint(PointXY referencePoint) {
+        double toStart = distanceToStart(referencePoint);
+        double toEnd = distanceToEnd(referencePoint);
+
+        return toStart > toEnd ? startPoint : endPoint;
+    }
+
+    public double minimumX() {
+        return Math.min(startPoint.x(), endPoint.x());
+    }
+
+    public double minimumY() {
+        return Math.min(startPoint.y(), endPoint.y());
+    }
+
+    public double maximumX() {
+        return Math.max(startPoint.x(), endPoint.x());
+    }
+
+    public double maximumY() {
+        return Math.max(startPoint.y(), endPoint.y());
+    }
+
+    public enum Orientation {
+        COLLINEAR,
+        CLOCKWISE,
+        COUNTERCLOCKWISE
     }
 }

@@ -21,6 +21,11 @@ public class Circle implements Shape {
     }
 
     @Override
+    public PointXY getCenter() {
+        return center;
+    }
+
+    @Override
     public PointXY getClosestPoint(PointXY referencePoint) {
         Angle circleToReference = center.angleTo(referencePoint);
 

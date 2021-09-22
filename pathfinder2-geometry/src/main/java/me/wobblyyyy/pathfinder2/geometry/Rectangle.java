@@ -171,6 +171,11 @@ public class Rectangle implements Shape {
     }
 
     @Override
+    public PointXY getCenter() {
+        return center;
+    }
+
+    @Override
     public boolean isPointInShape(PointXY point) {
         return isPointInRectangle(this, point);
     }
