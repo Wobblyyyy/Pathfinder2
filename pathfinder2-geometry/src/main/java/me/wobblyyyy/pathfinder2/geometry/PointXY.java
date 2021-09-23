@@ -69,6 +69,8 @@ public class PointXY implements Serializable {
      */
     private final double y;
 
+    public static final PointXY ZERO = zero();
+
     /**
      * Create a new {@code PointXY}.
      *
@@ -156,6 +158,11 @@ public class PointXY implements Serializable {
      */
     public static PointXY zero() {
         return new PointXY(0, 0);
+    }
+
+    public static double slope(PointXY a,
+                                PointXY b) {
+        return distanceY(a, b) / distanceX(a, b);
     }
 
     /**

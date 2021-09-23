@@ -10,16 +10,34 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+/**
+ * A circle. I'm not really sure how many else I can describe it. It's
+ * a pretty simple circe.
+ *
+ * @author Colin Robertson
+ * @since 0.1.0
+ */
 public class Circle implements Shape {
     private final PointXY center;
     private final double radius;
 
+    /**
+     * Create a new circle.
+     *
+     * @param center the center of the circle.
+     * @param radius the circle's radius.
+     */
     public Circle(PointXY center,
                   double radius) {
         this.center = center;
         this.radius = radius;
     }
 
+    /**
+     * Get the circle's center.
+     *
+     * @return the center of the circle.
+     */
     @Override
     public PointXY getCenter() {
         return center;
@@ -52,5 +70,32 @@ public class Circle implements Shape {
     @Override
     public boolean isPointNotInShape(PointXY point) {
         return !isPointInShape(point);
+    }
+
+    /**
+     * Get the circle's radius.
+     *
+     * @return the circle's radius.
+     */
+    public double getRadius() {
+        return radius;
+    }
+
+    /**
+     * Get the circle's diameter.
+     *
+     * @return the circle's diameter.
+     */
+    public double getDiameter() {
+        return radius * 2;
+    }
+
+    /**
+     * Get the circle's area.
+     *
+     * @return the circle's area.
+     */
+    public double getArea() {
+        return getDiameter() * Math.PI;
     }
 }

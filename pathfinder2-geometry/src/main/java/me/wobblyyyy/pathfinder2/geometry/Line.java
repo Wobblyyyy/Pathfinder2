@@ -201,32 +201,10 @@ public class Line {
 
     public static PointXY unboundedPointOfIntersection(Line line1,
                                                        Line line2) {
-        PointXY p1 = line1.getStartPoint();
-        PointXY q1 = line1.getEndPoint();
-        PointXY p2 = line2.getStartPoint();
-        PointXY q2 = line2.getEndPoint();
-
-        double a1 = PointXY.distanceY(p1, q1);
-        double b1 = PointXY.distanceX(p1, q1);
-        double c1 = (a1 * p1.x()) + (b1 * p1.y());
-
-        double a2 = PointXY.distanceY(p2, q2);
-        double b2 = PointXY.distanceX(p2, q2);
-        double c2 = (a2 * p2.x()) + (b2 * p2.y());
-
-        double determinant = (a1 * b2) - (a2 * b1);
-
-        if (determinant == 0) {
-            return new PointXY(
-                    Double.MAX_VALUE,
-                    Double.MAX_VALUE
-            );
-        } else {
-            double x = ((b2 * c1) - (b1 * c2)) / determinant;
-            double y = ((a1 * c2) - (a2 * c1)) / determinant;
-
-            return new PointXY(x, y);
-        }
+        return EquationForm.unboundedIntersection(
+                EquationForm.lineToEquation(line1),
+                EquationForm.lineToEquation(line1)
+        );
     }
 
     /**

@@ -128,6 +128,20 @@ public class BoundingBox {
         return maximumY;
     }
 
+    public PointXY getMinimumPoint() {
+        return new PointXY(
+                minimumX,
+                minimumY
+        );
+    }
+
+    public PointXY getMaximumPoint() {
+        return new PointXY(
+                maximumX,
+                maximumY
+        );
+    }
+
     public boolean isInBox(PointXY point) {
         return isInBox(
                 point,

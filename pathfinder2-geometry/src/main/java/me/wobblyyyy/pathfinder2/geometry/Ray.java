@@ -65,6 +65,16 @@ public class Ray {
         );
     }
 
+    /**
+     * Is there an odd number of intersections?
+     *
+     * @param start    the ray's start point.
+     * @param center   the ray's target point.
+     * @param fallback a fallback target point.
+     * @param lines    a set of lines.
+     * @return true if there's an odd number of intersections, otherwise,
+     * false.
+     */
     public static boolean intersectsOdd(PointXY start,
                                         PointXY center,
                                         PointXY fallback,
@@ -76,6 +86,16 @@ public class Ray {
         ).intersectsOdd(lines);
     }
 
+    /**
+     * Is there an even number of intersections?
+     *
+     * @param start    the ray's start point.
+     * @param center   the ray's target point.
+     * @param fallback a fallback target point.
+     * @param lines    a set of lines.
+     * @return true if there's an even number of intersections, otherwise,
+     * false.
+     */
     public static boolean intersectsEven(PointXY start,
                                          PointXY center,
                                          PointXY fallback,
@@ -272,5 +292,23 @@ public class Ray {
      */
     public boolean intersectsEven(List<Line> allLines) {
         return intersectsEven(this, allLines);
+    }
+
+    /**
+     * Get the ray's point.
+     *
+     * @return the ray's point.
+     */
+    public PointXY getPoint() {
+        return point;
+    }
+
+    /**
+     * Get the ray's direction.
+     *
+     * @return the ray's direction.
+     */
+    public Angle getDirection() {
+        return direction;
     }
 }
