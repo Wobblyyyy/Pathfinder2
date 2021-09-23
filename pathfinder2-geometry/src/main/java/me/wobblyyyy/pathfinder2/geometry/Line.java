@@ -302,13 +302,18 @@ public class Line {
         );
     }
 
+    /**
+     * Is a point ON the specific line segment?
+     *
+     * @param point the point to test.
+     * @return true if the point is on the line segment, otherwise, false.
+     */
     public boolean isPointOnSegment(PointXY point) {
-        boolean validX = point.x() <= maximumX() && point.x() >= minimumX();
-        boolean validY = point.y() <= maximumY() && point.y() >= minimumY();
-
-        boolean isPointOnLine = isPointOnLine(point);
-
-        return validX && validY && isPointOnLine;
+        return BoundingBox.isInBox(
+                point,
+                new PointXY(minimumX(), minimumY()),
+                new PointXY(minimumX(), minimumY())
+        );
     }
 
     /**
@@ -343,6 +348,11 @@ public class Line {
         return perpendicularTo(slope());
     }
 
+    /**
+     * Get the slope of the line, as an angle.
+     *
+     * @return the slope of the line, as an angle.
+     */
     public Angle angleSlope() {
         return Angle.atan2(
                 deltaY(),
@@ -350,6 +360,11 @@ public class Line {
         );
     }
 
+    /**
+     * Get a slope perpendicular to this line's slope.
+     *
+     * @return a slope, perpendicular to this line's slope.
+     */
     public Angle perpendicularAngleSlope() {
         return angleSlope().fixedRotate90Deg();
     }
@@ -447,10 +462,23 @@ public class Line {
         else return closestEndPoint(referencePoint);
     }
 
+    /**
+     * Get the point on the line the furthest away from the reference point.
+     *
+     * @param referencePoint the point to use for reference.
+     * @return the furthest point on the line.
+     */
     public PointXY getFurthestPoint(PointXY referencePoint) {
         return furthestEndPoint(referencePoint);
     }
 
+    /**
+     * Get the closest end point.
+     *
+     * @param referencePoint the point to use for reference.
+     * @return either start point or end point depending on which one is
+     * closer.
+     */
     public PointXY closestEndPoint(PointXY referencePoint) {
         double toStart = distanceToStart(referencePoint);
         double toEnd = distanceToEnd(referencePoint);
@@ -458,6 +486,13 @@ public class Line {
         return toStart < toEnd ? startPoint : endPoint;
     }
 
+    /**
+     * Get the furthest end point.
+     *
+     * @param referencePoint the point to use for reference.
+     * @return either start point or end point depending on which one is
+     * further.
+     */
     public PointXY furthestEndPoint(PointXY referencePoint) {
         double toStart = distanceToStart(referencePoint);
         double toEnd = distanceToEnd(referencePoint);
@@ -501,10 +536,23 @@ public class Line {
         return Math.max(startPoint.y(), endPoint.y());
     }
 
+    /**
+     * Does this line intersect with another line?
+     *
+     * @param line the line to test.
+     * @return true if the lines intersect, otherwise, false.
+     */
     public boolean doesIntersectWith(Line line) {
         return doLinesIntersect(this, line);
     }
 
+    /**
+     * Get the point of intersection for this line and another line.
+     *
+     * @param line the line to test.
+     * @return the point of intersection for the two lines. If there is no
+     * valid point of intersection, this will return null.
+     */
     public PointXY getIntersectionPoint(Line line) {
         return pointOfIntersection(this, line);
     }
