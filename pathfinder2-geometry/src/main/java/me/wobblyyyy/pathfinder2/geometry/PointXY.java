@@ -338,12 +338,16 @@ public class PointXY implements Serializable {
         // I'll be 100% honest here - I think I copied this code from
         // a stackoverflow answer somewhere. So I can't offer too much insight
         // into how it works. Sorry!
-        double dx1 = b.x() - a.x();
-        double dy1 = b.y() - a.y();
-        double dx2 = c.x() - a.x();
-        double dy2 = c.y() - a.y();
+        double dx1 = (b.x() + 0.01) - (a.x() + 0.01);
+        double dy1 = (b.y() + 0.01) - (a.y() + 0.01);
+        double dx2 = (c.x() + 0.01) - (a.x() + 0.01);
+        double dy2 = (c.y() + 0.01) - (a.y() + 0.01);
 
-        return Math.abs(dx1 * dy2 - dy1 * dx2) < 0.001;
+        return Equals.soft(
+                (dx1 * dy2),
+                (dx2 * dy1),
+                0.01
+        );
     }
 
     /**
@@ -872,5 +876,14 @@ public class PointXY implements Serializable {
         }
 
         return super.equals(obj);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "(%s, %s)",
+                x,
+                y
+        );
     }
 }

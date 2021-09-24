@@ -203,7 +203,7 @@ public class Line {
                                                        Line line2) {
         return EquationForm.unboundedIntersection(
                 EquationForm.lineToEquation(line1),
-                EquationForm.lineToEquation(line1)
+                EquationForm.lineToEquation(line2)
         );
     }
 
@@ -290,7 +290,7 @@ public class Line {
         return BoundingBox.isInBox(
                 point,
                 new PointXY(minimumX(), minimumY()),
-                new PointXY(minimumX(), minimumY())
+                new PointXY(maximumX(), maximumY())
         );
     }
 
@@ -424,8 +424,8 @@ public class Line {
             return closestEndPoint(referencePoint);
         }
 
-        double toStart = distanceToStart(referencePoint);
-        double toEnd = distanceToEnd(referencePoint);
+        double toStart = Math.abs(distanceToStart(referencePoint));
+        double toEnd = Math.abs(distanceToEnd(referencePoint));
         double sum = toStart + toEnd; // sum of two legs is always longer than the third side
 
         Line ray = new Line(

@@ -61,6 +61,19 @@ public class Average {
         return sum / numbers.length;
     }
 
+    public static double of(int maxIndex,
+                            double... numbers) {
+        double sum = 0;
+        int j = 0;
+
+        for (int i = 0; i < maxIndex; i++) {
+            sum += numbers[i];
+            j++;
+        }
+
+        return sum / j;
+    }
+
     public static double ofX(PointXY... points) {
         double x = 0;
 

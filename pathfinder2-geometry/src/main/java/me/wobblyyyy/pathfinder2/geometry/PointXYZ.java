@@ -368,4 +368,14 @@ public class PointXYZ extends PointXY {
     public PointXYZ withY(double y) {
         return new PointXYZ(x(), y, this.z);
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "(%s, %s, %s deg)",
+                x(),
+                y(),
+                z.deg()
+        );
+    }
 }
