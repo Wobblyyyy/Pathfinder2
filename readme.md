@@ -21,9 +21,7 @@
 Pathfinder2 is a continuation of the original [Pathfinder](https://github.com/Wobblyyyy/Pathfinder)
 library - an autonomous motion planning and control system designed for FIRST Robotics environments, such as
 the [FIRST Robotics Competition](https://www.firstinspires.org/robotics/frc) and the
-[FIRST Tech Challenge](https://www.firstinspires.org/robotics/ftc). Pathfinder2, colloquially denoted as "Pathfinder,"
-is an efficient and expansive library written in Java, making use of the Java
-[JDK version 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html).
+[FIRST Tech Challenge](https://www.firstinspires.org/robotics/ftc). 
 
 <h2 align="center">Important Notice</h2>
 
@@ -55,18 +53,6 @@ We now have an example project! Check it out [here](https://github.com/Wobblyyyy
 You'll want to navigate to the TeamCode folder (`org.firstinspires...`) and
 check out the classes there. This may be useful if you're in FTC or FRC.
 There will be an FRC-specific repository in the near future!
-
-<h2 align="center">Documentation Style</h2>
-
-Okay. I'm gonna be real with you. Although, yes - I could type out all the documentation for this project exactly as I
-would if I was to hand in an AP Literature essay - I'm not going to. A lot of the text available surrounding the
-Pathfinder project is not meant to be taken literally. There's quite a bit of sarcasm. And quite a few terrible jokes.
-I'm putting this out here so we're all on the same page here.
-
-If you can't understand some sarcasm present within the documentation... well, that's really unfortunate, come to think
-of it. With that being said - if you really, seriously, actually can't understand something for whatever reason
-(I try to make sure everything can be understood at least a little) let me know, and I'll be glad to fix up any of the
-documentation.
 
 <h2 align="center">Quickstart</h2>
 
