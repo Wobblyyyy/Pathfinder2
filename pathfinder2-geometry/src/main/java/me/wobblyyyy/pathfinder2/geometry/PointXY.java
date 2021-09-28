@@ -262,10 +262,6 @@ public class PointXY implements Serializable {
     public static PointXY inDirection(PointXY base,
                                       double distance,
                                       Angle angle) {
-        // Look at that! Making use of those sexy angle trig functions.
-        // On a more serious note, remember:
-        // COS corresponds with X
-        // SIN corresponds with Y
         return new PointXY(
                 base.x() + (distance * angle.cos()),
                 base.y() + (distance * angle.sin())
@@ -291,8 +287,6 @@ public class PointXY implements Serializable {
             );
         }
 
-        // Get the distance between the two points, make sure it's absolute,
-        // and check to see if it's less than the tolerance value.
         return Math.abs(distance(a, b)) <= Math.abs(tolerance);
     }
 
@@ -307,16 +301,6 @@ public class PointXY implements Serializable {
     public static PointXY rotate(PointXY point,
                                  PointXY center,
                                  Angle angle) {
-        // Okay. I know for sure this is a bit confusing-looking at the very
-        // Thankfully, it's actually pretty simple.
-        // Firstly, we need to calculate the angle between the center point
-        // and the target point. We'll call this our base angle.
-        // Secondly, we need to determine how far away the target point is
-        // from the center point - kind of like a magnitude.
-        // Thirdly, we'll need to create another angle by adding the base
-        // angle with our rotation angle.
-        // And finally, we'll create a new point that's the right distance
-        // away from the center point using the new angle.
         return inDirection(
                 center,
                 distance(center, point),
@@ -335,9 +319,6 @@ public class PointXY implements Serializable {
     public static boolean areCollinear(PointXY a,
                                        PointXY b,
                                        PointXY c) {
-        // I'll be 100% honest here - I think I copied this code from
-        // a stackoverflow answer somewhere. So I can't offer too much insight
-        // into how it works. Sorry!
         double dx1 = (b.x() + 0.01) - (a.x() + 0.01);
         double dy1 = (b.y() + 0.01) - (a.y() + 0.01);
         double dx2 = (c.x() + 0.01) - (a.x() + 0.01);
@@ -828,40 +809,11 @@ public class PointXY implements Serializable {
      * Is this point inside a given shape?
      *
      * @param shape the shape to test.
-     * @return true if the point is inside the shape, otherwise, false.
+     * @return if the point is contained in the shape, return true. If the
+     * point is not contained in the shape, return false.
      */
     public boolean isInside(Shape shape) {
         return shape.isPointInShape(this);
-    }
-
-    /**
-     * Is this point not inside a given shape?
-     *
-     * @param shape the shape to test.
-     * @return false if the point is inside the shape, otherwise, true.
-     */
-    public boolean isNotInside(Shape shape) {
-        return !shape.isPointInShape(this);
-    }
-
-    /**
-     * Get the shape's closest point to this.
-     *
-     * @param shape the shape to use.
-     * @return the closest point contained in the shape.
-     */
-    public PointXY closestPoint(Shape shape) {
-        return shape.getClosestPoint(this);
-    }
-
-    /**
-     * Get the shape's farthest point from this.
-     *
-     * @param shape the shape to use.
-     * @return the farthest point contained in the shape.
-     */
-    public PointXY farthestPoint(Shape shape) {
-        return shape.getFurthestPoint(this);
     }
 
     @Override

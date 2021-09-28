@@ -12,532 +12,216 @@ package me.wobblyyyy.pathfinder2.geometry;
 
 import me.wobblyyyy.pathfinder2.math.Equals;
 
-/**
- * A line is a two-dimensional entity that exists between two {@code PointXY}s.
- * There's some pretty neat things you can do with lines if that's your cup
- * of tea, but there's a fundamental part of geometry beyond single points.
- *
- * <p>
- * This is not actually a LINE, but rather, a LINE SEGMENT.
- * </p>
- *
- * @author Colin Robertson
- * @see #isPointOnLine(PointXY)
- * @since 0.1.0
- */
-public class Line {
-    private final PointXY startPoint;
-    private final PointXY midPoint;
-    private final PointXY endPoint;
+import java.io.Serializable;
 
-    /**
-     * Create a new {@code Line} using two points.
-     *
-     * @param startPoint the line's start point. (initial point)
-     * @param endPoint   the line's end point. (final point)
-     */
-    public Line(PointXY startPoint,
-                PointXY endPoint) {
-        if (startPoint == null)
-            throw new IllegalArgumentException("Start point cannot be null!");
-        if (endPoint == null)
-            throw new IllegalArgumentException("End point cannot be null!");
-        if (startPoint.x() == endPoint.x() && startPoint.y() == endPoint.y())
-            throw new IllegalArgumentException("Cannot create a line between two of the same point!");
+public class Line implements Serializable {
+    private final double minX;
+    private final double minY;
+    private final double maxX;
+    private final double maxY;
 
-        this.startPoint = startPoint;
-        // calculate the midpoint only once, memory usage isn't really a problem
-        this.midPoint = PointXY.avg(startPoint, endPoint);
-        this.endPoint = endPoint;
+    private final PointXY start;
+    private final PointXY end;
+
+    private final LinearEquation equation;
+
+    public Line(PointXY start,
+                PointXY end) {
+        minX = PointXY.minimumX(start, end);
+        minY = PointXY.minimumY(start, end);
+        maxX = PointXY.maximumX(start, end);
+        maxY = PointXY.maximumY(start, end);
+
+        this.start = start;
+        this.end = end;
+
+        if (Equals.soft(minX, maxX, 0.01)) {
+            // line is vertical
+
+            equation = SlopeIntercept.newVertical(minX);
+        } else {
+            // line is not vertical
+
+            double slope = start.angleTo(end).tan();
+            equation = new PointSlope(start, slope);
+        }
     }
 
-    public static Line avg(Line line1,
-                           Line line2) {
-        return new Line(
-                PointXY.avg(line1.startPoint, line2.startPoint),
-                PointXY.avg(line1.endPoint, line2.endPoint)
-        );
+    public static PointXY getUnboundedIntersection(Line a,
+                                                   Line b) {
+        return a.getEquation().getIntersection(b.getEquation());
     }
 
-    public static Line add(Line line1,
-                           Line line2) {
-        return new Line(
-                PointXY.add(line1.startPoint, line2.startPoint),
-                PointXY.add(line1.endPoint, line2.endPoint)
-        );
+    public static boolean areLinesParallel(Line a,
+                                           Line b) {
+        return Equals.soft(a.slope(), b.slope(), 0.001) &&
+                getUnboundedIntersection(a, b) == null;
     }
 
-    public static boolean higherThan(Line line1,
-                                     Line line2) {
-        double xs1 = line1.startPoint.x();
-        double xs2 = line2.startPoint.x();
-        double xe1 = line1.endPoint.x();
-        double xe2 = line2.endPoint.x();
-        double ys1 = line1.startPoint.y();
-        double ys2 = line2.startPoint.y();
-        double ye1 = line1.endPoint.y();
-        double ye2 = line2.endPoint.y();
+    public static boolean doLinesIntersect(Line a,
+                                           Line b) {
+        PointXY unboundedIntersection = getUnboundedIntersection(a, b);
 
-        boolean higherThanX = xs2 > xs1 && xe2 > xe1;
-        boolean higherThanY = ys2 > ys1 && ye2 > ye1;
+        boolean onLineA = a.isPointOnLineSegment(unboundedIntersection);
+        boolean onLineB = b.isPointOnLineSegment(unboundedIntersection);
 
-        return higherThanX && higherThanY;
+        return onLineA && onLineB;
     }
 
-    public static boolean isBetweenLines(PointXY point,
-                                         Line line1,
-                                         Line line2) {
-        double x = point.x();
-        double y = point.y();
+    public static PointXY getIntersection(Line a,
+                                          Line b) {
+        PointXY unboundedIntersection = getUnboundedIntersection(a, b);
 
-        boolean isLine1HigherThanLine2 = Line.higherThan(line1, line2);
-        Line highLine = isLine1HigherThanLine2 ? line1 : line2;
-        Line lowLine = isLine1HigherThanLine2 ? line2 : line1;
+        boolean validA = BoundingBox.isPointInLine(unboundedIntersection, a);
+        boolean validB = BoundingBox.isPointInLine(unboundedIntersection, b);
 
-        boolean isPointLowerThanHighLine = highLine.isPointBelow(point);
-        boolean isPointHigherThanLowLine = lowLine.isPointAbove(point);
-
-        return isPointLowerThanHighLine && isPointHigherThanLowLine;
+        return validA && validB ? unboundedIntersection : null;
     }
 
-    public static boolean isNotBetweenLines(PointXY point,
-                                            Line line1,
-                                            Line line2) {
-        return !isBetweenLines(point, line1, line2);
+    public static boolean isPointOnLine(Line line,
+                                        PointXY point) {
+        if (point == null) return false;
+
+        return point.isCollinearWith(line.start, line.end);
     }
 
-    public static double perpendicularTo(double slope) {
-        return -(slope * -1);
+    public static boolean isPointOnLineSegment(Line line,
+                                               PointXY point) {
+        if (point == null) return false;
+
+        return isPointOnLine(line, point) &&
+                BoundingBox.isPointInLine(point, line);
     }
 
-    public static Orientation getOrientation(PointXY p,
-                                             PointXY q,
-                                             PointXY r) {
-        double v = (q.y() - p.y()) * (r.x() - q.x()) -
-                (q.x() - p.x()) * (r.y() - q.y());
+    public static PointXY getClosestPoint(PointXY reference,
+                                          Line line) {
+        if (
+                isPointOnLine(line, reference) ||
+                        !BoundingBox.isPointInLine(reference, line)
+        )
+            return getClosestEndpoint(reference, line);
 
-        if (Equals.soft(v, 0.0, 0.1)) return Orientation.COLLINEAR;
-        else if (v > 0) return Orientation.CLOCKWISE;
-        else return Orientation.COUNTERCLOCKWISE;
-    }
-
-    public static boolean doLinesIntersect(PointXY firstLineStartPoint,
-                                           PointXY firstLineEndPoint,
-                                           PointXY secondLineStartPoint,
-                                           PointXY secondLineEndPoint) {
-        Orientation o1 = getOrientation(
-                firstLineStartPoint,
-                firstLineEndPoint,
-                secondLineStartPoint
-        );
-        Orientation o2 = getOrientation(
-                firstLineStartPoint,
-                firstLineEndPoint,
-                secondLineEndPoint
-        );
-        Orientation o3 = getOrientation(
-                secondLineStartPoint,
-                secondLineEndPoint,
-                firstLineStartPoint
-        );
-        Orientation o4 = getOrientation(
-                secondLineStartPoint,
-                secondLineEndPoint,
-                firstLineEndPoint
+        LinearEquation perpendicular = new PointSlope(
+                reference,
+                line.perpendicularSlope()
         );
 
-        boolean collinear1 = o1 == Orientation.COLLINEAR && PointXY.areCollinear(
-                firstLineStartPoint,
-                firstLineEndPoint,
-                secondLineStartPoint
-        );
-        boolean collinear2 = o2 == Orientation.COLLINEAR && PointXY.areCollinear(
-                firstLineStartPoint,
-                secondLineEndPoint,
-                firstLineEndPoint
-        );
-        boolean collinear3 = o3 == Orientation.COLLINEAR && PointXY.areCollinear(
-                secondLineStartPoint,
-                firstLineStartPoint,
-                secondLineEndPoint
-        );
-        boolean collinear4 = o4 == Orientation.COLLINEAR && PointXY.areCollinear(
-                secondLineStartPoint,
-                firstLineStartPoint,
-                secondLineEndPoint
-        );
-
-        return (o1 != o2 && o3 != o4) ||
-                collinear1 ||
-                collinear2 ||
-                collinear3 ||
-                collinear4;
+        return perpendicular.getIntersection(line.getEquation());
     }
 
-    public static boolean doLinesIntersect(Line line1,
-                                           Line line2) {
-        return doLinesIntersect(
-                line1.getStartPoint(),
-                line1.getEndPoint(),
-                line2.getStartPoint(),
-                line2.getEndPoint()
-        );
+    public static PointXY getClosestEndpoint(PointXY reference,
+                                             Line line) {
+        double distanceToStart = reference.distance(line.start);
+        double distanceToEnd = reference.distance(line.end);
+
+        return distanceToStart < distanceToEnd
+                ? line.start
+                : line.end;
     }
 
-    public static Angle angleBetweenLines(Line line1,
-                                          Line line2) {
-        double rad1 = Math.atan2(
-                line1.deltaY() * -1,
-                line1.deltaX() * -1
-        );
+    public static PointXY getFurthestPoint(PointXY reference,
+                                           Line line) {
+        double distanceToStart = reference.distance(line.start);
+        double distanceToEnd = reference.distance(line.end);
 
-        double rad2 = Math.atan2(
-                line2.deltaY() * -1,
-                line2.deltaX() * -1
-        );
-
-        return Angle.fixedRad(Math.abs(rad1) - Math.abs(rad2));
+        return distanceToStart > distanceToEnd
+                ? line.start
+                : line.end;
     }
 
-    public static PointXY unboundedPointOfIntersection(Line line1,
-                                                       Line line2) {
-        return EquationForm.unboundedIntersection(
-                EquationForm.lineToEquation(line1),
-                EquationForm.lineToEquation(line2)
-        );
+    public static PointXY midpoint(Line line) {
+        return line.start.midpoint(line.end);
     }
 
-    /**
-     * Get the point of intersection between two lines. If the lines are
-     * parallel, this will return a point with {@link Double#MAX_VALUE} as
-     * both the X and Y positions. If the lines do not intersect, this method
-     * will return null. If the lines do intersect, this method will
-     * return the point of intersection between the two lines.
-     *
-     * @param line1 the first of the two lines.
-     * @param line2 the second of the two lines.
-     * @return the point of intersection between the two lines. If the lines
-     * do not intersect, this will be null.
-     * @see #doLinesIntersect(Line, Line)
-     * @see #doLinesIntersect(PointXY, PointXY, PointXY, PointXY)
-     */
-    public static PointXY pointOfIntersection(Line line1,
-                                              Line line2) {
-        PointXY point = unboundedPointOfIntersection(line1, line2);
-
-        boolean existsOnLine1 = line1.isPointOnSegment(point);
-        boolean existsOnLine2 = line2.isPointOnSegment(point);
-
-        if (existsOnLine1 || existsOnLine2) return point;
-        else return null;
+    public double getMinX() {
+        return minX;
     }
 
-    /**
-     * Get the line's start point.
-     *
-     * @return the line's start point.
-     */
-    public PointXY getStartPoint() {
-        return startPoint;
+    public double getMinY() {
+        return minY;
     }
 
-    /**
-     * Get the line's mid-point.
-     *
-     * @return the line's mid-point.
-     */
-    public PointXY getMidPoint() {
-        return midPoint;
+    public double getMaxX() {
+        return maxX;
     }
 
-    /**
-     * Get the line's end point.
-     *
-     * @return the line's end point.
-     */
-    public PointXY getEndPoint() {
-        return endPoint;
+    public double getMaxY() {
+        return maxY;
     }
 
-    /**
-     * Is a given point on a line?
-     *
-     * <p>
-     * To determine whether the point lies on the line, we use the
-     * {@link PointXY#areCollinear(PointXY, PointXY, PointXY)} method to
-     * check. Very fancy, very cool, very epic. I know.
-     * </p>
-     *
-     * @param point the point to test.
-     * @return true if the point is on the line, false if the point is
-     * not on the line.
-     */
-    public boolean isPointOnLine(PointXY point) {
-        return PointXY.areCollinear(
-                startPoint,
-                point,
-                endPoint
-        );
+    public PointXY getStart() {
+        return start;
     }
 
-    /**
-     * Is a point ON the specific line segment?
-     *
-     * @param point the point to test.
-     * @return true if the point is on the line segment, otherwise, false.
-     */
-    public boolean isPointOnSegment(PointXY point) {
-        return BoundingBox.isInBox(
-                point,
-                new PointXY(minimumX(), minimumY()),
-                new PointXY(maximumX(), maximumY())
-        );
+    public PointXY getEnd() {
+        return end;
     }
 
-    /**
-     * Get the change in X (end point X - start point X).
-     *
-     * @return the change in X.
-     */
+    public LinearEquation getEquation() {
+        return equation;
+    }
+
     public double deltaX() {
-        return endPoint.x() - startPoint.x();
+        return maxX - minX;
     }
 
-    /**
-     * Get the change in Y (end point Y - start point Y).
-     *
-     * @return the change in Y.
-     */
     public double deltaY() {
-        return endPoint.y() - startPoint.y();
+        return maxY - minY;
     }
 
-    /**
-     * Get the slope of the line. This is calculated by dividing
-     * {@link #deltaY()} by {@link #deltaX()}.
-     *
-     * @return the slope of the line.
-     */
     public double slope() {
         return deltaY() / deltaX();
     }
 
-    public double perpendicularSlope() {
-        return perpendicularTo(slope());
-    }
-
-    /**
-     * Get the slope of the line, as an angle.
-     *
-     * @return the slope of the line, as an angle.
-     */
     public Angle angleSlope() {
-        return Angle.atan2(
-                deltaY(),
-                deltaX()
-        );
+        return Angle.atan2(deltaY(), deltaX());
     }
 
-    /**
-     * Get a slope perpendicular to this line's slope.
-     *
-     * @return a slope, perpendicular to this line's slope.
-     */
-    public Angle perpendicularAngleSlope() {
-        return angleSlope().fixedRotate90Deg();
+    public double perpendicularSlope() {
+        return slope() / -1;
     }
 
-    /**
-     * Get the length of the line as determined by the distance formula.
-     *
-     * @return the length of the line.
-     */
-    public double length() {
-        return PointXY.distance(startPoint, endPoint);
+    public Angle anglePerpendicularSlope() {
+        return angleSlope().fixedRotate180Deg();
     }
 
-    /**
-     * Is a given point above or below the line? A point is "above" the line
-     * if, were it drawn on a piece of paper, would appear "above" the line.
-     * Likewise, a point below the line would appear to be literally "below"
-     * the line.
-     *
-     * @param point the point to test.
-     * @return true if the point is above the line, false if it's not above
-     * the line.
-     */
-    public boolean isPointAbove(PointXY point) {
-        double x = point.x();
-        double y = point.y();
-        double slope = slope();
-
-        return (slope * x) > y;
+    public PointXY getUnboundedIntersectionWith(Line line) {
+        return getUnboundedIntersection(this, line);
     }
 
-    /**
-     * Is a given point above or below the line? A point is "above" the line
-     * if, were it drawn on a piece of paper, would appear "above" the line.
-     * Likewise, a point below the line would appear to be literally "below"
-     * the line.
-     *
-     * @param point the point to test.
-     * @return false if the point is above the line, true if it's not above
-     * the line.
-     */
-    public boolean isPointBelow(PointXY point) {
-        return !isPointAbove(point);
+    public PointXY getIntersectionWith(Line line) {
+        return getIntersection(this, line);
     }
 
-    /**
-     * Get the distance from the reference point to the line's
-     * start point.
-     *
-     * @param referencePoint the point to use.
-     * @return the distance from {@code referencePoint} to this line's
-     * start point.
-     */
-    public double distanceToStart(PointXY referencePoint) {
-        return referencePoint.distance(startPoint);
-    }
-
-    /**
-     * Get the distance from the reference point to the line's
-     * end point.
-     *
-     * @param referencePoint the point to use.
-     * @return the distance from {@code referencePoint} to this line's
-     * end point.
-     */
-    public double distanceToEnd(PointXY referencePoint) {
-        return referencePoint.distance(endPoint);
-    }
-
-    /**
-     * Get the point on the line that's closest to the provided reference
-     * point.
-     *
-     * @param referencePoint the point to use.
-     * @return the line that's closest to the reference point.
-     */
-    public PointXY getClosestPoint(PointXY referencePoint) {
-        if (referencePoint.isCollinearWith(startPoint, endPoint)) {
-            return closestEndPoint(referencePoint);
-        }
-
-        double toStart = Math.abs(distanceToStart(referencePoint));
-        double toEnd = Math.abs(distanceToEnd(referencePoint));
-        double sum = toStart + toEnd; // sum of two legs is always longer than the third side
-
-        Line ray = new Line(
-                referencePoint,
-                referencePoint.inDirection(
-                        sum,
-                        perpendicularAngleSlope()
-                )
-        );
-
-        if (Line.doLinesIntersect(this, ray)) return Line.pointOfIntersection(this, ray);
-        else return closestEndPoint(referencePoint);
-    }
-
-    /**
-     * Get the point on the line the furthest away from the reference point.
-     *
-     * @param referencePoint the point to use for reference.
-     * @return the furthest point on the line.
-     */
-    public PointXY getFurthestPoint(PointXY referencePoint) {
-        return furthestEndPoint(referencePoint);
-    }
-
-    /**
-     * Get the closest end point.
-     *
-     * @param referencePoint the point to use for reference.
-     * @return either start point or end point depending on which one is
-     * closer.
-     */
-    public PointXY closestEndPoint(PointXY referencePoint) {
-        double toStart = distanceToStart(referencePoint);
-        double toEnd = distanceToEnd(referencePoint);
-
-        return toStart < toEnd ? startPoint : endPoint;
-    }
-
-    /**
-     * Get the furthest end point.
-     *
-     * @param referencePoint the point to use for reference.
-     * @return either start point or end point depending on which one is
-     * further.
-     */
-    public PointXY furthestEndPoint(PointXY referencePoint) {
-        double toStart = distanceToStart(referencePoint);
-        double toEnd = distanceToEnd(referencePoint);
-
-        return toStart > toEnd ? startPoint : endPoint;
-    }
-
-    /**
-     * Get the line's min X value.
-     *
-     * @return the line's min X value.
-     */
-    public double minimumX() {
-        return Math.min(startPoint.x(), endPoint.x());
-    }
-
-    /**
-     * Get the line's min Y value.
-     *
-     * @return the line's min Y value.
-     */
-    public double minimumY() {
-        return Math.min(startPoint.y(), endPoint.y());
-    }
-
-    /**
-     * Get the line's max Y value.
-     *
-     * @return the line's max Y value.
-     */
-    public double maximumX() {
-        return Math.max(startPoint.x(), endPoint.x());
-    }
-
-    /**
-     * Get the line's max Y value.
-     *
-     * @return the line's max Y value.
-     */
-    public double maximumY() {
-        return Math.max(startPoint.y(), endPoint.y());
-    }
-
-    /**
-     * Does this line intersect with another line?
-     *
-     * @param line the line to test.
-     * @return true if the lines intersect, otherwise, false.
-     */
     public boolean doesIntersectWith(Line line) {
         return doLinesIntersect(this, line);
     }
 
-    /**
-     * Get the point of intersection for this line and another line.
-     *
-     * @param line the line to test.
-     * @return the point of intersection for the two lines. If there is no
-     * valid point of intersection, this will return null.
-     */
-    public PointXY getIntersectionPoint(Line line) {
-        return pointOfIntersection(this, line);
+    public boolean isParallelWith(Line line) {
+        return areLinesParallel(this, line);
     }
 
-    public enum Orientation {
-        COLLINEAR,
-        CLOCKWISE,
-        COUNTERCLOCKWISE
+    public PointXY midpoint() {
+        return midpoint(this);
+    }
+
+    public PointXY getClosestPoint(PointXY reference) {
+        return getClosestPoint(reference, this);
+    }
+
+    public PointXY getClosestEndpoint(PointXY reference) {
+        return getClosestEndpoint(reference, this);
+    }
+
+    public PointXY getFurthestPoint(PointXY reference) {
+        return getFurthestPoint(reference, this);
+    }
+
+    public boolean isPointOnLine(PointXY reference) {
+        return isPointOnLine(this, reference);
+    }
+
+    public boolean isPointOnLineSegment(PointXY reference) {
+        return isPointOnLineSegment(this, reference);
     }
 }

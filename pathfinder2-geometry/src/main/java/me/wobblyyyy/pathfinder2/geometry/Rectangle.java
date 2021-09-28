@@ -13,261 +13,138 @@ package me.wobblyyyy.pathfinder2.geometry;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Class for dealing with rectangles. There is only one constructor for this
- * class, and it accepts a start point and an end point. Based on these
- * two points, the side lengths will be determined, and lines created. By
- * default, rectangles will face "upwards," but you can change this by using
- * the {@link #rotate(PointXY, Angle)} method.
- *
- * @author Colin Robertson
- * @see #rotate(PointXY, Angle)
- * @since 0.0.0
- */
 public class Rectangle implements Shape {
-    private final PointXY startPoint;
-    private final PointXY endPoint;
+    private final PointXY a;
+    private final PointXY b;
+    private final PointXY c;
+    private final PointXY d;
     private final PointXY center;
-    private final double startPointX;
-    private final double startPointY;
-    private final double endPointX;
-    private final double endPointY;
-    private final PointXY aPoint;
-    private final PointXY bPoint;
-    private final PointXY cPoint;
-    private final PointXY dPoint;
-    private final Line abLine;
-    private final Line bcLine;
-    private final Line cdLine;
-    private final Line daLine;
-    private final List<Line> lines = new ArrayList<>(4);
+
+    private final Line ab;
+    private final Line bc;
+    private final Line cd;
+    private final Line da;
+    private final List<Line> lines;
+
+    private final double sizeX;
+    private final double sizeY;
 
     private Rectangle(PointXY a,
                       PointXY b,
                       PointXY c,
                       PointXY d) {
-        this.startPoint = a;
-        this.endPoint = c;
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+
+        this.ab = new Line(a, b);
+        this.bc = new Line(b, c);
+        this.cd = new Line(c, d);
+        this.da = new Line(d, a);
+
+        this.lines = new ArrayList<>() {{
+            add(ab);
+            add(bc);
+            add(cd);
+            add(da);
+        }};
+
         this.center = PointXY.avg(a, b, c, d);
 
-        this.startPointX = startPoint.x();
-        this.startPointY = startPoint.y();
-        this.endPointX = endPoint.x();
-        this.endPointY = endPoint.y();
-
-        aPoint = a;
-        bPoint = b;
-        cPoint = c;
-        dPoint = d;
-
-        abLine = new Line(aPoint, bPoint);
-        bcLine = new Line(bPoint, cPoint);
-        cdLine = new Line(cPoint, dPoint);
-        daLine = new Line(dPoint, aPoint);
-
-        lines.add(abLine);
-        lines.add(bcLine);
-        lines.add(cdLine);
-        lines.add(daLine);
+        this.sizeX = c.x() - a.x();
+        this.sizeY = b.y() - d.y();
     }
 
-    /**
-     * Create a new {@code Rectangle}. This rectangle will have sides
-     * parallel to the X and Y axes. This can be rotated using the
-     * {@link #rotate(PointXY, Angle)} and {@link #rotateAroundCenter(Angle)}
-     * methods provided.
-     *
-     * @param startPoint the rectangle's start point. Typically, this is
-     *                   the smaller of the two points.
-     * @param endPoint   the rectangle's end point. Typically, this is
-     *                   the larger of the two points.
-     */
-    public Rectangle(PointXY startPoint,
-                     PointXY endPoint) {
-        this.startPoint = startPoint;
-        this.endPoint = endPoint;
-        this.center = PointXY.avg(startPoint, endPoint);
-
-        this.startPointX = startPoint.x();
-        this.startPointY = startPoint.y();
-        this.endPointX = endPoint.x();
-        this.endPointY = endPoint.y();
-
-        aPoint = new PointXY(
-                startPointX,
-                startPointY
-        );
-        bPoint = new PointXY(
-                startPointX,
-                endPointY
-        );
-        cPoint = new PointXY(
-                endPointX,
-                endPointY
-        );
-        dPoint = new PointXY(
-                endPointX,
-                startPointY
-        );
-
-        abLine = new Line(aPoint, bPoint);
-        bcLine = new Line(bPoint, cPoint);
-        cdLine = new Line(cPoint, dPoint);
-        daLine = new Line(dPoint, aPoint);
-
-        lines.add(abLine);
-        lines.add(bcLine);
-        lines.add(cdLine);
-        lines.add(daLine);
-    }
-
-    public PointXY getStartPoint() {
-        return startPoint;
-    }
-
-    public PointXY getEndPoint() {
-        return endPoint;
-    }
-
-    public double getStartPointX() {
-        return startPointX;
-    }
-
-    public double getStartPointY() {
-        return startPointY;
-    }
-
-    public double getEndPointX() {
-        return endPointX;
-    }
-
-    public double getEndPointY() {
-        return endPointY;
-    }
-
-    public PointXY getPointA() {
-        return aPoint;
-    }
-
-    public PointXY getPointB() {
-        return bPoint;
-    }
-
-    public PointXY getPointC() {
-        return cPoint;
-    }
-
-    public PointXY getPointD() {
-        return dPoint;
-    }
-
-    public Line getLineAB() {
-        return abLine;
-    }
-
-    public Line getLineBC() {
-        return bcLine;
-    }
-
-    public Line getLineCD() {
-        return cdLine;
-    }
-
-    public Line getLineDA() {
-        return daLine;
-    }
-
-    public double getMinimumX() {
-        return PointXY.minimumX(
-                aPoint,
-                bPoint,
-                cPoint,
-                dPoint
-        );
-    }
-
-    public double getMinimumY() {
-        return PointXY.minimumY(
-                aPoint,
-                bPoint,
-                cPoint,
-                dPoint
-        );
-    }
-
-    public double getMaximumX() {
-        return PointXY.maximumX(
-                aPoint,
-                bPoint,
-                cPoint,
-                dPoint
-        );
-    }
-
-    public double getMaximumY() {
-        return PointXY.maximumY(
-                aPoint,
-                bPoint,
-                cPoint,
-                dPoint
+    public Rectangle(double minX,
+                     double minY,
+                     double maxX,
+                     double maxY) {
+        this(
+                new PointXY(minX, minY),
+                new PointXY(minX, maxY),
+                new PointXY(maxX, maxY),
+                new PointXY(maxX, minY)
         );
     }
 
     @Override
-    public boolean isPointInShape(PointXY point) {
-        return Ray.intersectsOdd(
-                point,
-                center,
-                abLine.getMidPoint(),
-                lines
-        );
-    }
-
-    @Override
-    public boolean isPointNotInShape(PointXY point) {
-        return Ray.intersectsEven(
-                point,
-                center,
-                abLine.getMidPoint(),
-                lines
-        );
-    }
-
-    @Override
-    public PointXY getClosestPoint(PointXY referencePoint) {
-        PointXY abClosestPoint = abLine.getClosestPoint(referencePoint);
-        PointXY bcClosestPoint = bcLine.getClosestPoint(referencePoint);
-        PointXY cdClosestPoint = cdLine.getClosestPoint(referencePoint);
-        PointXY daClosestPoint = daLine.getClosestPoint(referencePoint);
-
+    public PointXY getClosestPoint(PointXY reference) {
         return PointXY.getClosestPoint(
-                referencePoint,
-                abClosestPoint,
-                bcClosestPoint,
-                cdClosestPoint,
-                daClosestPoint
+                reference,
+                ab.getClosestPoint(reference),
+                bc.getClosestPoint(reference),
+                cd.getClosestPoint(reference),
+                da.getClosestPoint(reference)
         );
     }
 
-    @Override
-    public PointXY getFurthestPoint(PointXY referencePoint) {
-        PointXY abFurthestPoint = abLine.getFurthestPoint(referencePoint);
-        PointXY bcFurthestPoint = bcLine.getFurthestPoint(referencePoint);
-        PointXY cdFurthestPoint = cdLine.getFurthestPoint(referencePoint);
-        PointXY daFurthestPoint = daLine.getFurthestPoint(referencePoint);
+    private static boolean testIsCollinear(PointXY test,
+                                           PointXY start,
+                                           PointXY end) {
+        return test.isCollinearWith(start, end);
+    }
 
-        return PointXY.getFurthestPoint(
-                referencePoint,
-                abFurthestPoint,
-                bcFurthestPoint,
-                cdFurthestPoint,
-                daFurthestPoint
-        );
+    private static boolean validate(PointXY test,
+                                    PointXY start,
+                                    PointXY end) {
+        double minX = PointXY.minimumX(start, end);
+        double minY = PointXY.minimumY(start, end);
+        double maxX = PointXY.maximumX(start, end);
+        double maxY = PointXY.maximumY(start, end);
+
+        boolean validX = BoundingBox.validate(test.x(), minX, maxX);
+        boolean validY = BoundingBox.validate(test.y(), minY, maxY);
+
+        return validX && validY;
     }
 
     @Override
-    public boolean collidesWith(Shape shape) {
-        return shape.getClosestPoint(center).isInside(this);
+    public boolean isPointInShape(PointXY reference) {
+        if (PointXY.isNear(reference, a, 0.01)) {
+            return true;
+        } else if (PointXY.isNear(reference, b, 0.01)) {
+            return true;
+        } else if (PointXY.isNear(reference, c, 0.01)) {
+            return true;
+        } else if (PointXY.isNear(reference, d, 0.01)) {
+            return true;
+        }
+
+        if (testIsCollinear(reference, a, b)) {
+            return validate(reference, a, b);
+        } else if (testIsCollinear(reference, b, c)) {
+            return validate(reference, b, c);
+        } else if (testIsCollinear(reference, c, d)) {
+            return validate(reference, c, d);
+        } else if (testIsCollinear(reference, d, a)) {
+            return validate(reference, d, a);
+        } else if (testIsCollinear(reference, a, c)) {
+            return validate(reference, a, c);
+        } else if (testIsCollinear(reference, b, d)) {
+            return validate(reference, b, d);
+        }
+
+        PointXY target = center;
+
+        if (PointXY.isNear(reference, center, 0.01)) {
+            target = ab.midpoint();
+        }
+
+        Line line = new Line(
+                reference,
+                target.inDirection(
+                        sizeX + sizeY,
+                        reference.angleTo(target)
+                )
+        );
+
+        return Shape.doesIntersectOdd(line, lines);
+    }
+
+    @Override
+    public boolean doesCollideWith(Shape shape) {
+        return shape.getClosestPoint(center).isInside(shape);
     }
 
     @Override
@@ -275,42 +152,17 @@ public class Rectangle implements Shape {
         return center;
     }
 
-    public Rectangle rotate(PointXY centerOfRotation,
-                            Angle rotationAmount) {
+    public Rectangle rotate(Angle rotation) {
+        PointXY rotatedA = a.rotate(center, rotation);
+        PointXY rotatedB = b.rotate(center, rotation);
+        PointXY rotatedC = c.rotate(center, rotation);
+        PointXY rotatedD = d.rotate(center, rotation);
+
         return new Rectangle(
-                aPoint.rotate(centerOfRotation, rotationAmount),
-                bPoint.rotate(centerOfRotation, rotationAmount),
-                cPoint.rotate(centerOfRotation, rotationAmount),
-                dPoint.rotate(centerOfRotation, rotationAmount)
+                rotatedA,
+                rotatedB,
+                rotatedC,
+                rotatedD
         );
-    }
-
-    public Rectangle rotateAroundCenter(Angle rotationAmount) {
-        return rotate(
-                center,
-                rotationAmount
-        );
-    }
-
-    public Rectangle shiftX(double x) {
-        return shift(new PointXY(x, 0));
-    }
-
-    public Rectangle shiftY(double y) {
-        return shift(new PointXY(0, y));
-    }
-
-    public Rectangle shift(PointXY offset) {
-        return new Rectangle(
-                aPoint.add(offset),
-                bPoint.add(offset),
-                cPoint.add(offset),
-                dPoint.add(offset)
-        );
-    }
-
-    public Rectangle shiftAndRotate(PointXY offset,
-                                    Angle rotationAmount) {
-        return shift(offset).rotateAroundCenter(rotationAmount);
     }
 }

@@ -10,71 +10,47 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
-/**
- * A shape is any enclosed polygon (or, in the case of circles, non-polygons?)
- * Regardless, it's for any enclosed shapes.
- *
- * <p>
- * Shapes aren't very useful if you're just using the basic features of
- * Pathfinder because you don't need them. However, if you're planning on
- * doing things such as collision prevention and dynamic pathing, you'll
- * want to use shapes to represent physical objects so you can mathematically
- * make sure you don't slam into a wall at Mach 3.
- * </p>
- *
- * @author Colin Robertson
- * @since 0.1.0
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public interface Shape {
-    /**
-     * Is the provided point contained within the shape?
-     *
-     * @param point the point to test.
-     * @return true if the point is contained within the shape, otherwise,
-     * true.
-     */
-    boolean isPointInShape(PointXY point);
+    PointXY getClosestPoint(PointXY reference);
 
-    /**
-     * Is the provided point not contained within the shape?
-     *
-     * @param point the point to test.
-     * @return false if the point is contained within the shape, otherwise,
-     * true.
-     */
-    boolean isPointNotInShape(PointXY point);
+    boolean isPointInShape(PointXY reference);
 
-    /**
-     * Find the point contained within the shape that's closest to the
-     * reference point's center.
-     *
-     * @param referencePoint the point to use for comparison.
-     * @return the closest point to the reference point.
-     */
-    PointXY getClosestPoint(PointXY referencePoint);
+    boolean doesCollideWith(Shape shape);
 
-    /**
-     * Find the point contained within the shape that's farthest from the
-     * reference point's center.
-     *
-     * @param referencePoint the point to use for comparison.
-     * @return the farthest point from the reference point.
-     */
-    PointXY getFurthestPoint(PointXY referencePoint);
-
-    /**
-     * Does this shape collide with another shape?
-     *
-     * @param shape the shape to test.
-     * @return true if there are any collisions (any areas that are in
-     * BOTH shapes are collisions) and false if there are not.
-     */
-    boolean collidesWith(Shape shape);
-
-    /**
-     * Get the center point of the shape.
-     *
-     * @return the shape's center.
-     */
     PointXY getCenter();
+
+    static List<Line> getIntersections(Line line,
+                                       List<Line> allLines) {
+        List<Line> intersectingLines = new ArrayList<>();
+
+        for (Line l : allLines)
+            if (line.doesIntersectWith(l))
+                intersectingLines.add(l);
+
+        return intersectingLines;
+    }
+
+    static int getIntersectionsCount(Line line,
+                                     List<Line> allLines) {
+        int i = 0;
+
+        for (Line l : allLines)
+            if (line.doesIntersectWith(l))
+                i++;
+
+        return i;
+    }
+
+    static boolean doesIntersectOdd(Line line,
+                                    List<Line> allLines) {
+        return getIntersectionsCount(line, allLines) % 2 == 1;
+    }
+
+    static boolean doesIntersectEven(Line line,
+                                     List<Line> allLines) {
+        return getIntersectionsCount(line, allLines) % 2 == 0;
+    }
 }

@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+import java.io.Serializable;
+
 /**
  * A two-dimensional translation. Robots should be capable of receiving
  * these translations and moving appropriately.
@@ -56,7 +58,7 @@ package me.wobblyyyy.pathfinder2.geometry;
  * @author Colin Robertson
  * @since 0.0.0
  */
-public class Translation {
+public class Translation implements Serializable {
     /**
      * The robot's translation along its X axis.
      */
