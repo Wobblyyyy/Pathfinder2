@@ -14,14 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface Shape {
-    PointXY getClosestPoint(PointXY reference);
-
-    boolean isPointInShape(PointXY reference);
-
-    boolean doesCollideWith(Shape shape);
-
-    PointXY getCenter();
-
     static List<Line> getIntersections(Line line,
                                        List<Line> allLines) {
         List<Line> intersectingLines = new ArrayList<>();
@@ -53,4 +45,12 @@ public interface Shape {
                                      List<Line> allLines) {
         return getIntersectionsCount(line, allLines) % 2 == 0;
     }
+
+    PointXY getClosestPoint(PointXY reference);
+
+    boolean isPointInShape(PointXY reference);
+
+    boolean doesCollideWith(Shape shape);
+
+    PointXY getCenter();
 }

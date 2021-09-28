@@ -75,7 +75,17 @@ public class RollingAverage {
      */
     public double average() {
         if (hasChanged) {
-            lastAverage = Average.of(data);
+            double sum = 0;
+
+            for (int i = 0; i < maxIndex; i++) {
+                sum += data[i];
+            }
+
+            if (maxIndex == size - 1) {
+                lastAverage = sum / size;
+            } else {
+                lastAverage = sum / maxIndex;
+            }
         }
 
         return lastAverage;

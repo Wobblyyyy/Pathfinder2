@@ -16,6 +16,8 @@ import java.util.List;
 
 public interface Spline {
     Spline create(List<PointXY> controlPoints);
+
     double interpolateY(double x);
+
     PointXY interpolate(double x);
 }

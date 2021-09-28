@@ -33,6 +33,11 @@ public class Rectangle implements Shape {
                       PointXY b,
                       PointXY c,
                       PointXY d) {
+        assert a != null;
+        assert b != null;
+        assert c != null;
+        assert d != null;
+
         this.a = a;
         this.b = b;
         this.c = c;
@@ -52,8 +57,13 @@ public class Rectangle implements Shape {
 
         this.center = PointXY.avg(a, b, c, d);
 
-        this.sizeX = c.x() - a.x();
-        this.sizeY = b.y() - d.y();
+        double minX = PointXY.minimumX(a, b, c, d);
+        double minY = PointXY.minimumY(a, b, c, d);
+        double maxX = PointXY.maximumX(a, b, c, d);
+        double maxY = PointXY.maximumY(a, b, c, d);
+
+        this.sizeX = maxX - minX;
+        this.sizeY = maxY - minY;
     }
 
     public Rectangle(double minX,
@@ -68,26 +78,36 @@ public class Rectangle implements Shape {
         );
     }
 
-    @Override
-    public PointXY getClosestPoint(PointXY reference) {
-        return PointXY.getClosestPoint(
-                reference,
-                ab.getClosestPoint(reference),
-                bc.getClosestPoint(reference),
-                cd.getClosestPoint(reference),
-                da.getClosestPoint(reference)
-        );
+    public static Rectangle newRotatedRectangle(double minX,
+                                                double minY,
+                                                double maxX,
+                                                double maxY,
+                                                Angle rotationAngle) {
+        return new Rectangle(
+                minX,
+                minY,
+                maxX,
+                maxY
+        ).rotate(rotationAngle);
     }
 
     private static boolean testIsCollinear(PointXY test,
                                            PointXY start,
                                            PointXY end) {
+        assert test != null;
+        assert start != null;
+        assert end != null;
+
         return test.isCollinearWith(start, end);
     }
 
     private static boolean validate(PointXY test,
                                     PointXY start,
                                     PointXY end) {
+        assert test != null;
+        assert start != null;
+        assert end != null;
+
         double minX = PointXY.minimumX(start, end);
         double minY = PointXY.minimumY(start, end);
         double maxX = PointXY.maximumX(start, end);
@@ -100,16 +120,24 @@ public class Rectangle implements Shape {
     }
 
     @Override
+    public PointXY getClosestPoint(PointXY reference) {
+        assert reference != null;
+
+        return PointXY.getClosestPoint(
+                reference,
+                ab.getClosestPoint(reference),
+                bc.getClosestPoint(reference),
+                cd.getClosestPoint(reference),
+                da.getClosestPoint(reference)
+        );
+    }
+
+    @Override
     public boolean isPointInShape(PointXY reference) {
-        if (PointXY.isNear(reference, a, 0.01)) {
+        assert reference != null;
+
+        if (PointXY.isNear(reference, 0.01, a, b, c, d))
             return true;
-        } else if (PointXY.isNear(reference, b, 0.01)) {
-            return true;
-        } else if (PointXY.isNear(reference, c, 0.01)) {
-            return true;
-        } else if (PointXY.isNear(reference, d, 0.01)) {
-            return true;
-        }
 
         if (testIsCollinear(reference, a, b)) {
             return validate(reference, a, b);
@@ -127,9 +155,8 @@ public class Rectangle implements Shape {
 
         PointXY target = center;
 
-        if (PointXY.isNear(reference, center, 0.01)) {
+        if (PointXY.isNear(reference, center, 0.01))
             target = ab.midpoint();
-        }
 
         Line line = new Line(
                 reference,
@@ -153,6 +180,8 @@ public class Rectangle implements Shape {
     }
 
     public Rectangle rotate(Angle rotation) {
+        assert rotation != null;
+
         PointXY rotatedA = a.rotate(center, rotation);
         PointXY rotatedB = b.rotate(center, rotation);
         PointXY rotatedC = c.rotate(center, rotation);

@@ -59,17 +59,15 @@ public class PointXY implements Serializable {
      * see if there's anything you need to modify there.
      */
 
+    public static final PointXY ZERO = zero();
     /**
      * The point's X value.
      */
     private final double x;
-
     /**
      * The point's Y value.
      */
     private final double y;
-
-    public static final PointXY ZERO = zero();
 
     /**
      * Create a new {@code PointXY}.
@@ -161,7 +159,7 @@ public class PointXY implements Serializable {
     }
 
     public static double slope(PointXY a,
-                                PointXY b) {
+                               PointXY b) {
         return distanceY(a, b) / distanceX(a, b);
     }
 
@@ -290,6 +288,16 @@ public class PointXY implements Serializable {
         return Math.abs(distance(a, b)) <= Math.abs(tolerance);
     }
 
+    public static boolean isNear(PointXY a,
+                                 double tolerance,
+                                 PointXY... points) {
+        for (PointXY point : points) {
+            if (isNear(a, point, tolerance)) return true;
+        }
+
+        return false;
+    }
+
     /**
      * Rotate a point around a center point.
      *
@@ -304,7 +312,7 @@ public class PointXY implements Serializable {
         return inDirection(
                 center,
                 distance(center, point),
-                angleTo(center, point).add(angle)
+                angleTo(center, point).fix().add(angle).fix()
         );
     }
 
@@ -567,6 +575,34 @@ public class PointXY implements Serializable {
     }
 
     /**
+     * Get the "minimum point." This point has the minimum X and Y values
+     * from all the points.
+     *
+     * @param points the points.
+     * @return the minimum point.
+     */
+    public static PointXY minimumPoint(PointXY... points) {
+        double x = minimumX(points);
+        double y = minimumX(points);
+
+        return new PointXY(x, y);
+    }
+
+    /**
+     * Get the "maximum point." This point has the maximum X and Y values
+     * from all the points.
+     *
+     * @param points the points.
+     * @return the maximum point.
+     */
+    public static PointXY maximumPoint(PointXY... points) {
+        double x = maximumX(points);
+        double y = maximumY(points);
+
+        return new PointXY(x, y);
+    }
+
+    /**
      * Get the point's X value.
      *
      * @return the point's X value.
@@ -814,6 +850,26 @@ public class PointXY implements Serializable {
      */
     public boolean isInside(Shape shape) {
         return shape.isPointInShape(this);
+    }
+
+    /**
+     * Is this point collinear with a given line's start and end points?
+     *
+     * @param line the line to test.
+     * @return true if the point is collinear, otherwise, false.
+     */
+    public boolean isCollinearWithLine(Line line) {
+        return line.isPointOnLine(this);
+    }
+
+    /**
+     * Is a point on a given line segment?
+     *
+     * @param line the line to test.
+     * @return true if the point is on the line segment, otherwise, false.
+     */
+    public boolean isOnLineSegment(Line line) {
+        return line.isPointOnLineSegment(this);
     }
 
     @Override
