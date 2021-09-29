@@ -13,7 +13,11 @@ package me.wobblyyyy.pathfinder2.geometry;
 import java.io.Serializable;
 
 /**
- * A representation of a linear equation.
+ * A representation of a linear equation. A linear equation is a
+ * first-degree function, meaning the highest power X is raised to is 1.
+ * Linear equations are used for - you guessed it - {@link Line}s! You
+ * can also do some other math with them, but I just haven't found a use for
+ * it yet. So yeah.
  *
  * @author Colin Robertson
  * @since 0.1.0
@@ -85,7 +89,10 @@ public interface LinearEquation extends Serializable {
 
     /**
      * Get the point of intersection between this equation and another
-     * {@code LinearEquation}.
+     * {@code LinearEquation}. If the lines do not intersect (say, for
+     * example, they're parallel lines) this method should return {@code null}.
+     * This method does not take into account domain or range - any intersection
+     * between the two lines is considered valid and will be returned.
      *
      * @param equation the other equation.
      * @return the point of intersection between the two equations. If the
@@ -95,7 +102,8 @@ public interface LinearEquation extends Serializable {
     PointXY getIntersection(LinearEquation equation);
 
     /**
-     * Check if two equations intersect.
+     * Check if two equations intersect. This should, generally, always return
+     * true unless the equations are parallel.
      *
      * @param equation the equation to test.
      * @return if the equations intersect, true. Otherwise, false.

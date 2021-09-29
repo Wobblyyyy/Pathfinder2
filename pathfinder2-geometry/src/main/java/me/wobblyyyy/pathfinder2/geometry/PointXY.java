@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A 2d coordinate with X and Y values. The base for which Pathfinder's
+ * A 2d coordinate with X and Y values. The foundation Pathfinder's
  * geometry is based upon.
  *
  * <p>
@@ -31,16 +31,29 @@ import java.util.List;
  * <p>
  * Points will be one of the most important concepts in using Pathfinder -
  * all of the advanced geometry (rectangles, circles, shapes, etc) is based
- * on lines and points. And you know what lines are based on? Points. Because
- * they're used all over the place, there's a ton of very specific or
- * "niche" methods in this class to accomplish very specific goals.
+ * on lines and points. And you know what lines are based on? Points.
+ * </p>
+ *
+ * <p>
+ * The concept of a point is relatively straightforwards - it's literally just
+ * a pair of X and Y values. There's a ton of methods available for use,
+ * even for very niche situations. Some of the most important methods (at
+ * least the ones that I've used the most) are as follows...
+ * <ul>
+ *     <li>{@link #distance(PointXY)}</li>
+ *     <li>{@link #inDirection(double, Angle)}</li>
+ *     <li>{@link #angleTo(PointXY)}</li>
+ * </ul>
+ * Additionally, it's worth noting that most (possibly all) of the methods
+ * in this class have a corresponding static method.
  * </p>
  *
  * @author Colin Robertson
  * @since 0.0.0
+ * @see PointXYZ
  */
 @SuppressWarnings("DuplicatedCode")
-public class PointXY implements Serializable {
+public class PointXY implements Comparable<PointXY>, Serializable {
     /*
      * Another non-JavaDoc comment - if you're only browsing the API, you
      * can skip over all of this, as it contains nothing that's in any way,
@@ -234,9 +247,10 @@ public class PointXY implements Serializable {
 
         for (PointXY p : points) {
             for (PointXY x : ps) {
-                if (x.x() == p.x() && x.y() == p.y()) {
-                    return true;
-                }
+                boolean sameX = Equals.soft(x.x(), p.x(), 0.01);
+                boolean sameY = Equals.soft(x.y(), p.y(), 0.01);
+
+                if (sameX && sameY) return true;
             }
 
             ps.add(p);
@@ -602,6 +616,153 @@ public class PointXY implements Serializable {
         return new PointXY(x, y);
     }
 
+    public static void checkArgument(PointXY point,
+                                     String message) {
+        if (point == null) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    public static void checkArgument(PointXY point) {
+        checkArgument(
+                point,
+                "Attempted to operate on a null PointXY, please " +
+                        "make sure you're not passing a null point to a method."
+        );
+    }
+
+    /**
+     * Get the closest point in the shape.
+     *
+     * @param reference the reference point.
+     * @param shape     the shape.
+     * @return the closest point in the shape.
+     */
+    public static PointXY closestPoint(PointXY reference,
+                                       Shape shape) {
+        return shape.getClosestPoint(reference);
+    }
+
+    /**
+     * Shift a point by an X and Y offset.
+     *
+     * @param reference the reference point.
+     * @param shiftX    the X translation/shift.
+     * @param shiftY    the Y translation/shift.
+     * @return the shifted point.
+     */
+    public static PointXY shift(PointXY reference,
+                                double shiftX,
+                                double shiftY) {
+        return new PointXY(
+                reference.x() + shiftX,
+                reference.y() + shiftY
+        );
+    }
+
+    /**
+     * Shift a point by an X offset.
+     *
+     * @param reference the reference point.
+     * @param shiftX    the X translation/shift.
+     * @return the shifted point.
+     */
+    public static PointXY shiftX(PointXY reference,
+                                 double shiftX) {
+        return shift(reference, shiftX, 0);
+    }
+
+    /**
+     * Shift a point by an Y offset.
+     *
+     * @param reference the reference point.
+     * @param shiftY    the Y translation/shift.
+     * @return the shifted point.
+     */
+    public static PointXY shiftY(PointXY reference,
+                                 double shiftY) {
+        return shift(reference, 0, shiftY);
+    }
+
+    /**
+     * Shift a list of points.
+     *
+     * @param shiftX the X shift.
+     * @param shiftY the Y shift.
+     * @param points the points to shift.
+     * @return shifted points.
+     */
+    public static List<PointXY> shift(double shiftX,
+                                      double shiftY,
+                                      List<PointXY> points) {
+        List<PointXY> newPoints = new ArrayList<>(points.size());
+
+        for (PointXY point : points) {
+            newPoints.add(point.shift(shiftX, shiftY));
+        }
+
+        return newPoints;
+    }
+
+    /**
+     * Shift a set of points.
+     *
+     * @param shiftX the X shift.
+     * @param shiftY the Y shift.
+     * @param points the points to shift.
+     * @return shifted points.
+     */
+    public static List<PointXY> shift(double shiftX,
+                                      double shiftY,
+                                      PointXY... points) {
+        List<PointXY> newPoints = new ArrayList<>(points.length);
+
+        for (PointXY point : points) {
+            newPoints.add(point.shift(shiftX, shiftY));
+        }
+
+        return newPoints;
+    }
+
+    /**
+     * Is this point close to any point in a set of points?
+     *
+     * @param reference the reference point.
+     * @param tolerance the maximum distance value that is considered "near."
+     *                  If the distance between this point and the shape is
+     *                  greater than this value, it's not considered to
+     *                  be "near" to the point.
+     * @param points    the set of points to test.
+     * @return if the reference point is near any of the points in the provided
+     * set of points, return true. Otherwise, return false.
+     */
+    public static boolean isPointNearPoints(PointXY reference,
+                                            double tolerance,
+                                            PointXY... points) {
+        for (PointXY point : points)
+            if (reference.isNear(point, tolerance)) return true;
+
+        return false;
+    }
+
+    /**
+     * Is a point close to a given shape?
+     *
+     * @param reference the reference point.
+     * @param shape     the shape to test.
+     * @param tolerance the maximum distance value that is considered "near."
+     *                  If the distance between this point and the shape is
+     *                  greater than this value, it's not considered to
+     *                  be "near" to the point.
+     * @return if the reference point is "near" the shape, return true.
+     * Otherwise, return false.
+     */
+    public static boolean isPointNearShape(PointXY reference,
+                                           Shape shape,
+                                           double tolerance) {
+        return reference.absDistance(shape.getClosestPoint(reference)) <= tolerance;
+    }
+
     /**
      * Get the point's X value.
      *
@@ -872,6 +1033,83 @@ public class PointXY implements Serializable {
         return line.isPointOnLineSegment(this);
     }
 
+    /**
+     * Get the closest point in the shape.
+     *
+     * @param shape the shape.
+     * @return the closest point in the shape.
+     */
+    public PointXY closestPoint(Shape shape) {
+        return closestPoint(this, shape);
+    }
+
+    /**
+     * Shift a point by an X and Y offset.
+     *
+     * @param shiftX the X translation/shift.
+     * @param shiftY the Y translation/shift.
+     * @return the shifted point.
+     */
+    public PointXY shift(double shiftX,
+                         double shiftY) {
+        return shift(this, shiftX, shiftY);
+    }
+
+    /**
+     * Shift a point by an X offset.
+     *
+     * @param shiftX the X translation/shift.
+     * @return the shifted point.
+     */
+    public PointXY shiftX(double shiftX) {
+        return shiftX(this, shiftX);
+    }
+
+    /**
+     * Shift a point by an Y offset.
+     *
+     * @param shiftY the Y translation/shift.
+     * @return the shifted point.
+     */
+    public PointXY shiftY(double shiftY) {
+        return shiftY(this, shiftY);
+    }
+
+    /**
+     * Is this point close to any point in a set of points?
+     *
+     * @param tolerance the maximum distance value that is considered "near."
+     *                  If the distance between this point and the shape is
+     *                  greater than this value, it's not considered to
+     *                  be "near" to the point.
+     * @param points    the set of points to test.
+     * @return if the reference point is near any of the points in the provided
+     * set of points, return true. Otherwise, return false.
+     */
+    public boolean isPointNearPoints(double tolerance,
+                                     PointXY... points) {
+        return isPointNearPoints(this, tolerance, points);
+    }
+
+    /**
+     * Is this point close to a given shape?
+     *
+     * @param shape     the shape to test.
+     * @param tolerance the maximum distance value that is considered "near."
+     *                  If the distance between this point and the shape is
+     *                  greater than this value, it's not considered to
+     *                  be "near" to the point.
+     * @return if this point is "near" the shape, return true. Otherwise,
+     * return false.
+     */
+    public boolean isPointNearShape(Shape shape,
+                                    double tolerance) {
+        return isPointNearShape(this, shape, tolerance);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof PointXY) {
@@ -886,6 +1124,9 @@ public class PointXY implements Serializable {
         return super.equals(obj);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return String.format(
@@ -893,5 +1134,16 @@ public class PointXY implements Serializable {
                 x,
                 y
         );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int compareTo(PointXY o) {
+        double d1 = distance(PointXY.ZERO);
+        double d2 = o.distance(PointXY.ZERO);
+
+        return Double.compare(d1, d2);
     }
 }

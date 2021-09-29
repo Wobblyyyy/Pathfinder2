@@ -712,6 +712,20 @@ public class Angle implements Comparable<Angle>, Serializable {
         return Math.toRadians(deg);
     }
 
+    public static void checkArgument(Angle angle,
+                                     String message) {
+        if (angle == null)
+            throw new IllegalArgumentException(message);
+    }
+
+    public static void checkArgument(Angle angle) {
+        checkArgument(
+                angle,
+                "Attempted to operate on a null angle, please " +
+                        "make sure you're not passing a null angle to a method."
+        );
+    }
+
     /**
      * Get the angle's value in radians.
      *

@@ -10,6 +10,18 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+/**
+ * Another implementation of the {@link LinearEquation} interface.
+ * {@code y - y1 = m(x - x1)} or {@code y = m(x - x1) + y1}
+ *
+ * <p>
+ * Internally, this simply converts the point slope into a slope intercept.
+ * This means you can't get "the point."
+ * </p>
+ *
+ * @author Colin Robertson
+ * @since 0.1.0
+ */
 public class PointSlope extends SlopeIntercept {
     public PointSlope(PointXY point,
                       double slope) {

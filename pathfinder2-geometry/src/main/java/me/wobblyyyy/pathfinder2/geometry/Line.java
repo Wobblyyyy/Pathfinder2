@@ -41,6 +41,17 @@ public class Line implements Serializable {
      */
     public Line(PointXY start,
                 PointXY end) {
+        PointXY.checkArgument(start);
+        PointXY.checkArgument(end);
+
+        if (PointXY.areDuplicatesPresent(start, end)) {
+            throw new IllegalArgumentException(
+                    "Cannot create a line between the same point! " +
+                            "Make sure the start and end points are both " +
+                            "different from each other."
+            );
+        }
+
         minX = PointXY.minimumX(start, end);
         minY = PointXY.minimumY(start, end);
         maxX = PointXY.maximumX(start, end);
@@ -192,6 +203,8 @@ public class Line implements Serializable {
      */
     public static PointXY getClosestEndpoint(PointXY reference,
                                              Line line) {
+        PointXY.checkArgument(reference);
+
         double distanceToStart = reference.distance(line.start);
         double distanceToEnd = reference.distance(line.end);
 
@@ -209,6 +222,8 @@ public class Line implements Serializable {
      */
     public static PointXY getFurthestPoint(PointXY reference,
                                            Line line) {
+        PointXY.checkArgument(reference);
+
         double distanceToStart = reference.distance(line.start);
         double distanceToEnd = reference.distance(line.end);
 
@@ -445,5 +460,28 @@ public class Line implements Serializable {
      */
     public boolean isPointOnLineSegment(PointXY reference) {
         return isPointOnLineSegment(this, reference);
+    }
+
+    /**
+     * Get the length of the line.
+     *
+     * @return the line's length.
+     */
+    public double length() {
+        return start.absDistance(end);
+    }
+
+    public boolean shouldReturnFalse(PointXY reference) {
+        if (reference.isCollinearWith(start, end)) {
+            double x = reference.x();
+            double y = reference.y();
+
+            boolean validX = minX <= x && x <= maxX;
+            boolean validY = minY <= y && y <= maxY;
+
+            return !validX && !validY;
+        }
+
+        return false;
     }
 }

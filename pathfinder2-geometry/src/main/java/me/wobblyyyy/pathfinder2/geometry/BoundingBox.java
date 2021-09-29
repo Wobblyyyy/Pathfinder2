@@ -18,7 +18,7 @@ public class BoundingBox {
     public static boolean validate(double number,
                                    double min,
                                    double max) {
-        return min <= number && number <= max;
+        return (min - 0.01) <= number && number <= (max + 0.01);
     }
 
     public static boolean isPointInBox(PointXY point,

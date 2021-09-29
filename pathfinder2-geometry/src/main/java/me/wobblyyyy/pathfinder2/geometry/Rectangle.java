@@ -24,6 +24,8 @@ public class Rectangle implements Shape {
     private final Line bc;
     private final Line cd;
     private final Line da;
+    private final Line ac;
+    private final Line bd;
     private final List<Line> lines;
 
     private final double sizeX;
@@ -33,10 +35,18 @@ public class Rectangle implements Shape {
                       PointXY b,
                       PointXY c,
                       PointXY d) {
-        assert a != null;
-        assert b != null;
-        assert c != null;
-        assert d != null;
+        PointXY.checkArgument(a);
+        PointXY.checkArgument(b);
+        PointXY.checkArgument(c);
+        PointXY.checkArgument(d);
+
+        if (PointXY.areDuplicatesPresent(a, b, c, d)) {
+            throw new IllegalArgumentException(
+                    "Cannot create a rectangle with duplicate points! " +
+                            "Make sure your rectangle has > 0 width and > 0 " +
+                            "height."
+            );
+        }
 
         this.a = a;
         this.b = b;
@@ -47,6 +57,8 @@ public class Rectangle implements Shape {
         this.bc = new Line(b, c);
         this.cd = new Line(c, d);
         this.da = new Line(d, a);
+        this.ac = new Line(c, a);
+        this.bd = new Line(b, d);
 
         this.lines = new ArrayList<>() {{
             add(ab);
@@ -83,6 +95,8 @@ public class Rectangle implements Shape {
                                                 double maxX,
                                                 double maxY,
                                                 Angle rotationAngle) {
+        Angle.checkArgument(rotationAngle);
+
         return new Rectangle(
                 minX,
                 minY,
@@ -94,19 +108,15 @@ public class Rectangle implements Shape {
     private static boolean testIsCollinear(PointXY test,
                                            PointXY start,
                                            PointXY end) {
-        assert test != null;
-        assert start != null;
-        assert end != null;
-
         return test.isCollinearWith(start, end);
     }
 
     private static boolean validate(PointXY test,
                                     PointXY start,
                                     PointXY end) {
-        assert test != null;
-        assert start != null;
-        assert end != null;
+        PointXY.checkArgument(test);
+        PointXY.checkArgument(start);
+        PointXY.checkArgument(end);
 
         double minX = PointXY.minimumX(start, end);
         double minY = PointXY.minimumY(start, end);
@@ -119,10 +129,11 @@ public class Rectangle implements Shape {
         return validX && validY;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PointXY getClosestPoint(PointXY reference) {
-        assert reference != null;
-
         return PointXY.getClosestPoint(
                 reference,
                 ab.getClosestPoint(reference),
@@ -132,26 +143,24 @@ public class Rectangle implements Shape {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isPointInShape(PointXY reference) {
-        assert reference != null;
+        PointXY.checkArgument(reference);
 
         if (PointXY.isNear(reference, 0.01, a, b, c, d))
             return true;
 
-        if (testIsCollinear(reference, a, b)) {
-            return validate(reference, a, b);
-        } else if (testIsCollinear(reference, b, c)) {
-            return validate(reference, b, c);
-        } else if (testIsCollinear(reference, c, d)) {
-            return validate(reference, c, d);
-        } else if (testIsCollinear(reference, d, a)) {
-            return validate(reference, d, a);
-        } else if (testIsCollinear(reference, a, c)) {
-            return validate(reference, a, c);
-        } else if (testIsCollinear(reference, b, d)) {
-            return validate(reference, b, d);
-        }
+        if (
+                ab.shouldReturnFalse(reference) ||
+                        bc.shouldReturnFalse(reference) ||
+                        cd.shouldReturnFalse(reference) ||
+                        da.shouldReturnFalse(reference) ||
+                        ac.shouldReturnFalse(reference) ||
+                        bd.shouldReturnFalse(reference)
+        ) return false;
 
         PointXY target = center;
 
@@ -169,19 +178,29 @@ public class Rectangle implements Shape {
         return Shape.doesIntersectOdd(line, lines);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean doesCollideWith(Shape shape) {
         return shape.getClosestPoint(center).isInside(shape);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PointXY getCenter() {
         return center;
     }
 
+    /**
+     * Rotate the rectangle around the rectangle's center.
+     *
+     * @param rotation how much to rotate the rectangle by.
+     * @return a rotated rectangle.
+     */
     public Rectangle rotate(Angle rotation) {
-        assert rotation != null;
-
         PointXY rotatedA = a.rotate(center, rotation);
         PointXY rotatedB = b.rotate(center, rotation);
         PointXY rotatedC = c.rotate(center, rotation);
@@ -192,6 +211,30 @@ public class Rectangle implements Shape {
                 rotatedB,
                 rotatedC,
                 rotatedD
+        );
+    }
+
+    /**
+     * Shift the rectangle by an X and Y value.
+     *
+     * @param shiftX the X shift.
+     * @param shiftY the Y shift.
+     * @return a shifted rectangle.
+     */
+    public Rectangle shift(double shiftX,
+                           double shiftY) {
+        PointXY shift = new PointXY(shiftX, shiftY);
+
+        PointXY adjustedA = a.add(shift);
+        PointXY adjustedB = a.add(shift);
+        PointXY adjustedC = a.add(shift);
+        PointXY adjustedD = a.add(shift);
+
+        return new Rectangle(
+                adjustedA,
+                adjustedB,
+                adjustedC,
+                adjustedD
         );
     }
 }

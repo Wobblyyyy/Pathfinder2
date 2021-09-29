@@ -12,6 +12,14 @@ package me.wobblyyyy.pathfinder2.geometry;
 
 import me.wobblyyyy.pathfinder2.math.Equals;
 
+/**
+ * The most simple implementation of the {@link LinearEquation} interface,
+ * the {@code SlopeIntercept} form is a classic I'm sure you've heard of before.
+ * {@code y = mx + b}
+ *
+ * @author Colin Robertson
+ * @since 0.1.0
+ */
 public class SlopeIntercept implements LinearEquation {
     private final double slope;
     private final double intercept;
@@ -55,6 +63,9 @@ public class SlopeIntercept implements LinearEquation {
         return Double.isFinite(value) && !Double.isNaN(value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getY(double x) {
         if (!validateDouble(x))
@@ -66,6 +77,9 @@ public class SlopeIntercept implements LinearEquation {
         return (slope * x) + intercept;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PointXY getPoint(double x) {
         return new PointXY(
@@ -74,21 +88,33 @@ public class SlopeIntercept implements LinearEquation {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PointXY getPoint() {
         return getPoint(0);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getSlope() {
         return slope;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getIntercept() {
         return intercept;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isVertical() {
         return isVertical;
@@ -99,6 +125,9 @@ public class SlopeIntercept implements LinearEquation {
         return verticalX;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PointXY getIntersection(LinearEquation equation) {
         if (isVertical() && equation.isVertical()) {
@@ -145,6 +174,9 @@ public class SlopeIntercept implements LinearEquation {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean intersectsWith(LinearEquation equation) {
         return getIntersection(equation) != null;

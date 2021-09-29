@@ -15,12 +15,26 @@ import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
 /**
- * Get the average of things.
+ * Get the average of different sets of data. These methods only exist
+ * to make code more compact and readable.
  *
  * @author Colin Robertson
  * @since 0.1.0
  */
 public class Average {
+    /*
+     * If you want to be able to get the average of some set of data, but
+     * there's not an existing method to get the average, feel free to add
+     * one! There's no harm in having more average methods. Who doesn't
+     * love them?
+     */
+
+    /**
+     * Get the average of some numbers.
+     *
+     * @param numbers the numbers to get the average of.
+     * @return the average of the numbers.
+     */
     public static double of(double... numbers) {
         double sum = 0;
 
@@ -31,6 +45,12 @@ public class Average {
         return sum / numbers.length;
     }
 
+    /**
+     * Get the average of some numbers.
+     *
+     * @param numbers the numbers to get the average of.
+     * @return the average of the numbers.
+     */
     public static float of(float... numbers) {
         float sum = 0;
 
@@ -41,6 +61,12 @@ public class Average {
         return sum / numbers.length;
     }
 
+    /**
+     * Get the average of some numbers.
+     *
+     * @param numbers the numbers to get the average of.
+     * @return the average of the numbers.
+     */
     public static int of(int... numbers) {
         int sum = 0;
 
@@ -51,6 +77,12 @@ public class Average {
         return sum / numbers.length;
     }
 
+    /**
+     * Get the average of some numbers.
+     *
+     * @param numbers the numbers to get the average of.
+     * @return the average of the numbers.
+     */
     public static long of(long... numbers) {
         long sum = 0;
 
@@ -128,5 +160,15 @@ public class Average {
         }
 
         return new PointXYZ(x, y, z);
+    }
+
+    public static Angle of(Angle... angles) {
+        Angle sum = Angle.fromDeg(0);
+
+        for (Angle angle : angles) {
+            sum = sum.add(angle);
+        }
+
+        return sum.fix();
     }
 }
