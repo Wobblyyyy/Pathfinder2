@@ -145,6 +145,9 @@ public class Average {
             y += point.y();
         }
 
+        x /= points.length;
+        y /= points.length;
+
         return new PointXY(x, y);
     }
 
@@ -158,6 +161,10 @@ public class Average {
             y += point.y();
             z = z.add(point.z());
         }
+
+        x /= points.length;
+        y /= points.length;
+        z = Angle.fromDeg(z.deg() / points.length);
 
         return new PointXYZ(x, y, z);
     }

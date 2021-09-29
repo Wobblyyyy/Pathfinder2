@@ -10,14 +10,28 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Rectangle implements Shape {
+/**
+ * A rectangle! It has four vertices and four lines. There's not much
+ * more to say, to be honest, but they're pretty cool.
+ *
+ * <p>
+ * Rectangles can be rotated! Check out the following methods:
+ * <ul>
+ *     <li>{@link #newRotatedRectangle(double, double, double, double, Angle)}</li>
+ *     <li>{@link #rotate(Angle)}</li>
+ *     <li>{@link #rotate(Angle, PointXY)}</li>
+ * </ul>
+ * </p>
+ *
+ * @author Colin Robertson
+ * @since 0.1.0
+ */
+public class Rectangle implements Shape<Rectangle> {
     private final PointXY a;
     private final PointXY b;
     private final PointXY c;
     private final PointXY d;
+
     private final PointXY center;
 
     private final Line ab;
@@ -26,15 +40,64 @@ public class Rectangle implements Shape {
     private final Line da;
     private final Line ac;
     private final Line bd;
-    private final List<Line> lines;
 
     private final double sizeX;
     private final double sizeY;
 
-    private Rectangle(PointXY a,
-                      PointXY b,
-                      PointXY c,
-                      PointXY d) {
+    /**
+     * Create a new rectangle based on four points.
+     *
+     * <p>
+     * It's suggested that you use the other constructor,
+     * {@link Rectangle#Rectangle(double, double, double, double)}, instead
+     * of this constructor, unless you have a specific reason to use
+     * this constructor instead.
+     * </p>
+     *
+     * <p>
+     * Rectangles must be constructed as follows. As a visual example:
+     * <code>
+     * <pre>
+     *   B                   C
+     *   #####################
+     *   #                   #
+     *   #                   #
+     *   #                   #
+     *   #####################
+     *   A                   D
+     * </pre>
+     * </code>
+     * As a text-based example, the following points should be adjacent.
+     * <ul>
+     *     <li>A should be adjacent to B and D.</li>
+     *     <li>B should be adjacent to A and C.</li>
+     *     <li>C should be adjacent to B and D.</li>
+     *     <li>D should be adjacent to C and A.</li>
+     * </ul>
+     * </p>
+     *
+     * <p>
+     * The following lines MUST be parallel - if they're not, you'll get
+     * an {@link IllegalArgumentException}.
+     * <ul>
+     *     <li>AB should be parallel to CD.</li>
+     *     <li>BC should be parallel to AD.</li>
+     * </ul>
+     * </p>
+     *
+     * @param a one of the rectangle's four points.
+     *          Should be adjacent to B and D.
+     * @param b one of the rectangle's four points.
+     *          Should be adjacent to A and C.
+     * @param c one of the rectangle's four points.
+     *          Should be adjacent to B and D.
+     * @param d one of the rectangle's four points.
+     *          Should be adjacent to C and A.
+     */
+    public Rectangle(PointXY a,
+                     PointXY b,
+                     PointXY c,
+                     PointXY d) {
         PointXY.checkArgument(a);
         PointXY.checkArgument(b);
         PointXY.checkArgument(c);
@@ -60,14 +123,14 @@ public class Rectangle implements Shape {
         this.ac = new Line(c, a);
         this.bd = new Line(b, d);
 
-        this.lines = new ArrayList<>() {{
-            add(ab);
-            add(bc);
-            add(cd);
-            add(da);
-        }};
+        if (!(ab.isParallelWith(cd) && bc.isParallelWith(da))) {
+            throw new IllegalArgumentException(
+                    "Invalid points! Please make sure that 1. AB and CD are " +
+                            "parallel, and 2. BC and DA are parallel."
+            );
+        }
 
-        this.center = PointXY.avg(a, b, c, d);
+        this.center = Line.getIntersection(ac, bd);
 
         double minX = PointXY.minimumX(a, b, c, d);
         double minY = PointXY.minimumY(a, b, c, d);
@@ -78,6 +141,14 @@ public class Rectangle implements Shape {
         this.sizeY = maxY - minY;
     }
 
+    /**
+     * Create a new rectangle by giving minimum and maximum values.
+     *
+     * @param minX the minimum X value.
+     * @param minY the minimum Y value.
+     * @param maxX the maximum X value.
+     * @param maxY the maximum Y value.
+     */
     public Rectangle(double minX,
                      double minY,
                      double maxX,
@@ -169,20 +240,18 @@ public class Rectangle implements Shape {
 
         Line line = new Line(
                 reference,
-                target.inDirection(
-                        sizeX + sizeY,
-                        reference.angleTo(target)
-                )
+                reference.angleTo(target),
+                sizeX + sizeY
         );
 
-        return Shape.doesIntersectOdd(line, lines);
+        return Shape.doesIntersectOdd(line, ab, bc, cd, da, ac, bd);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean doesCollideWith(Shape shape) {
+    public boolean doesCollideWith(Shape<?> shape) {
         return shape.getClosestPoint(center).isInside(shape);
     }
 
@@ -200,11 +269,25 @@ public class Rectangle implements Shape {
      * @param rotation how much to rotate the rectangle by.
      * @return a rotated rectangle.
      */
+    @Override
     public Rectangle rotate(Angle rotation) {
-        PointXY rotatedA = a.rotate(center, rotation);
-        PointXY rotatedB = b.rotate(center, rotation);
-        PointXY rotatedC = c.rotate(center, rotation);
-        PointXY rotatedD = d.rotate(center, rotation);
+        return rotate(rotation, center);
+    }
+
+    /**
+     * Rotate the rectangle around the rectangle's center.
+     *
+     * @param rotation         how much to rotate the rectangle by.
+     * @param centerOfRotation the center of rotation.
+     * @return a rotated rectangle.
+     */
+    @Override
+    public Rectangle rotate(Angle rotation,
+                            PointXY centerOfRotation) {
+        PointXY rotatedA = a.rotate(centerOfRotation, rotation);
+        PointXY rotatedB = b.rotate(centerOfRotation, rotation);
+        PointXY rotatedC = c.rotate(centerOfRotation, rotation);
+        PointXY rotatedD = d.rotate(centerOfRotation, rotation);
 
         return new Rectangle(
                 rotatedA,
@@ -236,5 +319,52 @@ public class Rectangle implements Shape {
                 adjustedC,
                 adjustedD
         );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Rectangle moveTo(PointXY newCenter) {
+        double dx = center.distanceX(newCenter);
+        double dy = center.distanceY(newCenter);
+
+        return shift(dx, dy);
+    }
+
+    /**
+     * Get the minimum X value in the rectangle.
+     *
+     * @return the minimum X value.
+     */
+    public double getMinimumX() {
+        return PointXY.minimumX(a, b, c, d);
+    }
+
+    /**
+     * Get the minimum Y value in the rectangle.
+     *
+     * @return the minimum Y value.
+     */
+    public double getMinimumY() {
+        return PointXY.minimumY(a, b, c, d);
+    }
+
+    /**
+     * Get the maximum X value in the rectangle.
+     *
+     * @return the maximum X value.
+     */
+    public double getMaximumX() {
+        return PointXY.maximumX(a, b, c, d);
+    }
+
+    /**
+     * Get the maximum Y value in the rectangle.
+     *
+     * @return the maximum Y value.
+     */
+    public double getMaximumY() {
+        return PointXY.maximumY(a, b, c, d);
     }
 }

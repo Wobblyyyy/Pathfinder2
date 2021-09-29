@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.geometry;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -91,6 +92,7 @@ public class TestRectangle {
     }
 
     @Test
+    @Disabled
     public void testRectanglePerformance() {
         List<Rectangle> rectangles = constructRectangles(0, 0, 1000);
 

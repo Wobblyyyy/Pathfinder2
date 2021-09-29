@@ -18,7 +18,7 @@ import me.wobblyyyy.pathfinder2.math.Average;
  * @author Colin Robertson
  * @since 0.1.0
  */
-public class Triangle implements Shape {
+public class Triangle implements Shape<Triangle> {
     private final PointXY a;
     private final PointXY b;
     private final PointXY c;
@@ -180,7 +180,7 @@ public class Triangle implements Shape {
      * {@inheritDoc}
      */
     @Override
-    public boolean doesCollideWith(Shape shape) {
+    public boolean doesCollideWith(Shape<?> shape) {
         return shape.getClosestPoint(center).isInside(this);
     }
 
@@ -192,10 +192,16 @@ public class Triangle implements Shape {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Triangle rotate(Angle rotation) {
-        PointXY rotatedA = a.rotate(center, rotation);
-        PointXY rotatedB = b.rotate(center, rotation);
-        PointXY rotatedC = c.rotate(center, rotation);
+        return rotate(rotation, center);
+    }
+
+    @Override
+    public Triangle rotate(Angle rotation, PointXY centerOfRotation) {
+        PointXY rotatedA = a.rotate(centerOfRotation, rotation);
+        PointXY rotatedB = b.rotate(centerOfRotation, rotation);
+        PointXY rotatedC = c.rotate(centerOfRotation, rotation);
 
         return new Triangle(
                 rotatedA,
@@ -207,6 +213,7 @@ public class Triangle implements Shape {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Triangle shift(double shiftX,
                           double shiftY) {
         PointXY shift = new PointXY(shiftX, shiftY);
@@ -220,5 +227,37 @@ public class Triangle implements Shape {
                 adjustedB,
                 adjustedC
         );
+    }
+
+    @Override
+    public Triangle moveTo(PointXY newCenter) {
+        double dx = center.distanceX(newCenter);
+        double dy = center.distanceY(newCenter);
+
+        return shift(dx, dy);
+    }
+
+    public PointXY getA() {
+        return a;
+    }
+
+    public PointXY getB() {
+        return b;
+    }
+
+    public PointXY getC() {
+        return c;
+    }
+
+    public Line getAB() {
+        return ab;
+    }
+
+    public Line getBC() {
+        return bc;
+    }
+
+    public Line getCA() {
+        return ca;
     }
 }

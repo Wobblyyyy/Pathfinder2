@@ -30,4 +30,21 @@ public class TestTriangle {
         Assertions.assertFalse(testPoint2.isInside(triangle));
         Assertions.assertTrue(testPoint3.isInside(triangle));
     }
+
+    @Test
+    public void testIsInsideRotatedTriangle() {
+        PointXY a = new PointXY(0, 0);
+        PointXY b = a.inDirection(5, Angle.fromDeg(0));
+        PointXY c = a.inDirection(5, Angle.fromDeg(60));
+
+        Triangle triangle = new Triangle(a, b, c).rotate(Angle.fromDeg(45));
+
+        PointXY testPoint1 = new PointXY(0, 0);
+        PointXY testPoint2 = new PointXY(10, 10);
+        PointXY testPoint3 = new PointXY(2.5, 2.5);
+
+        Assertions.assertFalse(testPoint1.isInside(triangle));
+        Assertions.assertFalse(testPoint2.isInside(triangle));
+        Assertions.assertTrue(testPoint3.isInside(triangle));
+    }
 }

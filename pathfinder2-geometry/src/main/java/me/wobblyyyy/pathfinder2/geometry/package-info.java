@@ -28,5 +28,12 @@
  * exclusively for use within Pathfinder2 - none of the code here is very
  * specific and can be used just about anywhere.
  * </p>
+ *
+ * <p>
+ * This isn't really an API guide or anything, but you're more than welcome
+ * to add exhaustive tests. In order for this library to function properly,
+ * the geometry portion has to function perfectly, and adding more tests can
+ * never hurt, right? Right.
+ * </p>
  */
 package me.wobblyyyy.pathfinder2.geometry;

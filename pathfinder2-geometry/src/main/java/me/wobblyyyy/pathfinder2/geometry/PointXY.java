@@ -49,8 +49,8 @@ import java.util.List;
  * </p>
  *
  * @author Colin Robertson
- * @since 0.0.0
  * @see PointXYZ
+ * @since 0.0.0
  */
 @SuppressWarnings("DuplicatedCode")
 public class PointXY implements Comparable<PointXY>, Serializable {
@@ -354,6 +354,23 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     }
 
     /**
+     * Create a new point TOWARDS the target point. This point will be
+     * {@code distance} away.
+     *
+     * @param origin   the origin point.
+     * @param target   the target point.
+     * @param distance how far away the point should be.
+     * @return a new point.
+     */
+    public static PointXY towards(PointXY origin,
+                                  PointXY target,
+                                  double distance) {
+        Angle angle = origin.angleTo(target);
+
+        return origin.inDirection(distance, angle);
+    }
+
+    /**
      * Get the midpoint between two points.
      *
      * @param a one of the two points.
@@ -621,6 +638,19 @@ public class PointXY implements Comparable<PointXY>, Serializable {
         if (point == null) {
             throw new IllegalArgumentException(message);
         }
+
+        double x = point.x();
+        double y = point.y();
+
+        boolean invalidX = Double.isNaN(x) || Double.isInfinite(x);
+        boolean invalidY = Double.isNaN(y) || Double.isInfinite(y);
+
+        if (invalidX || invalidY) {
+            throw new IllegalArgumentException(
+                    "Invalid X or Y value - please make sure " +
+                            "your X and Y values are finite real numbers."
+            );
+        }
     }
 
     public static void checkArgument(PointXY point) {
@@ -761,6 +791,19 @@ public class PointXY implements Comparable<PointXY>, Serializable {
                                            Shape shape,
                                            double tolerance) {
         return reference.absDistance(shape.getClosestPoint(reference)) <= tolerance;
+    }
+
+    /**
+     * Create a new point TOWARDS the target point. This point will be
+     * {@code distance} away.
+     *
+     * @param target   the target point.
+     * @param distance how far away the point should be.
+     * @return a new point.
+     */
+    public PointXY towards(PointXY target,
+                           double distance) {
+        return towards(this, target, distance);
     }
 
     /**

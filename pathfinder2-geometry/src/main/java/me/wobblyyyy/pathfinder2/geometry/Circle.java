@@ -10,10 +10,24 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
-public class Circle implements Shape {
+/**
+ * Among everyone's favorite things in the world, is, of course, the circle!
+ * What's not to love about a classic circle? I mean, come on, they're
+ * pretty cool, you have to admit.
+ *
+ * @author Colin Robertson
+ * @since 0.1.0
+ */
+public class Circle implements Shape<Circle> {
     private final PointXY center;
     private final double radius;
 
+    /**
+     * Create a new {@code Circle}.
+     *
+     * @param center the circle's center point.
+     * @param radius the circle's radius.
+     */
     public Circle(PointXY center,
                   double radius) {
         this.center = center;
@@ -37,12 +51,38 @@ public class Circle implements Shape {
     }
 
     @Override
-    public boolean doesCollideWith(Shape shape) {
+    public boolean doesCollideWith(Shape<?> shape) {
         return shape.getClosestPoint(center).isInside(this);
     }
 
     @Override
     public PointXY getCenter() {
         return center;
+    }
+
+    @Override
+    public Circle rotate(Angle rotation) {
+        return rotate(rotation, center);
+    }
+
+    @Override
+    public Circle rotate(Angle rotation, PointXY centerOfRotation) {
+        return new Circle(
+                center.rotate(centerOfRotation, rotation),
+                radius
+        );
+    }
+
+    @Override
+    public Circle shift(double shiftX, double shiftY) {
+        return new Circle(
+                center.shift(shiftX, shiftY),
+                radius
+        );
+    }
+
+    @Override
+    public Circle moveTo(PointXY newCenter) {
+        return new Circle(newCenter, radius);
     }
 }

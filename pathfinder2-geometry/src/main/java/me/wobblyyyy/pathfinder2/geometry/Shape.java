@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,6 @@ import java.util.List;
  * </p>
  *
  * @author Colin Robertson
- * @since 0.1.0
  * @see Rectangle
  * @see Triangle
  * @see Circle
@@ -37,8 +37,9 @@ import java.util.List;
  * @see #doesIntersectOdd(Line, Line...)
  * @see #doesIntersectEven(Line, List)
  * @see #doesIntersectEven(Line, Line...)
+ * @since 0.1.0
  */
-public interface Shape {
+public interface Shape<T> extends Serializable {
     static List<Line> getIntersections(Line line,
                                        List<Line> allLines) {
         List<Line> intersectingLines = new ArrayList<>();
@@ -125,7 +126,7 @@ public interface Shape {
      * @param shape the shape to test.
      * @return if the shapes collide, true. Otherwise, false.
      */
-    boolean doesCollideWith(Shape shape);
+    boolean doesCollideWith(Shape<?> shape);
 
     /**
      * Get the center of the shape.
@@ -133,4 +134,39 @@ public interface Shape {
      * @return the shape's center.
      */
     PointXY getCenter();
+
+    /**
+     * Rotate the shape around the point's center.
+     *
+     * @param rotation how much to rotate the shape by.
+     * @return a rotated shape.
+     */
+    T rotate(Angle rotation);
+
+    /**
+     * Rotate the shape around a given center point.
+     *
+     * @param rotation         how much to rotate the shape by.
+     * @param centerOfRotation the center of rotation.
+     * @return a rotated shape.
+     */
+    T rotate(Angle rotation, PointXY centerOfRotation);
+
+    /**
+     * Shift a shape by X and Y values.
+     *
+     * @param shiftX the X shift.
+     * @param shiftY the Y shift.
+     * @return the shifted shape.
+     */
+    T shift(double shiftX, double shiftY);
+
+    /**
+     * Move the shape's center to the {@code newCenter} point. This will
+     * shift all the shape's points and lines.
+     *
+     * @param newCenter the new center for the shape.
+     * @return a shifted shape.
+     */
+    T moveTo(PointXY newCenter);
 }

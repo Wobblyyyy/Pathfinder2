@@ -131,12 +131,19 @@ public class SlopeIntercept implements LinearEquation {
     @Override
     public PointXY getIntersection(LinearEquation equation) {
         if (isVertical() && equation.isVertical()) {
+            // if they're both vertical, check to see if they have the same
+            // X axis intercept - if they don't, the lines don't intersect,
+            // and we should return null
+
             if (Equals.soft(getVertical(), equation.getVertical(), 0.01)) {
                 return new PointXY(getVertical(), 0);
             }
 
             return null;
         } else if (isVertical() || equation.isVertical()) {
+            // if either of the equations are vertical, find the point
+            // of intersection
+
             if (isVertical()) {
                 double x = getVertical();
 
@@ -149,6 +156,8 @@ public class SlopeIntercept implements LinearEquation {
                 return getPoint(x);
             }
         } else {
+            // if neither of the two equations are vertical, determine the
+            // point of intersection using the following math:
             // y1 = m1x + b1
             // y2 = m2x + b2
             // m1x + b1 = m2x + b2
@@ -156,21 +165,21 @@ public class SlopeIntercept implements LinearEquation {
             // x(m1 - m2) = b2 - b1
             // x = (b2 - b1) / (m1 - m2)
 
-            double x = (equation.getIntercept() - getIntercept()) /
-                    (getSlope() - equation.getSlope());
+            double numerator = equation.getIntercept() - getIntercept();
+            double denominator = getSlope() - equation.getSlope();
+            double x = numerator / denominator;
 
+            // if x isn't valid, y won't be either - return null
             if (!validateDouble(x)) return null;
 
             double y = equation.getY(x);
 
-            boolean validX = validateDouble(x);
-            boolean validY = validateDouble(y);
-
-            if (validX && validY) {
-                return new PointXY(x, y);
-            }
+            // if y IS valid, return our lovely point of intersection
+            if (validateDouble(y)) return new PointXY(x, y);
         }
 
+        // if none of the other branches were executed, return null,
+        // indicating that there is no point of intersection.
         return null;
     }
 

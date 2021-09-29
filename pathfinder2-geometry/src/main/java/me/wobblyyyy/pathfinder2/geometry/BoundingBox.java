@@ -10,6 +10,13 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+/**
+ * Utilities for verifying numbers. I'd encourage you to not use this class,
+ * it's only still here so nothing breaks.
+ *
+ * @author Colin Robertson
+ * @since 0.1.0
+ */
 public class BoundingBox {
     private BoundingBox() {
 

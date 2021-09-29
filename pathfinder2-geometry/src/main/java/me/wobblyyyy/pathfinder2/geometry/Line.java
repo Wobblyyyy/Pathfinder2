@@ -72,6 +72,15 @@ public class Line implements Serializable {
         }
     }
 
+    public Line(PointXY origin,
+                Angle angle,
+                double distance) {
+        this(
+                origin,
+                origin.inDirection(distance, angle)
+        );
+    }
+
     /**
      * Get the unbounded point of intersection between two lines. This ignores
      * the line's "boundaries" - it doesn't matter if the point is actually
@@ -97,8 +106,17 @@ public class Line implements Serializable {
      */
     public static boolean areLinesParallel(Line a,
                                            Line b) {
-        return Equals.soft(a.slope(), b.slope(), 0.001) &&
-                getUnboundedIntersection(a, b) == null;
+        boolean aIsVertical = a.equation.isVertical();
+        boolean bIsVertical = b.equation.isVertical();
+
+        if (aIsVertical || bIsVertical) {
+            return aIsVertical && bIsVertical;
+        }
+
+        double aSlope = a.slope();
+        double bSlope = b.slope();
+
+        return Equals.soft(aSlope, bSlope, 0.01);
     }
 
     /**
@@ -347,7 +365,7 @@ public class Line implements Serializable {
      * @return a slope that's perpendicular to this line.
      */
     public double perpendicularSlope() {
-        return slope() / -1;
+        return -(1 / slope());
     }
 
     /**
@@ -357,6 +375,19 @@ public class Line implements Serializable {
      */
     public Angle anglePerpendicularSlope() {
         return angleSlope().fixedRotate180Deg();
+    }
+
+    /**
+     * Is this line perpendicular to another line?
+     *
+     * @param line the other line.
+     * @return if the lines are perpendicular, true. Otherwise, false.
+     */
+    public boolean isPerpendicularTo(Line line) {
+        double slope1 = slope();
+        double slope2 = line.perpendicularSlope();
+
+        return Equals.soft(slope1, slope2, 0.01);
     }
 
     /**
