@@ -54,4 +54,8 @@ public class Zone implements Serializable {
     public void whileInside(PointXYZ robotPosition) {
 
     }
+
+    public boolean isSolid() {
+        return true;
+    }
 }

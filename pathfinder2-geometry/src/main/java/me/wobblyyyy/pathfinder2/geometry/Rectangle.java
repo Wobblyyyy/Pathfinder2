@@ -367,4 +367,22 @@ public class Rectangle implements Shape<Rectangle> {
     public double getMaximumY() {
         return PointXY.maximumY(a, b, c, d);
     }
+
+    /**
+     * Get the rectangle's X size.
+     *
+     * @return the rectangle's X size.
+     */
+    public double getSizeX() {
+        return sizeX;
+    }
+
+    /**
+     * Get the rectangle's Y size.
+     *
+     * @return the rectangle's Y size.
+     */
+    public double getSizeY() {
+        return sizeY;
+    }
 }
