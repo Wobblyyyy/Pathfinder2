@@ -57,6 +57,6 @@ public class LocalizedPathGen {
         if (!points.get(0).equals(start)) points.add(0, start);
         if (!points.get(points.size() - 1).equals(end)) points.add(end);
 
-        return points;
+        return PathOptimizer.optimize(points);
     }
 }

@@ -135,7 +135,10 @@ public class PathGen {
             newPath.add(path.get(i));
         }
 
-        if (!newPath.get(newPath.size() - 1).equals(end)) newPath.add(end);
+        int size = newPath.size();
+        if (size == 0) return newPath;
+
+        if (!newPath.get(size - 1).equals(end)) newPath.add(end);
 
         return newPath;
     }
