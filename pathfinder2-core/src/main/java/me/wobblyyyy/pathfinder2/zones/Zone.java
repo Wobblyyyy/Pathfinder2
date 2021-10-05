@@ -15,12 +15,58 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Shape;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * A zone is a wrapper for a shape that provides some additional utilities
+ * you can make use of. In addition to providing utilities, the {@code Zone}
+ * class allows you to avoid the {@link Shape} class' generics.
+ *
+ * @author Colin Robertson
+ * @since 0.1.0
+ */
 public class Zone implements Serializable {
     private final Shape<?> shape;
 
     public Zone(Shape<?> shape) {
         this.shape = shape;
+    }
+
+    public static Zone inflate(Zone zone,
+                               double inflationRadius) {
+        return new Zone((Shape<?>) zone.getShape().growBy(inflationRadius)) {
+            @Override
+            public void onEnter(PointXYZ robotPosition) {
+                zone.onEnter(robotPosition);
+            }
+
+            @Override
+            public void onExit(PointXYZ robotPosition) {
+                zone.onExit(robotPosition);
+            }
+
+            @Override
+            public void whileInside(PointXYZ robotPosition) {
+                zone.whileInside(robotPosition);
+            }
+
+            @Override
+            public boolean isSolid() {
+                return zone.isSolid();
+            }
+        };
+    }
+
+    public static List<Zone> inflate(List<Zone> zones,
+                                     double inflationRadius) {
+        List<Zone> inflated = new ArrayList<>(zones.size());
+
+        for (Zone zone : zones) {
+            inflated.add(inflate(zone, inflationRadius));
+        }
+
+        return inflated;
     }
 
     public final Shape<?> getShape() {

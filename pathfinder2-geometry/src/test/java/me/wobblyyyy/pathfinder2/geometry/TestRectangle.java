@@ -92,6 +92,25 @@ public class TestRectangle {
     }
 
     @Test
+    public void testIsPointInShape() {
+        Rectangle rectangle = new Rectangle(0, 2, 10, 3);
+
+        PointXY test1 = new PointXY(0, 0); // false
+        PointXY test2 = new PointXY(10, 10); // false
+        PointXY test3 = new PointXY(0, 2.5); // true
+        PointXY test4 = new PointXY(1, 2.51); // true
+        PointXY test5 = new PointXY(10, 3); // true
+        PointXY test6 = new PointXY(5, 3.5); // false
+
+        Assertions.assertFalse(test1.isInside(rectangle));
+        Assertions.assertFalse(test2.isInside(rectangle));
+        Assertions.assertTrue(test3.isInside(rectangle));
+        Assertions.assertTrue(test4.isInside(rectangle));
+        Assertions.assertTrue(test5.isInside(rectangle));
+        Assertions.assertFalse(test6.isInside(rectangle));
+    }
+
+    @Test
     @Disabled
     public void testRectanglePerformance() {
         List<Rectangle> rectangles = constructRectangles(0, 0, 1000);

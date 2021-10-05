@@ -169,4 +169,24 @@ public interface Shape<T> extends Serializable {
      * @return a shifted shape.
      */
     T moveTo(PointXY newCenter);
+
+    /**
+     * Resize the shape.
+     *
+     * @param scale the new scale for the shape. If this number is 2, the shape
+     *              will double in size. If this number is 0.5, the shape will
+     *              be half the original size.
+     * @return the scaled shape.
+     */
+    T scale(double scale);
+
+    /**
+     * Resize the shape by a specific value.
+     *
+     * @param growth how much to grow the shape by. All the shape's points
+     *               will be moved this distance away from their original
+     *               positions.
+     * @return the resized shape.
+     */
+    T growBy(double growth);
 }

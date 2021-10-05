@@ -95,4 +95,21 @@ public class Grid {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                builder.append(findNode(j, i).isValid() ? "." : "#");
+            }
+            builder.append(String.format(
+                    " (row %s)\n",
+                    i
+            ));
+        }
+
+        return builder.toString();
+    }
 }

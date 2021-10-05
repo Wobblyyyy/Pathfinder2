@@ -11,7 +11,9 @@
 package me.wobblyyyy.pathfinder2.pathgen;
 
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
+import me.wobblyyyy.pathfinder2.geometry.Rectangle;
 import me.wobblyyyy.pathfinder2.zones.Zone;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -28,5 +30,81 @@ public class TestLocalizedPathGen {
         PointXY end = new PointXY(10, 10);
 
         List<PointXY> path = gen.getPath(start, end);
+    }
+
+    @Test
+    public void testFullyObstructedPath() {
+        List<Zone> zones = new ArrayList<>() {{
+            add(new Zone(new Rectangle(0, 3, 10, 4)));
+        }};
+
+        LocalizedPathGen gen = new LocalizedPathGen(zones, 0.5, 0.5);
+
+        PointXY start = new PointXY(0, 0);
+        PointXY end = new PointXY(10, 10);
+
+        List<PointXY> path = gen.getPath(start, end);
+
+        Assertions.assertNull(path);
+    }
+
+    @Test
+    public void testPartiallyObstructedPath() {
+        List<Zone> zones = new ArrayList<>() {{
+            add(new Zone(new Rectangle(1, 3, 10, 4)));
+        }};
+
+        LocalizedPathGen gen = new LocalizedPathGen(zones, 0.5, 0.5);
+
+        PointXY start = new PointXY(0, 0);
+        PointXY end = new PointXY(10, 10);
+
+        List<PointXY> path = gen.getPath(start, end);
+
+        for (PointXY point : path) {
+            Assertions.assertFalse(zones.get(0).isPointInShape(point));
+        }
+
+        Assertions.assertNotNull(path);
+    }
+
+    @Test
+    public void testHugePath() {
+        List<Zone> zones = new ArrayList<>() {{
+            add(new Zone(new Rectangle(10, 30, 100, 40)));
+        }};
+
+        LocalizedPathGen gen = new LocalizedPathGen(zones, 0.75, 0.75);
+
+        PointXY start = new PointXY(0, 0);
+        PointXY end = new PointXY(100, 100);
+
+        List<PointXY> path = gen.getPath(start, end);
+
+        for (PointXY point : path) {
+            Assertions.assertFalse(zones.get(0).isPointInShape(point));
+        }
+
+        Assertions.assertNotNull(path);
+    }
+
+    @Test
+    public void testStupidScaling() {
+        List<Zone> zones = new ArrayList<>() {{
+            add(new Zone(new Rectangle(1, 3, 10, 4)));
+        }};
+
+        LocalizedPathGen gen = new LocalizedPathGen(zones, 0.05, 0.05);
+
+        PointXY start = new PointXY(0, 0);
+        PointXY end = new PointXY(10, 10);
+
+        List<PointXY> path = gen.getPath(start, end);
+
+        for (PointXY point : path) {
+            Assertions.assertFalse(zones.get(0).isPointInShape(point));
+        }
+
+        Assertions.assertNotNull(path);
     }
 }

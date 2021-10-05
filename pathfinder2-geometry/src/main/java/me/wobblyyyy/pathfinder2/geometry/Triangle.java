@@ -237,6 +237,46 @@ public class Triangle implements Shape<Triangle> {
         return shift(dx, dy);
     }
 
+    private PointXY redrawPoint(PointXY point,
+                                double scale) {
+        Angle fromCenter = center.angleTo(point);
+        double originalDistance = center.distance(point);
+
+        return center.inDirection(
+                scale * originalDistance,
+                fromCenter
+        );
+    }
+
+    private PointXY addDistance(PointXY point,
+                                double distance) {
+        Angle fromCenter = center.angleTo(point);
+        double originalDistance = center.distance(point);
+
+        return center.inDirection(
+                originalDistance + distance,
+                fromCenter
+        );
+    }
+
+    @Override
+    public Triangle scale(double scale) {
+        PointXY newA = redrawPoint(a, scale);
+        PointXY newB = redrawPoint(b, scale);
+        PointXY newC = redrawPoint(c, scale);
+
+        return new Triangle(newA, newB, newC);
+    }
+
+    @Override
+    public Triangle growBy(double growth) {
+        PointXY newA = addDistance(a, growth);
+        PointXY newB = addDistance(b, growth);
+        PointXY newC = addDistance(c, growth);
+
+        return new Triangle(newA, newB, newC);
+    }
+
     public PointXY getA() {
         return a;
     }

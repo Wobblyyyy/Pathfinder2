@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+import me.wobblyyyy.pathfinder2.math.Equals;
+
 /**
  * A rectangle! It has four vertices and four lines. There's not much
  * more to say, to be honest, but they're pretty cool.
@@ -240,11 +242,49 @@ public class Rectangle implements Shape<Rectangle> {
 
         Line line = new Line(
                 reference,
-                reference.angleTo(target),
+                reference.angleTo(target).add(Angle.fromDeg(17.31313204182)),
                 sizeX + sizeY
         );
 
-        return Shape.doesIntersectOdd(line, ab, bc, cd, da, ac, bd);
+        if (
+                ab.isPointOnLineSegment(reference) ||
+                        bc.isPointOnLineSegment(reference) ||
+                        cd.isPointOnLineSegment(reference) ||
+                        da.isPointOnLineSegment(reference) ||
+                        ac.isPointOnLineSegment(reference) ||
+                        bc.isPointOnLineSegment(reference)
+        ) return true;
+
+        double x = reference.x();
+        double y = reference.y();
+
+        boolean sameTargetX = Equals.soft(target.x(), x, 0.01);
+        boolean sameTargetY = Equals.soft(target.y(), y, 0.01);
+
+        if (sameTargetX) target.withX(x + 0.69);
+        if (sameTargetY) target.withY(y + 0.69);
+
+        double minX = getMinimumX();
+        double minY = getMinimumY();
+        double maxX = getMaximumX();
+        double maxY = getMaximumY();
+
+        if (
+                x < minX ||
+                        x > maxX ||
+                        y < minY ||
+                        y > maxY
+        ) return false;
+
+        boolean sameMinX = Equals.soft(minX, x, 0.01);
+        boolean sameMinY = Equals.soft(minY, x, 0.01);
+        boolean sameMaxX = Equals.soft(maxX, x, 0.01);
+        boolean sameMaxY = Equals.soft(maxY, x, 0.01);
+
+        if (sameMinX || sameMaxX) return minY <= y && y <= maxY;
+        if (sameMinY || sameMaxY) return minX <= x && x <= maxX;
+
+        return Shape.doesIntersectOdd(line, ab, bc, cd, da);
     }
 
     /**
@@ -330,6 +370,48 @@ public class Rectangle implements Shape<Rectangle> {
         double dy = center.distanceY(newCenter);
 
         return shift(dx, dy);
+    }
+
+    private PointXY redrawPoint(PointXY point,
+                                double scale) {
+        Angle fromCenter = center.angleTo(point);
+        double originalDistance = center.distance(point);
+
+        return center.inDirection(
+                scale * originalDistance,
+                fromCenter
+        );
+    }
+
+    private PointXY addDistance(PointXY point,
+                                double distance) {
+        Angle fromCenter = center.angleTo(point);
+        double originalDistance = center.distance(point);
+
+        return center.inDirection(
+                originalDistance + distance,
+                fromCenter
+        );
+    }
+
+    @Override
+    public Rectangle scale(double scale) {
+        PointXY newA = redrawPoint(a, scale);
+        PointXY newB = redrawPoint(b, scale);
+        PointXY newC = redrawPoint(c, scale);
+        PointXY newD = redrawPoint(d, scale);
+
+        return new Rectangle(newA, newB, newC, newD);
+    }
+
+    @Override
+    public Rectangle growBy(double growth) {
+        PointXY newA = addDistance(a, growth);
+        PointXY newB = addDistance(b, growth);
+        PointXY newC = addDistance(c, growth);
+        PointXY newD = addDistance(d, growth);
+
+        return new Rectangle(newA, newB, newC, newD);
     }
 
     /**

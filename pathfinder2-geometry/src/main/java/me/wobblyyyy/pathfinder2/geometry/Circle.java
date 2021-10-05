@@ -85,4 +85,14 @@ public class Circle implements Shape<Circle> {
     public Circle moveTo(PointXY newCenter) {
         return new Circle(newCenter, radius);
     }
+
+    @Override
+    public Circle scale(double scale) {
+        return new Circle(center, radius * scale);
+    }
+
+    @Override
+    public Circle growBy(double growth) {
+        return new Circle(center, radius + growth);
+    }
 }

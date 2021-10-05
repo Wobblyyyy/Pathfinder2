@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Node {
     private Node parent;
@@ -82,6 +83,14 @@ public class Node {
                     nodes
             );
         }
+    }
+
+    public static List<Node> getValidNodes(List<Node> nodes) {
+        return nodes.stream().filter(Node::isValid).collect(Collectors.toList());
+    }
+
+    public static List<Node> getInvalidNodes(List<Node> nodes) {
+        return nodes.stream().filter(Node::isInvalid).collect(Collectors.toList());
     }
 
     public void calculateNeighbours(Grid grid) {
@@ -187,11 +196,15 @@ public class Node {
         return valid;
     }
 
+    public boolean isInvalid() {
+        return !valid;
+    }
+
     public void setValid(boolean valid) {
         this.valid = valid;
     }
 
-    public void reverseValidation(){
+    public void reverseValidation() {
         valid = !valid;
     }
 
@@ -216,5 +229,15 @@ public class Node {
         }
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "(%s, %s, valid: %s)",
+                x,
+                y,
+                valid
+        );
     }
 }

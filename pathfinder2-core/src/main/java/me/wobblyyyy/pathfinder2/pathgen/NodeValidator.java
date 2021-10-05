@@ -17,7 +17,21 @@ import me.wobblyyyy.pathfinder2.zones.Zone;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Validate a set of nodes.
+ *
+ * @author Colin Robertson
+ * @since 0.1.0
+ */
 public class NodeValidator {
+    /**
+     * Validate a set of nodes. This will iterate through a grid's nodes and
+     * update the validity of each of the nodes by determining if the node
+     * is inside a solid zone (not valid) or not (valid).
+     *
+     * @param grid  the grid to validate the nodes of.
+     * @param zones the list of zones to use for validation.
+     */
     public static void validateNodes(LocalizedGrid grid,
                                      List<Zone> zones) {
         List<Node> nodes = grid.getGrid().getNodes();
