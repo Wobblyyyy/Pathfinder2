@@ -13,10 +13,23 @@ package me.wobblyyyy.pathfinder2.pathgen;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A coordinate is basically a {@link me.wobblyyyy.pathfinder2.geometry.PointXY},
+ * but with integers instead of doubles.
+ *
+ * @author Colin Robertson
+ * @since 0.1.0
+ */
 public class Coord {
     private final int x;
     private final int y;
 
+    /**
+     * Create a new coordinate.
+     *
+     * @param x the coordinate's X value.
+     * @param y the coordinate's Y value.
+     */
     public Coord(int x,
                  int y) {
         this.x = x;

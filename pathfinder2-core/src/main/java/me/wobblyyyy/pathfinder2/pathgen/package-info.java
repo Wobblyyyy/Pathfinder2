@@ -19,5 +19,10 @@
  * class. Truly, just lovely. Fantastic, even. I'm currently in English class
  * and trying to kill time until the period ends, so I hope you're enjoying
  * this meaningless rambling.
+ *
+ * <p>
+ * Interestingly enough, this code... sucks. If you can rewrite it so it's
+ * cleaner and/or faster, you're more than welcome to do so.
+ * </p>
  */
 package me.wobblyyyy.pathfinder2.pathgen;

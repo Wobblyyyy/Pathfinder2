@@ -32,6 +32,15 @@ public class Time {
     }
 
     /**
+     * Get the system's current time in milliseconds.
+     *
+     * @return the system's current time in milliseconds.
+     */
+    public static long longMs() {
+        return System.currentTimeMillis();
+    }
+
+    /**
      * Convert between two different units of time.
      *
      * @param value    the value represented in original units.

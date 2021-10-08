@@ -46,18 +46,33 @@ public class LocalizedGrid {
                          double maxX,
                          double maxY) {
         this.grid = grid;
+
         this.minX = minX;
         this.minY = minY;
         this.maxX = maxX;
         this.maxY = maxY;
+
         double sizeX = maxX - minX;
         double sizeY = maxY - minY;
+
         int xCount = grid.getWidth();
         int yCount = grid.getHeight();
+
         this.xRatio = sizeX / xCount;
         this.yRatio = sizeY / yCount;
     }
 
+    /**
+     * Create a new {@code LocalizedGrid}.
+     *
+     * @param xScaling the x scaling value.
+     * @param yScaling the y scaling value.
+     * @param minX     the grid's minimum X value.
+     * @param minY     the grid's minimum Y value.
+     * @param maxX     the grid's maximum X value.
+     * @param maxY     the grid's maximum Y value.
+     * @return a new localized grid.
+     */
     public static LocalizedGrid generateLocalizedGrid(double xScaling,
                                                       double yScaling,
                                                       double minX,
@@ -81,6 +96,12 @@ public class LocalizedGrid {
         );
     }
 
+    /**
+     * Convert a point to a coordinate.
+     *
+     * @param point the point to convert.
+     * @return the converted coordinate.
+     */
     public Coord toCoord(PointXY point) {
         int x = (int) Math.round((point.x() - minX) / xRatio);
         int y = (int) Math.round((point.y() - minY) / yRatio);
@@ -91,6 +112,12 @@ public class LocalizedGrid {
         return new Coord(x, y);
     }
 
+    /**
+     * Convert a coordinate to a point.
+     *
+     * @param coord the coordinate to convert.t
+     * @return the converted point.
+     */
     public PointXY toPoint(Coord coord) {
         double x = (coord.x() * xRatio) + minX;
         double y = (coord.y() * yRatio) + minY;

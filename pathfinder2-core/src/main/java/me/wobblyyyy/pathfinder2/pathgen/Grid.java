@@ -14,14 +14,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A grid is pretty much a two-dimensional array.
+ *
+ * @author Colin Robertson
+ * @since 0.1.0
+ */
 public class Grid {
     private final int width;
     private final int height;
     private List<Node> nodes;
-    private Map<Coord, Node> map = new HashMap<>();
+    private final Map<Coord, Node> map = new HashMap<>();
 
     private Grid(int width,
-                int height) {
+                 int height) {
         this(width, height, null);
     }
 
@@ -62,21 +68,20 @@ public class Grid {
     public Node findNode(int x,
                          int y) {
         Coord coord = new Coord(x, y);
-        return map.get(coord);
 
-//        if (map.containsKey(coord)) return map.get(coord);
-//
-//        for (Node node : nodes) {
-//            int targetX = node.getX();
-//            int targetY = node.getY();
-//
-//            boolean sameX = x == targetX;
-//            boolean sameY = y == targetY;
-//
-//            if (sameX && sameY) return node;
-//        }
-//
-//        return null;
+        if (map.containsKey(coord)) return map.get(coord);
+
+        for (Node node : nodes) {
+            int targetX = node.getX();
+            int targetY = node.getY();
+
+            boolean sameX = x == targetX;
+            boolean sameY = y == targetY;
+
+            if (sameX && sameY) return node;
+        }
+
+        return null;
     }
 
     public List<Node> getNodes() {
@@ -89,7 +94,7 @@ public class Grid {
         if (nodes != null) {
             for (Node node : nodes) {
                 map.put(
-                        new Coord(node.getX(), node.getY()),
+                        new Coord(node),
                         node
                 );
             }

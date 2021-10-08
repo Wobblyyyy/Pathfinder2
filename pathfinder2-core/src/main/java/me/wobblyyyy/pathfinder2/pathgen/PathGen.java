@@ -22,6 +22,11 @@ import java.util.List;
  * instead, unless you have a very specific reason for using a non-localized one.
  * </p>
  *
+ * <p>
+ * I'll be honest, my understanding of algorithms is limited to... well, let's
+ * just say... I don't know.
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.1.0
  */
@@ -34,6 +39,13 @@ public class PathGen {
 
     private List<Node> openList;
 
+    /**
+     * Create a new path generator.
+     *
+     * @param grid  the generator's grid.
+     * @param start the path's start point.
+     * @param end   the path's end point.
+     */
     public PathGen(Grid grid,
                    Node start,
                    Node end) {
@@ -46,6 +58,11 @@ public class PathGen {
         return Coord.convertNodes(findPath());
     }
 
+    /**
+     * Find a path. Wow!
+     *
+     * @return a path. Or something.
+     */
     public List<Node> findPath() {
         if (start == null)
             throw new IllegalArgumentException("Start node may not be null!");
@@ -143,10 +160,20 @@ public class PathGen {
         return newPath;
     }
 
+    /**
+     * Get the start node.
+     *
+     * @return the start node.
+     */
     public Node getStart() {
         return start;
     }
 
+    /**
+     * Get the end node.
+     *
+     * @return the end node.
+     */
     public Node getEnd() {
         return end;
     }

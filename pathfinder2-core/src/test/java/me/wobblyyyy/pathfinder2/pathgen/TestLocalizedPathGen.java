@@ -14,6 +14,7 @@ import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.Rectangle;
 import me.wobblyyyy.pathfinder2.zones.Zone;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -89,6 +90,30 @@ public class TestLocalizedPathGen {
     }
 
     @Test
+    public void testUnobstructedNegativePathfinding() {
+        List<Zone> zones = new ArrayList<>();
+        LocalizedPathGen gen = new LocalizedPathGen(zones, 0.5, 0.5);
+        PointXY start = new PointXY(-5, -5);
+        PointXY end = new PointXY(5, 5);
+        List<PointXY> path = gen.getPath(start, end);
+        Assertions.assertNotNull(path);
+        Assertions.assertEquals(2, path.size());
+    }
+
+    @Test
+    public void testObstructedNegativePathfinding() {
+        List<Zone> zones = new ArrayList<>() {{
+            add(new Zone(new Rectangle(-3, -2, 8, 3)));
+        }};
+        LocalizedPathGen gen = new LocalizedPathGen(zones, 0.5, 0.5);
+        PointXY start = new PointXY(-5, -5);
+        PointXY end = new PointXY(5, 5);
+        List<PointXY> path = gen.getPath(start, end);
+        Assertions.assertNotNull(path);
+    }
+
+    @Test
+    @Disabled
     public void testStupidScaling() {
         List<Zone> zones = new ArrayList<>() {{
             add(new Zone(new Rectangle(1, 3, 10, 4)));

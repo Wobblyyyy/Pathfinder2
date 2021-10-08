@@ -19,6 +19,16 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * "I don't even know to be honest."
+ *
+ * <p>
+ * Nodes are the basis for which the pathfinding grid operates on.
+ * </p>
+ *
+ * @author Colin Robertson
+ * @since 0.1.0
+ */
 public class Node {
     private Node parent;
     private List<Node> neighbours;

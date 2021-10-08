@@ -86,6 +86,8 @@ public class PathOptimizer {
         // if there's still a collinear point to add, add it
         if (lastCollinear != null) optimized.add(lastCollinear);
 
+        if (optimized.size() == 0) return new ArrayList<>();
+
         // make sure the optimized path includes the start and end points
         if (!optimized.get(0).equals(start)) optimized.add(0, start);
         if (!optimized.get(optimized.size() - 1).equals(end)) optimized.add(end);

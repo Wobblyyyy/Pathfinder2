@@ -1,17 +1,20 @@
 # Pathfinder Tutorial
 
-Alright. Here's a pretty quick and pretty cool tutorial on using Pathfinder. Note that this is only a really basic
-implementation of Pathfinder, and there's way cooler things you can do.
+Alright. Here's a pretty quick and pretty cool tutorial on using Pathfinder.
+Note that this is only a really basic implementation of Pathfinder, and there's
+way cooler things you can do.
 
 ## Quick Overview
 
-Okay. Here's a really quick overview of a couple of the most important concepts. Note that this does not fully encompass
-everything you can do.
+Okay. Here's a really quick overview of a couple of the most important concepts.
+Note that this does not fully encompass everything you can do.
 
-- Your robot has a drivetrain. This is done with the Drive interface. There are several ways you can implement a Drive,
-  and there are a couple of cool implementations, such as `MeccanumDrive`.
-- Your robot has an odometry system. This thing just has to tell us where the robot is. It doesn't really matter how you
-  implement odometry - I've used three-wheel odometry before, and it's worked perfectly.
+- Your robot has a drivetrain. This is done with the Drive interface. There are
+  several ways you can implement a Drive, and there are a couple of cool
+  implementations, such as `MeccanumDrive`.
+- Your robot has an odometry system. This thing just has to tell us where the
+  robot is. It doesn't really matter how you implement odometry - I've used
+  three-wheel odometry before, and it's worked perfectly.
 
 ## Creating a drive and odometry setup
 
@@ -46,7 +49,8 @@ public class PathfinderGuide {
 }
 ```
 
-Alright, there's our robot. Only a couple more things we need to do before we can get Pathfinder actually working.
+Alright, there's our robot. Only a couple more things we need to do before we
+can get Pathfinder actually working.
 
 ```java
 public class PathfinderGuide {
@@ -94,12 +98,13 @@ public class PathfinderGuide {
 
 ## Actually using Pathfinder
 
-There's a ton of functionality in this library, but for the sake of keeping things simple, we'll only go over the most
-basic concepts.
+There's a ton of functionality in this library, but for the sake of keeping
+things simple, we'll only go over the most basic concepts.
 
 ### Operating Pathfinder
 
-The most important thing you can do is tick Pathfinder - if you don't tick it, nothing happens. For example:
+The most important thing you can do is tick Pathfinder - if you don't tick it,
+nothing happens. For example:
 
 ```java
 public class PathfinderGuide {
@@ -111,11 +116,12 @@ public class PathfinderGuide {
 }
 ```
 
-The concept here is that Pathfinder is running in a loop - it constantly checks its state (where it is, what the chassis
-is doing, where it's supposed to be going) and then decides what to do from there.
+The concept here is that Pathfinder is running in a loop - it constantly checks
+its state (where it is, what the chassis is doing, where it's supposed to be
+going) and then decides what to do from there.
 
-When you instruct Pathfinder to do something, you need to wait for it to finish doing what you asked it to do or cancel
-it.
+When you instruct Pathfinder to do something, you need to wait for it to finish
+doing what you asked it to do or cancel it.
 
 ```java
 public class PathfinderGuide {
@@ -135,7 +141,8 @@ public class PathfinderGuide {
 }
 ```
 
-But what if we want to cancel it? Let's say we want to check for a gamepad button being pressed - what do we do then?
+But what if we want to cancel it? Let's say we want to check for a gamepad
+button being pressed - what do we do then?
 
 ```java
 public class PathfinderGuide {
@@ -157,12 +164,14 @@ public class PathfinderGuide {
 }
 ```
 
-Now let's follow some more paths, shall we? We're going to learn about more concepts - exciting! Right! Yeah...
+Now let's follow some more paths, shall we? We're going to learn about more
+concepts - exciting! Right! Yeah...
 
 ### Trajectories and Followers
 
-Trajectories and followers are at the heart of Pathfinder's operation. I'd encourage you to go read the Javadocs for
-those (maybe just check out these pages)
+Trajectories and followers are at the heart of Pathfinder's operation. I'd
+encourage you to go read the Javadocs for those (maybe just check out these
+pages)
 
 - [Follower](https://github.com/Wobblyyyy/Pathfinder2/blob/master/pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/follower/Follower.java)
 - [Trajectory](https://github.com/Wobblyyyy/Pathfinder2/blob/master/pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/trajectory/Trajectory.java)
@@ -170,8 +179,9 @@ those (maybe just check out these pages)
 - [GenericFollower](https://github.com/Wobblyyyy/Pathfinder2/blob/master/pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/follower/GenericFollower.java)
 - [GenericFollowerGenerator](https://github.com/Wobblyyyy/Pathfinder2/blob/master/pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/follower/generators/GenericFollowerGenerator.java)
 
-Trajectories are paths your robot can follow. Followers are the things that make your robot follow the paths. Let's take
-a look at a simple example of a trajectory - a linear trajectory.
+Trajectories are paths your robot can follow. Followers are the things that make
+your robot follow the paths. Let's take a look at a simple example of a
+trajectory - a linear trajectory.
 
 ```java
 public class PathfinderGuide {
@@ -183,7 +193,7 @@ public class PathfinderGuide {
         // Speed can be any value between 0 and 1 - 0 isn't moving, 1 is
         // as fast as possible.
         double speed = 0.5;
-        
+
         // The "tolerance." Basically, Pathfinder has a tolerance for when
         // you're at a certain position. If you're at (9.5, 9.5) and your
         // target is (10, 10), you're technically 0.707 units away from the
@@ -193,7 +203,7 @@ public class PathfinderGuide {
         // target (sqrt2). 1.414 is greater than 1.0, so Pathfinder knows it
         // hasn't reached it target yet.
         double tolerance = 1.0;
-        
+
         // The angle tolerance - basically the same thing with the regular
         // tolerance, but for the angle the robot is/should be facing.
         Angle angleTolerance = Angle.deg(15);
@@ -209,15 +219,31 @@ public class PathfinderGuide {
                 tolerance,
                 angleTolerance
         );
-        
+
         // Tell Pathfinder to follow the trajectory.
         pathfinder.followTrajectory(trajectory);
-        
+
         while (pathfinder.isActive()) {
             Thread.onSpinWait();
-            
+
             pathfinder.tick();
         }
     }
 }
 ```
+
+## Path Generation
+
+The name of the library is quite literally `Pathfinder` - it wouldn't be
+unreasonable to assume that you'd be able to generate paths. How exactly would
+one go about doing that, you may ask? Well, it's not all that challenging.
+
+### Field Zones
+
+Before we can get into actually generating paths, we need to go over the
+concept of a `Zone`. See `me.wobblyyyy.pathfinder2.geometry.Shape` and
+`me.wobblyyyy.pathfinder2.zones.Zone`. In short, a zone is an area of the
+field, defined by a shape (say, a rectangle or a circle) that Pathfinder
+will not allow the robot to enter when generating a path. If you have an
+obstacle on the field, you'd want to define that obstacle as a zone - this
+means you'll be able to avoid the obstacle, which is probably your goal.
