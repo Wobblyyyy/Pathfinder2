@@ -4,6 +4,15 @@ Alright. Here's a pretty quick and pretty cool tutorial on using Pathfinder.
 Note that this is only a really basic implementation of Pathfinder, and there's
 way cooler things you can do.
 
+## Important Notices
+Here's a couple of important notices. Or one. Or more, I'm not entirely sure
+to be honest. This is NOT a tutorial - these are just important notices that
+you should PROBABLY read before using the library.
+- Pathfinder2 is designed to operate with exclusively positive points. You CAN
+  use negative points, but the library was not designed with that in mind and
+  may not function as intended.
+- Tolerance values cannot and should not be negative. 
+
 ## Quick Overview
 
 Okay. Here's a really quick overview of a couple of the most important concepts.

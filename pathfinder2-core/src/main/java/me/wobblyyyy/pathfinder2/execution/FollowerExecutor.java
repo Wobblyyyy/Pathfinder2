@@ -39,7 +39,7 @@ public class FollowerExecutor {
     private final Drive drive;
 
     /**
-     * A list of all of the followers the executor is responsible for.
+     * A list of all the followers the executor is responsible for.
      */
     private final List<Follower> followers;
 

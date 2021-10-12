@@ -9,6 +9,21 @@
  */
 
 /**
- * Internal code responsible for managing Pathfinder's actions.
+ * Internal code responsible for managing Pathfinder's actions. The concept
+ * behind these execution constructs is as follows:
+ *
+ * <ul>
+ *     <li>
+ *         Individual followers are executed by a {@code FollowerExecutor}.
+ *     </li>
+ *     <li>
+ *         {@code FollowerExecutor}s are executed and managed by a
+ *         {@code ExecutorManager}.
+ *     </li>
+ *     <li>
+ *         Pathfinder's autonomous movement is operated via controlling
+ *         and managing {@code ExecutorManager}s.
+ *     </li>
+ * </ul>
  */
 package me.wobblyyyy.pathfinder2.execution;

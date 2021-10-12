@@ -32,6 +32,12 @@ import java.util.List;
  * </ul>
  * </p>
  *
+ * <p>
+ * Executor managers are a relatively simple and limited method of managing
+ * autonomous movement - this is completely intentional, as to not
+ * overcomplicate usage of the library.
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.0.0
  * @see FollowerExecutor
@@ -75,11 +81,13 @@ public class ExecutorManager {
      *                  create a new {@link FollowerExecutor}.
      */
     public void addExecutor(List<Follower> followers) {
-        executors.add(new FollowerExecutor(
-                odometry,
-                drive,
-                followers
-        ));
+        executors.add(
+                new FollowerExecutor(
+                        odometry,
+                        drive,
+                        followers
+                )
+        );
     }
 
     /**
@@ -116,7 +124,12 @@ public class ExecutorManager {
     }
 
     /**
-     * Tick the {@link ExecutorManager} once.
+     * Tick the {@link ExecutorManager} once. The tick method returns a boolean
+     * value indicating the status of the {@code ExecutorManager}. If the
+     * method returns true, the {@code ExecutorManager} has finished its
+     * execution - this means all the {@link FollowerExecutor}s have finished
+     * their execution. If the method returns false, the {@code ExecutorManager}
+     * hasn't yet finished its execution.
      *
      * @return true if there are no remaining executors in the list. False if
      * there are still remaining executors.
