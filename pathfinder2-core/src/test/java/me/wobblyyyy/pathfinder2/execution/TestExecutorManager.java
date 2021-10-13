@@ -74,4 +74,66 @@ public class TestExecutorManager {
         Assertions.assertFalse(manager.isActive());
         Assertions.assertTrue(manager.isInactive());
     }
+
+    @Test
+    public void testExecutorManager2() {
+        SimulatedOdometry odometry = new SimulatedOdometry();
+        SimulatedDrive drive = new SimulatedDrive();
+        Robot robot = new Robot(drive, odometry);
+        Trajectory trajectory1 = new LinearTrajectory(
+                new PointXYZ(10, 10, 0),
+                1.0,
+                0.1,
+                Angle.fromDeg(3)
+        );
+        Trajectory trajectory2 = new LinearTrajectory(
+                new PointXYZ(20, 20, 45),
+                1.0,
+                0.1,
+                Angle.fromDeg(3)
+        );
+        Trajectory trajectory3 = new LinearTrajectory(
+                new PointXYZ(30, 30, 90),
+                1.0,
+                0.1,
+                Angle.fromDeg(3)
+        );
+        Controller controller = new GenericTurnController(0.1);
+        GenericFollowerGenerator generator = new GenericFollowerGenerator(controller);
+        Follower follower1 = generator.generate(robot, trajectory1);
+        Follower follower2 = generator.generate(robot, trajectory2);
+        Follower follower3 = generator.generate(robot, trajectory3);
+        List<Follower> followers = new ArrayList<>() {{
+            add(follower1);
+            add(follower2);
+            add(follower3);
+        }};
+
+        ExecutorManager manager = new ExecutorManager(odometry, drive);
+
+        manager.addExecutor(followers);
+
+        manager.tick();
+        Assertions.assertTrue(manager.isActive());
+
+        odometry.setRawPosition(new PointXYZ(10, 10, 0));
+        manager.tick();
+        Assertions.assertTrue(manager.isActive());
+
+        odometry.setRawPosition(new PointXYZ(20, 20, 30));
+        manager.tick();
+        Assertions.assertTrue(manager.isActive());
+
+        odometry.setRawPosition(new PointXYZ(20, 20, 45));
+        manager.tick();
+        Assertions.assertTrue(manager.isActive());
+
+        odometry.setRawPosition(new PointXYZ(30, 30, 45));
+        manager.tick();
+        Assertions.assertTrue(manager.isActive());
+
+        odometry.setRawPosition(new PointXYZ(30, 30, 90));
+        manager.tick();
+        Assertions.assertFalse(manager.isActive());
+    }
 }

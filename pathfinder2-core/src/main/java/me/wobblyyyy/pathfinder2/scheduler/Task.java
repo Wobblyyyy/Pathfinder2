@@ -235,7 +235,7 @@ public class Task {
      * Is the minimum time limit valid?
      *
      * @param currentTimeMilliseconds the current time, in milliseconds.
-     * @return whether or not the minimum time limit is valid.
+     * @return whether the minimum time limit is valid.
      */
     public boolean isMinimumTimeLimitValid(double currentTimeMilliseconds) {
         return calculateTimeDelta(currentTimeMilliseconds) >= minTimeMilliseconds;
@@ -245,7 +245,7 @@ public class Task {
      * Is the maximum time limit valid?
      *
      * @param currentTimeMilliseconds the current time, in milliseconds.
-     * @return whether or not the maximum time limit is valid.
+     * @return whether the maximum time limit is valid.
      */
     public boolean isMaximumTimeLimitValid(double currentTimeMilliseconds) {
         return calculateTimeDelta(currentTimeMilliseconds) <= maxTimeMilliseconds;
@@ -255,7 +255,7 @@ public class Task {
      * Are both time limits valid?
      *
      * @param currentTimeMilliseconds the current time, in milliseconds.
-     * @return whether or not both time limits are valid.
+     * @return whether both time limits are valid.
      * @see #isMinimumTimeLimitValid(double)
      * @see #isMaximumTimeLimitValid(double)
      */
@@ -267,7 +267,7 @@ public class Task {
     /**
      * Has the task started yet?
      *
-     * @return whether or not the task has started yet.
+     * @return whether the task has started yet.
      */
     public boolean hasStarted() {
         return this.startTimeMilliseconds > 0;

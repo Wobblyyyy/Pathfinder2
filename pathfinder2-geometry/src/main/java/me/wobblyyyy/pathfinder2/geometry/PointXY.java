@@ -77,6 +77,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * The point's X value.
      */
     private final double x;
+
     /**
      * The point's Y value.
      */
@@ -171,6 +172,15 @@ public class PointXY implements Comparable<PointXY>, Serializable {
         return new PointXY(0, 0);
     }
 
+    /**
+     * Get the slope between two points.
+     *
+     * @param a the first of the two points.
+     * @param b the second of the two points.
+     * @return the slope between the two points. This value is calculated
+     * by taking the change in Y over the change in X - in other words,
+     * (y2 minus y1) divided by (x2 minus x1).
+     */
     public static double slope(PointXY a,
                                PointXY b) {
         return distanceY(a, b) / distanceX(a, b);
@@ -669,7 +679,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return the closest point in the shape.
      */
     public static PointXY closestPoint(PointXY reference,
-                                       Shape shape) {
+                                       Shape<?> shape) {
         return shape.getClosestPoint(reference);
     }
 
@@ -788,7 +798,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * Otherwise, return false.
      */
     public static boolean isPointNearShape(PointXY reference,
-                                           Shape shape,
+                                           Shape<?> shape,
                                            double tolerance) {
         return reference.absDistance(shape.getClosestPoint(reference)) <= tolerance;
     }
@@ -1052,7 +1062,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return if the point is contained in the shape, return true. If the
      * point is not contained in the shape, return false.
      */
-    public boolean isInside(Shape shape) {
+    public boolean isInside(Shape<?> shape) {
         return shape.isPointInShape(this);
     }
 
@@ -1082,7 +1092,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param shape the shape.
      * @return the closest point in the shape.
      */
-    public PointXY closestPoint(Shape shape) {
+    public PointXY closestPoint(Shape<?> shape) {
         return closestPoint(this, shape);
     }
 
@@ -1145,7 +1155,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return if this point is "near" the shape, return true. Otherwise,
      * return false.
      */
-    public boolean isPointNearShape(Shape shape,
+    public boolean isPointNearShape(Shape<?> shape,
                                     double tolerance) {
         return isPointNearShape(this, shape, tolerance);
     }
