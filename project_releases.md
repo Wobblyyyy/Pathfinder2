@@ -10,6 +10,14 @@
 
 <h2>What should I download?</h2>
 
+<h3>After October 27, 2021</h3>
+
+Pathfinder2 releases are released in a single form - one JAR file that contains all of the
+libraries related to Pathfinder2. This was done to simplify installation, and also partially
+because I'm really lazy.
+
+<h3>Prior to October 27, 2021</h3>
+
 Each of Pathfinder's releases will be released with several assets. As of September 9th, 2021,
 those assets will be:
 - Pathfinder2 Geometry
