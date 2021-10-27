@@ -9,7 +9,7 @@
 # pathfinder2-geometry
 
 Geometry! My favorite. It might not be yours, but it's certainly mine. The memories I have of 9th grade geometry
-class... man, those were the days, am I right? Of course I'm right, I always am.
+class... man, those were the days, am I right? Of course, I'm right, I always am.
 
 Anyways. Pathfinder2's geometry package contains some rather extensive classes and methods for anything geometry
 related. Well, not anything, actually, but just about. The core concepts of the geometry package revolve around points

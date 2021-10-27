@@ -72,7 +72,7 @@ public class MeccanumDrive implements Drive {
     /**
      * The drive's modifier - you probably don't need to touch this.
      */
-    private Function<Translation, Translation> modifier = t -> t;
+    private Function<Translation, Translation> modifier;
 
     /**
      * The drive's translation - this is only used for the

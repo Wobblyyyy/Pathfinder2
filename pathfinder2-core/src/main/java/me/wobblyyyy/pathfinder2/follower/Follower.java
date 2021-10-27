@@ -56,7 +56,7 @@ public interface Follower {
      * @param current  the robot's current position.
      * @param consumer a consumer that will accept a generated translation.
      *                 This translation should never have X or Y values
-     *                 outside of the bounds (-1.0, 1.0).
+     *                 outside the bounds (-1.0, 1.0).
      * @return if the follower has finished, return true, indicating that
      * the follower can be de-queued and the next follower can begin execution.
      * If the follower has not finished, however, return false, indicating

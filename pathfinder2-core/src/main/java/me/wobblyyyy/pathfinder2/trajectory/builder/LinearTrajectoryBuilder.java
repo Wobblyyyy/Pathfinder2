@@ -43,7 +43,7 @@ public class LinearTrajectoryBuilder {
     private static final Angle BACKWARDS = Angle.DEG_270;
 
     /**
-     * A list of all of the trajectories.
+     * A list of all the trajectories.
      */
     private final List<Trajectory> trajectories = new ArrayList<>();
 
@@ -142,7 +142,7 @@ public class LinearTrajectoryBuilder {
     }
 
     /**
-     * Move in a line. Epic, right? Of course it's epic.
+     * Move in a line. Epic, right? Of course, it's epic.
      *
      * @param distance how long the line should be.
      * @param angle    the direction the line should be drawn in.
@@ -295,9 +295,9 @@ public class LinearTrajectoryBuilder {
     }
 
     /**
-     * Get a list of all of the trajectories that have been generated.
+     * Get a list of all the trajectories that have been generated.
      *
-     * @return a list of all of the generated trajectories.
+     * @return a list of all the generated trajectories.
      */
     public List<Trajectory> getTrajectories() {
         return this.trajectories;

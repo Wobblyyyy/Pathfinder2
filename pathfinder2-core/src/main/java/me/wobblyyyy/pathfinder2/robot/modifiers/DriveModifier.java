@@ -62,6 +62,7 @@ public class DriveModifier {
      * @param invertY should Y be inverted?
      * @return this.
      */
+    @SuppressWarnings("UnusedReturnValue")
     public DriveModifier invertY(boolean invertY) {
         this.invertY = invertY;
         return this;

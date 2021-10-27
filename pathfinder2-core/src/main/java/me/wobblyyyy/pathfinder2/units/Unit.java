@@ -90,7 +90,7 @@ public enum Unit {
      * Convert a provided value of whatever unit you're using into inches.
      *
      * @param a the value to convert.
-     * @return the value converted to inches.
+     * @return the value converted into inches.
      */
     public double inches(double a) {
         return valueInInches * a;

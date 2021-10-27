@@ -75,7 +75,7 @@ public class FollowerExecutor {
         // completely empty. If it IS empty, ignore the if statement and
         // return false.
         if (followers.size() > 0) {
-            // Otherwise, get the current follower so we can do more stuff
+            // Otherwise, get the current follower, so we can do more stuff
             // with said follower.
             Follower current = followers.get(0);
 

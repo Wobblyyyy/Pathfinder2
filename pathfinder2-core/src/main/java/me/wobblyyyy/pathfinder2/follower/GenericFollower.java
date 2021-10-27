@@ -121,7 +121,7 @@ public class GenericFollower implements Follower {
         // speed differently.
         double speed = trajectory.speed(current);
 
-        // Determine the delta between the two angles so we can calculate
+        // Determine the delta between the two angles, so we can calculate
         // turn in just a moment.
         double angleDelta = Angle.minimumDelta(current.z(), nextMarker.z());
 

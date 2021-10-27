@@ -73,7 +73,7 @@ public class OdometryModifier {
     /**
      * Should the outputted X and Y values be swapped?
      *
-     * @param swapXY whether or not outputted X and Y values should be swapped.
+     * @param swapXY whether outputted X and Y values should be swapped.
      *               True means X now equals Y and Y now equals X. False means
      *               there's no modification.
      */

@@ -136,7 +136,7 @@ public class Stopwatch {
     /**
      * Get the total amount of time elapsed between the first timestamp and
      * the last timestamp. Note that this method doesn't have any checks to
-     * see whether or not there's more than a single timestamp - if you only
+     * see whether there's more than a single timestamp - if you only
      * have one timestamp (say you just called the start method and nothing
      * else) this method will then return 0.
      *

@@ -52,7 +52,7 @@ public class SimulatedDrive implements Drive {
      *                    meaning whatever the translation says should make
      *                    the robot act accordingly according to the robot's
      *                    position and the robot's current heading. I'm
-     *                    currently really tired and just about entirely unable
+     *                    currently exhausted and just about entirely unable
      *                    to type, so this isn't coherent, but guess what -
      */
     @Override

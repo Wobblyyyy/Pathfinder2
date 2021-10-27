@@ -234,7 +234,7 @@ public class Angle implements Comparable<Angle>, Serializable {
 
     /**
      * Private constructor - angles can only be created with static methods.
-     * We do this so we don't have to convert degrees to radians and so
+     * We do this, so we don't have to convert degrees to radians and so
      * on and so forth over and over again.
      *
      * @param rad radians value.
@@ -509,12 +509,12 @@ public class Angle implements Comparable<Angle>, Serializable {
             b_deg = b.fixedFlip().deg();
 
             // Recalculate the delta. Once again, we assume b is the target
-            // and a is the initial. This delta should always be below
+            // and an is the initial. This delta should always be below
             // 180 - if it's not, something's gone seriously wrong.
             delta = b_deg - a_deg;
         }
 
-        // And we're done! Would you look at that. Truly incredible, isn't it?
+        // And we're done! Would you look at that? Truly incredible, isn't it?
         return delta;
     }
 

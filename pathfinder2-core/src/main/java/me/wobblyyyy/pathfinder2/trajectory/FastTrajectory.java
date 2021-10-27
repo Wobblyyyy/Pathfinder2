@@ -128,7 +128,7 @@ public class FastTrajectory implements Trajectory {
 
     @Override
     public boolean isDone(PointXYZ current) {
-        // We take the absolute values of each of these measurements so we
+        // We take the absolute values of each of these measurements, so we
         // don't have to deal with any negative numbers - they're not cool.
         double elapsedX = Math.abs(PointXYZ.distanceX(start, current));
         double elapsedY = Math.abs(PointXYZ.distanceY(start, current));

@@ -43,7 +43,7 @@ public class GenericFollowerGenerator implements FollowerGenerator {
      * followers.
      *
      * @param turnController the generator's turn controller. This turn
-     *                       controller will be used for all of the generated
+     *                       controller will be used for all the generated
      *                       {@link GenericFollower}s.
      */
     public GenericFollowerGenerator(Controller turnController) {
