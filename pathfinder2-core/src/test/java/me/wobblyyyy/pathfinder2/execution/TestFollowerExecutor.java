@@ -42,7 +42,7 @@ public class TestFollowerExecutor {
         Controller controller = new GenericTurnController(0.1);
         GenericFollowerGenerator generator = new GenericFollowerGenerator(controller);
         Follower follower = generator.generate(robot, trajectory);
-        List<Follower> list = new ArrayList<>() {{
+        List<Follower> list = new ArrayList<Follower>() {{
             add(follower);
         }};
 

@@ -164,6 +164,14 @@ public class Scheduler {
      * {@link #disableAutomaticTicking()} method is called.
      *
      * <p>
+     * <em>THE USE OF THIS METHOD IS STRONGLY DISCOURAGED.</em> Using another
+     * thread in an application like this doesn't provide any benefits. Because
+     * Pathfinder shouldn't be performing incredibly intense calculations,
+     * there's nothing to worry about. Additionally, CPU-bound operations
+     * are not sped up by multithreading, they're just made to be non-blocking.
+     * </p>
+     *
+     * <p>
      * Automatic ticking is starting a new thread on which the {@link #tick()}
      * method will be called repeatedly. This means you can focus on other
      * parts of your robot in your main thread. It's worth nothing that I
@@ -184,7 +192,11 @@ public class Scheduler {
 
         Thread automaticTickingThread = new Thread(() -> {
             while (isAutomaticallyTicking() && shouldContinueTicking.get()) {
-                Thread.onSpinWait();
+                // originally pathfinder was written with jdk11
+                // but because FIRST doesn't like updating their tech
+                // we have to use jdk8 instead... so if this ever does get
+                // updated to jdk11 again, uncomment the next line:
+                // Thread.onSpinWait();
 
                 this.tick();
             }

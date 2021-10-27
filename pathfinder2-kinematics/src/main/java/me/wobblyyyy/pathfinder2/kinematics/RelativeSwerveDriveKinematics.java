@@ -187,16 +187,29 @@ public class RelativeSwerveDriveKinematics implements ForwardsKinematics<Relativ
     public RelativeSwerveState calculate(Translation translation) {
         Angle angle = translation.angle();
 
-        double frontRightTurn = frontRightKinematics.calculate(frontRightModuleAngle.get(), angle);
-        double frontLeftTurn = frontLeftKinematics.calculate(frontLeftModuleAngle.get(), angle);
-        double backRightTurn = backRightKinematics.calculate(backRightModuleAngle.get(), angle);
-        double backLeftTurn = backLeftKinematics.calculate(backLeftModuleAngle.get(), angle);
-
         double vz = translation.vz() * turnMultiplier;
-        double frontRightDrive = translation.magnitude() + vz;
-        double frontLeftDrive = translation.magnitude() - vz;
-        double backRightDrive = translation.magnitude() + vz;
-        double backLeftDrive = translation.magnitude() - vz;
+
+        double frontRightTurn = frontRightKinematics.calculate(
+                frontRightModuleAngle.get(),
+                angle.add(Angle.fromDeg(vz))
+        );
+        double frontLeftTurn = frontLeftKinematics.calculate(
+                frontLeftModuleAngle.get(),
+                angle.add(Angle.fromDeg(-vz))
+        );
+        double backRightTurn = backRightKinematics.calculate(
+                backRightModuleAngle.get(),
+                angle.add(Angle.fromDeg(vz))
+        );
+        double backLeftTurn = backLeftKinematics.calculate(
+                backLeftModuleAngle.get(),
+                angle.add(Angle.fromDeg(-vz))
+        );
+
+        double frontRightDrive = translation.magnitude();
+        double frontLeftDrive = translation.magnitude();
+        double backRightDrive = translation.magnitude();
+        double backLeftDrive = translation.magnitude();
 
         SwerveModuleState frontRightState = new SwerveModuleState(frontRightTurn, frontRightDrive);
         SwerveModuleState frontLeftState = new SwerveModuleState(frontLeftTurn, frontLeftDrive);
@@ -228,16 +241,29 @@ public class RelativeSwerveDriveKinematics implements ForwardsKinematics<Relativ
     public RelativeSwerveState calculateOptimized(Translation translation) {
         Angle angle = translation.angle();
 
-        double frontRightTurn = frontRightKinematics.calculate(frontRightModuleAngle.get(), angle);
-        double frontLeftTurn = frontLeftKinematics.calculate(frontLeftModuleAngle.get(), angle);
-        double backRightTurn = backRightKinematics.calculate(backRightModuleAngle.get(), angle);
-        double backLeftTurn = backLeftKinematics.calculate(backLeftModuleAngle.get(), angle);
-
         double vz = translation.vz() * turnMultiplier;
-        double frontRightDrive = translation.magnitude() + vz;
-        double frontLeftDrive = translation.magnitude() - vz;
-        double backRightDrive = translation.magnitude() + vz;
-        double backLeftDrive = translation.magnitude() - vz;
+
+        double frontRightTurn = frontRightKinematics.calculate(
+                frontRightModuleAngle.get(),
+                angle.add(Angle.fromDeg(vz))
+        );
+        double frontLeftTurn = frontLeftKinematics.calculate(
+                frontLeftModuleAngle.get(),
+                angle.add(Angle.fromDeg(-vz))
+        );
+        double backRightTurn = backRightKinematics.calculate(
+                backRightModuleAngle.get(),
+                angle.add(Angle.fromDeg(vz))
+        );
+        double backLeftTurn = backLeftKinematics.calculate(
+                backLeftModuleAngle.get(),
+                angle.add(Angle.fromDeg(-vz))
+        );
+
+        double frontRightDrive = translation.magnitude();
+        double frontLeftDrive = translation.magnitude();
+        double backRightDrive = translation.magnitude();
+        double backLeftDrive = translation.magnitude();
 
         SwerveModuleState frontRightState = SwerveModuleState.optimized(
                 angle,

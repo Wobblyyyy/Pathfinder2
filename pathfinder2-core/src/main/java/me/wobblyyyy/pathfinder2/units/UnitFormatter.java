@@ -17,7 +17,7 @@ import static me.wobblyyyy.pathfinder2.units.Unit.*;
 
 public class UnitFormatter {
     private static final Map<Unit, String> NAMES_SHORT =
-            new EnumMap<>(Unit.class) {{
+            new EnumMap<Unit, String>(Unit.class) {{
                 put(INCH, "in");
                 put(CM, "cm");
                 put(M, "m");
@@ -30,7 +30,7 @@ public class UnitFormatter {
             }};
 
     private static final Map<Unit, String> NAMES_SINGULAR =
-            new EnumMap<>(Unit.class) {{
+            new EnumMap<Unit, String>(Unit.class) {{
                 put(INCH, "inch");
                 put(CM, "centimeter");
                 put(M, "meter");
@@ -43,7 +43,7 @@ public class UnitFormatter {
             }};
 
     private static final Map<Unit, String> NAMES_PLURAL =
-            new EnumMap<>(Unit.class) {{
+            new EnumMap<Unit, String>(Unit.class) {{
                 put(INCH, "inches");
                 put(CM, "centimeters");
                 put(M, "meters");

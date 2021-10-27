@@ -35,7 +35,7 @@ public class TestLocalizedPathGen {
 
     @Test
     public void testFullyObstructedPath() {
-        List<Zone> zones = new ArrayList<>() {{
+        List<Zone> zones = new ArrayList<Zone>() {{
             add(new Zone(new Rectangle(0, 3, 10, 4)));
         }};
 
@@ -51,7 +51,7 @@ public class TestLocalizedPathGen {
 
     @Test
     public void testPartiallyObstructedPath() {
-        List<Zone> zones = new ArrayList<>() {{
+        List<Zone> zones = new ArrayList<Zone>() {{
             add(new Zone(new Rectangle(1, 3, 10, 4)));
         }};
 
@@ -71,7 +71,7 @@ public class TestLocalizedPathGen {
 
     @Test
     public void testHugePath() {
-        List<Zone> zones = new ArrayList<>() {{
+        List<Zone> zones = new ArrayList<Zone>() {{
             add(new Zone(new Rectangle(10, 30, 100, 40)));
         }};
 
@@ -102,7 +102,7 @@ public class TestLocalizedPathGen {
 
     @Test
     public void testObstructedNegativePathfinding() {
-        List<Zone> zones = new ArrayList<>() {{
+        List<Zone> zones = new ArrayList<Zone>() {{
             add(new Zone(new Rectangle(-3, -2, 8, 3)));
         }};
         LocalizedPathGen gen = new LocalizedPathGen(zones, 0.5, 0.5);
@@ -115,7 +115,7 @@ public class TestLocalizedPathGen {
     @Test
     @Disabled
     public void testStupidScaling() {
-        List<Zone> zones = new ArrayList<>() {{
+        List<Zone> zones = new ArrayList<Zone>() {{
             add(new Zone(new Rectangle(1, 3, 10, 4)));
         }};
 

@@ -42,7 +42,7 @@ public class TestExecutorManager {
         Controller controller = new GenericTurnController(0.1);
         GenericFollowerGenerator generator = new GenericFollowerGenerator(controller);
         Follower follower = generator.generate(robot, trajectory);
-        List<Follower> list = new ArrayList<>() {{
+        List<Follower> list = new ArrayList<Follower>() {{
             add(follower);
         }};
 
@@ -103,7 +103,7 @@ public class TestExecutorManager {
         Follower follower1 = generator.generate(robot, trajectory1);
         Follower follower2 = generator.generate(robot, trajectory2);
         Follower follower3 = generator.generate(robot, trajectory3);
-        List<Follower> followers = new ArrayList<>() {{
+        List<Follower> followers = new ArrayList<Follower>() {{
             add(follower1);
             add(follower2);
             add(follower3);

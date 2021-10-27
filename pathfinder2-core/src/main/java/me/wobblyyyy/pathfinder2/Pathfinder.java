@@ -291,7 +291,7 @@ public class Pathfinder {
         if (trajectory == null)
             throw new NullPointerException("Cannot follow a null trajectory!");
 
-        List<Trajectory> list = new ArrayList<>(1) {{
+        List<Trajectory> list = new ArrayList<Trajectory>(1) {{
             add(trajectory);
         }};
 
@@ -325,7 +325,7 @@ public class Pathfinder {
      * @param follower a single follower to follow.
      */
     public void follow(Follower follower) {
-        List<Follower> list = new ArrayList<>() {{
+        List<Follower> list = new ArrayList<Follower>() {{
             add(follower);
         }};
 

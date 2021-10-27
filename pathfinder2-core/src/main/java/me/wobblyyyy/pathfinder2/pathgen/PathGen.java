@@ -74,12 +74,12 @@ public class PathGen {
 
         this.path = new ArrayList<>();
 
-        if (start.equals(end)) return new ArrayList<>() {{
+        if (start.equals(end)) return new ArrayList<Node>() {{
             add(start);
             add(end);
         }};
 
-        this.openList = new ArrayList<>() {{
+        this.openList = new ArrayList<Node>() {{
             add(start);
         }};
         List<Node> closedList = new ArrayList<>();

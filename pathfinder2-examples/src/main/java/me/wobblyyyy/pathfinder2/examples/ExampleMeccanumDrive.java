@@ -84,7 +84,7 @@ public class ExampleMeccanumDrive {
     @SuppressWarnings("DuplicatedCode")
     public void autonomousDrive() {
         // go in a big rectangle
-        List<PointXYZ> path = new ArrayList<>() {{
+        List<PointXYZ> path = new ArrayList<PointXYZ>() {{
             add(new PointXYZ(0, 0, 0));
             add(new PointXYZ(10, 0, 0));
             add(new PointXYZ(10, 10, 0));
@@ -96,7 +96,8 @@ public class ExampleMeccanumDrive {
             pathfinder.goTo(point);
 
             while (pathfinder.isActive()) {
-                Thread.onSpinWait();
+                // commented out to support jdk8... :(
+                // Thread.onSpinWait();
 
                 pathfinder.tick();
             }

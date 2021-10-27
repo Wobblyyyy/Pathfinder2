@@ -41,7 +41,7 @@ public class TestPathOptimizer {
     public void testNonlinearOptimization() {
         Rectangle blockerShape = new Rectangle(5, 1, 6, 10);
         Zone blockerZone = new Zone(blockerShape);
-        List<Zone> zones = new ArrayList<>() {{
+        List<Zone> zones = new ArrayList<Zone>() {{
             add(blockerZone);
         }};
 

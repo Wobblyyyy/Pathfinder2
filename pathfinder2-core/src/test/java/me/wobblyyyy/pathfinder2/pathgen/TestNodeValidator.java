@@ -32,7 +32,7 @@ public class TestNodeValidator {
 
         Rectangle blocker = new Rectangle(5, 0, 10, 10);
         Zone blockerZone = new Zone(blocker);
-        List<Zone> zones = new ArrayList<>(1) {{
+        List<Zone> zones = new ArrayList<Zone>(1) {{
             add(blockerZone);
         }};
 

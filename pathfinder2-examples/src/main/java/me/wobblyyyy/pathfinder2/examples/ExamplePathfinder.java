@@ -86,7 +86,8 @@ public class ExamplePathfinder {
         pathfinder.goTo(target);
 
         while (pathfinder.isActive()) {
-            Thread.onSpinWait();
+            // commented out to support jdk8... :(
+            // Thread.onSpinWait();
 
             pathfinder.tick();
         }
@@ -100,7 +101,7 @@ public class ExamplePathfinder {
      * has to do, but wouldn't be so great for the teleop periods.
      */
     public void goToSomePoints() {
-        List<PointXYZ> points = new ArrayList<>() {{
+        List<PointXYZ> points = new ArrayList<PointXYZ>() {{
             add(new PointXYZ( 0,  0, 0));
             add(new PointXYZ(10,  0, 0));
             add(new PointXYZ(10, 10, 0));
