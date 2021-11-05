@@ -176,3 +176,39 @@ of the `Odometry` interface: `me.wobblyyyy.pathfinder2.robot.AbstractOdometry`.
 
 The `Odometry` interface is incredibly simple - it should report the robot's
 position on the field. That's it. This position should be absolute.
+
+### Trajectories 
+Trajectories are the basis for Pathfinder's movement. Well, technically
+speaking, `Follower`s actually control your robot's movement, but instances
+of the `Trajectory` interface dictate how your robot moves. 
+
+#### Linear trajectory
+The most simple kind of trajectory is the [linear trajectory](https://github.com/Wobblyyyy/Pathfinder2/blob/master/pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/trajectory/LinearTrajectory.java).
+It can be (and is) described as follows:
+
+> The most simple type of trajectory. A linear trajectory does nothing other
+> than go to a point at a linear speed. Such, there's not much you can
+> customize here. But it's simple, and it works. Hopefully, that is.
+
+##### Creating a linear trajectory
+The `LinearTrajectory` class has a single constructor, which accepts the
+following parameters:
+
+- Target point - the target point (a `PointXYZ`) is the trajectory's target.
+  In other words, it's where you want the robot to go.
+- Speed - the speed at which the robot should move. This value must be
+  greater than 0 and less than or equal to 1. A speed value of 1 will make
+  the robot move as fast as it can, and a speed value of 0.1 will be... pretty
+  slow. 
+- Tolerance - the tolerance Pathfinder uses in determining if it's finished
+  following the trajectory. This value should be determined experimentally.
+  Higher tolerance values make your robot's movement less accurate, while
+  lower tolerance values increase accuracy, but can sometimes cause issues
+  with your robot circling around a point.
+- Angle tolerance - just like tolerance, but for the robot's heading. This
+  should be an `Angle`.
+
+#### Fast trajectory 
+A fast trajectory is a linear trajectory, but it's less precise. The purpose
+of a fast trajectory is documented in the file - check it out right
+[here](https://github.com/Wobblyyyy/Pathfinder2/blob/master/pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/trajectory/FastTrajectory.java).
