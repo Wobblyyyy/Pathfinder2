@@ -28,6 +28,36 @@ public class EasyMotor {
     }
 
     public static Motor buildMotor(Consumer<Double> setPower,
+                                   Supplier<Double> getPower,
+                                   boolean invertSetPower) {
+        return buildMotor(
+                setPower,
+                getPower,
+                invertSetPower,
+                invertSetPower
+        );
+    }
+
+    public static Motor buildMotor(Consumer<Double> setPower,
+                                   Supplier<Double> getPower,
+                                   boolean invertSetPower,
+                                   boolean invertGetPower) {
+        return new Motor() {
+            @Override
+            public double getPower() {
+                double rawPower = getPower.get();
+
+                return invertGetPower ? rawPower * -1 : rawPower;
+            }
+
+            @Override
+            public void setPower(double power) {
+                setPower.accept(invertSetPower ? power * -1 : power);
+            }
+        };
+    }
+
+    public static Motor buildMotor(Consumer<Double> setPower,
                                    Supplier<Double> getPower) {
         return new AbstractMotor(
                 setPower,

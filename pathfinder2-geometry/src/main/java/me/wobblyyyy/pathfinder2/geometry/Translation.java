@@ -225,4 +225,14 @@ public class Translation implements Serializable {
     public Translation toRelative(Angle heading) {
         return absoluteToRelative(this, heading);
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "(vx: %s, vy: %s, vz: %s)",
+                vx,
+                vy,
+                vz
+        );
+    }
 }
