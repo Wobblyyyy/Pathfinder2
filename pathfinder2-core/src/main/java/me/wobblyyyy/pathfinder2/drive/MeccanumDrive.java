@@ -176,9 +176,9 @@ public class MeccanumDrive implements Drive {
      */
     @Override
     public void setTranslation(Translation translation) {
-        this.translation = translation;
+        this.translation = getModifier().apply(translation);
 
-        MeccanumState state = kinematics.calculate(translation);
+        MeccanumState state = kinematics.calculate(this.translation);
 
         fr.setPower(state.fr());
         fl.setPower(state.fl());
