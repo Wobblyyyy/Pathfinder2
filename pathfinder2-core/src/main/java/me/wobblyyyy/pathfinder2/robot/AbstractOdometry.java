@@ -45,7 +45,7 @@ public abstract class AbstractOdometry implements Odometry {
             );
         }
 
-        return modifier.apply(rawPosition.add(offset));
+        return modifier.apply(rawPosition).add(offset);
     }
 
     @Override
