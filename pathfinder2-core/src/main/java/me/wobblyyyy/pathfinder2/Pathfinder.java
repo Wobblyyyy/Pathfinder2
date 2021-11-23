@@ -24,11 +24,13 @@ import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.robot.Robot;
 import me.wobblyyyy.pathfinder2.time.Stopwatch;
+import me.wobblyyyy.pathfinder2.time.Time;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * The highest-level interface used for interacting with {@code Pathfinder}.
@@ -191,7 +193,7 @@ public class Pathfinder {
      *              trajectories when either of the two "goTo" methods
      *              are called.
      */
-    public void setSpeed(double speed) {
+    public Pathfinder setSpeed(double speed) {
         InvalidSpeedException.throwIfInvalid(
                 "Attempted to set speed to an invalid value - speed " +
                         "values must be within the range of 0.0 to 1.0.",
@@ -199,6 +201,8 @@ public class Pathfinder {
         );
 
         this.speed = speed;
+
+        return this;
     }
 
     /**
@@ -227,7 +231,7 @@ public class Pathfinder {
      * @param tolerance the tolerance Pathfinder will use in generating
      *                  new linear trajectories.
      */
-    public void setTolerance(double tolerance) {
+    public Pathfinder setTolerance(double tolerance) {
         InvalidToleranceException.throwIfInvalid(
                 "Attempted to set an invalid tolerance - all " +
                         "tolerance values must be above 0.",
@@ -235,6 +239,8 @@ public class Pathfinder {
         );
 
         this.tolerance = tolerance;
+
+        return this;
     }
 
     /**
@@ -263,7 +269,7 @@ public class Pathfinder {
      * @param angleTolerance the tolerance Pathfinder should use in generating
      *                       new linear trajectories.
      */
-    public void setAngleTolerance(Angle angleTolerance) {
+    public Pathfinder setAngleTolerance(Angle angleTolerance) {
         InvalidToleranceException.throwIfInvalid(
                 "Attempted to set an invalid angle tolerance - all " +
                         "tolerance values must be above 0.",
@@ -271,6 +277,8 @@ public class Pathfinder {
         );
 
         this.angleTolerance = angleTolerance;
+
+        return this;
     }
 
     /**
@@ -278,8 +286,47 @@ public class Pathfinder {
      * to check to see what Pathfinder should be doing right now, and based
      * on that, move your robot.
      */
-    public void tick() {
+    public Pathfinder tick() {
         this.getExecutorManager().tick();
+
+        return this;
+    }
+
+    /**
+     * Tick Pathfinder until it finishes whatever path is currently being
+     * executed.
+     */
+    public Pathfinder tickUntil() {
+        while (isActive()) {
+            tick();
+        }
+
+        return this;
+    }
+
+    public Pathfinder tickUntil(double timeoutMs) {
+        double start = Time.ms();
+
+        while (isActive()) {
+            double current = Time.ms();
+            double elapsed = current - start;
+
+            if (elapsed - current >= timeoutMs) {
+                break;
+            }
+
+            tick();
+        }
+
+        return this;
+    }
+
+    public Pathfinder tickUntil(Supplier<Boolean> shouldContinueRunning) {
+        while (isActive() && shouldContinueRunning.get()) {
+            tick();
+        }
+
+        return this;
     }
 
     /**
@@ -287,7 +334,7 @@ public class Pathfinder {
      *
      * @param trajectory the trajectory to follow.
      */
-    public void followTrajectory(Trajectory trajectory) {
+    public Pathfinder followTrajectory(Trajectory trajectory) {
         if (trajectory == null)
             throw new NullPointerException("Cannot follow a null trajectory!");
 
@@ -296,6 +343,8 @@ public class Pathfinder {
         }};
 
         followTrajectories(list);
+
+        return this;
     }
 
     /**
@@ -303,7 +352,7 @@ public class Pathfinder {
      *
      * @param trajectories a list of trajectories to follow.
      */
-    public void followTrajectories(List<Trajectory> trajectories) {
+    public Pathfinder followTrajectories(List<Trajectory> trajectories) {
         if (trajectories == null)
             throw new NullPointerException("Cannot follow null trajectories!");
 
@@ -317,6 +366,8 @@ public class Pathfinder {
         }
 
         follow(followers);
+
+        return this;
     }
 
     /**
@@ -324,12 +375,14 @@ public class Pathfinder {
      *
      * @param follower a single follower to follow.
      */
-    public void follow(Follower follower) {
+    public Pathfinder follow(Follower follower) {
         List<Follower> list = new ArrayList<Follower>() {{
             add(follower);
         }};
 
         follow(list);
+
+        return this;
     }
 
     /**
@@ -337,8 +390,10 @@ public class Pathfinder {
      *
      * @param followers a list of followers.
      */
-    public void follow(List<Follower> followers) {
+    public Pathfinder follow(List<Follower> followers) {
         manager.addExecutor(followers);
+
+        return this;
     }
 
     /**
@@ -349,7 +404,7 @@ public class Pathfinder {
      * @see #setTolerance(double)
      * @see #setAngleTolerance(Angle)
      */
-    public void goTo(PointXY point) {
+    public Pathfinder goTo(PointXY point) {
         NullPointException.throwIfInvalid(
                 "Attempted to navigate to a null point.",
                 point
@@ -360,6 +415,8 @@ public class Pathfinder {
                         getOdometry().getZ()
                 )
         );
+
+        return this;
     }
 
     /**
@@ -370,7 +427,7 @@ public class Pathfinder {
      * @see #setTolerance(double)
      * @see #setAngleTolerance(Angle)
      */
-    public void goTo(PointXYZ point) {
+    public Pathfinder goTo(PointXYZ point) {
         NullPointException.throwIfInvalid(
                 "Attempted to navigate to a null point.",
                 point
@@ -382,6 +439,8 @@ public class Pathfinder {
                 tolerance,
                 angleTolerance
         ));
+
+        return this;
     }
 
     /**
@@ -416,8 +475,10 @@ public class Pathfinder {
     /**
      * Clear the {@link ExecutorManager}, resetting just about everything.
      */
-    public void clear() {
+    public Pathfinder clear() {
         manager.clearExecutors();
+
+        return this;
     }
 
     /**
@@ -458,7 +519,9 @@ public class Pathfinder {
      *                    should be RELATIVE, meaning forwards is forwards for
      *                    the robot, not forwards relative to you.
      */
-    public void setTranslation(Translation translation) {
+    public Pathfinder setTranslation(Translation translation) {
         getDrive().setTranslation(translation);
+
+        return this;
     }
 }
