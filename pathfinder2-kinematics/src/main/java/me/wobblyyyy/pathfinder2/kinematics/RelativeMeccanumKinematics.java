@@ -43,6 +43,11 @@ public class RelativeMeccanumKinematics implements ForwardsKinematics<MeccanumSt
     private final double maxMagnitude;
 
     /**
+     * The kinematic's turn magnitude.
+     */
+    private final double turnMagnitude;
+
+    /**
      * The kinematic's angle offset.
      */
     private final Angle angleOffset;
@@ -57,8 +62,29 @@ public class RelativeMeccanumKinematics implements ForwardsKinematics<MeccanumSt
     public RelativeMeccanumKinematics(double minMagnitude,
                                       double maxMagnitude,
                                       Angle angleOffset) {
+        this(
+                minMagnitude,
+                maxMagnitude,
+                1.0,
+                angleOffset
+        );
+    }
+
+    /**
+     * Create a new instance of the {@code RelativeMeccanumKinematics} class.
+     *
+     * @param minMagnitude the minimum magnitude.
+     * @param maxMagnitude the maximum magnitude.
+     * @param turnMagnitude the turn magnitude.
+     * @param angleOffset  the angle offset for the kinematics.
+     */
+    public RelativeMeccanumKinematics(double minMagnitude,
+                                      double maxMagnitude,
+                                      double turnMagnitude,
+                                      Angle angleOffset) {
         this.minMagnitude = minMagnitude;
         this.maxMagnitude = maxMagnitude;
+        this.turnMagnitude = turnMagnitude;
         this.angleOffset = angleOffset;
     }
 
@@ -88,7 +114,10 @@ public class RelativeMeccanumKinematics implements ForwardsKinematics<MeccanumSt
                 translation.vx()
         ).add(angleOffset);
         double magnitude = Math.max(Math.min(
-                Math.hypot(translation.vx(), translation.vy()),
+                Math.hypot(
+                        translation.vx(),
+                        translation.vy()
+                ) + (turn * turnMagnitude),
                 maxMagnitude
         ), minMagnitude);
 
