@@ -164,11 +164,11 @@ public class OdometryModifier {
         }
 
         if (reflectX) {
-            point.withX(reflect(point.x(), xReflectionAxis));
+            point = point.withX(reflect(point.x(), xReflectionAxis));
         }
 
         if (reflectY) {
-            point.withY(reflect(point.y(), yReflectionAxis));
+            point = point.withY(reflect(point.y(), yReflectionAxis));
         }
 
         PointXYZ offset = new PointXYZ(
