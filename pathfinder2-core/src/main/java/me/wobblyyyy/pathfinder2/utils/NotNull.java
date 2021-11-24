@@ -35,8 +35,10 @@ public class NotNull {
         return !isAnythingNull(objects);
     }
 
-    public static boolean throwExceptionIfNull(String message,
-                                               Object... objects) {
-        throw new NullPointerException(message);
+    public static void throwExceptionIfNull(String message,
+                                            Object... objects) {
+        if (isAnythingNull(objects)) {
+            throw new NullPointerException(message);
+        }
     }
 }
