@@ -13,6 +13,8 @@ package me.wobblyyyy.pathfinder2.robot.modifiers;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
+import java.util.function.Function;
+
 /**
  * Easy-to-use builder class for creating odometry modifiers.
  *
@@ -76,9 +78,12 @@ public class OdometryModifier {
      * @param swapXY whether outputted X and Y values should be swapped.
      *               True means X now equals Y and Y now equals X. False means
      *               there's no modification.
+     * @return {@code this}, used for method chaining.
      */
-    public void swapXY(boolean swapXY) {
+    public OdometryModifier swapXY(boolean swapXY) {
         this.swapXY = swapXY;
+
+        return this;
     }
 
     /**
@@ -91,11 +96,14 @@ public class OdometryModifier {
      *                 you'd like to "invert" and X value (positive now equals
      *                 negative, negative now equals positive) you should
      *                 use an axis of 0.0.
+     * @return {@code this}, used for method chaining.
      */
-    public void reflectX(boolean reflectX,
-                         double axis) {
+    public OdometryModifier reflectX(boolean reflectX,
+                                     double axis) {
         this.reflectX = reflectX;
         this.xReflectionAxis = axis;
+
+        return this;
     }
 
     /**
@@ -108,38 +116,50 @@ public class OdometryModifier {
      *                 you'd like to "invert" and Y value (positive now equals
      *                 negative, negative now equals positive) you should
      *                 use an axis of 0.0.
+     * @return {@code this}, used for method chaining.
      */
-    public void reflectY(boolean reflectY,
-                         double axis) {
+    public OdometryModifier reflectY(boolean reflectY,
+                                     double axis) {
         this.reflectY = reflectY;
         this.yReflectionAxis = axis;
+
+        return this;
     }
 
     /**
      * Set the offset applied to outputted X values.
      *
      * @param xOffset X offset.
+     * @return {@code this}, used for method chaining.
      */
-    public void offsetX(double xOffset) {
+    public OdometryModifier offsetX(double xOffset) {
         this.xOffset = xOffset;
+
+        return this;
     }
 
     /**
      * Set the offset applied to outputted Y values.
      *
      * @param yOffset Y offset.
+     * @return {@code this}, used for method chaining.
      */
-    public void offsetY(double yOffset) {
+    public OdometryModifier offsetY(double yOffset) {
         this.yOffset = yOffset;
+
+        return this;
     }
 
     /**
      * Set the offset applied to outputted Z values.
      *
      * @param zOffset Z offset.
+     * @return {@code this}, used for method chaining.
      */
-    public void offsetZ(Angle zOffset) {
+    public OdometryModifier offsetZ(Angle zOffset) {
         this.zOffset = zOffset;
+
+        return this;
     }
 
     private double reflect(double value,
@@ -178,5 +198,9 @@ public class OdometryModifier {
         );
 
         return point.add(offset);
+    }
+
+    public Function<PointXYZ, PointXYZ> getModifier() {
+        return this::modify;
     }
 }

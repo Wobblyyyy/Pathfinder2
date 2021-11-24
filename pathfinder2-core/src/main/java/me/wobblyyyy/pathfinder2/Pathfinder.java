@@ -27,9 +27,12 @@ import me.wobblyyyy.pathfinder2.time.Stopwatch;
 import me.wobblyyyy.pathfinder2.time.Time;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
+import me.wobblyyyy.pathfinder2.utils.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -53,8 +56,13 @@ import java.util.function.Supplier;
  * quite precisely and quite easily.
  * </p>
  *
+ * <p>
+ * At any given point, you should only be using one of these objects. I have
+ * absolutely no idea why you would want to use more than one of them, but
+ * I'd put this here anyways.
+ * </p>
+ *
  * @author Colin Robertson
- * @since 0.0.0
  * @see #goTo(PointXY)
  * @see #goTo(PointXYZ)
  * @see #setTranslation(Translation)
@@ -62,7 +70,11 @@ import java.util.function.Supplier;
  * @see #followTrajectories(List)
  * @see #follow(Follower)
  * @see #follow(List)
+ * @see #tickUntil(double, Supplier)
+ * @see #andThen(Consumer, double, Supplier)
+ * @since 0.0.0
  */
+@SuppressWarnings("UnusedReturnValue")
 public class Pathfinder {
     /**
      * The {@code Robot} (made up of {@code Drive} and {@code Odometry}) that
@@ -119,11 +131,11 @@ public class Pathfinder {
      */
     public Pathfinder(Robot robot,
                       FollowerGenerator generator) {
-        if (robot == null) 
+        if (robot == null)
             throw new NullPointerException("Robot cannot be null!");
         if (generator == null)
             throw new NullPointerException("Follower generator cannot be null!");
-        
+
         this.robot = robot;
         this.generator = generator;
 
@@ -192,6 +204,7 @@ public class Pathfinder {
      * @param speed the speed at which Pathfinder should generate new linear
      *              trajectories when either of the two "goTo" methods
      *              are called.
+     * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder setSpeed(double speed) {
         InvalidSpeedException.throwIfInvalid(
@@ -230,6 +243,7 @@ public class Pathfinder {
      *
      * @param tolerance the tolerance Pathfinder will use in generating
      *                  new linear trajectories.
+     * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder setTolerance(double tolerance) {
         InvalidToleranceException.throwIfInvalid(
@@ -268,6 +282,7 @@ public class Pathfinder {
      *
      * @param angleTolerance the tolerance Pathfinder should use in generating
      *                       new linear trajectories.
+     * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder setAngleTolerance(Angle angleTolerance) {
         InvalidToleranceException.throwIfInvalid(
@@ -285,6 +300,8 @@ public class Pathfinder {
      * "Tick" Pathfinder once. This will tell Pathfinder's execution manager
      * to check to see what Pathfinder should be doing right now, and based
      * on that, move your robot.
+     *
+     * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder tick() {
         this.getExecutorManager().tick();
@@ -295,19 +312,70 @@ public class Pathfinder {
     /**
      * Tick Pathfinder until it finishes whatever path is currently being
      * executed.
+     *
+     * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder tickUntil() {
-        while (isActive()) {
-            tick();
-        }
-
-        return this;
+        return tickUntil(
+                Double.MAX_VALUE,
+                () -> true
+        );
     }
 
+    /**
+     * Tick Pathfinder until either the path it was following is finished or
+     * the timeout time (in milliseconds) is reached.
+     *
+     * @param timeoutMs             how long, in milliseconds, Pathfinder will
+     *                              continue ticking (as a maximum). If the
+     *                              path finishes before this time is reached,
+     *                              it'll stop as normal.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
     public Pathfinder tickUntil(double timeoutMs) {
+        return tickUntil(
+                timeoutMs,
+                () -> true
+        );
+    }
+
+    /**
+     * Tick Pathfinder while the provided supplier returns true.
+     *
+     * @param shouldContinueRunning a supplier, indicating whether Pathfinder
+     *                              should still continue running.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder tickUntil(Supplier<Boolean> shouldContinueRunning) {
+        return tickUntil(
+                Double.MAX_VALUE,
+                shouldContinueRunning
+        );
+    }
+
+    /**
+     * Tick Pathfinder while the provided supplier returns true and the
+     * elapsed time is less than the timeout time.
+     *
+     * @param timeoutMs             how long, in milliseconds, Pathfinder will
+     *                              continue ticking (as a maximum). If the
+     *                              path finishes before this time is reached,
+     *                              it'll stop as normal.
+     * @param shouldContinueRunning a supplier, indicating whether Pathfinder
+     *                              should still continue running.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder tickUntil(double timeoutMs,
+                                Supplier<Boolean> shouldContinueRunning) {
+        NotNull.throwExceptionIfNull(
+                "A null value was passed to the tickUntil method! " +
+                        "Please make sure you don't pass any null values.",
+                shouldContinueRunning
+        );
+
         double start = Time.ms();
 
-        while (isActive()) {
+        while (isActive() && shouldContinueRunning.get()) {
             double current = Time.ms();
             double elapsed = current - start;
 
@@ -321,10 +389,176 @@ public class Pathfinder {
         return this;
     }
 
-    public Pathfinder tickUntil(Supplier<Boolean> shouldContinueRunning) {
-        while (isActive() && shouldContinueRunning.get()) {
+    /**
+     * Tick Pathfinder while the elapsed time is less than the timeout (in
+     * milliseconds) and the {@link Predicate} (accepting {@code this} as
+     * a parameter) returns true.
+     *
+     * @param timeoutMs             how long, in milliseconds, Pathfinder will
+     *                              continue ticking (as a maximum). If the
+     *                              path finishes before this time is reached,
+     *                              it'll stop as normal.
+     * @param isValid               a predicate, accepting {@code this}
+     *                              instance of Pathfinder as a parameter.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder tickUntil(double timeoutMs,
+                                Predicate<Pathfinder> isValid) {
+        NotNull.throwExceptionIfNull(
+                "A null value was passed to the tickUntil method! " +
+                        "Please make sure you don't pass any null values.",
+                isValid
+        );
+
+        double start = Time.ms();
+
+        while (isActive() && isValid.test(this)) {
+            double current = Time.ms();
+            double elapsed = current - start;
+
+            if (elapsed - current >= timeoutMs) {
+                break;
+            }
+
             tick();
         }
+
+        return this;
+    }
+
+    /**
+     * Tick Pathfinder while the elapsed time is less than the timeout (in
+     * milliseconds), the {@link Predicate} (accepting {@code this} as
+     * a parameter) returns true, and the provided {@link Supplier} also
+     * returns true.
+     *
+     * @param timeoutMs             how long, in milliseconds, Pathfinder will
+     *                              continue ticking (as a maximum). If the
+     *                              path finishes before this time is reached,
+     *                              it'll stop as normal.
+     * @param shouldContinueRunning a supplier, indicating whether Pathfinder
+     *                              should still continue running.
+     * @param isValid               a predicate, accepting {@code this}
+     *                              instance of Pathfinder as a parameter.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder tickUntil(double timeoutMs,
+                                Supplier<Boolean> shouldContinueRunning,
+                                Predicate<Pathfinder> isValid) {
+        NotNull.throwExceptionIfNull(
+                "A null value was passed to the tickUntil method! " +
+                        "Please make sure you don't pass any null values.",
+                shouldContinueRunning,
+                isValid
+        );
+
+        double start = Time.ms();
+
+        while (
+                isActive() &&
+                        shouldContinueRunning.get() &&
+                        isValid.test(this)
+        ) {
+            double current = Time.ms();
+            double elapsed = current - start;
+
+            if (elapsed - current >= timeoutMs) {
+                break;
+            }
+
+            tick();
+        }
+
+        return this;
+    }
+
+    /**
+     * Use the {@code tickUntil} method to tick Pathfinder until the path
+     * it's executing is finished.
+     *
+     * @param onCompletion a callback to be executed after Pathfinder finishes
+     *                     whatever it's doing. This consumer accepts the
+     *                     instance of Pathfinder that this method was
+     *                     called from.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder andThen(Consumer<Pathfinder> onCompletion) {
+        return andThen(
+                onCompletion,
+                Double.MAX_VALUE,
+                () -> true
+        );
+    }
+
+    /**
+     * Use the {@code tickUntil} method to tick Pathfinder until the path
+     * it's executing is finished (or a timeout is reached).
+     *
+     * @param onCompletion a callback to be executed after Pathfinder finishes
+     *                     whatever it's doing. This consumer accepts the
+     *                     instance of Pathfinder that this method was
+     *                     called from.
+     * @param timeoutMs    how long, in milliseconds, Pathfinder will continue
+     *                     ticking (as a maximum). If the path finishes before
+     *                     this time is reached, it'll stop as normal.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder andThen(Consumer<Pathfinder> onCompletion,
+                              double timeoutMs) {
+        return andThen(
+                onCompletion,
+                timeoutMs,
+                () -> true
+        );
+    }
+
+    /**
+     * Use the {@code tickUntil} method to tick Pathfinder until the path
+     * it's executing is finished (or the {@code shouldContinueRunning}
+     * {@link Supplier} returns false).
+     *
+     * @param onCompletion          a callback to be executed after Pathfinder finishes
+     *                              whatever it's doing. This consumer accepts the
+     *                              instance of Pathfinder that this method was
+     *                              called from.
+     * @param shouldContinueRunning a supplier, indicating whether Pathfinder
+     *                              should still continue running.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder andThen(Consumer<Pathfinder> onCompletion,
+                              Supplier<Boolean> shouldContinueRunning) {
+        return andThen(
+                onCompletion,
+                Double.MAX_VALUE,
+                shouldContinueRunning
+        );
+    }
+
+    /**
+     * Use the {@code tickUntil} method to tick Pathfinder until the path
+     * it's executing is finished (or a timeout is reached, or the
+     * {@code shouldContinueRunning} {@link Supplier} returns false).
+     *
+     * @param onCompletion          a callback to be executed after Pathfinder finishes
+     *                              whatever it's doing. This consumer accepts the
+     *                              instance of Pathfinder that this method was
+     *                              called from.
+     * @param timeoutMs             how long, in milliseconds, Pathfinder will continue
+     *                              ticking (as a maximum). If the path finishes before
+     *                              this time is reached, it'll stop as normal.
+     * @param shouldContinueRunning a supplier, indicating whether Pathfinder
+     *                              should still continue running.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder andThen(Consumer<Pathfinder> onCompletion,
+                              double timeoutMs,
+                              Supplier<Boolean> shouldContinueRunning) {
+        tickUntil(
+                timeoutMs,
+                shouldContinueRunning
+        );
+
+        onCompletion.accept(this);
 
         return this;
     }
@@ -333,6 +567,7 @@ public class Pathfinder {
      * Follow a single trajectory.
      *
      * @param trajectory the trajectory to follow.
+     * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder followTrajectory(Trajectory trajectory) {
         if (trajectory == null)
@@ -351,6 +586,7 @@ public class Pathfinder {
      * Follow multiple trajectories.
      *
      * @param trajectories a list of trajectories to follow.
+     * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder followTrajectories(List<Trajectory> trajectories) {
         if (trajectories == null)
@@ -374,13 +610,10 @@ public class Pathfinder {
      * Follow a single follower.
      *
      * @param follower a single follower to follow.
+     * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder follow(Follower follower) {
-        List<Follower> list = new ArrayList<Follower>() {{
-            add(follower);
-        }};
-
-        follow(list);
+        manager.addExecutor(follower);
 
         return this;
     }
@@ -389,6 +622,7 @@ public class Pathfinder {
      * Follow a list of followers.
      *
      * @param followers a list of followers.
+     * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder follow(List<Follower> followers) {
         manager.addExecutor(followers);
@@ -400,6 +634,7 @@ public class Pathfinder {
      * Go to a specific point. This method will create a new linear trajectory.
      *
      * @param point the target point to go to.
+     * @return this instance of Pathfinder, used for method chaining.
      * @see #setSpeed(double)
      * @see #setTolerance(double)
      * @see #setAngleTolerance(Angle)
@@ -423,6 +658,7 @@ public class Pathfinder {
      * Go to a specific point. This method will create a new linear trajectory.
      *
      * @param point the target point to go to.
+     * @return this instance of Pathfinder, used for method chaining.
      * @see #setSpeed(double)
      * @see #setTolerance(double)
      * @see #setAngleTolerance(Angle)
@@ -474,6 +710,8 @@ public class Pathfinder {
 
     /**
      * Clear the {@link ExecutorManager}, resetting just about everything.
+     *
+     * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder clear() {
         manager.clearExecutors();
@@ -518,10 +756,31 @@ public class Pathfinder {
      * @param translation the translation to set to the robot. This translation
      *                    should be RELATIVE, meaning forwards is forwards for
      *                    the robot, not forwards relative to you.
+     * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder setTranslation(Translation translation) {
         getDrive().setTranslation(translation);
 
         return this;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return false;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        throw new CloneNotSupportedException();
+    }
+
+    @Override
+    public String toString() {
+        return getPosition().toString();
     }
 }

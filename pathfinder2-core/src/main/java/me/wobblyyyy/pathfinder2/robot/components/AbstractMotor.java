@@ -62,6 +62,16 @@ public class AbstractMotor implements Motor {
     private final Supplier<Double> getPower;
 
     /**
+     * Should power values be inverted when being set?
+     */
+    private final boolean isSetInverted;
+
+    /**
+     * Should power values be inverted when being retrieved?
+     */
+    private final boolean isGetInverted;
+
+    /**
      * The motor's minimum power.
      */
     private double minPower = -1.0;
@@ -111,8 +121,66 @@ public class AbstractMotor implements Motor {
      */
     public AbstractMotor(Consumer<Double> setPower,
                          Supplier<Double> getPower) {
+        this(
+                setPower,
+                getPower,
+                false,
+                false
+        );
+    }
+
+    /**
+     * Create a new {@code AbstractMotor} using a {@link Supplier} and a
+     * {@link Consumer}.
+     *
+     * @param setPower a {@code Consumer} that accepts a double value. This
+     *                 consumer should perform some set of actions that
+     *                 actually sets power to the motor and makes it spin.
+     * @param getPower a {@code Supplier} that returns the motor's current
+     *                 power. This method typically calls a provided method
+     *                 that queries the power from the physical motor. If such
+     *                 a method is not provided, you should go about making
+     *                 it function in some other way. Sorry!
+     * @param isInverted if this is true, all {@code setPower} and
+     *                   {@code getPower} operations will multiply any
+     *                   inputted/outputted power values by -1.
+     */
+    public AbstractMotor(Consumer<Double> setPower,
+                         Supplier<Double> getPower,
+                         boolean isInverted) {
+        this(
+                setPower,
+                getPower,
+                isInverted,
+                isInverted
+        );
+    }
+
+    /**
+     * Create a new {@code AbstractMotor} using a {@link Supplier} and a
+     * {@link Consumer}.
+     *
+     * @param setPower a {@code Consumer} that accepts a double value. This
+     *                 consumer should perform some set of actions that
+     *                 actually sets power to the motor and makes it spin.
+     * @param getPower a {@code Supplier} that returns the motor's current
+     *                 power. This method typically calls a provided method
+     *                 that queries the power from the physical motor. If such
+     *                 a method is not provided, you should go about making
+     *                 it function in some other way. Sorry!
+     * @param isSetInverted if this is true, all {@code setPower} operations
+     *                      will multiply the inputted power by -1.
+     * @param isGetInverted if this is true, all {@code getPower} operations
+     *                      will multiply the outputted power by -1.
+     */
+    public AbstractMotor(Consumer<Double> setPower,
+                         Supplier<Double> getPower,
+                         boolean isSetInverted,
+                         boolean isGetInverted) {
         this.setPower = setPower;
         this.getPower = getPower;
+        this.isSetInverted = isSetInverted;
+        this.isGetInverted = isGetInverted;
     }
 
     /**
@@ -128,9 +196,12 @@ public class AbstractMotor implements Motor {
      * Set the motor's minimum power value.
      *
      * @param minPower the motor's minimum power value.
+     * @return {@code this}, used for method chaining.
      */
-    public void setMinPower(double minPower) {
+    public AbstractMotor setMinPower(double minPower) {
         this.minPower = minPower;
+
+        return this;
     }
 
     /**
@@ -146,9 +217,12 @@ public class AbstractMotor implements Motor {
      * Set the motor's maximum power value.
      *
      * @param maxPower the motor's maximum power value.
+     * @return {@code this}, used for method chaining.
      */
-    public void setMaxPower(double maxPower) {
+    public AbstractMotor setMaxPower(double maxPower) {
         this.maxPower = maxPower;
+
+        return this;
     }
 
     /**
@@ -166,9 +240,12 @@ public class AbstractMotor implements Motor {
      *
      * @param isLazy should lazy mode be enabled? If true, lazy mode will be
      *               enabled. If false, it will not.
+     * @return {@code this}, used for method chaining.
      */
-    public void setLazy(boolean isLazy) {
+    public AbstractMotor setLazy(boolean isLazy) {
         this.isLazy = isLazy;
+
+        return this;
     }
 
     /**
@@ -188,9 +265,12 @@ public class AbstractMotor implements Motor {
      *
      * @param maxElapsedMs the maximum amount of milliseconds that can be
      *                     elapsed before power is set to the motor.
+     * @return {@code this}, used for method chaining.
      */
-    public void setMaxElapsedMs(double maxElapsedMs) {
+    public AbstractMotor setMaxElapsedMs(double maxElapsedMs) {
         this.lazyMs = maxElapsedMs;
+
+        return this;
     }
 
     /**
@@ -209,9 +289,12 @@ public class AbstractMotor implements Motor {
      * this value.
      *
      * @param maxPowerGap the maximum power gap.
+     * @return {@code this}, used for method chaining.
      */
-    public void setMaxPowerGap(double maxPowerGap) {
+    public AbstractMotor setMaxPowerGap(double maxPowerGap) {
         this.maxLazyPowerGap = maxPowerGap;
+
+        return this;
     }
 
     /**
@@ -231,7 +314,13 @@ public class AbstractMotor implements Motor {
      */
     @Override
     public double getPower() {
-        return this.getPower.get();
+        double power = this.getPower.get();
+
+        if (isGetInverted) {
+            power *= -1;
+        }
+
+        return power;
     }
 
     /**
@@ -264,6 +353,10 @@ public class AbstractMotor implements Motor {
         // power values. By default, these are -1.0 and 1.0, respectively.
         power = Math.max(minPower, Math.min(power, maxPower));
 
+        if (isSetInverted) {
+            power = power * -1;
+        }
+
         // Check to see if the motor is operating in "lazy mode."
         if (isLazy) {
             // Get the current timestamp.
@@ -290,5 +383,35 @@ public class AbstractMotor implements Motor {
             // other checks. Sick!
             accept(power);
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof AbstractMotor) {
+            AbstractMotor motor = (AbstractMotor) obj;
+
+            boolean sameSetPower = motor.setPower == this.setPower;
+            boolean sameGetPower = motor.getPower == this.getPower;
+            boolean sameSetInvert = motor.isSetInverted == this.isSetInverted;
+            boolean sameGetInvert = motor.isGetInverted == this.isGetInverted;
+
+            return sameSetPower &&
+                    sameGetPower &&
+                    sameSetInvert &&
+                    sameGetInvert;
+        }
+
+        return false;
+    }
+
+    @SuppressWarnings("ALL")
+    @Override
+    protected Object clone() {
+        return new AbstractMotor(
+                this.setPower,
+                this.getPower,
+                this.isSetInverted,
+                this.isGetInverted
+        );
     }
 }

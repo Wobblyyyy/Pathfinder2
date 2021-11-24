@@ -9,6 +9,9 @@
  */
 
 /**
- * Pathfinder-specific exceptions.
+ * Pathfinder-specific exceptions. There are quite a few of these exceptions,
+ * many of which are used only, say, once or twice. These are here to make
+ * debugging as easy as possible, because I know that FIRST's support for
+ * debugging via Android phones is... slightly less than stellar.
  */
 package me.wobblyyyy.pathfinder2.exceptions;

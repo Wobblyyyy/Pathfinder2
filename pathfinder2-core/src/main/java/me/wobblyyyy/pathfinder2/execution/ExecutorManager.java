@@ -91,6 +91,23 @@ public class ExecutorManager {
     }
 
     /**
+     * Add an executor to the manager. Because this manager operates on a
+     * first-in, first-out model, the follower you've added will be executed
+     * after any other executors have finished.
+     *
+     * @param follower a single follower to add.
+     */
+    public void addExecutor(Follower follower) {
+        executors.add(
+                new FollowerExecutor(
+                        odometry,
+                        drive,
+                        follower
+                )
+        );
+    }
+
+    /**
      * Clear the list of {@link FollowerExecutor}s.
      *
      * <p>

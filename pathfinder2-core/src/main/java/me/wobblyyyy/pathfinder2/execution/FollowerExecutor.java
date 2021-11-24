@@ -10,11 +10,14 @@
 
 package me.wobblyyyy.pathfinder2.execution;
 
+import me.wobblyyyy.pathfinder2.exceptions.NullDriveException;
+import me.wobblyyyy.pathfinder2.exceptions.NullOdometryException;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -53,9 +56,38 @@ public class FollowerExecutor {
     public FollowerExecutor(Odometry odometry,
                             Drive drive,
                             List<Follower> followers) {
+        if (odometry == null) throw new NullOdometryException(
+                    "A null odometry instance was passed to the constructor " +
+                            "of a FollowerExecutor!");
+        if (drive == null) throw new NullDriveException(
+                "A null drive instance was passed to the constructor " +
+                        "of a FollowerExecutor!");
+        if (followers == null) throw new NullPointerException(
+                "A null list of followers was passed to the constructor " +
+                        "of a FollowerExecutor!");
+
         this.odometry = odometry;
         this.drive = drive;
         this.followers = followers;
+    }
+
+    /**
+     * Create a new {@code FollowerExecutor}.
+     *
+     * @param odometry the odometry system the executor should use.
+     * @param drive    the drivetrain the executor should use.
+     * @param follower the follower to execute.
+     */
+    public FollowerExecutor(Odometry odometry,
+                            Drive drive,
+                            Follower follower) {
+        this(
+                odometry,
+                drive,
+                new ArrayList<Follower>() {{
+                    add(follower);
+                }}
+        );
     }
 
     /**
@@ -89,7 +121,13 @@ public class FollowerExecutor {
                 // finished its execution. So we do... well, nothing.
                 // Please note that there's no reason to have this else
                 // statement here, other than telling the compiler that
-                // it better execute this "else" statement.
+                // it better execute this "else" statement. Now, if you'll
+                // notice, this comment has absolutely no reason to be so
+                // long. None at all. Not even a minor reason. Literally
+                // nothing. If I may ask, why exactly are you still reading
+                // this? Do you have nothing better to do? You should go
+                // outside, or get a drink of water. Yeah, you should get
+                // a drink of water - staying hydrated is important.
             }
         }
 
