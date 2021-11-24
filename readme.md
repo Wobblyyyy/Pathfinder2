@@ -2,15 +2,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 
-<style>
-p {
-  font-family: 'Robot', sans-serif;
-}
-
-h1, h2, h3, h4 {
-  font-family: 'Robot', sans-serif;
-}
-</style>
+<div style="font-family: 'Robot', sans-serif">
 
 <p align="center">
 <img src="media/pathfinder2-logo.png" alt="Pathfinder2">
@@ -152,3 +144,5 @@ are licensed under their own terms.
 
 - [OdometryCore](https://github.com/tmthecoder/OdometryCore), licensed under
   the [MIT License](https://opensource.org/licenses/MIT)
+
+</div>
