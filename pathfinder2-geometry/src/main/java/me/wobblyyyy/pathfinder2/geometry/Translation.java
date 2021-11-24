@@ -100,6 +100,21 @@ public class Translation implements Serializable {
         this.vz = vz;
     }
 
+    public Translation(PointXY point) {
+        this(
+                point.x(),
+                point.y()
+        );
+    }
+
+    public Translation(PointXYZ point) {
+        this(
+                point.x(),
+                point.y(),
+                point.z().deg()
+        );
+    }
+
     /**
      * Convert an absolute translation into a relative translation.
      *
@@ -224,6 +239,30 @@ public class Translation implements Serializable {
      */
     public Translation toRelative(Angle heading) {
         return absoluteToRelative(this, heading);
+    }
+
+    public Translation withVx(double vx) {
+        return new Translation(
+                vx,
+                this.vy,
+                this.vz
+        );
+    }
+
+    public Translation withVy(double vy) {
+        return new Translation(
+                this.vx,
+                vy,
+                this.vz
+        );
+    }
+
+    public Translation withVz(double vz) {
+        return new Translation(
+                this.vx,
+                this.vy,
+                vz
+        );
     }
 
     @Override

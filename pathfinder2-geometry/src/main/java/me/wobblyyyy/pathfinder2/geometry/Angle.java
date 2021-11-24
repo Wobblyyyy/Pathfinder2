@@ -226,12 +226,6 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     private final double deg;
 
-    private final double cos;
-
-    private final double sin;
-
-    private final double tan;
-
     /**
      * Private constructor - angles can only be created with static methods.
      * We do this, so we don't have to convert degrees to radians and so
@@ -244,10 +238,6 @@ public class Angle implements Comparable<Angle>, Serializable {
                   double deg) {
         this.rad = rad;
         this.deg = deg;
-
-        this.cos = Math.cos(rad);
-        this.sin = Math.sin(rad);
-        this.tan = Math.tan(rad);
     }
 
     /**
@@ -755,7 +745,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @see #cot()
      */
     public double sin() {
-        return this.sin;
+        return Math.sin(rad);
     }
 
     /**
@@ -769,7 +759,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @see #cot()
      */
     public double cos() {
-        return this.cos;
+        return Math.cos(rad);
     }
 
     /**
@@ -783,7 +773,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @see #cot()
      */
     public double tan() {
-        return this.tan;
+        return Math.tan(rad);
     }
 
     /**
@@ -1110,6 +1100,58 @@ public class Angle implements Comparable<Angle>, Serializable {
         if (greaterThan(maximum)) return maximum;
         else if (lessThan(minimum)) return minimum;
         else return this;
+    }
+
+    /**
+     * Convert this {@code Angle} into a translation by using the
+     * {@link #toTranslation(double, double)} and providing a vz value of
+     * 0 and a {@code translationMagnitude} value of 1.0.
+     *
+     * @return the {@link Translation} representation of this angle.
+     */
+    public Translation toTranslation() {
+        return toTranslation(0);
+    }
+
+    /**
+     * Convert this {@code Angle} into a {@link Translation}. This creates
+     * a translation by creating a point that is {@code 1}
+     * away from (0, 0) in this angle's direction, and then creating a
+     * translation based on that point's component X and Y values. At the end,
+     * the supplied {@code vz} value is added on to the translation.
+     *
+     * @param vz the vz value to add on to the translation.
+     * @return the {@link Translation} representation of this angle.
+     */
+    public Translation toTranslation(double vz) {
+        return toTranslation(
+                1.0,
+                vz
+        );
+    }
+
+    /**
+     * Convert this {@code Angle} into a {@link Translation}. This creates
+     * a translation by creating a point that is {@code translationMagnitude}
+     * away from (0, 0) in this angle's direction, and then creating a
+     * translation based on that point's component X and Y values. At the end,
+     * the supplied {@code vz} value is added on to the translation.
+     *
+     * @param translationMagnitude the magnitude of the translation. A
+     *                             magnitude of 1 is default. The higher the
+     *                             magnitude is, the "larger" the translation
+     *                             will be.
+     * @param vz                   the vz value to add on to the translation.
+     * @return the {@link Translation} representation of this angle.
+     */
+    public Translation toTranslation(double translationMagnitude,
+                                     double vz) {
+        return new Translation(
+                PointXY.ZERO.inDirection(
+                        translationMagnitude,
+                        this
+                )
+        ).withVz(vz);
     }
 
     /**
