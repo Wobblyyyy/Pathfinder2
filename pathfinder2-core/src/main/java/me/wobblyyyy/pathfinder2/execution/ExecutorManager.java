@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.execution;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
+import me.wobblyyyy.pathfinder2.time.Time;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,21 @@ public class ExecutorManager {
      * The manager's drive.
      */
     private final Drive drive;
+
+    /**
+     * How long it took to execute the last follower.
+     */
+    private double executionTime = 0;
+
+    /**
+     * The last start time for execution time tracking.
+     */
+    private double lastStartTime = 0;
+
+    /**
+     * The last follower that was being executed.
+     */
+    private FollowerExecutor lastExecutor;
 
     /**
      * A list of follower executors. This list can be added to and cleared,
@@ -156,12 +172,19 @@ public class ExecutorManager {
         if (howManyExecutors() > 0) {
             FollowerExecutor executor = executors.get(0);
 
+            if (lastExecutor != executor) {
+                // restart the timer
+                lastStartTime = Time.ms();
+            }
+
             // Tick the executor. The tick method returns a boolean result.
             // If true, the executor is finished. If false, it's not finished.
             if (executor.tick()) {
                 // If the executor's finished, we no longer need it.
                 executors.remove(executor);
             }
+
+            executionTime = Time.ms() - lastStartTime;
         }
 
         // Return true if there's 0 remaining executors (meaning we're entirely
@@ -176,5 +199,17 @@ public class ExecutorManager {
      */
     public int howManyExecutors() {
         return executors.size();
+    }
+
+    /**
+     * Get how long the current follower has been executing. If no followers
+     * have executed, this will return 0. If no followers are active, but
+     * a follower has been active in the past, this will return the execution
+     * time of the last follower.
+     *
+     * @return the execution time of the current follower.
+     */
+    public double getExecutionTime() {
+        return executionTime;
     }
 }

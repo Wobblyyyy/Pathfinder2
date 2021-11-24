@@ -39,12 +39,6 @@ import java.util.function.Supplier;
  * The highest-level interface used for interacting with {@code Pathfinder}.
  *
  * <p>
- * Because it's rather challenging to document such an expansive library, I
- * would suggest you read up on some documentation before attempting to dive
- * into everything that's going on here.
- * </p>
- *
- * <p>
  * This object is the main method of interacting with the Pathfinder library.
  * With it, you'll be able to control all of your robot's movement from a
  * single object - both autonomous and teleop movement included. For advanced
@@ -749,6 +743,81 @@ public class Pathfinder {
     }
 
     /**
+     * Get the X component of the robot's translation.
+     *
+     * @return the X component of the robot's translation.
+     */
+    public double getVx() {
+        return getTranslation().vx();
+    }
+
+    /**
+     * Set the X component of the robot's translation.
+     *
+     * @param vx the X component of the robot's translation.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder setVx(double vx) {
+        return setTranslation(
+                new Translation(
+                        vx,
+                        getVy(),
+                        getVz()
+                )
+        );
+    }
+
+    /**
+     * Get the Y component of the robot's translation.
+     *
+     * @return the Y component of the robot's translation.
+     */
+    public double getVy() {
+        return getTranslation().vy();
+    }
+
+    /**
+     * Set the Y component of the robot's translation.
+     *
+     * @param vy the Y component of the robot's translation.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder setVy(double vy) {
+        return setTranslation(
+                new Translation(
+                        getVx(),
+                        vy,
+                        getVz()
+                )
+        );
+    }
+
+    /**
+     * Get the Z component of the robot's translation.
+     *
+     * @return the Z component of the robot's translation.
+     */
+    public double getVz() {
+        return getTranslation().vz();
+    }
+
+    /**
+     * Set the Z component of the robot's translation.
+     *
+     * @param vz the Z component of the robot's translation.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder setVz(double vz) {
+        return setTranslation(
+                new Translation(
+                        getVx(),
+                        getVy(),
+                        vz
+                )
+        );
+    }
+
+    /**
      * Set a translation to the robot. This is how to manually move your robot.
      * If, for example, you're in TeleOp, and you'd like to drive your robot
      * according to some joystick inputs, this is the method you should use.
@@ -762,6 +831,18 @@ public class Pathfinder {
         getDrive().setTranslation(translation);
 
         return this;
+    }
+
+    /**
+     * Get how long the current follower has been executing. If no followers
+     * have executed, this will return 0. If no followers are active, but
+     * a follower has been active in the past, this will return the execution
+     * time of the last follower.
+     *
+     * @return the execution time of the current follower.
+     */
+    public double getExecutionTime() {
+        return getExecutorManager().getExecutionTime();
     }
 
     @Override
