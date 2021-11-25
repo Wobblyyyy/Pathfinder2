@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.trajectory;
 
 import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
+import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
@@ -70,13 +71,23 @@ public class LinearTrajectory implements Trajectory {
                             "null - crazy, I know!"
             );
         }
+
         if (speed < 0 || speed > 1) {
             throw new InvalidSpeedException(
-                    "Attempted to create LinearTrajectory instance with speed " +
+                    "Attempted to create a LinearTrajectory instance with speed " +
                             "(" + speed + "). Speed values must be greater " +
                             "than 0. and less than 1.0."
             );
         }
+
+        if (tolerance < 0) {
+            throw new InvalidToleranceException(
+                    "Attempted to create a LinearTrajectory instance with a " +
+                            "tolerance value less than 0. Tolerance values must " +
+                            "be greater than or equal to 0."
+            );
+        }
+
         if (angleTolerance == null) {
             throw new NullAngleException(
                     "Attempted to create a LinearTrajectory instance with " +
@@ -122,6 +133,8 @@ public class LinearTrajectory implements Trajectory {
 
     @Override
     public boolean isDone(PointXYZ current) {
+        if (current == null) return false;
+
         return isDoneXY(current) && isDoneHeading(current);
     }
 

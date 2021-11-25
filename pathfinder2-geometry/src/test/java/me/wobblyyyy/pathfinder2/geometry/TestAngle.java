@@ -59,7 +59,7 @@ public class TestAngle {
         Angle angleDeg = Angle.fromDeg(180);
         Angle angleRad = Angle.fromRad(Math.PI);
 
-        // ensure that the equals method words both ways
+        // ensure that the "equals" method words both ways
         assert angleDeg.equals(angleRad);
         assert angleRad.equals(angleDeg);
     }
@@ -123,5 +123,17 @@ public class TestAngle {
                 Angle.minimumDelta(c, d),
                 Angle.minimumDelta(d, c) * -1
         );
+    }
+
+    @Test
+    public void testAngleDelta2() {
+        Angle a = Angle.fromDeg(0);
+        Angle b = Angle.fromDeg(90);
+        Angle c = Angle.fromDeg(180);
+        Angle d = Angle.fromDeg(270);
+
+        System.out.println(Angle.minimumDelta(a, b));
+        System.out.println(Angle.minimumDelta(a, d));
+        System.out.println(Angle.minimumDelta(d, a));
     }
 }

@@ -10,9 +10,7 @@
 
 package me.wobblyyyy.pathfinder2;
 
-import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
-import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
-import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
+import me.wobblyyyy.pathfinder2.exceptions.*;
 import me.wobblyyyy.pathfinder2.execution.ExecutorManager;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.follower.FollowerGenerator;
@@ -23,6 +21,7 @@ import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.robot.Robot;
+import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
 import me.wobblyyyy.pathfinder2.time.Stopwatch;
 import me.wobblyyyy.pathfinder2.time.Time;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
@@ -31,6 +30,7 @@ import me.wobblyyyy.pathfinder2.utils.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -95,17 +95,17 @@ public class Pathfinder {
     /**
      * The speed Pathfinder will use in creating linear trajectories.
      */
-    private double speed;
+    private double speed = -1.0;
 
     /**
      * The tolerance Pathfinder will use in creating linear trajectories.
      */
-    private double tolerance;
+    private double tolerance = -1.0;
 
     /**
      * The angle tolerance Pathfinder will use in creating linear trajectories.
      */
-    private Angle angleTolerance;
+    private Angle angleTolerance = null;
 
     /**
      * Create a new {@code Pathfinder} instance.
@@ -320,10 +320,10 @@ public class Pathfinder {
      * Tick Pathfinder until either the path it was following is finished or
      * the timeout time (in milliseconds) is reached.
      *
-     * @param timeoutMs             how long, in milliseconds, Pathfinder will
-     *                              continue ticking (as a maximum). If the
-     *                              path finishes before this time is reached,
-     *                              it'll stop as normal.
+     * @param timeoutMs how long, in milliseconds, Pathfinder will
+     *                  continue ticking (as a maximum). If the
+     *                  path finishes before this time is reached,
+     *                  it'll stop as normal.
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder tickUntil(double timeoutMs) {
@@ -361,6 +361,91 @@ public class Pathfinder {
      */
     public Pathfinder tickUntil(double timeoutMs,
                                 Supplier<Boolean> shouldContinueRunning) {
+        return tickUntil(
+                timeoutMs,
+                shouldContinueRunning,
+                pathfinder -> {}
+        );
+    }
+
+    /**
+     * Tick Pathfinder while the provided supplier returns true and the
+     * elapsed time is less than the timeout time.
+     *
+     * @param timeoutMs             how long, in milliseconds, Pathfinder will
+     *                              continue ticking (as a maximum). If the
+     *                              path finishes before this time is reached,
+     *                              it'll stop as normal.
+     * @param shouldContinueRunning a supplier, indicating whether Pathfinder
+     *                              should still continue running.
+     * @param onTick                a {@link Consumer} that will be executed
+     *                              after every successful tick.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder tickUntil(double timeoutMs,
+                                Supplier<Boolean> shouldContinueRunning,
+                                Consumer<Pathfinder> onTick) {
+        if (timeoutMs < 0) {
+            throw new InvalidTimeException(
+                    "Attempted to use an invalid timeout time in in a call to " +
+                            "the tickUntil method - make sure this time value " +
+                            "is greater than or equal to 0."
+            );
+        }
+
+        if (shouldContinueRunning == null) {
+            throw new NullPointerException(
+                    "Attempted to use a null supplier with the tickUntil " +
+                            "method - this can't be null, nerd."
+            );
+        }
+
+        if (onTick == null) {
+            throw new NullPointerException(
+                    "Attempted to use a null consumer with the tickUntil " +
+                            "method. This also can't be null, nerd."
+            );
+        }
+
+        double start = Time.ms();
+
+        while (isActive() && shouldContinueRunning.get()) {
+            double current = Time.ms();
+            double elapsed = current - start;
+
+            if (elapsed >= timeoutMs) {
+                break;
+            }
+
+            tick();
+            onTick.accept(this);
+        }
+
+        return this;
+    }
+
+    /**
+     * Tick Pathfinder while the provided supplier returns true and the
+     * elapsed time is less than the timeout time.
+     *
+     * @param timeoutMs             how long, in milliseconds, Pathfinder will
+     *                              continue ticking (as a maximum). If the
+     *                              path finishes before this time is reached,
+     *                              it'll stop as normal.
+     * @param shouldContinueRunning a supplier, indicating whether Pathfinder
+     *                              should still continue running.
+     * @param onTick                a {@link Consumer} that will be executed
+     *                              after every successful tick. This consumer
+     *                              accepts two parameters - first the instance
+     *                              of Pathfinder that is running. Second, a
+     *                              double value representing the total elapsed
+     *                              time (in milliseconds) that the tick
+     *                              until method has been running for.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder tickUntil(double timeoutMs,
+                                Supplier<Boolean> shouldContinueRunning,
+                                BiConsumer<Pathfinder, Double> onTick) {
         NotNull.throwExceptionIfNull(
                 "A null value was passed to the tickUntil method! " +
                         "Please make sure you don't pass any null values.",
@@ -373,11 +458,42 @@ public class Pathfinder {
             double current = Time.ms();
             double elapsed = current - start;
 
-            if (elapsed - current >= timeoutMs) {
+            if (elapsed >= timeoutMs) {
                 break;
             }
 
             tick();
+            onTick.accept(this, elapsed);
+        }
+
+        return this;
+    }
+
+    /**
+     * Continually tick Pathfinder for as long as it needs to be ticked to
+     * finish executing the current path. This method accepts a
+     * {@link BiConsumer} parameter that in turn accepts two parameters -
+     * first, {@code this} instance of Pathfinder, and second, the elapsed
+     * time (in milliseconds). If you'd like to exit out of the ticking, you
+     * can simply use {@link #clear()} inside of the {@link BiConsumer}.
+     *
+     * @param onTick a {@link Consumer} that will be executed
+     *               after every successful tick. This consumer
+     *               accepts two parameters - first the instance
+     *               of Pathfinder that is running. Second, a
+     *               double value representing the total elapsed
+     *               time (in milliseconds) that the tick
+     *               until method has been running for.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder tickUntil(BiConsumer<Pathfinder, Double> onTick) {
+        double start = Time.ms();
+
+        while (isActive()) {
+            double current = Time.ms();
+            double elapsed = current - start;
+
+            onTick.accept(this, elapsed);
         }
 
         return this;
@@ -388,12 +504,12 @@ public class Pathfinder {
      * milliseconds) and the {@link Predicate} (accepting {@code this} as
      * a parameter) returns true.
      *
-     * @param timeoutMs             how long, in milliseconds, Pathfinder will
-     *                              continue ticking (as a maximum). If the
-     *                              path finishes before this time is reached,
-     *                              it'll stop as normal.
-     * @param isValid               a predicate, accepting {@code this}
-     *                              instance of Pathfinder as a parameter.
+     * @param timeoutMs how long, in milliseconds, Pathfinder will
+     *                  continue ticking (as a maximum). If the
+     *                  path finishes before this time is reached,
+     *                  it'll stop as normal.
+     * @param isValid   a predicate, accepting {@code this}
+     *                  instance of Pathfinder as a parameter.
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder tickUntil(double timeoutMs,
@@ -410,7 +526,7 @@ public class Pathfinder {
             double current = Time.ms();
             double elapsed = current - start;
 
-            if (elapsed - current >= timeoutMs) {
+            if (elapsed >= timeoutMs) {
                 break;
             }
 
@@ -456,7 +572,7 @@ public class Pathfinder {
             double current = Time.ms();
             double elapsed = current - start;
 
-            if (elapsed - current >= timeoutMs) {
+            if (elapsed >= timeoutMs) {
                 break;
             }
 
@@ -558,6 +674,119 @@ public class Pathfinder {
     }
 
     /**
+     * Use the {@code tickUntil} method to tick Pathfinder until the path
+     * it's executing is finished (or a timeout is reached, or the
+     * {@code shouldContinueRunning} {@link Supplier} returns false).
+     *
+     * @param onCompletion          a callback to be executed after Pathfinder finishes
+     *                              whatever it's doing. This consumer accepts the
+     *                              instance of Pathfinder that this method was
+     *                              called from.
+     * @param timeoutMs             how long, in milliseconds, Pathfinder will continue
+     *                              ticking (as a maximum). If the path finishes before
+     *                              this time is reached, it'll stop as normal.
+     * @param shouldContinueRunning a supplier, indicating whether Pathfinder
+     *                              should still continue running.
+     * @param onTick                a {@link Consumer} that will be called
+     *                              once per tick.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder andThen(Consumer<Pathfinder> onCompletion,
+                              double timeoutMs,
+                              Supplier<Boolean> shouldContinueRunning,
+                              Consumer<Pathfinder> onTick) {
+        tickUntil(
+                timeoutMs,
+                shouldContinueRunning,
+                onTick
+        );
+
+        onCompletion.accept(this);
+
+        return this;
+    }
+
+    /**
+     * Pause until a certain condition is met.
+     *
+     * @param condition the condition that must be met before continuing.
+     * @param maxTime   the maximum length of the pause. If the amount of
+     *                  elapsed time exceeds this length, the condition will
+     *                  break and Pathfinder will be unpaused, regardless of
+     *                  whether the condition has been met.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    @SuppressWarnings("BusyWait")
+    public Pathfinder waitUntil(Supplier<Boolean> condition,
+                                double maxTime) {
+        if (condition == null) {
+            throw new NullPointerException(
+                    "Attempted to use the waitUntil method with a null " +
+                            "condition supplier!"
+            );
+        }
+
+        if (maxTime < 0) {
+            throw new InvalidTimeException(
+                    "Attempted to use an invalid time value! Make sure the " +
+                            "time value you're supplying is 0 or greater."
+            );
+        }
+
+        ElapsedTimer timer = new ElapsedTimer(true);
+
+        try {
+            while (!condition.get() && timer.isElapsedLessThan(maxTime)) {
+                Thread.sleep(10);
+            }
+        } catch (InterruptedException ignored) {
+        }
+
+        return this;
+    }
+
+    /**
+     * Pause as long as a certain condition is met.
+     *
+     * @param condition the condition that must be met in order to continue.
+     *                  If this condition returns false, this method will
+     *                  finish its execution and will unpause.
+     * @param maxTime   the maximum length of the pause. If the amount of
+     *                  elapsed time exceeds this length, the condition will
+     *                  break and Pathfinder will be unpaused, regardless of
+     *                  whether the condition has been met.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    @SuppressWarnings("BusyWait")
+    public Pathfinder waitAsLongAs(Supplier<Boolean> condition,
+                                   double maxTime) {
+        if (condition == null) {
+            throw new NullPointerException(
+                    "Attempted to use the waitAsLongAs method with a null " +
+                            "condition supplier!"
+            );
+        }
+
+        if (maxTime < 0) {
+            throw new InvalidTimeException(
+                    "Attempted to use an invalid time value! Make sure the " +
+                            "time value you're supplying is 0 or greater."
+            );
+        }
+
+        ElapsedTimer timer = new ElapsedTimer(true);
+
+        try {
+            while (condition.get() && timer.isElapsedLessThan(maxTime)) {
+                Thread.sleep(10);
+            }
+        } catch (InterruptedException ignored) {
+        }
+
+        return this;
+    }
+
+    /**
      * Follow a single trajectory.
      *
      * @param trajectory the trajectory to follow.
@@ -607,6 +836,13 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder follow(Follower follower) {
+        if (follower == null) {
+            throw new NullPointerException(
+                    "Attempted to follow a null Follower object - make sure " +
+                            "this object is not null."
+            );
+        }
+
         manager.addExecutor(follower);
 
         return this;
@@ -619,6 +855,13 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder follow(List<Follower> followers) {
+        if (followers == null) {
+            throw new NullPointerException(
+                    "Attempted to follow a null list of Follower objects - " +
+                            "make sure the list you supply is not null."
+            );
+        }
+
         manager.addExecutor(followers);
 
         return this;
@@ -634,11 +877,6 @@ public class Pathfinder {
      * @see #setAngleTolerance(Angle)
      */
     public Pathfinder goTo(PointXY point) {
-        NullPointException.throwIfInvalid(
-                "Attempted to navigate to a null point.",
-                point
-        );
-
         goTo(
                 point.withHeading(
                         getOdometry().getZ()
@@ -662,6 +900,49 @@ public class Pathfinder {
                 "Attempted to navigate to a null point.",
                 point
         );
+
+        // perform some wonderful exception checking...
+        // this was a pretty big pain for me personally because I entirely
+        // forgot that you actually need to set these values, so these lovely
+        // and very handy reminders should definitely help... I think...
+        // side note, I'm really craving some vanilla ice cream right now,
+        // but I don't think I have any :(
+
+        if (speed < 0 && tolerance < 0 && angleTolerance == null) {
+            throw new RuntimeException(
+                    "Attempted to use the goTo method without having set " +
+                            "Pathfinder's default speed, tolerance, and angle " +
+                            "tolerance. Use the setSpeed(double), " +
+                            "setTolerance(double), and setAngleTolerance(Angle) " +
+                            "methods to set these values before using any  " +
+                            "variation of the goTo method."
+            );
+        }
+
+        if (speed < 0) {
+            throw new InvalidSpeedException(
+                    "Attempted to use the goTo method without having set the " +
+                            "speed of Pathfinder first! Use the setSpeed(double) " +
+                            "method to set a speed value."
+            );
+        }
+
+        if (tolerance < 0) {
+            throw new InvalidToleranceException(
+                    "Attempted to use the goTo method without having set the " +
+                            "tolerance of Pathfinder first! Use the setTolerance(double) " +
+                            "method to set a tolerance value."
+            );
+        }
+
+        if (angleTolerance == null) {
+            throw new NullAngleException(
+                    "Attempted to use the goTo method without having set the " +
+                            "angle tolerance of Pathfinder first! Use the" +
+                            "setAngleTolerance(Angle) method to set a " +
+                            "tolerance value."
+            );
+        }
 
         followTrajectory(new LinearTrajectory(
                 point,
@@ -828,6 +1109,14 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder setTranslation(Translation translation) {
+        if (translation == null) {
+            throw new NullPointerException(
+                    "Attempted to use the setTranslation method, but provided " +
+                            "a null translation - make sure this translation " +
+                            "isn't null next time, alright? Cool."
+            );
+        }
+
         getDrive().setTranslation(translation);
 
         return this;
@@ -860,6 +1149,12 @@ public class Pathfinder {
         throw new CloneNotSupportedException();
     }
 
+    /**
+     * Convert this instance of {@code Pathfinder} into a {@code String}.
+     * Really simply, this just return's the current position.
+     *
+     * @return the current position, as a string.
+     */
     @Override
     public String toString() {
         return getPosition().toString();

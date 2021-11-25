@@ -83,8 +83,7 @@ public class PathGen {
             add(start);
         }};
         List<Node> closedList = new ArrayList<>();
-
-        while (!this.openList.isEmpty()) {
+         while (!this.openList.isEmpty()) {
             Node current = getLowestF();
 
             if (current.equals(end)) {

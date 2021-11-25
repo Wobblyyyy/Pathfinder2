@@ -17,6 +17,7 @@ import me.wobblyyyy.pathfinder2.kinematics.RelativeMeccanumKinematics;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.components.Motor;
 import me.wobblyyyy.pathfinder2.robot.modifiers.DriveModifier;
+import me.wobblyyyy.pathfinder2.utils.NotNull;
 
 import java.util.function.Function;
 
@@ -141,16 +142,93 @@ public class MeccanumDrive implements Drive {
                          boolean swapXY,
                          boolean reflectX,
                          boolean reflectY) {
-        DriveModifier modBuilder = new DriveModifier();
-        modBuilder.swapXY(swapXY).invertX(reflectX).invertY(reflectY);
-        this.modifier = modBuilder::modify;
+        this(
+                fr,
+                fl,
+                br,
+                bl,
+                angleOffset,
+                0.0,
+                1.0,
+                0.001,
+                swapXY,
+                reflectX,
+                reflectY
+        );
+    }
+
+    /**
+     * Create a new {@code MeccanumDrive} with a modifier.
+     *
+     * @param fr            the front-right motor.
+     * @param fl            the front-left motor.
+     * @param br            the back-right motor.
+     * @param bl            the back-left motor.
+     * @param angleOffset   the angle offset to apply to any inputted translations.
+     * @param swapXY        should input translations have their X and Y
+     *                      values swapped? This is the very first modifier that
+     *                      gets applied - if X and Y values are swapped, and
+     *                      you set reflectX to true, you'll be reflecting what
+     *                      were originally Y values.
+     * @param invertX       should X values be reflected across the Y axis?
+     *                      Try changing this if your robot isn't moving in
+     *                      the right direction.
+     * @param invertY       should Y values be reflected across the X axis?
+     *                      Try changing this if your robot isn't moving in
+     *                      the right direction.
+     * @param turnMagnitude the multiplier for magnitude calculation during
+     *                      zero-point turns. This value should typically be
+     *                      very low. To get a rough estimate of this value,
+     *                      take the maximum angle delta (unless you changed
+     *                      it, it will be 180 degrees) and multiply it so that
+     *                      it fits within the bounds of 0.0 to 1.0. A good
+     *                      starting place is 0.001.
+     */
+    public MeccanumDrive(Motor fr,
+                         Motor fl,
+                         Motor br,
+                         Motor bl,
+                         Angle angleOffset,
+                         double minMagnitude,
+                         double maxMagnitude,
+                         double turnMagnitude,
+                         boolean swapXY,
+                         boolean invertX,
+                         boolean invertY) {
+        NotNull.throwExceptionIfNull(
+                "Attempted to create an instance of the MeccanumDrive " +
+                        "class with one or more null Motor objects.",
+                fr,
+                fl,
+                br,
+                bl
+        );
+
+        this.modifier = new DriveModifier()
+                .swapXY(swapXY)
+                .invertX(invertX)
+                .invertY(invertY)::modify;
 
         this.fr = fr;
         this.fl = fl;
         this.br = br;
         this.bl = bl;
 
-        kinematics = new RelativeMeccanumKinematics(0, 1, angleOffset);
+        kinematics = new RelativeMeccanumKinematics(
+                0,
+                1,
+                turnMagnitude,
+                angleOffset
+        );
+    }
+
+    /**
+     * Create a new instance of the {@link MeccanumDriveBuilder} class.
+     *
+     * @return a new instance of the {@link MeccanumDriveBuilder} class.
+     */
+    public static MeccanumDriveBuilder builder() {
+        return new MeccanumDriveBuilder();
     }
 
     /**
@@ -194,5 +272,194 @@ public class MeccanumDrive implements Drive {
     @Override
     public void setModifier(Function<Translation, Translation> modifier) {
         this.modifier = modifier;
+    }
+
+    /**
+     * A builder/helper class to simplify the creation of an instance of
+     * a {@link MeccanumDrive}.
+     *
+     * <p>
+     * There are several parameters that you can customize:
+     * <ul>
+     *     <li>Front right motor</li>
+     *     <li>Front left motor</li>
+     *     <li>Back right motor</li>
+     *     <li>Back left motor</li>
+     *     <li>Should X and Y be swapped?</li>
+     *     <li>Should X be inverted?</li>
+     *     <li>Should Y be inverted?</li>
+     *     <li>The kinematics' minimum magnitude</li>
+     *     <li>The kinematics' maximum magnitude</li>
+     *     <li>The kinematics' turn magnitude</li>
+     *     <li>The kinematics' angle offset</li>
+     * </ul>
+     * </p>
+     */
+    public static class MeccanumDriveBuilder {
+        private Motor frontRight;
+        private Motor frontLeft;
+        private Motor backRight;
+        private Motor backLeft;
+        private boolean swapXY = false;
+        private boolean invertX = false;
+        private boolean invertY = false;
+        private double minMagnitude = 0.0;
+        private double maxMagnitude = 1.0;
+        private double turnMagnitude = 0.001;
+        private Angle angleOffset = Angle.DEG_0;
+
+        public MeccanumDriveBuilder() {
+
+        }
+
+        public MeccanumDriveBuilder setFrontRight(Motor frontRight) {
+            this.frontRight = frontRight;
+
+            return this;
+        }
+
+        public MeccanumDriveBuilder setFrontLeft(Motor frontLeft) {
+            this.frontLeft = frontLeft;
+
+            return this;
+        }
+
+        public MeccanumDriveBuilder setBackRight(Motor backRight) {
+            this.backRight = backRight;
+
+            return this;
+        }
+
+        public MeccanumDriveBuilder setBackLeft(Motor backLeft) {
+            this.backLeft = backLeft;
+
+            return this;
+        }
+
+        public MeccanumDriveBuilder setMinMagnitude(double minMagnitude) {
+            this.minMagnitude = minMagnitude;
+
+            return this;
+        }
+
+        public MeccanumDriveBuilder setMaxMagnitude(double maxMagnitude) {
+            this.maxMagnitude = maxMagnitude;
+
+            return this;
+        }
+
+        public MeccanumDriveBuilder setTurnMagnitude(double turnMagnitude) {
+            this.turnMagnitude = turnMagnitude;
+
+            return this;
+        }
+
+        public MeccanumDriveBuilder setAngleOffset(Angle angleOffset) {
+            this.angleOffset = angleOffset;
+
+            return this;
+        }
+
+        public MeccanumDriveBuilder setMotors(Motor frontRight,
+                                              Motor frontLeft,
+                                              Motor backRight,
+                                              Motor backLeft) {
+            this.frontRight = frontRight;
+            this.frontLeft = frontLeft;
+            this.backRight = backRight;
+            this.backLeft = backLeft;
+
+            return this;
+        }
+
+        public MeccanumDriveBuilder swapXY(boolean swapXY) {
+            this.swapXY = swapXY;
+
+            return this;
+        }
+
+        public MeccanumDriveBuilder invertX(boolean invertX) {
+            this.invertX = invertX;
+
+            return this;
+        }
+
+        public MeccanumDriveBuilder invertY(boolean invertY) {
+            this.invertY = invertY;
+
+            return this;
+        }
+
+        public MeccanumDriveBuilder setSwapXY(boolean swapXY) {
+            this.swapXY = swapXY;
+
+            return this;
+        }
+
+        public MeccanumDriveBuilder setInvertX(boolean invertX) {
+            this.invertX = invertX;
+
+            return this;
+        }
+
+        public MeccanumDriveBuilder setInvertY(boolean invertY) {
+            this.invertY = invertY;
+
+            return this;
+        }
+
+        public MeccanumDriveBuilder setMagnitudes(double minMagnitude,
+                                                  double maxMagnitude,
+                                                  double turnMagnitude) {
+            this.minMagnitude = minMagnitude;
+            this.maxMagnitude = maxMagnitude;
+            this.turnMagnitude = turnMagnitude;
+
+            return this;
+        }
+
+        public MeccanumDriveBuilder setModifiers(boolean swapXY,
+                                                 boolean invertX,
+                                                 boolean invertY) {
+            this.swapXY = swapXY;
+            this.invertX = invertX;
+            this.invertY = invertY;
+
+            return this;
+        }
+
+        public MeccanumDrive build() {
+            boolean areAnyMotorsNull = NotNull.isAnythingNull(
+                    frontRight,
+                    frontLeft,
+                    backRight,
+                    backLeft
+            );
+
+            if (areAnyMotorsNull) {
+                throw new NullPointerException(
+                        "Attempted to create an instance of the meccanum drive " +
+                                "class using the MeccanumDriveBuilder without " +
+                                "setting 1 or more of the motors to a non-null " +
+                                "value! Each of the motors (frontRight, frontLeft," +
+                                "backRight, and backLeft) need to have a non-null " +
+                                "value in order to build a MeccanumDrive."
+                );
+            }
+
+            return new MeccanumDrive(
+                    frontRight,
+                    frontLeft,
+                    backRight,
+                    backLeft,
+                    angleOffset,
+                    minMagnitude,
+                    maxMagnitude,
+                    turnMagnitude,
+                    swapXY,
+                    invertX,
+                    invertY
+            );
+        }
     }
 }

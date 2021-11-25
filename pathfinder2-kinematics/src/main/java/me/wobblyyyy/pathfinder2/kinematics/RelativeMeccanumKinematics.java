@@ -113,13 +113,13 @@ public class RelativeMeccanumKinematics implements ForwardsKinematics<MeccanumSt
                 translation.vy(),
                 translation.vx()
         ).add(angleOffset);
-        double magnitude = Math.max(Math.min(
+        double magnitude = Math.abs(Math.max(Math.min(
                 Math.hypot(
                         translation.vx(),
                         translation.vy()
                 ) + (turn * turnMagnitude),
                 maxMagnitude
-        ), minMagnitude);
+        ), minMagnitude));
 
         double frontLeft = calculatePower(angle, WHEEL_ANGLES[0]) + turn;
         double frontRight = calculatePower(angle, WHEEL_ANGLES[1]) - turn;

@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.kinematics;
 
+import me.wobblyyyy.pathfinder2.math.Max;
+
 /**
  * A state for a meccanum chassis.
  *
@@ -38,6 +40,11 @@ public class MeccanumState {
     private final double br;
 
     /**
+     * The magnitude of the translation.
+     */
+    private final double magnitude;
+
+    /**
      * Create a new meccanum state.
      *
      * @param fl the front-left motor.
@@ -49,10 +56,34 @@ public class MeccanumState {
                          double fr,
                          double bl,
                          double br) {
+        this(
+                fl,
+                fr,
+                bl,
+                br,
+                0
+        );
+    }
+
+    /**
+     * Create a new meccanum state.
+     *
+     * @param fl        the front-left motor.
+     * @param fr        the front-right motor.
+     * @param bl        the back-left motor.
+     * @param br        the back-right motor.
+     * @param magnitude the magnitude of the translation.
+     */
+    public MeccanumState(double fl,
+                         double fr,
+                         double bl,
+                         double br,
+                         double magnitude) {
         this.fl = fl;
         this.fr = fr;
         this.bl = bl;
         this.br = br;
+        this.magnitude = magnitude;
     }
 
     /**
@@ -92,14 +123,25 @@ public class MeccanumState {
     }
 
     /**
+     * Get the magnitude of the translation.
+     *
+     * @return the magnitude of the translation.
+     */
+    public double magnitude() {
+        return this.magnitude;
+    }
+
+    /**
      * Get the max power value out of all the motor power values.
      *
      * @return the maximum power value.
      */
     public double maxPower() {
-        return Math.max(
-                Math.max(fl, fr),
-                Math.max(bl, br)
+        return Max.absoluteOf(
+                fl,
+                fr,
+                bl,
+                br
         );
     }
 
@@ -111,18 +153,24 @@ public class MeccanumState {
      * @return a normalized meccanum state.
      */
     public MeccanumState normalize(double max) {
+        max = Math.abs(max);
         double realMax = maxPower();
 
-        double _fl = fl;
-        double _fr = fr;
-        double _bl = bl;
-        double _br = br;
+        double _fl;
+        double _fr;
+        double _bl;
+        double _br;
 
         if (realMax > max) {
-            _fl = fl / realMax * max;
-            _fr = fr / realMax * max;
-            _bl = bl / realMax * max;
-            _br = br / realMax * max;
+            _fl = (fl / realMax) * max;
+            _fr = (fr / realMax) * max;
+            _bl = (bl / realMax) * max;
+            _br = (br / realMax) * max;
+        } else {
+            _fl = fl;
+            _fr = fr;
+            _bl = bl;
+            _br = br;
         }
 
         return new MeccanumState(_fl, _fr, _bl, _br);
