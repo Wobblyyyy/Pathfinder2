@@ -117,7 +117,7 @@ public class RelativeMeccanumKinematics implements ForwardsKinematics<MeccanumSt
                 Math.hypot(
                         translation.vx(),
                         translation.vy()
-                ) + (turn * turnMagnitude),
+                ) + Math.abs(turn * turnMagnitude),
                 maxMagnitude
         ), minMagnitude));
 

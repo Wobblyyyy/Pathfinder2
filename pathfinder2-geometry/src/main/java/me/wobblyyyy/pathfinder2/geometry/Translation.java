@@ -100,6 +100,12 @@ public class Translation implements Serializable {
         this.vz = vz;
     }
 
+    /**
+     * Create a new {@code Translation} by using the X and Y values of the
+     * provided point. The point will have a vz value of 0.
+     *
+     * @param point the point to create a {@code Translation} based on.
+     */
     public Translation(PointXY point) {
         this(
                 point.x(),
@@ -107,6 +113,13 @@ public class Translation implements Serializable {
         );
     }
 
+    /**
+     * Create a new {@code Translation} by using the X and Y values of the
+     * provided point. The point will have a vz value of the degrees value
+     * of the point.
+     *
+     * @param point the point to create a {@code Translation} based on.
+     */
     public Translation(PointXYZ point) {
         this(
                 point.x(),
@@ -133,14 +146,12 @@ public class Translation implements Serializable {
      */
     public static Translation absoluteToRelative(Translation translation,
                                                  Angle heading) {
-        // Create a new angle by adding the translation's angle to the
-        // robot's heading. Once again - pretty swaggy.
+        // create a new angle by adding the translation's angle to the
+        // robot's heading. once again - pretty swaggy.
         Angle newAngle = translation.angle().add(heading);
 
-        // Return a new translation by using some fancy trig or something.
-        // Remember: COS = X, SIN = Y.
-        // Also, this code roughly corresponds with the stuff in the
-        // PointXY class' rotation method. Just as a heads-up.
+        // return a new translation by using some fancy trig or something.
+        // remember: COS = X, SIN = Y.
         return new Translation(
                 newAngle.cos() * translation.magnitude(),
                 newAngle.sin() * translation.magnitude(),
@@ -161,6 +172,99 @@ public class Translation implements Serializable {
      */
     public static Translation zero() {
         return new Translation(0, 0, 0);
+    }
+
+    /**
+     * Add two translations together.
+     *
+     * @param a one of the translations.
+     * @param b one of the translations.
+     * @return the sum of the two translations.
+     */
+    public static Translation add(Translation a,
+                                  Translation b) {
+        return new Translation(
+                a.vx() + b.vx(),
+                a.vy() + b.vy(),
+                a.vz() + b.vz()
+        );
+    }
+
+    /**
+     * Multiply two translations together.
+     *
+     * @param a one of the translations.
+     * @param b one of the translations.
+     * @return the product of the two translations.
+     */
+    public static Translation multiply(Translation a,
+                                       Translation b) {
+        return new Translation(
+                a.vx() * b.vx(),
+                a.vy() * b.vy(),
+                a.vz() * b.vz()
+        );
+    }
+
+    /**
+     * Multiply a translation by a value.
+     *
+     * @param a one of the translations.
+     * @param b the value to multiply each of the translation's component
+     *          values.
+     * @return the product of the translation and the multiplier.
+     */
+    public static Translation multiply(Translation a,
+                                       double b) {
+        return new Translation(
+                a.vx() * b,
+                a.vy() * b,
+                a.vz() * b
+        );
+    }
+
+    /**
+     * Subtract translation B from translation A.
+     *
+     * @param a the first of the two translations.
+     * @param b the second of the two translations.
+     * @return the remainder of the two translations.
+     */
+    public static Translation subtract(Translation a,
+                                       Translation b) {
+        return add(a, multiply(b, -1));
+    }
+
+    /**
+     * Divide a translation by another translation.
+     *
+     * @param a the numerator.
+     * @param b the denominator.
+     * @return the quotient of the two translations.
+     */
+    public static Translation divide(Translation a,
+                                     Translation b) {
+        return new Translation(
+                a.vx() / b.vx(),
+                a.vy() / b.vy(),
+                a.vz() / b.vz()
+        );
+    }
+
+    /**
+     * Divide a translation by a number.
+     *
+     * @param a the numerator.
+     * @param b the denominator.
+     * @return the quotient.
+     */
+    public static Translation divide(Translation a,
+                                     double b) {
+        return new Translation(
+                a.vx() / b,
+                a.vy() / b,
+                a.vz() / b
+        );
     }
 
     /**
@@ -241,6 +345,12 @@ public class Translation implements Serializable {
         return absoluteToRelative(this, heading);
     }
 
+    /**
+     * Create a new {@code Translation} with the provided vx value.
+     *
+     * @param vx the new value to assign to the translation.
+     * @return a new {@code Translation}.
+     */
     public Translation withVx(double vx) {
         return new Translation(
                 vx,
@@ -249,6 +359,12 @@ public class Translation implements Serializable {
         );
     }
 
+    /**
+     * Create a new {@code Translation} with the provided vy value.
+     *
+     * @param vx the new value to assign to the translation.
+     * @return a new {@code Translation}.
+     */
     public Translation withVy(double vy) {
         return new Translation(
                 this.vx,
@@ -257,12 +373,78 @@ public class Translation implements Serializable {
         );
     }
 
+    /**
+     * Create a new {@code Translation} with the provided vz value.
+     *
+     * @param vx the new value to assign to the translation.
+     * @return a new {@code Translation}.
+     */
     public Translation withVz(double vz) {
         return new Translation(
                 this.vx,
                 this.vy,
                 vz
         );
+    }
+
+    /**
+     * Add another translation to this translation.
+     *
+     * @param a the translation to add.
+     * @return the sum of the two translations.
+     */
+    public Translation add(Translation a) {
+        return add(this, a);
+    }
+
+    /**
+     * Multiply this translation by another translation.
+     *
+     * @param a the translation to multiply.
+     * @return the product of the two translations.
+     */
+    public Translation multiply(Translation a) {
+        return multiply(this, a);
+    }
+
+    /**
+     * Multiply this translation by a number.
+     *
+     * @param a the value to multiply this translation by.
+     * @return the product of this translation and the multiplier.
+     */
+    public Translation multiply(double a) {
+        return multiply(this, a);
+    }
+
+    /**
+     * Subtract a translation from this translation.
+     *
+     * @param a the translation to subtract.
+     * @return the remainder of the two translations.
+     */
+    public Translation subtract(Translation a) {
+        return subtract(this, a);
+    }
+
+    /**
+     * Divide this translation by another translation.
+     *
+     * @param a the translation to divide by.
+     * @return the quotient of the two translations.
+     */
+    public Translation divide(Translation a) {
+        return divide(this, a);
+    }
+
+    /**
+     * Divide this translation by a value.
+     *
+     * @param a the value to divide by.
+     * @return the quotient.
+     */
+    public Translation divide(double a) {
+        return divide(this, a);
     }
 
     @Override

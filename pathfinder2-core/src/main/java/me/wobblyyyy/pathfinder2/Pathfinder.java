@@ -364,7 +364,8 @@ public class Pathfinder {
         return tickUntil(
                 timeoutMs,
                 shouldContinueRunning,
-                pathfinder -> {}
+                pathfinder -> {
+                }
         );
     }
 
@@ -706,6 +707,12 @@ public class Pathfinder {
         return this;
     }
 
+    /*
+     * the waitUntil and waitAsLongAs methods have to use busy waiting
+     * because JDK8 doesn't support the Thread#onSpinWait method, which
+     * is really obnoxious, but oh well... I guess...
+     */
+
     /**
      * Pause until a certain condition is met.
      *
@@ -1035,6 +1042,11 @@ public class Pathfinder {
     /**
      * Set the X component of the robot's translation.
      *
+     * <p>
+     * This will update the robot's translation by copying over unchanged
+     * values and reassigning the changed value.
+     * </p>
+     *
      * @param vx the X component of the robot's translation.
      * @return {@code this}, used for method chaining.
      */
@@ -1059,6 +1071,11 @@ public class Pathfinder {
 
     /**
      * Set the Y component of the robot's translation.
+     *
+     * <p>
+     * This will update the robot's translation by copying over unchanged
+     * values and reassigning the changed value.
+     * </p>
      *
      * @param vy the Y component of the robot's translation.
      * @return {@code this}, used for method chaining.
@@ -1085,6 +1102,11 @@ public class Pathfinder {
     /**
      * Set the Z component of the robot's translation.
      *
+     * <p>
+     * This will update the robot's translation by copying over unchanged
+     * values and reassigning the changed value.
+     * </p>
+     *
      * @param vz the Z component of the robot's translation.
      * @return {@code this}, used for method chaining.
      */
@@ -1102,6 +1124,13 @@ public class Pathfinder {
      * Set a translation to the robot. This is how to manually move your robot.
      * If, for example, you're in TeleOp, and you'd like to drive your robot
      * according to some joystick inputs, this is the method you should use.
+     *
+     * <p>
+     * Calling this method will immediately update the robot's translation.
+     * However, if the robot is still under the control of a trajectory
+     * or follower or executor, the translation you set will have next to
+     * no effect.
+     * </p>
      *
      * @param translation the translation to set to the robot. This translation
      *                    should be RELATIVE, meaning forwards is forwards for
@@ -1133,6 +1162,12 @@ public class Pathfinder {
     public double getExecutionTime() {
         return getExecutorManager().getExecutionTime();
     }
+
+    /*
+     * I'm not entirely sure why you'd ever need any of these methods (even
+     * the toString method is rather pointless) but I'm putting them here
+     * anyways. so epic, right? so epic.
+     */
 
     @Override
     public int hashCode() {

@@ -347,7 +347,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public static Angle add(Angle a,
                             Angle b) {
-        return Angle.fromRad(a.rad() + b.rad());
+        return Angle.fixedRad(a.rad() + b.rad());
     }
 
     /**
@@ -371,7 +371,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public static Angle multiply(Angle a,
                                  Angle b) {
-        return Angle.fromRad(a.rad() * b.rad());
+        return Angle.fixedRad(a.rad() * b.rad());
     }
 
     /**
@@ -383,7 +383,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public static Angle multiply(Angle a,
                                  double b) {
-        return Angle.fromRad(a.rad() * b);
+        return Angle.fixedRad(a.rad() * b);
     }
 
     /**
@@ -429,7 +429,7 @@ public class Angle implements Comparable<Angle>, Serializable {
             );
         }
 
-        return Math.abs(a.rad() - b.rad()) <= tolerance;
+        return Math.abs(a.fix().rad() - b.fix().rad()) <= tolerance;
     }
 
     /**
@@ -449,7 +449,7 @@ public class Angle implements Comparable<Angle>, Serializable {
             );
         }
 
-        return Math.abs(a.deg() - b.deg()) <= Math.abs(tolerance);
+        return Math.abs(a.fix().deg() - b.fix().deg()) <= Math.abs(tolerance);
     }
 
     /**
@@ -473,7 +473,8 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param b the target angle. This one should not be the robot's heading.
      *          Well, I mean, it can be, but I don't know why you'd want it to
      *          be. It's up to you, dawg!
-     * @return the minimum delta between these two angles.
+     * @return the minimum delta between these two angles. This is measured
+     * in degrees, not radians.
      */
     public static double minimumDelta(Angle a,
                                       Angle b) {
@@ -1047,7 +1048,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * otherwise, false.
      */
     public boolean lessThan(Angle angle) {
-        return fixDeg(deg()) < fixDeg(angle.deg());
+        return minimumDelta(this, angle) <= 0;
     }
 
     /**
@@ -1058,7 +1059,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * otherwise, false.
      */
     public boolean greaterThan(Angle angle) {
-        return fixDeg(deg()) < fixDeg(angle.deg());
+        return minimumDelta(this, angle) >= 0;
     }
 
     /**
@@ -1162,7 +1163,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     @Override
     public int compareTo(Angle o) {
-        return Double.compare(this.rad(), o.rad());
+        return Double.compare(this.fix().rad(), o.fix().rad());
     }
 
     /**

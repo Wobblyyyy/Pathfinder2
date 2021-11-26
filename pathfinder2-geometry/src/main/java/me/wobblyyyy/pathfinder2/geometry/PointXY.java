@@ -54,25 +54,11 @@ import java.util.List;
  */
 @SuppressWarnings("DuplicatedCode")
 public class PointXY implements Comparable<PointXY>, Serializable {
-    /*
-     * Another non-JavaDoc comment - if you're only browsing the API, you
-     * can skip over all of this, as it contains nothing that's in any way,
-     * shape nor form, useful to you.
-     *
-     * Using PointXY can make code rather confusing. Because PointXYZ extends
-     * it and can be used in place of it, there's very few applications in
-     * which it's ever useful. Not only that, but it makes maintenance a
-     * total nightmare - if you add a method to the PointXY class, you have
-     * to add an analogous method to the PointXYZ class, otherwise things
-     * can go wrong pretty quickly.
-     *
-     * I guess what I'm trying to say here is that you should keep the
-     * PointXY and PointXYZ classes on the same page. If you make any
-     * modifications to the PointXY class, go check the PointXYZ class and
-     * see if there's anything you need to modify there.
+    /**
+     * A point with X and Y values of 0.
      */
-
     public static final PointXY ZERO = zero();
+
     /**
      * The point's X value.
      */
@@ -93,6 +79,86 @@ public class PointXY implements Comparable<PointXY>, Serializable {
                    double y) {
         this.x = x;
         this.y = y;
+    }
+
+    /**
+     * Create a new {@code PointXY} and convert the provided values from
+     * meters to inches.
+     *
+     * @param xMeters the X value.
+     * @param yMeters the Y value.
+     * @return a new {@code PointXY}.
+     */
+    public static PointXY fromMetersToInches(double xMeters,
+                                             double yMeters) {
+        return new PointXY(
+                xMeters * 39.37,
+                yMeters * 39.37
+        );
+    }
+
+    /**
+     * Create a new {@code PointXY} and convert the provided values from
+     * inches to meters.
+     *
+     * @param xInches the X value.
+     * @param yInches the Y value.
+     * @return a new {@code PointXY}.
+     */
+    public static PointXY fromInchesToMeters(double xInches,
+                                             double yInches) {
+        return new PointXY(
+                xInches * 0.025,
+                yInches * 0.025
+        );
+    }
+
+    /**
+     * Create a new {@code PointXY} and convert the provided values from
+     * meters to centimeters.
+     *
+     * @param xMeters the X value.
+     * @param yMeters the Y value.
+     * @return a new {@code PointXY}.
+     */
+    public static PointXY fromMetersToCentimeters(double xMeters,
+                                                  double yMeters) {
+        return new PointXY(
+                xMeters * 100,
+                yMeters * 100
+        );
+    }
+
+    /**
+     * Create a new {@code PointXY} and convert the provided values from
+     * centimeters to inches.
+     *
+     * @param xCentimeters the X value.
+     * @param yCentimeters the Y value.
+     * @return a new {@code PointXY}.
+     */
+    public static PointXY fromCentimetersToInches(double xCentimeters,
+                                                  double yCentimeters) {
+        return new PointXY(
+                xCentimeters / 100,
+                yCentimeters / 100
+        );
+    }
+
+    /**
+     * Create a new {@code PointXY} and convert the provided values from
+     * inches to centimeters.
+     *
+     * @param xInches the X value.
+     * @param yInches the Y value.
+     * @return a new {@code PointXY}.
+     */
+    public static PointXY fromInchesToCentimeters(double xInches,
+                                                  double yInches) {
+        return new PointXY(
+                (xInches * 0.025) / 100,
+                (yInches * 0.025) / 100
+        );
     }
 
     /**
@@ -1178,7 +1244,15 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     }
 
     /**
-     * {@inheritDoc}
+     * Convert this {@code PointXY} into a string.
+     *
+     * <p>
+     * The string takes the following format:
+     * <code>
+     * (x, y)
+     * </code>
+     * ... where X and Y are the X and Y values.
+     * </p>
      */
     @Override
     public String toString() {

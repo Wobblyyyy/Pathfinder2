@@ -101,19 +101,10 @@ public interface Follower {
                                               PointXYZ target,
                                               double speed,
                                               double turn) {
-        // Find the angle from the current point to the target point.
-        Angle theta = current.angleTo(target).fix();
+        Angle angle = current.angleTo(target).fix();
 
-        // Create a semi-real target point. This point should always be
-        // "speed" distance away. Because the inDirection point is being
-        // called on a zero point, the generated point ("targetPoint")
-        // should always have X and Y values that fit within the range
-        // of (-1.0, 1.0).
-        PointXYZ targetPoint = PointXYZ.zero().inDirection(speed, theta);
+        PointXYZ targetPoint = PointXYZ.zero().inDirection(speed, angle);
 
-        // Convert the target point into a translation by getting its X
-        // and Y values. The turn value comes from an external source,
-        // so we don't have to worry about it.
         return new Translation(targetPoint.x(), targetPoint.y(), turn);
     }
 

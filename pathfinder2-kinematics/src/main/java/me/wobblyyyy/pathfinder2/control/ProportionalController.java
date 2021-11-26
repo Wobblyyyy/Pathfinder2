@@ -10,8 +10,12 @@
 
 package me.wobblyyyy.pathfinder2.control;
 
+import me.wobblyyyy.pathfinder2.math.MinMax;
+
 /**
- * The most simple controller - a directly proportional controller.
+ * The most simple controller - a directly proportional controller. The value
+ * outputted this controller will be directly proportional to the error (or
+ * the values inputted to the controller).
  *
  * @author Colin Robertson
  */
@@ -24,7 +28,11 @@ public class ProportionalController extends AbstractController {
     /**
      * Create a new {@code ProportionalController}.
      *
-     * @param coefficient the controller's coefficient.
+     * @param coefficient the controller's coefficient. Higher coefficients
+     *                    mean higher outputs, lower coefficients mean lower
+     *                    outputs. A negative coefficient "inverts" the
+     *                    controller. A coefficient of 0 renders the controller
+     *                    completely useless.
      */
     public ProportionalController(double coefficient) {
         this.coefficient = coefficient;
@@ -50,6 +58,11 @@ public class ProportionalController extends AbstractController {
     @Override
     public double calculate(double value) {
         double delta = getTarget() - value;
-        return delta * coefficient;
+
+        return MinMax.clip(
+                delta * coefficient,
+                getMin(),
+                getMax()
+        );
     }
 }

@@ -82,6 +82,101 @@ public class PointXYZ extends PointXY {
     }
 
     /**
+     * Create a new {@code PointXYZ} and convert the provided values from
+     * meters to inches.
+     *
+     * @param xMeters the X value.
+     * @param yMeters the Y value.
+     * @param angle   the angle the point should have.
+     * @return a new {@code PointXYZ}.
+     */
+    public static PointXYZ fromMetersToInches(double xMeters,
+                                              double yMeters,
+                                              Angle angle) {
+        return new PointXYZ(
+                xMeters * 39.37,
+                yMeters * 39.37,
+                angle
+        );
+    }
+
+    /**
+     * Create a new {@code PointXYZ} and convert the provided values from
+     * inches to meters.
+     *
+     * @param xInches the X value.
+     * @param yInches the Y value.
+     * @param angle   the angle the point should have.
+     * @return a new {@code PointXYZ}.
+     */
+    public static PointXYZ fromInchesToMeters(double xInches,
+                                              double yInches,
+                                              Angle angle) {
+        return new PointXYZ(
+                xInches * 0.025,
+                yInches * 0.025,
+                angle
+        );
+    }
+
+    /**
+     * Create a new {@code PointXYZ} and convert the provided values from
+     * meters to centimeters.
+     *
+     * @param xMeters the X value.
+     * @param yMeters the Y value.
+     * @param angle   the angle the point should have.
+     * @return a new {@code PointXYZ}.
+     */
+    public static PointXYZ fromMetersToCentimeters(double xMeters,
+                                                   double yMeters,
+                                                   Angle angle) {
+        return new PointXYZ(
+                xMeters * 100,
+                yMeters * 100,
+                angle
+        );
+    }
+
+    /**
+     * Create a new {@code PointXYZ} and convert the provided values from
+     * centimeters to inches.
+     *
+     * @param xCentimeters the X value.
+     * @param yCentimeters the Y value.
+     * @param angle        the angle the point should have.
+     * @return a new {@code PointXYZ}.
+     */
+    public static PointXYZ fromCentimetersToInches(double xCentimeters,
+                                                   double yCentimeters,
+                                                   Angle angle) {
+        return new PointXYZ(
+                xCentimeters / 100,
+                yCentimeters / 100,
+                angle
+        );
+    }
+
+    /**
+     * Create a new {@code PointXYZ} and convert the provided values from
+     * inches to centimeters.
+     *
+     * @param xInches the X value.
+     * @param yInches the Y value.
+     * @param angle   the angle the point should have.
+     * @return a new {@code PointXYZ}.
+     */
+    public static PointXYZ fromInchesToCentimeters(double xInches,
+                                                   double yInches,
+                                                   Angle angle) {
+        return new PointXYZ(
+                (xInches * 0.025) / 100,
+                (yInches * 0.025) / 100,
+                angle
+        );
+    }
+
+    /**
      * Add two points together.
      *
      * @param a one of the two points to add.
@@ -218,6 +313,12 @@ public class PointXYZ extends PointXY {
         return point == null ? new PointXYZ(0, 0, Angle.zero()) : point;
     }
 
+    /**
+     * Get the average of a set of points.
+     *
+     * @param points the points to get the average of.
+     * @return the average of all the points.
+     */
     @SuppressWarnings("DuplicatedCode")
     public static PointXYZ average(List<PointXYZ> points) {
         double totalX = 0;
@@ -237,6 +338,12 @@ public class PointXYZ extends PointXY {
         );
     }
 
+    /**
+     * Get the average of a set of points.
+     *
+     * @param points the points to get the average of.
+     * @return the average of all the points.
+     */
     @SuppressWarnings("DuplicatedCode")
     public static PointXY average(PointXYZ... points) {
         double totalX = 0;

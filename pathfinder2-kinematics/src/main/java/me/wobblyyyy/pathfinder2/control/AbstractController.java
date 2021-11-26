@@ -125,6 +125,7 @@ public abstract class AbstractController implements Controller {
     @Override
     public double calculate(double value, double target) {
         setTarget(target);
+
         return calculate(value);
     }
 }
