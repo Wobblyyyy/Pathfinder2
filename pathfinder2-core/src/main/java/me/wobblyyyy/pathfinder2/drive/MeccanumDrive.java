@@ -150,7 +150,7 @@ public class MeccanumDrive implements Drive {
                 angleOffset,
                 0.0,
                 1.0,
-                0.001,
+                0.5,
                 swapXY,
                 reflectX,
                 reflectY
