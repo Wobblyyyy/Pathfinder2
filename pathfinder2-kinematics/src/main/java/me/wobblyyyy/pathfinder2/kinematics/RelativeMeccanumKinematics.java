@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.kinematics;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
+import me.wobblyyyy.pathfinder2.math.MinMax;
 
 /**
  * The most simple implementation of meccanum kinematics. For most use
@@ -108,31 +109,22 @@ public class RelativeMeccanumKinematics implements ForwardsKinematics<MeccanumSt
 
     @Override
     public MeccanumState calculate(Translation translation) {
-        double turn = translation.vz();
+        double xyMagnitude = MinMax.clip(
+                Math.hypot(translation.vx(), translation.vy()),
+                minMagnitude,
+                maxMagnitude
+        );
         Angle angle = Angle.atan2(
                 translation.vy(),
                 translation.vx()
         ).add(angleOffset);
-        double magnitude = Math.abs(Math.max(Math.min(
-                Math.hypot(
-                        translation.vx(),
-                        translation.vy()
-                ) + Math.abs(turn * turnMagnitude),
-                maxMagnitude
-        ), minMagnitude));
+        double turn = translation.vz() * turnMagnitude;
 
-        double frontLeft = calculatePower(angle, WHEEL_ANGLES[0]) + turn;
-        double frontRight = calculatePower(angle, WHEEL_ANGLES[1]) - turn;
-        double backLeft = calculatePower(angle, WHEEL_ANGLES[2]) + turn;
-        double backRight = calculatePower(angle, WHEEL_ANGLES[3]) - turn;
+        double fl = (calculatePower(angle, WHEEL_ANGLES[0]) * xyMagnitude) + turn;
+        double fr = (calculatePower(angle, WHEEL_ANGLES[1]) * xyMagnitude) - turn;
+        double bl = (calculatePower(angle, WHEEL_ANGLES[2]) * xyMagnitude) + turn;
+        double br = (calculatePower(angle, WHEEL_ANGLES[3]) * xyMagnitude) - turn;
 
-        return new MeccanumState(
-                frontLeft,
-                frontRight,
-                backLeft,
-                backRight
-        )
-                .normalizeFromMaxUnderOne()
-                .multiply(magnitude);
+        return new MeccanumState(fl, fr, bl, br).normalizeFromMaxUnderOne();
     }
 }
