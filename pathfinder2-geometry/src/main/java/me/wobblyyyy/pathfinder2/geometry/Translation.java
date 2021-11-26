@@ -146,15 +146,14 @@ public class Translation implements Serializable {
      */
     public static Translation absoluteToRelative(Translation translation,
                                                  Angle heading) {
-        // create a new angle by adding the translation's angle to the
-        // robot's heading. once again - pretty swaggy.
-        Angle newAngle = translation.angle().add(heading);
+        PointXY point = PointXY.ZERO.inDirection(
+                translation.magnitude(),
+                translation.angle().add(heading)
+        );
 
-        // return a new translation by using some fancy trig or something.
-        // remember: COS = X, SIN = Y.
         return new Translation(
-                newAngle.cos() * translation.magnitude(),
-                newAngle.sin() * translation.magnitude(),
+                point.x(),
+                point.y(),
                 translation.vz()
         );
     }
@@ -362,7 +361,7 @@ public class Translation implements Serializable {
     /**
      * Create a new {@code Translation} with the provided vy value.
      *
-     * @param vx the new value to assign to the translation.
+     * @param vy the new value to assign to the translation.
      * @return a new {@code Translation}.
      */
     public Translation withVy(double vy) {
@@ -376,7 +375,7 @@ public class Translation implements Serializable {
     /**
      * Create a new {@code Translation} with the provided vz value.
      *
-     * @param vx the new value to assign to the translation.
+     * @param vz the new value to assign to the translation.
      * @return a new {@code Translation}.
      */
     public Translation withVz(double vz) {
