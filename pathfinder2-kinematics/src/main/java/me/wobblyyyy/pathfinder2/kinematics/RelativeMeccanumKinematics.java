@@ -89,22 +89,12 @@ public class RelativeMeccanumKinematics implements ForwardsKinematics<MeccanumSt
         this.angleOffset = angleOffset;
     }
 
-    private static double transformCos(Angle movement,
-                                       Angle wheel) {
-        return movement.cos() * wheel.cos() * 1.0;
-    }
+    private static double calculatePower(Angle movement,
+                                         Angle wheel) {
+        double x = movement.sin() * wheel.sin();
+        double y = movement.cos() * wheel.cos();
 
-    private static double transformSin(Angle movement,
-                                       Angle wheel) {
-        return movement.sin() * wheel.sin() * 1.0;
-    }
-
-    private static double calculatePower(Angle angleMovement,
-                                         Angle angleWheel) {
-        double transformX = transformSin(angleMovement, angleWheel);
-        double transformY = transformCos(angleMovement, angleWheel);
-
-        return transformX + transformY;
+        return x + y;
     }
 
     @Override
