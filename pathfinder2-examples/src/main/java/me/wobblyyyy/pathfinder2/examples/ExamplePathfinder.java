@@ -18,11 +18,14 @@ import me.wobblyyyy.pathfinder2.follower.generators.GenericFollowerGenerator;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
+import me.wobblyyyy.pathfinder2.prebuilt.TrajectoryFactory;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.robot.Robot;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedDrive;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
+import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
+import me.wobblyyyy.pathfinder2.trajectory.builder.LinearTrajectoryBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,15 +62,15 @@ public class ExamplePathfinder {
     // there would be a Gamepad object, and we'd get input states from there.
     // However, for the sake of simplicity, these are being used in place of
     // that Gamepad object.
-    private static boolean gamepadA = false;
-    private static boolean gamepadB = false;
-    private static boolean gamepadX = false;
-    private static boolean gamepadY = false;
-    private static boolean gamepadStart = false;
-    private static double joystick1x = 0.0;
-    private static double joystick2x = 0.0;
-    private static double joystick1y = 0.0;
-    private static double joystick2y = 0.0;
+    private static final boolean gamepadA = false;
+    private static final boolean gamepadB = false;
+    private static final boolean gamepadX = false;
+    private static final boolean gamepadY = false;
+    private static final boolean gamepadStart = false;
+    private static final double joystick1x = 0.0;
+    private static final double joystick2x = 0.0;
+    private static final double joystick1y = 0.0;
+    private static final double joystick2y = 0.0;
 
     private static final PointXYZ TARGET_A = new PointXYZ(0, 0, 0);
     private static final PointXYZ TARGET_B = new PointXYZ(10, 10, 0);
@@ -100,7 +103,9 @@ public class ExamplePathfinder {
      * Autonomous period of FTC/FRC games, because it's the only thing the robot
      * has to do, but wouldn't be so great for the teleop periods.
      */
+    @SuppressWarnings("DuplicatedCode")
     public void goToSomePoints() {
+        // this is a pretty bad way of going to the points...
         List<PointXYZ> points = new ArrayList<PointXYZ>() {{
             add(new PointXYZ( 0,  0, 0));
             add(new PointXYZ(10,  0, 0));
@@ -112,6 +117,34 @@ public class ExamplePathfinder {
         for (PointXYZ point : points) {
             goToPoint(point);
         }
+    }
+
+    public void betterGoToSomePoints() {
+        // generate a list of trajectories w/ LinearTrajectoryBuilder
+        // the setSpeed method is used to dynamically adjust the speed of
+        // the robot - for example, the speed is halved, then the speed
+        // is reset, then the speed is doubled
+        List<Trajectory> trajectories = new LinearTrajectoryBuilder(
+                SPEED,
+                TOLERANCE,
+                ANGLE_TOLERANCE,
+                PointXYZ.ZERO
+        )
+                .goTo(new PointXYZ(0, 0, 0))
+                .goTo(new PointXYZ(10, 0, 0))
+                .setSpeed(SPEED / 2)
+                .goTo(new PointXYZ(10, 10, 0))
+                .setSpeed(SPEED)
+                .goTo(new PointXYZ(0, 10, 0))
+                .setSpeed(SPEED * 2)
+                .goTo(new PointXYZ(0, 0, 0))
+                .getTrajectories();
+
+        // follow the trajectories with a timeout of 10 seconds. if more than
+        // 10 seconds pass and the trajectories haven't finished yet, stop
+        // following the trajectories
+        pathfinder.followTrajectories(trajectories)
+                .tickUntil(10_000);
     }
 
     /**
@@ -128,6 +161,7 @@ public class ExamplePathfinder {
      * Pathfinder, meaning it will no longer try to follow any paths, meaning
      * you have control over the robot.
      */
+    @SuppressWarnings("UnnecessaryLocalVariable")
     public void loop() {
         if (!pathfinder.isActive()) {
             // If Pathfinder isn't active, let's take a look at our

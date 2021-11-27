@@ -30,34 +30,9 @@ public class TimedTrajectory implements Trajectory {
     private final Translation translation;
     private double startTime = 0;
     private double elapsedTime = 0;
-    private final double timeout;
+    private final double timeoutMs;
     private final double speed;
     private final double turnMultiplier;
-
-    /**
-     * Create a new {@code TimedTrajectory} with a default speed value of 1.0
-     * and a default turn multiplier of 1.0.
-     *
-     * @param translation    the translation the robot should follow. This
-     *                       translation will have vx and vy values of how far
-     *                       the robot should move in those respective directions
-     *                       (remember, always relative to the robot). The vz
-     *                       value of this translation will be how fast the
-     *                       robot will turn, in radians.
-     * @param timeout        how long the trajectory should last. This time
-     *                       is measured in milliseconds. The trajectory is
-     *                       considered finished after the elapsed time (ms) is
-     *                       greater than this value.
-     */
-    public TimedTrajectory(Translation translation,
-                           double timeout) {
-        this(
-                translation,
-                timeout,
-                1.0,
-                1.0
-        );
-    }
 
     /**
      * Create a new {@code TimedTrajectory}.
@@ -68,7 +43,7 @@ public class TimedTrajectory implements Trajectory {
      *                       (remember, always relative to the robot). The vz
      *                       value of this translation will be how fast the
      *                       robot will turn, in radians.
-     * @param timeout        how long the trajectory should last. This time
+     * @param timeoutMs      how long the trajectory should last. This time
      *                       is measured in milliseconds. The trajectory is
      *                       considered finished after the elapsed time (ms) is
      *                       greater than this value.
@@ -81,11 +56,11 @@ public class TimedTrajectory implements Trajectory {
      *                       will attempt to turn more slowly.
      */
     public TimedTrajectory(Translation translation,
-                           double timeout,
+                           double timeoutMs,
                            double speed,
                            double turnMultiplier) {
         this.translation = translation;
-        this.timeout = timeout;
+        this.timeoutMs = timeoutMs;
         this.speed = speed;
         this.turnMultiplier = turnMultiplier;
     }
@@ -122,7 +97,7 @@ public class TimedTrajectory implements Trajectory {
 
     @Override
     public boolean isDone(PointXYZ current) {
-        return elapsedTime >= timeout;
+        return elapsedTime >= timeoutMs;
     }
 
     @Override

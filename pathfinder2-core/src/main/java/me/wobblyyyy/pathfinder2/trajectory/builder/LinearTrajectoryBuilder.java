@@ -98,24 +98,30 @@ public class LinearTrajectoryBuilder {
         return this.speed;
     }
 
-    public void setSpeed(double speed) {
+    public LinearTrajectoryBuilder setSpeed(double speed) {
         this.speed = speed;
+
+        return this;
     }
 
     public double getTolerance() {
         return this.tolerance;
     }
 
-    public void setTolerance(double tolerance) {
+    public LinearTrajectoryBuilder setTolerance(double tolerance) {
         this.tolerance = tolerance;
+
+        return this;
     }
 
     public Angle getAngleTolerance() {
         return this.angleTolerance;
     }
 
-    public void setAngleTolerance(Angle angleTolerance) {
+    public LinearTrajectoryBuilder setAngleTolerance(Angle angleTolerance) {
         this.angleTolerance = angleTolerance;
+
+        return this;
     }
 
     /**
@@ -126,7 +132,7 @@ public class LinearTrajectoryBuilder {
      * @param targetAngle the angle the trajectory should attempt to turn to.
      * @param angle       the angle at which the line should be drawn.
      */
-    public void rotateLine(double distance,
+    public LinearTrajectoryBuilder rotateLine(double distance,
                            Angle targetAngle,
                            Angle angle) {
         PointXYZ next = last.inDirection(distance, angle);
@@ -139,6 +145,8 @@ public class LinearTrajectoryBuilder {
         ));
 
         last = next;
+
+        return this;
     }
 
     /**
@@ -147,9 +155,11 @@ public class LinearTrajectoryBuilder {
      * @param distance how long the line should be.
      * @param angle    the direction the line should be drawn in.
      */
-    public void line(double distance,
+    public LinearTrajectoryBuilder line(double distance,
                      Angle angle) {
         rotateLine(distance, last.z(), angle);
+
+        return this;
     }
 
     /**
@@ -157,8 +167,10 @@ public class LinearTrajectoryBuilder {
      *
      * @param distance how far to move.
      */
-    public void forwards(double distance) {
+    public LinearTrajectoryBuilder forwards(double distance) {
         this.line(distance, FORWARDS.add(last.z()));
+
+        return this;
     }
 
     /**
@@ -166,8 +178,10 @@ public class LinearTrajectoryBuilder {
      *
      * @param distance how far to move.
      */
-    public void rightwards(double distance) {
+    public LinearTrajectoryBuilder rightwards(double distance) {
         this.line(distance, RIGHTWARDS.add(last.z()));
+
+        return this;
     }
 
     /**
@@ -175,8 +189,10 @@ public class LinearTrajectoryBuilder {
      *
      * @param distance how far to move.
      */
-    public void leftwards(double distance) {
+    public LinearTrajectoryBuilder leftwards(double distance) {
         this.line(distance, LEFTWARDS.add(last.z()));
+
+        return this;
     }
 
     /**
@@ -184,8 +200,10 @@ public class LinearTrajectoryBuilder {
      *
      * @param distance how far to move.
      */
-    public void backwards(double distance) {
+    public LinearTrajectoryBuilder backwards(double distance) {
         this.line(distance, BACKWARDS.add(last.z()));
+
+        return this;
     }
 
     /**
@@ -194,13 +212,15 @@ public class LinearTrajectoryBuilder {
      * @param distance   how far to move.
      * @param toRotateBy how much to rotate.
      */
-    public void rotateForwards(double distance,
+    public LinearTrajectoryBuilder rotateForwards(double distance,
                                Angle toRotateBy) {
         rotateLine(
                 distance,
                 last.z().add(toRotateBy),
                 FORWARDS.add(last.z())
         );
+
+        return this;
     }
 
     /**
@@ -209,13 +229,15 @@ public class LinearTrajectoryBuilder {
      * @param distance   how far to move.
      * @param toRotateBy how much to rotate.
      */
-    public void rotateRightwards(double distance,
+    public LinearTrajectoryBuilder rotateRightwards(double distance,
                                  Angle toRotateBy) {
         rotateLine(
                 distance,
                 last.z().add(toRotateBy),
                 RIGHTWARDS.add(last.z())
         );
+
+        return this;
     }
 
     /**
@@ -224,13 +246,15 @@ public class LinearTrajectoryBuilder {
      * @param distance   how far to move.
      * @param toRotateBy how much to rotate.
      */
-    public void rotateLeftwards(double distance,
+    public LinearTrajectoryBuilder rotateLeftwards(double distance,
                                 Angle toRotateBy) {
         rotateLine(
                 distance,
                 last.z().add(toRotateBy),
                 LEFTWARDS.add(last.z())
         );
+
+        return this;
     }
 
     /**
@@ -239,13 +263,15 @@ public class LinearTrajectoryBuilder {
      * @param distance   how far to move.
      * @param toRotateBy how much to rotate.
      */
-    public void rotateBackwards(double distance,
+    public LinearTrajectoryBuilder rotateBackwards(double distance,
                                 Angle toRotateBy) {
         rotateLine(
                 distance,
                 last.z().add(toRotateBy),
                 BACKWARDS.add(last.z())
         );
+
+        return this;
     }
 
     /**
@@ -253,7 +279,7 @@ public class LinearTrajectoryBuilder {
      *
      * @param target the target point.
      */
-    public void goTo(PointXYZ target) {
+    public LinearTrajectoryBuilder goTo(PointXYZ target) {
         trajectories.add(new LinearTrajectory(
                 target,
                 speed,
@@ -262,6 +288,8 @@ public class LinearTrajectoryBuilder {
         ));
 
         last = target;
+
+        return this;
     }
 
     /**
@@ -269,8 +297,10 @@ public class LinearTrajectoryBuilder {
      *
      * @param x the X value.
      */
-    public void goToX(double x) {
+    public LinearTrajectoryBuilder goToX(double x) {
         goTo(last.withX(x));
+
+        return this;
     }
 
     /**
@@ -278,8 +308,10 @@ public class LinearTrajectoryBuilder {
      *
      * @param y the Y value.
      */
-    public void goToY(double y) {
+    public LinearTrajectoryBuilder goToY(double y) {
         goTo(last.withY(y));
+
+        return this;
     }
 
     /**
@@ -289,9 +321,11 @@ public class LinearTrajectoryBuilder {
      * @param x target X coordinate.
      * @param y target Y coordinate.
      */
-    public void goTo(double x,
-                     double y) {
+    public LinearTrajectoryBuilder goTo(double x,
+                                        double y) {
         goTo(new PointXYZ(x, y, last.z()));
+
+        return this;
     }
 
     /**

@@ -17,7 +17,16 @@ import me.wobblyyyy.pathfinder2.math.MinMax;
  * outputted this controller will be directly proportional to the error (or
  * the values inputted to the controller).
  *
+ * <p>
+ * For most use cases, this type of controller will work perfectly fine. I'd
+ * suggest you use one of these bad boys for your robot's turn controller, but
+ * that's just me. There may or may not be a PID controller by the time
+ * you're reading this, so you can use that if you'd like, but this thing
+ * works pretty well too.
+ * </p>
+ *
  * @author Colin Robertson
+ * @since 0.0.0
  */
 public class ProportionalController extends AbstractController {
     /**

@@ -60,6 +60,31 @@ import java.io.Serializable;
  */
 public class Translation implements Serializable {
     /**
+     * A translation with values of (0, 0, 0).
+     */
+    public static final Translation ZERO = new Translation(0, 0, 0);
+
+    /**
+     * A translation with values of (0, 1, 0).
+     */
+    public static final Translation FORWARDS = new Translation(0, 1, 0);
+
+    /**
+     * A translation with values of (1, 0, 0).
+     */
+    public static final Translation RIGHTWARDS = new Translation(1, 0, 0);
+
+    /**
+     * A translation with values of (0, -1, 0).
+     */
+    public static final Translation BACKWARDS = new Translation(0, -1, 0);
+
+    /**
+     * A translation with values of (-1, 0, 0).
+     */
+    public static final Translation LEFTWARDS = new Translation(-1, 0, 0);
+
+    /**
      * The robot's translation along its X axis.
      */
     private final double vx;
@@ -106,8 +131,8 @@ public class Translation implements Serializable {
      *
      * @param point the point to create a {@code Translation} based on.
      */
-    public Translation(PointXY point) {
-        this(
+    public static Translation fromPointXY(PointXY point) {
+        return new Translation(
                 point.x(),
                 point.y()
         );
@@ -119,9 +144,10 @@ public class Translation implements Serializable {
      * of the point.
      *
      * @param point the point to create a {@code Translation} based on.
+     * @return a new {@code Translation}.
      */
-    public Translation(PointXYZ point) {
-        this(
+    public static Translation fromPointXYZ(PointXYZ point) {
+        return new Translation(
                 point.x(),
                 point.y(),
                 point.z().deg()

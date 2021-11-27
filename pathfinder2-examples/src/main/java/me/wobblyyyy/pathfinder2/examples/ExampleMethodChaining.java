@@ -13,24 +13,14 @@ package me.wobblyyyy.pathfinder2.examples;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.control.GenericTurnController;
-import me.wobblyyyy.pathfinder2.drive.MeccanumDrive;
 import me.wobblyyyy.pathfinder2.follower.FollowerGenerator;
 import me.wobblyyyy.pathfinder2.follower.generators.GenericFollowerGenerator;
-import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.robot.Robot;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedDrive;
-import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedMotor;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
-import me.wobblyyyy.pathfinder2.utils.DualJoystick;
-import me.wobblyyyy.pathfinder2.utils.Gamepad;
-import me.wobblyyyy.pathfinder2.utils.Joystick;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ExampleMethodChaining {
     private final Drive drive = new SimulatedDrive();
@@ -45,6 +35,10 @@ public class ExampleMethodChaining {
 
     }
 
+    private boolean shouldRun() {
+        return true;
+    }
+
     /**
      * Drive in autonomous mode! Very cool.
      *
@@ -55,11 +49,22 @@ public class ExampleMethodChaining {
     @SuppressWarnings("DuplicatedCode")
     public void autonomousDrive() {
         pathfinder
-                .goTo(new PointXYZ(0, 0, 0)).tickUntil()
-                .goTo(new PointXYZ(10, 0, 0)).tickUntil()
-                .goTo(new PointXYZ(10, 10, 0)).tickUntil()
-                .goTo(new PointXYZ(0, 10, 0)).tickUntil()
-                .goTo(new PointXYZ(0, 0, 0)).tickUntil()
+                .goTo(new PointXYZ(0, 0, 0))
+                .tickUntil()
+                .goTo(new PointXYZ(10, 0, 0))
+                .tickUntil()
+                .goTo(new PointXYZ(10, 10, 0))
+                .tickUntil()
+                .goTo(new PointXYZ(0, 10, 0))
+                .tickUntil(4_000, this::shouldRun, (pathfinder, elapsedMs) -> {
+                    System.out.printf(
+                            "Current position: %s%n" +
+                                    "Elapsed time: %sms%n",
+                            pathfinder.getPosition(),
+                            elapsedMs
+                    );
+                })
+                .goTo(new PointXYZ(0, 0, 0))
                 .andThen((pf) -> {
                     // print the position at the very end
                     System.out.printf(

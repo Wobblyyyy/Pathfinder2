@@ -33,6 +33,8 @@ import java.util.List;
  * @since 0.0.0
  */
 public class PointXYZ extends PointXY {
+    public static final PointXYZ ZERO = PointXYZ.zero();
+
     /**
      * The point's angle, or heading, or whatever you want to call it.
      */
