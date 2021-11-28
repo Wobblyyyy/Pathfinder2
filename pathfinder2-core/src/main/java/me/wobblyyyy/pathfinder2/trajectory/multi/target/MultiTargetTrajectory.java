@@ -15,6 +15,15 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.math.Magnitude;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 
+/**
+ * A multi-stage trajectory with multiple target points. This trajectory
+ * allows each point to have individual values - speed, tolerance, angle
+ * tolerance, and even whether it should act more like a {@code FastTrajectory}
+ * or a {@code LinearTrajectory}. This is one of the few mutable types of
+ *
+ * @author Colin Robertson
+ * @since 0.4.0
+ */
 public class MultiTargetTrajectory implements Trajectory {
     private final TrajectoryTarget[] targets;
     private int index = 0;
@@ -27,12 +36,20 @@ public class MultiTargetTrajectory implements Trajectory {
     private boolean hasFinished = false;
     private boolean hasRan = false;
 
+    /**
+     * Create a new {@code MultiTargetTrajectory}.
+     *
+     * @param targets an array of targets for the {@code Trajectory} to
+     *                follow.
+     */
     public MultiTargetTrajectory(TrajectoryTarget[] targets) {
         this.targets = targets;
     }
 
     @Override
     public PointXYZ nextMarker(PointXYZ current) {
+        // if this is the first time the trajectory is running,
+        // set up some values
         if (!hasRan) {
             lastStartX = current.x();
             lastStartY = current.y();
@@ -49,10 +66,12 @@ public class MultiTargetTrajectory implements Trajectory {
 
         TrajectoryTarget target = targets[index];
 
+        // current values
         double currentX = current.x();
         double currentY = current.y();
         Angle currentAngle = current.z();
 
+        // sort of "delta" values - difference between current and start
         double translationX = currentX - lastStartX;
         double translationY = currentY - lastStartY;
         double translationZ = currentAngle.subtract(lastStartZ).fix().deg();
@@ -65,6 +84,8 @@ public class MultiTargetTrajectory implements Trajectory {
                 Magnitude.higherMagnitude(translationZ, requiredTranslationZ);
 
         if (hasCompletedX && hasCompletedY && hasCompletedZ) {
+            // precision targets need to be treated differently - we have
+            // to handle tolerance values
             if (target.precision() == TargetPrecision.PRECISE) {
                 PointXYZ targetPoint = target.target();
                 double distance = current.absDistance(targetPoint);
@@ -82,7 +103,10 @@ public class MultiTargetTrajectory implements Trajectory {
                 }
             }
 
+            // non-precision targets are treated normally - we don't really
+            // care about tolerance
             if (index == targets.length - 1) {
+                // if it's the last target point, the entire trajectory is done
                 hasFinished = true;
                 return current;
             } else {
