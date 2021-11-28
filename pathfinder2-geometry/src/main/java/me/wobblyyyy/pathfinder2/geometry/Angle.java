@@ -1147,12 +1147,16 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public Translation toTranslation(double translationMagnitude,
                                      double vz) {
+        PointXY point = PointXY.ZERO.inDirection(
+                translationMagnitude,
+                this
+        );
+
         return new Translation(
-                PointXY.ZERO.inDirection(
-                        translationMagnitude,
-                        this
-                )
-        ).withVz(vz);
+                point.x(),
+                point.y(),
+                vz
+        );
     }
 
     /**

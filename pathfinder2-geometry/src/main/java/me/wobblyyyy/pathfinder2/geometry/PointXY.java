@@ -901,6 +901,24 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     }
 
     /**
+     * Get the absolute value of the point's X value.
+     *
+     * @return the absolute value of the point's X value.
+     */
+    public double absX() {
+        return Math.abs(this.x);
+    }
+
+    /**
+     * Get the absolute value of the point's Y value.
+     *
+     * @return the absolute value of the point's Y value.
+     */
+    public double absY() {
+        return Math.abs(this.y);
+    }
+
+    /**
      * Add this point with another point.
      *
      * @param a the point to add to this point.
