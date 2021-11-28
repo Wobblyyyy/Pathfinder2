@@ -13,6 +13,39 @@ package me.wobblyyyy.pathfinder2.trajectory.multi.target;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
+/**
+ * A single target for a multi-target trajectory.
+ *
+ * <p>
+ * Each target has several values:
+ * <ul>
+ *     <li>
+ *         <b>Type of precision</b> -
+ *         which type of precision the target point uses. There are two types
+ *         of precision - {@code PRECISE} and {@code FAST}. The differences
+ *         between these is documented here: {@link TargetPrecision}
+ *     </li>
+ *     <li>
+ *         <b>Speed</b> -
+ *         how fast the robot should move towards the target point. This speed
+ *         value should be greater than 0 and less than or equal to 1.
+ *     </li>
+ *     <li>
+ *         <b>Tolerance</b> -
+ *         the tolerance the target should have. This value only impacts
+ *         {@code PRECISE} trajectories.
+ *     </li>
+ *     <li>
+ *         <b>Angle tolerance</b> -
+ *         the same thing as regular tolerance, but for angles. Likewise,
+ *         this only impacts {@code PRECISE} trajectories.
+ *     </li>
+ * </ul>
+ * </p>
+ *
+ * @author Colin Robertson
+ * @since 0.4.0
+ */
 public class TrajectoryTarget {
     private final PointXYZ target;
     private final TargetPrecision precision;

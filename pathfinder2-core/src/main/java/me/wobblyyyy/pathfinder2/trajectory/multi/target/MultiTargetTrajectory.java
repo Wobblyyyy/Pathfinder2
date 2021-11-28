@@ -20,6 +20,21 @@ import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
  * allows each point to have individual values - speed, tolerance, angle
  * tolerance, and even whether it should act more like a {@code FastTrajectory}
  * or a {@code LinearTrajectory}. This is one of the few mutable types of
+ * trajectory. Every time the {@link #nextMarker(PointXYZ)} method is called,
+ * the {@code MultiTargetTrajectory} determines if it's reached its target
+ * point. If it has reached the target point, it'll begin moving to the next
+ * target point. If it has not reached the target point, it'll continue going
+ * towards that point. After all of the target points have been reached,
+ * the trajectory is marked as finished, and the {@link #isDone(PointXYZ)}
+ * method will return true, terminating the trajectory's execution.
+ *
+ * <p>
+ * This class provides a streamlined way of creating trajectories that have
+ * non-linear movement without dealing with splines and spline interpolation.
+ * Using several target points with the {@link TargetPrecision#FAST} precision
+ * type allows you to follow a loosely-defined set of points rather quickly,
+ * while still maintaining somewhat respectable accuracy.
+ * </p>
  *
  * @author Colin Robertson
  * @since 0.4.0
