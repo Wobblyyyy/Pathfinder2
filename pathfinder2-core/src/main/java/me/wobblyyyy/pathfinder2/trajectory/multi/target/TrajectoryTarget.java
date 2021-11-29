@@ -10,6 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.trajectory.multi.target;
 
+import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
+import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
+import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
+import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
@@ -53,11 +57,42 @@ public class TrajectoryTarget {
     private final double tolerance;
     private final Angle angleTolerance;
 
+    /**
+     * Create a new {@code TrajectoryTarget}.
+     *
+     * @param target         the point that the trajectory target will try
+     *                       to reach.
+     * @param precision      the type of precision the target should use.
+     *                       Either {@code FAST} or {@code PRECISE}.
+     * @param speed          the speed at which the robot will move towards
+     *                       the target. This value should be greater than 0
+     *                       and less than or equal to 1.
+     * @param tolerance      the tolerance used in determining whether the robot
+     *                       has reached its target point. This only impacts
+     *                       {@code PRECISE} targets.
+     * @param angleTolerance the angle tolerance used in determining whether the
+     *                       robot has reached its target point. This only
+     *                       impacts {@code PRECISE} targets.
+     */
     public TrajectoryTarget(PointXYZ target,
                             TargetPrecision precision,
                             double speed,
                             double tolerance,
                             Angle angleTolerance) {
+        if (target == null) throw new NullPointException(
+                "Cannot create a trajectory target with a null point!");
+
+        if (speed <= 0 || speed > 1) throw new InvalidSpeedException(
+                "Cannot create a trajectory target with a speed value " +
+                        "less than or equal to 0 or greater than 1!");
+
+        if (tolerance < 0) throw new InvalidToleranceException(
+                "Cannot create a trajectory target with a tolerance " +
+                        "value less than 0!");
+
+        if (angleTolerance == null) throw new NullAngleException(
+                "Cannot create a trajectory target with a null angle!");
+
         this.target = target;
         this.precision = precision;
         this.speed = speed;

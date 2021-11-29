@@ -23,12 +23,26 @@ import java.util.List;
  * you can make use of. In addition to providing utilities, the {@code Zone}
  * class allows you to avoid the {@link Shape} class' generics.
  *
+ * <p>
+ * You can overload some methods to control the zone's behavior.
+ * <ul>
+ *     <li>{@link #onEnter(PointXYZ)}</li>
+ *     <li>{@link #onExit(PointXYZ)}</li>
+ *     <li>{@link #whileInside(PointXYZ)}</li>
+ * </ul>
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.1.0
  */
 public class Zone implements Serializable {
     private final Shape<?> shape;
 
+    /**
+     * Create a {@code Zone} based on a {@link Shape}.
+     *
+     * @param shape the shape that represents the zone.
+     */
     public Zone(Shape<?> shape) {
         this.shape = shape;
     }
@@ -69,6 +83,11 @@ public class Zone implements Serializable {
         return inflated;
     }
 
+    /**
+     * Get the zone's shape.
+     *
+     * @return the zone's shape.
+     */
     public final Shape<?> getShape() {
         return shape;
     }
@@ -89,14 +108,29 @@ public class Zone implements Serializable {
         return this.shape.doesCollideWith(shape);
     }
 
+    /**
+     * Code to be executed whenever a robot enters the zone.
+     *
+     * @param robotPosition the robot's position.
+     */
     public void onEnter(PointXYZ robotPosition) {
 
     }
 
+    /**
+     * Code to be executed whenever a robot exits the zone.
+     *
+     * @param robotPosition the robot's position.
+     */
     public void onExit(PointXYZ robotPosition) {
 
     }
 
+    /**
+     * Code to be executed whenever the robot is inside the zone.
+     *
+     * @param robotPosition the robot's position.
+     */
     public void whileInside(PointXYZ robotPosition) {
 
     }

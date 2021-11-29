@@ -14,6 +14,23 @@ import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
+/**
+ * Builder for creating a {@link TrajectoryTarget}.
+ *
+ * <p>
+ * The default values are as follows:
+ * <ul>
+ *     <li>target: null</li>
+ *     <li>precision: {@link TargetPrecision#FAST}</li>
+ *     <li>speed: 0.5</li>
+ *     <li>tolerance: 2</li>
+ *     <li>angleTolerance: 5 degrees</li>
+ * </ul>
+ * </p>
+ *
+ * @author Colin Robertson
+ * @since 0.4.0
+ */
 public class TargetBuilder {
     private PointXYZ target = null;
     private TargetPrecision precision = TargetPrecision.FAST;

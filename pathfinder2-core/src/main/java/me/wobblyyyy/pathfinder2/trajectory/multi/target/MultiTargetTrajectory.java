@@ -14,6 +14,7 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.math.Magnitude;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
+import me.wobblyyyy.pathfinder2.utils.NotNull;
 
 /**
  * A multi-stage trajectory with multiple target points. This trajectory
@@ -58,6 +59,12 @@ public class MultiTargetTrajectory implements Trajectory {
      *                follow.
      */
     public MultiTargetTrajectory(TrajectoryTarget[] targets) {
+        NotNull.throwExceptionIfNull(
+                "Cannot create a multi-target trajectory with " +
+                        "any null targets!",
+                (Object[]) targets
+        );
+
         this.targets = targets;
     }
 

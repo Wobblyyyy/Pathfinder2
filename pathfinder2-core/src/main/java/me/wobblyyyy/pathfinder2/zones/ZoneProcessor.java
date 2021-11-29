@@ -18,14 +18,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A {@code ZoneProcessor} is responsible for dealing with {@link Zone}
+ * objects, allowing you to do some pretty cool stuff. Unfortunately, I
+ * still can't juggle chainsaws (which is incredibly cool), but you wanna
+ * know what's just as cool? A {@code ZoneProcessor}.
+ *
+ * @author Colin Robertson
+ * @since 0.1.0
+ */
 public class ZoneProcessor {
     private final Map<String, Zone> zones = new HashMap<>();
     private List<Zone> currentZones = new ArrayList<>();
 
+    /**
+     * Create a new {@code ZoneProcessor}.
+     */
     public ZoneProcessor() {
 
     }
 
+    /**
+     * Add a zone to collection of zones the processor is handling.
+     *
+     * @param name the name of the zone. This name will be needed if you're
+     *             planning on removing the zone or referencing it at some
+     *             point. This is also used for getting a list of names
+     *             of zones.
+     * @param zone the zone.
+     */
     public void addZone(String name,
                         Zone zone) {
         if (name == null)
@@ -43,6 +64,11 @@ public class ZoneProcessor {
         zones.put(name, zone);
     }
 
+    /**
+     * Remove a zone based on the zone's name.
+     *
+     * @param name the name of the zone to remove.
+     */
     public void removeZone(String name) {
         if (name == null)
             throw new IllegalArgumentException("Zones must have a non-null name!");
@@ -50,6 +76,12 @@ public class ZoneProcessor {
         zones.remove(name);
     }
 
+    /**
+     * Get a list of zones that contain the provided point.
+     *
+     * @param point the point to test.
+     * @return a list of zones that contain the provided point.
+     */
     public List<Zone> getContainingZones(PointXY point) {
         List<Zone> containingZones = new ArrayList<>();
 
@@ -62,6 +94,12 @@ public class ZoneProcessor {
         return containingZones;
     }
 
+    /**
+     * Get a list of zones that do not contain the provided point.
+     *
+     * @param point the point to test.
+     * @return a list of zones that do not contain the provided point.
+     */
     public List<Zone> getNonContainingZones(PointXY point) {
         List<Zone> containingZones = new ArrayList<>();
 
@@ -96,6 +134,31 @@ public class ZoneProcessor {
         return exitedZones;
     }
 
+    /**
+     * Based on the provided point, call the correct methods of each of
+     * the zones.
+     *
+     * <ul>
+     *     <li>
+     *         If the robot has ENTERED the zone (previously, it was not in
+     *         the zone, but now it is), the zone's {@link Zone#onEnter(PointXYZ)}
+     *         method will be called.
+     *     </li>
+     *     <li>
+     *         If the robot has EXITED the zone (previously, it was in the zone,
+     *         but now it is not), the zone's {@link Zone#onExit(PointXYZ)}
+     *         method will be called.
+     *     </li>
+     *     <li>
+     *         If the robot is INSIDE the zone (this will be activated every
+     *         time the {@code onEnter} method is called, as well as whenever
+     *         the robot is inside the zone), the zone's
+     *         {@link Zone#whileInside(PointXYZ)} method will be called.
+     *     </li>
+     * </ul>
+     *
+     * @param position the position to test.
+     */
     public void update(PointXYZ position) {
         List<Zone> lastZones = currentZones;
         currentZones = getContainingZones(position);

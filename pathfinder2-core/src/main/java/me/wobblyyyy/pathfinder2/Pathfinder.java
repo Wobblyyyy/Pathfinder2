@@ -200,6 +200,11 @@ public class Pathfinder {
     /**
      * Create a new {@code Pathfinder} instance.
      *
+     * <p>
+     * This will call the {@link #Pathfinder(Robot, FollowerGenerator)}
+     * constructor with a new {@link GenericFollowerGenerator}.
+     * </p>
+     *
      * @param robot          the {@code Pathfinder} instance's robot. This robot
      *                       should have an odometry system that can report the
      *                       position of the robot and a drive system that can
@@ -217,6 +222,11 @@ public class Pathfinder {
 
     /**
      * Create a new {@code Pathfinder} instance.
+     *
+     * <p>
+     * This will call the {@link #Pathfinder(Robot, FollowerGenerator)}
+     * constructor with a new {@link GenericFollowerGenerator}.
+     * </p>
      *
      * @param robot       the {@code Pathfinder} instance's robot. This robot
      *                    should have an odometry system that can report the
