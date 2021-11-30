@@ -23,7 +23,7 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
  * @author Colin Robertson
  * @since 0.0.0
  */
-public class SwerveModuleKinematics {
+public class RelativeSwerveModuleKinematics {
     /**
      * The swerve module's turn controller.
      */
@@ -39,7 +39,7 @@ public class SwerveModuleKinematics {
      *                   always be the module's target angle, once again,
      *                   in degrees.
      */
-    public SwerveModuleKinematics(Controller controller) {
+    public RelativeSwerveModuleKinematics(Controller controller) {
         this.controller = controller;
     }
 
@@ -54,7 +54,7 @@ public class SwerveModuleKinematics {
      *                    controller will ALWAYS be in degrees mode.
      * @see AngleDeltaController
      */
-    public SwerveModuleKinematics(double coefficient) {
+    public RelativeSwerveModuleKinematics(double coefficient) {
         this(new AngleDeltaController(coefficient));
     }
 

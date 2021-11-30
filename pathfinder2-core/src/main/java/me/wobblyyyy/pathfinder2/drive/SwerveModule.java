@@ -11,7 +11,7 @@
 package me.wobblyyyy.pathfinder2.drive;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
-import me.wobblyyyy.pathfinder2.kinematics.SwerveModuleState;
+import me.wobblyyyy.pathfinder2.kinematics.RelativeSwerveModuleState;
 import me.wobblyyyy.pathfinder2.robot.components.Motor;
 
 import java.util.function.Supplier;
@@ -94,7 +94,7 @@ public class SwerveModule {
      *
      * @param state the state to set to the turn module.
      */
-    public void set(SwerveModuleState state) {
+    public void set(RelativeSwerveModuleState state) {
         turn.setPower(state.getTurn());
         drive.setPower(state.getDrive());
     }

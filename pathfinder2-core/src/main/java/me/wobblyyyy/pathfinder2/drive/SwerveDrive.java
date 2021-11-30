@@ -14,8 +14,8 @@ import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.kinematics.RelativeSwerveDriveKinematics;
 import me.wobblyyyy.pathfinder2.kinematics.RelativeSwerveState;
-import me.wobblyyyy.pathfinder2.kinematics.SwerveModuleKinematics;
-import me.wobblyyyy.pathfinder2.kinematics.SwerveModuleState;
+import me.wobblyyyy.pathfinder2.kinematics.RelativeSwerveModuleKinematics;
+import me.wobblyyyy.pathfinder2.kinematics.RelativeSwerveModuleState;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 
 import java.util.function.Function;
@@ -103,7 +103,7 @@ public class SwerveDrive implements Drive {
         this.backLeftModule = backLeftModule;
 
         this.kinematics = new RelativeSwerveDriveKinematics(
-                new SwerveModuleKinematics(moduleController),
+                new RelativeSwerveModuleKinematics(moduleController),
                 frontRightModule::getAngle,
                 frontLeftModule::getAngle,
                 backRightModule::getAngle,
@@ -146,10 +146,10 @@ public class SwerveDrive implements Drive {
 
         RelativeSwerveState state = kinematics.calculate(translation);
 
-        SwerveModuleState frState = state.fr();
-        SwerveModuleState flState = state.fl();
-        SwerveModuleState brState = state.br();
-        SwerveModuleState blState = state.bl();
+        RelativeSwerveModuleState frState = state.fr();
+        RelativeSwerveModuleState flState = state.fl();
+        RelativeSwerveModuleState brState = state.br();
+        RelativeSwerveModuleState blState = state.bl();
 
         this.frontRightModule.set(frState);
         this.frontLeftModule.set(flState);

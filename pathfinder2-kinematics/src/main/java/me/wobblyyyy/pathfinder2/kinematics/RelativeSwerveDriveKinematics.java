@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 /**
  * The simplest form of swerve drive kinematics. This class operates very
- * simply - each of the four swerve modules has its own {@link SwerveModuleKinematics}
+ * simply - each of the four swerve modules has its own {@link RelativeSwerveModuleKinematics}
  * instance responsible for controlling the module's angle and power. The
  * only thing this class does differently is incorporating turn values.
  *
@@ -37,22 +37,22 @@ public class RelativeSwerveDriveKinematics implements ForwardsKinematics<Relativ
     /**
      * The front right module's kinematics.
      */
-    private final SwerveModuleKinematics frontRightKinematics;
+    private final RelativeSwerveModuleKinematics frontRightKinematics;
 
     /**
      * The front left module's kinematics.
      */
-    private final SwerveModuleKinematics frontLeftKinematics;
+    private final RelativeSwerveModuleKinematics frontLeftKinematics;
 
     /**
      * The back right module's kinematics.
      */
-    private final SwerveModuleKinematics backRightKinematics;
+    private final RelativeSwerveModuleKinematics backRightKinematics;
 
     /**
      * The back left module's kinematics.
      */
-    private final SwerveModuleKinematics backLeftKinematics;
+    private final RelativeSwerveModuleKinematics backLeftKinematics;
 
     /**
      * The front right module's angle.
@@ -112,7 +112,7 @@ public class RelativeSwerveDriveKinematics implements ForwardsKinematics<Relativ
      *                              a negative turn multiplier will mean the
      *                              chassis will turn in the opposite direction.
      */
-    public RelativeSwerveDriveKinematics(SwerveModuleKinematics moduleKinematics,
+    public RelativeSwerveDriveKinematics(RelativeSwerveModuleKinematics moduleKinematics,
                                          Supplier<Angle> frontRightModuleAngle,
                                          Supplier<Angle> frontLeftModuleAngle,
                                          Supplier<Angle> backRightModuleAngle,
@@ -153,10 +153,10 @@ public class RelativeSwerveDriveKinematics implements ForwardsKinematics<Relativ
      *                              a negative turn multiplier will mean the
      *                              chassis will turn in the opposite direction.
      */
-    public RelativeSwerveDriveKinematics(SwerveModuleKinematics frontRightKinematics,
-                                         SwerveModuleKinematics frontLeftKinematics,
-                                         SwerveModuleKinematics backRightKinematics,
-                                         SwerveModuleKinematics backLeftKinematics,
+    public RelativeSwerveDriveKinematics(RelativeSwerveModuleKinematics frontRightKinematics,
+                                         RelativeSwerveModuleKinematics frontLeftKinematics,
+                                         RelativeSwerveModuleKinematics backRightKinematics,
+                                         RelativeSwerveModuleKinematics backLeftKinematics,
                                          Supplier<Angle> frontRightModuleAngle,
                                          Supplier<Angle> frontLeftModuleAngle,
                                          Supplier<Angle> backRightModuleAngle,
@@ -211,10 +211,10 @@ public class RelativeSwerveDriveKinematics implements ForwardsKinematics<Relativ
         double backRightDrive = translation.magnitude();
         double backLeftDrive = translation.magnitude();
 
-        SwerveModuleState frontRightState = new SwerveModuleState(frontRightTurn, frontRightDrive);
-        SwerveModuleState frontLeftState = new SwerveModuleState(frontLeftTurn, frontLeftDrive);
-        SwerveModuleState backRightState = new SwerveModuleState(backRightTurn, backRightDrive);
-        SwerveModuleState backLeftState = new SwerveModuleState(backLeftTurn, backLeftDrive);
+        RelativeSwerveModuleState frontRightState = new RelativeSwerveModuleState(frontRightTurn, frontRightDrive);
+        RelativeSwerveModuleState frontLeftState = new RelativeSwerveModuleState(frontLeftTurn, frontLeftDrive);
+        RelativeSwerveModuleState backRightState = new RelativeSwerveModuleState(backRightTurn, backRightDrive);
+        RelativeSwerveModuleState backLeftState = new RelativeSwerveModuleState(backLeftTurn, backLeftDrive);
 
         return new RelativeSwerveState(
                 frontRightState,
@@ -265,25 +265,25 @@ public class RelativeSwerveDriveKinematics implements ForwardsKinematics<Relativ
         double backRightDrive = translation.magnitude();
         double backLeftDrive = translation.magnitude();
 
-        SwerveModuleState frontRightState = SwerveModuleState.optimized(
+        RelativeSwerveModuleState frontRightState = RelativeSwerveModuleState.optimized(
                 angle,
                 frontRightDrive,
                 frontRightModuleAngle.get(),
                 frontRightKinematics
         );
-        SwerveModuleState frontLeftState = SwerveModuleState.optimized(
+        RelativeSwerveModuleState frontLeftState = RelativeSwerveModuleState.optimized(
                 angle,
                 frontLeftDrive,
                 frontLeftModuleAngle.get(),
                 frontLeftKinematics
         );
-        SwerveModuleState backRightState = SwerveModuleState.optimized(
+        RelativeSwerveModuleState backRightState = RelativeSwerveModuleState.optimized(
                 angle,
                 backRightDrive,
                 backRightModuleAngle.get(),
                 backRightKinematics
         );
-        SwerveModuleState backLeftState = SwerveModuleState.optimized(
+        RelativeSwerveModuleState backLeftState = RelativeSwerveModuleState.optimized(
                 angle,
                 backLeftDrive,
                 backLeftModuleAngle.get(),

@@ -11,34 +11,34 @@
 package me.wobblyyyy.pathfinder2.kinematics;
 
 public class RelativeSwerveState {
-    private SwerveModuleState fr;
-    private SwerveModuleState fl;
-    private SwerveModuleState br;
-    private SwerveModuleState bl;
+    private RelativeSwerveModuleState fr;
+    private RelativeSwerveModuleState fl;
+    private RelativeSwerveModuleState br;
+    private RelativeSwerveModuleState bl;
 
-    public RelativeSwerveState(SwerveModuleState fr,
-                               SwerveModuleState fl,
-                               SwerveModuleState br,
-                               SwerveModuleState bl) {
+    public RelativeSwerveState(RelativeSwerveModuleState fr,
+                               RelativeSwerveModuleState fl,
+                               RelativeSwerveModuleState br,
+                               RelativeSwerveModuleState bl) {
         this.fr = fr;
         this.fl = fl;
         this.br = br;
         this.bl = bl;
     }
 
-    public SwerveModuleState fr() {
+    public RelativeSwerveModuleState fr() {
         return this.fr;
     }
 
-    public SwerveModuleState fl() {
+    public RelativeSwerveModuleState fl() {
         return this.fl;
     }
 
-    public SwerveModuleState br() {
+    public RelativeSwerveModuleState br() {
         return this.br;
     }
 
-    public SwerveModuleState bl() {
+    public RelativeSwerveModuleState bl() {
         return this.bl;
     }
 }
