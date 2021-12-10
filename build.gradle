@@ -54,7 +54,8 @@ dependencies {
 
 // define our shadowJar task here
 shadowJar {
-
+    archiveBaseName.set('pathfinder2-shadow')
+    archiveClassifier.set('')
 }
 
 // suppress all javadoc warnings - i use end tags, and javadoc will normally
@@ -98,7 +99,10 @@ artifacts {
 publishing {
     publications {
         shadow(MavenPublication) { publication ->
-            project.shadow.component(publication)
+            artifact shadowJar
+            artifact sourcesJar
+            artifact javadocJar
+            artifactId = 'pathfinder2-shadow'
         }
 //        mavenJava(MavenPublication) {
 //            artifact shadowJar
