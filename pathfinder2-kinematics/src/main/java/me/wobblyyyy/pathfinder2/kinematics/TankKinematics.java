@@ -12,9 +12,14 @@ package me.wobblyyyy.pathfinder2.kinematics;
 
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 
-public class TankKinematics implements ForwardsKinematics<TankState> {
+public class TankKinematics implements Kinematics<TankState> {
     @Override
     public TankState calculate(Translation translation) {
+        return null;
+    }
+
+    @Override
+    public Translation toTranslation(TankState state) {
         return null;
     }
 }

@@ -22,7 +22,7 @@ import me.wobblyyyy.pathfinder2.math.MinMax;
  * @author Colin Robertson
  * @since 0.0.0
  */
-public class RelativeMeccanumKinematics implements ForwardsKinematics<MeccanumState> {
+public class RelativeMeccanumKinematics implements Kinematics<MeccanumState> {
     /**
      * The angles of each of the wheels.
      */
@@ -116,5 +116,13 @@ public class RelativeMeccanumKinematics implements ForwardsKinematics<MeccanumSt
         double br = (calculatePower(angle, WHEEL_ANGLES[3]) * xyMagnitude) - turn;
 
         return new MeccanumState(fl, fr, bl, br).normalizeFromMaxUnderOne();
+    }
+
+    @Override
+    public Translation toTranslation(MeccanumState state) {
+        throw new RuntimeException(
+                "Cannot convert a meccanum state to a translation " +
+                        "using the relative meccanum kinematics."
+        );
     }
 }

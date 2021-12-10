@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     implementation project(':pathfinder2-geometry')
+    implementation group: 'org.ejml', name: 'ejml-all', version: '0.40'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }

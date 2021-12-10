@@ -180,6 +180,21 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     }
 
     /**
+     * Subtract point b from point a.
+     *
+     * @param a the first point.
+     * @param b the second point.
+     * @return a new point - the difference between a and b.
+     */
+    public static PointXY subtract(PointXY a,
+                                   PointXY b) {
+        return new PointXY(
+                a.x() - b.x(),
+                a.y() - b.y()
+        );
+    }
+
+    /**
      * Multiply two points together.
      *
      * <p>
@@ -926,6 +941,16 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public PointXY add(PointXY a) {
         return add(this, a);
+    }
+
+    /**
+     * Subtract another point from this point.
+     *
+     * @param b the point to subtract.
+     * @return the difference of the two points.
+     */
+    public PointXY subtract(PointXY b) {
+        return subtract(this, b);
     }
 
     /**

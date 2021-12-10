@@ -240,6 +240,11 @@ public class Angle implements Comparable<Angle>, Serializable {
         this.deg = deg;
     }
 
+    public static Angle fromTrig(double sin,
+                                 double cos) {
+        return atan2(sin, cos);
+    }
+
     /**
      * Ensure a radian value fits within 0-2pi.
      *

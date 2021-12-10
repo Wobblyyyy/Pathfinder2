@@ -59,6 +59,10 @@ public class ElapsedTimer {
         return current - start;
     }
 
+    public double elapsedSeconds() {
+        return getElapsed() / 1_000d;
+    }
+
     /**
      * Is the elapsed time greater than a provided value?
      *

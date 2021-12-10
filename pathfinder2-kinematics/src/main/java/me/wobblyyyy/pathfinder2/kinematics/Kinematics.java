@@ -19,7 +19,7 @@ import me.wobblyyyy.pathfinder2.geometry.Translation;
  * @author Colin Robertson
  * @since 0.0.0
  */
-public interface ForwardsKinematics<E> {
+public interface Kinematics<E> {
     /**
      * Calculate a value of type E based on a translation.
      *
@@ -28,4 +28,6 @@ public interface ForwardsKinematics<E> {
      * @return a calculated value based on the provided translation.
      */
     E calculate(Translation translation);
+
+    Translation toTranslation(E state);
 }

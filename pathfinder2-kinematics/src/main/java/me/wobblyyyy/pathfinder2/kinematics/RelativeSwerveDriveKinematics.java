@@ -33,7 +33,7 @@ import java.util.function.Supplier;
  * @author Colin Robertson
  * @since 0.0.0
  */
-public class RelativeSwerveDriveKinematics implements ForwardsKinematics<RelativeSwerveState> {
+public class RelativeSwerveDriveKinematics implements Kinematics<RelativeSwerveState> {
     /**
      * The front right module's kinematics.
      */
@@ -221,6 +221,14 @@ public class RelativeSwerveDriveKinematics implements ForwardsKinematics<Relativ
                 frontLeftState,
                 backRightState,
                 backLeftState
+        );
+    }
+
+    @Override
+    public Translation toTranslation(RelativeSwerveState state) {
+        throw new RuntimeException(
+                "Cannot convert a swerve state to a translation " +
+                        "using the relaive swerve kinematics."
         );
     }
 

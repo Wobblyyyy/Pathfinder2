@@ -40,6 +40,14 @@ public class Time {
         return System.currentTimeMillis();
     }
 
+    public static double seconds() {
+        return ms() / 1_000;
+    }
+
+    public static long longSeconds() {
+        return longMs() / 1_000;
+    }
+
     /**
      * Convert between two different units of time.
      *
