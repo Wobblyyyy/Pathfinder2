@@ -88,3 +88,9 @@ task sourcesJar(type: Jar) {
 // make sure shadowJar triggers both javadocJar and sourcesJar
 shadowJar.finalizedBy javadocJar
 shadowJar.finalizedBy sourcesJar
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+    archives shadowJar
+}
