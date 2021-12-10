@@ -97,10 +97,13 @@ artifacts {
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            artifact shadowJar
-            artifact sourcesJar
-            artifact javadocJar
+        shadow(MavenPublication) { publication ->
+            project.shadow.component(publication)
         }
+//        mavenJava(MavenPublication) {
+//            artifact shadowJar
+//            artifact sourcesJar
+//            artifact javadocJar
+//        }
     }
 }
