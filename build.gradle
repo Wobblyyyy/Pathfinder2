@@ -8,6 +8,9 @@
  * <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL V3</a>
  */
 
+// disable assignment checks for artifact IDs (at the very bottom)
+//file:noinspection GroovyAssignabilityCheck
+
 // wow! would you look at that! how lovely! a build file for building stuff!
 // there's not really too much to say here, to be honest. if you want to
 // build pathfinder from source, just run the shadowJar task and it should
