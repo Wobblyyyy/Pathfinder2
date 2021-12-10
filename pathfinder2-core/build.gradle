@@ -10,7 +10,6 @@
 
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
 
 group 'org.example'
@@ -23,14 +22,10 @@ repositories {
 dependencies {
     implementation project(':pathfinder2-geometry')
     implementation project(':pathfinder2-kinematics')
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
 
 test {
     useJUnitPlatform()
-}
-
-shadowJar {
-
 }

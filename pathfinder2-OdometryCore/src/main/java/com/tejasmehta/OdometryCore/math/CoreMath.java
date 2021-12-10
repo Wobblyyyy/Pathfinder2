@@ -9,6 +9,7 @@ import com.tejasmehta.OdometryCore.localization.OdometryPosition;
 
 /**
  * A class to house and handle all the math methods for three wheel odometry
+ *
  * @author Tejas Mehta
  * Made on Wednesday, November 04, 2020
  * File Name: CoreMath
@@ -33,8 +34,9 @@ public class CoreMath {
 
     /**
      * A method to convert encoder ticks to their respective inch measurement given a cpr and diameter
-     * @param ticks - The amount of elapsed ticks
-     * @param cpr - The amount of counts per rotation for the encoder
+     *
+     * @param ticks    - The amount of elapsed ticks
+     * @param cpr      - The amount of counts per rotation for the encoder
      * @param diameter - The encoder wheel's diameter
      * @return - The inch measurement of the given ticks
      */
@@ -66,11 +68,11 @@ public class CoreMath {
      * Sourced from the formula AverageHeading = PreviousHeading + HeadingChange/2
      *
      * @param previousHeading - The previous heading of the robot (in radians)
-     * @param headingChange - The change in heading from the previous heading to the current one (in radians)
+     * @param headingChange   - The change in heading from the previous heading to the current one (in radians)
      * @return - The average heading to rotate the local vector by (in radians)
      */
     public static double getAverageHeading(double previousHeading, double headingChange) {
-        return previousHeading + headingChange/2.0;
+        return previousHeading + headingChange / 2.0;
     }
 
     /**
@@ -146,7 +148,7 @@ public class CoreMath {
         double heading = getHeading(leftChange, rightChange, leftOffset, rightOffset);
         double rawXCoordinate = getRawXCoordinate(frontBackChange, frontBackOffset, heading);
         double rawYCoordinate = getRawYCoordinate(leftChange, rightChange, leftOffset, rightOffset, heading);
-        double rawMovement = rightChange/heading + rightOffset;
+        double rawMovement = rightChange / heading + rightOffset;
         return getPolarCoordinate(rawXCoordinate, rawYCoordinate);
     }
 
@@ -165,15 +167,15 @@ public class CoreMath {
      * A method to take the left and right encoders' new values, old values, as well as the change of the front/back encoder paired with
      * the offset of all 3 to calculate a localized Cartesian Coordinate after performing relative calculations
      *
-     * @param currentLeftPosition   - The current reported left encoder;s position (in inches)
-     * @param currentRightPosition  - The current reported right encoder's position (in inches)
-     * @param currentFrontBackPosition - The current reported front/back encoder's position (in inches)
-     * @param previousLeftPosition  - The previous reported position of the left encoder (in inches)
-     * @param previousRightPosition - The previous reported position of the right encoder (in inches)
+     * @param currentLeftPosition       - The current reported left encoder;s position (in inches)
+     * @param currentRightPosition      - The current reported right encoder's position (in inches)
+     * @param currentFrontBackPosition  - The current reported front/back encoder's position (in inches)
+     * @param previousLeftPosition      - The previous reported position of the left encoder (in inches)
+     * @param previousRightPosition     - The previous reported position of the right encoder (in inches)
      * @param previousFrontBackPosition - The previous reported position of the front/back encoder (in inches)
-     * @param leftOffset            - The horizontal offset of the left odometry wheel from the robot's center (in inches)
-     * @param rightOffset           - The horizontal offset of the right odometry wheel from the robot's center (in inches)
-     * @param frontBackOffset       - The horizontal offset of the front/back odometry wheel from the robot's center (in inches)
+     * @param leftOffset                - The horizontal offset of the left odometry wheel from the robot's center (in inches)
+     * @param rightOffset               - The horizontal offset of the right odometry wheel from the robot's center (in inches)
+     * @param frontBackOffset           - The horizontal offset of the front/back odometry wheel from the robot's center (in inches)
      * @return - The converted Cartesian Coordinate on the local plane of the field
      */
     public static CartesianCoordinate getConvertedCoordinate(double currentLeftPosition, double currentRightPosition, double currentFrontBackPosition, double previousLeftPosition, double previousRightPosition, double previousFrontBackPosition, double leftOffset, double rightOffset, double frontBackOffset) {
@@ -182,8 +184,8 @@ public class CoreMath {
         double frontBackChange = currentFrontBackPosition - previousFrontBackPosition;
         PolarCoordinate relativePolarCoordinate = getPolarCoordinate(leftChange, rightChange, frontBackChange, leftOffset, rightOffset, frontBackOffset);
         double xVal = currentFrontBackPosition;
-        double yVal = (currentLeftPosition + currentRightPosition)/2;
-        double tanVal = xVal == 0 ? 0 : yVal/xVal;
+        double yVal = (currentLeftPosition + currentRightPosition) / 2;
+        double tanVal = xVal == 0 ? 0 : yVal / xVal;
         return getConvertedCoordinate(relativePolarCoordinate, Math.atan(tanVal));
     }
 
@@ -191,17 +193,17 @@ public class CoreMath {
      * A method to take the left and right encoders' new values, old values, as well as the change of the front/back encoder paired with
      * the offset of all 3 to calculate a localized Cartesian Coordinate after performing relative calculations
      *
-     * @param leftChange   - The current reported left encoder's positional change (in inches)
-     * @param rightChange  - The current reported right encoder's positional change (in inches)
+     * @param leftChange      - The current reported left encoder's positional change (in inches)
+     * @param rightChange     - The current reported right encoder's positional change (in inches)
      * @param frontBackChange - The current reported front/back encoder's position (in inches)
-     * @param leftOffset            - The horizontal offset of the left odometry wheel from the robot's center (in inches)
-     * @param rightOffset           - The horizontal offset of the right odometry wheel from the robot's center (in inches)
-     * @param frontBackOffset       - The vertical offset of the front/back odometry wheel from the robot's center (in inches)
+     * @param leftOffset      - The horizontal offset of the left odometry wheel from the robot's center (in inches)
+     * @param rightOffset     - The horizontal offset of the right odometry wheel from the robot's center (in inches)
+     * @param frontBackOffset - The vertical offset of the front/back odometry wheel from the robot's center (in inches)
      * @return - The converted Cartesian Coordinate on the local plane of the field
      */
     public static CartesianCoordinate getConvertedCoordinate(double leftChange, double rightChange, double frontBackChange, double leftOffset, double rightOffset, double frontBackOffset) {
         PolarCoordinate relativePolarCoordinate = getPolarCoordinate(leftChange, rightChange, frontBackChange, leftOffset, rightOffset, frontBackOffset);
-        double tanVal = frontBackChange == 0 ? 0 : ((leftChange+rightChange)/2)/frontBackChange;
+        double tanVal = frontBackChange == 0 ? 0 : ((leftChange + rightChange) / 2) / frontBackChange;
         CartesianCoordinate relativeCartesian = CartesianCoordinate.fromPolar(relativePolarCoordinate);
         double newAngle = Math.atan2(relativeCartesian.getY(), relativeCartesian.getX());
         return getConvertedCoordinate(relativePolarCoordinate, newAngle);
@@ -212,20 +214,20 @@ public class CoreMath {
      * Essentially calculates the length of both x and y vectors, converts them to Polar coordinates with the average heading, and then
      * adds their opposite values together to give a new position
      *
-     * @param leftChange   - The current reported left encoder's positional change (in inches)
-     * @param rightChange   - The current reported right encoder's positional change (in inches)
+     * @param leftChange      - The current reported left encoder's positional change (in inches)
+     * @param rightChange     - The current reported right encoder's positional change (in inches)
      * @param frontBackChange - The current reported front/back encoder's positional change (in inches)
-     * @param leftOffset - The horizontal offset of the left oodometry wheel from the robot's center (in inches)
-     * @param rightOffset - The horizontal offset of the right odometry wheel from the robot's center (in inches)
+     * @param leftOffset      - The horizontal offset of the left oodometry wheel from the robot's center (in inches)
+     * @param rightOffset     - The horizontal offset of the right odometry wheel from the robot's center (in inches)
      * @param frontBackOffset - The vertical offset of the front/back odometry wheel from the robot's center (in inches)
      * @param previousHeading - The robot's previous heading (in radians)
      * @return - An OdometryPosition with the robot's global vector (to be added to the previous one) and the robot's absolute heading
      */
     public static OdometryPosition getOdometryPosition(double leftChange, double rightChange, double frontBackChange, double leftOffset, double rightOffset, double frontBackOffset, double previousHeading) {
-        double yLength = (leftChange + rightChange)/2.0;
+        double yLength = (leftChange + rightChange) / 2.0;
         double headingChange = getHeading(leftChange, rightChange, leftOffset, rightOffset);
 //        if (Math.floor(leftChange/10) == Math.floor(-1 * rightChange/10)) frontBackChange = 0;
-        frontBackChange = frontBackChange - headingChange * (2 * frontBackOffset * Math.PI * 0.25)/(Math.PI/2);
+        frontBackChange = frontBackChange - headingChange * (2 * frontBackOffset * Math.PI * 0.25) / (Math.PI / 2);
         double averageHeading = getAverageHeading(previousHeading, headingChange);
         CartesianCoordinate rotatedX = CartesianCoordinate.fromPolar(new PolarCoordinate(frontBackChange, averageHeading));
         CartesianCoordinate rotatedY = CartesianCoordinate.fromPolar(new PolarCoordinate(yLength, averageHeading));
@@ -240,7 +242,7 @@ public class CoreMath {
      * @return - The converted Cartesian Coordinate on the local plane of the field
      */
     public static CartesianCoordinate getConvertedCoordinate(PolarCoordinate polarCoordinate, double absoluteHeading) {
-        return CartesianCoordinate.fromPolar(new PolarCoordinate(polarCoordinate.getR(), absoluteHeading + Math.PI/2));
+        return CartesianCoordinate.fromPolar(new PolarCoordinate(polarCoordinate.getR(), absoluteHeading + Math.PI / 2));
     }
 
 }

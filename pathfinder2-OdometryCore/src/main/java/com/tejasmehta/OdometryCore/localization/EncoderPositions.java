@@ -19,8 +19,9 @@ public class EncoderPositions {
 
     /**
      * The constructor for the encoder positions class
-     * @param leftPosition - The left encoder's position in ticks
-     * @param rightPosition - The right encoder's position in ticks
+     *
+     * @param leftPosition      - The left encoder's position in ticks
+     * @param rightPosition     - The right encoder's position in ticks
      * @param frontBackPosition - The Front or back encoder's position in ticks
      */
     public EncoderPositions(double leftPosition, double rightPosition, double frontBackPosition) {
@@ -31,6 +32,7 @@ public class EncoderPositions {
 
     /**
      * A method to get the left encoder's position
+     *
      * @return - The left encoder's position (in ticks)
      */
     public double getLeftPosition() {
@@ -39,6 +41,7 @@ public class EncoderPositions {
 
     /**
      * A method to get the right encoder's position
+     *
      * @return - The right encoder's position (in ticks)
      */
     public double getRightPosition() {
@@ -47,6 +50,7 @@ public class EncoderPositions {
 
     /**
      * A method to get the front or back encoder's position
+     *
      * @return - The front or back encoder's position (in ticks)
      */
     public double getFrontBackPosition() {

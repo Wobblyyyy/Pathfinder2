@@ -8,10 +8,24 @@
  * <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL V3</a>
  */
 
+// wow! would you look at that! how lovely! a build file for building stuff!
+// there's not really too much to say here, to be honest. if you want to
+// build pathfinder from source, just run the shadowJar task and it should
+// handle the rest for you, typically outputting everything to
+// "build/libs/...", where ... is the name of the release you're building
+
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
 
+subprojects {
+    apply plugin: 'java'
+}
+
+// make sure we're using JDK 8
+// i don't really want to use JDK 8, but because FTC requires us to
+// (thanks outdated versions of android...) we have to
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(8))
@@ -26,10 +40,50 @@ repositories {
 }
 
 dependencies {
+    // obviously we need to depend on all of the modules we need
     implementation project(':pathfinder2-core')
     implementation project(':pathfinder2-geometry')
     implementation project(':pathfinder2-kinematics')
     implementation project(':pathfinder2-OdometryCore')
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    // for testing!
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
+
+// define our shadowJar task here
+shadowJar {
+
+}
+
+// suppress all javadoc warnings - i use end tags, and javadoc will normally
+// throw errors if you do, so we have to do this
+tasks.withType(Javadoc) {
+    failOnError false
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
+// task for creating javadocs for everything
+task allJavadoc(type: Javadoc) {
+    source subprojects.collect { it.sourceSets.main.allJava }
+    classpath = files(subprojects.collect {
+        it.sourceSets.main.compileClasspath
+    })
+    destinationDir = file("${buildDir}/docs/javadoc")
+}
+
+task javadocJar(type: Jar, dependsOn: allJavadoc) {
+    archiveClassifier.set('javadoc')
+    from allJavadoc.destinationDir
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from subprojects.collect { it.sourceSets.main.allSource }
+}
+
+// make sure shadowJar triggers both javadocJar and sourcesJar
+shadowJar.finalizedBy javadocJar
+shadowJar.finalizedBy sourcesJar

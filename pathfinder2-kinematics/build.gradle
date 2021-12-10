@@ -1,3 +1,13 @@
+/*
+ * Copyright (c) 2021.
+ *
+ * This file is part of the "Pathfinder2" project, available here:
+ * <a href="https://github.com/Wobblyyyy/Pathfinder2">GitHub</a>
+ *
+ * This project is licensed under the GNU GPL V3 license.
+ * <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL V3</a>
+ */
+
 plugins {
     id 'java'
 }
@@ -11,11 +21,21 @@ repositories {
 
 dependencies {
     implementation project(':pathfinder2-geometry')
-    implementation group: 'org.ejml', name: 'ejml-all', version: '0.40'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    // ejml is only needed for compilation - if a user actually wants to
+    // use it, they'll have to include it as an implementation for their
+    // own gradle build script
+    compileOnly group: 'org.ejml', name: 'ejml-all', version: '0.40'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
 
 test {
     useJUnitPlatform()
+}
+
+configurations {
+    // make sure ejml-all isn't included in shadowJar builds
+    runtime.exclude module: 'ejml-all'
 }

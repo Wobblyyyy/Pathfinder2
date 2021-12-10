@@ -28,11 +28,15 @@ import java.util.function.Function;
  *
  * @author Colin Robertson
  * @since 0.0.0
+ * @see Odometry
  */
 public abstract class AbstractOdometry implements Odometry {
     private PointXYZ offset = PointXYZ.zero();
     private Function<PointXYZ, PointXYZ> modifier = p -> p;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PointXYZ getPosition() {
         PointXYZ rawPosition = getRawPosition();
@@ -48,11 +52,19 @@ public abstract class AbstractOdometry implements Odometry {
         return modifier.apply(rawPosition).add(offset);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PointXYZ getOffset() {
         return this.offset;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param offset the new offset. This offset value will replace whatever
+     */
     @Override
     public void setOffset(PointXYZ offset) {
         if (offset == null) {
@@ -64,31 +76,53 @@ public abstract class AbstractOdometry implements Odometry {
         this.offset = offset;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getOffsetX() {
         return offset.x();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getOffsetY() {
         return offset.y();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Angle getOffsetZ() {
         return offset.z();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param offset the offset to add to the existing offset.
+     */
     @Override
     public void offsetBy(PointXYZ offset) {
         this.offset = PointXYZ.add(this.offset, offset);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeOffset() {
         this.offset = new PointXYZ(0, 0, Angle.fromDeg(0));
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param targetPosition the position you'd like the odometry system
+     */
     @Override
     public void offsetSoPositionIs(PointXYZ targetPosition) {
         if (targetPosition == null) {
@@ -101,66 +135,107 @@ public abstract class AbstractOdometry implements Odometry {
         setOffset(getRawPosition().multiply(-1).add(targetPosition));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void zeroOdometry() {
         offsetSoPositionIs(new PointXYZ(0, 0, Angle.zero()));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getX() {
         return getPosition().x();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getY() {
         return getPosition().y();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Angle getZ() {
         return getPosition().z();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getRad() {
         return getPosition().z().rad();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getDeg() {
         return getPosition().z().deg();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getRawX() {
         return getRawPosition().x();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getRawY() {
         return getRawPosition().y();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Angle getRawZ() {
         return getRawPosition().z();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getRawRad() {
         return getRawPosition().z().rad();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getRawDeg() {
         return getRawPosition().z().deg();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Function<PointXYZ, PointXYZ> getModifier() {
         return this.modifier;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param modifier the modifier.
+     */
     @Override
     public void setModifier(Function<PointXYZ, PointXYZ> modifier) {
         this.modifier = modifier;

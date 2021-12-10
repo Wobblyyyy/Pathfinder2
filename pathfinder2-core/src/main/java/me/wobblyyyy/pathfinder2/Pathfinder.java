@@ -557,6 +557,47 @@ public class Pathfinder {
     }
 
     /**
+     * Tick Pathfinder while the provided supplier returns true.
+     *
+     * @param shouldContinueRunning a supplier, indicating whether Pathfinder
+     *                              should still continue running.
+     * @param onTick                a {@link Consumer} that will be executed
+     *                              after every successful tick.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder tickUntil(Supplier<Boolean> shouldContinueRunning,
+                                Consumer<Pathfinder> onTick) {
+        return tickUntil(
+                Double.MAX_VALUE,
+                shouldContinueRunning,
+                onTick
+        );
+    }
+
+    /**
+     * Tick Pathfinder while the provided supplier returns true.
+     *
+     * @param shouldContinueRunning a supplier, indicating whether Pathfinder
+     *                              should still continue running.
+     * @param onTick                a {@link Consumer} that will be executed
+     *                              after every successful tick. This consumer
+     *                              accepts two parameters - first the instance
+     *                              of Pathfinder that is running. Second, a
+     *                              double value representing the total elapsed
+     *                              time (in milliseconds) that the tick
+     *                              until method has been running for.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder tickUntil(Supplier<Boolean> shouldContinueRunning,
+                                BiConsumer<Pathfinder, Double> onTick) {
+        return tickUntil(
+                Double.MAX_VALUE,
+                shouldContinueRunning,
+                onTick
+        );
+    }
+
+    /**
      * Tick Pathfinder while the provided supplier returns true and the
      * elapsed time is less than the timeout time.
      *
@@ -1823,7 +1864,10 @@ public class Pathfinder {
 
     /**
      * Convert this instance of {@code Pathfinder} into a {@code String}.
-     * Really simply, this just return's the current position.
+     * Really simply, this just return's the current position. To be
+     * completely honest, I have absolutely no idea why anybody would ever
+     * even want to do this, but I figured I'd include it anyways. No harm
+     * in that, I guess... right?
      *
      * @return the current position, as a string.
      */

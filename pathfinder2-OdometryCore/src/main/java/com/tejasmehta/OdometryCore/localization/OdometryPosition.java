@@ -21,10 +21,11 @@ public class OdometryPosition {
 
     /**
      * The constructor for the OdometryPosition class
-     * @param x - The x value on a cartesian plane (in inches)
-     * @param y - The y value on a cartesian plane (in inches)
+     *
+     * @param x       - The x value on a cartesian plane (in inches)
+     * @param y       - The y value on a cartesian plane (in inches)
      * @param heading - The robot's current heading (in degrees or radians)
-     * @param unit - The unit for the heading (either HeadingUnit.degrees or HeadingUnit.radians)
+     * @param unit    - The unit for the heading (either HeadingUnit.degrees or HeadingUnit.radians)
      */
     public OdometryPosition(double x, double y, double heading, HeadingUnit unit) {
         this.x = x;
@@ -35,6 +36,7 @@ public class OdometryPosition {
 
     /**
      * A getter for the x value
+     *
      * @return - The robot's x value (in inches)
      */
     public double getX() {
@@ -43,6 +45,7 @@ public class OdometryPosition {
 
     /**
      * A getter for the y value
+     *
      * @return - The robot's y value (in inches)
      */
     public double getY() {
@@ -51,6 +54,7 @@ public class OdometryPosition {
 
     /**
      * A getter for the robot's heading
+     *
      * @return - The robot's heading (in degrees)
      */
     public double getHeadingDegrees() {
@@ -59,6 +63,7 @@ public class OdometryPosition {
 
     /**
      * A getter for the robot's heading
+     *
      * @return - The robot's heading (in radians)
      */
     public double getHeadingRadians() {

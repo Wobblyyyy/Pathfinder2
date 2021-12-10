@@ -15,41 +15,6 @@ import me.wobblyyyy.pathfinder2.geometry.PointXY;
 
 import java.util.List;
 
-/**
- * Monotonic cubic spline interpolation on a given set of points.
- *
- * <p>
- * I will fully disclose that almost all of this code comes pretty much
- * directly from right
- * <a
- * href="https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/util/Spline.java"
- * >here</a>.
- * That file contains the following copyright header:
- * <pre><code>
- * Copyright (C) 2012 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * </code></pre>
- * I'm only including this because I'll be honest, there's absolutely no
- * chance I have the energy to read through the entire Apache License. So
- * hopefully, including this will mean I won't get... sued, or something?
- * Let's hope.
- * </p>
- *
- * @author Colin Robertson
- * @author The Android Open Source Project
- * @since 0.0.0
- */
 public class MonotoneCubicSpline implements Spline {
     private final double[] mx;
     private final double[] my;
