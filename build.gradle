@@ -89,8 +89,12 @@ task sourcesJar(type: Jar) {
 shadowJar.finalizedBy javadocJar
 shadowJar.finalizedBy sourcesJar
 
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-    archives shadowJar
+publishing {
+    publications {
+        Library(MavenPublication) {
+            from project.components.java
+            artifact tasks.sourcesJar
+            artifact tasks.javadocJar
+        }
+    }
 }
