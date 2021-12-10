@@ -104,10 +104,5 @@ publishing {
             artifact javadocJar
             artifactId = 'pathfinder2-shadow'
         }
-//        mavenJava(MavenPublication) {
-//            artifact shadowJar
-//            artifact sourcesJar
-//            artifact javadocJar
-//        }
     }
 }
