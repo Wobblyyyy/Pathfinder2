@@ -86,15 +86,21 @@ task sourcesJar(type: Jar) {
 }
 
 // make sure shadowJar triggers both javadocJar and sourcesJar
-shadowJar.finalizedBy javadocJar
-shadowJar.finalizedBy sourcesJar
+//shadowJar.finalizedBy javadocJar
+//shadowJar.finalizedBy sourcesJar
+
+artifacts {
+    archives shadowJar
+    archives sourcesJar
+    archives javadocJar
+}
 
 publishing {
     publications {
-        Library(MavenPublication) {
-            from project.components.java
-            artifact tasks.sourcesJar
-            artifact tasks.javadocJar
+        mavenJava(MavenPublication) {
+            artifact shadowJar
+            artifact sourcesJar
+            artifact javadocJar
         }
     }
 }
