@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -365,6 +366,70 @@ public class PointXYZ extends PointXY {
         );
     }
 
+    public static List<PointXYZ> reflectPointsOverX(double axis,
+                                                    List<PointXYZ> points) {
+        List<PointXYZ> reflectedPoints = new ArrayList<>();
+
+        for (PointXYZ point : points) {
+            reflectedPoints.add(point.reflectOverX(axis));
+        }
+
+        return reflectedPoints;
+    }
+
+    public static List<PointXYZ> reflectPointsOverX(double axis,
+                                                    PointXYZ... points) {
+        List<PointXYZ> reflectedPoints = new ArrayList<>();
+
+        for (PointXYZ point : points) {
+            reflectedPoints.add(point.reflectOverX(axis));
+        }
+
+        return reflectedPoints;
+    }
+
+    public static List<PointXYZ> reflectPointsOverY(double axis,
+                                                    List<PointXYZ> points) {
+        List<PointXYZ> reflectedPoints = new ArrayList<>();
+
+        for (PointXYZ point : points) {
+            reflectedPoints.add(point.reflectOverY(axis));
+        }
+
+        return reflectedPoints;
+    }
+
+    public static List<PointXYZ> reflectPointsOverY(double axis,
+                                                    PointXYZ... points) {
+        List<PointXYZ> reflectedPoints = new ArrayList<>();
+
+        for (PointXYZ point : points) {
+            reflectedPoints.add(point.reflectOverY(axis));
+        }
+
+        return reflectedPoints;
+    }
+
+    public static List<PointXYZ> reflectHeadings(List<PointXYZ> points) {
+        List<PointXYZ> reflectedPoints = new ArrayList<>();
+
+        for (PointXYZ point : points) {
+            reflectedPoints.add(point.reflectHeading());
+        }
+
+        return reflectedPoints;
+    }
+
+    public static List<PointXYZ> reflectHeadings(PointXYZ... points) {
+        List<PointXYZ> reflectedPoints = new ArrayList<>();
+
+        for (PointXYZ point : points) {
+            reflectedPoints.add(point.reflectHeading());
+        }
+
+        return reflectedPoints;
+    }
+
     /**
      * Get the point's heading.
      *
@@ -486,5 +551,17 @@ public class PointXYZ extends PointXY {
                 y(),
                 z.deg()
         );
+    }
+
+    public PointXYZ reflectOverX(double xAxis) {
+        return withX(x() + (xAxis - x()));
+    }
+
+    public PointXYZ reflectOverY(double yAxis) {
+        return withY(y() + (yAxis - y()));
+    }
+
+    public PointXYZ reflectHeading() {
+        return withHeading(z.fixedFlip());
     }
 }
