@@ -6,7 +6,7 @@ This will be updated later.
 
 ## Geometry
 Geometry is one of the important concepts in Pathfinder, given the entire
-library is literally based around geometry. 
+library is literally based around geometry.
 
 ### Angles
 The `Angle` class is a representation of... an angle. It's shocking, I know.
@@ -38,9 +38,9 @@ Get the distance between two points. This method uses the distance formula
 to determine the distance between the two points.
 ```java
 PointXY a = new PointXY(0, 0);
-PointXY b = new PointXY(5, 0);
+        PointXY b = new PointXY(5, 0);
 
-double distance = PointXY.distance(a, b); // distance = 5
+        double distance = PointXY.distance(a, b); // distance = 5
 ```
 
 ```java
@@ -62,14 +62,14 @@ Create a new point a given distance away from a base point. There's two ways
 to use this method:
 ```java
 PointXY base = new PointXY(0, 0);
-double distance = 7.07;
-Angle direction = Angle.fromDeg(45);
+        double distance = 7.07;
+        Angle direction = Angle.fromDeg(45);
 
 // this method accepts three parameters:
 // base:      the base point
 // distance:  how far away the point should be
 // direction: the direction the point should be created in        
-PointXY newPoint = PointXY.inDirection(base, distance, direction); 
+PointXY newPoint = PointXY.inDirection(base, distance, direction);
 
 // the above point is (5, 5)
 ```
@@ -99,7 +99,7 @@ Translations are at the heart of Pathfinder's movement. The general idea is
 that any chassis should be able to receive a translation and move accordingly.
 Translations received by the robot will always be relative - a translation that
 means "go forwards" will make the robot "go forwards," relative to the robot
-itself. 
+itself.
 
 #### Values for a translation
 There are three values for a translation:
@@ -174,8 +174,8 @@ Say you're using the library during tele-op or something similar. You want to
 call the `tick()` method once per loop update, as follows.
 ```java
 while (opModeIsActive()) {
-    pathfinder.tick();
-}
+        pathfinder.tick();
+        }
 ```
 
 #### Ticking Pathfinder outside of a loop
@@ -183,8 +183,8 @@ Say you're using the library during autonomous. You could simply do
 something like:
 ```java
 while (pathfinder.isActive()) {
-    pathfinder.tick();
-}
+        pathfinder.tick();
+        }
 ```
 
 You could also do something like this:
@@ -206,23 +206,23 @@ public class ExampleMethodChaining() {
     private static final PointXYZ TARGET_B = ...;
     private static final PointXYZ TARGET_C = ...;
     private static final PointXYZ TARGET_D = ...;
-    
+
     private void doSomething() {
-        
+
     }
-    
+
     private boolean shouldRun() {
         return true;
     }
-    
+
     public void example() {
         pathfinder.goTo(TARGET_A)
                 .tickUntil() // will tick Pathfinder until the path finishes
-                             // executing, regardless of how long it takes
+                // executing, regardless of how long it takes
                 .goTo(TARGET_B)
                 .tickUntil(4_000) // will tick Pathfinder until either (a) the
-                                  // path finishes, or (b) the elapsed time is
-                                  // greater than or equal to 4 seconds
+                // path finishes, or (b) the elapsed time is
+                // greater than or equal to 4 seconds
                 .goTo(TARGET_C)
                 .andThen((pathfinder -> {
                     doSomething();
@@ -236,10 +236,10 @@ public class ExampleMethodChaining() {
                     // provided the current instance of Pathfinder, as well
                     // as the elapsed time (in milliseconds)
                     PointXYZ currentPosition = pathfinder.getPosition();
-                    
+
                     // print the current position and the elapsed time
                     System.out.printf(
-                            "Current position: %s%n" + 
+                            "Current position: %s%n" +
                                     "Elapsed time: %sms%n",
                             currentPosition,
                             elapsedMs
@@ -250,7 +250,7 @@ public class ExampleMethodChaining() {
 ```
 
 ### Robot
-A `Robot` is composed of two elements - a `Drive` and an `Odometry`. 
+A `Robot` is composed of two elements - a `Drive` and an `Odometry`.
 
 #### Robot: drive
 The `Drive` interface is responsible for physically driving a robot around
@@ -267,7 +267,7 @@ There's only a total of four methods you need to implement.
 
 ##### Methods from `me.wobblyyyy.pathfinder2.robot.Drive`
 - `getTranslation()` - return the last drivetrain that was set to the robot.
-- `setTranslation(Translation)` - set a translation to the robot. 
+- `setTranslation(Translation)` - set a translation to the robot.
 
 ##### Methods from `me.wobblyyyy.pathfinder2.robot.modifiers.Modifiable`
 - `getModifier()` - return the modifier.
@@ -275,7 +275,7 @@ There's only a total of four methods you need to implement.
 
 ##### The `AbstractDrive` class
 If you're going to implement your own `Drive`, I'd encourage you to use the
-`AbstractDrive` class (`me.wobblyyyy.pathfinder2.robot.AbstractDrive`). It 
+`AbstractDrive` class (`me.wobblyyyy.pathfinder2.robot.AbstractDrive`). It
 doesn't do much, but it removes the need to implement methods from the
 `Modifiable` interface.
 
@@ -302,18 +302,18 @@ relative translation.
 // let's say you want to move the robot forwards, relative to the robot
 Drive drive = ...; // assume this is actually implemented
 
-Translation translation = new Translation(0, 1, 0);
+        Translation translation = new Translation(0, 1, 0);
 
-drive.setTranslation(translation);
+        drive.setTranslation(translation);
 ```
 
 ```java
 // let's say you want to move the robot forwards, relative to the field
 Drive drive = ...; // assume this is actually implemented
-        
+
 // assume 'robot' is declared
 // assume 'robot' has a method 'getPos' that returns a PointXYZ - the robot's position
-Translation translation = new Translation(0, 1, 0).toRelative(robot.getPos().z());
+        Translation translation = new Translation(0, 1, 0).toRelative(robot.getPos().z());
 ```
 
 #### Robot: odometry
@@ -329,10 +329,10 @@ of the `Odometry` interface: `me.wobblyyyy.pathfinder2.robot.AbstractOdometry`.
 The `Odometry` interface is incredibly simple - it should report the robot's
 position on the field. That's it. This position should be absolute.
 
-### Trajectories 
+### Trajectories
 Trajectories are the basis for Pathfinder's movement. Well, technically
 speaking, `Follower`s actually control your robot's movement, but instances
-of the `Trajectory` interface dictate how your robot moves. 
+of the `Trajectory` interface dictate how your robot moves.
 
 #### Linear trajectory
 The most simple kind of trajectory is the [linear trajectory](https://github.com/Wobblyyyy/Pathfinder2/blob/master/pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/trajectory/LinearTrajectory.java).
@@ -351,7 +351,7 @@ following parameters:
 - Speed - the speed at which the robot should move. This value must be
   greater than 0 and less than or equal to 1. A speed value of 1 will make
   the robot move as fast as it can, and a speed value of 0.1 will be... pretty
-  slow. 
+  slow.
 - Tolerance - the tolerance Pathfinder uses in determining if it's finished
   following the trajectory. This value should be determined experimentally.
   Higher tolerance values make your robot's movement less accurate, while
@@ -360,7 +360,7 @@ following parameters:
 - Angle tolerance - just like tolerance, but for the robot's heading. This
   should be an `Angle`.
 
-#### Fast trajectory 
+#### Fast trajectory
 A fast trajectory is a linear trajectory, but it's less precise. The purpose
 of a fast trajectory is documented in the file - check it out right
 [here](https://github.com/Wobblyyyy/Pathfinder2/blob/master/pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/trajectory/FastTrajectory.java).
@@ -391,12 +391,93 @@ based exclusively on elapsed time.
  *                       will attempt to turn more slowly.
  */
 public TimedTrajectory(Translation translation,
-                       double timeoutMs,
-                       double speed,
-                       double turnMultiplier) {
-    this.translation = translation;
-    this.timeoutMs = timeoutMs;
-    this.speed = speed;
-    this.turnMultiplier = turnMultiplier;
-}
+        double timeoutMs,
+        double speed,
+        double turnMultiplier) {
+        this.translation = translation;
+        this.timeoutMs = timeoutMs;
+        this.speed = speed;
+        this.turnMultiplier = turnMultiplier;
+        }
+```
+
+#### Spline trajectories
+Splines are among the coolest things to ever grace this beautiful planet.
+In short, a spline is basically a curvy line. Splines are generally created
+with a series of control points (points that the line MUST pass through),
+and interpolation handles everything in between.
+
+Splines are popular for trajectories because they allow you to move your robot
+quickly, utilizing the curve to cut time. You can also make a trajectory
+speed up or slow down or just about anything else, except not actually anything
+else.
+
+##### Creating splines with a factory (suggested)
+This is the easiest (and suggested) method of creating spline trajectories.
+```java
+SplineBuilderFactory factory = new SplineBuilderFactory()
+    .setSpeed(0.5)
+    .setStep(0.1)
+    .setTolerance(2)
+    .setAngleTolerance(Angle.fromDeg(5));
+
+Trajectory trajectory3 = factory.builder()
+    .add(0, 60, Angle.fromDeg(0))
+    .add(new PointXYZ(20, 60, 0))
+    .add(new PointXYZ(30, 60, 0))
+    .add(new PointXYZ(40, 70, 0))
+    .build();
+    Trajectory trajectory4 = factory.builder()
+    .add(new PointXYZ(40, 70, 0))
+    .add(new PointXYZ(30, 60, 0))
+    .add(new PointXYZ(20, 60, 0))
+    .add(0, 60, Angle.fromDeg(0))
+    .build();
+```
+
+##### Creating a spline trajectory
+It's encouraged that you use a different method of creating splines, because
+this can make your code somewhat confusing. The JavaDoc for the constructor
+of the `AdvancedSplineTrajectory` class is included below.
+```java
+/**
+ * Create a new {@code AdvancedSplineTrajectory}.
+ *
+ * @param spline         a spline responsible for controlling the target point
+ *                       of the trajectory. This target point should be updated
+ *                       dynamically so that the robot is constantly given
+ *                       a new marker/target point.
+ * @param angleSpline    a spline responsible for controlling the angle
+ *                       target of the trajectory. Because splines only work
+ *                       with X and Y values, this has to be separate from
+ *                       the original spline.
+ * @param speedSpline    a spline responsible for controlling the speed of
+ *                       the robot. This allows your robot to accelerate
+ *                       and decelerate with relative ease.
+ * @param step           how large each "step" value should be. A larger
+ *                       step value makes the trajectory slightly less
+ *                       accurate, but makes it have coarser movement. A
+ *                       smaller step makes the trajectory more accurate, but
+ *                       might be hard to work with at high velocities.
+ * @param tolerance      the tolerance used in determining if the robot is
+ *                       actually at the target point.
+ * @param angleTolerance the tolerance used for determining if the robot
+ *                       is facing the correct direction.
+ */
+```
+
+##### Creating splines with a builder
+This is preferable to using the constructor to create splines, but it's
+still not as good as using a factory. Anyways.
+```java
+Trajectory trajectory1 = new AdvancedSplineTrajectoryBuilder()
+        .setSpeed(0.5)
+        .setStep(0.1)
+        .setTolerance(2)
+        .setAngleTolerance(Angle.fromDeg(5))
+        .add(new PointXYZ(0, 0, 0))
+        .add(new PointXYZ(4, 6, 0))
+        .add(new PointXYZ(6, 12, 0))
+        .add(new PointXYZ(8, 24, 0))
+        .build();
 ```
