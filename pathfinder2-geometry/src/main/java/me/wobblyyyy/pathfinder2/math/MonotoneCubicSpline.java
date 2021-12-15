@@ -19,6 +19,8 @@ public class MonotoneCubicSpline implements Spline {
     private final double[] mx;
     private final double[] my;
     private final double[] mm;
+    private final PointXY start;
+    private final PointXY end;
 
     public MonotoneCubicSpline(double[] x,
                                double[] y) {
@@ -73,10 +75,12 @@ public class MonotoneCubicSpline implements Spline {
         this.mx = x;
         this.my = y;
         this.mm = m;
+
+        this.start = new PointXY(mx[0], my[0]);
+        this.end = new PointXY(mx[mx.length - 1], my[my.length - 1]);
     }
 
-    @Override
-    public Spline create(List<PointXY> controlPoints) {
+    public static Spline create(List<PointXY> controlPoints) {
         // Create arrays for X and Y values - they're both the same size.
         double[] x = new double[controlPoints.size()];
         double[] y = new double[controlPoints.size()];
@@ -133,5 +137,15 @@ public class MonotoneCubicSpline implements Spline {
     @Override
     public PointXY interpolate(double x) {
         return new PointXY(x, interpolateY(x));
+    }
+
+    @Override
+    public PointXY getStartPoint() {
+        return start;
+    }
+
+    @Override
+    public PointXY getEndPoint() {
+        return end;
     }
 }

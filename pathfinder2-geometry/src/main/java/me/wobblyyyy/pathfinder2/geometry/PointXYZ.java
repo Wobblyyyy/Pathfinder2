@@ -34,6 +34,15 @@ import java.util.List;
  * @since 0.0.0
  */
 public class PointXYZ extends PointXY {
+    /**
+     * A point with...
+     *
+     * <ul>
+     *     <li>X: 0</li>
+     *     <li>Y: 0</li>
+     *     <li>Z: 0</li>
+     * </ul>
+     */
     public static final PointXYZ ZERO = PointXYZ.zero();
 
     /**
@@ -366,6 +375,13 @@ public class PointXYZ extends PointXY {
         );
     }
 
+    /**
+     * Reflect a set of points over a given axis.
+     *
+     * @param axis   the axis to reflect the points over.
+     * @param points the points to reflect over the given axis.
+     * @return the same list of points, but reflected over a given axis.
+     */
     public static List<PointXYZ> reflectPointsOverX(double axis,
                                                     List<PointXYZ> points) {
         List<PointXYZ> reflectedPoints = new ArrayList<>();
@@ -377,6 +393,13 @@ public class PointXYZ extends PointXY {
         return reflectedPoints;
     }
 
+    /**
+     * Reflect a set of points over a given axis.
+     *
+     * @param axis   the axis to reflect the points over.
+     * @param points the points to reflect over the given axis.
+     * @return the same list of points, but reflected over a given axis.
+     */
     public static List<PointXYZ> reflectPointsOverX(double axis,
                                                     PointXYZ... points) {
         List<PointXYZ> reflectedPoints = new ArrayList<>();
@@ -388,6 +411,13 @@ public class PointXYZ extends PointXY {
         return reflectedPoints;
     }
 
+    /**
+     * Reflect a set of points over a given axis.
+     *
+     * @param axis   the axis to reflect the points over.
+     * @param points the points to reflect over the given axis.
+     * @return the same list of points, but reflected over a given axis.
+     */
     public static List<PointXYZ> reflectPointsOverY(double axis,
                                                     List<PointXYZ> points) {
         List<PointXYZ> reflectedPoints = new ArrayList<>();
@@ -399,6 +429,13 @@ public class PointXYZ extends PointXY {
         return reflectedPoints;
     }
 
+    /**
+     * Reflect a set of points over a given axis.
+     *
+     * @param axis   the axis to reflect the points over.
+     * @param points the points to reflect over the given axis.
+     * @return the same list of points, but reflected over a given axis.
+     */
     public static List<PointXYZ> reflectPointsOverY(double axis,
                                                     PointXYZ... points) {
         List<PointXYZ> reflectedPoints = new ArrayList<>();
@@ -410,6 +447,12 @@ public class PointXYZ extends PointXY {
         return reflectedPoints;
     }
 
+    /**
+     * Reflect a set of points over a given axis.
+     *
+     * @param points the points to reflect over the given axis.
+     * @return the same list of points, but reflected over a given axis.
+     */
     public static List<PointXYZ> reflectHeadings(List<PointXYZ> points) {
         List<PointXYZ> reflectedPoints = new ArrayList<>();
 
@@ -420,6 +463,12 @@ public class PointXYZ extends PointXY {
         return reflectedPoints;
     }
 
+    /**
+     * Reflect a set of points over a given axis.
+     *
+     * @param points the points to reflect over the given axis.
+     * @return the same list of points, but reflected over a given axis.
+     */
     public static List<PointXYZ> reflectHeadings(PointXYZ... points) {
         List<PointXYZ> reflectedPoints = new ArrayList<>();
 
@@ -553,14 +602,31 @@ public class PointXYZ extends PointXY {
         );
     }
 
+    /**
+     * Reflect a point over a given axis.
+     *
+     * @param xAxis the axis to reflect the point over.
+     * @return the reflected point.
+     */
     public PointXYZ reflectOverX(double xAxis) {
         return withX(x() + (xAxis - x()));
     }
 
+    /**
+     * Reflect a point over a given axis.
+     *
+     * @param yAxis the axis to reflect the point over.
+     * @return the reflected point.
+     */
     public PointXYZ reflectOverY(double yAxis) {
         return withY(y() + (yAxis - y()));
     }
 
+    /**
+     * Reflect a point over a given axis.
+     *
+     * @return the reflected point.
+     */
     public PointXYZ reflectHeading() {
         return withHeading(z.fixedFlip());
     }
