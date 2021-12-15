@@ -13,30 +13,72 @@ package me.wobblyyyy.pathfinder2.trajectory.spline;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-import me.wobblyyyy.pathfinder2.math.MonotoneCubicSpline;
 import me.wobblyyyy.pathfinder2.math.Spline;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * A {@link Trajectory} that utilizes multiple splines to control values
+ * for the trajectory. Those values are as follows:
+ *
+ * <ul>
+ *     <li>The target position</li>
+ *     <li>The target heading</li>
+ *     <li>The speed of the robot</li>
+ * </ul>
+ *
+ * <p>
+ * The idea behind this trajectory is that several different components can
+ * be controlled using splines. This makes it very easy to precisely tune
+ * your trajectory so that it does exactly what you want.
+ * </p>
+ *
+ * @author Colin Robertson
+ * @since 0.6.1
+ */
 public class AdvancedSplineTrajectory implements Trajectory {
     private final Spline spline;
     private final AngleSpline angleSpline;
     private final Spline speedSpline;
     private final double step;
     private final double tolerance;
+    private final Angle angleTolerance;
 
+    /**
+     * Create a new {@code AdvancedSplineTrajectory}.
+     *
+     * @param spline         a spline responsible for controlling the target point
+     *                       of the trajectory. This target point should be updated
+     *                       dynamically so that the robot is constantly given
+     *                       a new marker/target point.
+     * @param angleSpline    a spline responsible for controlling the angle
+     *                       target of the trajectory. Because splines only work
+     *                       with X and Y values, this has to be separate from
+     *                       the original spline.
+     * @param speedSpline    a spline responsible for controlling the speed of
+     *                       the robot. This allows your robot to accelerate
+     *                       and decelerate with relative ease.
+     * @param step           how large each "step" value should be. A larger
+     *                       step value makes the trajectory slightly less
+     *                       accurate, but makes it have coarser movement. A
+     *                       smaller step makes the trajectory more accurate, but
+     *                       might be hard to work with at high velocities.
+     * @param tolerance      the tolerance used in determining if the robot is
+     *                       actually at the target point.
+     * @param angleTolerance the tolerance used for determining if the robot
+     *                       is facing the correct direction.
+     */
     public AdvancedSplineTrajectory(Spline spline,
                                     AngleSpline angleSpline,
                                     Spline speedSpline,
                                     double step,
-                                    double tolerance) {
+                                    double tolerance,
+                                    Angle angleTolerance) {
         this.spline = spline;
         this.angleSpline = angleSpline;
         this.speedSpline = speedSpline;
         this.step = step;
         this.tolerance = tolerance;
+        this.angleTolerance = angleTolerance;
     }
 
     @Override
@@ -47,78 +89,25 @@ public class AdvancedSplineTrajectory implements Trajectory {
         return interpolatedPoint.withHeading(interpolatedAngle);
     }
 
+    private boolean isDoneXY(PointXYZ current) {
+        return current.isNear(spline.getEndPoint(), tolerance);
+    }
+
+    private boolean isDoneZ(PointXYZ current) {
+        return Angle.isCloseDeg(
+                current.z(),
+                Angle.fromDeg(angleSpline.getSpline().getEndPoint().y()),
+                angleTolerance.deg()
+        );
+    }
+
     @Override
     public boolean isDone(PointXYZ current) {
-        return current.isNear(spline.getEndPoint(), tolerance);
+        return isDoneXY(current) && isDoneZ(current);
     }
 
     @Override
     public double speed(PointXYZ current) {
         return speedSpline.interpolateY(current.x());
-    }
-
-    public static class AdvancedSplineTrajectoryBuilder {
-        private final List<Double> xValues = new ArrayList<>();
-        private final List<Double> yValues = new ArrayList<>();
-        private final List<Angle> angleTargets = new ArrayList<>();
-        private final List<Double> speeds = new ArrayList<>();
-        private double step;
-        private double tolerance;
-
-        public AdvancedSplineTrajectoryBuilder() {
-
-        }
-
-        public AdvancedSplineTrajectoryBuilder setStep(double step) {
-            this.step = step;
-
-            return this;
-        }
-
-        public AdvancedSplineTrajectoryBuilder setTolerance(double tolerance) {
-            this.tolerance = tolerance;
-
-            return this;
-        }
-
-        public AdvancedSplineTrajectoryBuilder add(PointXYZ target,
-                                                   double speed) {
-            xValues.add(target.x());
-            yValues.add(target.y());
-            angleTargets.add(target.z());
-            speeds.add(speed);
-
-            return this;
-        }
-
-        public AdvancedSplineTrajectory build() {
-            int size = xValues.size();
-            Double[] xBoxed = new Double[size];
-            Double[] yBoxed = new Double[size];
-            Angle[] z = new Angle[size];
-            Double[] speedBoxed = new Double[size];
-            xValues.toArray(xBoxed);
-            yValues.toArray(yBoxed);
-            angleTargets.toArray(z);
-            speeds.toArray(speedBoxed);
-            double[] x = new double[size];
-            double[] y = new double[size];
-            double[] speed = new double[size];
-            for (int i = 0; i < xBoxed.length; i++) {
-                x[i] = xBoxed[i];
-                y[i] = yBoxed[i];
-                speed[i] = speedBoxed[i];
-            }
-            Spline spline = new MonotoneCubicSpline(x, y);
-            AngleSpline angleSpline = new AngleSpline(x, z);
-            Spline speedSpline = new MonotoneCubicSpline(x, speed);
-            return new AdvancedSplineTrajectory(
-                    spline,
-                    angleSpline,
-                    speedSpline,
-                    step,
-                    tolerance
-            );
-        }
     }
 }

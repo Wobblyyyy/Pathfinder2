@@ -14,6 +14,9 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.math.MonotoneCubicSpline;
 import me.wobblyyyy.pathfinder2.math.Spline;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AngleSpline {
     private final Spline spline;
 
@@ -31,5 +34,42 @@ public class AngleSpline {
 
     public Angle getAngleTarget(double x) {
         return Angle.fixedDeg(spline.interpolateY(x));
+    }
+
+    public static class AngleSplineBuilder {
+        private final List<Double> x = new ArrayList<>();
+        private final List<Angle> z = new ArrayList<>();
+
+        public AngleSplineBuilder() {
+
+        }
+
+        public AngleSplineBuilder add(double x,
+                                      Angle angle) {
+            this.x.add(x);
+            this.z.add(angle);
+
+            return this;
+        }
+
+        public AngleSpline build() {
+            int size = x.size();
+
+            Double[] boxedX = new Double[size];
+            x.toArray(boxedX);
+            double[] unboxedX = new double[size];
+            for (int i = 0; i < size; i++) {
+                unboxedX[i] = boxedX[i];
+            }
+
+            Angle[] angles = new Angle[size];
+            z.toArray(angles);
+
+            return new AngleSpline(unboxedX, angles);
+        }
+    }
+
+    public Spline getSpline() {
+        return spline;
     }
 }

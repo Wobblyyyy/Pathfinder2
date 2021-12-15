@@ -32,6 +32,7 @@ import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.utils.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -1438,6 +1439,16 @@ public class Pathfinder {
         followTrajectories(list);
 
         return this;
+    }
+
+    /**
+     * Follow multiple trajectories.
+     *
+     * @param trajectories a list of trajectories to follow.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder followTrajectories(Trajectory... trajectories) {
+        return followTrajectories(Arrays.asList(trajectories));
     }
 
     /**

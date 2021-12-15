@@ -12,15 +12,25 @@ package me.wobblyyyy.pathfinder2.math;
 
 
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
+import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
 import java.util.List;
 
+/**
+ * A monotone cubic spline... whatever that means. This is the standard
+ * implementation of the {@link Spline} interface.
+ *
+ * @author Colin Robertson
+ * @since 0.0.0
+ */
+@SuppressWarnings("DuplicatedCode")
 public class MonotoneCubicSpline implements Spline {
     private final double[] mx;
     private final double[] my;
     private final double[] mm;
     private final PointXY start;
     private final PointXY end;
+    private final boolean isInverted;
 
     public MonotoneCubicSpline(double[] x,
                                double[] y) {
@@ -29,6 +39,22 @@ public class MonotoneCubicSpline implements Spline {
                     "with at least 2 control points and arrays of " +
                     "equal lengths.");
         }
+
+        // reflect all of the x values of the spline over the first x value
+        // if the spline's control points have descending x values
+        isInverted = x[0] < x[1];
+        if (isInverted)
+            for (int i = 1; i < x.length; i++) x[i] = x[i] - (x[i] - x[0]);
+
+        for (int i = 1; i < x.length; i++)
+            if (x[i] - x[i - 1] < 0)
+                throw new IllegalArgumentException(
+                        "Cannot create a monotone cubic spline with X values " +
+                                "that do not approach the same infinity! " +
+                                "Make sure your X values are either (1) " +
+                                "strictly increasing or (2) strictly " +
+                                "decreasing"
+                );
 
         final int n = x.length;
         double[] d = new double[n - 1];
@@ -100,9 +126,55 @@ public class MonotoneCubicSpline implements Spline {
         return new MonotoneCubicSpline(x, y);
     }
 
+    public static MonotoneCubicSpline fromPoints(PointXY[] points) {
+        double[] x = new double[points.length];
+        double[] y = new double[points.length];
+        for (int i = 0; i < points.length; i++) {
+            x[i] = points[i].x();
+            y[i] = points[i].y();
+        }
+        return new MonotoneCubicSpline(x, y);
+    }
+
+    public static MonotoneCubicSpline fromPoints(PointXYZ[] points) {
+        double[] x = new double[points.length];
+        double[] y = new double[points.length];
+        for (int i = 0; i < points.length; i++) {
+            x[i] = points[i].x();
+            y[i] = points[i].y();
+        }
+        return new MonotoneCubicSpline(x, y);
+    }
+
+    public MonotoneCubicSpline fromVarArgs(PointXY... points) {
+        double[] x = new double[points.length];
+        double[] y = new double[points.length];
+        for (int i = 0; i < points.length; i++) {
+            x[i] = points[i].x();
+            y[i] = points[i].y();
+        }
+        return new MonotoneCubicSpline(x, y);
+    }
+
+    public MonotoneCubicSpline fromVarArgs(PointXYZ... points) {
+        double[] x = new double[points.length];
+        double[] y = new double[points.length];
+        for (int i = 0; i < points.length; i++) {
+            x[i] = points[i].x();
+            y[i] = points[i].y();
+        }
+        return new MonotoneCubicSpline(x, y);
+    }
+
     @Override
     public double interpolateY(double x) {
         final int n = mx.length;
+
+        // if the spline is inverted, reflect x value over the first
+        // x value
+        if (isInverted) {
+            x = x - (x - mx[0]);
+        }
 
         if (Double.isNaN(x)) {
             // noinspection SuspiciousNameCombination
