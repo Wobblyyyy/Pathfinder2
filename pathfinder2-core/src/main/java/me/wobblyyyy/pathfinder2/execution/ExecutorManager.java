@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.execution;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
+import me.wobblyyyy.pathfinder2.robot.Robot;
 import me.wobblyyyy.pathfinder2.time.Time;
 
 import java.util.ArrayList;
@@ -40,8 +41,8 @@ import java.util.List;
  * </p>
  *
  * @author Colin Robertson
- * @since 0.0.0
  * @see FollowerExecutor
+ * @since 0.0.0
  */
 public class ExecutorManager {
     /**
@@ -79,13 +80,11 @@ public class ExecutorManager {
      * Create a new {@code ExecutorManager}. By default, new managers will
      * not have any executors.
      *
-     * @param odometry the odometry system the executor should use.
-     * @param drive    the drive system the executor should use.
+     * @param robot the robot.
      */
-    public ExecutorManager(Odometry odometry,
-                           Drive drive) {
-        this.odometry = odometry;
-        this.drive = drive;
+    public ExecutorManager(Robot robot) {
+        this.odometry = robot.odometry();
+        this.drive = robot.drive();
     }
 
     /**

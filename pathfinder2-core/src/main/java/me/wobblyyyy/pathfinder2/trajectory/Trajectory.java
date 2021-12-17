@@ -11,6 +11,9 @@
 package me.wobblyyyy.pathfinder2.trajectory;
 
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.trajectory.multi.segment.MultiSegmentTrajectory;
+
+import java.util.Arrays;
 
 /**
  * A path-like thing that your robot can follow. Look, I know all this
@@ -93,4 +96,24 @@ public interface Trajectory {
      * a value of 1 corresponds to moving at full speed.
      */
     double speed(PointXYZ current);
+
+    /**
+     * Convert this trajectory to a {@link MultiSegmentTrajectory}, adding
+     * all of the provided additional trajectories.
+     *
+     * @param additionalTrajectories a variable length array containing
+     *                               trajectories that should be conjoined
+     *                               with {@code this} trajectory.
+     * @return a new {@link MultiSegmentTrajectory}.
+     */
+    default Trajectory toMultiSegmentTrajectory(Trajectory... additionalTrajectories) {
+        Trajectory[] trajectories = new Trajectory[additionalTrajectories.length + 1];
+        System.arraycopy(
+                additionalTrajectories, 0,
+                trajectories, 1,
+                additionalTrajectories.length
+        );
+        trajectories[0] = this;
+        return new MultiSegmentTrajectory(Arrays.asList(trajectories));
+    }
 }

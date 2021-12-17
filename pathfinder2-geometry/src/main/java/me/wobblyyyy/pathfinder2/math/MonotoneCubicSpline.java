@@ -14,6 +14,7 @@ package me.wobblyyyy.pathfinder2.math;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,7 +32,9 @@ public class MonotoneCubicSpline implements Spline {
     private final PointXY start;
     private final PointXY end;
     private final boolean isInverted;
+    private boolean isXY = false;
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public MonotoneCubicSpline(double[] x,
                                double[] y) {
         if (x == null || y == null || x.length != y.length || x.length < 2) {
@@ -39,10 +42,22 @@ public class MonotoneCubicSpline implements Spline {
                     "with at least 2 control points and arrays of " +
                     "equal lengths.");
         }
-
-        // reflect all of the x values of the spline over the first x value
-        // if the spline's control points have descending x values
         isInverted = x[0] < x[1];
+        List<Double> xValues = new ArrayList<>();
+        for (double d : x) {
+            if (xValues.contains(d)) {
+                isXY = true;
+            } else {
+                xValues.add(d);
+            }
+        }
+        double[] tempX;
+        double[] tempY;
+        tempX = x;
+        tempY = y;
+        x = tempY;
+        y = tempX;
+
         if (isInverted)
             for (int i = 1; i < x.length; i++) x[i] = x[i] - (x[i] - x[0]);
 
@@ -55,12 +70,9 @@ public class MonotoneCubicSpline implements Spline {
                                 "strictly increasing or (2) strictly " +
                                 "decreasing"
                 );
-
         final int n = x.length;
         double[] d = new double[n - 1];
         double[] m = new double[n];
-
-        // Compute slopes of secant lines between successive points.
         for (int i = 0; i < n - 1; i++) {
             double h = x[i + 1] - x[i];
             if (h <= 0D) {
@@ -69,17 +81,11 @@ public class MonotoneCubicSpline implements Spline {
             }
             d[i] = (y[i + 1] - y[i]) / h;
         }
-
-        // Initialize the tangents as the average of the secants.
         m[0] = d[0];
-        for (int i = 1; i < n - 1; i++) {
-            m[i] = (d[i - 1] + d[i]) * 0.5D;
-        }
+        for (int i = 1; i < n - 1; i++) m[i] = (d[i - 1] + d[i]) * 0.5D;
         m[n - 1] = d[n - 2];
-
-        // Update the tangents to preserve monotonicity.
-        for (int i = 0; i < n - 1; i++) {
-            if (d[i] == 0D) { // successive Y values are equal
+        for (int i = 0; i < n - 1; i++)
+            if (d[i] == 0D) {
                 m[i] = 0D;
                 m[i + 1] = 0F;
             } else {
@@ -96,33 +102,21 @@ public class MonotoneCubicSpline implements Spline {
                     m[i + 1] *= t;
                 }
             }
-        }
-
         this.mx = x;
         this.my = y;
         this.mm = m;
-
         this.start = new PointXY(mx[0], my[0]);
         this.end = new PointXY(mx[mx.length - 1], my[my.length - 1]);
     }
 
     public static Spline create(List<PointXY> controlPoints) {
-        // Create arrays for X and Y values - they're both the same size.
         double[] x = new double[controlPoints.size()];
         double[] y = new double[controlPoints.size()];
-
-        // Iterate through the controlPoints list and set the X and Y arrays
-        // to have the same contents as the points.
         for (int i = 0; i < controlPoints.size(); i++) {
             PointXY controlPoint = controlPoints.get(i);
-
             x[i] = controlPoint.x();
             y[i] = controlPoint.y();
         }
-
-        // Return a new instance of this using the x and y arrays.
-        // Note that exceptions aren't handled in this method - rather,
-        // you should see the MonotoneCubicSpline constructor.
         return new MonotoneCubicSpline(x, y);
     }
 
@@ -166,40 +160,28 @@ public class MonotoneCubicSpline implements Spline {
         return new MonotoneCubicSpline(x, y);
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     @Override
     public double interpolateY(double x) {
         final int n = mx.length;
-
-        // if the spline is inverted, reflect x value over the first
-        // x value
-        if (isInverted) {
-            x = x - (x - mx[0]);
+        double[] mx;
+        double[] my;
+        if (isXY) {
+            mx = this.my;
+            my = this.mx;
+        } else {
+            mx = this.mx;
+            my = this.my;
         }
-
-        if (Double.isNaN(x)) {
-            // noinspection SuspiciousNameCombination
-            return x;
-        }
-
-        // If X is either greater than the last X value or lesser than the
-        // first X value in the mx array, return, respectively, the first
-        // or last Y value.
-        if (x <= mx[0]) {
-            return my[0];
-        } else if (x >= mx[n - 1]) {
-            return my[n - 1];
-        }
-
+        if (isInverted) x = x - (x - mx[0]);
+        if (Double.isNaN(x)) return x;
+        if (x <= mx[0]) return my[0];
+        else if (x >= mx[n - 1]) return my[n - 1];
         int i = 0;
         while (x >= mx[i + 1]) {
             i += 1;
-            if (x == mx[i]) {
-                return my[i];
-            }
+            if (x == mx[i]) return my[i];
         }
-
-        // I'm not even going to pretend to understand what's going on here.
-        // Sorry.
         double h = mx[i + 1] - mx[i];
         double t = (x - mx[i]) / h;
         return (my[i] * (1 + 2 * t) + h * mm[i] * t) * (1 - t) * (1 - t) +

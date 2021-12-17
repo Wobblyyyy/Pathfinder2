@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.trajectory.spline;
 
+import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
@@ -56,16 +57,33 @@ public class AdvancedSplineTrajectory implements Trajectory {
      *                       the original spline.
      * @param speedSpline    a spline responsible for controlling the speed of
      *                       the robot. This allows your robot to accelerate
-     *                       and decelerate with relative ease.
+     *                       and decelerate with relative ease. If you'd
+     *                       like to have your robot move at a consistent
+     *                       speed, you can use a {@code ZeroSlopeSpline},
+     *                       which makes the spline return the same value,
+     *                       no matter what input is provided.
      * @param step           how large each "step" value should be. A larger
      *                       step value makes the trajectory slightly less
      *                       accurate, but makes it have coarser movement. A
      *                       smaller step makes the trajectory more accurate, but
      *                       might be hard to work with at high velocities.
+     *                       If your spline is moving in a positive X
+     *                       direction, this value should also be positive.
+     *                       Likewise, if your spline is moving in a negative
+     *                       X direction, this value should also be negative.
+     *                       Having a positive step with a negative spline
+     *                       (or vice versa) will cause your robot to never
+     *                       complete the trajectory, because it'll try to go
+     *                       to the wrong target point.
      * @param tolerance      the tolerance used in determining if the robot is
-     *                       actually at the target point.
+     *                       actually at the target point. This tolerance
+     *                       only affects the LAST of the points in the
+     *                       trajectory - all of the other points ignore
+     *                       whatever this value is.
      * @param angleTolerance the tolerance used for determining if the robot
-     *                       is facing the correct direction.
+     *                       is facing the correct direction. Like the
+     *                       {@code tolerance} parameter, this only affects
+     *                       the LAST of the points in the trajectory.
      */
     public AdvancedSplineTrajectory(Spline spline,
                                     AngleSpline angleSpline,
@@ -73,6 +91,36 @@ public class AdvancedSplineTrajectory implements Trajectory {
                                     double step,
                                     double tolerance,
                                     Angle angleTolerance) {
+        if (spline == null)
+            throw new IllegalArgumentException(
+                    "The 'spline' argument of the AdvancedSplineTrajectory " +
+                            "constructor was null!");
+
+        if (angleSpline == null)
+            throw new IllegalArgumentException(
+                    "The 'angleSpline' argument of the AdvancedSplineTrajectory " +
+                            "constructor was null!");
+
+        if (speedSpline == null)
+            throw new IllegalArgumentException(
+                    "The 'speedSpline' argument of the AdvancedSplineTrajectory " +
+                            "constructor was null!");
+
+        InvalidToleranceException.throwIfInvalid(
+                "Invalid tolerance in AdvancedSplineTrajectory " +
+                        "constructor! Make sure this value is greater " +
+                        "than or equal to zero.",
+                tolerance
+        );
+
+        if (step == 0)
+            throw new IllegalArgumentException(
+                    "Attempted to create an AdvancedSplineTrajectory with " +
+                            "a step value of 0. Please make sure this number " +
+                            "is NOT equal to zero. Or just don't have " +
+                            "working code - it's up to you, really."
+            );
+
         this.spline = spline;
         this.angleSpline = angleSpline;
         this.speedSpline = speedSpline;
@@ -84,8 +132,10 @@ public class AdvancedSplineTrajectory implements Trajectory {
     @Override
     public PointXYZ nextMarker(PointXYZ current) {
         double x = current.x() + step;
+
         PointXY interpolatedPoint = spline.interpolate(x);
         Angle interpolatedAngle = angleSpline.getAngleTarget(x);
+
         return interpolatedPoint.withHeading(interpolatedAngle);
     }
 

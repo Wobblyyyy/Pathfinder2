@@ -38,9 +38,8 @@ Get the distance between two points. This method uses the distance formula
 to determine the distance between the two points.
 ```java
 PointXY a = new PointXY(0, 0);
-        PointXY b = new PointXY(5, 0);
-
-        double distance = PointXY.distance(a, b); // distance = 5
+PointXY b = new PointXY(5, 0);
+double distance = PointXY.distance(a, b); // distance = 5
 ```
 
 ```java
@@ -62,8 +61,8 @@ Create a new point a given distance away from a base point. There's two ways
 to use this method:
 ```java
 PointXY base = new PointXY(0, 0);
-        double distance = 7.07;
-        Angle direction = Angle.fromDeg(45);
+double distance = 7.07;
+Angle direction = Angle.fromDeg(45);
 
 // this method accepts three parameters:
 // base:      the base point
@@ -174,8 +173,8 @@ Say you're using the library during tele-op or something similar. You want to
 call the `tick()` method once per loop update, as follows.
 ```java
 while (opModeIsActive()) {
-        pathfinder.tick();
-        }
+    pathfinder.tick();
+}
 ```
 
 #### Ticking Pathfinder outside of a loop
@@ -183,8 +182,8 @@ Say you're using the library during autonomous. You could simply do
 something like:
 ```java
 while (pathfinder.isActive()) {
-        pathfinder.tick();
-        }
+    pathfinder.tick();
+}
 ```
 
 You could also do something like this:
@@ -200,52 +199,54 @@ once the tickUntil method has finished.
 
 #### An example of method chaining
 Method chaining is beautiful - who doesn't love method chaining?
+
 ```java
 public class ExampleMethodChaining() {
-    private static final PointXYZ TARGET_A = ...;
-    private static final PointXYZ TARGET_B = ...;
-    private static final PointXYZ TARGET_C = ...;
-    private static final PointXYZ TARGET_D = ...;
+  private static final PointXYZ TARGET_A = ...;
+  private static final PointXYZ TARGET_B = ...;
+  private static final PointXYZ TARGET_C = ...;
+  private static final PointXYZ TARGET_D = ...;
 
-    private void doSomething() {
+  private void doSomething() {
 
-    }
+  }
 
-    private boolean shouldRun() {
-        return true;
-    }
+  private boolean shouldRun() {
+    return true;
+  }
 
-    public void example() {
-        pathfinder.goTo(TARGET_A)
-                .tickUntil() // will tick Pathfinder until the path finishes
-                // executing, regardless of how long it takes
-                .goTo(TARGET_B)
-                .tickUntil(4_000) // will tick Pathfinder until either (a) the
-                // path finishes, or (b) the elapsed time is
-                // greater than or equal to 4 seconds
-                .goTo(TARGET_C)
-                .andThen((pathfinder -> {
-                    doSomething();
-                }))
-                .goTo(TARGET_D)
-                .tickUntil(4_000, this::shouldRun, (pathfinder, elapsedMs) -> {
-                    // this has a timeout of 4 seconds
-                    // if the shouldRun supplier returns false, this method
-                    // will finish executing immediately
-                    // this consumer will be called once per tick and will be
-                    // provided the current instance of Pathfinder, as well
-                    // as the elapsed time (in milliseconds)
-                    PointXYZ currentPosition = pathfinder.getPosition();
+  @SuppressWarnings("CodeBlock2Expr")
+  public void example() {
+    pathfinder.goTo(TARGET_A)
+            .tickUntil() // will tick Pathfinder until the path finishes
+            // executing, regardless of how long it takes
+            .goTo(TARGET_B)
+            .tickUntil(4_000) // will tick Pathfinder until either (a) the
+            // path finishes, or (b) the elapsed time is
+            // greater than or equal to 4 seconds
+            .goTo(TARGET_C)
+            .andThen((pathfinder -> {
+              doSomething();
+            }))
+            .goTo(TARGET_D)
+            .tickUntil(4_000, this::shouldRun, (pathfinder, elapsedMs) -> {
+              // this has a timeout of 4 seconds
+              // if the shouldRun supplier returns false, this method
+              // will finish executing immediately
+              // this consumer will be called once per tick and will be
+              // provided the current instance of Pathfinder, as well
+              // as the elapsed time (in milliseconds)
+              PointXYZ currentPosition = pathfinder.getPosition();
 
-                    // print the current position and the elapsed time
-                    System.out.printf(
-                            "Current position: %s%n" +
-                                    "Elapsed time: %sms%n",
-                            currentPosition,
-                            elapsedMs
-                    );
-                });
-    }
+              // print the current position and the elapsed time
+              System.out.printf(
+                      "Current position: %s%n" +
+                              "Elapsed time: %sms%n",
+                      currentPosition,
+                      elapsedMs
+              );
+            });
+  }
 }
 ```
 
@@ -427,7 +428,7 @@ Trajectory trajectory3 = factory.builder()
     .add(new PointXYZ(30, 60, 0))
     .add(new PointXYZ(40, 70, 0))
     .build();
-    Trajectory trajectory4 = factory.builder()
+Trajectory trajectory4 = factory.builder()
     .add(new PointXYZ(40, 70, 0))
     .add(new PointXYZ(30, 60, 0))
     .add(new PointXYZ(20, 60, 0))
@@ -453,18 +454,55 @@ of the `AdvancedSplineTrajectory` class is included below.
  *                       the original spline.
  * @param speedSpline    a spline responsible for controlling the speed of
  *                       the robot. This allows your robot to accelerate
- *                       and decelerate with relative ease.
+ *                       and decelerate with relative ease. If you'd
+ *                       like to have your robot move at a consistent
+ *                       speed, you can use a {@code ZeroSlopeSpline},
+ *                       which makes the spline return the same value,
+ *                       no matter what input is provided.
  * @param step           how large each "step" value should be. A larger
  *                       step value makes the trajectory slightly less
  *                       accurate, but makes it have coarser movement. A
  *                       smaller step makes the trajectory more accurate, but
  *                       might be hard to work with at high velocities.
+ *                       If your spline is moving in a positive X
+ *                       direction, this value should also be positive.
+ *                       Likewise, if your spline is moving in a negative
+ *                       X direction, this value should also be negative.
+ *                       Having a positive step with a negative spline
+ *                       (or vice versa) will cause your robot to never
+ *                       complete the trajectory, because it'll try to go
+ *                       to the wrong target point.
  * @param tolerance      the tolerance used in determining if the robot is
- *                       actually at the target point.
+ *                       actually at the target point. This tolerance
+ *                       only affects the LAST of the points in the
+ *                       trajectory - all of the other points ignore
+ *                       whatever this value is.
  * @param angleTolerance the tolerance used for determining if the robot
- *                       is facing the correct direction.
+ *                       is facing the correct direction. Like the
+ *                       {@code tolerance} parameter, this only affects
+ *                       the LAST of the points in the trajectory.
  */
 ```
+
+###### Creating a speed spline with a constant value
+What if you want to have a spline that doesn't change speed at all?
+Well. I would say "that sucks," but luckily for you, there's this!
+```java
+// introducing the ZeroSlopeSpline!
+// me.wobblyyyy.pathfinder2.math.ZeroSlopeSpline
+Spline spline = new ZeroSlopeSpline(0.5);
+```
+No matter where you are on the spline, it'll always return 0.5.
+
+##### Creating a speed spline with a linear equation
+You'll need to make use of the `LinearEquation` class, but it shouldn't be
+all that difficult. Hopefully.
+```java
+// me.wobblyyyy.pathfinder2.math.LinearSpline
+LinearEquation equation = new PointSlope(new PointXY(0, 0), 0.5);
+Spline linearSpline = new LinearSpline(equation);
+```
+You'll always get a value dictated by a `LinearEquation` - quite lovely.
 
 ##### Creating splines with a builder
 This is preferable to using the constructor to create splines, but it's
@@ -478,6 +516,5 @@ Trajectory trajectory1 = new AdvancedSplineTrajectoryBuilder()
         .add(new PointXYZ(0, 0, 0))
         .add(new PointXYZ(4, 6, 0))
         .add(new PointXYZ(6, 12, 0))
-        .add(new PointXYZ(8, 24, 0))
-        .build();
+        .add(new PointXYZ(8, 24, 0)).build();
 ```

@@ -10,8 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.zones;
 
+import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
-import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Shape;
 
 import java.io.Serializable;
@@ -26,9 +26,9 @@ import java.util.List;
  * <p>
  * You can overload some methods to control the zone's behavior.
  * <ul>
- *     <li>{@link #onEnter(PointXYZ)}</li>
- *     <li>{@link #onExit(PointXYZ)}</li>
- *     <li>{@link #whileInside(PointXYZ)}</li>
+ *     <li>{@link #onEnter(Pathfinder)}</li>
+ *     <li>{@link #onExit(Pathfinder)}</li>
+ *     <li>{@link #whileInside(Pathfinder)}</li>
  * </ul>
  * </p>
  *
@@ -51,18 +51,18 @@ public class Zone implements Serializable {
                                double inflationRadius) {
         return new Zone((Shape<?>) zone.getShape().growBy(inflationRadius)) {
             @Override
-            public void onEnter(PointXYZ robotPosition) {
-                zone.onEnter(robotPosition);
+            public void onEnter(Pathfinder pathfinder) {
+                zone.onEnter(pathfinder);
             }
 
             @Override
-            public void onExit(PointXYZ robotPosition) {
-                zone.onExit(robotPosition);
+            public void onExit(Pathfinder pathfinder) {
+                zone.onExit(pathfinder);
             }
 
             @Override
-            public void whileInside(PointXYZ robotPosition) {
-                zone.whileInside(robotPosition);
+            public void whileInside(Pathfinder pathfinder) {
+                zone.whileInside(pathfinder);
             }
 
             @Override
@@ -111,27 +111,27 @@ public class Zone implements Serializable {
     /**
      * Code to be executed whenever a robot enters the zone.
      *
-     * @param robotPosition the robot's position.
+     * @param pathfinder the instance of Pathfinder.
      */
-    public void onEnter(PointXYZ robotPosition) {
+    public void onEnter(Pathfinder pathfinder) {
 
     }
 
     /**
      * Code to be executed whenever a robot exits the zone.
      *
-     * @param robotPosition the robot's position.
+     * @param pathfinder the instance of Pathfinder.
      */
-    public void onExit(PointXYZ robotPosition) {
+    public void onExit(Pathfinder pathfinder) {
 
     }
 
     /**
      * Code to be executed whenever the robot is inside the zone.
      *
-     * @param robotPosition the robot's position.
+     * @param pathfinder the instance of Pathfinder.
      */
-    public void whileInside(PointXYZ robotPosition) {
+    public void whileInside(Pathfinder pathfinder) {
 
     }
 

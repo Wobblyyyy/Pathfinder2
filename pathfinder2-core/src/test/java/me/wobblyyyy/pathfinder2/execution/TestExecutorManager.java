@@ -54,7 +54,7 @@ public class TestExecutorManager {
 
         Assertions.assertFalse(executor.tick());
 
-        ExecutorManager manager = new ExecutorManager(odometry, drive);
+        ExecutorManager manager = new ExecutorManager(robot);
 
         Assertions.assertFalse(manager.isActive());
 
@@ -109,7 +109,7 @@ public class TestExecutorManager {
             add(follower3);
         }};
 
-        ExecutorManager manager = new ExecutorManager(odometry, drive);
+        ExecutorManager manager = new ExecutorManager(robot);
 
         manager.addExecutor(followers);
 

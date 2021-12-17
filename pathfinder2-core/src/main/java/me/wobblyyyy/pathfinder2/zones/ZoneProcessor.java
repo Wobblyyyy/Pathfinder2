@@ -10,8 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.zones;
 
+import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
-import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +23,19 @@ import java.util.Map;
  * objects, allowing you to do some pretty cool stuff. Unfortunately, I
  * still can't juggle chainsaws (which is incredibly cool), but you wanna
  * know what's just as cool? A {@code ZoneProcessor}.
+ *
+ * <p>
+ * Ever wanted to have your robot perform some certain action automatically?
+ * Well, of course you have. But have you ever wanted your robot to perform
+ * something automatically as soon as it enters (or exits) (or is inside)
+ * a certain area?
+ * </p>
+ *
+ * <p>
+ * {@code ZoneProcessor} is operated by using the {@link #update(Pathfinder)}
+ * method. It should accept the instance of Pathfinder that you're using
+ * as a parameter. With that, it'll do magical stuff... basically.
+ * </p>
  *
  * @author Colin Robertson
  * @since 0.1.0
@@ -141,41 +154,43 @@ public class ZoneProcessor {
      * <ul>
      *     <li>
      *         If the robot has ENTERED the zone (previously, it was not in
-     *         the zone, but now it is), the zone's {@link Zone#onEnter(PointXYZ)}
+     *         the zone, but now it is), the zone's {@link Zone#onEnter(Pathfinder)}
      *         method will be called.
      *     </li>
      *     <li>
      *         If the robot has EXITED the zone (previously, it was in the zone,
-     *         but now it is not), the zone's {@link Zone#onExit(PointXYZ)}
+     *         but now it is not), the zone's {@link Zone#onExit(Pathfinder)}
      *         method will be called.
      *     </li>
      *     <li>
      *         If the robot is INSIDE the zone (this will be activated every
      *         time the {@code onEnter} method is called, as well as whenever
      *         the robot is inside the zone), the zone's
-     *         {@link Zone#whileInside(PointXYZ)} method will be called.
+     *         {@link Zone#whileInside(Pathfinder)} method will be called.
      *     </li>
      * </ul>
      *
-     * @param position the position to test.
+     * @param pathfinder the instance of Pathfinder.
      */
-    public void update(PointXYZ position) {
+    public void update(Pathfinder pathfinder) {
+        if (zones.size() == 0) return;
+
         List<Zone> lastZones = currentZones;
-        currentZones = getContainingZones(position);
+        currentZones = getContainingZones(pathfinder.getPosition());
 
         List<Zone> enteredZones = getEnteredZones(lastZones, currentZones);
         List<Zone> exitedZones = getExitedZones(lastZones, currentZones);
 
         for (Zone zone : enteredZones) {
-            zone.onEnter(position);
+            zone.onEnter(pathfinder);
         }
 
         for (Zone zone : currentZones) {
-            zone.whileInside(position);
+            zone.whileInside(pathfinder);
         }
 
         for (Zone zone : exitedZones) {
-            zone.onExit(position);
+            zone.onExit(pathfinder);
         }
     }
 }

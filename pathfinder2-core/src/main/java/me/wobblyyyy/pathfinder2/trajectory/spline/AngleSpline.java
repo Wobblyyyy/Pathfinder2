@@ -17,9 +17,24 @@ import me.wobblyyyy.pathfinder2.math.Spline;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A wrapper class for using {@link Spline}s with {@link Angle}s.
+ *
+ * @author Colin Robertson
+ * @since 0.6.1.
+ */
 public class AngleSpline {
     private final Spline spline;
 
+    /**
+     * Create a new {@code AngleSpline}, given a set of X values and a set
+     * of angles.
+     *
+     * @param x      the X value.
+     * @param angles the target angle. Note that this angle will be
+     *               normalized, so it will always fit between 0 and 360
+     *               degrees, inclusive.
+     */
     public AngleSpline(double[] x,
                        Angle[] angles) {
         double[] anglesDeg = new double[angles.length];
@@ -32,10 +47,19 @@ public class AngleSpline {
         );
     }
 
+    /**
+     * Get the angle at a certain X value.
+     *
+     * @param x the X value to get the angle of.
+     * @return the angle at that X value.
+     */
     public Angle getAngleTarget(double x) {
         return Angle.fixedDeg(spline.interpolateY(x));
     }
 
+    /**
+     * A builder for the {@link AngleSpline} class.
+     */
     public static class AngleSplineBuilder {
         private final List<Double> x = new ArrayList<>();
         private final List<Angle> z = new ArrayList<>();

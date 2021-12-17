@@ -12,7 +12,11 @@ package me.wobblyyyy.pathfinder2;
 
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.control.ProportionalController;
-import me.wobblyyyy.pathfinder2.exceptions.*;
+import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
+import me.wobblyyyy.pathfinder2.exceptions.InvalidTimeException;
+import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
+import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
+import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.execution.ExecutorManager;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.follower.FollowerGenerator;
@@ -21,15 +25,27 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
+import me.wobblyyyy.pathfinder2.recording.MovementPlayback;
+import me.wobblyyyy.pathfinder2.recording.MovementRecorder;
+import me.wobblyyyy.pathfinder2.recording.MovementRecording;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.robot.Robot;
+import me.wobblyyyy.pathfinder2.robot.simulated.EmptyDrive;
+import me.wobblyyyy.pathfinder2.robot.simulated.EmptyOdometry;
+import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedDrive;
+import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
+import me.wobblyyyy.pathfinder2.scheduler.Scheduler;
+import me.wobblyyyy.pathfinder2.scheduler.Task;
 import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
 import me.wobblyyyy.pathfinder2.time.Stopwatch;
 import me.wobblyyyy.pathfinder2.time.Time;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
+import me.wobblyyyy.pathfinder2.trajectory.spline.AdvancedSplineTrajectoryBuilder;
 import me.wobblyyyy.pathfinder2.utils.NotNull;
+import me.wobblyyyy.pathfinder2.zones.Zone;
+import me.wobblyyyy.pathfinder2.zones.ZoneProcessor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -113,7 +129,7 @@ public class Pathfinder {
     /**
      * Pathfinder's executor manager.
      */
-    private final ExecutorManager manager;
+    private final ExecutorManager executorManager;
 
     /**
      * A generator used in converting trajectories into {@link Follower}s.
@@ -163,6 +179,14 @@ public class Pathfinder {
     private BiConsumer<Pathfinder, Double> defaultOnTick = (pathfinder, aDouble) -> {
     };
 
+    private final ZoneProcessor zoneProcessor;
+
+    private final Scheduler scheduler;
+
+    private final MovementRecorder recorder;
+
+    private final MovementPlayback playback;
+
     /**
      * Create a new {@code Pathfinder} instance.
      *
@@ -188,14 +212,11 @@ public class Pathfinder {
 
         this.robot = robot;
         this.generator = generator;
-
-        // Create a new manager using the robot's odometry and drive systems.
-        // I don't know why I'm using odometry and drive independently of the
-        // Robot container class here, but that's for a later day.
-        manager = new ExecutorManager(
-                robot.odometry(),
-                robot.drive()
-        );
+        this.executorManager = new ExecutorManager(robot);
+        this.zoneProcessor = new ZoneProcessor();
+        this.scheduler = new Scheduler(this);
+        this.recorder = new MovementRecorder(this, 25);
+        this.playback = new MovementPlayback(this);
     }
 
     /**
@@ -242,6 +263,42 @@ public class Pathfinder {
                 robot,
                 new ProportionalController(coefficient)
         );
+    }
+
+    /**
+     * Create a new, "simulated" instance of Pathfinder.
+     *
+     * <p>
+     * This is pretty much only useful for debugging or testing purposes.
+     * </p>
+     *
+     * @param coefficient the coefficient to use for the turn controller.
+     * @return a new instance of Pathfinder, having a {@link Drive} of
+     * {@link SimulatedDrive} and {@link Odometry} of {@link SimulatedOdometry}.
+     */
+    public static Pathfinder newSimulatedPathfinder(double coefficient) {
+        Drive drive = new SimulatedDrive();
+        Odometry odometry = new SimulatedOdometry();
+        Robot robot = new Robot(drive, odometry);
+        return new Pathfinder(robot, coefficient);
+    }
+
+    /**
+     * Create a new, "empty" instance of Pathfinder.
+     *
+     * <p>
+     * This is pretty much only useful for debugging or testing purposes.
+     * </p>
+     *
+     * @param coefficient the coefficient to use for the turn controller.
+     * @return a new instance of Pathfinder that makes use of both the
+     * {@link EmptyDrive} and {@link EmptyOdometry} classes.
+     */
+    public static Pathfinder newEmptyPathfinder(double coefficient) {
+        Drive drive = new EmptyDrive();
+        Odometry odometry = new EmptyOdometry();
+        Robot robot = new Robot(drive, odometry);
+        return new Pathfinder(robot, coefficient);
     }
 
     /**
@@ -477,16 +534,197 @@ public class Pathfinder {
     }
 
     /**
+     * Get {@code this} instance of Pathfinder's {@link ZoneProcessor}.
+     *
+     * @return a {@link ZoneProcessor}.
+     */
+    public ZoneProcessor getZoneProcessor() {
+        return zoneProcessor;
+    }
+
+    /**
+     * Add a zone to collection of zones the processor is handling.
+     *
+     * @param name the name of the zone. This name will be needed if you're
+     *             planning on removing the zone or referencing it at some
+     *             point. This is also used for getting a list of names
+     *             of zones.
+     * @param zone the zone.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder addZone(String name,
+                              Zone zone) {
+        zoneProcessor.addZone(name, zone);
+
+        return this;
+    }
+
+    /**
+     * Remove a zone.
+     *
+     * @param name the zone's name.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder removeZone(String name) {
+        zoneProcessor.removeZone(name);
+
+        return this;
+    }
+
+    /**
+     * Get Pathfinder's {@code Scheduler}.
+     *
+     * @return a {@link Scheduler}.
+     */
+    public Scheduler getScheduler() {
+        return scheduler;
+    }
+
+    /**
+     * Queue a single task.
+     *
+     * @param task the task the scheduler should execute.
+     * @see Scheduler
+     */
+    public Pathfinder queueTask(Task task) {
+        scheduler.queueTask(task);
+
+        return this;
+    }
+
+    /**
+     * Queue an array of tasks.
+     *
+     * @param tasks the array of tasks the scheduler should execute.
+     * @see Scheduler
+     */
+    public Pathfinder queueTasks(Task... tasks) {
+        scheduler.queueTasks(tasks);
+
+        return this;
+    }
+
+    /**
+     * Queue a list of tasks.
+     *
+     * @param tasks the list of tasks the scheduler should execute.
+     * @see Scheduler
+     */
+    public Pathfinder queueTasks(List<Task> tasks) {
+        scheduler.queueTasks(tasks);
+
+        return this;
+    }
+
+    /**
+     * Stop the {@code Scheduler} from doing anything at all. If the scheduler
+     * is currently automatically ticking, this will stop it from doing
+     * so.
+     */
+    public Pathfinder clearTasks() {
+        scheduler.clear();
+
+        return this;
+    }
+
+    /**
+     * Get Pathfinder's movement recorder.
+     *
+     * <ul>
+     *     <li>
+     *         Start recording by getting Pathfinder's recorder and using the
+     *         {@link MovementRecorder#start()} method. This will reset the current
+     *         recording (so if you recorded something and then want to start over,
+     *         this is how you would do that) and set the
+     *         {@code isRecording} boolean to true. While this is true, whenever
+     *         you call {@link Pathfinder#tick()}, the recorder will record
+     *         information on Pathfinder's current movement.
+     *     </li>
+     *     <li>
+     *         Once you've finished recording, use the {@link MovementRecorder#stop()}
+     *         method to stop recording information. You can access this recorded
+     *         data by using the {@link MovementRecorder#getRecording()} method.
+     *     </li>
+     *     <li>
+     *         Now, to play back movement, it's pretty simple. You just use the
+     *         {@link MovementPlayback#startPlayback(MovementRecording)} method
+     *         to start the playback, and then use {@link Pathfinder#tick()} to
+     *         continue playing the movement back.
+     *     </li>
+     *     <li>
+     *         Because everything is done on a single thread, it's quite easy
+     *         to stop or start recording, and you won't have any issues with
+     *         doing just that.
+     *     </li>
+     * </ul>
+     *
+     * @return Pathfinder's movement recorder.
+     */
+    public MovementRecorder getRecorder() {
+        return recorder;
+    }
+
+    /**
+     * Get Pathfinder's movement playback manager.
+     *
+     * <ul>
+     *     <li>
+     *         Start recording by getting Pathfinder's recorder and using the
+     *         {@link MovementRecorder#start()} method. This will reset the current
+     *         recording (so if you recorded something and then want to start over,
+     *         this is how you would do that) and set the
+     *         {@code isRecording} boolean to true. While this is true, whenever
+     *         you call {@link Pathfinder#tick()}, the recorder will record
+     *         information on Pathfinder's current movement.
+     *     </li>
+     *     <li>
+     *         Once you've finished recording, use the {@link MovementRecorder#stop()}
+     *         method to stop recording information. You can access this recorded
+     *         data by using the {@link MovementRecorder#getRecording()} method.
+     *     </li>
+     *     <li>
+     *         Now, to play back movement, it's pretty simple. You just use the
+     *         {@link MovementPlayback#startPlayback(MovementRecording)} method
+     *         to start the playback, and then use {@link Pathfinder#tick()} to
+     *         continue playing the movement back.
+     *     </li>
+     *     <li>
+     *         Because everything is done on a single thread, it's quite easy
+     *         to stop or start recording, and you won't have any issues with
+     *         doing just that.
+     *     </li>
+     * </ul>
+     *
+     * @return Pathfinder's movement playback manager.
+     */
+    public MovementPlayback getPlayback() {
+        return playback;
+    }
+
+    /**
      * "Tick" Pathfinder once. This will tell Pathfinder's execution manager
      * to check to see what Pathfinder should be doing right now, and based
      * on that, move your robot. This method is required to operate Pathfinder
      * and should be run as frequently as possible. Not executing this method
      * will cause the library to not function at all.
      *
+     * <p>
+     * As of Pathfinder2 0.6.1, this method will tick two other things
+     * BEFORE the executor manager. Those are as follows:
+     * <ul>
+     *     <li>Scheduler ({@link #getScheduler()})</li>
+     *     <li>Zone processor ({@link #getZoneProcessor()})</li>
+     * </ul>
+     * </p>
+     *
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder tick() {
-        this.getExecutorManager().tick();
+        this.scheduler.tick();
+        this.zoneProcessor.update(this);
+        this.executorManager.tick();
+        this.playback.tick();
+        this.recorder.tick();
 
         return this;
     }
@@ -1489,7 +1727,7 @@ public class Pathfinder {
             );
         }
 
-        manager.addExecutor(follower);
+        executorManager.addExecutor(follower);
 
         return this;
     }
@@ -1508,7 +1746,26 @@ public class Pathfinder {
             );
         }
 
-        manager.addExecutor(followers);
+        executorManager.addExecutor(followers);
+
+        return this;
+    }
+
+    /**
+     * Follow a list of followers.
+     *
+     * @param followers a list of followers.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder follow(Follower... followers) {
+        if (followers == null) {
+            throw new NullPointerException(
+                    "Attempted to follow a null list of Follower objects - " +
+                            "make sure the list you supply is not null."
+            );
+        }
+
+        executorManager.addExecutor(Arrays.asList(followers));
 
         return this;
     }
@@ -1530,6 +1787,50 @@ public class Pathfinder {
         );
 
         return this;
+    }
+
+    /**
+     * Create a spline trajectory to a certain target point, and then follow
+     * that aforementioned trajectory.
+     *
+     * @param speed          the speed at which the robot should move. This
+     *                       is a constant value.
+     * @param tolerance      the tolerance used for determining whether the
+     *                       robot is at the target point.
+     * @param angleTolerance same thing as {@code tolerance}, but for the
+     *                       robot's angle.
+     * @param points         a set of control points for the spline. This
+     *                       will automatically insert the robot's current
+     *                       position into this array.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder splineTo(double speed,
+                               double tolerance,
+                               Angle angleTolerance,
+                               PointXYZ... points) {
+        if (points.length < 2) return this;
+
+        double length = PointXY.distance(
+                points[0],
+                points[points.length - 1]
+        );
+        double step = length / 20;
+
+        AdvancedSplineTrajectoryBuilder builder =
+                new AdvancedSplineTrajectoryBuilder()
+                        .setSpeed(speed)
+                        .setTolerance(tolerance)
+                        .setAngleTolerance(angleTolerance)
+                        .setStep(step)
+                        .add(getPosition());
+
+        for (PointXYZ point : points) {
+            builder.add(point);
+        }
+
+        Trajectory trajectory = builder.build();
+
+        return followTrajectory(trajectory);
     }
 
     /**
@@ -1665,7 +1966,7 @@ public class Pathfinder {
      * will return false if Pathfinder is not active (meaning its idle).
      */
     public boolean isActive() {
-        return manager.isActive();
+        return executorManager.isActive();
     }
 
     /**
@@ -1674,7 +1975,7 @@ public class Pathfinder {
      * @return Pathfinder's executor manager.
      */
     public ExecutorManager getExecutorManager() {
-        return manager;
+        return executorManager;
     }
 
     /**
@@ -1683,7 +1984,7 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder clear() {
-        manager.clearExecutors();
+        executorManager.clearExecutors();
 
         return this;
     }

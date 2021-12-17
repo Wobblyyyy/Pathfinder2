@@ -11,6 +11,9 @@
 package me.wobblyyyy.pathfinder2.trajectory.spline;
 
 
+import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
+import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
+import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.math.MonotoneCubicSpline;
@@ -19,14 +22,20 @@ import me.wobblyyyy.pathfinder2.math.Spline;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A builder for the {@link AdvancedSplineTrajectory} class.
+ *
+ * @author Colin Robertson
+ * @since 0.6.1
+ */
 public class AdvancedSplineTrajectoryBuilder {
     private final List<Double> xValues = new ArrayList<>();
     private final List<Double> yValues = new ArrayList<>();
     private final List<Angle> angleTargets = new ArrayList<>();
     private final List<Double> speeds = new ArrayList<>();
-    private double step;
-    private double speed;
-    private double tolerance;
+    private double step = Double.MAX_VALUE;
+    private double speed = Double.MAX_VALUE;
+    private double tolerance = Double.MAX_VALUE;
     private Angle angleTolerance;
 
     public AdvancedSplineTrajectoryBuilder() {
@@ -110,6 +119,23 @@ public class AdvancedSplineTrajectoryBuilder {
     }
 
     public AdvancedSplineTrajectory build() {
+        if (step == Double.MAX_VALUE)
+            throw new IllegalArgumentException(
+                    "Did not set a step value - use setStep().");
+
+        if (speed == Double.MAX_VALUE)
+            throw new InvalidSpeedException(
+                    "Did not set a speed - use setSpeed().");
+
+        if (tolerance == Double.MAX_VALUE)
+            throw new InvalidToleranceException(
+                    "Did not set a tolerance - use setTolerance().");
+
+        if (angleTolerance == null)
+            throw new NullAngleException(
+                    "Null angle tolerance while creating an " +
+                            "AdvancedSplineTrajectory.");
+
         int size = xValues.size();
         Double[] xBoxed = new Double[size];
         Double[] yBoxed = new Double[size];

@@ -16,6 +16,14 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.math.Spline;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 
+/**
+ * A trajectory based on two splines - firstly, a spline representing
+ * the target position of the robot, and additionally, a spline representing
+ * the angle of the robot. So cool! So epic! So true!
+ *
+ * @author Colin Robertson
+ * @since 0.6.1
+ */
 public class AngleSplineTrajectory implements Trajectory {
     private final Spline spline;
     private final AngleSpline angleSpline;
