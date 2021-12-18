@@ -109,28 +109,4 @@ public class TestRectangle {
         Assertions.assertTrue(test5.isInside(rectangle));
         Assertions.assertFalse(test6.isInside(rectangle));
     }
-
-    @Test
-    @Disabled
-    public void testRectanglePerformance() {
-        List<Rectangle> rectangles = constructRectangles(0, 0, 1000);
-
-        PointXY point1 = new PointXY(33, 12);
-        PointXY point2 = new PointXY(-33, 12);
-        PointXY point3 = new PointXY(100, 100);
-
-        int vp1 = 0;
-        int vp2 = 0;
-        int vp3 = 0;
-
-        for (Rectangle rectangle : rectangles) {
-            boolean validPoint1 = point1.isInside(rectangle);
-            boolean validPoint2 = point2.isInside(rectangle);
-            boolean validPoint3 = point3.isInside(rectangle);
-
-            if (validPoint1) vp1++;
-            if (validPoint2) vp2++;
-            if (validPoint3) vp3++;
-        }
-    }
 }

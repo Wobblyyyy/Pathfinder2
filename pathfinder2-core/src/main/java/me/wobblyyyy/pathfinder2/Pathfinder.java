@@ -25,6 +25,8 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
+import me.wobblyyyy.pathfinder2.plugin.PathfinderPlugin;
+import me.wobblyyyy.pathfinder2.plugin.PathfinderPluginManager;
 import me.wobblyyyy.pathfinder2.recording.MovementPlayback;
 import me.wobblyyyy.pathfinder2.recording.MovementRecorder;
 import me.wobblyyyy.pathfinder2.recording.MovementRecording;
@@ -121,6 +123,13 @@ import java.util.function.Supplier;
 @SuppressWarnings("UnusedReturnValue")
 public class Pathfinder {
     /**
+     * A static list of plugins that should be automatically loaded every
+     * time an instance of Pathfinder is created.
+     */
+    private static final List<PathfinderPlugin> autoLoadPlugins =
+            new ArrayList<>();
+
+    /**
      * The {@code Robot} (made up of {@code Drive} and {@code Odometry}) that
      * Pathfinder operates.
      */
@@ -179,13 +188,100 @@ public class Pathfinder {
     private BiConsumer<Pathfinder, Double> defaultOnTick = (pathfinder, aDouble) -> {
     };
 
+    /**
+     * A zone processor is responsible for dealing with any zones on
+     * the field.
+     */
     private final ZoneProcessor zoneProcessor;
 
+    /**
+     * A scheduler for executing tasks.
+     */
     private final Scheduler scheduler;
 
+    /**
+     * A manager for recording Pathfinder's movement.
+     */
     private final MovementRecorder recorder;
 
+    /**
+     * A manager for playing back recordings.
+     */
     private final MovementPlayback playback;
+
+    /**
+     * A manager for {@link PathfinderPlugin}s.
+     */
+    private final PathfinderPluginManager pluginManager;
+
+    /**
+     * Last tick, how many followers were there?
+     */
+    private int previousFollowerCount = 0;
+
+    /**
+     * Last tick, what was the currently active follower?
+     */
+    private Follower previousFollower = null;
+
+    /**
+     * Create a new {@code Pathfinder} instance.
+     *
+     * @param robot     the {@code Pathfinder} instance's robot. This robot
+     *                  should have an odometry system that can report the
+     *                  position of the robot and a drive system that can
+     *                  respond to drive commands. This object may not be
+     *                  null or, an exception will be thrown.
+     * @param generator a generator used in creating followers. This generator
+     *                  functions by accepting a {@link Trajectory} and a
+     *                  {@link Robot} and returning a follower. If you're
+     *                  unsure of what this means, or what you should do here,
+     *                  you should probably use the "generic follower
+     *                  generator," as it's the simplest. This object may not
+     *                  be null, or an exception will be thrown.
+     * @param doNotLoad a set of {@code String}s that specify to Pathfinder
+     *                  which plugins it should NOT load. If any of the
+     *                  plugins that attempt to automatically load are inside
+     *                  of the {@code doNotLoad} list, they won't be loaded.
+     *                  This is here in case you depend on a file which
+     *                  modifies the list of plugins that are automatically
+     *                  loaded whenever an instance of Pathfinder is created.
+     *                  If you decide you don't want that plugin to be loaded,
+     *                  add it's name to this list, and you should be all good.
+     */
+    public Pathfinder(Robot robot,
+                      FollowerGenerator generator,
+                      String... doNotLoad) {
+        if (robot == null)
+            throw new NullPointerException("Robot cannot be null!");
+        if (generator == null)
+            throw new NullPointerException("Follower generator cannot be null!");
+
+        this.robot = robot;
+        this.generator = generator;
+        this.executorManager = new ExecutorManager(robot);
+        this.zoneProcessor = new ZoneProcessor();
+        this.scheduler = new Scheduler(this);
+        this.recorder = new MovementRecorder(this, 25);
+        this.playback = new MovementPlayback(this);
+        this.pluginManager = new PathfinderPluginManager();
+
+        for (PathfinderPlugin plugin : autoLoadPlugins) {
+            String pluginName = plugin.getName();
+
+            boolean shouldLoad = true;
+            for (String str : doNotLoad) {
+                if (str.equals(pluginName)) {
+                    shouldLoad = false;
+                    break;
+                }
+            }
+
+            if (shouldLoad) {
+                loadPlugin(plugin);
+            }
+        }
+    }
 
     /**
      * Create a new {@code Pathfinder} instance.
@@ -205,18 +301,11 @@ public class Pathfinder {
      */
     public Pathfinder(Robot robot,
                       FollowerGenerator generator) {
-        if (robot == null)
-            throw new NullPointerException("Robot cannot be null!");
-        if (generator == null)
-            throw new NullPointerException("Follower generator cannot be null!");
-
-        this.robot = robot;
-        this.generator = generator;
-        this.executorManager = new ExecutorManager(robot);
-        this.zoneProcessor = new ZoneProcessor();
-        this.scheduler = new Scheduler(this);
-        this.recorder = new MovementRecorder(this, 25);
-        this.playback = new MovementPlayback(this);
+        this(
+                robot,
+                generator,
+                new String[0]
+        );
     }
 
     /**
@@ -299,6 +388,17 @@ public class Pathfinder {
         Odometry odometry = new EmptyOdometry();
         Robot robot = new Robot(drive, odometry);
         return new Pathfinder(robot, coefficient);
+    }
+
+    public static void addAutoLoadPlugin(PathfinderPlugin plugin) {
+        autoLoadPlugins.add(plugin);
+    }
+
+    public Pathfinder loadPlugin(PathfinderPlugin plugin) {
+        pluginManager.loadPlugin(plugin);
+        plugin.onLoad(this);
+
+        return this;
     }
 
     /**
@@ -701,6 +801,10 @@ public class Pathfinder {
         return playback;
     }
 
+    public PathfinderPluginManager getPluginManager() {
+        return pluginManager;
+    }
+
     /**
      * "Tick" Pathfinder once. This will tell Pathfinder's execution manager
      * to check to see what Pathfinder should be doing right now, and based
@@ -711,20 +815,45 @@ public class Pathfinder {
      * <p>
      * As of Pathfinder2 0.6.1, this method will tick two other things
      * BEFORE the executor manager. Those are as follows:
-     * <ul>
+     * <ol>
      *     <li>Scheduler ({@link #getScheduler()})</li>
      *     <li>Zone processor ({@link #getZoneProcessor()})</li>
-     * </ul>
+     * </ol>
+     * Also as of Pathfinder2 0.6.1, this method will tick two other things
+     * AFTER the executor manager. Those are...
+     * <ol>
+     *     <li>Playback manager ({@link #getPlayback()})</li>
+     *     <li>Recording manager ({@link #getRecorder()})</li>
+     * </ol>
      * </p>
      *
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder tick() {
-        this.scheduler.tick();
-        this.zoneProcessor.update(this);
-        this.executorManager.tick();
-        this.playback.tick();
-        this.recorder.tick();
+        pluginManager.preTick(this);
+        scheduler.tick();
+        zoneProcessor.update(this);
+        executorManager.tick();
+        int followerCount = executorManager.howManyFollowers();
+        Follower follower =
+                executorManager.getCurrentExecutor().getCurrentFollower();
+        if (followerCount > previousFollowerCount) {
+            pluginManager.onStartFollower(
+                    this,
+                    executorManager.getCurrentExecutor().getCurrentFollower()
+            );
+        } else if (followerCount < previousFollowerCount) {
+            pluginManager.onFinishFollower(
+                    this,
+                    previousFollower
+            );
+        }
+        previousFollowerCount = followerCount;
+        previousFollower = follower;
+        pluginManager.onTick(this);
+        playback.tick();
+        recorder.tick();
+        pluginManager.postTick(this);
 
         return this;
     }
@@ -1789,65 +1918,7 @@ public class Pathfinder {
         return this;
     }
 
-    /**
-     * Create a spline trajectory to a certain target point, and then follow
-     * that aforementioned trajectory.
-     *
-     * @param speed          the speed at which the robot should move. This
-     *                       is a constant value.
-     * @param tolerance      the tolerance used for determining whether the
-     *                       robot is at the target point.
-     * @param angleTolerance same thing as {@code tolerance}, but for the
-     *                       robot's angle.
-     * @param points         a set of control points for the spline. This
-     *                       will automatically insert the robot's current
-     *                       position into this array.
-     * @return {@code this}, used for method chaining.
-     */
-    public Pathfinder splineTo(double speed,
-                               double tolerance,
-                               Angle angleTolerance,
-                               PointXYZ... points) {
-        if (points.length < 2) return this;
-
-        double length = PointXY.distance(
-                points[0],
-                points[points.length - 1]
-        );
-        double step = length / 20;
-
-        AdvancedSplineTrajectoryBuilder builder =
-                new AdvancedSplineTrajectoryBuilder()
-                        .setSpeed(speed)
-                        .setTolerance(tolerance)
-                        .setAngleTolerance(angleTolerance)
-                        .setStep(step)
-                        .add(getPosition());
-
-        for (PointXYZ point : points) {
-            builder.add(point);
-        }
-
-        Trajectory trajectory = builder.build();
-
-        return followTrajectory(trajectory);
-    }
-
-    /**
-     * Go to a specific point. This method will create a new linear trajectory.
-     *
-     * @param point the target point to go to.
-     * @return this instance of Pathfinder, used for method chaining.
-     * @see #setSpeed(double)
-     * @see #setTolerance(double)
-     * @see #setAngleTolerance(Angle)
-     */
-    public Pathfinder goTo(PointXYZ point) {
-        NullPointException.throwIfInvalid(
-                "Attempted to navigate to a null point.",
-                point
-        );
-
+    private void checkForMissingDefaultValues() {
         // perform some wonderful exception checking...
         // this was a pretty big pain for me personally because I entirely
         // forgot that you actually need to set these values, so these lovely
@@ -1890,6 +1961,98 @@ public class Pathfinder {
                             "tolerance value."
             );
         }
+    }
+
+    /**
+     * Create a spline trajectory to a certain target point, and then follow
+     * that aforementioned trajectory. This will use the default speed,
+     * tolerance, and angle tolerance values.
+     *
+     * @param points         a set of control points for the spline. This
+     *                       will automatically insert the robot's current
+     *                       position into this array. This array must have
+     *                       AT LEAST two points.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder splineTo(PointXYZ... points) {
+        return splineTo(
+                speed,
+                tolerance,
+                angleTolerance,
+                points
+        );
+    }
+
+    /**
+     * Create a spline trajectory to a certain target point, and then follow
+     * that aforementioned trajectory.
+     *
+     * @param speed          the speed at which the robot should move. This
+     *                       is a constant value.
+     * @param tolerance      the tolerance used for determining whether the
+     *                       robot is at the target point.
+     * @param angleTolerance same thing as {@code tolerance}, but for the
+     *                       robot's angle.
+     * @param points         a set of control points for the spline. This
+     *                       will automatically insert the robot's current
+     *                       position into this array. This array must have
+     *                       AT LEAST two points.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder splineTo(double speed,
+                               double tolerance,
+                               Angle angleTolerance,
+                               PointXYZ... points) {
+        if (points.length < 2) throw new IllegalArgumentException(
+                "At least two control points are required to use the " +
+                        "splineTo method."
+        );
+        checkForMissingDefaultValues();
+
+        double length = PointXY.distance(
+                points[0],
+                points[points.length - 1]
+        );
+        double step = length / 20;
+
+        AdvancedSplineTrajectoryBuilder builder =
+                new AdvancedSplineTrajectoryBuilder()
+                        .setSpeed(speed)
+                        .setTolerance(tolerance)
+                        .setAngleTolerance(angleTolerance)
+                        .setStep(step)
+                        .add(getPosition());
+
+        for (PointXYZ point : points) {
+            if (point == null) throw new NullPointException(
+                    "Cannot use the splineTo method with a null " +
+                            "control point!"
+            );
+
+            builder.add(point);
+        }
+
+        Trajectory trajectory = builder.build();
+
+        return followTrajectory(trajectory);
+    }
+
+    /**
+     * Go to a specific point. This method will create a new linear trajectory.
+     *
+     * @param point the target point to go to.
+     * @return this instance of Pathfinder, used for method chaining.
+     * @see #setSpeed(double)
+     * @see #setTolerance(double)
+     * @see #setAngleTolerance(Angle)
+     */
+    public Pathfinder goTo(PointXYZ point) {
+        NullPointException.throwIfInvalid(
+                "Attempted to navigate to a null point.",
+                point
+        );
+
+        checkForMissingDefaultValues();
 
         followTrajectory(new LinearTrajectory(
                 point,
@@ -1984,7 +2147,9 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder clear() {
-        executorManager.clearExecutors();
+        this.pluginManager.preClear(this);
+        this.executorManager.clearExecutors();
+        this.pluginManager.onClear(this);
 
         return this;
     }

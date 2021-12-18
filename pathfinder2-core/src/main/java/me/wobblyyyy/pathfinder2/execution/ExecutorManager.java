@@ -200,6 +200,16 @@ public class ExecutorManager {
         return executors.size();
     }
 
+    public int howManyFollowers() {
+        int sum = 0;
+
+        for (FollowerExecutor executor : executors) {
+            sum += executor.howManyFollowers();
+        }
+
+        return sum;
+    }
+
     /**
      * Get how long the current follower has been executing. If no followers
      * have executed, this will return 0. If no followers are active, but
@@ -210,5 +220,9 @@ public class ExecutorManager {
      */
     public double getExecutionTime() {
         return executionTime;
+    }
+
+    public FollowerExecutor getCurrentExecutor() {
+        return executors.get(0);
     }
 }

@@ -111,25 +111,4 @@ public class TestLocalizedPathGen {
         List<PointXY> path = gen.getPath(start, end);
         Assertions.assertNotNull(path);
     }
-
-    @Test
-    @Disabled
-    public void testStupidScaling() {
-        List<Zone> zones = new ArrayList<Zone>() {{
-            add(new Zone(new Rectangle(1, 3, 10, 4)));
-        }};
-
-        LocalizedPathGen gen = new LocalizedPathGen(zones, 0.05, 0.05);
-
-        PointXY start = new PointXY(0, 0);
-        PointXY end = new PointXY(10, 10);
-
-        List<PointXY> path = gen.getPath(start, end);
-
-        for (PointXY point : path) {
-            Assertions.assertFalse(zones.get(0).isPointInShape(point));
-        }
-
-        Assertions.assertNotNull(path);
-    }
 }

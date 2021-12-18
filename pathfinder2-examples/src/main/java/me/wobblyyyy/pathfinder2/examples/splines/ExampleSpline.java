@@ -8,28 +8,31 @@
  * <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL V3</a>
  */
 
-package me.wobblyyyy.pathfinder2.examples;
+package me.wobblyyyy.pathfinder2.examples.splines;
 
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
-import me.wobblyyyy.pathfinder2.robot.Drive;
-import me.wobblyyyy.pathfinder2.robot.Odometry;
-import me.wobblyyyy.pathfinder2.robot.Robot;
-import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedDrive;
-import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.trajectory.spline.AdvancedSplineTrajectoryBuilder;
 import me.wobblyyyy.pathfinder2.trajectory.spline.SplineBuilderFactory;
 
+/**
+ * Here's a brief overview of using {@link AdvancedSplineTrajectoryBuilder}
+ * to create {@code AdvancedSplineTrajectory} (trajectories, actually). This
+ * is among the most customizable and extensible ways to create a spline
+ * trajectory - it gives you a lot of control over how the splines are
+ * created, allowing you to finely tune your spline so it's just so incredibly
+ * awesome, fantastic, and cool.
+ *
+ * @author Colin Robertson
+ * @since 0.6.1
+ */
 public class ExampleSpline {
     public void run() {
         // before anything else, we have to get some stuff set up.
-        Drive drive = new SimulatedDrive();
-        Odometry odometry = new SimulatedOdometry();
-        Robot robot = new Robot(drive, odometry);
-        Pathfinder pathfinder = new Pathfinder(robot, 0.1);
+        Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
 
         // alright! trajectory time! let's see what's up.
         // as you can see, this is mostly pretty self-explanatory.

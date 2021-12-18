@@ -136,4 +136,12 @@ public class FollowerExecutor {
         // if there are 1 or more.
         return followers.size() == 0;
     }
+
+    public Follower getCurrentFollower() {
+        return followers.get(0);
+    }
+
+    public int howManyFollowers() {
+        return followers.size();
+    }
 }

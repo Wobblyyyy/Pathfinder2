@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.zones;
 
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
+import me.wobblyyyy.pathfinder2.plugin.PathfinderPluginManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -175,6 +176,8 @@ public class ZoneProcessor {
     public void update(Pathfinder pathfinder) {
         if (zones.size() == 0) return;
 
+        PathfinderPluginManager manager = pathfinder.getPluginManager();
+
         List<Zone> lastZones = currentZones;
         currentZones = getContainingZones(pathfinder.getPosition());
 
@@ -183,14 +186,17 @@ public class ZoneProcessor {
 
         for (Zone zone : enteredZones) {
             zone.onEnter(pathfinder);
+            manager.onEnterZone(pathfinder, zone);
         }
 
         for (Zone zone : currentZones) {
             zone.whileInside(pathfinder);
+            manager.whileInsideZone(pathfinder, zone);
         }
 
         for (Zone zone : exitedZones) {
             zone.onExit(pathfinder);
+            manager.onExitZone(pathfinder, zone);
         }
     }
 }

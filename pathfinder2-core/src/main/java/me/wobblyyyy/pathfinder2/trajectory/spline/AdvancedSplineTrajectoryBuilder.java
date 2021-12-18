@@ -119,19 +119,35 @@ public class AdvancedSplineTrajectoryBuilder {
     }
 
     public AdvancedSplineTrajectory build() {
-        if (step == Double.MAX_VALUE)
+        boolean invalidStep = step == Double.MAX_VALUE;
+        boolean invalidSpeed = speed == Double.MAX_VALUE;
+        boolean invalidTolerance = tolerance == Double.MAX_VALUE;
+        boolean invalidAngleTolerance = angleTolerance == null;
+
+        if (invalidStep &&
+                invalidSpeed &&
+                invalidTolerance &&
+                invalidAngleTolerance
+        ) throw new IllegalArgumentException(
+                "Did not set a step, speed, tolerance, and angle tolerance " +
+                        "value! You need to use setStep(), setSpeed(), " +
+                        "setTolerance(), and setAngleTolerance() before " +
+                        "calling the build() method."
+        );
+
+        if (invalidStep)
             throw new IllegalArgumentException(
                     "Did not set a step value - use setStep().");
 
-        if (speed == Double.MAX_VALUE)
+        if (invalidSpeed)
             throw new InvalidSpeedException(
                     "Did not set a speed - use setSpeed().");
 
-        if (tolerance == Double.MAX_VALUE)
+        if (invalidTolerance)
             throw new InvalidToleranceException(
                     "Did not set a tolerance - use setTolerance().");
 
-        if (angleTolerance == null)
+        if (invalidAngleTolerance)
             throw new NullAngleException(
                     "Null angle tolerance while creating an " +
                             "AdvancedSplineTrajectory.");

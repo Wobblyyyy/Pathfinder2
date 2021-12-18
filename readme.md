@@ -42,7 +42,7 @@ Here's all of the sources of documentation I can think of right now.
 
 - [Documentation portal](https://google.com) - (not yet available) the hub for
   documentation for this library.
-- [Project tutorial](project_tutorial.md) - this is a basic tutorial that walks
+- [Project tutorial](.github/project_tutorial.md) - this is a basic tutorial that walks
   through the fundamentals of the library. This is probably the best place to
   start getting acquainted with the library.
 - [General documentation](docs/docs.md) - this is a document containing a bunch

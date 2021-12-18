@@ -140,7 +140,7 @@ public class Velocity {
      *
      * @return convert the {@code Velocity} into a PointXY.
      */
-    public PointXY asPoint() {
+    public PointXY asPointXY() {
         return PointXY.zero().inDirection(
                 speed,
                 direction
@@ -154,7 +154,7 @@ public class Velocity {
      * @return convert the {@code Velocity} into a PointXYZ. Z is equal
      * to the direction value.
      */
-    public PointXYZ asHeadingPoint() {
+    public PointXYZ asPointXYZ() {
         return PointXYZ.zero().inDirection(
                 speed,
                 direction
@@ -176,11 +176,11 @@ public class Velocity {
         if (howMany < velocities.size())
             throw new IllegalArgumentException("Cannot return more velocities than were provided!");
 
-        PointXY velocityPoint = velocity.asPoint();
+        PointXY velocityPoint = velocity.asPointXY();
 
         velocities.sort((v1, v2) -> {
-            PointXY point1 = v1.asPoint();
-            PointXY point2 = v2.asPoint();
+            PointXY point1 = v1.asPointXY();
+            PointXY point2 = v2.asPointXY();
 
             double distance1 = PointXY.distance(velocityPoint, point1);
             double distance2 = PointXY.distance(velocityPoint, point2);
