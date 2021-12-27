@@ -8,11 +8,8 @@
  * <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL V3</a>
  */
 
-rootProject.name = 'Pathfinder2'
 include 'pathfinder2-geometry', 'Pathfinder2'
 include 'pathfinder2-core', 'Pathfinder2'
 include 'pathfinder2-kinematics', 'Pathfinder2'
 include 'pathfinder2-OdometryCore', 'Pathfinder2'
 include 'pathfinder2-examples', 'Pathfinder2'
-include 'pathfinder2-ftc', 'Pathfinder2'
-

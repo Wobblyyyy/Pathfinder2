@@ -36,8 +36,10 @@ java {
     }
 }
 
-group 'me.wobblyyyy'
-version '0.6.0'
+allprojects {
+    group = 'me.wobblyyyy'
+    version = '0.7.0'
+}
 
 repositories {
     mavenCentral()
