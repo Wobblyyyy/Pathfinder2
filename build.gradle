@@ -59,7 +59,7 @@ dependencies {
 
 // define our shadowJar task here
 shadowJar {
-    archiveBaseName.set('pathfinder2-shadow')
+    archiveBaseName.set('Pathfinder2')
     archiveClassifier.set('')
 }
 
