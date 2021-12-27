@@ -16,7 +16,7 @@
 <img alt="Latest Release" src="https://img.shields.io/github/v/release/wobblyyyy/Pathfinder2">
 </div>
 
-<h1 align="center">Description</h1>
+<h1 align="center"></h1>
 
 Pathfinder2 is a continuation of the
 original [Pathfinder](https://github.com/Wobblyyyy/Pathfinder)
@@ -61,8 +61,8 @@ something will, at some point, go very wrong.
 
 Here's all of the sources of documentation I can think of right now.
 
-- [Documentation portal](https://google.com) - (not yet available) the hub for
-  documentation for this library.
+- [Documentation portal](https://wobblyyyy.github.io/docs/pathfinder2/documentation.html) - 
+  the hub for documentation for this library.
 - [Project tutorial](.github/project_tutorial.md) - this is a basic tutorial
   that walks through the fundamentals of the library. This is probably the best
   place to start getting acquainted with the library.
