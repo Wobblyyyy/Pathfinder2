@@ -16,6 +16,9 @@ Pathfinder2 releases are released in a single form - one JAR file that contains
 all the libraries related to Pathfinder2. This was done to simplify
 installation, and also partially because I'm really lazy.
 
+Please see the [readme](readme.md) to learn more about how to install
+Pathfinder2 without downloading a JAR.
+
 <h3>Prior to October 27, 2021</h3>
 
 Each of Pathfinder's releases will be released with several assets. As of
