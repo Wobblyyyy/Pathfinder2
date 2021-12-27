@@ -80,6 +80,6 @@ Here's all of the sources of documentation I can think of right now.
   the library. Who doesn't love videos? Right? Right.
 
 <h2 align="center">Licensing</h2>
-This project uses the [GNU GPL V3](license.md). You're allowed to freely
+This project uses the [GNU GPL V3](/license.md). You're allowed to freely
 distribute and modify the code contained in this project, so long as a copy of
 the original license is provided, and all of your code is made open-source.
