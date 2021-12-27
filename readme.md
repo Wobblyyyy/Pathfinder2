@@ -46,7 +46,9 @@ dependencies {
     implementation 'com.github.Wobblyyyy:Pathfinder2:v0.7.0'
 }
 ```
-If you're using maven, sbt, or leningen, you can see installation instructions
+For a complete example, see the `pathfinder2-examples` module's
+[build.gradle](pathfinder2-examples/build.gradle) file.
+If you're using maven, sbt, or leiningen, you can see installation instructions
 [here](https://jitpack.io/#Wobblyyyy/Pathfinder2/v0.7.0).
 
 <h2 align="center">Important Notice</h2>

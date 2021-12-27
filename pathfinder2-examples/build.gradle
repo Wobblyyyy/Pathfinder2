@@ -12,18 +12,22 @@ plugins {
     id 'java'
 }
 
+// the readme suggests that you make use of 'allprojects'. this is very
+// likely not needed, and you can instead add jitpack as a maven repository
+// like so
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    implementation project(':pathfinder2-geometry')
-    implementation project(':pathfinder2-kinematics')
-    implementation project(':pathfinder2-core')
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
-}
+    // add Pathfinder2 as a dependency
+    // note that the version (at the end of the string) may change - if there's
+    // a newer version of the library that's NOT whatever this is, you should
+    // use that instead
+    implementation 'com.github.Wobblyyyy:Pathfinder2:v0.7.0'
 
-test {
-    useJUnitPlatform()
+    // in an actual project, other dependencies would go here...
+    // for example, if you use RoadRunner or FTCLib or wpilib or anything
+    // like that, those would go here
 }
