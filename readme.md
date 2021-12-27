@@ -28,6 +28,27 @@ the
 will be actively developed until Q3 2022, and (hopefully) maintained long
 afterwards.
 
+<h2 align="center">Installation</h2>
+
+Installing Pathfinder shouldn't be TOO difficult. If you're using Gradle, it's
+pretty simple. First, add the `jitpack` repository by adding the following to
+your `build.gradle`.
+```groovy
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+Once you're done with that, add Pathfinder2 as a dependency:
+```groovy
+dependencies {
+    implementation 'com.github.Wobblyyyy:Pathfinder2:v0.7.0'
+}
+```
+If you're using maven, sbt, or leningen, you can see installation instructions
+[here](https://jitpack.io/#Wobblyyyy/Pathfinder2/v0.7.0).
+
 <h2 align="center">Important Notice</h2>
 
 This project is still in active development. You will almost certainly encounter
@@ -42,9 +63,9 @@ Here's all of the sources of documentation I can think of right now.
 
 - [Documentation portal](https://google.com) - (not yet available) the hub for
   documentation for this library.
-- [Project tutorial](.github/project_tutorial.md) - this is a basic tutorial that walks
-  through the fundamentals of the library. This is probably the best place to
-  start getting acquainted with the library.
+- [Project tutorial](.github/project_tutorial.md) - this is a basic tutorial
+  that walks through the fundamentals of the library. This is probably the best
+  place to start getting acquainted with the library.
 - [General documentation](docs/docs.md) - this is a document containing a bunch
   of general documentation for the project. It's still being worked on and
   updated, but it contains a variety of information on different useful topics.
