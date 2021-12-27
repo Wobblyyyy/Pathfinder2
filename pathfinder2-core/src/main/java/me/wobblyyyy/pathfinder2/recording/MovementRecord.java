@@ -15,16 +15,34 @@ import me.wobblyyyy.pathfinder2.geometry.Translation;
 
 import java.io.Serializable;
 
+/**
+ * A snapshot of Pathfinder's movement.
+ *
+ * @author Colin Robertson
+ * @since 0.6.1
+ */
 public class MovementRecord implements Serializable {
     private PointXYZ position;
     private double velocity;
     private double elapsedMs;
     private Translation translation;
 
+    /**
+     * Create a new {@code MovementRecord} without any data.
+     */
     public MovementRecord() {
 
     }
 
+    /**
+     * Create a new {@code MovementRecord} with data.
+     *
+     * @param position    the current position of the robot.
+     * @param velocity    the current velocity of the robot.
+     * @param elapsedMs   the amount of time, in milliseconds, that have
+     *                    elapsed since the last record.
+     * @param translation the current translation of the robot.
+     */
     public MovementRecord(PointXYZ position,
                           double velocity,
                           double elapsedMs,
