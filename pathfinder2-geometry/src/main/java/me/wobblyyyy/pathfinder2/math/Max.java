@@ -34,4 +34,21 @@ public class Max {
 
         return m;
     }
+
+    @SuppressWarnings("DuplicatedCode")
+    public static double magnitude(double... values) {
+        double value = values[0];
+        double magnitude = Math.abs(values[0]);
+
+        for (int i = 1; i < values.length; i++) {
+            double val = values[i];
+            double mag = Math.abs(values[i]);
+
+            if (mag > magnitude) {
+                value = val;
+            }
+        }
+
+        return value;
+    }
 }

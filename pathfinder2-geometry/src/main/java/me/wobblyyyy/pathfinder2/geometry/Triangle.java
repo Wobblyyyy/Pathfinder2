@@ -15,6 +15,14 @@ import me.wobblyyyy.pathfinder2.math.Average;
 /**
  * A polygon with 3 sides and 3 vertices.
  *
+ * <p>
+ * Update: this is about... I'd say 2 months, possibly, after I've written this
+ * code. And I would like say that this is some very respectful documentation.
+ * This must have been written by a charming young gentleman. It's so polite.
+ * "A polygon with 3 sides and 3 vertices." I can just imagine a young
+ * gentleman in a tuxedo saying those words in a respectful tone. Anyways.
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.1.0
  */

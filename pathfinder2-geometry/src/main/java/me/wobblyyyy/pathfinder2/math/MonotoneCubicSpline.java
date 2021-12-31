@@ -34,6 +34,22 @@ public class MonotoneCubicSpline implements Spline {
     private final boolean isInverted;
     private boolean isXY = false;
 
+    /*
+     * very important implementation notes here:
+     *
+     * i have no fucking idea what any of this code does. like... none. at
+     * all. this all comes from... some website i found when i looked up
+     * spline interpolation in java. hold on... i'll go find it just give me
+     * one moment...
+     *
+     * https://gist.github.com/lecho/7627739
+     *
+     * also implementation notes here i guess... some of this code was
+     * written by me. if the spline has decreasing x values, just invert
+     * the x values so that they're increasing. it's pretty simple, to be
+     * honest.
+     */
+
     @SuppressWarnings("SuspiciousNameCombination")
     public MonotoneCubicSpline(double[] x,
                                double[] y) {
@@ -57,10 +73,9 @@ public class MonotoneCubicSpline implements Spline {
         tempY = y;
         x = tempY;
         y = tempX;
-
-        if (isInverted)
+        if (isInverted) {
             for (int i = 1; i < x.length; i++) x[i] = x[i] - (x[i] - x[0]);
-
+        }
         for (int i = 1; i < x.length; i++)
             if (x[i] - x[i - 1] < 0)
                 throw new IllegalArgumentException(
@@ -184,6 +199,13 @@ public class MonotoneCubicSpline implements Spline {
         }
         double h = mx[i + 1] - mx[i];
         double t = (x - mx[i]) / h;
+        // okay.
+        // what. the fuck.
+        // is this.
+        // somebody tell me.
+        // genuinely, what the fuck does this do? this is just a random string
+        // of numbers and letters with no apparent meaning? literally none?
+        // what the fuck does this mean? anybody?
         return (my[i] * (1 + 2 * t) + h * mm[i] * t) * (1 - t) * (1 - t) +
                 (my[i + 1] * (3 - 2 * t) + h * mm[i + 1] * (t - 1)) * t * t;
     }

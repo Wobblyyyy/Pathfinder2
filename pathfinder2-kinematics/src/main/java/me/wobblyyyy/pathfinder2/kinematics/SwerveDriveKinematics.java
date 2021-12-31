@@ -17,6 +17,13 @@ import org.ejml.simple.SimpleMatrix;
 
 import java.util.Arrays;
 
+/**
+ * Kinematics for a swerve drive. This is stolen pretty shamelessly (and poorly
+ * adapted) from wpilib.
+ *
+ * @author Colin Robertson
+ * @since 0.7.0
+ */
 @SuppressWarnings("PointlessArithmeticExpression")
 public class SwerveDriveKinematics implements Kinematics<SwerveState> {
     private final SimpleMatrix inverseKinematics;
@@ -25,6 +32,11 @@ public class SwerveDriveKinematics implements Kinematics<SwerveState> {
     private final PointXY[] modulePositions;
     private PointXY previousCenterOfRotation;
 
+    /**
+     * Create a new instance of {@code SwerveDriveKinematics}.
+     *
+     * @param modulePositions an array of swerve module positions.
+     */
     public SwerveDriveKinematics(PointXY... modulePositions) {
         if (modulePositions.length < 2) {
             throw new IllegalArgumentException(
@@ -44,6 +56,14 @@ public class SwerveDriveKinematics implements Kinematics<SwerveState> {
         forwardKinematics = inverseKinematics.pseudoInverse();
     }
 
+    /**
+     * Create a new instance of {@code SwerveDriveKinematics}.
+     *
+     * @param frontRightPosition front right module position.
+     * @param frontLeftPosition  the front left module position.
+     * @param backRightPosition  back right module position.
+     * @param backLeftPosition   back left module position.
+     */
     public SwerveDriveKinematics(PointXY frontRightPosition,
                                  PointXY frontLeftPosition,
                                  PointXY backRightPosition,
@@ -58,6 +78,16 @@ public class SwerveDriveKinematics implements Kinematics<SwerveState> {
         );
     }
 
+    /**
+     * Calculate a {@link SwerveState}, given a translation and a center
+     * of rotation.
+     *
+     * @param translation      the translation to calculate a swerve state
+     *                         based on.
+     * @param centerOfRotation the center of rotation. To be entirely honest,
+     *                         I have absolutely no idea what this means.
+     * @return create a new swerve drive.
+     */
     public SwerveState calculate(Translation translation,
                                  PointXY centerOfRotation) {
         if (!centerOfRotation.equals(previousCenterOfRotation)) {

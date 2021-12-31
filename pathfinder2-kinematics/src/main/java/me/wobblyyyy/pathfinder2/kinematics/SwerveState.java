@@ -22,6 +22,14 @@ public class SwerveState {
     private final SwerveModuleState backRight;
     private final SwerveModuleState backLeft;
 
+    /**
+     * Create a new {@code SwerveModuleState}.
+     *
+     * @param frontRight the front right module state.
+     * @param frontLeft  the front left module.
+     * @param backRight  the back right module state.
+     * @param backLeft   the back left module position.
+     */
     public SwerveState(SwerveModuleState frontRight,
                        SwerveModuleState frontLeft,
                        SwerveModuleState backRight,

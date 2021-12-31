@@ -75,8 +75,8 @@ Here's all of the sources of documentation I can think of right now.
 - [Examples](pathfinder2-examples) - several example usages of the project. Each
   of the classes contained in this module will contain more specific
   documentation explaining what the example is demonstrating.
-- [JavaDoc](https://google.com) - (not yet available) JavaDoc for the
-  Pathfinder2 library. This is the most fine-grained documentation, and I'd
+- [JavaDoc](https://wobblyyyy.github.io/JavaDocs/Pathfinder2/0.7.0) - JavaDoc 
+  for the Pathfinder2 library. This is the most fine-grained documentation, and I'd
   encourage you to check this out once you're comfortable with the library.
 - [Video guides](https://google.com) - (not yet available) video guides on using
   the library. Who doesn't love videos? Right? Right.
