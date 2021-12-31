@@ -28,6 +28,11 @@ the
 will be actively developed until Q3 2022, and (hopefully) maintained long
 afterwards.
 
+For a fun little video tangentially related to the rest of the readme,
+see [this](https://www.reddit.com/r/FTC/comments/rdqitc/guys_we_got_auton_working/).
+No, our robot does not do that anymore, and no, yours won't do that either -
+but you gotta admit, our robot has got some moves.
+
 <h2 align="center">Installation</h2>
 
 Installing Pathfinder shouldn't be TOO difficult. If you're using Gradle, it's
