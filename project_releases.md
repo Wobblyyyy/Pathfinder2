@@ -10,7 +10,33 @@
 
 <h2>What should I download?</h2>
 
-<h3>After October 27, 2021</h3>
+<h3>After January 3rd, 2022</h3>
+As of January 3rd, 2022, Pathfinder will no longer provide JAR binaries in
+the Releases section. You can install Pathfinder via `jitpack`. Instructions
+on doing that are as follows:
+
+Installing Pathfinder shouldn't be TOO difficult. If you're using Gradle, it's
+pretty simple. First, add the `jitpack` repository by adding the following to
+your `build.gradle`.
+```groovy
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+Once you're done with that, add Pathfinder2 as a dependency:
+```groovy
+dependencies {
+    implementation 'com.github.Wobblyyyy:Pathfinder2:v0.7.0'
+}
+```
+For a complete example, see the `pathfinder2-examples` module's
+[build.gradle](pathfinder2-examples/build.gradle) file.
+If you're using maven, sbt, or leiningen, you can see installation instructions
+[here](https://jitpack.io/#Wobblyyyy/Pathfinder2/v0.7.0).
+
+<h3>After October 27, 2021, but prior to January 3rd, 2022</h3>
 
 Pathfinder2 releases are released in a single form - one JAR file that contains
 all the libraries related to Pathfinder2. This was done to simplify
