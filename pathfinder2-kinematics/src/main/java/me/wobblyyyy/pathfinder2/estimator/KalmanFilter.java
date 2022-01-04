@@ -107,7 +107,13 @@ import org.ejml.equation.Sequence;
  * @author Colin Robertson
  * @see <a href="https://en.wikipedia.org/wiki/Kalman_filter">Wikipedia</a>
  * @since 0.8.0
+ * @deprecated I don't know enough about math to be able to support this, so
+ * I don't know if this works as its supposed to. Until either (a) I learn
+ * enough about math to know what's going on here or (b) someone else who
+ * knows enough about math contributes to this project, this class will not
+ * be officially supported, but will still be included for posterity.
  */
+@Deprecated
 public class KalmanFilter {
     private final DMatrixRMaj state;
     private final DMatrixRMaj covariance;
