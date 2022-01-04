@@ -148,6 +148,16 @@ public class KalmanFilter {
         );
     }
 
+    /**
+     * Create a new Kalman filter.
+     *
+     * @param stateTransitionMatrix a matrix containing the initial states
+     *                              of the inputs.
+     * @param plantNoiseMatrix      a matrix containing the initial covariance
+     *                              of the values of the inputs.
+     * @param projectionMatrix      a matrix containing values that will be
+     *                              used when projecting outputs.
+     */
     public KalmanFilter(DMatrixRMaj stateTransitionMatrix,
                         DMatrixRMaj plantNoiseMatrix,
                         DMatrixRMaj projectionMatrix) {
@@ -261,17 +271,33 @@ public class KalmanFilter {
         return matrix;
     }
 
+    /**
+     * Set the state of the filter.
+     *
+     * @param state      the state to set to the filter.
+     * @param covariance the covariance of the state.
+     */
     public void setState(DMatrixRMaj state,
                          DMatrixRMaj covariance) {
         this.state.set(state);
         this.covariance.set(covariance);
     }
 
+    /**
+     * Predict values.
+     */
     public void predict() {
         predictX.perform();
         predictP.perform();
     }
 
+    /**
+     * Update the filter. This should be called AFTER prediction has been
+     * completed.
+     *
+     * @param state      the state of the input.
+     * @param covariance the covariance of the input.
+     */
     public void update(DMatrixRMaj state,
                        DMatrixRMaj covariance) {
         equation.alias(
