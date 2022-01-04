@@ -91,6 +91,16 @@ import org.ejml.equation.Sequence;
  *             HandWiki projection matrix
  *         </a>
  *     </li>
+ *     <li>
+ *         <a href="https://robotics.stackexchange.com/questions/20395/extended-kalman-filtering-for-imu-and-encoder">
+ *             Extended Kalman Filtering for IMU and Encoder
+ *         </a>
+ *     </li>
+ *     <li>
+ *         <a href="https://robotics.stackexchange.com/questions/22115/how-to-actually-fuse-sensor-using-extended-kalman-filter">
+ *             Fusing sensor data with the Extended Kalman Filter
+ *         </a>
+ *     </li>
  * </ul>
  * </p>
  *
