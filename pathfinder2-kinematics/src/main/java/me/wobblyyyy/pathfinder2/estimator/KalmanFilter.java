@@ -311,4 +311,22 @@ public class KalmanFilter {
         updateX.perform();
         updateP.perform();
     }
+
+    /**
+     * Get the most recently calculated state.
+     *
+     * @return the most recently calculated state.
+     */
+    public DMatrixRMaj getState() {
+        return state;
+    }
+
+    /**
+     * Get the most recently calculated covariance.
+     *
+     * @return the most recently calculated covariance.
+     */
+    public DMatrixRMaj getCovariance() {
+        return covariance;
+    }
 }
