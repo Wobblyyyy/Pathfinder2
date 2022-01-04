@@ -12,6 +12,14 @@ package me.wobblyyyy.pathfinder2.kinematics;
 
 import java.util.function.Supplier;
 
+/**
+ * An {@code EncoderTracker} tracks the position of a tick-based encoder by
+ * storing the current and last tick values, as well as the elapsed time,
+ * in milliseconds. This allows for the speed of the encoder to be calculated.
+ *
+ * @author Colin Robertson
+ * @since 0.5.0
+ */
 public class EncoderTracker {
     private final EncoderConverter converter;
     private final Supplier<Integer> getTicks;
@@ -20,6 +28,18 @@ public class EncoderTracker {
     private boolean hasUpdated = false;
     private long lastMs = 0;
 
+    /**
+     * Create a new {@code EncoderTracker}.
+     *
+     * @param converter  an {@link EncoderConverter} that will convert ticks
+     *                   to rotations and distance.
+     * @param getTicks   a supplier that returns the encoder's outputted
+     *                   tick value.
+     * @param isInverted is the encoder inverted? An inverted encoder will
+     *                   function exactly the same as a non-inverted encoder:
+     *                   the only difference is that an inverted encoder has
+     *                   all of its values multiplied by -1.
+     */
     public EncoderTracker(EncoderConverter converter,
                           Supplier<Integer> getTicks,
                           boolean isInverted) {
@@ -41,6 +61,15 @@ public class EncoderTracker {
         return converter;
     }
 
+    /**
+     * Get the speed of the encoder based on an amount of elapsed milliseconds.
+     * It's strongly encouraged that you use the {@link #getSpeed()} method
+     * instead.
+     *
+     * @param elapsedSeconds how many seconds have elapsed since the last
+     *                       time this method was called.
+     * @return the speed of the encoder.
+     */
     public double getSpeedWithTime(double elapsedSeconds) {
         int currentTicks = isInverted ? -getTicks.get() : getTicks.get();
         if (!hasUpdated) {
@@ -52,6 +81,11 @@ public class EncoderTracker {
         return elapsedDistance / elapsedSeconds;
     }
 
+    /**
+     * Get the speed of the encoder.
+     *
+     * @return the speed of the encoder.
+     */
     public double getSpeed() {
         long currentMs = System.currentTimeMillis();
         if (lastMs == 0) lastMs = currentMs;
