@@ -8,9 +8,22 @@
 
 <h1>Pathfinder2 Releases</h1>
 
+<h3>Table of Contents</h3>
+
+- What should I download?
+- Semantic versioning
+- Policy on releases
+
 <h2>What should I download?</h2>
 
-<h3>After January 3rd, 2022</h3>
+Pathfinder has had several different guidelines on installation. Outdated
+guidelines are preserved for posterity. These guidelines are sorted
+chronologically, so that the most recent guideline (the one you should be
+following if you're using the latest release of the library) is at the top,
+and the oldest guideline (the one you definitely shouldn't be following) is all
+the way at the bottom.
+
+<h3>After January 3rd, 2022 (v0.7.1 and onwards)</h3>
 As of January 3rd, 2022, Pathfinder will no longer provide JAR binaries in
 the Releases section. You can install Pathfinder via `jitpack`. Instructions
 on doing that are as follows:
@@ -36,7 +49,7 @@ For a complete example, see the `pathfinder2-examples` module's
 If you're using maven, sbt, or leiningen, you can see installation instructions
 [here](https://jitpack.io/#Wobblyyyy/Pathfinder2/v0.7.0).
 
-<h3>After October 27, 2021, but prior to January 3rd, 2022</h3>
+<h3>After October 27, 2021, but prior to January 3rd, 2022 (v0.2.0-v0.7.0)</h3>
 
 Pathfinder2 releases are released in a single form - one JAR file that contains
 all the libraries related to Pathfinder2. This was done to simplify
@@ -45,7 +58,7 @@ installation, and also partially because I'm really lazy.
 Please see the [readme](readme.md) to learn more about how to install
 Pathfinder2 without downloading a JAR.
 
-<h3>Prior to October 27, 2021</h3>
+<h3>Prior to October 27, 2021 (v0.1.0)</h3>
 
 Each of Pathfinder's releases will be released with several assets. As of
 September 9th, 2021, those assets will be:
