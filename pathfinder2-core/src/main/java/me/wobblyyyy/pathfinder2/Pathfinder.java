@@ -126,7 +126,7 @@ public class Pathfinder {
      * A static list of plugins that should be automatically loaded every
      * time an instance of Pathfinder is created.
      */
-    private static final List<PathfinderPlugin> autoLoadPlugins =
+    private static final List<PathfinderPlugin> AUTO_LOAD_PLUGINS =
             new ArrayList<>();
 
     /**
@@ -266,7 +266,7 @@ public class Pathfinder {
         this.playback = new MovementPlayback(this);
         this.pluginManager = new PathfinderPluginManager();
 
-        for (PathfinderPlugin plugin : autoLoadPlugins) {
+        for (PathfinderPlugin plugin : AUTO_LOAD_PLUGINS) {
             String pluginName = plugin.getName();
 
             boolean shouldLoad = true;
@@ -391,7 +391,7 @@ public class Pathfinder {
     }
 
     public static void addAutoLoadPlugin(PathfinderPlugin plugin) {
-        autoLoadPlugins.add(plugin);
+        AUTO_LOAD_PLUGINS.add(plugin);
     }
 
     public Pathfinder loadPlugin(PathfinderPlugin plugin) {
