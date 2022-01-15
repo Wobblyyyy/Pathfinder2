@@ -54,6 +54,13 @@ public interface Trajectory {
      * how to move in that angle.
      * </p>
      *
+     * <p>
+     * A {@code Trajectory} is, in essence, a long sequence of points the
+     * robot should navigate to. These points are typically generated
+     * dynamically. Simple trajectories, such as linear trajectories, only need
+     * a single marker point.
+     * </p>
+     *
      * @param current the robot's current position. This position is used in
      *                determining the next marker position.
      * @return the next marker the robot should attempt to navigate to.
@@ -61,7 +68,11 @@ public interface Trajectory {
     PointXYZ nextMarker(PointXYZ current);
 
     /**
-     * Has the robot finished executing this trajectory?
+     * Has the robot finished executing this trajectory? This method should
+     * return true if the robot has finished executing the trajectory and
+     * can move on to the next trajectory or stop. If the robot hasn't finished
+     * it's trajectory, meaning it should still continue executing it, this
+     * method should return false.
      *
      * <p>
      * Each trajectory follower can only be marked as "completed" if this
@@ -87,6 +98,12 @@ public interface Trajectory {
      * the robot. However, if you'd like to have some more control over the
      * speed of your robot at different points throughout the trajectory,
      * you're more than free to do so.
+     * </p>
+     *
+     * <p>
+     * If you'd like to control the speed of a trajectory, I'd suggest you
+     * make note of the following class:
+     * {@link me.wobblyyyy.pathfinder2.control.SplineController}
      * </p>
      *
      * @param current the robot's current position. This position is used in

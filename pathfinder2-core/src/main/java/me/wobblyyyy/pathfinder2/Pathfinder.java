@@ -2102,6 +2102,16 @@ public class Pathfinder {
         return this;
     }
 
+    /**
+     * Move the robot in a certain direction (specified by a translation)
+     * for a specified amount of time, in milliseconds.
+     *
+     * @param vx        the vx component of the robot's translation.
+     * @param vy        the vy component of the robot's translation.
+     * @param vz        the vz component of the robot's translation.
+     * @param timeoutMs how long the robot should move for, in milliseconds.
+     * @return {@code this}, used for method chaining.
+     */
     public Pathfinder moveFor(double vx,
                               double vy,
                               double vz,
