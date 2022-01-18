@@ -22,6 +22,13 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
  * than go to a point at a linear speed. Such, there's not much you can
  * customize here. But it's simple, and it works. Hopefully, that is.
  *
+ * <p>
+ * A linear trajectory will move to a target point at a predetermined speed.
+ * If the robot's position is unintentionally altered - say, for example,
+ * another robot collides with your robot - a {@code LinearTrajectory} should
+ * compensate automatically.
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.0.0
  */
@@ -55,7 +62,11 @@ public class LinearTrajectory implements Trajectory {
      *                       be changed while the trajectory is being followed.
      * @param tolerance      the tolerance used in determining whether the
      *                       robot's X and Y coordinates match up with those
-     *                       of the target point.
+     *                       of the target point. A higher tolerance means
+     *                       your robot can more quickly complete paths while
+     *                       sacrificing accuracy, while a lower tolerance
+     *                       does exactly the opposite: it makes your robot
+     *                       more accurate, at the price of speed.
      * @param angleTolerance the tolerance used in determining whether the
      *                       robot's heading matches up with whatever heading
      *                       the robot is supposed to be facing.
