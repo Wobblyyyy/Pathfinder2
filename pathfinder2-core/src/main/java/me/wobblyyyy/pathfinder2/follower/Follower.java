@@ -26,6 +26,17 @@ import java.util.function.Consumer;
  * follower responsible for... well, actually following the trajectory.
  * </p>
  *
+ * <p>
+ * A follower is responsible for manipulating the robot's motors in a
+ * manner that allows the robot to follow some sort of predetermined path.
+ * Each {@code Follower} should be responsible for a single action.
+ * </p>
+ *
+ * <p>
+ * For almost all use cases, the {@link GenericFollower} is the best
+ * implementation of the {@code Follower} interface.
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.0.0
  */
