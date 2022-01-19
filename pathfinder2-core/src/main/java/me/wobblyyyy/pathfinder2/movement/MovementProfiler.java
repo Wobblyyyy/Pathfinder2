@@ -8,10 +8,12 @@
  * <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL V3</a>
  */
 
-package me.wobblyyyy.pathfinder2.motion;
+package me.wobblyyyy.pathfinder2.movement;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.math.Velocity;
+import me.wobblyyyy.pathfinder2.time.Time;
 
 /**
  * Helper class for recording {@link MovementSnapshot}s for a robot.
@@ -26,9 +28,43 @@ public class MovementProfiler {
     private double yUnitsPerSec;
     private double zDegreesPerSec;
     private double timeMs;
+    private MovementSnapshot lastSnapshot;
 
+    /**
+     * Get the most recently-recorded snapshot. If no snapshots have been
+     * recorded yet, this will return null.
+     *
+     * @return if at least one snapshot has been captured/recorded, this
+     * will return the most recently captured/recorded snapshot. If no
+     * snapshots have been taken, this will return null.
+     */
+    public MovementSnapshot getLastSnapshot() {
+        return lastSnapshot;
+    }
+
+    /**
+     * Capture a single {@link MovementSnapshot}.
+     *
+     * @param position the robot's current position.
+     * @return a new {@link MovementSnapshot}.
+     */
+    public MovementSnapshot capture(PointXYZ position) {
+        return capture(position, Time.ms());
+    }
+
+    /**
+     * Capture a single {@link MovementSnapshot}.
+     *
+     * @param position the robot's current position.
+     * @param timeMs the current time, in milliseconds.
+     * @return a new {@link MovementSnapshot}.
+     */
     public MovementSnapshot capture(PointXYZ position,
                                     double timeMs) {
+        // look... i'm sorry to whoever is reading this.
+        // this isn't good code. this isn't even decent code. this is
+        // just genuinely awful, and i'm sorry for everything...
+
         if (this.timeMs == 0) this.timeMs = timeMs;
 
         double deltaMs = timeMs - this.timeMs;
@@ -52,6 +88,8 @@ public class MovementProfiler {
         double dZps = dZp / deltaSec;
         double dps = d / deltaSec;
 
+        Angle angle = this.position.angleTo(position);
+
         this.position = position;
         this.unitsPerSec = dps;
         this.xUnitsPerSec = dxPs;
@@ -60,14 +98,16 @@ public class MovementProfiler {
         this.timeMs = timeMs;
 
         MovementSnapshot snapshot = new MovementSnapshot();
-        snapshot.setAcceleration(dps);
+        snapshot.setAccelerationXY(dps);
         snapshot.setAccelerationX(dXps);
         snapshot.setAccelerationY(dYps);
         snapshot.setAccelerationZ(Angle.fromDeg(dZps));
-        snapshot.setVelocity(d);
+        snapshot.setVelocity(new Velocity(d, angle));
+        snapshot.setVelocityXY(d);
         snapshot.setVelocityX(dxPs);
         snapshot.setVelocityY(dyPs);
         snapshot.setVelocityZ(Angle.fromDeg(dzDegPs));
+        lastSnapshot = snapshot;
         return snapshot;
     }
 }

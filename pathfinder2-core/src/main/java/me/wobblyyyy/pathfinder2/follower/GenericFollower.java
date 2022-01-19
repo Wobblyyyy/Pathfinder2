@@ -52,7 +52,11 @@ public class GenericFollower implements Follower {
      *
      * @param trajectory     the trajectory the follower should follow.
      * @param turnController a turn controller, responsible for determining
-     *                       turn values.
+     *                       turn values. This controller's target will be
+     *                       set to 0. The controller will receive the current
+     *                       distance from the target angle, in degrees, and
+     *                       should output a value to minimize that distance
+     *                       and bring it as close to 0 as possible.
      */
     public GenericFollower(Trajectory trajectory,
                            Controller turnController) {
@@ -87,6 +91,17 @@ public class GenericFollower implements Follower {
     @Override
     public boolean tick(PointXYZ current,
                         Consumer<Translation> consumer) {
+        // alright - i'm writing this comment maybe... say... four months?
+        // after writing this initial bit of code, and i would just like to
+        // say - if you're here because you're trying to figure out what makes
+        // the robot move, congrats! you've found it! enjoy some stupidly
+        // thoroughly commented and insanely simple code!
+        // with love,
+        // - colin <3
+        // Tue Jan 18 22:34:58
+        // p.s. i also made all of the comments in this method lowercase now
+        // so it matches the vibe better. you know what i mean?
+
         if (current == null) {
             throw new NullPointException(
                     "Attempted to tick a generic follower with a NULL " +
@@ -95,37 +110,37 @@ public class GenericFollower implements Follower {
             );
         }
 
-        // If the trajectory is done, we should stop executing this method
+        // if the trajectory is done, we should stop executing this method
         // right here.
         if (trajectory.isDone(current)) {
-            // Because the trajectory has finished, we give the robot a
+            // because the trajectory has finished, we give the robot a
             // translation of zero - there's no point in moving anymore, right?
             consumer.accept(Translation.zero());
 
-            // And because the translation is finished, the tick method should
-            // return true. Putting a return statement here ensures that the
+            // and because the translation is finished, the tick method should
+            // return true. putting a return statement here ensures that the
             // rest of the method won't get executed.
             return true;
         }
 
-        // Assuming the follower hasn't finished executing its trajectory,
+        // assuming the follower hasn't finished executing its trajectory,
         // we continue by finding a couple values and generating a shiny
         // new translation for the robot to follow.
 
-        // Get the next marker by calling the trajectory's nextMarker
-        // method. This method should always return a target point we can
+        // get the next marker by calling the trajectory's nextMarker
+        // method. this method should always return a target point we can
         // use to generate a new translation.
         PointXYZ nextMarker = trajectory.nextMarker(current);
 
-        // And of course, the speed, because some trajectories can control
+        // and of course, the speed, because some trajectories can control
         // speed differently.
         double speed = trajectory.speed(current);
 
-        // Determine the delta between the two angles, so we can calculate
+        // determine the delta between the two angles, so we can calculate
         // turn in just a moment.
         double angleDelta = Angle.minimumDelta(current.z(), nextMarker.z());
 
-        // And calculate turn. Remember, the turn controller's only job is to
+        // and calculate turn. remember, the turn controller's only job is to
         // get the delta to zero, so by feeding it the delta it should output
         // a value that will minimize that aforementioned delta.
         double turn = turnController.calculate(angleDelta);
@@ -137,15 +152,15 @@ public class GenericFollower implements Follower {
                 turn
         );
 
-        // Use the consumer to accept a translation we create.
-        // Instead of creating an absolute translation, which would only help
+        // use the consumer to accept a translation we create.
+        // instead of creating an absolute translation, which would only help
         // if the robot is facing straight forwards, we have to use a relative
-        // translation. The Follower interface's static method that we
+        // translation. the follower interface's static method that we
         // call here (getRelativeTranslation) first generates an absolute
-        // translation and then converts it to a relative one. Epic sauce.
+        // translation and then converts it to a relative one. epic sauce.
         consumer.accept(translation);
 
-        // We're not done yet, so return false.
+        // we're not done yet, so return false.
         return false;
     }
 }

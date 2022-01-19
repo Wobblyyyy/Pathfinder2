@@ -25,5 +25,9 @@
  *         and managing {@code ExecutorManager}s.
  *     </li>
  * </ul>
+ *
+ * <p>
+ * Classes in this package are pretty much only useful inside the library.
+ * </p>
  */
 package me.wobblyyyy.pathfinder2.execution;

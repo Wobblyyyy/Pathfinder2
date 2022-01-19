@@ -61,7 +61,9 @@ public interface Drive extends Modifiable<Translation> {
     /**
      * Get the drive train's current translation. This shouldn't be determined
      * based on what the robot's actually doing, but rather, whatever the last
-     * translation that was set to the drive train.
+     * translation that was set to the drive train. This value should only
+     * ever change whenever the {@link #setTranslation(Translation)} method
+     * is called.
      *
      * @return whatever translation was last set to the drive train.
      */
@@ -69,7 +71,10 @@ public interface Drive extends Modifiable<Translation> {
 
     /**
      * Set a translation to the drive train. This should, in fact, make the
-     * robot move! Crazy. Anyways.
+     * robot move! Crazy. Anyways. Whenever this method is invoked, the
+     * value the invocation of {@link #getTranslation()} will be changed
+     * to the value of the {@link Translation} passed as a parameter to
+     * this method call.
      *
      * @param translation a translation the robot should act upon. This
      *                    translation should always be <em>relative</em>,

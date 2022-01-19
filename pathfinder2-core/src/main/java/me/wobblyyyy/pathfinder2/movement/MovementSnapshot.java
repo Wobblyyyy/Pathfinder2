@@ -8,9 +8,10 @@
  * <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL V3</a>
  */
 
-package me.wobblyyyy.pathfinder2.motion;
+package me.wobblyyyy.pathfinder2.movement;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
+import me.wobblyyyy.pathfinder2.math.Velocity;
 
 import java.io.Serializable;
 
@@ -22,21 +23,31 @@ import java.io.Serializable;
  * @since 0.7.1
  */
 public class MovementSnapshot implements Serializable {
-    private double velocity;
+    private Velocity velocity;
+    private double velocityXY;
     private double velocityX;
     private double velocityY;
     private Angle velocityZ;
-    private double acceleration;
+
+    private double accelerationXY;
     private double accelerationX;
     private double accelerationY;
     private Angle accelerationZ;
 
-    public double getVelocity() {
+    public Velocity getVelocity() {
         return velocity;
     }
 
-    public void setVelocity(double velocity) {
+    public void setVelocity(Velocity velocity) {
         this.velocity = velocity;
+    }
+
+    public double getVelocityXY() {
+        return velocityXY;
+    }
+
+    public void setVelocityXY(double velocityXY) {
+        this.velocityXY = velocityXY;
     }
 
     public double getVelocityX() {
@@ -63,12 +74,12 @@ public class MovementSnapshot implements Serializable {
         this.velocityZ = velocityZ;
     }
 
-    public double getAcceleration() {
-        return acceleration;
+    public double getAccelerationXY() {
+        return accelerationXY;
     }
 
-    public void setAcceleration(double acceleration) {
-        this.acceleration = acceleration;
+    public void setAccelerationXY(double accelerationXY) {
+        this.accelerationXY = accelerationXY;
     }
 
     public double getAccelerationX() {

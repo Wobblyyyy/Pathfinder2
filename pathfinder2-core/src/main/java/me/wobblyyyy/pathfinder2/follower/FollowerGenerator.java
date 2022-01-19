@@ -55,6 +55,9 @@ public interface FollowerGenerator {
      *                   as be capable o providing movement options with the
      *                   {@link Robot#drive()} method.
      * @param trajectory the trajectory this follower should be following.
+     *                   Each {@link Follower} should be responsible for
+     *                   one single {@link Trajectory}, so a {@link Follower}
+     *                   will be created for this {@link Trajectory}.
      * @return a newly-generated {@link Follower} based on the provided robot
      * and the provided trajectory. This {@link Follower} is responsible for
      * the execution of the inputted trajectory.

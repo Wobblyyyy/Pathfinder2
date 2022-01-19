@@ -14,6 +14,7 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ import java.util.List;
  * @author Colin Robertson
  * @since 0.1.0
  */
-public class Velocity {
+public class Velocity implements Serializable {
     /**
      * The velocity's speed.
      */

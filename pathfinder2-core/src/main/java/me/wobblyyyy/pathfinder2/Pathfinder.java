@@ -12,11 +12,7 @@ package me.wobblyyyy.pathfinder2;
 
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.control.ProportionalController;
-import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
-import me.wobblyyyy.pathfinder2.exceptions.InvalidTimeException;
-import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
-import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
-import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
+import me.wobblyyyy.pathfinder2.exceptions.*;
 import me.wobblyyyy.pathfinder2.execution.ExecutorManager;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.follower.FollowerGenerator;
@@ -25,14 +21,19 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
+import me.wobblyyyy.pathfinder2.math.Velocity;
+import me.wobblyyyy.pathfinder2.movement.MovementProfiler;
 import me.wobblyyyy.pathfinder2.plugin.PathfinderPlugin;
 import me.wobblyyyy.pathfinder2.plugin.PathfinderPluginManager;
+import me.wobblyyyy.pathfinder2.prebuilt.AutoRotator;
+import me.wobblyyyy.pathfinder2.prebuilt.HeadingLock;
 import me.wobblyyyy.pathfinder2.recording.MovementPlayback;
 import me.wobblyyyy.pathfinder2.recording.MovementRecorder;
 import me.wobblyyyy.pathfinder2.recording.MovementRecording;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.robot.Robot;
+import me.wobblyyyy.pathfinder2.robot.modifiers.Modifier;
 import me.wobblyyyy.pathfinder2.robot.simulated.EmptyDrive;
 import me.wobblyyyy.pathfinder2.robot.simulated.EmptyOdometry;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedDrive;
@@ -120,7 +121,7 @@ import java.util.function.Supplier;
  * @see #andThen(Consumer, double, Supplier)
  * @since 0.0.0
  */
-@SuppressWarnings("UnusedReturnValue")
+@SuppressWarnings({"UnusedReturnValue", "JavaDoc"})
 public class Pathfinder {
     /**
      * A static list of plugins that should be automatically loaded every
@@ -146,74 +147,87 @@ public class Pathfinder {
     private final FollowerGenerator generator;
 
     /**
+     * Turn controller, used for... controlling turns. What else would
+     * it be used for, huh?
+     */
+    private final Controller turnController;
+
+    /**
      * A stopwatch - this is very likely to not be useful at all, but its
      * included anyways.
      */
     private final Stopwatch stopwatch = new Stopwatch();
-
-    /**
-     * The speed Pathfinder will use in creating linear trajectories.
-     */
-    private double speed = -1.0;
-
-    /**
-     * The tolerance Pathfinder will use in creating linear trajectories.
-     */
-    private double tolerance = -1.0;
-
-    /**
-     * The angle tolerance Pathfinder will use in creating linear trajectories.
-     */
-    private Angle angleTolerance = null;
-
-    /**
-     * The default tick until timeout.
-     */
-    private double defaultTimeout = Double.MAX_VALUE;
-
-    /**
-     * The default tick until should run supplier.
-     */
-    private Supplier<Boolean> defaultShouldRun = () -> true;
-
-    /**
-     * The default tick until completion consumer.
-     */
-    private Consumer<Pathfinder> defaultOnCompletion = pathfinder -> {
-    };
-
-    /**
-     * The default tick until on tick consumer.
-     */
-    private BiConsumer<Pathfinder, Double> defaultOnTick = (pathfinder, aDouble) -> {
-    };
-
     /**
      * A zone processor is responsible for dealing with any zones on
      * the field.
      */
     private final ZoneProcessor zoneProcessor;
-
     /**
      * A scheduler for executing tasks.
      */
     private final Scheduler scheduler;
-
     /**
      * A manager for recording Pathfinder's movement.
      */
     private final MovementRecorder recorder;
-
     /**
      * A manager for playing back recordings.
      */
     private final MovementPlayback playback;
-
     /**
      * A manager for {@link PathfinderPlugin}s.
      */
     private final PathfinderPluginManager pluginManager;
-
+    /**
+     * Used in recording information about the robot's motion.
+     */
+    private final MovementProfiler profiler;
+    /**
+     * The speed Pathfinder will use in creating linear trajectories.
+     *
+     * <p>
+     * This value defaults to -1.0 if it's not set by the user.
+     * </p>
+     */
+    private double speed = -1.0;
+    /**
+     * The tolerance Pathfinder will use in creating linear trajectories.
+     *
+     * <p>
+     * This value defaults to -1.0 if it's not set by the user.
+     * </p>
+     */
+    private double tolerance = -1.0;
+    /**
+     * The angle tolerance Pathfinder will use in creating linear trajectories.
+     *
+     * <p>
+     * This value defaults to null if it's not set by the user.
+     * </p>
+     */
+    private Angle angleTolerance = null;
+    /**
+     * The default tick until timeout.
+     *
+     * <p>
+     * This value defaults to {@link Double#MAX_VALUE} if it's not set by the user.
+     * </p>
+     */
+    private double defaultTimeout = Double.MAX_VALUE;
+    /**
+     * The default tick until should run supplier.
+     */
+    private Supplier<Boolean> defaultShouldRun = () -> true;
+    /**
+     * The default tick until completion consumer.
+     */
+    private Consumer<Pathfinder> defaultOnCompletion = pathfinder -> {
+    };
+    /**
+     * The default tick until on tick consumer.
+     */
+    private BiConsumer<Pathfinder, Double> defaultOnTick = (pathfinder, aDouble) -> {
+    };
     /**
      * Last tick, how many followers were there?
      */
@@ -225,32 +239,64 @@ public class Pathfinder {
     private Follower previousFollower = null;
 
     /**
-     * Create a new {@code Pathfinder} instance.
+     * Last tick, what was the currently active drive modifier? Or
+     * something like that.
+     */
+    private Modifier<Translation> lastDriveModifier = null;
+
+    /**
+     * Create a new {@code Pathfinder} instance. This constructor will
+     * conditionally load any automatically loading plugins - if the plugin's
+     * name is not in the {@code doNotLoad} collection of strings, the
+     * plugin will be loaded; if the plugin's name IS in the collection of
+     * strings, the plugin will not be loaded.
      *
-     * @param robot     the {@code Pathfinder} instance's robot. This robot
-     *                  should have an odometry system that can report the
-     *                  position of the robot and a drive system that can
-     *                  respond to drive commands. This object may not be
-     *                  null or, an exception will be thrown.
-     * @param generator a generator used in creating followers. This generator
-     *                  functions by accepting a {@link Trajectory} and a
-     *                  {@link Robot} and returning a follower. If you're
-     *                  unsure of what this means, or what you should do here,
-     *                  you should probably use the "generic follower
-     *                  generator," as it's the simplest. This object may not
-     *                  be null, or an exception will be thrown.
-     * @param doNotLoad a set of {@code String}s that specify to Pathfinder
-     *                  which plugins it should NOT load. If any of the
-     *                  plugins that attempt to automatically load are inside
-     *                  of the {@code doNotLoad} list, they won't be loaded.
-     *                  This is here in case you depend on a file which
-     *                  modifies the list of plugins that are automatically
-     *                  loaded whenever an instance of Pathfinder is created.
-     *                  If you decide you don't want that plugin to be loaded,
-     *                  add it's name to this list, and you should be all good.
+     * <p>
+     * This constructor will instantiate instances of the following:
+     * <ul>
+     *     <li>{@link ExecutorManager}</li>
+     *     <li>{@link ZoneProcessor}</li>
+     *     <li>{@link Scheduler}</li>
+     *     <li>{@link MovementRecorder}</li>
+     *     <li>{@link MovementPlayback}</li>
+     *     <li>{@link PathfinderPluginManager}</li>
+     *     <li>{@link MovementProfiler}</li>
+     * </ul>
+     * There's a very good chance you're not going to need some or all of those,
+     * and that's okay - you simply don't have to worry about them and everything
+     * will work as intended.
+     * </p>
+     *
+     * @param robot          the {@code Pathfinder} instance's robot. This robot
+     *                       should have an odometry system that can report the
+     *                       position of the robot and a drive system that can
+     *                       respond to drive commands. This object may not be
+     *                       null or, an exception will be thrown.
+     * @param generator      a generator used in creating followers. This generator
+     *                       functions by accepting a {@link Trajectory} and a
+     *                       {@link Robot} and returning a follower. If you're
+     *                       unsure of what this means, or what you should do here,
+     *                       you should probably use the "generic follower
+     *                       generator," as it's the simplest. This object may not
+     *                       be null, or an exception will be thrown.
+     * @param turnController the controller responsible for turning the robot.
+     *                       This is some bad code on my part, but basically,
+     *                       this constructor assumes that the generator provided
+     *                       makes use of a controller for controlling the
+     *                       robot's heading.
+     * @param doNotLoad      a set of {@code String}s that specify to Pathfinder
+     *                       which plugins it should NOT load. If any of the
+     *                       plugins that attempt to automatically load are inside
+     *                       of the {@code doNotLoad} list, they won't be loaded.
+     *                       This is here in case you depend on a file which
+     *                       modifies the list of plugins that are automatically
+     *                       loaded whenever an instance of Pathfinder is created.
+     *                       If you decide you don't want that plugin to be loaded,
+     *                       add it's name to this list, and you should be all good.
      */
     public Pathfinder(Robot robot,
                       FollowerGenerator generator,
+                      Controller turnController,
                       String... doNotLoad) {
         if (robot == null)
             throw new NullPointerException("Robot cannot be null!");
@@ -259,51 +305,74 @@ public class Pathfinder {
 
         this.robot = robot;
         this.generator = generator;
+        this.turnController = turnController;
         this.executorManager = new ExecutorManager(robot);
         this.zoneProcessor = new ZoneProcessor();
         this.scheduler = new Scheduler(this);
         this.recorder = new MovementRecorder(this, 25);
         this.playback = new MovementPlayback(this);
         this.pluginManager = new PathfinderPluginManager();
+        this.profiler = new MovementProfiler();
 
         for (PathfinderPlugin plugin : AUTO_LOAD_PLUGINS) {
             String pluginName = plugin.getName();
 
             boolean shouldLoad = true;
-            for (String str : doNotLoad) {
+            for (String str : doNotLoad)
                 if (str.equals(pluginName)) {
                     shouldLoad = false;
                     break;
                 }
-            }
 
-            if (shouldLoad) {
+            if (shouldLoad)
                 loadPlugin(plugin);
-            }
         }
     }
 
     /**
      * Create a new {@code Pathfinder} instance.
      *
-     * @param robot     the {@code Pathfinder} instance's robot. This robot
-     *                  should have an odometry system that can report the
-     *                  position of the robot and a drive system that can
-     *                  respond to drive commands. This object may not be
-     *                  null or, an exception will be thrown.
-     * @param generator a generator used in creating followers. This generator
-     *                  functions by accepting a {@link Trajectory} and a
-     *                  {@link Robot} and returning a follower. If you're
-     *                  unsure of what this means, or what you should do here,
-     *                  you should probably use the "generic follower
-     *                  generator," as it's the simplest. This object may not
-     *                  be null, or an exception will be thrown.
+     * <p>
+     * This constructor will instantiate instances of the following:
+     * <ul>
+     *     <li>{@link ExecutorManager}</li>
+     *     <li>{@link ZoneProcessor}</li>
+     *     <li>{@link Scheduler}</li>
+     *     <li>{@link MovementRecorder}</li>
+     *     <li>{@link MovementPlayback}</li>
+     *     <li>{@link PathfinderPluginManager}</li>
+     *     <li>{@link MovementProfiler}</li>
+     * </ul>
+     * There's a very good chance you're not going to need some or all of those,
+     * and that's okay - you simply don't have to worry about them and everything
+     * will work as intended.
+     * </p>
+     *
+     * @param robot          the {@code Pathfinder} instance's robot. This robot
+     *                       should have an odometry system that can report the
+     *                       position of the robot and a drive system that can
+     *                       respond to drive commands. This object may not be
+     *                       null or, an exception will be thrown.
+     * @param generator      a generator used in creating followers. This generator
+     *                       functions by accepting a {@link Trajectory} and a
+     *                       {@link Robot} and returning a follower. If you're
+     *                       unsure of what this means, or what you should do here,
+     *                       you should probably use the "generic follower
+     *                       generator," as it's the simplest. This object may not
+     *                       be null, or an exception will be thrown.
+     * @param turnController the controller responsible for turning the robot.
+     *                       This is some bad code on my part, but basically,
+     *                       this constructor assumes that the generator provided
+     *                       makes use of a controller for controlling the
+     *                       robot's heading.
      */
     public Pathfinder(Robot robot,
-                      FollowerGenerator generator) {
+                      FollowerGenerator generator,
+                      Controller turnController) {
         this(
                 robot,
                 generator,
+                turnController,
                 new String[0]
         );
     }
@@ -312,8 +381,9 @@ public class Pathfinder {
      * Create a new {@code Pathfinder} instance.
      *
      * <p>
-     * This will call the {@link #Pathfinder(Robot, FollowerGenerator)}
-     * constructor with a new {@link GenericFollowerGenerator}.
+     * This constructor will create a new {@link GenericFollowerGenerator}
+     * by using the provided {@link Controller} as a turn controller. That's...
+     * well, that's pretty much it.
      * </p>
      *
      * @param robot          the {@code Pathfinder} instance's robot. This robot
@@ -321,13 +391,18 @@ public class Pathfinder {
      *                       position of the robot and a drive system that can
      *                       respond to drive commands. This object may not be
      *                       null or, an exception will be thrown.
-     * @param turnController the controller used for turning the robot.
+     * @param turnController the controller responsible for turning the robot.
+     *                       This is some bad code on my part, but basically,
+     *                       this constructor assumes that the generator provided
+     *                       makes use of a controller for controlling the
+     *                       robot's heading.
      */
     public Pathfinder(Robot robot,
                       Controller turnController) {
         this(
                 robot,
-                new GenericFollowerGenerator(turnController)
+                new GenericFollowerGenerator(turnController),
+                turnController
         );
     }
 
@@ -335,8 +410,19 @@ public class Pathfinder {
      * Create a new {@code Pathfinder} instance.
      *
      * <p>
-     * This will call the {@link #Pathfinder(Robot, FollowerGenerator)}
-     * constructor with a new {@link GenericFollowerGenerator}.
+     * This constructor will instantiate instances of the following:
+     * <ul>
+     *     <li>{@link ExecutorManager}</li>
+     *     <li>{@link ZoneProcessor}</li>
+     *     <li>{@link Scheduler}</li>
+     *     <li>{@link MovementRecorder}</li>
+     *     <li>{@link MovementPlayback}</li>
+     *     <li>{@link PathfinderPluginManager}</li>
+     *     <li>{@link MovementProfiler}</li>
+     * </ul>
+     * There's a very good chance you're not going to need some or all of those,
+     * and that's okay - you simply don't have to worry about them and everything
+     * will work as intended.
      * </p>
      *
      * @param robot       the {@code Pathfinder} instance's robot. This robot
@@ -369,6 +455,7 @@ public class Pathfinder {
         Drive drive = new SimulatedDrive();
         Odometry odometry = new SimulatedOdometry();
         Robot robot = new Robot(drive, odometry);
+
         return new Pathfinder(robot, coefficient);
     }
 
@@ -387,6 +474,7 @@ public class Pathfinder {
         Drive drive = new EmptyDrive();
         Odometry odometry = new EmptyOdometry();
         Robot robot = new Robot(drive, odometry);
+
         return new Pathfinder(robot, coefficient);
     }
 
@@ -427,6 +515,15 @@ public class Pathfinder {
      */
     public Drive getDrive() {
         return robot.drive();
+    }
+
+    /**
+     * Get the {@code Pathfinder} instance's {@link MovementProfiler}.
+     *
+     * @return the {@link MovementProfiler}.
+     */
+    public MovementProfiler getProfiler() {
+        return profiler;
     }
 
     /**
@@ -801,6 +898,13 @@ public class Pathfinder {
         return playback;
     }
 
+    /**
+     * Get Pathfinder's plugin manager. This manager can be used to load
+     * and unload plugins, allowing you to customize Pathfinder's inner
+     * workings to your likings.
+     *
+     * @return Pathfinder's plugin manager.
+     */
     public PathfinderPluginManager getPluginManager() {
         return pluginManager;
     }
@@ -834,24 +938,27 @@ public class Pathfinder {
         scheduler.tick();
         zoneProcessor.update(this);
         executorManager.tick();
+
         int followerCount = executorManager.howManyFollowers();
         Follower follower =
                 executorManager.getCurrentExecutor().getCurrentFollower();
-        if (followerCount > previousFollowerCount) {
+
+        if (followerCount > previousFollowerCount)
             pluginManager.onStartFollower(
                     this,
                     executorManager.getCurrentExecutor().getCurrentFollower()
             );
-        } else if (followerCount < previousFollowerCount) {
+        else if (followerCount < previousFollowerCount)
             pluginManager.onFinishFollower(
                     this,
                     previousFollower
             );
-        }
+
         previousFollowerCount = followerCount;
         previousFollower = follower;
         pluginManager.onTick(this);
         playback.tick();
+        profiler.capture(getPosition());
         recorder.tick();
         pluginManager.postTick(this);
 
@@ -1046,7 +1153,8 @@ public class Pathfinder {
         NotNull.throwExceptionIfNull(
                 "A null value was passed to the tickUntil method! " +
                         "Please make sure you don't pass any null values.",
-                shouldContinueRunning
+                shouldContinueRunning,
+                onTick
         );
 
         double start = Time.ms();
@@ -1055,9 +1163,8 @@ public class Pathfinder {
             double current = Time.ms();
             double elapsed = current - start;
 
-            if (elapsed >= timeoutMs) {
+            if (elapsed >= timeoutMs)
                 break;
-            }
 
             tick();
             onTick.accept(this, elapsed);
@@ -1749,7 +1856,10 @@ public class Pathfinder {
     }
 
     /**
-     * Pause as long as a certain condition is met.
+     * Pause as long as a certain condition is met. This method requires
+     * doing just that.* the use of multiple threads, as this method has a busy wait that will
+     * block the calling thread until {@code condition}'s {@code get} returns
+     * false.
      *
      * @param condition the condition that must be met in order to continue.
      *                  If this condition returns false, this method will
@@ -1830,12 +1940,11 @@ public class Pathfinder {
 
         List<Follower> followers = new ArrayList<>();
 
-        for (Trajectory trajectory : trajectories) {
+        for (Trajectory trajectory : trajectories)
             followers.add(generator.generate(
                     robot,
                     trajectory
             ));
-        }
 
         follow(followers);
 
@@ -1849,12 +1958,11 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder follow(Follower follower) {
-        if (follower == null) {
+        if (follower == null)
             throw new NullPointerException(
                     "Attempted to follow a null Follower object - make sure " +
                             "this object is not null."
             );
-        }
 
         executorManager.addExecutor(follower);
 
@@ -1868,12 +1976,11 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder follow(List<Follower> followers) {
-        if (followers == null) {
+        if (followers == null)
             throw new NullPointerException(
                     "Attempted to follow a null list of Follower objects - " +
                             "make sure the list you supply is not null."
             );
-        }
 
         executorManager.addExecutor(followers);
 
@@ -1887,12 +1994,11 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder follow(Follower... followers) {
-        if (followers == null) {
+        if (followers == null)
             throw new NullPointerException(
                     "Attempted to follow a null list of Follower objects - " +
                             "make sure the list you supply is not null."
             );
-        }
 
         executorManager.addExecutor(Arrays.asList(followers));
 
@@ -1926,7 +2032,7 @@ public class Pathfinder {
         // side note, I'm really craving some vanilla ice cream right now,
         // but I don't think I have any :(
 
-        if (speed < 0 && tolerance < 0 && angleTolerance == null) {
+        if (speed < 0 && tolerance < 0 && angleTolerance == null)
             throw new RuntimeException(
                     "Attempted to use the goTo method without having set " +
                             "Pathfinder's default speed, tolerance, and angle " +
@@ -1935,32 +2041,28 @@ public class Pathfinder {
                             "methods to set these values before using any  " +
                             "variation of the goTo method."
             );
-        }
 
-        if (speed < 0) {
+        if (speed < 0)
             throw new InvalidSpeedException(
                     "Attempted to use the goTo method without having set the " +
                             "speed of Pathfinder first! Use the setSpeed(double) " +
                             "method to set a speed value."
             );
-        }
 
-        if (tolerance < 0) {
+        if (tolerance < 0)
             throw new InvalidToleranceException(
                     "Attempted to use the goTo method without having set the " +
                             "tolerance of Pathfinder first! Use the setTolerance(double) " +
                             "method to set a tolerance value."
             );
-        }
 
-        if (angleTolerance == null) {
+        if (angleTolerance == null)
             throw new NullAngleException(
                     "Attempted to use the goTo method without having set the " +
                             "angle tolerance of Pathfinder first! Use the" +
                             "setAngleTolerance(Angle) method to set a " +
                             "tolerance value."
             );
-        }
     }
 
     /**
@@ -1968,10 +2070,10 @@ public class Pathfinder {
      * that aforementioned trajectory. This will use the default speed,
      * tolerance, and angle tolerance values.
      *
-     * @param points         a set of control points for the spline. This
-     *                       will automatically insert the robot's current
-     *                       position into this array. This array must have
-     *                       AT LEAST two points.
+     * @param points a set of control points for the spline. This
+     *               will automatically insert the robot's current
+     *               position into this array. This array must have
+     *               AT LEAST two points.
      * @return {@code this}, used for method chaining.
      */
     public Pathfinder splineTo(PointXYZ... points) {
@@ -2077,25 +2179,22 @@ public class Pathfinder {
     @SuppressWarnings("BusyWait")
     public Pathfinder moveFor(Translation translation,
                               double timeoutMs) {
-        if (translation == null) {
+        if (translation == null)
             throw new NullPointerException(
                     "Cannot use a null translation!"
             );
-        }
 
-        if (timeoutMs <= 0 || Double.isInfinite(timeoutMs) || timeoutMs == Double.MAX_VALUE) {
+        if (timeoutMs <= 0 || Double.isInfinite(timeoutMs) || timeoutMs == Double.MAX_VALUE)
             throw new IllegalArgumentException(
                     "Invalid timeout!"
             );
-        }
 
         ElapsedTimer timer = new ElapsedTimer(true);
         setTranslation(translation);
 
         try {
-            while (timer.isElapsedLessThan(timeoutMs)) {
+            while (timer.isElapsedLessThan(timeoutMs))
                 Thread.sleep(10);
-            }
         } catch (Exception ignored) {
         }
 
@@ -2326,6 +2425,304 @@ public class Pathfinder {
      */
     public double getExecutionTime() {
         return getExecutorManager().getExecutionTime();
+    }
+
+    /**
+     * Get the robot's velocity according to the last motion snapshot. If
+     * no motion snapshots have been taken, invoking this method will cause
+     * a {@link NullPointerException}.
+     *
+     * <p>
+     * Along with all other profiler-related methods, the return value of
+     * this method is units per second. Because units are not specified
+     * anywhere and are thus left up to the user, these units can be anything
+     * at all - but the time will always remain in seconds.
+     * </p>
+     *
+     * @return the robot's velocity, in units per second.
+     */
+    public Velocity getVelocity() {
+        return profiler.getLastSnapshot().getVelocity();
+    }
+
+    /**
+     * Get the robot's velocity according to the last motion snapshot. If
+     * no motion snapshots have been taken, invoking this method will cause
+     * a {@link NullPointerException}.
+     *
+     * <p>
+     * Along with all other profiler-related methods, the return value of
+     * this method is units per second. Because units are not specified
+     * anywhere and are thus left up to the user, these units can be anything
+     * at all - but the time will always remain in seconds.
+     * </p>
+     *
+     * @return the robot's velocity, in units per second.
+     */
+    public double getVelocityXY() {
+        return profiler.getLastSnapshot().getVelocityXY();
+    }
+
+    /**
+     * Get the robot's X velocity according to the last motion snapshot. If
+     * no motion snapshots have been taken, invoking this method will cause
+     * a {@link NullPointerException}.
+     *
+     * <p>
+     * Along with all other profiler-related methods, the return value of
+     * this method is units per second. Because units are not specified
+     * anywhere and are thus left up to the user, these units can be anything
+     * at all - but the time will always remain in seconds.
+     * </p>
+     *
+     * @return the robot's X velocity, in units per second.
+     */
+    public double getVelocityX() {
+        return profiler.getLastSnapshot().getVelocityX();
+    }
+
+    /**
+     * Get the robot's Y velocity according to the last motion snapshot. If
+     * no motion snapshots have been taken, invoking this method will cause
+     * a {@link NullPointerException}.
+     *
+     * <p>
+     * Along with all other profiler-related methods, the return value of
+     * this method is units per second. Because units are not specified
+     * anywhere and are thus left up to the user, these units can be anything
+     * at all - but the time will always remain in seconds.
+     * </p>
+     *
+     * @return the robot's Y velocity, in units per second.
+     */
+    public double getVelocityY() {
+        return profiler.getLastSnapshot().getVelocityY();
+    }
+
+    /**
+     * Get the robot's Z velocity according to the last motion snapshot. If
+     * no motion snapshots have been taken, invoking this method will cause
+     * a {@link NullPointerException}.
+     *
+     * <p>
+     * Along with all other profiler-related methods, the return value of
+     * this method is units per second. Because units are not specified
+     * anywhere and are thus left up to the user, these units can be anything
+     * at all - but the time will always remain in seconds.
+     * </p>
+     *
+     * @return the robot's Z velocity, in units per second. Because this is
+     * an angle and not a degree or radian measure, I can't think of a better
+     * term, but it's basically just angle per second.
+     */
+    public Angle getVelocityZ() {
+        return profiler.getLastSnapshot().getVelocityZ();
+    }
+
+    /**
+     * Get the robot's acceleration according to the last motion snapshot. If
+     * no motion snapshots have been taken, invoking this method will cause
+     * a {@link NullPointerException}.
+     *
+     * <p>
+     * Along with all other profiler-related methods, the return value of
+     * this method is units per second. Because units are not specified
+     * anywhere and are thus left up to the user, these units can be anything
+     * at all - but the time will always remain in seconds.
+     * </p>
+     *
+     * @return the robot's acceleration, in units per second squared.
+     */
+    public double getAccelerationXY() {
+        return profiler.getLastSnapshot().getAccelerationXY();
+    }
+
+    /**
+     * Get the robot's X acceleration according to the last motion snapshot. If
+     * no motion snapshots have been taken, invoking this method will cause
+     * a {@link NullPointerException}.
+     *
+     * <p>
+     * Along with all other profiler-related methods, the return value of
+     * this method is units per second. Because units are not specified
+     * anywhere and are thus left up to the user, these units can be anything
+     * at all - but the time will always remain in seconds.
+     * </p>
+     *
+     * @return the robot's X acceleration, in units per second squared.
+     */
+    public double getAccelerationX() {
+        return profiler.getLastSnapshot().getAccelerationX();
+    }
+
+    /**
+     * Get the robot's Y acceleration according to the last motion snapshot. If
+     * no motion snapshots have been taken, invoking this method will cause
+     * a {@link NullPointerException}.
+     *
+     * <p>
+     * Along with all other profiler-related methods, the return value of
+     * this method is units per second. Because units are not specified
+     * anywhere and are thus left up to the user, these units can be anything
+     * at all - but the time will always remain in seconds.
+     * </p>
+     *
+     * @return the robot's Y acceleration, in units per second squared.
+     */
+    public double getAccelerationY() {
+        return profiler.getLastSnapshot().getAccelerationY();
+    }
+
+    /**
+     * Get the robot's Z acceleration according to the last motion snapshot. If
+     * no motion snapshots have been taken, invoking this method will cause
+     * a {@link NullPointerException}.
+     *
+     * <p>
+     * Along with all other profiler-related methods, the return value of
+     * this method is units per second. Because units are not specified
+     * anywhere and are thus left up to the user, these units can be anything
+     * at all - but the time will always remain in seconds.
+     * </p>
+     *
+     * @return the robot's Z acceleration, in units per second squared.
+     */
+    public Angle getAccelerationZ() {
+        return profiler.getLastSnapshot().getAccelerationZ();
+    }
+
+    /**
+     * Lock Pathfinder's heading by using a modifier. Every time a translation
+     * is set to the drive train, it will be modified so that it will turn
+     * the robot towards the provided heading value.
+     *
+     * <p>
+     * In order to reverse this effect, use {@link #unlockHeading()}.
+     * </p>
+     *
+     * <p>
+     * The following three methods CAN NOT be combined or you will encounter
+     * some issues: (combined meaning nested)
+     * <ul>
+     *     <li>{@link #lockHeading(Angle)}</li>
+     *     <li>{@link #lockHeading(PointXY)}</li>
+     *     <li>{@link #lockHeading(PointXY, Angle)}</li>
+     * </ul>
+     * Basically, this is a technical limitation because of my laziness and
+     * poorly written code. This might get fixed at some point in the near
+     * future, but it's not a high priority.
+     * </p>
+     *
+     * @param heading the heading Pathfinder should remain at.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder lockHeading(Angle heading) {
+        Modifier<Translation> modifier = new HeadingLock(
+                heading,
+                turnController,
+                this.getPosition()::z
+        );
+
+        lastDriveModifier = (Modifier<Translation>) getDrive().getModifier();
+
+        getDrive().addModifier(modifier);
+
+        return this;
+    }
+
+    /**
+     * Lock Pathfinder's heading by making the robot face a given point. The
+     * robot will always face directly towards the provided point.
+     *
+     * <p>
+     * In order to reverse this effect, use {@link #unlockHeading()}.
+     * </p>
+     *
+     * <p>
+     * The following three methods CAN NOT be combined or you will encounter
+     * some issues: (combined meaning nested)
+     * <ul>
+     *     <li>{@link #lockHeading(Angle)}</li>
+     *     <li>{@link #lockHeading(PointXY)}</li>
+     *     <li>{@link #lockHeading(PointXY, Angle)}</li>
+     * </ul>
+     * Basically, this is a technical limitation because of my laziness and
+     * poorly written code. This might get fixed at some point in the near
+     * future, but it's not a high priority.
+     * </p>
+     *
+     * @param point the point to lock heading around.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder lockHeading(PointXY point) {
+        Modifier<Translation> modifier = new AutoRotator(
+                this,
+                turnController,
+                point,
+                Angle.DEG_0,
+                true
+        );
+
+        lastDriveModifier = (Modifier<Translation>) getDrive().getModifier();
+
+        getDrive().addModifier(modifier);
+
+        return this;
+    }
+
+    /**
+     * Lock Pathfinder's heading by making the robot face a given point. The
+     * robot will always face directly towards the provided point, plus
+     * the provided angle offset.
+     *
+     * <p>
+     * In order to reverse this effect, use {@link #unlockHeading()}.
+     * </p>
+     *
+     * <p>
+     * The following three methods CAN NOT be combined or you will encounter
+     * some issues: (combined meaning nested)
+     * <ul>
+     *     <li>{@link #lockHeading(Angle)}</li>
+     *     <li>{@link #lockHeading(PointXY)}</li>
+     *     <li>{@link #lockHeading(PointXY, Angle)}</li>
+     * </ul>
+     * Basically, this is a technical limitation because of my laziness and
+     * poorly written code. This might get fixed at some point in the near
+     * future, but it's not a high priority.
+     * </p>
+     *
+     * @param point       the point to lock heading around.
+     * @param angleOffset the offset to be applied to the angle Pathfinder
+     *                    determines it needs to face.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder lockHeading(PointXY point,
+                                  Angle angleOffset) {
+        Modifier<Translation> modifier = new AutoRotator(
+                this,
+                turnController,
+                point,
+                angleOffset,
+                true
+        );
+
+        lastDriveModifier = (Modifier<Translation>) getDrive().getModifier();
+
+        getDrive().addModifier(modifier);
+
+        return this;
+    }
+
+    /**
+     * Unlock Pathfinder's heading.
+     *
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder unlockHeading() {
+        getDrive().setModifier(lastDriveModifier);
+
+        return this;
     }
 
     /*
