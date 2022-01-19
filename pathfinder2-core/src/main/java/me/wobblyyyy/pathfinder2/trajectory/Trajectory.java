@@ -63,7 +63,9 @@ public interface Trajectory {
      *
      * @param current the robot's current position. This position is used in
      *                determining the next marker position.
-     * @return the next marker the robot should attempt to navigate to.
+     * @return the next marker the robot should attempt to navigate to. The
+     * robot should calculate, based on the current and marker positions,
+     * how to move in order to reach the target position.
      */
     PointXYZ nextMarker(PointXYZ current);
 
@@ -84,7 +86,10 @@ public interface Trajectory {
      *
      * @param current the robot's current position.
      * @return true if the robot has finished executing the trajectory, false
-     * if it has not.
+     * if it has not. Frequently, this is defined by a target position: after
+     * the robot reaches a certain position, the trajectory will end. However,
+     * this can also have other requirements - for example, the robot must be
+     * below a certain velocity, or the robot must not be accelerating, etc.
      */
     boolean isDone(PointXYZ current);
 
@@ -104,6 +109,9 @@ public interface Trajectory {
      * If you'd like to control the speed of a trajectory, I'd suggest you
      * make note of the following class:
      * {@link me.wobblyyyy.pathfinder2.control.SplineController}
+     * There's absolutely no need to, and you can control the speed using
+     * other methods, but the {@code SplineController} gives you the most
+     * control over what speed your robot will have at what point.
      * </p>
      *
      * @param current the robot's current position. This position is used in
@@ -121,7 +129,9 @@ public interface Trajectory {
      * @param additionalTrajectories a variable length array containing
      *                               trajectories that should be conjoined
      *                               with {@code this} trajectory.
-     * @return a new {@link MultiSegmentTrajectory}.
+     * @return a new {@link MultiSegmentTrajectory}. This new trajectory will
+     * have {@code this} trajectory as the first segment, and then any of the
+     * trajectories in the variable argument will be appended afterwards.
      */
     default Trajectory toMultiSegmentTrajectory(Trajectory... additionalTrajectories) {
         Trajectory[] trajectories = new Trajectory[additionalTrajectories.length + 1];

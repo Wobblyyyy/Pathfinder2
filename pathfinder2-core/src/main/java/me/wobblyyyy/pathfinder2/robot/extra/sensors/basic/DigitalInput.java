@@ -8,16 +8,18 @@
  * <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL V3</a>
  */
 
-package me.wobblyyyy.pathfinder2.robot;
+package me.wobblyyyy.pathfinder2.robot.extra.sensors.basic;
+
+import me.wobblyyyy.pathfinder2.robot.extra.sensors.Sensor;
 
 /**
- * A {@code LimitSwitch} is pretty much a binary sensor - it can either be
+ * A {@code DigitalInput} is pretty much a binary sensor - it can either be
  * on or off. Usually, this is implemented as something like a button.
  *
  * @author Colin Robertson
  * @since 0.7.1
  */
-public interface LimitSwitch {
+public interface DigitalInput extends Sensor<Boolean> {
     /**
      * Is the switch currently active?
      *
@@ -34,5 +36,10 @@ public interface LimitSwitch {
      */
     default boolean isInactive() {
         return !isActive();
+    }
+
+    @Override
+    default Boolean read() {
+        return isActive();
     }
 }

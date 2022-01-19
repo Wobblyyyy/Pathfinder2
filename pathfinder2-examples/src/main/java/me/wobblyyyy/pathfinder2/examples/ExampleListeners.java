@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021.
+ * Copyright (c) 2022.
  *
  * This file is part of the "Pathfinder2" project, available here:
  * <a href="https://github.com/Wobblyyyy/Pathfinder2">GitHub</a>
@@ -8,13 +8,7 @@
  * <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL V3</a>
  */
 
-package me.wobblyyyy.pathfinder2.robot.simulated;
+package me.wobblyyyy.pathfinder2.examples;
 
-import me.wobblyyyy.pathfinder2.robot.extra.sensors.movement.AbstractEncoder;
-
-public class EmptyEncoder extends AbstractEncoder {
-    @Override
-    public int getRawTicks() {
-        return 0;
-    }
+public class ExampleListeners {
 }

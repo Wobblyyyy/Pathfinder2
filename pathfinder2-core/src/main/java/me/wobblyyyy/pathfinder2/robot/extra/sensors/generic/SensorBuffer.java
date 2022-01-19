@@ -8,7 +8,7 @@
  * <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL V3</a>
  */
 
-package me.wobblyyyy.pathfinder2.robot;
+package me.wobblyyyy.pathfinder2.robot.extra.sensors.generic;
 
 import me.wobblyyyy.pathfinder2.math.RollingAverage;
 

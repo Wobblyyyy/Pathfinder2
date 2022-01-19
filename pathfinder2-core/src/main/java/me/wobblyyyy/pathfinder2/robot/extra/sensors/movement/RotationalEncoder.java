@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021.
+ * Copyright (c) 2022.
  *
  * This file is part of the "Pathfinder2" project, available here:
  * <a href="https://github.com/Wobblyyyy/Pathfinder2">GitHub</a>
@@ -8,21 +8,19 @@
  * <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL V3</a>
  */
 
-package me.wobblyyyy.pathfinder2.robot;
-
-import me.wobblyyyy.pathfinder2.geometry.Angle;
+package me.wobblyyyy.pathfinder2.robot.extra.sensors.movement;
 
 /**
- * An encoder that's capable of supplying the angle the encoder is at.
+ * A lovely rotational encoder. Quite fancy, I know.
  *
  * @author Colin Robertson
  * @since 0.5.0
  */
-public interface AngleEncoder {
+public interface RotationalEncoder {
     /**
-     * Get the angle the encoder is at.
+     * Get the amount of rotations the encoder has made.
      *
-     * @return the angle the encoder is at.
+     * @return the amount of rotations the encoder has made.
      */
-    Angle getAngle();
+    double getRotations();
 }

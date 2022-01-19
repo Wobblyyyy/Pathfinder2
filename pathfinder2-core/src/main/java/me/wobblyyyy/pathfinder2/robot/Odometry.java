@@ -41,13 +41,22 @@ import me.wobblyyyy.pathfinder2.robot.modifiers.Modifiable;
  * position of the robot it belongs to.
  * </p>
  *
+ * <p>
+ * Another one of the neat features of the {@code Odometry} interface is
+ * the ability to offset the position. This allows you to manipulate the
+ * reported position at will. Say you'd like to relocalize/recalibrate your
+ * robot's position during operation - offsets to the rescue!
+ * </p>
+ *
  * @author Colin Robertson
  * @see AbstractOdometry
  * @since 0.0.0
  */
 public interface Odometry extends Modifiable<PointXYZ> {
     /**
-     * Get the raw position reported by the odometry system.
+     * Get the raw position reported by the odometry system. This position
+     * should not be modified by any user code (unless you really want it
+     * to be, but for the sake of simplicity, I'd suggest you DON'T).
      *
      * <p>
      * I'd also like to suggest that you make use of the method
@@ -77,10 +86,14 @@ public interface Odometry extends Modifiable<PointXYZ> {
     PointXYZ getOffset();
 
     /**
-     * Set the odometry system's offset.
+     * Set the odometry system's offset. This will overwrite any existing
+     * offset that's been set to the odometry system.
      *
      * @param offset the new offset. This offset value will replace whatever
-     *               the old offset value was.
+     *               the old offset value was. An offset value is used by
+     *               the {@link #getPosition()} method, which returns the result
+     *               of {@link #getRawPosition()} added to the offset using
+     *               {@link PointXYZ#add(PointXYZ)}.
      */
     void setOffset(PointXYZ offset);
 

@@ -12,7 +12,11 @@ package me.wobblyyyy.pathfinder2;
 
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.control.ProportionalController;
-import me.wobblyyyy.pathfinder2.exceptions.*;
+import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
+import me.wobblyyyy.pathfinder2.exceptions.InvalidTimeException;
+import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
+import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
+import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.execution.ExecutorManager;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.follower.FollowerGenerator;
@@ -21,6 +25,9 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
+import me.wobblyyyy.pathfinder2.listening.Listener;
+import me.wobblyyyy.pathfinder2.listening.ListenerManager;
+import me.wobblyyyy.pathfinder2.listening.ListenerMode;
 import me.wobblyyyy.pathfinder2.math.Velocity;
 import me.wobblyyyy.pathfinder2.movement.MovementProfiler;
 import me.wobblyyyy.pathfinder2.plugin.PathfinderPlugin;
@@ -47,6 +54,7 @@ import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.trajectory.spline.AdvancedSplineTrajectoryBuilder;
 import me.wobblyyyy.pathfinder2.utils.NotNull;
+import me.wobblyyyy.pathfinder2.utils.RandomString;
 import me.wobblyyyy.pathfinder2.zones.Zone;
 import me.wobblyyyy.pathfinder2.zones.ZoneProcessor;
 
@@ -157,31 +165,43 @@ public class Pathfinder {
      * included anyways.
      */
     private final Stopwatch stopwatch = new Stopwatch();
+
     /**
      * A zone processor is responsible for dealing with any zones on
      * the field.
      */
     private final ZoneProcessor zoneProcessor;
+
     /**
      * A scheduler for executing tasks.
      */
     private final Scheduler scheduler;
+
     /**
      * A manager for recording Pathfinder's movement.
      */
     private final MovementRecorder recorder;
+
     /**
      * A manager for playing back recordings.
      */
     private final MovementPlayback playback;
+
     /**
      * A manager for {@link PathfinderPlugin}s.
      */
     private final PathfinderPluginManager pluginManager;
+
     /**
      * Used in recording information about the robot's motion.
      */
     private final MovementProfiler profiler;
+
+    /**
+     * Used in event listeners.
+     */
+    private final ListenerManager listenerManager;
+
     /**
      * The speed Pathfinder will use in creating linear trajectories.
      *
@@ -190,6 +210,7 @@ public class Pathfinder {
      * </p>
      */
     private double speed = -1.0;
+
     /**
      * The tolerance Pathfinder will use in creating linear trajectories.
      *
@@ -198,6 +219,7 @@ public class Pathfinder {
      * </p>
      */
     private double tolerance = -1.0;
+
     /**
      * The angle tolerance Pathfinder will use in creating linear trajectories.
      *
@@ -206,6 +228,7 @@ public class Pathfinder {
      * </p>
      */
     private Angle angleTolerance = null;
+
     /**
      * The default tick until timeout.
      *
@@ -214,20 +237,24 @@ public class Pathfinder {
      * </p>
      */
     private double defaultTimeout = Double.MAX_VALUE;
+
     /**
      * The default tick until should run supplier.
      */
     private Supplier<Boolean> defaultShouldRun = () -> true;
+
     /**
      * The default tick until completion consumer.
      */
     private Consumer<Pathfinder> defaultOnCompletion = pathfinder -> {
     };
+
     /**
      * The default tick until on tick consumer.
      */
     private BiConsumer<Pathfinder, Double> defaultOnTick = (pathfinder, aDouble) -> {
     };
+
     /**
      * Last tick, how many followers were there?
      */
@@ -261,6 +288,7 @@ public class Pathfinder {
      *     <li>{@link MovementPlayback}</li>
      *     <li>{@link PathfinderPluginManager}</li>
      *     <li>{@link MovementProfiler}</li>
+     *     <li>{@link ListenerManager}</li>
      * </ul>
      * There's a very good chance you're not going to need some or all of those,
      * and that's okay - you simply don't have to worry about them and everything
@@ -313,6 +341,7 @@ public class Pathfinder {
         this.playback = new MovementPlayback(this);
         this.pluginManager = new PathfinderPluginManager();
         this.profiler = new MovementProfiler();
+        this.listenerManager = new ListenerManager();
 
         for (PathfinderPlugin plugin : AUTO_LOAD_PLUGINS) {
             String pluginName = plugin.getName();
@@ -331,22 +360,6 @@ public class Pathfinder {
 
     /**
      * Create a new {@code Pathfinder} instance.
-     *
-     * <p>
-     * This constructor will instantiate instances of the following:
-     * <ul>
-     *     <li>{@link ExecutorManager}</li>
-     *     <li>{@link ZoneProcessor}</li>
-     *     <li>{@link Scheduler}</li>
-     *     <li>{@link MovementRecorder}</li>
-     *     <li>{@link MovementPlayback}</li>
-     *     <li>{@link PathfinderPluginManager}</li>
-     *     <li>{@link MovementProfiler}</li>
-     * </ul>
-     * There's a very good chance you're not going to need some or all of those,
-     * and that's okay - you simply don't have to worry about them and everything
-     * will work as intended.
-     * </p>
      *
      * @param robot          the {@code Pathfinder} instance's robot. This robot
      *                       should have an odometry system that can report the
@@ -409,22 +422,6 @@ public class Pathfinder {
     /**
      * Create a new {@code Pathfinder} instance.
      *
-     * <p>
-     * This constructor will instantiate instances of the following:
-     * <ul>
-     *     <li>{@link ExecutorManager}</li>
-     *     <li>{@link ZoneProcessor}</li>
-     *     <li>{@link Scheduler}</li>
-     *     <li>{@link MovementRecorder}</li>
-     *     <li>{@link MovementPlayback}</li>
-     *     <li>{@link PathfinderPluginManager}</li>
-     *     <li>{@link MovementProfiler}</li>
-     * </ul>
-     * There's a very good chance you're not going to need some or all of those,
-     * and that's okay - you simply don't have to worry about them and everything
-     * will work as intended.
-     * </p>
-     *
      * @param robot       the {@code Pathfinder} instance's robot. This robot
      *                    should have an odometry system that can report the
      *                    position of the robot and a drive system that can
@@ -482,6 +479,12 @@ public class Pathfinder {
         AUTO_LOAD_PLUGINS.add(plugin);
     }
 
+    /**
+     * Load a {@link PathfinderPlugin}.
+     *
+     * @param plugin the plugin to load.
+     * @return {@code this}, used for method chaining.
+     */
     public Pathfinder loadPlugin(PathfinderPlugin plugin) {
         pluginManager.loadPlugin(plugin);
         plugin.onLoad(this);
@@ -524,6 +527,67 @@ public class Pathfinder {
      */
     public MovementProfiler getProfiler() {
         return profiler;
+    }
+
+    /**
+     * Get the {@code Pathfinder} instance's {@link ListenerManager}.
+     *
+     * @return the {@link ListenerManager}.
+     */
+    public ListenerManager getListenerManager() {
+        return listenerManager;
+    }
+
+    /**
+     * Add a listener to the listener manager.
+     *
+     * @param name     the name of the listener. This can usually just be
+     *                 completely random, unless there's a need for it to
+     *                 be something specific.
+     * @param listener the listener that will be added.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder addListener(String name,
+                                  Listener listener) {
+        listenerManager.addListener(name, listener);
+
+        return this;
+    }
+
+    /**
+     * Add a listener to the listener manager.
+     *
+     * @param listener the listener that will be added.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder addListener(Listener listener) {
+        return addListener(
+                RandomString.randomString(10),
+                listener
+        );
+    }
+
+    /**
+     * Add a listener.
+     *
+     * @param condition the condition that must be true in order for the
+     *                  listener to be executed.
+     * @param action    a piece of functionality to be executed whenever the
+     *                  condition is met.
+     * @return {@code this}, used for method chaining.
+     */
+    @SuppressWarnings("unchecked")
+    public Pathfinder addListener(Predicate<Pathfinder> condition,
+                                  Runnable action) {
+        Pathfinder pathfinder = this;
+
+        return addListener(
+                new Listener(
+                        ListenerMode.CONDITION_IS_MET,
+                        action,
+                        () -> condition.test(pathfinder)
+                )
+        );
     }
 
     /**

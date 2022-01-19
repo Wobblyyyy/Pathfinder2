@@ -14,7 +14,7 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.kinematics.*;
 import me.wobblyyyy.pathfinder2.robot.AbstractOdometry;
-import me.wobblyyyy.pathfinder2.robot.Encoder;
+import me.wobblyyyy.pathfinder2.robot.extra.sensors.movement.Encoder;
 import me.wobblyyyy.pathfinder2.time.Time;
 
 import java.util.function.Supplier;
