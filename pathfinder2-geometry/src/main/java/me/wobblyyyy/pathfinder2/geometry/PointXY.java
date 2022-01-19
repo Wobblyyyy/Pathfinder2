@@ -19,7 +19,11 @@ import java.util.List;
 
 /**
  * A 2d coordinate with X and Y values. The foundation Pathfinder's
- * geometry is based upon.
+ * geometry is based upon. As a Pathfinder-specific notice: these points
+ * should almost never be negative. The library assumes that everything
+ * takes places in the first quadrant. You can try to use negative values
+ * if you want, but I haven't tested the library with it because, to be
+ * completely honest here, I'm pretty lazy.
  *
  * <p>
  * A point is defined as a pair of X and Y values. These values are stored
