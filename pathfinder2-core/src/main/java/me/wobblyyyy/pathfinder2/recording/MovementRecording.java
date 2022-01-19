@@ -14,6 +14,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A recording of Pathfinder's movement.
+ *
+ * @author Colin Robertson
+ * @since 0.7.1
+ */
 public class MovementRecording implements Serializable {
     private final List<MovementRecord> recording = new ArrayList<>(100);
 
