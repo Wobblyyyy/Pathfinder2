@@ -590,6 +590,12 @@ public class Pathfinder {
         );
     }
 
+    public Pathfinder addListener(ListenerMode mode,
+                                  Runnable runnable,
+                                  Supplier<Boolean>... suppliers) {
+        return addListener(new Listener(mode, runnable, suppliers));
+    }
+
     /**
      * Get the speed at which Pathfinder will generate new linear followers.
      * This speed value is entirely irrelevant if you only generate custom

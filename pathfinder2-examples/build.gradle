@@ -25,7 +25,8 @@ dependencies {
     // note that the version (at the end of the string) may change - if there's
     // a newer version of the library that's NOT whatever this is, you should
     // use that instead
-    implementation 'com.github.Wobblyyyy:Pathfinder2:v0.7.0'
+    // implementation 'com.github.Wobblyyyy:Pathfinder2:v0.8.0'
+    implementation 'com.github.Wobblyyyy:Pathfinder2:master-SNAPSHOT'
 
     // in an actual project, other dependencies would go here...
     // for example, if you use RoadRunner or FTCLib or wpilib or anything
