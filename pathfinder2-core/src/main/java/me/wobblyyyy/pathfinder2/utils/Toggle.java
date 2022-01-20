@@ -32,6 +32,14 @@ public class Toggle {
         state = initialState;
     }
 
+    public Toggle(boolean initialState) {
+        this.state = initialState;
+    }
+
+    public Toggle() {
+        this(false);
+    }
+
     public Toggle(Supplier<Boolean> input,
                   Consumer<Listener> listenerConsumer) {
         this(input, listenerConsumer, false);

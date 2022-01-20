@@ -21,12 +21,10 @@ repositories {
 }
 
 dependencies {
-    // add Pathfinder2 as a dependency
-    // note that the version (at the end of the string) may change - if there's
-    // a newer version of the library that's NOT whatever this is, you should
-    // use that instead
-    // implementation 'com.github.Wobblyyyy:Pathfinder2:v0.8.0'
-    implementation 'com.github.Wobblyyyy:Pathfinder2:08c126e244'
+    implementation project(':pathfinder2-core')
+    implementation project(':pathfinder2-geometry')
+    implementation project(':pathfinder2-kinematics')
+    implementation project(':pathfinder2-OdometryCore')
 
     // in an actual project, other dependencies would go here...
     // for example, if you use RoadRunner or FTCLib or wpilib or anything

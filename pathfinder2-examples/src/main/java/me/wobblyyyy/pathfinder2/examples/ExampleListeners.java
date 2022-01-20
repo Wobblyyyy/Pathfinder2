@@ -15,7 +15,11 @@ import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.listening.Listener;
 import me.wobblyyyy.pathfinder2.listening.ListenerMode;
 import me.wobblyyyy.pathfinder2.utils.Gamepad;
+import me.wobblyyyy.pathfinder2.utils.Shifter;
+import me.wobblyyyy.pathfinder2.utils.ShifterDirection;
+import me.wobblyyyy.pathfinder2.utils.Toggle;
 
+@SuppressWarnings("InfiniteLoopStatement")
 public class ExampleListeners {
     @SuppressWarnings({"CodeBlock2Expr", "unchecked", "InfiniteLoopStatement"})
     public void examplePositionListeners() {
@@ -106,7 +110,74 @@ public class ExampleListeners {
         }
     }
 
+    public boolean aButton() {
+        return true;
+    }
+
+    public boolean bButton() {
+        return true;
+    }
+
+    public boolean xButton() {
+        return true;
+    }
+
+    public boolean yButton() {
+        return true;
+    }
+
     public void exampleToggleListeners() {
         Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
+        Toggle toggle = new Toggle();
+
+        // bind the A button to toggling the toggle
+        pathfinder.getListenerManager().bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                this::aButton,
+                (b) -> b,
+                (b) -> toggle.toggle()
+        );
+
+        while (true) {
+            pathfinder.tick();
+        }
+    }
+
+    @SuppressWarnings("InfiniteLoopStatement")
+    public void exampleShifter() {
+        Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
+        Shifter shifter = new Shifter(1, 1, 5, false, (s) -> {});
+
+        pathfinder.getListenerManager().bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                this::aButton,
+                (b) -> b,
+                (b) -> shifter.shift(ShifterDirection.UP)
+        );
+
+        pathfinder.getListenerManager().bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                this::bButton,
+                (b) -> b,
+                (b) -> shifter.shift(ShifterDirection.DOWN)
+        );
+
+        pathfinder.getListenerManager().bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                this::xButton,
+                (b) -> b,
+                (b) -> shifter.setGear(1)
+        );
+
+        pathfinder.getListenerManager().bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                this::yButton,
+                (b) -> b,
+                (b) -> shifter.setGear(5)
+        );
+
+        while (true) {
+            pathfinder.tick();
+        }
     }
 }
