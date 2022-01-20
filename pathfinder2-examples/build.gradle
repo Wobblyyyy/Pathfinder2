@@ -26,7 +26,7 @@ dependencies {
     // a newer version of the library that's NOT whatever this is, you should
     // use that instead
     // implementation 'com.github.Wobblyyyy:Pathfinder2:v0.8.0'
-    implementation 'com.github.Wobblyyyy:Pathfinder2:8539bcf505'
+    implementation 'com.github.Wobblyyyy:Pathfinder2:ec198789da'
 
     // in an actual project, other dependencies would go here...
     // for example, if you use RoadRunner or FTCLib or wpilib or anything
