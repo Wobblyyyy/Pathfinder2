@@ -41,7 +41,7 @@ allprojects {
 Once you're done with that, add Pathfinder2 as a dependency:
 ```groovy
 dependencies {
-    implementation 'com.github.Wobblyyyy:Pathfinder2:v0.7.0'
+    implementation 'com.github.Wobblyyyy:Pathfinder2:v0.8.0'
 }
 ```
 For a complete example, see the `pathfinder2-examples` module's
