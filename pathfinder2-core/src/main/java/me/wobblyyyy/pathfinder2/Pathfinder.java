@@ -12,11 +12,7 @@ package me.wobblyyyy.pathfinder2;
 
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.control.ProportionalController;
-import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
-import me.wobblyyyy.pathfinder2.exceptions.InvalidTimeException;
-import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
-import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
-import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
+import me.wobblyyyy.pathfinder2.exceptions.*;
 import me.wobblyyyy.pathfinder2.execution.ExecutorManager;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.follower.FollowerGenerator;
@@ -393,6 +389,32 @@ public class Pathfinder {
     /**
      * Create a new {@code Pathfinder} instance.
      *
+     * @param robot     the {@code Pathfinder} instance's robot. This robot
+     *                  should have an odometry system that can report the
+     *                  position of the robot and a drive system that can
+     *                  respond to drive commands. This object may not be
+     *                  null or, an exception will be thrown.
+     * @param generator a generator used in creating followers. This generator
+     *                  functions by accepting a {@link Trajectory} and a
+     *                  {@link Robot} and returning a follower. If you're
+     *                  unsure of what this means, or what you should do here,
+     *                  you should probably use the "generic follower
+     *                  generator," as it's the simplest. This object may not
+     *                  be null, or an exception will be thrown.
+     */
+    public Pathfinder(Robot robot,
+                      FollowerGenerator generator) {
+        this(
+                robot,
+                generator,
+                extractController(generator),
+                new String[0]
+        );
+    }
+
+    /**
+     * Create a new {@code Pathfinder} instance.
+     *
      * <p>
      * This constructor will create a new {@link GenericFollowerGenerator}
      * by using the provided {@link Controller} as a turn controller. That's...
@@ -435,6 +457,15 @@ public class Pathfinder {
                 robot,
                 new ProportionalController(coefficient)
         );
+    }
+
+    private static Controller extractController(FollowerGenerator generator) {
+        if (generator instanceof GenericFollowerGenerator) {
+            GenericFollowerGenerator gfg = (GenericFollowerGenerator) generator;
+            return gfg.getTurnController();
+        }
+
+        return null;
     }
 
     /**

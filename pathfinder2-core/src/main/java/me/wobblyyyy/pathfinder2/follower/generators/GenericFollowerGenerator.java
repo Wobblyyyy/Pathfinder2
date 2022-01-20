@@ -89,4 +89,8 @@ public class GenericFollowerGenerator implements FollowerGenerator {
                 turnController
         );
     }
+
+    public Controller getTurnController() {
+        return turnController;
+    }
 }
