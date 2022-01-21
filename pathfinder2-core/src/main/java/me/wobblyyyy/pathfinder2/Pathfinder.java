@@ -1049,17 +1049,17 @@ public class Pathfinder {
      * will cause the library to not function at all.
      *
      * <p>
-     * As of Pathfinder2 0.6.1, this method will tick two other things
-     * BEFORE the executor manager. Those are as follows:
+     * The order everything is ticked in is as follows:
      * <ol>
+     *     <li>Plugin pre-tick ({@link PathfinderPluginManager#preTick(Pathfinder)})</li>
      *     <li>Scheduler ({@link #getScheduler()})</li>
      *     <li>Zone processor ({@link #getZoneProcessor()})</li>
-     * </ol>
-     * Also as of Pathfinder2 0.6.1, this method will tick two other things
-     * AFTER the executor manager. Those are...
-     * <ol>
+     *     <li>Executor manager ({@link #getExecutorManager()})</li>
      *     <li>Playback manager ({@link #getPlayback()})</li>
+     *     <li>Motion profiler ({@link #getProfiler()})</li>
      *     <li>Recording manager ({@link #getRecorder()})</li>
+     *     <li>On tick operations ({@link #onTickOperations})</li>
+     *     <li>Plugin post-tick ({@link PathfinderPluginManager#postTick(Pathfinder)})</li>
      * </ol>
      * </p>
      *
