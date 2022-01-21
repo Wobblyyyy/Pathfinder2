@@ -1222,27 +1222,24 @@ public class Pathfinder {
     public Pathfinder tickUntil(double timeoutMs,
                                 Supplier<Boolean> shouldContinueRunning,
                                 Consumer<Pathfinder> onTick) {
-        if (timeoutMs < 0) {
+        if (timeoutMs < 0)
             throw new InvalidTimeException(
                     "Attempted to use an invalid timeout time in in a call to " +
                             "the tickUntil method - make sure this time value " +
                             "is greater than or equal to 0."
             );
-        }
 
-        if (shouldContinueRunning == null) {
+        if (shouldContinueRunning == null)
             throw new NullPointerException(
                     "Attempted to use a null supplier with the tickUntil " +
                             "method - this can't be null, nerd."
             );
-        }
 
-        if (onTick == null) {
+        if (onTick == null)
             throw new NullPointerException(
                     "Attempted to use a null consumer with the tickUntil " +
                             "method. This also can't be null, nerd."
             );
-        }
 
         double start = Time.ms();
 
@@ -1250,9 +1247,8 @@ public class Pathfinder {
             double current = Time.ms();
             double elapsed = current - start;
 
-            if (elapsed >= timeoutMs) {
+            if (elapsed >= timeoutMs)
                 break;
-            }
 
             tick();
             onTick.accept(this);
@@ -1363,9 +1359,8 @@ public class Pathfinder {
             double current = Time.ms();
             double elapsed = current - start;
 
-            if (elapsed >= timeoutMs) {
+            if (elapsed >= timeoutMs)
                 break;
-            }
 
             tick();
         }
@@ -1409,9 +1404,8 @@ public class Pathfinder {
             double current = Time.ms();
             double elapsed = current - start;
 
-            if (elapsed >= timeoutMs) {
+            if (elapsed >= timeoutMs)
                 break;
-            }
 
             tick();
         }
@@ -1962,26 +1956,23 @@ public class Pathfinder {
     @SuppressWarnings("BusyWait")
     public Pathfinder waitUntil(Supplier<Boolean> condition,
                                 double maxTime) {
-        if (condition == null) {
+        if (condition == null)
             throw new NullPointerException(
                     "Attempted to use the waitUntil method with a null " +
                             "condition supplier!"
             );
-        }
 
-        if (maxTime < 0) {
+        if (maxTime < 0)
             throw new InvalidTimeException(
                     "Attempted to use an invalid time value! Make sure the " +
                             "time value you're supplying is 0 or greater."
             );
-        }
 
         ElapsedTimer timer = new ElapsedTimer(true);
 
         try {
-            while (!condition.get() && timer.isElapsedLessThan(maxTime)) {
+            while (!condition.get() && timer.isElapsedLessThan(maxTime))
                 Thread.sleep(10);
-            }
         } catch (InterruptedException ignored) {
         }
 
@@ -2006,26 +1997,23 @@ public class Pathfinder {
     @SuppressWarnings("BusyWait")
     public Pathfinder waitAsLongAs(Supplier<Boolean> condition,
                                    double maxTime) {
-        if (condition == null) {
+        if (condition == null)
             throw new NullPointerException(
                     "Attempted to use the waitAsLongAs method with a null " +
                             "condition supplier!"
             );
-        }
 
-        if (maxTime < 0) {
+        if (maxTime < 0)
             throw new InvalidTimeException(
                     "Attempted to use an invalid time value! Make sure the " +
                             "time value you're supplying is 0 or greater."
             );
-        }
 
         ElapsedTimer timer = new ElapsedTimer(true);
 
         try {
-            while (condition.get() && timer.isElapsedLessThan(maxTime)) {
+            while (condition.get() && timer.isElapsedLessThan(maxTime))
                 Thread.sleep(10);
-            }
         } catch (InterruptedException ignored) {
         }
 
