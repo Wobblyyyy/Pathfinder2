@@ -1093,6 +1093,7 @@ public class Pathfinder {
         profiler.capture(getPosition());
         recorder.tick();
         runOnTickOperations();
+        listenerManager.tick(this);
         pluginManager.postTick(this);
 
         return this;
