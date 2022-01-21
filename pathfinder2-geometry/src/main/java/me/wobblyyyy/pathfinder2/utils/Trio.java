@@ -8,7 +8,7 @@
  * <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL V3</a>
  */
 
-package me.wobblyyyy.pathfinder2.util;
+package me.wobblyyyy.pathfinder2.utils;
 
 public class Trio<A, B, C> {
     private final A a;
