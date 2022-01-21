@@ -51,7 +51,7 @@ public class ExampleElevator {
     public void exampleShifterElevator() {
         Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
 
-        Map<Integer, Integer> levels = new HashMap<>() {{
+        Map<Integer, Integer> levels = new HashMap<Integer, Integer>() {{
             put(1, 100);
             put(2, 200);
             put(3, 300);
