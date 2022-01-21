@@ -17,6 +17,10 @@ import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.utils.Gamepad;
 
+/**
+ * @deprecated use the listener system instead!
+ */
+@Deprecated
 public class ButtonMapper {
     private final Pathfinder pathfinder;
     private final Gamepad gamepad;

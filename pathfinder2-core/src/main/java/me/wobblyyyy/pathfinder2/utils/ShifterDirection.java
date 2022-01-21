@@ -10,7 +10,20 @@
 
 package me.wobblyyyy.pathfinder2.utils;
 
+/**
+ * A direction a shifter can move in.
+ *
+ * @author Colin Robertson
+ * @since 0.7.1
+ */
 public enum ShifterDirection {
+    /**
+     * Up.
+     */
     UP,
+
+    /**
+     * Down.
+     */
     DOWN
 }

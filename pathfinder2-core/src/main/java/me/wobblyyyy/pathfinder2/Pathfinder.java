@@ -12,7 +12,11 @@ package me.wobblyyyy.pathfinder2;
 
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.control.ProportionalController;
-import me.wobblyyyy.pathfinder2.exceptions.*;
+import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
+import me.wobblyyyy.pathfinder2.exceptions.InvalidTimeException;
+import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
+import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
+import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.execution.ExecutorManager;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.follower.FollowerGenerator;
@@ -56,7 +60,9 @@ import me.wobblyyyy.pathfinder2.zones.ZoneProcessor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -73,45 +79,6 @@ import java.util.function.Supplier;
  * I'd encourage you to go look at some documentation for the project to get
  * a decent idea of what's going on, but hey, that's up to you. Good luck...
  * I guess? Maybe? Yeah.
- *
- * <p>
- * There's some useful functionality in these methods:
- * <ul>
- *     <li>{@link #defaultTickUntil(double, Supplier, BiConsumer)}</li>
- *     <li>{@link #defaultAndThen(Consumer, double, Supplier, BiConsumer)}</li>
- * </ul>
- * ... and there's a bunch of overloads for those methods, too. I wish Java
- * had optional parameters, so I wouldn't have to make quite a few overload
- * methods, but alas... oh well. Anyways, those methods are as follows.
- * <ul>
- *     <li>{@link #defaultTickUntil()}</li>
- *     <li>{@link #defaultTickUntil(double)}</li>
- *     <li>{@link #defaultTickUntil(Supplier)}</li>
- *     <li>{@link #defaultTickUntil(BiConsumer)}</li>
- *     <li>{@link #defaultTickUntil(double, Supplier)}</li>
- *     <li>{@link #defaultTickUntil(double, BiConsumer)}</li>
- *     <li>{@link #defaultTickUntil(Supplier, BiConsumer)}</li>
- *     <li>{@link #defaultTickUntil(double, Supplier, BiConsumer)}</li>
- *     <li>{@link #defaultAndThen()}</li>
- *     <li>{@link #defaultAndThen(Consumer)}</li>
- *     <li>{@link #defaultAndThen(double)}</li>
- *     <li>{@link #defaultAndThen(Supplier)}</li>
- *     <li>{@link #defaultAndThen(BiConsumer)}</li>
- *     <li>{@link #defaultAndThen(Consumer, double)}</li>
- *     <li>{@link #defaultAndThen(Consumer, double, Supplier, BiConsumer)}</li>
- *     <li>{@link #defaultAndThen(Consumer, Supplier)}</li>
- * </ul>
- * ... there's a good chance I'm missing some, but you can go find those if
- * you'd like. Each of those methods has a different set of parameters. If
- * you don't supply one of those parameters, the default value will be used.
- * You can modify the default values as follows:
- * <ul>
- *     <li>{@link #setDefaultOnCompletion(Consumer)}</li>
- *     <li>{@link #setDefaultTimeout(double)}</li>
- *     <li>{@link #setDefaultShouldRun(Supplier)}</li>
- *     <li>{@link #setDefaultOnTick(BiConsumer)}</li>
- * </ul>
- * </p>
  *
  * @author Colin Robertson
  * @see #goTo(PointXY)
@@ -268,6 +235,11 @@ public class Pathfinder {
     private Modifier<Translation> lastDriveModifier = null;
 
     /**
+     * A modifiable map of operations to be run after every tick.
+     */
+    private final Map<String, Consumer<Pathfinder>> onTickOperations;
+
+    /**
      * Create a new {@code Pathfinder} instance. This constructor will
      * conditionally load any automatically loading plugins - if the plugin's
      * name is not in the {@code doNotLoad} collection of strings, the
@@ -338,6 +310,7 @@ public class Pathfinder {
         this.pluginManager = new PathfinderPluginManager();
         this.profiler = new MovementProfiler();
         this.listenerManager = new ListenerManager();
+        this.onTickOperations = new HashMap<>();
 
         for (PathfinderPlugin plugin : AUTO_LOAD_PLUGINS) {
             String pluginName = plugin.getName();
@@ -1010,6 +983,64 @@ public class Pathfinder {
         return pluginManager;
     }
 
+    private void runOnTickOperations() {
+        for (Map.Entry<String, Consumer<Pathfinder>> entry : onTickOperations.entrySet()) {
+            Consumer<Pathfinder> consumer = entry.getValue();
+
+            consumer.accept(this);
+        }
+    }
+
+    /**
+     * Bind an operation to the invocation of Pathfinder's {@link #tick()}
+     * method. Anything that's bound to Pathfinder's {@link #tick()} method
+     * will be called at the end of the invocation of {@link #tick()}.
+     *
+     * @param name   the name of the on tick operation. This mostly exists
+     *               just so you can later remove on tick operations with
+     *               {@link #removeOnTick(String)}.
+     * @param onTick an action to be executed whenever Pathfinder ticks. This
+     *               will be executed right before the plugin post-tick stuff,
+     *               meaning it's after everything else. This {@link Consumer}
+     *               accepts an instance of {@link Pathfinder}, which will
+     *               always be the instance that was just ticked.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder onTick(String name,
+                             Consumer<Pathfinder> onTick) {
+        onTickOperations.put(name, onTick);
+
+        return this;
+    }
+
+    /**
+     * Bind an operation to the invocation of Pathfinder's {@link #tick()}
+     * method. Anything that's bound to Pathfinder's {@link #tick()} method
+     * will be called at the end of the invocation of {@link #tick()}.
+     *
+     * @param onTick an action to be executed whenever Pathfinder ticks. This
+     *               will be executed right before the plugin post-tick stuff,
+     *               meaning it's after everything else. This {@link Consumer}
+     *               accepts an instance of {@link Pathfinder}, which will
+     *               always be the instance that was just ticked.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder onTick(Consumer<Pathfinder> onTick) {
+        return onTick(RandomString.randomString(10), onTick);
+    }
+
+    /**
+     * Remove an on tick operation.
+     *
+     * @param name the name of the operation to remove.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder removeOnTick(String name) {
+        onTickOperations.remove(name);
+
+        return this;
+    }
+
     /**
      * "Tick" Pathfinder once. This will tell Pathfinder's execution manager
      * to check to see what Pathfinder should be doing right now, and based
@@ -1061,6 +1092,7 @@ public class Pathfinder {
         playback.tick();
         profiler.capture(getPosition());
         recorder.tick();
+        runOnTickOperations();
         pluginManager.postTick(this);
 
         return this;
@@ -2413,13 +2445,12 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder setTranslation(Translation translation) {
-        if (translation == null) {
+        if (translation == null)
             throw new NullPointerException(
                     "Attempted to use the setTranslation method, but provided " +
                             "a null translation - make sure this translation " +
                             "isn't null next time, alright? Cool."
             );
-        }
 
         getDrive().setTranslation(translation);
 

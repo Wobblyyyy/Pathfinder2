@@ -14,7 +14,9 @@ import java.io.Serializable;
 
 /**
  * A two-dimensional translation. Robots should be capable of receiving
- * these translations and moving appropriately.
+ * these translations and moving appropriately. Translations have no units
+ * and are completely relative. {@code Translation}s are mostly used internally
+ * by Pathfinder to control the robot's movement.
  *
  * <p>
  * Translations are defined by three components.
@@ -27,6 +29,13 @@ import java.io.Serializable;
  * A translation with a Y value of 1 would make the robot go "forwards,"
  * forwards, of course, meaning whatever direction the robot "thinks"
  * is forwards - not absolute positioning.
+ * </p>
+ *
+ * <p>
+ * In almost all Pathfinder-specific use cases, {@code Translation}s will
+ * have translational values under 1.0: vx, vy, and vz should all be under
+ * 1.0. On occasion, translational values will be greater than 1.0, but it's
+ * uncommon, and Pathfinder's internals are all based on 1.0-max translations.
  * </p>
  *
  * <p>
@@ -102,8 +111,10 @@ public class Translation implements Serializable {
     /**
      * Create a new {@code Translation} using two translational values.
      *
-     * @param vx the robot's translation along its X axis.
-     * @param vy the robot's translation along its Y axis.
+     * @param vx the robot's translation along its X axis. This value should
+     *           not have any units, but should be scaled the same as vy.
+     * @param vy the robot's translation along its Y axis. This value should
+     *           not have any units, but should be scaled the same as vx.
      */
     public Translation(double vx,
                        double vy) {
@@ -113,8 +124,10 @@ public class Translation implements Serializable {
     /**
      * Create a new {@code Translation} using three translational values.
      *
-     * @param vx the robot's translation along its X axis.
-     * @param vy the robot's translation along its Y axis.
+     * @param vx the robot's translation along its X axis. This value should
+     *           not have any units, but should be scaled the same as vy.
+     * @param vy the robot's translation along its Y axis. This value should
+     *           not have any units, but should be scaled the same as vx.
      * @param vz the robot's rotation around its center of rotation.
      */
     public Translation(double vx,

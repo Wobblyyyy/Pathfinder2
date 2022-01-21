@@ -9,6 +9,9 @@
  */
 
 /**
- * Classes related to listeners.
+ * Classes related to listeners. Pathfinder's listener system is a robust
+ * system designed to simplify event handling by abstracting away much of the
+ * tedious and menial boilerplate code and instead allowing coders to focus
+ * on the functionality of their code.
  */
 package me.wobblyyyy.pathfinder2.listening;

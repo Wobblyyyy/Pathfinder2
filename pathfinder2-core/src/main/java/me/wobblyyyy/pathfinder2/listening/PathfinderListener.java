@@ -20,7 +20,10 @@ import java.util.function.Supplier;
  *
  * @author Colin Robertson
  * @since 0.7.1
+ * @deprecated this is some pretty bad code and I wouldn't recommend you make
+ * use of it...
  */
+@Deprecated
 public class PathfinderListener implements Supplier<Boolean> {
     private final Pathfinder pathfinder;
     private final Predicate<Pathfinder> predicate;

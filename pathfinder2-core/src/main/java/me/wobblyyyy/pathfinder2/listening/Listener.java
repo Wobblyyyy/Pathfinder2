@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.listening;
 
+import me.wobblyyyy.pathfinder2.Pathfinder;
+
 import java.util.function.Supplier;
 
 /**
@@ -22,7 +24,7 @@ import java.util.function.Supplier;
  * @author Colin Robertson
  * @since 0.7.1
  */
-public class Listener {
+public class Listener implements Tickable {
     private final ListenerMode mode;
     private final Runnable whenTriggered;
     private final Supplier<Boolean>[] input;
@@ -55,7 +57,8 @@ public class Listener {
         this.input = input;
     }
 
-    public void update() {
+    @Override
+    public boolean tick(Pathfinder pathfinder) {
         boolean input = true;
 
         for (Supplier<Boolean> supplier : this.input)
@@ -67,21 +70,23 @@ public class Listener {
         switch (mode) {
             case CONDITION_IS_MET:
                 if (input) whenTriggered.run();
-                return;
+                break;
             case CONDITION_IS_NOT_MET:
                 if (!input) whenTriggered.run();
-                return;
+                break;
             case CONDITION_NEWLY_MET:
                 if (!previousInput && input) whenTriggered.run();
-                return;
+                break;
             case CONDITION_NEWLY_NOT_MET:
                 if (previousInput && !input) whenTriggered.run();
-                return;
+                break;
             case CONDITION_NEWLY_CHANGED:
                 if ((!previousInput && input) || (previousInput && !input)) whenTriggered.run();
-                return;
+                break;
         }
 
         previousInput = input;
+
+        return true;
     }
 }

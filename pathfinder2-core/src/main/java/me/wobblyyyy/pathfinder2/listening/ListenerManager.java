@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.listening;
 
+import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.utils.RandomString;
 
 import java.util.HashMap;
@@ -30,7 +31,7 @@ import java.util.function.Supplier;
  * @author Colin Robertson
  * @since 0.7.1
  */
-public class ListenerManager {
+public class ListenerManager implements Tickable {
     private final Map<String, Listener> listeners = new HashMap<>();
 
     /**
@@ -93,14 +94,13 @@ public class ListenerManager {
     /**
      * "Tick", or update, the listener manager once by ticking/updating
      * each of the listeners operated by the manager.
-     *
-     * @return {@code this}, used for method chaining.
      */
-    public ListenerManager tick() {
+    @Override
+    public boolean tick(Pathfinder pathfinder) {
         for (Listener listener : listeners.values())
-            listener.update();
+            listener.tick(pathfinder);
 
-        return this;
+        return true;
     }
 
     public ListenerManager bindButtonPress(Supplier<Boolean> input,
@@ -121,6 +121,29 @@ public class ListenerManager {
         ));
     }
 
+    /**
+     * Bind a piece of functionality to a newly-created {@link Listener}.
+     *
+     * @param mode     the mode the listener will operate in. If you want
+     *                 a button-like effect, use
+     *                 {@link ListenerMode#CONDITION_NEWLY_MET}.
+     *                 See {@link ListenerMode} for more information.
+     * @param input    should provide inputs for the listener. This
+     *                 {@link Supplier} will supply values for the
+     *                 {@code checker} {@link Predicate}, which will in turn
+     *                 control the listener's state of activation.
+     * @param checker  a predicate that will test inputs for the listener. If
+     *                 this predicate returns true, the listener is considered
+     *                 to have met the condition. If this predicate returns
+     *                 false, the listener has not yet met the condition.
+     * @param consumer functionality that will be executed whenever the listener
+     *                 is triggered. This accepts a parameter of type
+     *                 {@code T}: this is the input that caused the listener
+     *                 to be triggered.
+     * @param <T>      the type of {@link Object} that's state is being
+     *                 observed.
+     * @return {@code this}, used for method chaining.
+     */
     public <T> ListenerManager bind(ListenerMode mode,
                                     Supplier<T> input,
                                     Predicate<T> checker,

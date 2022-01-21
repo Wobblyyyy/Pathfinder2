@@ -10,49 +10,59 @@
 
 package me.wobblyyyy.pathfinder2.utils;
 
-import me.wobblyyyy.pathfinder2.listening.Listener;
-import me.wobblyyyy.pathfinder2.listening.ListenerMode;
-
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
+/**
+ * A {@code Toggle} is a rather basic concept - it can be in one of two states:
+ * on and off. Whenever the toggle is toggled, it'll follow the following
+ * pattern:
+ *
+ * <ul>
+ *     <li>If it's off, the toggle will turn to on.</li>
+ *     <li>If it's on, the toggle will turn to off.</li>
+ * </ul>
+ *
+ * @author Colin Robertson
+ * @since 0.7.1
+ */
 public class Toggle {
     private boolean state;
 
-    public Toggle(Supplier<Boolean> input,
-                  Consumer<Listener> listenerConsumer,
-                  boolean initialState) {
-        Listener toggleListener = new Listener(
-                ListenerMode.CONDITION_NEWLY_MET,
-                this::toggle,
-                input
-        );
-
-        listenerConsumer.accept(toggleListener);
-        state = initialState;
-    }
-
+    /**
+     * Create a new {@code Toggle}.
+     *
+     * @param initialState the state the toggle is initially in.
+     */
     public Toggle(boolean initialState) {
         this.state = initialState;
     }
 
+    /**
+     * Create a new {@code Toggle} with an initial state of FALSE.
+     */
     public Toggle() {
         this(false);
     }
 
-    public Toggle(Supplier<Boolean> input,
-                  Consumer<Listener> listenerConsumer) {
-        this(input, listenerConsumer, false);
-    }
-
+    /**
+     * Toggle the toggle. If it's on, turn it off. If it's off, turn it on.
+     */
     public void toggle() {
         state = !state;
     }
 
+    /**
+     * Get the toggle's current state.
+     *
+     * @return the toggle's current state.
+     */
     public boolean getState() {
         return state;
     }
 
+    /**
+     * Override/set the toggle's state.
+     *
+     * @param state the toggle's new state.
+     */
     public void setState(boolean state) {
         this.state = state;
     }
