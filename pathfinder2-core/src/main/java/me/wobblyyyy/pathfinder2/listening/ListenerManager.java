@@ -154,4 +154,47 @@ public class ListenerManager implements Tickable {
                 () -> checker.test(input.get())
         ));
     }
+
+    /**
+     * Bind a piece of functionality to a newly-created {@link Listener}.
+     *
+     * @param mode     the mode the listener will operate in. If you want
+     *                 a button-like effect, use
+     *                 {@link ListenerMode#CONDITION_NEWLY_MET}.
+     *                 See {@link ListenerMode} for more information.
+     * @param input    should provide inputs for the listener. This
+     *                 {@link Supplier} will supply values for the
+     *                 {@code checker} {@link Predicate}, which will in turn
+     *                 control the listener's state of activation.
+     * @param checker  a predicate that will test inputs for the listener. If
+     *                 this predicate returns true, the listener is considered
+     *                 to have met the condition. If this predicate returns
+     *                 false, the listener has not yet met the condition.
+     * @param runnable functionality that will be executed whenever the listener
+     *                 is triggered.
+     * @param <T>      the type of {@link Object} that's state is being
+     *                 observed.
+     * @return {@code this}, used for method chaining.
+     */
+    public <T> ListenerManager bind(ListenerMode mode,
+                                    Supplier<T> input,
+                                    Predicate<T> checker,
+                                    Runnable runnable) {
+        return addListener(new Listener(
+                mode,
+                runnable::run,
+                () -> checker.test(input.get())
+        ));
+    }
+
+    public ListenerManager bind(ListenerMode mode,
+                                Supplier<Boolean> input,
+                                Consumer<Boolean> onFinish) {
+        return bind(
+                mode,
+                input,
+                (b) -> b,
+                onFinish
+        );
+    }
 }

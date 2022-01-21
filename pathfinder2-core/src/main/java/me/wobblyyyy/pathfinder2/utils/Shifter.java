@@ -10,7 +10,11 @@
 
 package me.wobblyyyy.pathfinder2.utils;
 
+import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.listening.ListenerMode;
+
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * A controller for moving up and down levels, like some kind of shifter.
@@ -64,26 +68,56 @@ public class Shifter {
         );
     }
 
-    public void shift(ShifterDirection direction) {
-        if (direction == ShifterDirection.UP) {
-            currentGear++;
+    public Shifter(int minGear,
+                   int currentGear,
+                   int maxGear,
+                   boolean shouldWrap,
+                   Supplier<Boolean> shiftUpButton,
+                   Supplier<Boolean> shiftDownButton,
+                   Consumer<Integer> onShift,
+                   Pathfinder pathfinder) {
+        this(minGear, currentGear, maxGear, shouldWrap, onShift);
 
-            if (currentGear > maxGear)
+        pathfinder.getListenerManager()
+                .bind(
+                        ListenerMode.CONDITION_NEWLY_MET,
+                        () -> SupplierFilter.trueThenAllFalse(
+                                shiftUpButton,
+                                shiftDownButton
+                        ),
+                        (isPressed) -> shift(ShifterDirection.UP)
+                )
+                .bind(
+                        ListenerMode.CONDITION_NEWLY_MET,
+                        () -> SupplierFilter.trueThenAllFalse(
+                                shiftDownButton,
+                                shiftUpButton
+                        ),
+                        (isPressed) -> shift(ShifterDirection.DOWN)
+                );
+    }
+
+    public void shift(ShifterDirection direction) {
+        int previousGear = currentGear;
+
+        if (direction == ShifterDirection.UP) {
+            if (++currentGear > maxGear)
                 if (shouldWrap)
                     currentGear = minGear;
                 else
                     currentGear--;
-        } else if (direction == ShifterDirection.DOWN) {
-            currentGear--;
-
-            if (currentGear < minGear)
+        }
+        else if (direction == ShifterDirection.DOWN) {
+            if (--currentGear < minGear)
                 if (shouldWrap)
                     currentGear = maxGear;
                 else
                     currentGear++;
         }
 
-        onShift.accept(currentGear);
+        if (previousGear != currentGear)
+            onShift.accept(currentGear);
+
     }
 
     public void setGear(int gear) {
