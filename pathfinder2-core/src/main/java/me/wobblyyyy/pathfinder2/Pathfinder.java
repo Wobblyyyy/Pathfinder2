@@ -1071,23 +1071,26 @@ public class Pathfinder {
         zoneProcessor.update(this);
         executorManager.tick();
 
-        int followerCount = executorManager.howManyFollowers();
-        Follower follower =
-                executorManager.getCurrentExecutor().getCurrentFollower();
+        if (executorManager.howManyExecutors() > 0) {
+            int followerCount = executorManager.howManyFollowers();
+            Follower follower =
+                    executorManager.getCurrentExecutor().getCurrentFollower();
 
-        if (followerCount > previousFollowerCount)
-            pluginManager.onStartFollower(
-                    this,
-                    executorManager.getCurrentExecutor().getCurrentFollower()
-            );
-        else if (followerCount < previousFollowerCount)
-            pluginManager.onFinishFollower(
-                    this,
-                    previousFollower
-            );
+            if (followerCount > previousFollowerCount)
+                pluginManager.onStartFollower(
+                        this,
+                        executorManager.getCurrentExecutor().getCurrentFollower()
+                );
+            else if (followerCount < previousFollowerCount)
+                pluginManager.onFinishFollower(
+                        this,
+                        previousFollower
+                );
 
-        previousFollowerCount = followerCount;
-        previousFollower = follower;
+            previousFollowerCount = followerCount;
+            previousFollower = follower;
+        }
+
         pluginManager.onTick(this);
         playback.tick();
         profiler.capture(getPosition());
