@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.listening;
 
 import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.time.Time;
 
 import java.util.function.Supplier;
 
@@ -29,6 +30,7 @@ public class Listener implements Tickable {
     private final Runnable whenTriggered;
     private final Supplier<Boolean>[] input;
     private boolean previousInput;
+    private double expiration = Double.MAX_VALUE;
 
     /**
      * Create a new {@code Listener}.
@@ -55,6 +57,20 @@ public class Listener implements Tickable {
         this.mode = mode;
         this.whenTriggered = whenTriggered;
         this.input = input;
+    }
+
+    public Listener setExpiration(double expiration) {
+        this.expiration = expiration;
+
+        return this;
+    }
+
+    public double getExpiration() {
+        return expiration;
+    }
+
+    public boolean hasExpired() {
+        return Time.ms() > expiration;
     }
 
     @Override

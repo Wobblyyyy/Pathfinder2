@@ -14,7 +14,9 @@ import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.utils.RandomString;
 import me.wobblyyyy.pathfinder2.utils.Toggle;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -98,8 +100,20 @@ public class ListenerManager implements Tickable {
      */
     @Override
     public boolean tick(Pathfinder pathfinder) {
-        for (Listener listener : listeners.values())
-            listener.tick(pathfinder);
+        List<String> expiredListeners = new ArrayList<String>(listeners.size());
+
+        for (Map.Entry<String, Listener> entry : listeners.entrySet()) {
+            String name = entry.getKey();
+            Listener listener = entry.getValue();
+
+            if (listener.hasExpired())
+                expiredListeners.add(name);
+            else
+                listener.tick(pathfinder);
+        }
+
+        for (String key : expiredListeners)
+            listeners.remove(key);
 
         return true;
     }
