@@ -23,16 +23,16 @@ import java.io.Serializable;
  * @since 0.7.1
  */
 public class MovementSnapshot implements Serializable {
-    private Velocity velocity;
+    private Velocity velocity = new Velocity(0, Angle.DEG_0);
     private double velocityXY;
     private double velocityX;
     private double velocityY;
-    private Angle velocityZ;
+    private Angle velocityZ = Angle.DEG_0;
 
     private double accelerationXY;
     private double accelerationX;
     private double accelerationY;
-    private Angle accelerationZ;
+    private Angle accelerationZ = Angle.DEG_0;
 
     public Velocity getVelocity() {
         return velocity;

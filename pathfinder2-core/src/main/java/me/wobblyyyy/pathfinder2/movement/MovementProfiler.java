@@ -21,14 +21,15 @@ import me.wobblyyyy.pathfinder2.time.Time;
  * @author Colin Robertson
  * @since 0.7.1
  */
+@SuppressWarnings("deprecation")
 public class MovementProfiler {
-    private PointXYZ position;
+    private PointXYZ position = PointXYZ.ZERO;
     private double unitsPerSec;
     private double xUnitsPerSec;
     private double yUnitsPerSec;
     private double zDegreesPerSec;
     private double timeMs;
-    private MovementSnapshot lastSnapshot;
+    private MovementSnapshot lastSnapshot = new MovementSnapshot();
 
     /**
      * Get the most recently-recorded snapshot. If no snapshots have been
