@@ -115,7 +115,7 @@ public abstract class AbstractOdometry implements Odometry {
      */
     @Override
     public void removeOffset() {
-        this.offset = new PointXYZ(0, 0, Angle.fromDeg(0));
+        this.offset = new PointXYZ(0, 0, Angle.fixedDeg(0));
     }
 
     /**
@@ -125,12 +125,11 @@ public abstract class AbstractOdometry implements Odometry {
      */
     @Override
     public void offsetSoPositionIs(PointXYZ targetPosition) {
-        if (targetPosition == null) {
+        if (targetPosition == null)
             throw new NullPointException(
                     "Attempted to apply an offset using a null target " +
                             "position!"
             );
-        }
 
         setOffset(getRawPosition().multiply(-1).add(targetPosition));
     }

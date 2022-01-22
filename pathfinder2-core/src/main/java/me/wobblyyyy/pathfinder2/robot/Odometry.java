@@ -48,6 +48,11 @@ import me.wobblyyyy.pathfinder2.robot.modifiers.Modifiable;
  * robot's position during operation - offsets to the rescue!
  * </p>
  *
+ * <p>
+ * The unit you choose for odometry does not matter. Odometry should always
+ * report the center of the robot's position.
+ * </p>
+ *
  * @author Colin Robertson
  * @see AbstractOdometry
  * @since 0.0.0
@@ -58,15 +63,9 @@ public interface Odometry extends Modifiable<PointXYZ> {
      * should not be modified by any user code (unless you really want it
      * to be, but for the sake of simplicity, I'd suggest you DON'T).
      *
-     * <p>
-     * I'd also like to suggest that you make use of the method
-     * {@link PointXYZ#zeroIfNull(PointXYZ)}. Doing so will ensure your
-     * odometry never reports a null position. I personally have had some
-     * issues with exactly that, so I'm putting this warning here so I
-     * can possibly save someone a bit of a headache.
-     * </p>
-     *
-     * @return the raw position reported by the odometry system.
+     * @return the raw position reported by the odometry system. The unit of
+     * this position is not specified. This should always return the very
+     * center of the robot's position.
      */
     PointXYZ getRawPosition();
 
@@ -74,7 +73,9 @@ public interface Odometry extends Modifiable<PointXYZ> {
      * Get the position produced by {@link #getRawPosition()} combined with
      * the offset produced by {@link #getOffset()}.
      *
-     * @return the odometry system's position, with an offset.
+     * @return the odometry system's position, with an offset. The unit of
+     * this position is not specified. This should always return the very
+     * center of the robot's position.
      */
     PointXYZ getPosition();
 

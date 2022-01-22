@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.listening;
 
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.utils.RandomString;
+import me.wobblyyyy.pathfinder2.utils.Toggle;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -121,6 +122,16 @@ public class ListenerManager implements Tickable {
         ));
     }
 
+    public ListenerManager bindToggle(Toggle toggle,
+                                      Supplier<Boolean> input,
+                                      Consumer<Toggle> onToggle) {
+        return bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                input,
+                (b) -> toggle.toggle()
+        );
+    }
+
     /**
      * Bind a piece of functionality to a newly-created {@link Listener}.
      *
@@ -182,7 +193,7 @@ public class ListenerManager implements Tickable {
                                     Runnable runnable) {
         return addListener(new Listener(
                 mode,
-                runnable::run,
+                runnable,
                 () -> checker.test(input.get())
         ));
     }
@@ -195,6 +206,106 @@ public class ListenerManager implements Tickable {
                 input,
                 (b) -> b,
                 onFinish
+        );
+    }
+
+    public <T> ListenerManager bindIsMet(Supplier<T> supplier,
+                                         Predicate<T> predicate,
+                                         Consumer<T> consumer) {
+        return bind(
+                ListenerMode.CONDITION_IS_MET,
+                supplier,
+                predicate,
+                consumer
+        );
+    }
+
+    public ListenerManager bindIsMet(Supplier<Boolean> supplier,
+                                     Consumer<Boolean> consumer) {
+        return bind(
+                ListenerMode.CONDITION_IS_MET,
+                supplier,
+                consumer
+        );
+    }
+
+    public <T> ListenerManager bindIsNotMet(Supplier<T> supplier,
+                                            Predicate<T> predicate,
+                                            Consumer<T> consumer) {
+        return bind(
+                ListenerMode.CONDITION_IS_NOT_MET,
+                supplier,
+                predicate,
+                consumer
+        );
+    }
+
+    public ListenerManager bindIsNotMet(Supplier<Boolean> supplier,
+                                        Consumer<Boolean> consumer) {
+        return bind(
+                ListenerMode.CONDITION_IS_NOT_MET,
+                supplier,
+                consumer
+        );
+    }
+
+    public <T> ListenerManager bindNewlyMet(Supplier<T> supplier,
+                                            Predicate<T> predicate,
+                                            Consumer<T> consumer) {
+        return bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                supplier,
+                predicate,
+                consumer
+        );
+    }
+
+    public ListenerManager bindNewlyMet(Supplier<Boolean> supplier,
+                                        Consumer<Boolean> consumer) {
+        return bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                supplier,
+                consumer
+        );
+    }
+
+    public <T> ListenerManager bindNewlyNotMet(Supplier<T> supplier,
+                                               Predicate<T> predicate,
+                                               Consumer<T> consumer) {
+        return bind(
+                ListenerMode.CONDITION_NEWLY_NOT_MET,
+                supplier,
+                predicate,
+                consumer
+        );
+    }
+
+    public ListenerManager bindNewlyNotMet(Supplier<Boolean> supplier,
+                                           Consumer<Boolean> consumer) {
+        return bind(
+                ListenerMode.CONDITION_NEWLY_NOT_MET,
+                supplier,
+                consumer
+        );
+    }
+
+    public <T> ListenerManager bindNewlyChanged(Supplier<T> supplier,
+                                                Predicate<T> predicate,
+                                                Consumer<T> consumer) {
+        return bind(
+                ListenerMode.CONDITION_NEWLY_CHANGED,
+                supplier,
+                predicate,
+                consumer
+        );
+    }
+
+    public ListenerManager bindNewlyChanged(Supplier<Boolean> supplier,
+                                            Consumer<Boolean> consumer) {
+        return bind(
+                ListenerMode.CONDITION_NEWLY_CHANGED,
+                supplier,
+                consumer
         );
     }
 }

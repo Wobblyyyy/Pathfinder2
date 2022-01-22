@@ -274,7 +274,12 @@ public class Angle implements Comparable<Angle>, Serializable {
      *
      * @param rad the value to create the angle based on.
      * @return a new angle.
+     * @deprecated use {@link #fixedRad(double)} instead. Using angles that
+     * don't fit within the bounds of 0 to 360 degrees (or 0 to 2 pi radians)
+     * can cause issues with Pathfinder, and it's encouraged you use fixed
+     * angles.
      */
+    @Deprecated
     public static Angle fromRad(double rad) {
         return new Angle(rad, Math.toDegrees(rad));
     }
@@ -285,7 +290,12 @@ public class Angle implements Comparable<Angle>, Serializable {
      *
      * @param deg the value to create the angle based on.
      * @return a new angle.
+     * @deprecated use {@link #fixedDeg(double)} instead. Using angles that
+     * don't fit within the bounds of 0 to 360 degrees (or 0 to 2 pi radians)
+     * can cause issues with Pathfinder, and it's encouraged you use fixed
+     * angles.
      */
+    @Deprecated
     public static Angle fromDeg(double deg) {
         return new Angle(Math.toRadians(deg), deg);
     }
