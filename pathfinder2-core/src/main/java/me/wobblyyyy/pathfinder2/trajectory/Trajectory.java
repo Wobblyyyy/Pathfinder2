@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.trajectory;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.trajectory.multi.segment.MultiSegmentTrajectory;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -41,7 +42,7 @@ import java.util.Arrays;
  * @author Colin Robertson
  * @since 0.0.0
  */
-public interface Trajectory {
+public interface Trajectory extends Serializable {
     /**
      * Get the next marker that the robot should attempt to navigate to. This
      * should always be a point along the trajectory.
