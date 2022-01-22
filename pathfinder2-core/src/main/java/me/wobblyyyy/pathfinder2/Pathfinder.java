@@ -1951,7 +1951,17 @@ public class Pathfinder {
      * Pause until a certain condition is met.
      *
      * @param condition the condition that must be met before continuing.
-     * @param maxTime   the maximum length of the pause. If the amount of
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder waitUntil(Supplier<Boolean> condition) {
+        return waitUntil(condition, Double.MAX_VALUE);
+    }
+
+    /**
+     * Pause until a certain condition is met.
+     *
+     * @param condition the condition that must be met before continuing.
+     * @param maxTimeMs   the maximum length of the pause. If the amount of
      *                  elapsed time exceeds this length, the condition will
      *                  break and Pathfinder will be unpaused, regardless of
      *                  whether the condition has been met.
@@ -1959,14 +1969,14 @@ public class Pathfinder {
      */
     @SuppressWarnings("BusyWait")
     public Pathfinder waitUntil(Supplier<Boolean> condition,
-                                double maxTime) {
+                                double maxTimeMs) {
         if (condition == null)
             throw new NullPointerException(
                     "Attempted to use the waitUntil method with a null " +
                             "condition supplier!"
             );
 
-        if (maxTime < 0)
+        if (maxTimeMs < 0)
             throw new InvalidTimeException(
                     "Attempted to use an invalid time value! Make sure the " +
                             "time value you're supplying is 0 or greater."
@@ -1975,12 +1985,27 @@ public class Pathfinder {
         ElapsedTimer timer = new ElapsedTimer(true);
 
         try {
-            while (!condition.get() && timer.isElapsedLessThan(maxTime))
+            while (!condition.get() && timer.isElapsedLessThan(maxTimeMs))
                 Thread.sleep(10);
         } catch (InterruptedException ignored) {
         }
 
         return this;
+    }
+
+    /**
+     * Pause as long as a certain condition is met. This method requires
+     * doing just that the use of multiple threads, as this method has a
+     * busy wait that will block the calling thread until {@code condition}'s
+     * {@code get} returns false.
+     *
+     * @param condition the condition that must be met in order to continue.
+     *                  If this condition returns false, this method will
+     *                  finish its execution and will unpause.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder waitAsLongAs(Supplier<Boolean> condition) {
+        return waitAsLongAs(condition, Double.MAX_VALUE);
     }
 
     /**
