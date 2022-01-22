@@ -32,6 +32,7 @@ import me.wobblyyyy.pathfinder2.math.Velocity;
 import me.wobblyyyy.pathfinder2.movement.MovementProfiler;
 import me.wobblyyyy.pathfinder2.plugin.PathfinderPlugin;
 import me.wobblyyyy.pathfinder2.plugin.PathfinderPluginManager;
+import me.wobblyyyy.pathfinder2.plugin.bundled.StatTracker;
 import me.wobblyyyy.pathfinder2.prebuilt.AutoRotator;
 import me.wobblyyyy.pathfinder2.prebuilt.HeadingLock;
 import me.wobblyyyy.pathfinder2.recording.MovementPlayback;
@@ -240,6 +241,11 @@ public class Pathfinder {
     private final Map<String, Consumer<Pathfinder>> onTickOperations;
 
     /**
+     * A map that can be used to communicate between classes.
+     */
+    private final Map<String, Object> dataMap;
+
+    /**
      * Create a new {@code Pathfinder} instance. This constructor will
      * conditionally load any automatically loading plugins - if the plugin's
      * name is not in the {@code doNotLoad} collection of strings, the
@@ -311,6 +317,7 @@ public class Pathfinder {
         this.profiler = new MovementProfiler();
         this.listenerManager = new ListenerManager();
         this.onTickOperations = new HashMap<>();
+        this.dataMap = new HashMap<>();
 
         for (PathfinderPlugin plugin : AUTO_LOAD_PLUGINS) {
             String pluginName = plugin.getName();
@@ -484,6 +491,85 @@ public class Pathfinder {
     }
 
     /**
+     * Get Pathfinder's data map.
+     *
+     * @return Pathfinder's data map.
+     */
+    public Map<String, Object> getDataMap() {
+        return dataMap;
+    }
+
+    /**
+     * Add data to Pathfinder's data map.
+     *
+     * @param key    the key for the data.j
+     * @param object the data to add.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder putData(String key,
+                              Object object) {
+        dataMap.put(key, object);
+
+        return this;
+    }
+
+    /**
+     * Get data from Pathfinder's data map.
+     *
+     * @param key the key that corresponds with the data being accessed.
+     * @return if the data map contains the requested key, return the
+     * associated value. If the data map does not contain the requested key,
+     * return null.
+     */
+    public Object getData(String key) {
+        return dataMap.get(key);
+    }
+
+    /**
+     * Get data from Pathfinder's data map and cast it to a specific
+     * data type.
+     *
+     * @param key the key that corresponds with the data being accessed.
+     * @return a casted result of a {@link #getData(String)} operation.
+     */
+    public PointXY getDataPointXY(String key) {
+        return (PointXY) getData(key);
+    }
+
+    /**
+     * Get data from Pathfinder's data map and cast it to a specific
+     * data type.
+     *
+     * @param key the key that corresponds with the data being accessed.
+     * @return a casted result of a {@link #getData(String)} operation.
+     */
+    public PointXYZ getDataPointXYZ(String key) {
+        return (PointXYZ) getData(key);
+    }
+
+    /**
+     * Get data from Pathfinder's data map and cast it to a specific
+     * data type.
+     *
+     * @param key the key that corresponds with the data being accessed.
+     * @return a casted result of a {@link #getData(String)} operation.
+     */
+    public Angle getDataAngle(String key) {
+        return (Angle) getData(key);
+    }
+
+    /**
+     * Get data from Pathfinder's data map and cast it to a specific
+     * data type.
+     *
+     * @param key the key that corresponds with the data being accessed.
+     * @return a casted result of a {@link #getData(String)} operation.
+     */
+    public String getDataString(String key) {
+        return (String) getData(key);
+    }
+
+    /**
      * Load a {@link PathfinderPlugin}.
      *
      * @param plugin the plugin to load.
@@ -492,6 +578,12 @@ public class Pathfinder {
     public Pathfinder loadPlugin(PathfinderPlugin plugin) {
         pluginManager.loadPlugin(plugin);
         plugin.onLoad(this);
+
+        return this;
+    }
+
+    public Pathfinder loadBundledPlugins() {
+        pluginManager.loadPlugin(new StatTracker());
 
         return this;
     }
