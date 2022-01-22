@@ -1093,7 +1093,7 @@ public class Pathfinder {
 
         pluginManager.onTick(this);
         playback.tick();
-        // profiler.capture(getPosition());
+        profiler.capture(getPosition());
         recorder.tick();
         listenerManager.tick(this);
         runOnTickOperations();
@@ -1985,9 +1985,9 @@ public class Pathfinder {
 
     /**
      * Pause as long as a certain condition is met. This method requires
-     * doing just that.* the use of multiple threads, as this method has a busy wait that will
-     * block the calling thread until {@code condition}'s {@code get} returns
-     * false.
+     * doing just that the use of multiple threads, as this method has a
+     * busy wait that will block the calling thread until {@code condition}'s
+     * {@code get} returns false.
      *
      * @param condition the condition that must be met in order to continue.
      *                  If this condition returns false, this method will
@@ -1996,7 +1996,7 @@ public class Pathfinder {
      *                  elapsed time exceeds this length, the condition will
      *                  break and Pathfinder will be unpaused, regardless of
      *                  whether the condition has been met.
-     * @return this instance of Pathfinder, used for method chaining.
+     * @return {@code this}, used for method chaining.
      */
     @SuppressWarnings("BusyWait")
     public Pathfinder waitAsLongAs(Supplier<Boolean> condition,

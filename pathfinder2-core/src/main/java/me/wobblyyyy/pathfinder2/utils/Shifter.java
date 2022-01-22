@@ -18,6 +18,7 @@ import java.util.function.Supplier;
 
 /**
  * A controller for moving up and down levels, like some kind of shifter.
+ * Using two buttons, you can shift up and down levels.
  *
  * @author Colin Robertson
  * @since 0.8.0
@@ -97,6 +98,14 @@ public class Shifter {
                 );
     }
 
+    /**
+     * Shift the shifter. Or at least try to. If the shifter cannot be
+     * shifted (say you're at the minimum gear and wrapping is disabled),
+     * nothing happens. If the gear changed, the "on shift" {@link Consumer}
+     * will be called.
+     *
+     * @param direction the direction to shift in.
+     */
     public void shift(ShifterDirection direction) {
         int previousGear = currentGear;
 

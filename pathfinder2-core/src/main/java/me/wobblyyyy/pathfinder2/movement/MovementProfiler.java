@@ -61,6 +61,8 @@ public class MovementProfiler {
      */
     public MovementSnapshot capture(PointXYZ position,
                                     double timeMs) {
+        if (position == null) return new MovementSnapshot();
+
         // look... i'm sorry to whoever is reading this.
         // this isn't good code. this isn't even decent code. this is
         // just genuinely awful, and i'm sorry for everything...
