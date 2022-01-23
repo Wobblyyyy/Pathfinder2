@@ -31,7 +31,7 @@ public class TestStatTracker {
 //    @Disabled
     public void testTicksPerSecond() {
         Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01)
-                .setSpeed(0.5)
+                .setSpeed(0.75)
                 .setTolerance(2)
                 .setAngleTolerance(Angle.fixedDeg(10));
 
@@ -80,7 +80,8 @@ public class TestStatTracker {
                         10,
                         ListenerMode.CONDITION_IS_MET,
                         () -> {
-                            System.out.println(10);
+                            double a = Math.sqrt(Math.cos(10 * Math.PI));
+                            a *= Math.cbrt(a);
                         },
                         () -> true
                 ))
@@ -88,7 +89,26 @@ public class TestStatTracker {
                         5,
                         ListenerMode.CONDITION_IS_MET,
                         () -> {
-                            System.out.println(5);
+                            double a = Math.sqrt(Math.cos(10 * Math.PI));
+                            a /= Math.cbrt(a);
+                        },
+                        () -> true
+                ))
+                .addListener(new Listener(
+                        100,
+                        ListenerMode.CONDITION_IS_MET,
+                        () -> {
+                            double a = Math.sqrt(Math.cos(10 * Math.PI));
+                            a += Math.cbrt(a);
+                        },
+                        () -> true
+                ))
+                .addListener(new Listener(
+                        0,
+                        ListenerMode.CONDITION_IS_MET,
+                        () -> {
+                            double a = Math.sqrt(Math.cos(10 * Math.PI));
+                            a -= Math.cbrt(a);
                         },
                         () -> true
                 ));

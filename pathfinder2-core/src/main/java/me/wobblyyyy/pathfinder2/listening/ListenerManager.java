@@ -15,14 +15,16 @@ import me.wobblyyyy.pathfinder2.utils.RandomString;
 import me.wobblyyyy.pathfinder2.utils.Toggle;
 
 import java.util.*;
-import java.util.function.*;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
  * Manager responsible for several {@link Listener}s. Each {@link Listener}
  * is stored in a {@link Map} with {@link String} keys so that listeners
  * can be activated and deactivated based on a shared name.
- *
+ * <p>
  * The {@link String} values used as keys do not require any certain rules
  * to be followed - they can be literally anything you want. If you're out
  * of ideas, check out {@link me.wobblyyyy.pathfinder2.utils.RandomString#randomString(int)}.
@@ -54,13 +56,11 @@ public class ListenerManager implements Tickable {
 
         listeners = listeners.entrySet().stream()
                 .sorted(Comparator.comparingInt(o -> o.getValue().getPriority()))
-                .collect(
-                        Collectors.toMap(
-                                Map.Entry::getKey,
-                                Map.Entry::getValue,
-                                (listener1, listener2) -> listener1
-                        )
-                );
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (l1, l2) -> l1
+                ));
 
         return this;
     }
