@@ -31,6 +31,8 @@ public class Listener implements Tickable {
     private final Supplier<Boolean>[] input;
     private boolean previousInput;
     private double expiration = Double.MAX_VALUE;
+    private boolean hasBeenMet;
+    private boolean hasBeenNotMet;
 
     /**
      * Create a new {@code Listener}.
@@ -99,9 +101,23 @@ public class Listener implements Tickable {
             case CONDITION_NEWLY_CHANGED:
                 if ((!previousInput && input) || (previousInput && !input)) whenTriggered.run();
                 break;
+            case CONDITION_NEVER_MET:
+                if (hasBeenMet) setExpiration(0);
+                if (hasBeenNotMet) whenTriggered.run();
+                break;
+            case CONDITION_ALWAYS_MET:
+                if (hasBeenNotMet) setExpiration(0);
+                if (hasBeenMet) whenTriggered.run();
+                break;
         }
 
         previousInput = input;
+
+        if (!hasBeenMet)
+            hasBeenMet = true;
+
+        if (!hasBeenNotMet)
+            hasBeenNotMet = true;
 
         return true;
     }

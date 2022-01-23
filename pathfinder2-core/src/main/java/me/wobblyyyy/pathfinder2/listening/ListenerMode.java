@@ -54,5 +54,15 @@ public enum ListenerMode {
      * Activated whenever the return value of the {@code Supplier} changes
      * from true to false or false to true.
      */
-    CONDITION_NEWLY_CHANGED
+    CONDITION_NEWLY_CHANGED,
+
+    /**
+     * Only when the condition has never been met.
+     */
+    CONDITION_NEVER_MET,
+
+    /**
+     * Only when the condition has always been met.
+     */
+    CONDITION_ALWAYS_MET,
 }

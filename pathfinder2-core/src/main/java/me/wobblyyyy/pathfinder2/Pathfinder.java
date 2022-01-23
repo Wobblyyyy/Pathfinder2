@@ -245,6 +245,8 @@ public class Pathfinder {
      */
     private final Map<String, Object> dataMap;
 
+    private boolean isMinimal = false;
+
     /**
      * Create a new {@code Pathfinder} instance. This constructor will
      * conditionally load any automatically loading plugins - if the plugin's
@@ -446,6 +448,20 @@ public class Pathfinder {
         }
 
         return null;
+    }
+
+    /**
+     * Set Pathfinder's {@code isMinimal} status.
+     *
+     * @param isMinimal should Pathfinder run in minimal mode, which is
+     *                  designed to reduce performance impact by skipping
+     *                  un-needed operations?
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder setIsMinimal(boolean isMinimal) {
+        this.isMinimal = isMinimal;
+
+        return this;
     }
 
     /**
@@ -934,6 +950,20 @@ public class Pathfinder {
         return this;
     }
 
+    public double ticksPerSecond() {
+        Object result = dataMap.get(StatTracker.KEY_TPS);
+
+        if (result == null)
+            throw new RuntimeException("tried to get ticks per second without " +
+                    "having any valid entries - make sure you load the " +
+                    "StatTracker plugin!");
+        else
+            if (Double.isInfinite((Double) result))
+                throw new RuntimeException("infinite tick rate!");
+            else
+                return (Double) result;
+    }
+
     /**
      * Get Pathfinder's {@code Scheduler}.
      *
@@ -1159,36 +1189,41 @@ public class Pathfinder {
      */
     public Pathfinder tick() {
         pluginManager.preTick(this);
-        scheduler.tick();
-        zoneProcessor.update(this);
-        executorManager.tick();
-
-        if (executorManager.howManyExecutors() > 0) {
-            int followerCount = executorManager.howManyFollowers();
-            Follower follower =
-                    executorManager.getCurrentExecutor().getCurrentFollower();
-
-            if (followerCount > previousFollowerCount)
-                pluginManager.onStartFollower(
-                        this,
-                        executorManager.getCurrentExecutor().getCurrentFollower()
-                );
-            else if (followerCount < previousFollowerCount)
-                pluginManager.onFinishFollower(
-                        this,
-                        previousFollower
-                );
-
-            previousFollowerCount = followerCount;
-            previousFollower = follower;
+        if (!isMinimal) {
+            scheduler.tick();
+            zoneProcessor.update(this);
         }
+        executorManager.tick();
+        if (!isMinimal) {
+            if (executorManager.howManyExecutors() > 0) {
+                int followerCount = executorManager.howManyFollowers();
+                Follower follower =
+                        executorManager.getCurrentExecutor().getCurrentFollower();
 
+                if (followerCount > previousFollowerCount)
+                    pluginManager.onStartFollower(
+                            this,
+                            executorManager.getCurrentExecutor().getCurrentFollower()
+                    );
+                else if (followerCount < previousFollowerCount)
+                    pluginManager.onFinishFollower(
+                            this,
+                            previousFollower
+                    );
+
+                previousFollowerCount = followerCount;
+                previousFollower = follower;
+            }
+        }
         pluginManager.onTick(this);
-        playback.tick();
-        profiler.capture(getPosition());
-        recorder.tick();
-        listenerManager.tick(this);
-        runOnTickOperations();
+        if (!isMinimal) {
+            playback.tick();
+            profiler.capture(getPosition());
+            recorder.tick();
+            listenerManager.tick(this);
+            runOnTickOperations();
+            pluginManager.postTick(this);
+        }
         pluginManager.postTick(this);
 
         return this;

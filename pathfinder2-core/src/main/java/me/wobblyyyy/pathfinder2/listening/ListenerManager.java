@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  * Manager responsible for several {@link Listener}s. Each {@link Listener}
  * is stored in a {@link Map} with {@link String} keys so that listeners
  * can be activated and deactivated based on a shared name.
- * <p>
+ *
  * The {@link String} values used as keys do not require any certain rules
  * to be followed - they can be literally anything you want. If you're out
  * of ideas, check out {@link me.wobblyyyy.pathfinder2.utils.RandomString#randomString(int)}.

@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.trajectory.spline;
 
+import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
@@ -146,7 +147,7 @@ public class AdvancedSplineTrajectory implements Trajectory {
     private boolean isDoneZ(PointXYZ current) {
         return Angle.isCloseDeg(
                 current.z(),
-                Angle.fromDeg(angleSpline.getSpline().getEndPoint().y()),
+                Angle.fixedDeg(angleSpline.getSpline().getEndPoint().y()),
                 angleTolerance.deg()
         );
     }
@@ -158,6 +159,13 @@ public class AdvancedSplineTrajectory implements Trajectory {
 
     @Override
     public double speed(PointXYZ current) {
-        return speedSpline.interpolateY(current.x());
+        double speed = speedSpline.interpolateY(current.x());
+
+        if (speed < 0 || speed > 1)
+            throw new InvalidSpeedException("AdvancedSplineTrajectory " +
+                    "calculated an invalid speed value, make sure your " +
+                    "speed spline is correctly constructed");
+
+        return speed;
     }
 }

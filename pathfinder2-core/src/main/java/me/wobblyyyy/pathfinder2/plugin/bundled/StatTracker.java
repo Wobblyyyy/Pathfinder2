@@ -14,19 +14,32 @@ import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.math.RollingAverage;
 import me.wobblyyyy.pathfinder2.plugin.PathfinderPlugin;
+import me.wobblyyyy.pathfinder2.time.Time;
 
 /**
+ * Rudimentary plugin that tracks statistics on Pathfinder usage. This is
+ * mostly used for debugging and profiling purposes - one of the key
+ * measurements this plugin provides is the "ticks per second" rate of
+ * Pathfinder. A higher tick rate means Pathfinder is running smoothly.
+ * A lower tick rate means the opposite.
+ *
  * @author Colin Robertson
  * @since 0.10.3
  */
 public class StatTracker extends PathfinderPlugin {
+    public static final String KEY_TPS = "pf_tps";
+    public static final String KEY_TICKS = "pf_ticks";
+
     private static final String NAME = "StatTracker";
 
     private long ticks = 0;
+    private final RollingAverage ticksPerSecond = new RollingAverage(10);
     private long followersFinished = 0;
     private double totalDistance = 0;
     private PointXY lastPoint = null;
+    private double lastMs = 0;
 
     @Override
     public String getName() {
@@ -35,6 +48,8 @@ public class StatTracker extends PathfinderPlugin {
 
     @Override
     public void onTick(Pathfinder pathfinder) {
+        if (lastMs == 0) lastMs = Time.ms();
+
         ticks++;
 
         PointXYZ position = pathfinder.getPosition();
@@ -42,6 +57,15 @@ public class StatTracker extends PathfinderPlugin {
         if (lastPoint == null) lastPoint = position;
 
         totalDistance += lastPoint.absDistance(position);
+
+        double currentMs = Time.ms();
+        double elapsedSeconds = (currentMs - lastMs) / 1_000;
+        if (elapsedSeconds < 0.001) return;
+        lastMs = currentMs;
+        double tps = 1 / elapsedSeconds;
+        ticksPerSecond.add(tps);
+        pathfinder.putData(KEY_TPS, ticksPerSecond.average());
+        pathfinder.putData(KEY_TICKS, ticks);
     }
 
     @Override

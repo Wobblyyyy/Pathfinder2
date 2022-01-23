@@ -144,6 +144,10 @@ public class Stopwatch {
      * first and last recorded timestamps. These CAN both be the same.
      */
     public double elapsed() {
+        if (timestamps.size() < 1)
+            throw new RuntimeException("you need to start the stopwatch " +
+                    "before getting the elapsed time!");
+
         return Timestamp.difference(
                 timestamps.get(0),
                 timestamps.get(laps() - 1)

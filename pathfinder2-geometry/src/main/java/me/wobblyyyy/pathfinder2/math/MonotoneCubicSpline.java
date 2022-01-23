@@ -58,7 +58,7 @@ public class MonotoneCubicSpline implements Spline {
                     "with at least 2 control points and arrays of " +
                     "equal lengths.");
         }
-        isInverted = x[0] < x[1];
+        isInverted = x[0] > x[1];
         List<Double> xValues = new ArrayList<>();
         for (double d : x) {
             if (xValues.contains(d)) {
@@ -74,26 +74,21 @@ public class MonotoneCubicSpline implements Spline {
         x = tempY;
         y = tempX;
         if (isInverted) {
-            for (int i = 1; i < x.length; i++) x[i] = x[i] - (x[i] - x[0]);
+            for (int i = 1; i < x.length; i++) {
+                x[i] = -(x[i] - x[0]);
+            }
         }
-        for (int i = 1; i < x.length; i++)
-            if (x[i] - x[i - 1] < 0)
-                throw new IllegalArgumentException(
-                        "Cannot create a monotone cubic spline with X values " +
-                                "that do not approach the same infinity! " +
-                                "Make sure your X values are either (1) " +
-                                "strictly increasing or (2) strictly " +
-                                "decreasing"
-                );
         final int n = x.length;
         double[] d = new double[n - 1];
         double[] m = new double[n];
         for (int i = 0; i < n - 1; i++) {
             double h = x[i + 1] - x[i];
+            /*
             if (h <= 0D) {
                 throw new IllegalArgumentException("Control points " +
                         "must have strictly increasing X values.");
             }
+             */
             d[i] = (y[i + 1] - y[i]) / h;
         }
         m[0] = d[0];
