@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.plugin.bundled;
 
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
+import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.listening.Listener;
@@ -28,7 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TestStatTracker {
     @SuppressWarnings("UnusedAssignment")
     @Test
-//    @Disabled
+    @Disabled
     public void testTicksPerSecond() {
         Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01)
                 .setSpeed(0.75)
@@ -135,5 +136,8 @@ public class TestStatTracker {
         System.out.println("ticks: " + pathfinder.getData("pf_ticks"));
         System.out.println("position: " + pathfinder.getPosition());
         System.out.println("condition met: " + i.get());
+        System.out.println("total PointXY: " + PointXY.COUNT);
+        System.out.println("total PointXYZ: " + PointXYZ.COUNT);
+        System.out.println("total Angle: " + Angle.COUNT);
     }
 }

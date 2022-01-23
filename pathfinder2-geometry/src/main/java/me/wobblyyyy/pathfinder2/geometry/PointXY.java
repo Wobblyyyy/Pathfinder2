@@ -58,6 +58,8 @@ import java.util.List;
  */
 @SuppressWarnings("DuplicatedCode")
 public class PointXY implements Comparable<PointXY>, Serializable {
+    public static long COUNT = 0;
+
     /**
      * A point with X and Y values of 0.
      */
@@ -81,6 +83,8 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public PointXY(double x,
                    double y) {
+        COUNT++;
+
         this.x = x;
         this.y = y;
     }

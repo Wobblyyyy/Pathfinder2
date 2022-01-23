@@ -34,6 +34,8 @@ import java.util.List;
  * @since 0.0.0
  */
 public class PointXYZ extends PointXY {
+    public static long COUNT = 0;
+
     /**
      * A point with...
      *
@@ -74,6 +76,8 @@ public class PointXYZ extends PointXY {
                     Angle z) {
         super(x, y);
 
+        COUNT++;
+
         if (z == null)
             throw new NullPointerException("Cannot have a null Z value!");
 
@@ -90,7 +94,7 @@ public class PointXYZ extends PointXY {
     public PointXYZ(double x,
                     double y,
                     double zDegrees) {
-        this(x, y, Angle.fromDeg(zDegrees));
+        this(x, y, Angle.fixedDeg(zDegrees));
     }
 
     /**
@@ -346,7 +350,7 @@ public class PointXYZ extends PointXY {
         return new PointXYZ(
                 totalX / points.size(),
                 totalY / points.size(),
-                Angle.fromDeg(totalZ / points.size())
+                Angle.fixedDeg(totalZ / points.size())
         );
     }
 
@@ -371,7 +375,7 @@ public class PointXYZ extends PointXY {
         return new PointXYZ(
                 totalX / points.length,
                 totalY / points.length,
-                Angle.fromDeg(totalZ / points.length)
+                Angle.fixedDeg(totalZ / points.length)
         );
     }
 

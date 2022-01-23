@@ -91,6 +91,8 @@ import java.io.Serializable;
  * @since 0.0.0
  */
 public class Angle implements Comparable<Angle>, Serializable {
+    public static long COUNT = 0;
+
     /**
      * "rad"
      */
@@ -236,6 +238,8 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     private Angle(double rad,
                   double deg) {
+        COUNT++;
+
         this.rad = rad;
         this.deg = deg;
     }
