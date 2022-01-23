@@ -44,9 +44,9 @@ public class TestStatTracker {
                 Translation translation = pathfinder.getTranslation();
                 odometry.setRawPosition(
                         odometry.getRawPosition().add(new PointXYZ(
-                                translation.vx() / 100,
-                                translation.vy() / 100,
-                                Angle.fixedRad(translation.vz() / 100)
+                                translation.vx() / 50,
+                                translation.vy() / 50,
+                                Angle.fixedRad(translation.vz() / 50)
                         ))
                 );
             }
