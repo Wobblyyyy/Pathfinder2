@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.recording;
 
+import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 
@@ -47,6 +48,17 @@ public class MovementRecord implements Serializable {
                           double velocity,
                           double elapsedMs,
                           Translation translation) {
+        if (position == null)
+            throw new NullPointException(
+                    "attempted to create a MovementRecord with a null " +
+                            "position, make sure this position isn't null"
+            );
+        if (translation == null)
+            throw new NullPointerException(
+                    "attempted to create a MovementRecord with a null " +
+                            "translation, make sure this translation isn't null"
+            );
+
         this.position = position;
         this.velocity = velocity;
         this.elapsedMs = elapsedMs;

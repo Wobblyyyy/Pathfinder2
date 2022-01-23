@@ -2566,7 +2566,11 @@ public class Pathfinder {
      * @return the robot's current translation.
      */
     public Translation getTranslation() {
-        return getDrive().getTranslation();
+        Translation translation = getDrive().getTranslation();
+
+        return translation != null
+                ? translation
+                : Translation.ZERO;
     }
 
     /**

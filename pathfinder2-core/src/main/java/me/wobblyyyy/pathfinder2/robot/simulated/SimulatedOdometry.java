@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.robot.simulated;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.AbstractOdometry;
 import me.wobblyyyy.pathfinder2.time.Time;
 
@@ -30,7 +31,7 @@ public class SimulatedOdometry extends AbstractOdometry {
     /**
      * The angle at which the robot should move.
      */
-    private Angle movementAngle = Angle.fromDeg(0);
+    private Angle movementAngle = Angle.DEG_0;
 
     /**
      * The robot's velocity, measured in units per second.
@@ -95,8 +96,16 @@ public class SimulatedOdometry extends AbstractOdometry {
      * @param angle          the angle at which the robot should move.
      * @param unitsPerSecond how many units per second the robot should move.
      */
-    public void setVelocity(Angle angle, double unitsPerSecond) {
+    public void setVelocity(Angle angle,
+                            double unitsPerSecond) {
         this.movementAngle = angle;
         this.unitsPerSecond = unitsPerSecond;
+    }
+
+    public void setTranslation(Translation translation) {
+        setVelocity(
+                translation.angle(),
+                translation.magnitude()
+        );
     }
 }

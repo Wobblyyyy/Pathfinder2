@@ -37,6 +37,11 @@ public class MovementPlayback {
         this.pathfinder = pathfinder;
     }
 
+    /**
+     * Start playing back a movement recording.
+     *
+     * @param recording the recording to play back.
+     */
     public void startPlayback(MovementRecording recording) {
         lastIndex = 0;
         lastSwitchMs = 0;
@@ -44,6 +49,9 @@ public class MovementPlayback {
         this.recording = recording;
     }
 
+    /**
+     * Stop the playback of a movement recording.
+     */
     public void stopPlayback() {
         isPlaying = false;
     }
