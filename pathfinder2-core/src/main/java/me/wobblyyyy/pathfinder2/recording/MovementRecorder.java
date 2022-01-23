@@ -78,6 +78,7 @@ public class MovementRecorder {
                     elapsed,
                     pathfinder.getTranslation()
             );
+
             recording.record(record);
             lastRecordMs = current;
         }
