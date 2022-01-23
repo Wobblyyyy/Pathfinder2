@@ -63,16 +63,19 @@ public class MonotoneCubicSpline implements Spline {
         for (double d : x) {
             if (xValues.contains(d)) {
                 isXY = true;
+                break;
             } else {
                 xValues.add(d);
             }
         }
-        double[] tempX;
-        double[] tempY;
-        tempX = x;
-        tempY = y;
-        x = tempY;
-        y = tempX;
+        if (isXY) {
+            double[] tempX;
+            double[] tempY;
+            tempX = x;
+            tempY = y;
+            x = tempY;
+            y = tempX;
+        }
         if (isInverted) {
             for (int i = 1; i < x.length; i++) {
                 x[i] = -(x[i] - x[0]);
