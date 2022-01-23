@@ -30,9 +30,11 @@ subprojects {
 // make sure we're using JDK 8
 // i don't really want to use JDK 8, but because FTC requires us to
 // (thanks outdated versions of android...) we have to
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
+allprojects {
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(8))
+        }
     }
 }
 
