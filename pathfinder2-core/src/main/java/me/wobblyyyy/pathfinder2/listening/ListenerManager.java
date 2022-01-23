@@ -14,13 +14,9 @@ import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.utils.RandomString;
 import me.wobblyyyy.pathfinder2.utils.Toggle;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.Collectors;
 
 /**
  * Manager responsible for several {@link Listener}s. Each {@link Listener}
@@ -35,13 +31,13 @@ import java.util.function.Supplier;
  * @since 0.7.1
  */
 public class ListenerManager implements Tickable {
-    private final Map<String, Listener> listeners = new HashMap<>();
+    private Map<String, Listener> listeners;
 
     /**
      * Create a new {@code ListenerManager}.
      */
     public ListenerManager() {
-
+        listeners = new HashMap<>();
     }
 
     /**
@@ -55,6 +51,16 @@ public class ListenerManager implements Tickable {
     public ListenerManager addListener(String name,
                                        Listener listener) {
         listeners.put(name, listener);
+
+        listeners = listeners.entrySet().stream()
+                .sorted(Comparator.comparingInt(o -> o.getValue().getPriority()))
+                .collect(
+                        Collectors.toMap(
+                                Map.Entry::getKey,
+                                Map.Entry::getValue,
+                                (listener1, listener2) -> listener1
+                        )
+                );
 
         return this;
     }

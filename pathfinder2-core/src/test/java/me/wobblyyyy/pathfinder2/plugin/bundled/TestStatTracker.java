@@ -14,6 +14,7 @@ import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
+import me.wobblyyyy.pathfinder2.listening.Listener;
 import me.wobblyyyy.pathfinder2.listening.ListenerMode;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
 import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
@@ -27,7 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TestStatTracker {
     @SuppressWarnings("UnusedAssignment")
     @Test
-    @Disabled
+//    @Disabled
     public void testTicksPerSecond() {
         Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01)
                 .setSpeed(0.5)
@@ -74,7 +75,23 @@ public class TestStatTracker {
                                 e.printStackTrace();
                             }
                         }
-                );
+                )
+                .addListener(new Listener(
+                        10,
+                        ListenerMode.CONDITION_IS_MET,
+                        () -> {
+                            System.out.println(10);
+                        },
+                        () -> true
+                ))
+                .addListener(new Listener(
+                        5,
+                        ListenerMode.CONDITION_IS_MET,
+                        () -> {
+                            System.out.println(5);
+                        },
+                        () -> true
+                ));
 
         try {
             while (timer.elapsedSeconds() < 5) {
