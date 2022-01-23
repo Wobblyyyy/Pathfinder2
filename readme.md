@@ -37,13 +37,39 @@ but you gotta admit, our robot has got some moves.
 
 Installation instructions have been moved [here](project_releases.md).
 
-<h2 align="center">Important Notice</h2>
+<h2 align="center">Example Code</h2>
 
-This project is still in active development. You will almost certainly encounter
-bugs, broken code, missing/poorly-written documentation, or any number of a host
-of other issues. You're welcome (and encouraged) to use this project and help
-find any issues with it, but I need to disclose that there's a decent chance
-something will, at some point, go very wrong.
+Here's a small bit of code demonstrating how Pathfinder can be used to write
+simple and easily understandable code. Pathfinder utilizes lambda expressions
+to write expressive and intuitive code.
+```java
+pathfinder.getListenerManager()
+    .bind(
+        ListenerMode.CONDITION_NEWLY_MET,
+        () -> gamepad::a,
+        (b) -> {
+            pathfinder.clear();
+            pathfinder.setTranslation(Translation.ZERO);
+        }
+    )
+    .bindButton(
+        gamepad::b,
+        (b) -> pathfinder.goTo(new PointXYZ(10, 10, 10).tickUntil());
+    );
+
+pathfinder
+    .setSpeed(0.5)
+    .setTolerance(2)
+    .setAngleTolerance(Angle.fixedDeg(5))
+    .splineTo(
+        new PointXYZ(10, 10, Angle.fixedDeg(90)),
+        new PointXYZ(20, 30, Angle.fixedDeg(45)),
+        new PointXYZ(30, 50, Angle.fixedDeg(180))
+    )
+    .andThen((pf) -> {
+        // do some cool stuff after finishing the spline
+    });
+```
 
 <h2 align="center">Documentation</h2>
 
