@@ -33,15 +33,10 @@ see [this](https://www.reddit.com/r/FTC/comments/rdqitc/guys_we_got_auton_workin
 No, our robot does not do that anymore, and no, yours won't do that either -
 but you gotta admit, our robot has got some moves.
 
-<h2 align="center">Installation</h2>
-
-Installation instructions have been moved [here](project_releases.md).
-
 <h2 align="center">Example Code</h2>
 
-Here's a small bit of code demonstrating how Pathfinder can be used to write
-simple and easily understandable code. Pathfinder utilizes lambda expressions
-to write expressive and intuitive code.
+Here's a demonstration of Pathfinder's utilization of lambda expressions to
+write simple and readable code.
 ```java
 pathfinder.getListenerManager()
     .bind(
@@ -71,6 +66,10 @@ pathfinder
     });
 ```
 
+<h2 align="center">Installation</h2>
+
+Installation instructions have been moved [here](project_releases.md).
+
 <h2 align="center">Documentation</h2>
 
 Here's all of the sources of documentation I can think of right now.
@@ -80,10 +79,6 @@ Here's all of the sources of documentation I can think of right now.
 - [Project tutorial](.github/project_tutorial.md) - this is a basic tutorial
   that walks through the fundamentals of the library. This is probably the best
   place to start getting acquainted with the library.
-- [General documentation](docs/docs.md) - this is a document containing a bunch
-  of general documentation for the project. It's still being worked on and
-  updated, but it contains a variety of information on different useful topics.
-  This is probably a good place to start getting into the library.
 - [Examples](pathfinder2-examples) - several example usages of the project. Each
   of the classes contained in this module will contain more specific
   documentation explaining what the example is demonstrating.
