@@ -82,6 +82,25 @@ import java.util.function.Supplier;
  * a decent idea of what's going on, but hey, that's up to you. Good luck...
  * I guess? Maybe? Yeah.
  *
+ * <p>
+ * This is absolutely a god class, but that's completely intentional, I swear.
+ * Because Pathfinder fully supports method chaining, having a single object
+ * ({@code Pathfinder}, in this case) with support for just about every
+ * operation you could imagine makes method chaining incredibly easy and
+ * effective. You can access smaller components of Pathfinder with some
+ * getter methods:
+ * <ul>
+ *     <li>{@link #getDataMap()}</li>
+ *     <li>{@link #getOdometry()}</li>
+ *     <li>{@link #getDrive()}</li>
+ *     <li>{@link #getExecutorManager()}</li>
+ *     <li>{@link #getPluginManager()}</li>
+ *     <li>{@link #getPlayback()}</li>
+ *     <li>{@link #getRecorder()}</li>
+ *     <li>{@link #getListenerManager()}</li>
+ * </ul>
+ * </p>
+ *
  * @author Colin Robertson
  * @see #goTo(PointXY)
  * @see #goTo(PointXYZ)
@@ -318,7 +337,7 @@ public class Pathfinder {
         this.playback = new MovementPlayback(this);
         this.pluginManager = new PathfinderPluginManager();
         this.profiler = new MovementProfiler();
-        this.listenerManager = new ListenerManager();
+        this.listenerManager = new ListenerManager(this);
         this.onTickOperations = new HashMap<>();
         this.dataMap = new HashMap<>();
 
@@ -1184,6 +1203,15 @@ public class Pathfinder {
      * will cause the library to not function at all.
      *
      * <p>
+     * If the {@code tick()} method causes the invocation of an odometry
+     * system's {@link Odometry#getPosition()} method, and that method updates
+     * the robot's position based on the amount of elapsed time since the
+     * last update, there can be issues. If {@code tick()} is called too
+     * frequently, there may be inaccuracy in positional tracking if the
+     * {@link Odometry#getPosition()} method is called too frequently.
+     * </p>
+     *
+     * <p>
      * The order everything is ticked in is as follows:
      * <ol>
      *     <li>Plugin pre-tick ({@link PathfinderPluginManager#preTick(Pathfinder)})</li>
@@ -1196,6 +1224,16 @@ public class Pathfinder {
      *     <li>On tick operations ({@link #onTickOperations})</li>
      *     <li>Plugin post-tick ({@link PathfinderPluginManager#postTick(Pathfinder)})</li>
      * </ol>
+     * </p>
+     *
+     * <p>
+     * If you're curious about how many times the tick method is being called
+     * per second, check out {@link #ticksPerSecond()}. This does require you
+     * to use the {@link StatTracker} plugin, which can be loaded two ways:
+     * <ul>
+     *     <li>{@code pathfinder.loadPlugin(new StatTracker());}</li>
+     *     <li>{@code pathfinder.loadBundledPlugins();}</li>
+     * </ul>
      * </p>
      *
      * @return this instance of Pathfinder, used for method chaining.

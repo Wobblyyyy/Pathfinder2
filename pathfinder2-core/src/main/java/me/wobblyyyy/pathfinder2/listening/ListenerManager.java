@@ -34,12 +34,18 @@ import java.util.stream.Collectors;
  */
 public class ListenerManager implements Tickable {
     private Map<String, Listener> listeners;
+    private final Pathfinder pathfinder;
 
     /**
      * Create a new {@code ListenerManager}.
      */
-    public ListenerManager() {
+    public ListenerManager(Pathfinder pathfinder) {
         listeners = new HashMap<>();
+        this.pathfinder = pathfinder;
+    }
+
+    public Pathfinder getPathfinder() {
+        return pathfinder;
     }
 
     /**

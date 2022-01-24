@@ -22,7 +22,9 @@ import java.util.function.Supplier;
  * if that condition is met. Listeners allow code to be executed whenever
  * a certain condition is met: for example, your robot could automatically
  * slow down if it's approaching a wall, or it could automatically activate
- * some servo if some condition is met, etc.
+ * some servo if some condition is met, etc. This is completely synchronous -
+ * there's only a single thread, and blocking code will prevent listeners from
+ * functioning correctly.
  *
  * <p>
  * Listeners have a variety of configuration options, some of which are
@@ -41,20 +43,35 @@ import java.util.function.Supplier;
  *         {@code Expiration} is the time the listener will "expire," in
  *         milliseconds from epoch (use {@link Time#ms()}!). This is infinity
  *         by default. Expired listeners are removed from the listener manager
- *         and will no longer be executed.
+ *         and will no longer be executed. If you need to add a time out to
+ *         your listener (it only needs to listen for 10 seconds, say), you'd
+ *         give it an expiration date of the current time plus 10 seconds,
+ *         like so:
+ *         <code>
+ *             listener.setExpiration(Time.ms() + 10_000);
+ *         </code>
  *     </li>
  *     <li>
  *         {@code Maximum executions} is the maximum amount of times the
  *         listener is allowed to activate before it expires. If you have
  *         a maximum execution of 5, the 5th execution of your listener will
- *         also be its last.
+ *         also be its last. By default, this is infinite, meaning there's
+ *         no limit on how many times your {@code Listener} can execute.
  *     </li>
  *     <li>
  *         {@code Cooldown} is how long in between activations the listener
  *         will wait. If you need to wait a certain amount of time between
- *         listener execution, a cooldown will be quite helpful.
+ *         listener execution, a cooldown will be quite helpful. The listener
+ *         will not be activated until the amount of milliseconds since the
+ *         last time the listener was activated. Cooldown is measured in
+ *         milliseconds.
  *     </li>
  * </ul>
+ * </p>
+ *
+ * <p>
+ * To simplify the creation of a {@code Listener}, check out the
+ * {@link ListenerBuilder} utility class.
  * </p>
  *
  * @author Colin Robertson

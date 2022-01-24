@@ -21,7 +21,6 @@ import java.util.function.Supplier;
  * values, as well as a feature called "lazy mode."
  *
  * <p>
- * <h3>Lazy Mode</h3>
  * Lazy mode is a feature I saw in another robotics library. Unfortunately,
  * I can't, for the life of me, remember the name of the team that wrote
  * the library or the name of the library - if you happen to know what
