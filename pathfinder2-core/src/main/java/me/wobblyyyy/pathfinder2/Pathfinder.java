@@ -32,6 +32,7 @@ import me.wobblyyyy.pathfinder2.math.Velocity;
 import me.wobblyyyy.pathfinder2.movement.MovementProfiler;
 import me.wobblyyyy.pathfinder2.plugin.PathfinderPlugin;
 import me.wobblyyyy.pathfinder2.plugin.PathfinderPluginManager;
+import me.wobblyyyy.pathfinder2.plugin.bundled.PositionLocker;
 import me.wobblyyyy.pathfinder2.plugin.bundled.StatTracker;
 import me.wobblyyyy.pathfinder2.prebuilt.AutoRotator;
 import me.wobblyyyy.pathfinder2.prebuilt.HeadingLock;
@@ -598,8 +599,20 @@ public class Pathfinder {
         return this;
     }
 
+    /**
+     * Load all of the plugins bundled with Pathfinder.
+     *
+     * The plugins that will be loaded are (in order):
+     * <ul>
+     *     <li>{@link StatTracker}</li>
+     *     <li>{@link PositionLocker}</li>
+     * </ul>
+     *
+     * @return {@code this}, used for method chaining.
+     */
     public Pathfinder loadBundledPlugins() {
         pluginManager.loadPlugin(new StatTracker());
+        pluginManager.loadPlugin(new PositionLocker());
 
         return this;
     }
