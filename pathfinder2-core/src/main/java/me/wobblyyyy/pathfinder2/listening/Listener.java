@@ -24,18 +24,59 @@ import java.util.function.Supplier;
  * slow down if it's approaching a wall, or it could automatically activate
  * some servo if some condition is met, etc.
  *
+ * <p>
+ * Listeners have a variety of configuration options, some of which are
+ * disabled by default. Those configuration options are as follows:
+ * <ul>
+ *     <li>
+ *         {@code Priority} is related to the listener's execution order.
+ *         A listener with a higher priority will be executed before any
+ *         other listeners that are also activated if it has a higher priority
+ *         than them. The default priority level is 0. This can be useful in
+ *         situations where you need the code of a certain listener to be
+ *         executed before the code of another listener because a value updated
+ *         in the latter is required in the former.
+ *     </li>
+ *     <li>
+ *         {@code Expiration} is the time the listener will "expire," in
+ *         milliseconds from epoch (use {@link Time#ms()}!). This is infinity
+ *         by default. Expired listeners are removed from the listener manager
+ *         and will no longer be executed.
+ *     </li>
+ *     <li>
+ *         {@code Maximum executions} is the maximum amount of times the
+ *         listener is allowed to activate before it expires. If you have
+ *         a maximum execution of 5, the 5th execution of your listener will
+ *         also be its last.
+ *     </li>
+ *     <li>
+ *         {@code Cooldown} is how long in between activations the listener
+ *         will wait. If you need to wait a certain amount of time between
+ *         listener execution, a cooldown will be quite helpful.
+ *     </li>
+ * </ul>
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.7.1
+ * @see ListenerManager
+ * @see ListenerMode
  */
 public class Listener implements Tickable {
     private final ListenerMode mode;
     private final Runnable whenTriggered;
     private final Supplier<Boolean>[] input;
-    private int priority;
+
     private boolean previousInput;
-    private double expiration = Double.MAX_VALUE;
     private boolean hasBeenMet;
     private boolean hasBeenNotMet;
+    private int executions;
+    private double lastExecMs = 0;
+
+    private int priority;
+    private double expiration = Double.MAX_VALUE;
+    private int maximumExecutions = Integer.MAX_VALUE;
+    private double cooldownMs = 0;
 
     /**
      * Create a new {@code Listener}.
@@ -97,6 +138,21 @@ public class Listener implements Tickable {
         this.mode = mode;
         this.whenTriggered = whenTriggered;
         this.input = input;
+    }
+
+    public Listener(Listener listener) {
+        this.priority = listener.priority;
+        this.mode = listener.mode;
+        this.whenTriggered = listener.whenTriggered;
+        this.input = listener.input;
+        this.previousInput = listener.previousInput;
+        this.expiration = listener.expiration;
+        this.hasBeenMet = listener.hasBeenMet;
+        this.hasBeenNotMet = listener.hasBeenNotMet;
+        this.maximumExecutions = listener.maximumExecutions;
+        this.executions = listener.executions;
+        this.cooldownMs = listener.cooldownMs;
+        this.lastExecMs = listener.lastExecMs;
     }
 
     public static Listener buttonHeld(Supplier<Boolean> input,
@@ -165,7 +221,8 @@ public class Listener implements Tickable {
     }
 
     public boolean hasExpired() {
-        return Time.ms() > expiration;
+        return Time.ms() > expiration
+                || executions > maximumExecutions;
     }
 
     public int getPriority() {
@@ -186,8 +243,31 @@ public class Listener implements Tickable {
         return this;
     }
 
+    public Listener setMaximumExecutions(int maximumExecutions) {
+        this.maximumExecutions = maximumExecutions;
+
+        return this;
+    }
+
+    public int getExecutions() {
+        return executions;
+    }
+
+    public Listener setCooldownMs(double cooldownMs) {
+        this.cooldownMs = cooldownMs;
+
+        return this;
+    }
+
+
     @Override
     public boolean tick(Pathfinder pathfinder) {
+        if (executions++ > maximumExecutions) return false;
+
+        double currentMs = Time.ms();
+        if (currentMs - lastExecMs < cooldownMs) return true;
+        lastExecMs = currentMs;
+
         boolean input = true;
 
         for (Supplier<Boolean> supplier : this.input)

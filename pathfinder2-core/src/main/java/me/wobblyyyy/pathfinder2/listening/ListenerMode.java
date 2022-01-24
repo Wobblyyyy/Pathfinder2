@@ -13,10 +13,6 @@ package me.wobblyyyy.pathfinder2.listening;
 /**
  * Modes a listener can operate in.
  *
- * <p>
- * If you want a button-like effect, use {@link #CONDITION_NEWLY_MET}.
- * </p>
- *
  * @author Colin Robertson
  * @since 0.7.1
  * @see Listener
@@ -57,12 +53,16 @@ public enum ListenerMode {
     CONDITION_NEWLY_CHANGED,
 
     /**
-     * Only when the condition has never been met.
+     * Only when the condition has never been met. If the condition has
+     * been met even once before, the listener will automatically remove
+     * itself from the listener manager so it can't be executed again.
      */
     CONDITION_NEVER_MET,
 
     /**
-     * Only when the condition has always been met.
+     * Only when the condition has always been met. If the condition has
+     * been not met even once before, the listener will automatically remove
+     * itself from the listener manager so it can't be executed again.
      */
     CONDITION_ALWAYS_MET,
 }
