@@ -21,6 +21,11 @@ import java.util.function.Supplier;
  * values, as well as a feature called "lazy mode."
  *
  * <p>
+ * Update: as of January 24th, 2022, the maximum lazy milliseconds value is
+ * set to infinity, negating its purpose.
+ * </p>
+ *
+ * <p>
  * Lazy mode is a feature I saw in another robotics library. Unfortunately,
  * I can't, for the life of me, remember the name of the team that wrote
  * the library or the name of the library - if you happen to know what
@@ -88,7 +93,7 @@ public class AbstractMotor implements Motor {
     /**
      * Maximum time delta for lazy mode. By default, this is 50 ms.
      */
-    private double lazyMs = 50;
+    private double lazyMs = Double.MAX_VALUE;
 
     /**
      * Maximum power value gap for lazy mode. By default, this is 0.01.

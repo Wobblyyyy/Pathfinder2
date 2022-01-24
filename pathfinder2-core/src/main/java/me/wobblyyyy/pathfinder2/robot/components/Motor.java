@@ -43,7 +43,9 @@ public interface Motor {
      * a note of it.
      * </p>
      *
-     * @param power the power value to set to the motor.
+     * @param power the power value to set to the motor. Conventionally, this
+     *              value should be between -1 and 1, representing full speed
+     *              reverse and full speed forwards, respectively.
      */
     void setPower(double power);
 }
