@@ -46,7 +46,7 @@ to write expressive and intuitive code.
 pathfinder.getListenerManager()
     .bind(
         ListenerMode.CONDITION_NEWLY_MET,
-        () -> gamepad::a,
+        () -> gamepad.a(),
         (b) -> {
             pathfinder.clear();
             pathfinder.setTranslation(Translation.ZERO);
