@@ -29,6 +29,15 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
  * compensate automatically.
  * </p>
  *
+ * <p>
+ * Linear trajectories are the easiest trajectories to work with, but don't
+ * maximize movement efficiency. There are several issues (not specific to
+ * linear trajectories) that make them, at times, slow: overcorrection, for
+ * example, can cause your robot to circle around the point. This can be fixed
+ * by increasing the tolerance value, but doing so will decrease the accuracy
+ * of the trajectory.
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.0.0
  */

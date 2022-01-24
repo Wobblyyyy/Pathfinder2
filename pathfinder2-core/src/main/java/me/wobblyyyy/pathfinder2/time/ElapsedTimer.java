@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.time;
 
 /**
  * A very simple timer that keeps track of how much time has been elapsed.
+ * This can be used to create time-based loops.
  *
  * @author Colin Robertson
  * @since 0.2.4

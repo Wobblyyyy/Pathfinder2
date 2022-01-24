@@ -59,11 +59,14 @@ public interface Trajectory extends Serializable {
      * A {@code Trajectory} is, in essence, a long sequence of points the
      * robot should navigate to. These points are typically generated
      * dynamically. Simple trajectories, such as linear trajectories, only need
-     * a single marker point.
+     * a single marker point - the target point.
      * </p>
      *
      * @param current the robot's current position. This position is used in
-     *                determining the next marker position.
+     *                determining the next marker position. Some trajectories
+     *                may use the robot's current position to keep track of
+     *                progress through a stateful trajectory, such as a
+     *                trajectory that passes through the same point twice.
      * @return the next marker the robot should attempt to navigate to. The
      * robot should calculate, based on the current and marker positions,
      * how to move in order to reach the target position.
