@@ -10,6 +10,7 @@
 
 /**
  * Extra physical utilities, such as LEDs and sensors, including color
- * sensors, distance sensors, and digital inputs.
+ * sensors, distance sensors, and digital inputs. These sensors are NOT
+ * related to Pathfinder's core functionality.
  */
 package me.wobblyyyy.pathfinder2.robot.extra;
