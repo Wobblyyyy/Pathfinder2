@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * Manager responsible for several {@link Listener}s. Each {@link Listener}
  * is stored in a {@link Map} with {@link String} keys so that listeners
  * can be activated and deactivated based on a shared name.
- * <p>
+ *
  * The {@link String} values used as keys do not require any certain rules
  * to be followed - they can be literally anything you want. If you're out
  * of ideas, check out {@link me.wobblyyyy.pathfinder2.utils.RandomString#randomString(int)}.
@@ -54,6 +54,8 @@ public class ListenerManager implements Tickable {
                                        Listener listener) {
         listeners.put(name, listener);
 
+        // sort the listeners on insertion so that the map doesn't have to
+        // be sorted every tick
         listeners = listeners.entrySet().stream()
                 .sorted(Comparator.comparingInt(o -> o.getValue().getPriority()))
                 .collect(Collectors.toMap(
@@ -112,12 +114,14 @@ public class ListenerManager implements Tickable {
             String name = entry.getKey();
             Listener listener = entry.getValue();
 
+            // remove expired listeners, tick non-expired listeners
             if (listener.hasExpired())
                 expiredListeners.add(name);
             else
                 listener.tick(pathfinder);
         }
 
+        // actually remove the listener if it's expired
         for (String key : expiredListeners)
             listeners.remove(key);
 
