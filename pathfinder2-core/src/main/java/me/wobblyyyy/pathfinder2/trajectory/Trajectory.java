@@ -99,7 +99,12 @@ public interface Trajectory extends Serializable {
 
     /**
      * Determine the speed at which the robot should be moving while executing
-     * this section of the trajectory.
+     * this section of the trajectory. Most simple forms of trajectory, such
+     * as the {@link LinearTrajectory}, have a linear speed, meaning the
+     * robot will move at the same speed throughout the duration of its
+     * {@code Trajectory}. Contrarily, more advanced trajectories, such as
+     * spline trajectories, can have variable speeds which change based on
+     * the robot's position.
      *
      * <p>
      * Trajectories can have different speeds at different points. This method
