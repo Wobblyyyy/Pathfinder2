@@ -26,7 +26,8 @@ the [FIRST Robotics Competition](https://www.firstinspires.org/robotics/frc) and
 the
 [FIRST Tech Challenge](https://www.firstinspires.org/robotics/ftc). This library
 will be actively developed until Q3 2022, and (hopefully) maintained long
-afterwards.
+afterwards. Pathfinder2 is focused on providing a streamlined and user-friendly
+interface for interacting with topics such as odometry and motion planning.
 
 For a fun little video tangentially related to the rest of the readme,
 see [this](https://www.reddit.com/r/FTC/comments/rdqitc/guys_we_got_auton_working/).
@@ -38,32 +39,73 @@ but you gotta admit, our robot has got some moves.
 Here's a demonstration of Pathfinder's utilization of lambda expressions to
 write simple and readable code.
 ```java
-pathfinder.getListenerManager()
-    .bind(
-        ListenerMode.CONDITION_NEWLY_MET,
-        () -> gamepad.a(),
-        (b) -> {
-            pathfinder.clear();
-            pathfinder.setTranslation(Translation.ZERO);
-        }
+// make the robot follow a spline. this could be used for autonomous movement
+pathfinder
+    .setSpeed(0.5) // a value, 0-1, how fast the robot is
+    .setTolerance(2) // how much tolerance pathfinder will use when
+                     // evaluating if the robot is at a certain position
+    .setAngleTolerance(Angle.fixedDeg(5)) // same thing as tolerance, but
+                                          // it's an angle
+    .splineTo(                                     // create a spline with 3
+        new PointXYZ(10, 10, Angle.fixedDeg(90)),  // very lovely points.
+        new PointXYZ(20, 30, Angle.fixedDeg(45)),  // splines can have a lot
+        new PointXYZ(30, 50, Angle.fixedDeg(180))  // more cool features that
+                                                   // are explained later on
     )
-    .bindButton(
-        gamepad::b,
-        (b) -> pathfinder.goTo(new PointXYZ(10, 10, 10).tickUntil());
+    .tickUntil(); // "tick" pathfinder until it's done. "ticking" is basically
+                  // updating the robot - it'll evaluate it's current position,
+                  // and it'll use that to determine where it should move.
+                  // pathfinder DOES NOT WORK unless you use the tick method!
+
+// add listeners for the A and B buttons, as well as either of the triggers.
+// this is very useful for making tele-op code
+pathfinder.getListenerManager()
+    .bindButton(gampad::a, (isPressed) -> {
+        // code to be executed whenever the A button is pressed
+    })
+    .bindButton(gamepad::b, (isPressed) -> {
+        // code to be executed whenever the B button is pressed
+    })
+    .bind(new ListenerBuilder()
+        .setMode(ListenerMode.CONDITION_IS_MET) // the listener will be active
+                                                // whenever the condition is
+                                                // met
+
+        .addInput(SupplierFilter.anyTrue(       // if either of the two
+                                                // conditions are true, the
+                                                // supplier will return true,
+                                                // meaning the listener
+                                                // will be activated
+            () -> gamepad.rightTrigger() > 0,
+            () -> gamepad.leftTrigger() > 0
+        ))
+        .setWhenTriggered(() -> {
+            // code to be executed whenever either trigger is pressed
+        })
+        .setPriority(10) // how important the listener is - higher priorities
+                         // are executed first
+        .setExpiration(Double.MAX_VALUE), // the timestamp (ms since epoch)
+                                          // that will cause the listener to
+                                          // "expire," basically making it no
+                                          // longer listen
+        .setMaximumExecutions(Double.MAX_VALUE) // the max amount of times
+                                                // the listener can be called
     );
 
-pathfinder
-    .setSpeed(0.5)
-    .setTolerance(2)
-    .setAngleTolerance(Angle.fixedDeg(5))
-    .splineTo(
-        new PointXYZ(10, 10, Angle.fixedDeg(90)),
-        new PointXYZ(20, 30, Angle.fixedDeg(45)),
-        new PointXYZ(30, 50, Angle.fixedDeg(180))
-    )
-    .andThen((pf) -> {
-        // do some cool stuff after finishing the spline
-    });
+// whenever pathfinder is "ticked" (updated, basically), set the robot's
+// translation to whatever the driver's controller outputs
+pathfinder.onTick(() -> {
+    pathfinder.setTranslation(new Translation(
+        gamepad.leftStickX(),
+        gamepad.leftStickY(),
+        gamepad.rightStickX()
+    ));
+});
+
+while (true) {
+    // tick pathfinder forever
+    pathfinder.tick();
+}
 ```
 
 <h2 align="center">Installation</h2>
