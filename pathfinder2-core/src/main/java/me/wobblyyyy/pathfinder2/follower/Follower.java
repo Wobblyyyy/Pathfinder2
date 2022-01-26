@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.follower;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
+import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
@@ -108,10 +109,16 @@ public interface Follower {
      * and Y values that fit within the bounds (-1.0, 1.0). This translation
      * is also absolute, NOT relative.
      */
+    @SuppressWarnings("RedundantCast")
     static Translation getAbsoluteTranslation(PointXYZ current,
                                               PointXYZ target,
                                               double speed,
                                               double turn) {
+        // if the robot is already at the correct x and y coordinates,
+        // set the x and y translation values to 0, but still turn
+        if (((PointXY) current).equals((PointXY) target))
+            return Translation.ZERO.withVz(turn);
+
         Angle angle = current.angleTo(target).fix();
 
         PointXYZ targetPoint = PointXYZ.zero().inDirection(speed, angle);

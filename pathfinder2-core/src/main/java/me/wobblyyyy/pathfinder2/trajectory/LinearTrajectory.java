@@ -84,38 +84,30 @@ public class LinearTrajectory implements Trajectory {
                             double speed,
                             double tolerance,
                             Angle angleTolerance) {
-        if (target == null) {
+        if (target == null)
             throw new NullPointException(
                     "Attempted to create a LinearTrajectory instance with " +
                             "a null target point. Target points can't be " +
-                            "null - crazy, I know!"
-            );
-        }
+                            "null - crazy, I know!");
 
-        if (speed < 0 || speed > 1) {
+        if (speed < 0 || speed > 1)
             throw new InvalidSpeedException(
                     "Attempted to create a LinearTrajectory instance with speed " +
                             "(" + speed + "). Speed values must be greater " +
-                            "than 0. and less than 1.0."
-            );
-        }
+                            "than 0. and less than 1.0.");
 
-        if (tolerance < 0) {
+        if (tolerance < 0)
             throw new InvalidToleranceException(
                     "Attempted to create a LinearTrajectory instance with a " +
                             "tolerance value less than 0. Tolerance values must " +
-                            "be greater than or equal to 0."
-            );
-        }
+                            "be greater than or equal to 0.");
 
-        if (angleTolerance == null) {
+        if (angleTolerance == null)
             throw new NullAngleException(
                     "Attempted to create a LinearTrajectory instance with " +
                             "a null angle tolerance value. Make sure whatever " +
                             "angle tolerance you pass isn't null next time, " +
-                            "okay? Cool."
-            );
-        }
+                            "okay? Cool.");
 
         this.target = target;
         this.speed = speed;
