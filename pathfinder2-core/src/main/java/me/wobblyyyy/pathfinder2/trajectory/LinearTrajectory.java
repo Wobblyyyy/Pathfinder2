@@ -43,6 +43,11 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
  */
 public class LinearTrajectory implements Trajectory {
     /**
+     * Should Pathfinder dance?
+     */
+    public static boolean SHOULD_SHUFFLE = false;
+
+    /**
      * The trajectory's target point.
      */
     private final PointXYZ target;
@@ -126,13 +131,15 @@ public class LinearTrajectory implements Trajectory {
 
     @Override
     public PointXYZ nextMarker(PointXYZ current) {
-        // if the robot has already reached the correct x and y coordinates,
-        // set the target position's x and y values to those of the current
-        // position, so that robot will stop trying to overcorrect. the heading
-        // value MUST remain the same as the target value or the trajectory
-        // may stop before reaching the correct angle
-        if (isDoneXY(current))
-            return current.withHeading(this.target);
+        if (!SHOULD_SHUFFLE) {
+            // if the robot has already reached the correct x and y coordinates,
+            // set the target position's x and y values to those of the current
+            // position, so that robot will stop trying to overcorrect. the heading
+            // value MUST remain the same as the target value or the trajectory
+            // may stop before reaching the correct angle
+            if (isDoneXY(current))
+                return current.withHeading(this.target);
+        }
 
         // otherwise, return the actual marker point
         return this.target;
