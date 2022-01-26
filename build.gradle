@@ -109,7 +109,7 @@ publishing {
             artifact shadowJar
             artifact sourcesJar
             artifact javadocJar
-            artifactId = 'pathfinder2-shadow'
+            artifactId = 'pathfinder2'
         }
     }
 }
