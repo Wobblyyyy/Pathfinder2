@@ -71,7 +71,7 @@ pathfinder.getListenerManager()
                                                 // whenever the condition is
                                                 // met
 
-        .addInput(SupplierFilter.anyTrue(       // if either of the two
+        .addInput(() -> SupplierFilter.anyTrue( // if either of the two
                                                 // conditions are true, the
                                                 // supplier will return true,
                                                 // meaning the listener
