@@ -10,8 +10,6 @@
 
 package me.wobblyyyy.pathfinder2.robot.components;
 
-import me.wobblyyyy.pathfinder2.time.Time;
-
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -21,28 +19,10 @@ import java.util.function.Supplier;
  * values, as well as a feature called "lazy mode."
  *
  * <p>
- * Update: as of January 24th, 2022, the maximum lazy milliseconds value is
- * set to infinity, negating its purpose.
- * </p>
- *
- * <p>
  * Lazy mode is a feature I saw in another robotics library. Unfortunately,
  * I can't, for the life of me, remember the name of the team that wrote
  * the library or the name of the library - if you happen to know what
  * I'm talking about, do me a favor and insert that name right here. Anyways.
- * Lazy mode conditionally calls the motor's actual set power method only
- * if one of two conditions are met.
- * <ul>
- *     <li>
- *         The amount of time that's elapsed since power was last actually
- *         set to the motor and the current time is greater than a minimum
- *         elapsed milliseconds value.
- *     </li>
- *     <li>
- *         The difference between the current power value and the target
- *         power value exceeds the maximum power value delta.
- *     </li>
- * </ul>
  * Lazy mode is designed to decrease CPU load and free up some busses by not
  * requiring the device running the robot code to set power to the motor every
  * single time the set power method is called. If there's such little

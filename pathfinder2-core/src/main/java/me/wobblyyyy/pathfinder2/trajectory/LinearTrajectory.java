@@ -168,6 +168,7 @@ public class LinearTrajectory implements Trajectory {
 
     @Override
     public double speed(PointXYZ current) {
-        return speed;
+        if (isDoneXY(current)) return 0;
+        else return speed;
     }
 }
