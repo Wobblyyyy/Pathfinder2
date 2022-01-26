@@ -134,6 +134,9 @@ public class LinearTrajectory implements Trajectory {
 
     @Override
     public PointXYZ nextMarker(PointXYZ current) {
+        if (isDoneXY(current))
+            return current;
+
         return this.target;
     }
 
