@@ -109,14 +109,15 @@ public interface Follower {
      * and Y values that fit within the bounds (-1.0, 1.0). This translation
      * is also absolute, NOT relative.
      */
-    @SuppressWarnings("RedundantCast")
     static Translation getAbsoluteTranslation(PointXYZ current,
                                               PointXYZ target,
                                               double speed,
                                               double turn) {
-        // if the robot is already at the correct x and y coordinates,
-        // set the x and y translation values to 0, but still turn
-        if (((PointXY) current).equals((PointXY) target))
+        // this is messy, i know, but i don't know how else to do it so uh...
+        PointXY currentXY = new PointXY(current.x(), current.y());
+        PointXY targetXY = new PointXY(target.x(), target.y());
+
+        if (currentXY.equals(targetXY))
             return Translation.ZERO.withVz(turn);
 
         Angle angle = current.angleTo(target).fix();
