@@ -209,7 +209,7 @@ public class Translation implements Serializable {
      * @return a new translation with vX, vY, and vZ values of 0.
      */
     public static Translation zero() {
-        return new Translation(0, 0, 0);
+        return ZERO;
     }
 
     /**

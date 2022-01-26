@@ -45,7 +45,7 @@ public class PointXYZ extends PointXY {
      *     <li>Z: 0</li>
      * </ul>
      */
-    public static final PointXYZ ZERO = PointXYZ.zero();
+    public static final PointXYZ ZERO = new PointXYZ(0, 0, 0);
 
     /**
      * The point's angle, or heading, or whatever you want to call it.
@@ -265,7 +265,7 @@ public class PointXYZ extends PointXY {
      * value of 0, and a Z value of 0 degrees.
      */
     public static PointXYZ zero() {
-        return new PointXYZ(0, 0, Angle.zero());
+        return PointXYZ.ZERO;
     }
 
     /**

@@ -91,19 +91,9 @@ public class AbstractMotor implements Motor {
     private boolean isLazy = true;
 
     /**
-     * Maximum time delta for lazy mode. By default, this is 50 ms.
-     */
-    private double lazyMs = Double.MAX_VALUE;
-
-    /**
      * Maximum power value gap for lazy mode. By default, this is 0.01.
      */
     private double maxLazyPowerGap = 0.01;
-
-    /**
-     * The last recorded timestamp.
-     */
-    private double lastTimestamp = Time.ms();
 
     /**
      * The last set power value.
@@ -253,31 +243,6 @@ public class AbstractMotor implements Motor {
     }
 
     /**
-     * Get the maximum amount of elapsed milliseconds between setting power
-     * to the motor.
-     *
-     * @return the maximum amount of elapsed milliseconds before setting power
-     * to the motor if operating in lazy mode.
-     */
-    public double getMaxElapsedMs() {
-        return this.lazyMs;
-    }
-
-    /**
-     * Set the maximum amount of milliseconds elapsed before power will be
-     * physically set to the motor.
-     *
-     * @param maxElapsedMs the maximum amount of milliseconds that can be
-     *                     elapsed before power is set to the motor.
-     * @return {@code this}, used for method chaining.
-     */
-    public AbstractMotor setMaxElapsedMs(double maxElapsedMs) {
-        this.lazyMs = maxElapsedMs;
-
-        return this;
-    }
-
-    /**
      * Get the maximum power gap.
      *
      * @return the maximum power gap.
@@ -361,30 +326,10 @@ public class AbstractMotor implements Motor {
             power = power * -1;
         }
 
-        // Check to see if the motor is operating in "lazy mode."
         if (isLazy) {
-            // Get the current timestamp.
-            double currentTimestamp = Time.ms();
-
-            // Determine how many ms have elapsed since power was last set.
-            double timeDelta = currentTimestamp - lastTimestamp;
-
-            // Determine the difference between the motor's current power
-            // value and the motor's target power value.
-            double powerDelta = Math.abs(lastPower - power);
-
-            // If the difference between the motor's current and target power
-            // values is greater than the maximum power gap, or if the amount
-            // of time (in ms) elapsed since power was last set to the motor
-            // is greater than the maximum allowable lazy ms, set power to the
-            // motor. Otherwise, do nothing.
-            if (powerDelta >= maxLazyPowerGap && timeDelta >= lazyMs) {
+            if (Math.abs(lastPower - power) >= maxLazyPowerGap)
                 accept(power);
-                lastTimestamp = currentTimestamp;
-            }
         } else {
-            // If the motor's not lazy, we set the power without doing any
-            // other checks. Sick!
             accept(power);
         }
     }

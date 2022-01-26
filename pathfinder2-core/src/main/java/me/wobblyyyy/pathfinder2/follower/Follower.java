@@ -122,7 +122,7 @@ public interface Follower {
 
         Angle angle = current.angleTo(target).fix();
 
-        PointXYZ targetPoint = PointXYZ.zero().inDirection(speed, angle);
+        PointXYZ targetPoint = PointXYZ.ZERO.inDirection(speed, angle);
 
         return new Translation(targetPoint.x(), targetPoint.y(), turn);
     }
