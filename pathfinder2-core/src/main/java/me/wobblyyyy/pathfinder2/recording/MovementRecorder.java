@@ -58,6 +58,10 @@ public class MovementRecorder {
         lastRecordMs = Time.ms();
     }
 
+    /**
+     * Stop the recording by setting the internal {@code isRecording} flag
+     * to false, meaning ticking this recorder won't actually do anything.
+     */
     public void stop() {
         isRecording = false;
     }
@@ -66,6 +70,12 @@ public class MovementRecorder {
         return recording;
     }
 
+    /**
+     * Tick, or update, the {@code MovementRecorder}. If the {@code isRecording}
+     * flag has not been set via the {@link #start()} method, this will do
+     * absolutely nothing. If the flag has been set to false using the
+     * {@link #stop()} method, this method will do nothing.
+     */
     public void tick() {
         if (!isRecording) return;
 

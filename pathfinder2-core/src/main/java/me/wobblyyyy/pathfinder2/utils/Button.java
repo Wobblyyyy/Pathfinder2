@@ -13,7 +13,15 @@ package me.wobblyyyy.pathfinder2.utils;
 import java.util.function.Supplier;
 
 /**
- * A very simple boolean button.
+ * A very simple boolean button. Buttons are based on a {@link Supplier} that
+ * indicates the state of a physical button: this supplier should return true
+ * if the button is pressed, and false if it is not.
+ *
+ * <p>
+ * {@code Button}s were pretty useful in older versions of Pathfinder, but
+ * there's a new listener system ({@code me.wobblyyyy.pathfinder2.listening})
+ * that's even better.
+ * </p>
  *
  * @author Colin Robertson
  * @since 0.0.0
@@ -25,7 +33,10 @@ public class Button {
     /**
      * Create a new {@code Button}.
      *
-     * @param stateSupplier a method that returns the button's state.
+     * @param stateSupplier a method that returns the button's state. This
+     *                      {@code Supplier} should return {@code true}
+     *                      whenever the physical button is pressed, and
+     *                      {@code false} whenever it is not.
      */
     public Button(Supplier<Boolean> stateSupplier) {
         this.stateSupplier = stateSupplier;

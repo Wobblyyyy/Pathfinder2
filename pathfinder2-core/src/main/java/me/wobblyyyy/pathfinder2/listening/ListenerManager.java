@@ -134,6 +134,16 @@ public class ListenerManager implements Tickable {
         return true;
     }
 
+    /**
+     * Bind an action to a button press - whenever the button is initially
+     * pressed, that is.
+     *
+     * @param input   a supplier that indicates the physical state of
+     *                a button.
+     * @param onPress code to be executed whenever the button is initially
+     *                pressed.
+     * @return {@code this}, used for method chaining.
+     */
     public ListenerManager bindButtonPress(Supplier<Boolean> input,
                                            Runnable onPress) {
         return addListener(new Listener(
@@ -143,6 +153,16 @@ public class ListenerManager implements Tickable {
         ));
     }
 
+    /**
+     * Bind an action to a button release - whenever the button is initially
+     * releaesed, that is.
+     *
+     * @param input     a supplier that indicates the physical state of
+     *                  a button.
+     * @param onRelease code to be executed whenever the button is initially
+     *                  pressed.
+     * @return {@code this}, used for method chaining.
+     */
     public ListenerManager bindButtonRelease(Supplier<Boolean> input,
                                              Runnable onRelease) {
         return addListener(new Listener(

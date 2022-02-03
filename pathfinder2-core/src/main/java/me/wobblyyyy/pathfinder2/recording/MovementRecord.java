@@ -17,7 +17,9 @@ import me.wobblyyyy.pathfinder2.geometry.Translation;
 import java.io.Serializable;
 
 /**
- * A snapshot of Pathfinder's movement.
+ * A snapshot of Pathfinder's movement. Each {@code MovementRecord} represents
+ * a single moment of Pathfinder's motion, including it's position, velocity,
+ * elapsed time, and the robot's translation.
  *
  * @author Colin Robertson
  * @since 0.6.1

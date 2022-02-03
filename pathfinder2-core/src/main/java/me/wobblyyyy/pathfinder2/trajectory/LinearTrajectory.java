@@ -43,7 +43,8 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
  */
 public class LinearTrajectory implements Trajectory {
     /**
-     * Should Pathfinder dance?
+     * Should Pathfinder dance? Please note that this should ALWAYS be false
+     * in any project that's used in competition. This is just for fun.
      */
     public static boolean SHOULD_SHUFFLE = false;
 
@@ -70,10 +71,13 @@ public class LinearTrajectory implements Trajectory {
     /**
      * Create a new {@code LinearTrajectory}.
      *
-     * @param target         the trajectory's target point.
+     * @param target         the trajectory's target point. The trajectory will
+     *                       execute until it is interrupted, or it reaches the
+     *                       target point.
      * @param speed          the speed at which the robot should move to the
      *                       target point. Note that this speed value can not
      *                       be changed while the trajectory is being followed.
+     *                       This value should be between 0 and 1.
      * @param tolerance      the tolerance used in determining whether the
      *                       robot's X and Y coordinates match up with those
      *                       of the target point. A higher tolerance means
@@ -168,7 +172,11 @@ public class LinearTrajectory implements Trajectory {
 
     @Override
     public double speed(PointXYZ current) {
+        // if the robot has already reached the target X and Y positions,
+        // return 0, so that the robot will not move.
         if (isDoneXY(current)) return 0;
-        else return speed;
+
+        return speed;
     }
 }
+

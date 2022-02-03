@@ -15,11 +15,8 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
-import me.wobblyyyy.pathfinder2.listening.Listener;
-import me.wobblyyyy.pathfinder2.listening.ListenerMode;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
 import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
-import me.wobblyyyy.pathfinder2.utils.SupplierFilter;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +24,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("BusyWait")
 public class TestStatTracker {
-    @SuppressWarnings("UnusedAssignment")
     @Test
     @Disabled
     public void testTicksPerSecond() {
@@ -47,72 +43,72 @@ public class TestStatTracker {
         SimulatedOdometry odometry = (SimulatedOdometry) pathfinder.getOdometry();
         AtomicInteger i = new AtomicInteger(0);
 
-        pathfinder.getListenerManager()
-                .bind(
-                        ListenerMode.CONDITION_ALWAYS_MET,
-                        () -> Math.random() > 0.5,
-                        (b) -> {
-                            double x;
-
-                            if (b) x = 10;
-                            else x = 1;
-
-                            x *= x;
-                        }
-                )
-                .bind(
-                        ListenerMode.CONDITION_IS_MET,
-                        () -> SupplierFilter.trueThenAllFalse(
-                                () -> true,
-                                () -> false,
-                                () -> Math.random() > 0.5,
-                                () -> Math.random() > 0.5
-                        ),
-                        (b) -> {
-                            i.incrementAndGet();
-                            try {
-                                Thread.sleep(2);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                )
-                .addListener(new Listener(
-                        10,
-                        ListenerMode.CONDITION_IS_MET,
-                        () -> {
-                            double a = Math.sqrt(Math.cos(10 * Math.PI));
-                            a *= Math.cbrt(a);
-                        },
-                        () -> true
-                ))
-                .addListener(new Listener(
-                        5,
-                        ListenerMode.CONDITION_IS_MET,
-                        () -> {
-                            double a = Math.sqrt(Math.cos(10 * Math.PI));
-                            a /= Math.cbrt(a);
-                        },
-                        () -> true
-                ))
-                .addListener(new Listener(
-                        100,
-                        ListenerMode.CONDITION_IS_MET,
-                        () -> {
-                            double a = Math.sqrt(Math.cos(10 * Math.PI));
-                            a += Math.cbrt(a);
-                        },
-                        () -> true
-                ))
-                .addListener(new Listener(
-                        0,
-                        ListenerMode.CONDITION_IS_MET,
-                        () -> {
-                            double a = Math.sqrt(Math.cos(10 * Math.PI));
-                            a -= Math.cbrt(a);
-                        },
-                        () -> true
-                ));
+//        pathfinder.getListenerManager()
+//                .bind(
+//                        ListenerMode.CONDITION_ALWAYS_MET,
+//                        () -> Math.random() > 0.5,
+//                        (b) -> {
+//                            double x;
+//
+//                            if (b) x = 10;
+//                            else x = 1;
+//
+//                            x *= x;
+//                        }
+//                )
+//                .bind(
+//                        ListenerMode.CONDITION_IS_MET,
+//                        () -> SupplierFilter.trueThenAllFalse(
+//                                () -> true,
+//                                () -> false,
+//                                () -> Math.random() > 0.5,
+//                                () -> Math.random() > 0.5
+//                        ),
+//                        (b) -> {
+//                            i.incrementAndGet();
+//                            try {
+//                                Thread.sleep(2);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                )
+//                .addListener(new Listener(
+//                        10,
+//                        ListenerMode.CONDITION_IS_MET,
+//                        () -> {
+//                            double a = Math.sqrt(Math.cos(10 * Math.PI));
+//                            a *= Math.cbrt(a);
+//                        },
+//                        () -> true
+//                ))
+//                .addListener(new Listener(
+//                        5,
+//                        ListenerMode.CONDITION_IS_MET,
+//                        () -> {
+//                            double a = Math.sqrt(Math.cos(10 * Math.PI));
+//                            a /= Math.cbrt(a);
+//                        },
+//                        () -> true
+//                ))
+//                .addListener(new Listener(
+//                        100,
+//                        ListenerMode.CONDITION_IS_MET,
+//                        () -> {
+//                            double a = Math.sqrt(Math.cos(10 * Math.PI));
+//                            a += Math.cbrt(a);
+//                        },
+//                        () -> true
+//                ))
+//                .addListener(new Listener(
+//                        0,
+//                        ListenerMode.CONDITION_IS_MET,
+//                        () -> {
+//                            double a = Math.sqrt(Math.cos(10 * Math.PI));
+//                            a -= Math.cbrt(a);
+//                        },
+//                        () -> true
+//                ));
 
         try {
             while (timer.elapsedSeconds() < 5) {

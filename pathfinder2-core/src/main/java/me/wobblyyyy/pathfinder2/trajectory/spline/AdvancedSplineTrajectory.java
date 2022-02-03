@@ -34,6 +34,11 @@ import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
  * your trajectory so that it does exactly what you want.
  * </p>
  *
+ * <p>
+ * This is the suggested way to utilize spline trajectories, as it gives the
+ * most flexibility without inhibiting usability.
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.6.1
  */

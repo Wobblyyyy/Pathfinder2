@@ -107,14 +107,14 @@ public class AbstractMotor implements Motor {
      * Create a new {@code AbstractMotor} using a {@link Supplier} and a
      * {@link Consumer}.
      *
-     * @param setPower a {@code Consumer} that accepts a double value. This
-     *                 consumer should perform some set of actions that
-     *                 actually sets power to the motor and makes it spin.
-     * @param getPower a {@code Supplier} that returns the motor's current
-     *                 power. This method typically calls a provided method
-     *                 that queries the power from the physical motor. If such
-     *                 a method is not provided, you should go about making
-     *                 it function in some other way. Sorry!
+     * @param setPower   a {@code Consumer} that accepts a double value. This
+     *                   consumer should perform some set of actions that
+     *                   actually sets power to the motor and makes it spin.
+     * @param getPower   a {@code Supplier} that returns the motor's current
+     *                   power. This method typically calls a provided method
+     *                   that queries the power from the physical motor. If such
+     *                   a method is not provided, you should go about making
+     *                   it function in some other way. Sorry!
      * @param isInverted if this is true, all {@code setPower} and
      *                   {@code getPower} operations will multiply any
      *                   inputted/outputted power values by -1.
@@ -134,14 +134,14 @@ public class AbstractMotor implements Motor {
      * Create a new {@code AbstractMotor} using a {@link Supplier} and a
      * {@link Consumer}.
      *
-     * @param setPower a {@code Consumer} that accepts a double value. This
-     *                 consumer should perform some set of actions that
-     *                 actually sets power to the motor and makes it spin.
-     * @param getPower a {@code Supplier} that returns the motor's current
-     *                 power. This method typically calls a provided method
-     *                 that queries the power from the physical motor. If such
-     *                 a method is not provided, you should go about making
-     *                 it function in some other way. Sorry!
+     * @param setPower      a {@code Consumer} that accepts a double value. This
+     *                      consumer should perform some set of actions that
+     *                      actually sets power to the motor and makes it spin.
+     * @param getPower      a {@code Supplier} that returns the motor's current
+     *                      power. This method typically calls a provided method
+     *                      that queries the power from the physical motor. If such
+     *                      a method is not provided, you should go about making
+     *                      it function in some other way. Sorry!
      * @param isSetInverted if this is true, all {@code setPower} operations
      *                      will multiply the inputted power by -1.
      * @param isGetInverted if this is true, all {@code getPower} operations

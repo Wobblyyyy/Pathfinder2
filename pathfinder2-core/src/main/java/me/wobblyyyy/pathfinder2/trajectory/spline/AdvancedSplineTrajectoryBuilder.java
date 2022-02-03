@@ -23,7 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A builder for the {@link AdvancedSplineTrajectory} class.
+ * A builder for the {@link AdvancedSplineTrajectory} class. Please read over
+ * the documentation in {@link AdvancedSplineTrajectory} before using this
+ * class!
  *
  * @author Colin Robertson
  * @since 0.6.1

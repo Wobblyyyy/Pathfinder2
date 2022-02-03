@@ -20,6 +20,12 @@ package me.wobblyyyy.pathfinder2.utils;
  *     <li>If it's on, the toggle will turn to off.</li>
  * </ul>
  *
+ * <p>
+ * Toggles are most useful in loop-based code: if you want to have a stateful
+ * component that can be toggled with the press of a button, for example,
+ * a toggle would be perfect, just like you. {@code :)}
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.7.1
  */

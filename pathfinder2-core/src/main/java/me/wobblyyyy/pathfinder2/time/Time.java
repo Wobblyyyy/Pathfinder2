@@ -11,8 +11,10 @@
 package me.wobblyyyy.pathfinder2.time;
 
 /**
- * A bunch of different utilities related to time. As a utility class, this
- * isn't instantiatable. Very unfortunate, I know.
+ * Utilities related to time. This includes convenience methods to get
+ * the system's current time, as well as convenience methods to calculate
+ * a timestamp based on the current timestamp - for example, check out
+ * {@link #secondsFromNow(double)}.
  *
  * @author Colin Robertson
  * @since 0.0.0
@@ -40,10 +42,20 @@ public class Time {
         return System.currentTimeMillis();
     }
 
+    /**
+     * Get the system's current time, in seconds.
+     *
+     * @return the system's current time, in seconds.
+     */
     public static double seconds() {
         return ms() / 1_000;
     }
 
+    /**
+     * Get the system's current time, in seconds.
+     *
+     * @return the system's current time, in seconds.
+     */
     public static long longSeconds() {
         return longMs() / 1_000;
     }
@@ -113,5 +125,24 @@ public class Time {
      */
     public static double hoursFromNow(double time) {
         return fromNow(time, TimeUnit.H);
+    }
+
+    /**
+     * Execute a certain piece of functionality repeatedly as long as the
+     * elapsed time (in milliseconds) is less than the provided maximum time
+     * (also in milliseconds). This is a blocking method and will call the
+     * {@code Runnable}'s {@link Runnable#run()} method as often as possible.
+     *
+     * @param durationMs how long, in milliseconds, the provided
+     *                   {@code Runnable} should run for.
+     * @param runnable   functionality that will be executed repeatedly for
+     *                   {@code durationMs}.
+     */
+    public static void runFor(double durationMs,
+                              Runnable runnable) {
+        ElapsedTimer timer = new ElapsedTimer(true);
+
+        while (timer.elapsedMs() <= durationMs)
+            runnable.run();
     }
 }

@@ -22,7 +22,8 @@ import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
  *
  * <p>
  * For more advanced application of splines, look at
- * {@link AdvancedSplineTrajectory}.
+ * {@link AdvancedSplineTrajectory}. Actually, I would strongly encourage you
+ * to use that aforementioned class instead.
  * </p>
  *
  * @author Colin Robertson

@@ -24,6 +24,12 @@ import java.util.List;
  * class allows you to avoid the {@link Shape} class' generics.
  *
  * <p>
+ * Zones allow your robot to perform certain actions or act in certain ways
+ * whenever it's position matches a certain set of requirements. Zones are
+ * based on shapes - each zone has one parent shape.
+ * </p>
+ *
+ * <p>
  * You can overload some methods to control the zone's behavior.
  * <ul>
  *     <li>{@link #onEnter(Pathfinder)}</li>
@@ -92,24 +98,50 @@ public class Zone implements Serializable {
         return shape;
     }
 
+    /**
+     * Is a given point contained inside the zone's parent shape?
+     *
+     * @param point the point to test.
+     * @return if the point is inside the zone, return true. Otherwise, false.
+     */
     public final boolean isPointInShape(PointXY point) {
         return shape.isPointInShape(point);
     }
 
+    /**
+     * Is a given point not contained inside the zone's parent shape?
+     *
+     * @param point the point to test.
+     * @return if the point is outside the zone, return true. Otherwise, false.
+     */
     public final boolean isPointOutsideOfShape(PointXY point) {
         return !isPointInShape(point);
     }
 
+    /**
+     * Does this zone collide with another zone?
+     *
+     * @param zone the zone to test.
+     * @return true if there's a collision, otherwise, false.
+     */
     public final boolean doesCollideWith(Zone zone) {
         return shape.doesCollideWith(zone.getShape());
     }
 
+    /**
+     * Does this zone collide with a given shape?
+     *
+     * @param shape the shape to test.
+     * @return true if there's a collision, otherwise, false.
+     */
     public final boolean doesCollideWith(Shape<?> shape) {
         return this.shape.doesCollideWith(shape);
     }
 
     /**
-     * Code to be executed whenever a robot enters the zone.
+     * Code to be executed whenever a robot enters the zone. This code will
+     * executed once when the robot enters the zone, and will not be executed
+     * again until the robot leaves the zone and re-enters it.
      *
      * @param pathfinder the instance of Pathfinder.
      */
@@ -127,7 +159,9 @@ public class Zone implements Serializable {
     }
 
     /**
-     * Code to be executed whenever the robot is inside the zone.
+     * Code to be executed whenever the robot is inside the zone. This code is
+     * executed every time Pathfinder's {@code tick()} method is called if the
+     * robot is inside the zone.
      *
      * @param pathfinder the instance of Pathfinder.
      */
@@ -135,6 +169,12 @@ public class Zone implements Serializable {
 
     }
 
+    /**
+     * Is the zone solid? There's no use for this right now, but it'll be
+     * implemented later on.
+     *
+     * @return true if the zone is solid, otherwise, false.
+     */
     public boolean isSolid() {
         return true;
     }

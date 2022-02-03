@@ -12,7 +12,9 @@ package me.wobblyyyy.pathfinder2.time;
 
 /**
  * A very simple timer that keeps track of how much time has been elapsed.
- * This can be used to create time-based loops.
+ * This can be used to create time-based loops. As of Pathfinder v0.10.7,
+ * the functionality of {@code ElapsedTimer} has been effectively
+ * encapsulated in the {@link Time} class: {@link Time#runFor(double, Runnable)}
  *
  * @author Colin Robertson
  * @since 0.2.4
@@ -60,6 +62,24 @@ public class ElapsedTimer {
         return current - start;
     }
 
+    /**
+     * Get the elapsed time, in milliseconds.
+     *
+     * @return the elapsed time, in milliseconds.
+     */
+    public long elapsedMilliseconds() {
+        return getElapsed();
+    }
+
+    /**
+     * Get the elapsed time, in milliseconds.
+     *
+     * @return the elapsed time, in milliseconds.
+     */
+    public long elapsedMs() {
+        return getElapsed();
+    }
+
     public double elapsedSeconds() {
         return getElapsed() / 1_000d;
     }
@@ -67,7 +87,11 @@ public class ElapsedTimer {
     /**
      * Is the elapsed time greater than a provided value?
      *
-     * @param time the time value to compare.
+     * <p>
+     * This method is based on milliseconds.
+     * </p>
+     *
+     * @param time the time value to compare (milliseconds).
      * @return whether or not the elapsed time is greater than the provided
      * time.
      */
@@ -78,7 +102,11 @@ public class ElapsedTimer {
     /**
      * Is the elapsed time less than a provided value?
      *
-     * @param time the time value to compare.
+     * <p>
+     * This method is based on milliseconds.
+     * </p>
+     *
+     * @param time the time value to compare (milliseconds).
      * @return whether or not the elapsed time is less than the provided
      * time.
      */
@@ -89,7 +117,11 @@ public class ElapsedTimer {
     /**
      * Is the elapsed time greater than a provided value?
      *
-     * @param time the time value to compare.
+     * <p>
+     * This method is based on milliseconds.
+     * </p>
+     *
+     * @param time the time value to compare (milliseconds).
      * @return whether or not the elapsed time is greater than the provided
      * time.
      */
@@ -100,7 +132,11 @@ public class ElapsedTimer {
     /**
      * Is the elapsed time less than a provided value?
      *
-     * @param time the time value to compare.
+     * <p>
+     * This method is based on milliseconds.
+     * </p>
+     *
+     * @param time the time value to compare (milliseconds).
      * @return whether or not the elapsed time is less than the provided
      * time.
      */

@@ -11,7 +11,10 @@
 package me.wobblyyyy.pathfinder2.listening;
 
 /**
- * Modes a listener can operate in.
+ * Modes a listener can operate in. The listener's mode determines when its
+ * functionality is executed - {@code CONDITION_IS_MET}, for example, will
+ * always execute whenever {@code CONDITION_IS_NOT_MET}. I hope that makes at
+ * least a little bit of sense.
  *
  * @author Colin Robertson
  * @since 0.7.1
@@ -64,5 +67,5 @@ public enum ListenerMode {
      * been not met even once before, the listener will automatically remove
      * itself from the listener manager so it can't be executed again.
      */
-    CONDITION_ALWAYS_MET,
+    CONDITION_ALWAYS_MET
 }
