@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/pathfinder2-examples" />
             <option value="$PROJECT_DIR$/pathfinder2-geometry" />
             <option value="$PROJECT_DIR$/pathfinder2-kinematics" />
+            <option value="$PROJECT_DIR$/pathfinder2-wpilib" />
           </set>
         </option>
       </GradleProjectSettings>

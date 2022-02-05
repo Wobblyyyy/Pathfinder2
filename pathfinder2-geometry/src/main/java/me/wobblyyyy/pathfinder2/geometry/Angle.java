@@ -230,6 +230,22 @@ public class Angle implements Comparable<Angle>, Serializable {
     private final double deg;
 
     /**
+     * Create a new angle representing 0 degrees or 0 radians.
+     */
+    public Angle() {
+        this(0, 0);
+    }
+
+    /**
+     * Create a new angle with a specified degrees value.
+     *
+     * @param degrees how many degrees the angle is.
+     */
+    public Angle(double degrees) {
+        this(degrees, Math.toRadians(degrees));
+    }
+
+    /**
      * Private constructor - angles can only be created with static methods.
      * We do this, so we don't have to convert degrees to radians and so
      * on and so forth over and over again.

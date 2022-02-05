@@ -1,0 +1,45 @@
+/*
+ * Copyright (c) 2022.
+ *
+ * This file is part of the "Pathfinder2" project, available here:
+ * <a href="https://github.com/Wobblyyyy/Pathfinder2">GitHub</a>
+ *
+ * This project is licensed under the GNU GPL V3 license.
+ * <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL V3</a>
+ */
+
+plugins {
+    id 'java'
+}
+
+group 'me.wobblyyyy'
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://frcmaven.wpi.edu/artifactory/release'
+    }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
+dependencies {
+    implementation project(':pathfinder2-core')
+    implementation project(':pathfinder2-geometry')
+    implementation project(':pathfinder2-kinematics')
+    implementation project(':pathfinder2-OdometryCore')
+
+    implementation 'edu.wpi.first.wpimath:wpimath-java:2022.3.1'
+    implementation 'edu.wpi.first.wpilibNewCommands:wpilibNewCommands-java:2022.3.1'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+}
+
+test {
+    useJUnitPlatform()
+}
