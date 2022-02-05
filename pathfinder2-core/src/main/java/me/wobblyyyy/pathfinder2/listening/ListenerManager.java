@@ -155,7 +155,7 @@ public class ListenerManager implements Tickable {
 
     /**
      * Bind an action to a button release - whenever the button is initially
-     * releaesed, that is.
+     * released, that is.
      *
      * @param input     a supplier that indicates the physical state of
      *                  a button.
@@ -178,7 +178,10 @@ public class ListenerManager implements Tickable {
         return bind(
                 ListenerMode.CONDITION_NEWLY_MET,
                 input,
-                (b) -> toggle.toggle()
+                (b) -> {
+                    toggle.toggle();
+                    onToggle.accept(toggle);
+                }
         );
     }
 
