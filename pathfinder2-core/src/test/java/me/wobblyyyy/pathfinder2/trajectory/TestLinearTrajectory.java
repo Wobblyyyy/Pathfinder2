@@ -10,8 +10,11 @@
 
 package me.wobblyyyy.pathfinder2.trajectory;
 
+import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.geometry.Translation;
+import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -53,5 +56,115 @@ public class TestLinearTrajectory {
         PointXYZ position = new PointXYZ(9.95, 9.95, 4.9);
 
         Assertions.assertTrue(trajectory.isDone(position));
+    }
+
+    @Test
+    public void testSimulation() {
+        Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
+        Trajectory a = new LinearTrajectory(
+                new PointXYZ(10, 10, 0),
+                0.5,
+                2,
+                Angle.fromDeg(5)
+        );
+        SimulatedOdometry odometry = (SimulatedOdometry) pathfinder.getOdometry();
+
+        pathfinder.followTrajectory(a);
+
+        odometry.setRawPosition(new PointXYZ(0, 0, 0));
+        pathfinder.tick();
+        Assertions.assertEquals(
+                new Translation(0.353, 0.353, 0.0),
+                pathfinder.getTranslation()
+        );
+        Assertions.assertTrue(pathfinder.isActive());
+
+        odometry.setRawPosition(new PointXYZ(0, 0, 15));
+        pathfinder.tick();
+        Assertions.assertEquals(
+                new Translation(0.353, 0.353, 0.15),
+                pathfinder.getTranslation().toRelative(Angle.fixedDeg(-15))
+        );
+        Assertions.assertTrue(pathfinder.isActive());
+
+        odometry.setRawPosition(new PointXYZ(10, 10, 45));
+        pathfinder.tick();
+        Assertions.assertEquals(
+                new Translation(0.0, 0.0, 0.45),
+                pathfinder.getTranslation()
+        );
+        Assertions.assertTrue(pathfinder.isActive());
+
+        odometry.setRawPosition(new PointXYZ(10, 10, 40));
+        pathfinder.tick();
+        Assertions.assertEquals(
+                new Translation(0.0, 0.0, 0.4),
+                pathfinder.getTranslation()
+        );
+        Assertions.assertTrue(pathfinder.isActive());
+
+        odometry.setRawPosition(new PointXYZ(10, 10, 3));
+        pathfinder.tick();
+        Assertions.assertEquals(
+                new Translation(0.0, 0.0, 0.0),
+                pathfinder.getTranslation()
+        );
+        Assertions.assertFalse(pathfinder.isActive());
+
+        Trajectory b = new LinearTrajectory(
+                new PointXYZ(10, 10, 45),
+                0.5,
+                2,
+                Angle.fromDeg(5)
+        );
+        pathfinder.followTrajectory(b);
+
+        odometry.setRawPosition(new PointXYZ(10, 10, 0));
+        pathfinder.tick();
+        Assertions.assertEquals(
+                new Translation(0.0, 0.0, -0.45),
+                pathfinder.getTranslation()
+        );
+        Assertions.assertTrue(pathfinder.isActive());
+
+        odometry.setRawPosition(new PointXYZ(10, 10, 10));
+        pathfinder.tick();
+        Assertions.assertEquals(
+                new Translation(0.0, 0.0, -0.35),
+                pathfinder.getTranslation()
+        );
+        Assertions.assertTrue(pathfinder.isActive());
+
+        odometry.setRawPosition(new PointXYZ(10, 10, 20));
+        pathfinder.tick();
+        Assertions.assertEquals(
+                new Translation(0.0, 0.0, -0.25),
+                pathfinder.getTranslation()
+        );
+        Assertions.assertTrue(pathfinder.isActive());
+
+        odometry.setRawPosition(new PointXYZ(12, 12, 0));
+        pathfinder.tick();
+        Assertions.assertEquals(
+                new Translation(-0.353, -0.353, -0.45),
+                pathfinder.getTranslation()
+        );
+        Assertions.assertTrue(pathfinder.isActive());
+
+        odometry.setRawPosition(new PointXYZ(12, 12, 45));
+        pathfinder.tick();
+        Assertions.assertEquals(
+                new Translation(0.0, -0.5, 0),
+                pathfinder.getTranslation()
+        );
+        Assertions.assertTrue(pathfinder.isActive());
+
+        odometry.setRawPosition(new PointXYZ(10, 10, 45));
+        pathfinder.tick();
+        Assertions.assertEquals(
+                new Translation(0.0, 0.0, 0.0),
+                pathfinder.getTranslation()
+        );
+        Assertions.assertFalse(pathfinder.isActive());
     }
 }
