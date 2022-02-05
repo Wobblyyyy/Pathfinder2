@@ -16,8 +16,17 @@ group 'me.wobblyyyy'
 
 repositories {
     mavenCentral()
+
     maven {
         url 'https://frcmaven.wpi.edu/artifactory/release'
+    }
+
+    maven {
+        url 'https://maven.revrobotics.com'
+    }
+
+    maven {
+        url 'https://maven.ctr-electronics.com/release'
     }
 }
 
@@ -33,8 +42,15 @@ dependencies {
     implementation project(':pathfinder2-kinematics')
     implementation project(':pathfinder2-OdometryCore')
 
+    // wpilib-specific stuff
     implementation 'edu.wpi.first.wpimath:wpimath-java:2022.3.1'
     implementation 'edu.wpi.first.wpilibNewCommands:wpilibNewCommands-java:2022.3.1'
+
+    // rev robotics
+    implementation 'com.revrobotics.frc:REVLib-java:2022.1.0'
+
+    // cross the road electronics
+    implementation 'com.ctre.phoenix:api-java:5.21.1'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
