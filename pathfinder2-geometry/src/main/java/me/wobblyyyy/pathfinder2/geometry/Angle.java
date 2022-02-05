@@ -92,133 +92,115 @@ import java.io.Serializable;
  * @since 0.0.0
  */
 public class Angle implements Comparable<Angle>, Serializable {
-    public static long COUNT = 0;
-
     /**
      * "rad"
      */
     public static final String FORMAT_RAD_SHORT = "rad";
-
     /**
      * "deg"
      */
     public static final String FORMAT_DEG_SHORT = "deg";
-
     /**
      * "radians"
      */
     public static final String FORMAT_RAD_LONG = "radians";
-
     /**
      * "degrees"
      */
     public static final String FORMAT_DEG_LONG = "degrees";
-
     /**
      * Minimum radians - 0
      */
     public static final double MIN_RAD = 0;
-
     /**
      * Maximum radians - 6.28318531
      */
     public static final double MAX_RAD = 6.28318531;
-
+    /**
+     * Maximum radians, times 10.
+     */
+    public static final double MAX_RAD_10X = MAX_RAD * 10;
     /**
      * Minimum degrees - 0
      */
     public static final double MIN_DEG = 0;
-
     /**
      * Maximum degrees - 360
      */
     public static final double MAX_DEG = 360;
-
+    /**
+     * Maximum degrees, times 10.
+     */
+    public static final double MAX_DEG_10X = MAX_DEG * 10;
     /**
      * {@link #fromDeg(double)} with an angle of 0
      */
     public static final Angle DEG_0 = Angle.fromDeg(0);
-
     /**
      * {@link #fromDeg(double)} with an angle of 45
      */
     public static final Angle DEG_45 = Angle.fromDeg(45);
-
     /**
      * {@link #fromDeg(double)} with an angle of 90
      */
     public static final Angle DEG_90 = Angle.fromDeg(90);
-
     /**
      * {@link #fromDeg(double)} with an angle of 135
      */
     public static final Angle DEG_135 = Angle.fromDeg(135);
-
     /**
      * {@link #fromDeg(double)} with an angle of 180
      */
     public static final Angle DEG_180 = Angle.fromDeg(180);
-
     /**
      * {@link #fromDeg(double)} with an angle of 225
      */
     public static final Angle DEG_225 = Angle.fromDeg(225);
-
     /**
      * {@link #fromDeg(double)} with an angle of 270
      */
     public static final Angle DEG_270 = Angle.fromDeg(270);
-
     /**
      * {@link #fromDeg(double)} with an angle of 315
      */
     public static final Angle DEG_315 = Angle.fromDeg(315);
-
     /**
      * {@link #fromDeg(double)} with an angle of 360
      */
     public static final Angle DEG_360 = Angle.fromDeg(360);
-
     /**
      * {@link #fromRad(double)} with an angle of 45 deg
      */
     public static final Angle PI_OVER_4 = Angle.fromDeg(45);
-
     /**
      * {@link #fromRad(double)} with an angle of 90 deg
      */
     public static final Angle PI_OVER_2 = Angle.fromDeg(90);
-
     /**
      * {@link #fromRad(double)} with an angle of 135 deg
      */
     public static final Angle THREE_PI_OVER_4 = Angle.fromDeg(135);
-
     /**
      * {@link #fromRad(double)} with an angle of 180 deg
      */
     public static final Angle PI = Angle.fromDeg(180);
-
     /**
      * {@link #fromRad(double)} with an angle of 225 deg
      */
     public static final Angle FIVE_PI_OVER_4 = Angle.fromDeg(225);
-
     /**
      * {@link #fromRad(double)} with an angle of 270 deg
      */
     public static final Angle THREE_PI_OVER_2 = Angle.fromDeg(270);
-
     /**
      * {@link #fromRad(double)} with an angle of 315 deg
      */
     public static final Angle SEVEN_PI_OVER_4 = Angle.fromDeg(315);
-
     /**
      * {@link #fromRad(double)} with an angle of 360 deg
      */
     public static final Angle TWO_PI = Angle.fromDeg(360);
-
+    public static long COUNT = 0;
     /**
      * Angle stored in radians.
      */
@@ -267,27 +249,45 @@ public class Angle implements Comparable<Angle>, Serializable {
     }
 
     /**
+     * Fix a value.
+     *
+     * @param value the value to fix.
+     * @param min   the minimum value.
+     * @param max   the maximum value.
+     * @param max10 10 times the maximum value.
+     * @return a fixed value.
+     */
+    public static double fix(double value,
+                             double min,
+                             double max,
+                             double max10) {
+        while (value < -max10) value += max10;
+        while (value > max10) value -= max10;
+
+        while (value < min) value += max;
+        while (value > max) value -= max;
+
+        return value;
+    }
+
+    /**
      * Ensure a radian value fits within 0-2pi.
      *
      * @param rad the value to fix.
      * @return the value within the range of 0-2pi.
      */
     public static double fixRad(double rad) {
-        while (rad < MIN_RAD) rad += MAX_RAD;
-        while (rad > MAX_RAD) rad -= MAX_RAD;
-        return rad;
+        return fix(rad, MIN_RAD, MAX_RAD, MAX_RAD_10X);
     }
 
     /**
-     * Ensure a radian value fits within 0-360.
+     * Ensure a degree value fits within 0-360 degrees.
      *
      * @param deg the value to fix.
-     * @return the value within the range of 0-360.
+     * @return the value within the range of 0-360 degrees.
      */
     public static double fixDeg(double deg) {
-        while (deg < MIN_DEG) deg += MAX_DEG;
-        while (deg > MAX_DEG) deg -= MAX_DEG;
-        return deg;
+        return fix(deg, MIN_DEG, MAX_DEG, MAX_DEG_10X);
     }
 
     /**
