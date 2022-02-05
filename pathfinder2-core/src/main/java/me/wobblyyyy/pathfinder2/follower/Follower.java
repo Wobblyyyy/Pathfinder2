@@ -117,6 +117,10 @@ public interface Follower {
         PointXY currentXY = new PointXY(current.x(), current.y());
         PointXY targetXY = new PointXY(target.x(), target.y());
 
+        // need to instantiate new PointXY instead of just casting the existing
+        // PointXYZ to PointXY - if you casted it, it would use the PointXYZ
+        // equals method, which also checks if they have the same angle. if
+        // we just use PointXY instead, it just checks for matching X and Y
         if (currentXY.equals(targetXY))
             return Translation.ZERO.withVz(turn);
 

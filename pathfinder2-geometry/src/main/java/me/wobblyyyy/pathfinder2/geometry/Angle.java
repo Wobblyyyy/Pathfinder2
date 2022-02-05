@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.geometry;
 
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
+import me.wobblyyyy.pathfinder2.math.Equals;
 
 import java.io.Serializable;
 
@@ -278,12 +279,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      *
      * @param rad the value to create the angle based on.
      * @return a new angle.
-     * @deprecated use {@link #fixedRad(double)} instead. Using angles that
-     * don't fit within the bounds of 0 to 360 degrees (or 0 to 2 pi radians)
-     * can cause issues with Pathfinder, and it's encouraged you use fixed
-     * angles.
      */
-    @Deprecated
     public static Angle fromRad(double rad) {
         return new Angle(rad, Math.toDegrees(rad));
     }
@@ -294,12 +290,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      *
      * @param deg the value to create the angle based on.
      * @return a new angle.
-     * @deprecated use {@link #fixedDeg(double)} instead. Using angles that
-     * don't fit within the bounds of 0 to 360 degrees (or 0 to 2 pi radians)
-     * can cause issues with Pathfinder, and it's encouraged you use fixed
-     * angles.
      */
-    @Deprecated
     public static Angle fromDeg(double deg) {
         return new Angle(Math.toRadians(deg), deg);
     }
@@ -1197,6 +1188,25 @@ public class Angle implements Comparable<Angle>, Serializable {
     @Override
     public String toString() {
         return deg() + " " + FORMAT_DEG_SHORT;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (fix().deg() * 1_000_000);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Angle) {
+            Angle a = (Angle) obj;
+
+            boolean sameDeg = Equals.soft(a.deg, this.deg, 0.01);
+            boolean sameRad = Equals.soft(a.rad, this.rad, 0.01);
+
+            return sameDeg || sameRad;
+        }
+
+        return false;
     }
 
     /**

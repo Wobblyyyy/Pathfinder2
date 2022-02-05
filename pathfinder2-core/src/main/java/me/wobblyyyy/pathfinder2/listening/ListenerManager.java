@@ -23,18 +23,23 @@ import java.util.stream.Collectors;
 /**
  * Manager responsible for several {@link Listener}s. Each {@link Listener}
  * is stored in a {@link Map} with {@link String} keys so that listeners
- * can be activated and deactivated based on a shared name.
+ * can be activated and deactivated based on a shared name. For most normal
+ * use cases, you shouldn't manually use this class' {@link #tick(Pathfinder)}
+ * method - rather, you'd want to have an instance of {@link Pathfinder} tick
+ * it instead in the {@link Pathfinder#tick()} method.
  *
+ * <p>
  * The {@link String} values used as keys do not require any certain rules
  * to be followed - they can be literally anything you want. If you're out
  * of ideas, check out {@link me.wobblyyyy.pathfinder2.utils.RandomString#randomString(int)}.
+ * </p>
  *
  * @author Colin Robertson
  * @since 0.7.1
  */
 public class ListenerManager implements Tickable {
-    private Map<String, Listener> listeners;
     private final Pathfinder pathfinder;
+    private Map<String, Listener> listeners;
 
     /**
      * Create a new {@code ListenerManager}.
@@ -42,10 +47,6 @@ public class ListenerManager implements Tickable {
     public ListenerManager(Pathfinder pathfinder) {
         listeners = new HashMap<>();
         this.pathfinder = pathfinder;
-    }
-
-    public Pathfinder getPathfinder() {
-        return pathfinder;
     }
 
     /**
@@ -132,6 +133,123 @@ public class ListenerManager implements Tickable {
             listeners.remove(key);
 
         return true;
+    }
+
+    /**
+     * Bind an action to whenever the button is pressed or not pressed.
+     *
+     * @param input     a supplier that indicates the physical state of
+     *                  a button.
+     * @param onPress   code to be executed whenever the button is initially
+     *                  pressed.
+     * @param onRelease code to be executed whenever the button is initially
+     *                  released.
+     * @return {@code this}, used for method chaining.
+     */
+    public ListenerManager bindButton(Supplier<Boolean> input,
+                                      Runnable onPress,
+                                      Runnable onRelease) {
+        return addListener(new Listener(
+                ListenerMode.CONDITION_NEWLY_MET,
+                onPress,
+                input
+        )).addListener(new Listener(
+                ListenerMode.CONDITION_NEWLY_NOT_MET,
+                onRelease,
+                input
+        ));
+    }
+
+    public ListenerManager bindButton(Supplier<Boolean> input,
+                                      Runnable onPress,
+                                      Runnable whenHeld,
+                                      Runnable onRelease) {
+        return addListener(new Listener(
+                ListenerMode.CONDITION_NEWLY_MET,
+                onPress,
+                input
+        )).addListener(new Listener(
+                ListenerMode.CONDITION_IS_MET,
+                whenHeld,
+                input
+        )).addListener(new Listener(
+                ListenerMode.CONDITION_NEWLY_NOT_MET,
+                onRelease,
+                input
+        ));
+    }
+
+    public ListenerManager bindTriggerPressed(Supplier<Double> input,
+                                              Runnable onPress) {
+        return addListener(new Listener(
+                ListenerMode.CONDITION_NEWLY_MET,
+                onPress,
+                () -> input.get() > 0
+        ));
+    }
+
+    public ListenerManager bindTrigger(Supplier<Double> input,
+                                       Runnable onPress,
+                                       Runnable onRelease) {
+        return addListener(new Listener(
+                ListenerMode.CONDITION_NEWLY_MET,
+                onPress,
+                () -> input.get() > 0
+        )).addListener(new Listener(
+                ListenerMode.CONDITION_NEWLY_NOT_MET,
+                onRelease,
+                () -> input.get() > 0
+        ));
+    }
+
+    public ListenerManager bindTrigger(Supplier<Double> input,
+                                       Runnable onPress,
+                                       Runnable whenHeld,
+                                       Runnable onRelease) {
+        return bindButton(
+                () -> input.get() > 0,
+                onPress,
+                whenHeld,
+                onRelease
+        );
+    }
+
+    public ListenerManager bindTrigger(Supplier<Double> input,
+                                       Runnable onPress,
+                                       Runnable whenHeld,
+                                       Runnable onRelease,
+                                       Runnable whenNotHeld) {
+        return bindButton(
+                () -> input.get() > 0,
+                onPress,
+                whenHeld,
+                onRelease,
+                whenNotHeld
+        );
+    }
+
+    public ListenerManager bindButton(Supplier<Boolean> input,
+                                      Runnable onPress,
+                                      Runnable whenHeld,
+                                      Runnable onRelease,
+                                      Runnable whenNotHeld) {
+        return addListener(new Listener(
+                ListenerMode.CONDITION_NEWLY_MET,
+                onPress,
+                input
+        )).addListener(new Listener(
+                ListenerMode.CONDITION_IS_MET,
+                whenHeld,
+                input
+        )).addListener(new Listener(
+                ListenerMode.CONDITION_NEWLY_NOT_MET,
+                onRelease,
+                input
+        )).addListener(new Listener(
+                ListenerMode.CONDITION_IS_NOT_MET,
+                whenNotHeld,
+                input
+        ));
     }
 
     /**
@@ -360,5 +478,16 @@ public class ListenerManager implements Tickable {
                 supplier,
                 consumer
         );
+    }
+
+    /**
+     * Get the instance of {@code Pathfinder} that's controlling this
+     * {@code ListenerManager}.
+     *
+     * @return the instance of {@code Pathfinder} that's controlling this
+     * {@code ListenerManager}.
+     */
+    public Pathfinder getPathfinder() {
+        return pathfinder;
     }
 }

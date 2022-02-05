@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+import me.wobblyyyy.pathfinder2.math.Equals;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -606,6 +608,21 @@ public class PointXYZ extends PointXY {
         );
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof PointXYZ) {
+            PointXYZ p = (PointXYZ) obj;
+
+            boolean sameX = Equals.soft(p.x(), this.x(), 0.01);
+            boolean sameY = Equals.soft(p.y(), this.y(), 0.01);
+            boolean sameZ = Angle.equals(p.z, this.z);
+
+            return sameX && sameY && sameZ;
+        }
+
+        return false;
+    }
+
     /**
      * Reflect a point over a given axis.
      *
@@ -633,5 +650,15 @@ public class PointXYZ extends PointXY {
      */
     public PointXYZ reflectHeading() {
         return withHeading(z.fixedFlip());
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public PointXYZ clone() {
+        return new PointXYZ(x(), y(), z);
     }
 }

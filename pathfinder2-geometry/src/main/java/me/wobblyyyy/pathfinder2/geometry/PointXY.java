@@ -58,13 +58,11 @@ import java.util.List;
  */
 @SuppressWarnings("DuplicatedCode")
 public class PointXY implements Comparable<PointXY>, Serializable {
-    public static long COUNT = 0;
-
     /**
      * A point with X and Y values of 0.
      */
     public static final PointXY ZERO = zero();
-
+    public static long COUNT = 0;
     /**
      * The point's X value.
      */
@@ -330,6 +328,19 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     public static Angle angleTo(PointXY a,
                                 PointXY b) {
         return Angle.atan2(distanceY(a, b), distanceX(a, b));
+    }
+
+    /**
+     * Calculate the angle from {@code b} to {@code a}.
+     *
+     * @param a the origin point.
+     * @param b the target point.
+     * @return the angle from {@code a} to {@code b}.
+     * @see <a href="https://en.wikipedia.org/wiki/Atan2">atan2</a>
+     */
+    public static Angle angleFrom(PointXY a,
+                                  PointXY b) {
+        return angleTo(b, a);
     }
 
     /**
@@ -1092,6 +1103,16 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     }
 
     /**
+     * Determine the angle to {@code this} point from {@code a}.
+     *
+     * @param a the point to determine the angle to.
+     * @return the angle from this point to {@code a}.
+     */
+    public Angle angleFrom(PointXY a) {
+        return angleFrom(this, a);
+    }
+
+    /**
      * Create a new point a specified distance and direction away from
      * this point.
      *
@@ -1323,5 +1344,11 @@ public class PointXY implements Comparable<PointXY>, Serializable {
         double d2 = o.distance(PointXY.ZERO);
 
         return Double.compare(d1, d2);
+    }
+
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
+    @Override
+    public PointXY clone() {
+        return new PointXY(x, y);
     }
 }

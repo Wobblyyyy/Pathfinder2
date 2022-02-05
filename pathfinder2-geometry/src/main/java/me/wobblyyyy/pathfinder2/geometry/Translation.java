@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+import me.wobblyyyy.pathfinder2.math.Equals;
+
 import java.io.Serializable;
 
 /**
@@ -493,5 +495,31 @@ public class Translation implements Serializable {
                 vy,
                 vz
         );
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Translation) {
+            Translation t = (Translation) obj;
+
+            boolean sameVx = Equals.soft(t.vx, this.vx, 0.01);
+            boolean sameVy = Equals.soft(t.vy, this.vy, 0.01);
+            boolean sameVz = Equals.soft(t.vz, this.vz, 0.01);
+
+            return sameVx && sameVy && sameVz;
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
+    @Override
+    public Translation clone() {
+        return new Translation(vx, vy, vz);
     }
 }

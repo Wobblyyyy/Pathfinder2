@@ -108,5 +108,54 @@ public class TestPointXY {
                 A.inDirection(-1, Angle.zero()).y(),
                 E.y()
         );
+        Assertions.assertEquals(
+                new PointXY(0, 0)
+                        .inDirection(1, Angle.fixedDeg(45)),
+                new PointXY(0, 0)
+                        .inDirection(2, Angle.fixedDeg(45))
+                        .inDirection(1, Angle.fixedDeg(45).fixedFlip())
+        );
+        Assertions.assertEquals(
+                new PointXY(0, 0)
+                        .inDirection(-10, Angle.fixedDeg(45))
+                        .inDirection(1, Angle.fixedDeg(45)),
+                new PointXY(0, 0)
+                        .inDirection(-10, Angle.fixedDeg(45))
+                        .inDirection(2, Angle.fixedDeg(45))
+                        .inDirection(1, Angle.fixedDeg(45).fixedFlip())
+        );
+    }
+
+    @Test
+    public void testAngleTo() {
+        PointXY a = new PointXY(0, 0);
+        PointXY b = new PointXY(1, 1);
+
+        Assertions.assertEquals(
+                Angle.fromDeg(45),
+                a.angleTo(b)
+        );
+    }
+
+    @Test
+    public void testAngleToAndFrom() {
+        PointXY a = new PointXY(2, 2);
+        PointXY b = new PointXY(4, 4);
+
+        Assertions.assertEquals(
+                a.angleTo(b),
+                b.angleFrom(a)
+        );
+    }
+
+    @Test
+    public void testAngleFromAndTo() {
+        PointXY a = new PointXY(2, 2);
+        PointXY b = new PointXY(4, 4);
+
+        Assertions.assertEquals(
+                b.angleFrom(a),
+                a.angleTo(b)
+        );
     }
 }
