@@ -16,6 +16,7 @@ import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.math.Equals;
 
 /**
  * The most simple type of trajectory. A linear trajectory does nothing other
@@ -177,6 +178,49 @@ public class LinearTrajectory implements Trajectory {
         if (isDoneXY(current)) return 0;
 
         return speed;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) ((target.hashCode() * speed) + (tolerance * 10));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof LinearTrajectory) {
+            LinearTrajectory t = (LinearTrajectory) obj;
+
+            boolean sameTarget = t.target.equals(this.target);
+            boolean sameSpeed = Equals.soft(t.speed, this.speed, 0.01);
+            boolean sameTolerance = Equals.soft(t.tolerance, this.tolerance, 0.01);
+            boolean sameAngleTolerance = t.angleTolerance.equals(this.angleTolerance);
+
+            return sameTarget && sameSpeed && sameTolerance && sameAngleTolerance;
+        }
+
+        return false;
+    }
+
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
+    @Override
+    public LinearTrajectory clone() {
+        return new LinearTrajectory(
+                target,
+                speed,
+                tolerance,
+                angleTolerance
+        );
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Linear trajectory to %s at %s speed (tolerance %s %s)",
+                target,
+                speed,
+                tolerance,
+                angleTolerance.formatAsDegShort()
+        );
     }
 }
 

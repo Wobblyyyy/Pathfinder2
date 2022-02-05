@@ -2496,6 +2496,8 @@ public class Pathfinder {
 
     /**
      * Move the robot in a certain direction for a certain amount of time.
+     * This is a blocking method call, meaning it will block the current thread
+     * until its execution has finished (whatever {@code timeoutMs} is).
      *
      * @param translation the translation that will be set to the robot.
      *                    This value may not be null.
@@ -2531,7 +2533,9 @@ public class Pathfinder {
 
     /**
      * Move the robot in a certain direction (specified by a translation)
-     * for a specified amount of time, in milliseconds.
+     * for a specified amount of time, in milliseconds. This is a blocking
+     * method call, meaning it will block the current thread until its
+     * execution has finished (whatever {@code timeoutMs} is).
      *
      * @param vx        the vx component of the robot's translation.
      * @param vy        the vy component of the robot's translation.
@@ -2559,7 +2563,12 @@ public class Pathfinder {
     }
 
     /**
-     * Is Pathfinder currently active?
+     * Is Pathfinder currently active? Pathfinder is considered to be active
+     * if there is at least 1 active follower in Pathfinder's 
+     * {@link ExecutorManager}. If there is 1 or more followers, this method
+     * will return true. If there are not any followers, this method will
+     * return false, indicating that Pathfinder is currently idle and is not
+     * in the process of following a {@link Follower}.
      *
      * @return is Pathfinder currently active? This method will return true
      * if Pathfinder is active (meaning its currently following a path) and

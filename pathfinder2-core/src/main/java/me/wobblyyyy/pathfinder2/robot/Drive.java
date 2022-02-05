@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.robot;
 
+import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.modifiers.Modifiable;
 
@@ -75,6 +76,14 @@ public interface Drive extends Modifiable<Translation> {
      * value the invocation of {@link #getTranslation()} will be changed
      * to the value of the {@link Translation} passed as a parameter to
      * this method call.
+     *
+     * <p>
+     * This translation should be relative to the robot, not relative to the
+     * field. If you have an absolute translation (NOT relative to the robot),
+     * you can use {@link Translation#absoluteToRelative(Translation, Angle)}
+     * or {@link Translation#toRelative(Angle)} to convert that translation
+     * into a relative translation the robot can then use.
+     * </p>
      *
      * @param translation a translation the robot should act upon. This
      *                    translation should always be <em>relative</em>,

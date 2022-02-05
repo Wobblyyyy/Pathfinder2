@@ -111,7 +111,8 @@ public class Translation implements Serializable {
     private final double vz;
 
     /**
-     * Create a new {@code Translation} using two translational values.
+     * Create a new {@code Translation} using two translational values. This
+     * translation will have a {@code vz} value (rotation) of 0.
      *
      * @param vx the robot's translation along its X axis. This value should
      *           not have any units, but should be scaled the same as vy.
@@ -514,7 +515,11 @@ public class Translation implements Serializable {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        int x = (int) (vx * 1_000_000);
+        int y = (int) (vy *   100_100);
+        int z = (int) (vz *       100);
+
+        return x + y + z;
     }
 
     @SuppressWarnings("MethodDoesntCallSuperMethod")

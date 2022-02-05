@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.math;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.geometry.Translation;
 
 /**
  * Get the average of different sets of data. These methods only exist
@@ -177,5 +178,15 @@ public class Average {
         }
 
         return sum.fix();
+    }
+
+    public static Translation of(Translation... translations) {
+        Translation sum = Translation.ZERO;
+
+        for (Translation translation : translations) {
+            sum = sum.add(translation);
+        }
+
+        return sum.divide(translations.length);
     }
 }

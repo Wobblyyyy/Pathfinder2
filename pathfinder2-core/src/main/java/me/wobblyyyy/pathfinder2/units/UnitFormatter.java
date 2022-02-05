@@ -15,6 +15,12 @@ import java.util.Map;
 
 import static me.wobblyyyy.pathfinder2.units.Unit.*;
 
+/**
+ * Utilities for formatting different units.
+ *
+ * @author Colin Robertson
+ * @since 0.0.0
+ */
 public class UnitFormatter {
     private static final Map<Unit, String> NAMES_SHORT =
             new EnumMap<Unit, String>(Unit.class) {{
@@ -44,15 +50,8 @@ public class UnitFormatter {
 
     private static final Map<Unit, String> NAMES_PLURAL =
             new EnumMap<Unit, String>(Unit.class) {{
-                put(INCH, "inches");
-                put(CM, "centimeters");
-                put(M, "meters");
-                put(KM, "kilometers");
-                put(MM, "millimeters");
-                put(MILE, "miles");
-                put(YARD, "yards");
-                put(FOOT, "feet");
-                put(NAUTICAL_MILE, "nautical miles");
+                for (Unit unit : Unit.values())
+                    put(unit, NAMES_SINGULAR.get(unit) + "s");
             }};
 
     private UnitFormatter() {
