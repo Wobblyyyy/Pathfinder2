@@ -17,3 +17,9 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+/pathfinder2-core/build
+/pathfinder2-OdometryCore/build
+/pathfinder2-geometry/build
+/pathfinder2-kinematics/build
+/pathfinder2-frc/build
+/pathfinder2-examples/build
