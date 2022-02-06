@@ -11,7 +11,7 @@
 package me.wobblyyyy.pathfinder2.wpilib;
 
 import edu.wpi.first.wpilibj.Encoder;
-import me.wobblyyyy.pathfinder2.robot.extra.sensors.movement.AbstractEncoder;
+import me.wobblyyyy.pathfinder2.robot.sensors.AbstractEncoder;
 
 /**
  * Wrapper for wpilib's {@link Encoder}.

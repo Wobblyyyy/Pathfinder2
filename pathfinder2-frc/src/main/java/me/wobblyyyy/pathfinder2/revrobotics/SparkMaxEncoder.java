@@ -13,8 +13,8 @@ package me.wobblyyyy.pathfinder2.revrobotics;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
-import me.wobblyyyy.pathfinder2.robot.extra.sensors.movement.AbstractAngleEncoder;
-import me.wobblyyyy.pathfinder2.robot.extra.sensors.movement.Encoder;
+import me.wobblyyyy.pathfinder2.robot.sensors.AbstractAngleEncoder;
+import me.wobblyyyy.pathfinder2.robot.sensors.Encoder;
 
 /**
  * A lovely encoder for a lovely {@link CANSparkMax}'s lovely encoder.

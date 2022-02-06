@@ -10,7 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.robot.simulated;
 
-import me.wobblyyyy.pathfinder2.robot.extra.sensors.movement.AbstractEncoder;
+import me.wobblyyyy.pathfinder2.robot.sensors.AbstractEncoder;
 
 public class SimulatedEncoder extends AbstractEncoder {
     private int rawTicks = 0;

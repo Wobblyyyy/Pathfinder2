@@ -12,7 +12,7 @@ package me.wobblyyyy.pathfinder2.revrobotics;
 
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
-import me.wobblyyyy.pathfinder2.robot.extra.sensors.advanced.color.ARGBColorSensor;
+import me.wobblyyyy.pathfinder2.robot.sensors.ARGBColorSensor;
 
 /**
  * A wrapper for {@link ColorSensorV3}.

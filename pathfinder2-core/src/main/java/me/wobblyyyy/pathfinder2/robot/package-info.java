@@ -14,7 +14,7 @@
  * <p>
  * Pathfinder contains many hardware components that are not used anywhere
  * in Pathfinder's source code. This is done for standardization purposes -
- * a generic sensor, such as {@link me.wobblyyyy.pathfinder2.robot.extra.sensors.movement.Accelerometer},
+ * a generic sensor, such as {@link me.wobblyyyy.pathfinder2.robot.sensors.Accelerometer},
  * can now be used across many different projects without relying on
  * vendor-specific classes.
  * </p>

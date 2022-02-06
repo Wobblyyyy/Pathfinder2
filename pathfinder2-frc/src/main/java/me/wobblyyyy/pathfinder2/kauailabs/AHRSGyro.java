@@ -13,7 +13,7 @@ package me.wobblyyyy.pathfinder2.kauailabs;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
-import me.wobblyyyy.pathfinder2.robot.extra.sensors.movement.AbstractGyroscope;
+import me.wobblyyyy.pathfinder2.robot.sensors.AbstractGyroscope;
 
 /**
  * Wrapper for {@link AHRS} gyroscope.
