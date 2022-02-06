@@ -1,3 +1,19 @@
 # Project exclude paths
 /.gradle/
 /Pathfinder2/
+*.class
+target/
+bin/
+!.mvn/wrapper/maven-wrapper.jar
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
