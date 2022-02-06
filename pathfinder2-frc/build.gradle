@@ -28,6 +28,10 @@ repositories {
     maven {
         url 'https://maven.ctr-electronics.com/release'
     }
+
+    maven {
+        url 'https://repo1.maven.org/maven2'
+    }
 }
 
 java {
@@ -44,6 +48,7 @@ dependencies {
 
     // wpilib-specific stuff
     implementation 'edu.wpi.first.wpimath:wpimath-java:2022.3.1'
+    implementation 'edu.wpi.first.wpilibj:wpilibj-java:2022.3.1'
     implementation 'edu.wpi.first.wpilibNewCommands:wpilibNewCommands-java:2022.3.1'
 
     // rev robotics
@@ -51,6 +56,9 @@ dependencies {
 
     // cross the road electronics
     implementation 'com.ctre.phoenix:api-java:5.21.1'
+
+    // navx
+    implementation 'com.kauailabs.navx.frc:navx-java:4.0.435'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
