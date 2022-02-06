@@ -12,9 +12,11 @@ package me.wobblyyyy.pathfinder2.wpilib;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.geometry.Translation;
 
 /**
  * An adapter for converting between WPILIB and Pathfinder types.
@@ -43,7 +45,7 @@ public class WPIAdapter {
         );
     }
 
-    public static PointXY pointXYZFromPose(Pose2d pose) {
+    public static PointXYZ pointXYZFromPose(Pose2d pose) {
         return new WPIPointXYZ(pose);
     }
 
@@ -53,5 +55,21 @@ public class WPIAdapter {
 
     public static Rotation2d rotationFromAngle(Angle angle) {
         return new Rotation2d(angle.rad());
+    }
+
+    public static Translation translationFromSpeeds(ChassisSpeeds speeds) {
+        return new Translation(
+                speeds.vxMetersPerSecond,
+                speeds.vyMetersPerSecond,
+                speeds.omegaRadiansPerSecond
+        );
+    }
+
+    public static ChassisSpeeds speedsFromTranslation(Translation translation) {
+        return new ChassisSpeeds(
+                translation.vx(),
+                translation.vy(),
+                translation.vz()
+        );
     }
 }
