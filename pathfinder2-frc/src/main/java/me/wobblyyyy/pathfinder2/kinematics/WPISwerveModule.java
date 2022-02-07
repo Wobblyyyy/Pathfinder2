@@ -17,6 +17,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.robot.components.Motor;
 import me.wobblyyyy.pathfinder2.robot.sensors.AngleEncoder;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.wpilib.WPIAdapter;
 
 /**
@@ -224,7 +225,7 @@ public class WPISwerveModule {
      */
     @Override
     public String toString() {
-        return String.format(
+        return StringUtils.format(
                 "(turn pos: %s, drive speed: %s)",
                 getTurnAngle().formatAsDegShort(),
                 driveMotor.getPower()

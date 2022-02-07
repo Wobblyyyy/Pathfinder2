@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
+
 /**
  * Two-dimensional integer coordinate.
  *
@@ -94,7 +96,7 @@ public class Coordinate {
 
     @Override
     public String toString() {
-        return String.format(
+        return StringUtils.format(
                 "(%s, %s)",
                 this.x,
                 this.y

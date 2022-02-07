@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.geometry;
 
 import me.wobblyyyy.pathfinder2.math.Equals;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 import java.io.Serializable;
 
@@ -490,7 +491,7 @@ public class Translation implements Serializable {
 
     @Override
     public String toString() {
-        return String.format(
+        return StringUtils.format(
                 "(vx: %s, vy: %s, vz: %s)",
                 vx,
                 vy,

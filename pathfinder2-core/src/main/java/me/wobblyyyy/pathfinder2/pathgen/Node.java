@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.pathgen;
 
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -243,7 +244,7 @@ public class Node {
 
     @Override
     public String toString() {
-        return String.format(
+        return StringUtils.format(
                 "(%s, %s, valid: %s)",
                 x,
                 y,
@@ -251,3 +252,4 @@ public class Node {
         );
     }
 }
+

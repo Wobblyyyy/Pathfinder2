@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.geometry;
 
 import me.wobblyyyy.pathfinder2.math.Equals;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -600,7 +601,7 @@ public class PointXYZ extends PointXY {
 
     @Override
     public String toString() {
-        return String.format(
+        return StringUtils.format(
                 "(%s, %s, %s deg)",
                 x(),
                 y(),

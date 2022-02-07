@@ -17,6 +17,7 @@ import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.math.Equals;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 /**
  * The most simple type of trajectory. A linear trajectory does nothing other
@@ -214,7 +215,7 @@ public class LinearTrajectory implements Trajectory {
 
     @Override
     public String toString() {
-        return String.format(
+        return StringUtils.format(
                 "Linear trajectory to %s at %s speed (tolerance %s %s)",
                 target,
                 speed,
