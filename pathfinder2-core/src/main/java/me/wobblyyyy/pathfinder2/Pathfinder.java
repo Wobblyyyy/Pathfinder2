@@ -2136,6 +2136,16 @@ public class Pathfinder {
     }
 
     /**
+     * Pause for a certain amount of time.
+     *
+     * @param timeoutMs how long it should wait.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder waitUntil(double timeoutMs) {
+        return waitUntil(() -> true, timeoutMs);
+    }
+
+    /**
      * Pause until a certain condition is met.
      *
      * @param condition the condition that must be met before continuing.
@@ -2163,8 +2173,10 @@ public class Pathfinder {
         ElapsedTimer timer = new ElapsedTimer(true);
 
         try {
-            while (!condition.get() && timer.isElapsedLessThan(maxTimeMs))
+            while (!condition.get() && timer.isElapsedLessThan(maxTimeMs)) {
+                tick();
                 Thread.sleep(10);
+            }
         } catch (InterruptedException ignored) {
         }
 
