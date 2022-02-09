@@ -2149,7 +2149,7 @@ public class Pathfinder {
      * Pause until a certain condition is met.
      *
      * @param condition the condition that must be met before continuing.
-     * @param maxTimeMs   the maximum length of the pause. If the amount of
+     * @param maxTimeMs the maximum length of the pause. If the amount of
      *                  elapsed time exceeds this length, the condition will
      *                  break and Pathfinder will be unpaused, regardless of
      *                  whether the condition has been met.

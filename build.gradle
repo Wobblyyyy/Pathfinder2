@@ -40,7 +40,7 @@ allprojects {
 
 allprojects {
     group = 'me.wobblyyyy'
-    version = '0.10.7'
+    version = '0.10.9'
 }
 
 repositories {
@@ -53,6 +53,7 @@ dependencies {
     implementation project(':pathfinder2-geometry')
     implementation project(':pathfinder2-kinematics')
     implementation project(':pathfinder2-OdometryCore')
+    implementation project(':pathfinder2-frc')
 
     // for testing!
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
@@ -63,6 +64,11 @@ dependencies {
 shadowJar {
     archiveBaseName.set('Pathfinder2')
     archiveClassifier.set('')
+}
+
+frc {
+    archiveBaseName.set('Pathfinder2')
+    archiveClassifier.set('frc')
 }
 
 // suppress all javadoc warnings - i use end tags, and javadoc will normally
@@ -110,6 +116,16 @@ publishing {
             artifact sourcesJar
             artifact javadocJar
             artifactId = 'pathfinder2'
+        }
+
+        maven(MavenPublication) {
+            groupId = 'me.wobblyyyy'
+            artifactId = 'Pathfinder2'
+
+            pom {
+                name = 'Pathfinder2'
+                description = 'Pathfinder\'s core functionality.'
+            }
         }
     }
 }
