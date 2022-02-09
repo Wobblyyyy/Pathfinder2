@@ -79,6 +79,13 @@ public class AbstractMotor implements Motor {
      * The last set power value.
      */
     private double lastPower = 0.0;
+    
+    /**
+     * The motor's deadband. Any power value set to the motor that has an
+     * absolute value less than this value will actually set the motor's power
+     * to 0 to prevent motor slippage.
+     */
+    private double deadband;
 
     /**
      * Create a new {@code AbstractMotor} using a {@link Supplier} and a
@@ -151,10 +158,42 @@ public class AbstractMotor implements Motor {
                          Supplier<Double> getPower,
                          boolean isSetInverted,
                          boolean isGetInverted) {
+        this(setPower, getPower, isSetInverted, isGetInverted, 0.0);
+    }
+
+    /**
+     * Create a new {@code AbstractMotor} using a {@link Supplier} and a
+     * {@link Consumer}.
+     *
+     * @param setPower      a {@code Consumer} that accepts a double value. This
+     *                      consumer should perform some set of actions that
+     *                      actually sets power to the motor and makes it spin.
+     * @param getPower      a {@code Supplier} that returns the motor's current
+     *                      power. This method typically calls a provided method
+     *                      that queries the power from the physical motor. If such
+     *                      a method is not provided, you should go about making
+     *                      it function in some other way. Sorry!
+     * @param isSetInverted if this is true, all {@code setPower} operations
+     *                      will multiply the inputted power by -1.
+     * @param isGetInverted if this is true, all {@code getPower} operations
+     *                      will multiply the outputted power by -1.
+     * @param deadband      the motor's deadband. If a power value is set to
+     *                      a motor such that the absolute value of the
+     *                      motor's power is less than this value, the motor's
+     *                      power will simply be set to 0. This is an option
+     *                      in case you'd like to try to prevent motor
+     *                      slippage, leading to encoder inaccuracies.
+     */
+    public AbstractMotor(Consumer<Double> setPower,
+                         Supplier<Double> getPower,
+                         boolean isSetInverted,
+                         boolean isGetInverted,
+                         double deadband) {
         this.setPower = setPower;
         this.getPower = getPower;
         this.isSetInverted = isSetInverted;
         this.isGetInverted = isGetInverted;
+        this.deadband = deadband;
     }
 
     /**
@@ -302,10 +341,16 @@ public class AbstractMotor implements Motor {
         // power values. By default, these are -1.0 and 1.0, respectively.
         power = Math.max(minPower, Math.min(power, maxPower));
 
-        if (isSetInverted) {
-            power = power * -1;
-        }
+        // apply power deadband
+        if (Math.abs(power) < deadband)
+            power = 0;
 
+        // apply motor power inversion
+        if (isSetInverted)
+            power = power * -1;
+
+        // if it's lazy, check to see if power actually needs to be set
+        // otherwise, just set the power value anyway
         if (isLazy) {
             if (Math.abs(lastPower - power) >= maxLazyPowerGap)
                 accept(power);
@@ -319,10 +364,11 @@ public class AbstractMotor implements Motor {
         if (obj instanceof AbstractMotor) {
             AbstractMotor motor = (AbstractMotor) obj;
 
-            boolean sameSetPower = motor.setPower == this.setPower;
-            boolean sameGetPower = motor.getPower == this.getPower;
+            boolean sameSetPower = motor.setPower.equals(this.setPower);
+            boolean sameGetPower = motor.getPower.equals(this.getPower);
             boolean sameSetInvert = motor.isSetInverted == this.isSetInverted;
             boolean sameGetInvert = motor.isGetInverted == this.isGetInverted;
+
 
             return sameSetPower &&
                     sameGetPower &&

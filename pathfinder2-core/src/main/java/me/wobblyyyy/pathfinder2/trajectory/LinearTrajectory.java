@@ -89,7 +89,12 @@ public class LinearTrajectory implements Trajectory {
      *                       more accurate, at the price of speed.
      * @param angleTolerance the tolerance used in determining whether the
      *                       robot's heading matches up with whatever heading
-     *                       the robot is supposed to be facing.
+     *                       the robot is supposed to be facing. A higher angle
+     *                       tolerance means the robot will complete the
+     *                       trajectory more quickly, as it won't have to
+     *                       compenstae for any over or under adjustments. A
+     *                       lower angle tolerance makes your robot more
+     *                       precise.
      */
     public LinearTrajectory(PointXYZ target,
                             double speed,

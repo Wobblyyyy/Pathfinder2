@@ -46,7 +46,7 @@ import me.wobblyyyy.pathfinder2.robot.modifiers.Modifiable;
  * It doesn't matter HOW your drive interface is implemented. There are
  * several prebuilt options, such as...
  * <ul>
- *     <li>{@link me.wobblyyyy.pathfinder2.drive.MeccanumDrive}</li>
+ *     <li>{@link me.wobblyyyy.pathfinder2.drive.MecanumDrive}</li>
  *     <li>{@link me.wobblyyyy.pathfinder2.drive.SwerveDrive}</li>
  * </ul>
  * ... but it doesn't exactly matter how your drivetrain is implemented, so
