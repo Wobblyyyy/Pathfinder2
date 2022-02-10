@@ -24,7 +24,7 @@ plugins {
 
 project.ext {
     projectName = 'me.wobblyyyy'
-    projectVersion = '0.12.0'
+    projectVersion = '0.13.0'
 }
 
 allprojects {

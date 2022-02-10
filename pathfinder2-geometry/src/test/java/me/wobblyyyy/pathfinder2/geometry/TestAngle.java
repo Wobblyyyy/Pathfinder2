@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.geometry;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -126,14 +127,25 @@ public class TestAngle {
     }
 
     @Test
+    @Disabled
     public void testAngleDelta2() {
         Angle a = Angle.fromDeg(0);
         Angle b = Angle.fromDeg(90);
-        Angle c = Angle.fromDeg(180);
         Angle d = Angle.fromDeg(270);
 
         System.out.println(Angle.minimumDelta(a, b));
         System.out.println(Angle.minimumDelta(a, d));
         System.out.println(Angle.minimumDelta(d, a));
+    }
+
+    @Test
+    public void testFixedAdd() {
+        Angle a = Angle.fromDeg(45);
+        Angle b = Angle.fromDeg(360);
+
+        Assertions.assertEquals(
+                a.add(b),
+                Angle.fromDeg(45)
+        );
     }
 }
