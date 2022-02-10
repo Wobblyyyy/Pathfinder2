@@ -17,6 +17,9 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(8)
     }
+
+    withJavadocJar()
+    withSourcesJar()
 }
 
 repositories {
@@ -42,4 +45,15 @@ test {
 configurations {
     // make sure ejml-all isn't included in shadowJar builds
     runtime.exclude module: 'ejml-all'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = project.projectName
+            version = project.projectVersion
+            artifactId = 'kinematics'
+            from components.java
+        }
+    }
 }

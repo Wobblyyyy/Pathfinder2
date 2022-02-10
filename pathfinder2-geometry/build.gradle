@@ -21,6 +21,9 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(8)
     }
+
+    withJavadocJar()
+    withSourcesJar()
 }
 
 dependencies {
@@ -30,4 +33,15 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = project.projectName
+            version = project.projectVersion
+            artifactId = 'geometry'
+            from components.java
+        }
+    }
 }

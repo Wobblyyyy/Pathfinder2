@@ -37,6 +37,9 @@ java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(11))
     }
+
+    withSourcesJar()
+    withJavadocJar()
 }
 
 dependencies {
@@ -66,4 +69,15 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = project.projectName
+            version = project.projectVersion
+            artifactId = 'frc'
+            from components.java
+        }
+    }
 }

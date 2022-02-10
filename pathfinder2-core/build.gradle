@@ -10,12 +10,16 @@
 
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(8))
     }
+
+    withJavadocJar()
+    withSourcesJar()
 }
 
 repositories {
