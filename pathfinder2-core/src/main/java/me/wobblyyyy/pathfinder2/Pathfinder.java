@@ -2128,6 +2128,12 @@ public class Pathfinder {
     /**
      * Pause until a certain condition is met.
      *
+     * <p>
+     * Unlike variants of {@link #tickUntil()}, the {@code waitUntil} method
+     * and its derivatives DO NOT tick Pathfinder - they'll simply block the
+     * current thread for a certain amount of time.
+     * </p>
+     *
      * @param condition the condition that must be met before continuing.
      * @return this instance of Pathfinder, used for method chaining.
      */
@@ -2138,6 +2144,12 @@ public class Pathfinder {
     /**
      * Pause for a certain amount of time.
      *
+     * <p>
+     * Unlike variants of {@link #tickUntil()}, the {@code waitUntil} method
+     * and its derivatives DO NOT tick Pathfinder - they'll simply block the
+     * current thread for a certain amount of time.
+     * </p>
+     *
      * @param timeoutMs how long it should wait.
      * @return {@code this}, used for method chaining.
      */
@@ -2147,6 +2159,12 @@ public class Pathfinder {
 
     /**
      * Pause until a certain condition is met.
+     *
+     * <p>
+     * Unlike variants of {@link #tickUntil()}, the {@code waitUntil} method
+     * and its derivatives DO NOT tick Pathfinder - they'll simply block the
+     * current thread for a certain amount of time.
+     * </p>
      *
      * @param condition the condition that must be met before continuing.
      * @param maxTimeMs the maximum length of the pause. If the amount of
@@ -2174,7 +2192,6 @@ public class Pathfinder {
 
         try {
             while (!condition.get() && timer.isElapsedLessThan(maxTimeMs)) {
-                tick();
                 Thread.sleep(10);
             }
         } catch (InterruptedException ignored) {
@@ -2188,6 +2205,12 @@ public class Pathfinder {
      * doing just that the use of multiple threads, as this method has a
      * busy wait that will block the calling thread until {@code condition}'s
      * {@code get} returns false.
+     *
+     * <p>
+     * Unlike variants of {@link #tickUntil()}, the {@code waitUntil} method
+     * and its derivatives DO NOT tick Pathfinder - they'll simply block the
+     * current thread for a certain amount of time.
+     * </p>
      *
      * @param condition the condition that must be met in order to continue.
      *                  If this condition returns false, this method will
@@ -2203,6 +2226,12 @@ public class Pathfinder {
      * doing just that the use of multiple threads, as this method has a
      * busy wait that will block the calling thread until {@code condition}'s
      * {@code get} returns false.
+     *
+     * <p>
+     * Unlike variants of {@link #tickUntil()}, the {@code waitUntil} method
+     * and its derivatives DO NOT tick Pathfinder - they'll simply block the
+     * current thread for a certain amount of time.
+     * </p>
      *
      * @param condition the condition that must be met in order to continue.
      *                  If this condition returns false, this method will
