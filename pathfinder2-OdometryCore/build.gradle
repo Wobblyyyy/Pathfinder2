@@ -6,6 +6,12 @@ repositories {
     mavenCentral()
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
 dependencies {
     implementation project(':pathfinder2-geometry')
     implementation project(':pathfinder2-kinematics')

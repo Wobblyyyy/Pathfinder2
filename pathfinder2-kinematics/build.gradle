@@ -10,6 +10,13 @@
 
 plugins {
     id 'java'
+    id 'maven-publish'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
 }
 
 repositories {

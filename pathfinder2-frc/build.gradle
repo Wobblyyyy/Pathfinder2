@@ -10,9 +10,8 @@
 
 plugins {
     id 'java'
+    id 'maven-publish'
 }
-
-group 'me.wobblyyyy'
 
 repositories {
     mavenCentral()

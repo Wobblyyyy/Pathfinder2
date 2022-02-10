@@ -12,6 +12,12 @@ plugins {
     id 'java'
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -19,8 +25,6 @@ repositories {
 dependencies {
     implementation project(':pathfinder2-geometry')
     implementation project(':pathfinder2-kinematics')
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
 
 test {
