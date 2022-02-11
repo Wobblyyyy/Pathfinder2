@@ -23,6 +23,67 @@ following if you're using the latest release of the library) is at the top,
 and the oldest guideline (the one you definitely shouldn't be following) is all
 the way at the bottom.
 
+<h3>After February 11th, 2022 (v0.15.0 and onwards)</h3>
+As of February 11th, 2022, Pathfinder will provide individual module artifacts
+on `jitpack`.
+
+Make sure to add `jitpack` as a dependency as so:
+```
+// this should go in the top level of your build.gradle file
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+Then select the components you'd like to install. All artifacts have the
+same group (`com.github.Wobblyyyy.Pathfinder2`).
+```groovy
+dependencies {
+    implementation 'com.github.Wobblyyyy.Pathfinder2:geometry:v0.15.0'
+    implementation 'com.github.Wobblyyyy.Pathfinder2:kinematics:v0.15.0'
+    implementation 'com.github.Wobblyyyy.Pathfinder2:core:v0.15.0'
+    implementation 'com.github.Wobblyyyy.Pathfinder2:frc:v0.15.0'
+    implementation 'com.github.Wobblyyyy.Pathfinder2:OdometryCore:v0.15.0'
+}
+```
+You should only select the modules you need. At the very least, you'll
+need `geometry`, `kinematics`, and `core`, which would be implemented as
+follows:
+```groovy
+dependencies {
+    implementation 'com.github.Wobblyyyy.Pathfinder2:geometry:v0.15.0'
+    implementation 'com.github.Wobblyyyy.Pathfinder2:kinematics:v0.15.0'
+    implementation 'com.github.Wobblyyyy.Pathfinder2:core:v0.15.0'
+}
+```
+If there's a newer version (newer than v0.15.0 that is) you should use the
+latest version instead.
+
+Here's an example of a full `build.gradle`.
+```groovy
+plugin {
+    id 'java'
+}
+
+// you might have some other stuff here
+
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+// or maybe even here
+
+dependencies {
+    implementation 'com.github.Wobblyyyy.Pathfinder2:geometry:v0.15.0'
+    implementation 'com.github.Wobblyyyy.Pathfinder2:kinematics:v0.15.0'
+    implementation 'com.github.Wobblyyyy.Pathfinder2:core:v0.15.0'
+}
+```
+
 <h3>After January 3rd, 2022 (v0.7.1 and onwards)</h3>
 As of January 3rd, 2022, Pathfinder will no longer provide JAR binaries in
 the Releases section. You can install Pathfinder via `jitpack`. Instructions

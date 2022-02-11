@@ -129,6 +129,8 @@ Here's all of the sources of documentation I can think of right now.
   encourage you to check this out once you're comfortable with the library.
 - [Video guides](https://google.com) - (not yet available) video guides on using
   the library. Who doesn't love videos? Right? Right.
+- [Project releases](project_releases.md) - a guide on all of the available
+  releases of Pathfinder.
 
 <h2 align="center">Licensing</h2>
 
