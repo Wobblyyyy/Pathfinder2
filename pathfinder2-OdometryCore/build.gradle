@@ -33,7 +33,7 @@ publishing {
         maven(MavenPublication) {
             groupId = project.projectName
             version = project.projectVersion
-            artifactId = 'geometry'
+            artifactId = 'OdometryCore'
             from components.java
         }
     }
