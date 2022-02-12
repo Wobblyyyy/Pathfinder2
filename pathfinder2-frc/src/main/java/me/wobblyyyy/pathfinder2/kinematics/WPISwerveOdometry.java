@@ -30,7 +30,6 @@ import me.wobblyyyy.pathfinder2.wpilib.WPIAdapter;
 public class WPISwerveOdometry extends AbstractOdometry {
     private final WPISwerveChassis chassis;
     private final Gyroscope gyroscope;
-    private final Pose2d initialPosition;
     private final double velocityToUnitsPerSec;
     private Pose2d pose;
     private PointXYZ position;
@@ -47,8 +46,21 @@ public class WPISwerveOdometry extends AbstractOdometry {
      * @param initialPosition       the robot's initial position.
      * @param velocityToUnitsPerSec the multiplier that is used to convert
      *                              ticks per second into units per second.
+     *                              If a motor is spinning at 4096 ticks per
+     *                              second (the motor's velocity), what value
+     *                              should that velocity be multiplied by in
+     *                              order to provide the robot's velocity in
+     *                              whatever units Pathfinder is using, instead
+     *                              of ticks.
      * @param driveEncoders         an array of encoders that track the position
-     *                              of each drive wheel.
+     *                              of each drive wheel. Each of these
+     *                              encoders should correspond to a swerve
+     *                              module on the chassis. If you have four
+     *                              swerve modules labelled front right, front
+     *                              left, back right, and back left, the
+     *                              encoders in this array should be, with
+     *                              respect to order, front right, front left,
+     *                              back right, and back left.
      */
     public WPISwerveOdometry(WPISwerveChassis chassis,
                              Gyroscope gyroscope,
@@ -63,7 +75,6 @@ public class WPISwerveOdometry extends AbstractOdometry {
 
         this.chassis = chassis;
         this.gyroscope = gyroscope;
-        this.initialPosition = initialPosition;
         this.velocityToUnitsPerSec = velocityToUnitsPerSec;
         this.pose = initialPosition;
 
@@ -75,6 +86,10 @@ public class WPISwerveOdometry extends AbstractOdometry {
         this.driveEncoders = driveEncoders;
     }
 
+    /**
+     * Update the odometry once. This will use the robot's translation over
+     * time to determine its position based on elapsed time.
+     */
     public void update() {
         Rotation2d rotation = WPIAdapter.rotationFromAngle(gyroscope.getAngle());
 

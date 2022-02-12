@@ -44,9 +44,12 @@ public class WPISwerveModule {
      * Create a new {@code WPISwerveModule}.
      *
      * @param turnMotor      the motor responsible for controlling the
-     *                       angle the swerve module is facing.
+     *                       angle the swerve module is facing. This motor
+     *                       should rotate the drive motor, changing the
+     *                       direction the module is moving in.
      * @param turnEncoder    the encoder responsible for tracking the angle
-     *                       the swerve module is currently facing.
+     *                       the swerve module is currently facing. This should
+     *                       report the angle of a single swerve module.
      * @param turnController the {@code PIDController} responsible for dictating
      *                       what power the {@code turnMotor} will move at in
      *                       order to make the swerve module face a specified
@@ -57,7 +60,9 @@ public class WPISwerveModule {
      *                       perform swerve module state optimization with
      *                       {@link SwerveModuleState#optimize(SwerveModuleState, Rotation2d)}
      *                       whenever a new state is set to the module using
-     *                       {@link #setState(SwerveModuleState)}?
+     *                       {@link #setState(SwerveModuleState)}? For most
+     *                       use cases, this will improve the speed at which
+     *                       your robot can navigate.
      * @param modulePosition the swerve module's position. This is used for
      *                       swerve drive kinematics and should represent the
      *                       module's position relative to the center of

@@ -39,7 +39,11 @@ public class WPISwerveChassis implements Drive {
      * Create a new {@code WPISwerveChassis}.
      *
      * @param modules all of the chassis' modules. Each module should have
-     *                a unique position/{@code Translation2d}.
+     *                a unique position/{@code Translation2d}. If you plan
+     *                on using {@link WPISwerveOdometry}, you will need to
+     *                create an array parallel to this one that stores all of
+     *                the encoders for the drive wheels, in the same order
+     *                the modules were provided in.
      */
     public WPISwerveChassis(WPISwerveModule... modules) {
         Translation2d[] modulePositions = new Translation2d[modules.length];
