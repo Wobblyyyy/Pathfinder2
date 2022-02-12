@@ -46,6 +46,7 @@ dependencies {
     implementation 'com.github.Wobblyyyy.Pathfinder2:core:v0.15.0'
     implementation 'com.github.Wobblyyyy.Pathfinder2:frc:v0.15.0'
     implementation 'com.github.Wobblyyyy.Pathfinder2:OdometryCore:v0.15.0'
+    implementation 'com.github.Wobblyyyy.Pathfinder2:io:v0.15.0'
 }
 ```
 You should only select the modules you need. At the very least, you'll
