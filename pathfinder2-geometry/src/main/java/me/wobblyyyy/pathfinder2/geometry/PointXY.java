@@ -277,6 +277,16 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     /**
      * Get the distance between two points.
      *
+     * <p>
+     * Code example:
+     * <code><pre>
+     * double distance = PointXY.distance(
+     *     new PointXY(0, 0), 
+     *     new PointXY(1, 1)
+     * ); // distance is equal to sqrt2/2 (about 1.41)
+     * </pre></code>
+     * </p>
+     *
      * @param a the first of the two points.
      * @param b the second of the two points.
      * @return the distance between the two points.
@@ -297,6 +307,16 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     /**
      * Get the difference in X values between the two points.
      *
+     * <p>
+     * Code example:
+     * <code><pre>
+     * double distance = PointXY.distanceX(
+     *     new PointXY(0, 0), 
+     *     new PointXY(1, 1)
+     * ); // distance is equal to 1
+     * </pre></code>
+     * </p>
+     *
      * @param a the first of the two points.
      * @param b the second of the two points.
      * @return {@code b}'s X value minus {@code a}'s X value.
@@ -308,6 +328,16 @@ public class PointXY implements Comparable<PointXY>, Serializable {
 
     /**
      * Get the difference in Y values between the two points.
+     *
+     * <p>
+     * Code example:
+     * <code><pre>
+     * double distance = PointXY.distanceY(
+     *     new PointXY(0, 0), 
+     *     new PointXY(1, 1)
+     * ); // distance is equal to 1
+     * </pre></code>
+     * </p>
      *
      * @param a the first of the two points.
      * @param b the second of the two points.
@@ -321,6 +351,20 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     /**
      * Calculate the angle from {@code a} to {@code b}.
      *
+     * <p>
+     * Code example:
+     * <code><pre>
+     * PointXY a = new PointXY(0, 0);
+     * PointXY b = new PointXY(1, 1);
+     * PointXY c = new PointXY(1, 2);
+     *
+     * Angle angleA = PointXY.angleTo(a, b); // 45 degrees
+     * Angle angleB = PointXY.angleTo(b, c); // 90 degrees
+     * Angle angleC = PointXY.angleTo(b, a); // 135 degrees
+     * Angle angleD = PointXY.angleTo(c, b); // 270 degrees
+     * </pre></code>
+     * </p>
+     *
      * @param a the origin point.
      * @param b the target point.
      * @return the angle from {@code a} to {@code b}.
@@ -333,6 +377,20 @@ public class PointXY implements Comparable<PointXY>, Serializable {
 
     /**
      * Calculate the angle from {@code b} to {@code a}.
+     *
+     * <p>
+     * Code example:
+     * <code><pre>
+     * PointXY a = new PointXY(0, 0);
+     * PointXY b = new PointXY(1, 1);
+     * PointXY c = new PointXY(1, 2);
+     *
+     * Angle angleA = PointXY.angleTo(a, b); // 135 degrees
+     * Angle angleB = PointXY.angleTo(b, c); // 270 degrees
+     * Angle angleC = PointXY.angleTo(b, a); // 45 degrees
+     * Angle angleD = PointXY.angleTo(c, b); // 90 degrees
+     * </pre></code>
+     * </p>
      *
      * @param a the origin point.
      * @param b the target point.
@@ -1096,6 +1154,20 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * this method gets the angle FROM the calling point TO the provided
      * point (parameter {@code a}).
      *
+     * <p>
+     * Code example:
+     * <code><pre>
+     * PointXY a = new PointXY(0, 0);
+     * PointXY b = new PointXY(1, 1);
+     * PointXY c = new PointXY(1, 2);
+     *
+     * Angle angleA = a.angleTo(b); // 45 degrees
+     * Angle angleB = b.angleTo(c); // 90 degrees
+     * Angle angleC = b.angleTo(a); // 135 degrees
+     * Angle angleD = c.angleTo(b); // 270 degrees
+     * </pre></code>
+     * </p>
+     *
      * @param a the point to determine the angle to.
      * @return the angle from this point to {@code a}.
      */
@@ -1105,6 +1177,20 @@ public class PointXY implements Comparable<PointXY>, Serializable {
 
     /**
      * Determine the angle to {@code this} point from {@code a}.
+     *
+     * <p>
+     * Code example:
+     * <code><pre>
+     * PointXY a = new PointXY(0, 0);
+     * PointXY b = new PointXY(1, 1);
+     * PointXY c = new PointXY(1, 2);
+     *
+     * Angle angleA = a.angleTo(b); // 135 degrees
+     * Angle angleB = b.angleTo(c); // 270 degrees
+     * Angle angleC = b.angleTo(a); // 45 degrees
+     * Angle angleD = c.angleTo(b); // 90 degrees
+     * </pre></code>
+     * </p>
      *
      * @param a the point to determine the angle to.
      * @return the angle from this point to {@code a}.

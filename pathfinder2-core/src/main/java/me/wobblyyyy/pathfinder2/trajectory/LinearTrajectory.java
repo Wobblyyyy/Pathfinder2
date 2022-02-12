@@ -73,6 +73,18 @@ public class LinearTrajectory implements Trajectory {
     /**
      * Create a new {@code LinearTrajectory}.
      *
+     * <p>
+     * Here's a quick code example:
+     * <code><pre>
+     * Trajectory trajectory = new LinearTrajectory(
+     *     new PointXYZ(10, 10, 0),  // the trajectory's destination
+     *     0.5,                      // the speed (0-1) to move at
+     *     2,                        // give the trajectory a tolerance of 2
+     *     Angle.fromDeg(5)          // and an angle tolerance of 5 degrees
+     * );
+     * </pre></code>
+     * </p>
+     *
      * @param target         the trajectory's target point. The trajectory will
      *                       execute until it is interrupted, or it reaches the
      *                       target point.

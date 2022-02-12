@@ -25,6 +25,14 @@ import me.wobblyyyy.pathfinder2.math.MinMax;
  * works pretty well too.
  * </p>
  *
+ * <p>
+ * Code example:
+ * <code><pre>
+ * Controller turnController = new ProportionalController(0.02);
+ * double value = turnController.calculate(0, 1);
+ * </pre></code>
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.0.0
  */
