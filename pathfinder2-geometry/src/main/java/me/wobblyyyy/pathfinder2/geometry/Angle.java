@@ -293,10 +293,10 @@ public class Angle implements Comparable<Angle>, Serializable {
                              double max,
                              double max10) {
         while (value < -max10) value += max10;
-        while (value > max10) value -= max10;
+        while (value >= max10) value -= max10;
 
         while (value < min) value += max;
-        while (value > max) value -= max;
+        while (value >= max) value -= max;
 
         return value;
     }
