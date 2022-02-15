@@ -20,8 +20,8 @@ import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
  * Helper class for utilizing {@link CircleSurround}.
  *
  * @author Colin Robertson
- * @since 0.1.0
  * @see CircleSurround
+ * @since 0.1.0
  */
 public class CircleSurrounder {
     private final Pathfinder pathfinder;

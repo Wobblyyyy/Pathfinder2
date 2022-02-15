@@ -115,8 +115,7 @@ public class Shifter {
                     currentGear = minGear;
                 else
                     currentGear--;
-        }
-        else if (direction == ShifterDirection.DOWN) {
+        } else if (direction == ShifterDirection.DOWN) {
             if (--currentGear < minGear)
                 if (shouldWrap)
                     currentGear = maxGear;

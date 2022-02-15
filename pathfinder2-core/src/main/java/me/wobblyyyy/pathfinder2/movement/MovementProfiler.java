@@ -57,7 +57,7 @@ public class MovementProfiler {
      * Capture a single {@link MovementSnapshot}.
      *
      * @param position the robot's current position.
-     * @param timeMs the current time, in milliseconds.
+     * @param timeMs   the current time, in milliseconds.
      * @return a new {@link MovementSnapshot}.
      */
     public MovementSnapshot capture(PointXYZ position,

@@ -10,8 +10,6 @@
 
 package me.wobblyyyy.pathfinder2.robot.sensors;
 
-import me.wobblyyyy.pathfinder2.robot.sensors.Sensor;
-
 /**
  * A {@code DigitalInput} is pretty much a binary sensor - it can either be
  * on or off. Usually, this is implemented as something like a button.

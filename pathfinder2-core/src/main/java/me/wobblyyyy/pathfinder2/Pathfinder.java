@@ -12,11 +12,7 @@ package me.wobblyyyy.pathfinder2;
 
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.control.ProportionalController;
-import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
-import me.wobblyyyy.pathfinder2.exceptions.InvalidTimeException;
-import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
-import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
-import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
+import me.wobblyyyy.pathfinder2.exceptions.*;
 import me.wobblyyyy.pathfinder2.execution.ExecutorManager;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.follower.FollowerGenerator;
@@ -60,11 +56,7 @@ import me.wobblyyyy.pathfinder2.utils.RandomString;
 import me.wobblyyyy.pathfinder2.zones.Zone;
 import me.wobblyyyy.pathfinder2.zones.ZoneProcessor;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -620,7 +612,7 @@ public class Pathfinder {
 
     /**
      * Load all of the plugins bundled with Pathfinder.
-     *
+     * <p>
      * The plugins that will be loaded are (in order):
      * <ul>
      *     <li>{@link StatTracker}</li>
@@ -989,11 +981,10 @@ public class Pathfinder {
             throw new RuntimeException("tried to get ticks per second without " +
                     "having any valid entries - make sure you load the " +
                     "StatTracker plugin!");
+        else if (Double.isInfinite((Double) result))
+            throw new RuntimeException("infinite tick rate!");
         else
-            if (Double.isInfinite((Double) result))
-                throw new RuntimeException("infinite tick rate!");
-            else
-                return (Double) result;
+            return (Double) result;
     }
 
     /**
@@ -2605,7 +2596,7 @@ public class Pathfinder {
 
     /**
      * Is Pathfinder currently active? Pathfinder is considered to be active
-     * if there is at least 1 active follower in Pathfinder's 
+     * if there is at least 1 active follower in Pathfinder's
      * {@link ExecutorManager}. If there is 1 or more followers, this method
      * will return true. If there are not any followers, this method will
      * return false, indicating that Pathfinder is currently idle and is not

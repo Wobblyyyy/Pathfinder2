@@ -27,8 +27,8 @@ import java.util.function.Function;
  * but, unfortunately, my future employers might read this.
  *
  * @author Colin Robertson
- * @since 0.0.0
  * @see Odometry
+ * @since 0.0.0
  */
 public abstract class AbstractOdometry implements Odometry {
     private PointXYZ offset = PointXYZ.zero();

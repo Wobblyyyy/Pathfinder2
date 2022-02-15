@@ -17,8 +17,8 @@ package me.wobblyyyy.pathfinder2.listening;
  * least a little bit of sense.
  *
  * @author Colin Robertson
- * @since 0.7.1
  * @see Listener
+ * @since 0.7.1
  */
 public enum ListenerMode {
     /**

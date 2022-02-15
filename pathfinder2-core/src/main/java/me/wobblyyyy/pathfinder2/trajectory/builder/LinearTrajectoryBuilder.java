@@ -133,8 +133,8 @@ public class LinearTrajectoryBuilder {
      * @param angle       the angle at which the line should be drawn.
      */
     public LinearTrajectoryBuilder rotateLine(double distance,
-                           Angle targetAngle,
-                           Angle angle) {
+                                              Angle targetAngle,
+                                              Angle angle) {
         PointXYZ next = last.inDirection(distance, angle);
 
         trajectories.add(new LinearTrajectory(
@@ -156,7 +156,7 @@ public class LinearTrajectoryBuilder {
      * @param angle    the direction the line should be drawn in.
      */
     public LinearTrajectoryBuilder line(double distance,
-                     Angle angle) {
+                                        Angle angle) {
         rotateLine(distance, last.z(), angle);
 
         return this;
@@ -213,7 +213,7 @@ public class LinearTrajectoryBuilder {
      * @param toRotateBy how much to rotate.
      */
     public LinearTrajectoryBuilder rotateForwards(double distance,
-                               Angle toRotateBy) {
+                                                  Angle toRotateBy) {
         rotateLine(
                 distance,
                 last.z().add(toRotateBy),
@@ -230,7 +230,7 @@ public class LinearTrajectoryBuilder {
      * @param toRotateBy how much to rotate.
      */
     public LinearTrajectoryBuilder rotateRightwards(double distance,
-                                 Angle toRotateBy) {
+                                                    Angle toRotateBy) {
         rotateLine(
                 distance,
                 last.z().add(toRotateBy),
@@ -247,7 +247,7 @@ public class LinearTrajectoryBuilder {
      * @param toRotateBy how much to rotate.
      */
     public LinearTrajectoryBuilder rotateLeftwards(double distance,
-                                Angle toRotateBy) {
+                                                   Angle toRotateBy) {
         rotateLine(
                 distance,
                 last.z().add(toRotateBy),
@@ -264,7 +264,7 @@ public class LinearTrajectoryBuilder {
      * @param toRotateBy how much to rotate.
      */
     public LinearTrajectoryBuilder rotateBackwards(double distance,
-                                Angle toRotateBy) {
+                                                   Angle toRotateBy) {
         rotateLine(
                 distance,
                 last.z().add(toRotateBy),

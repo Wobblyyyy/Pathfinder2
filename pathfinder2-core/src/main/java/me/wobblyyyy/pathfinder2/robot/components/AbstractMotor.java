@@ -79,7 +79,7 @@ public class AbstractMotor implements Motor {
      * The last set power value.
      */
     private double lastPower = 0.0;
-    
+
     /**
      * The motor's deadband. Any power value set to the motor that has an
      * absolute value less than this value will actually set the motor's power

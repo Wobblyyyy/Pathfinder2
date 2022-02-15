@@ -12,7 +12,6 @@ package me.wobblyyyy.pathfinder2.pathgen;
 
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.Rectangle;
-import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.zones.Zone;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

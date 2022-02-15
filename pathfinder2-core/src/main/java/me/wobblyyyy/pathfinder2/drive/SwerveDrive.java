@@ -13,9 +13,9 @@ package me.wobblyyyy.pathfinder2.drive;
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.kinematics.RelativeSwerveDriveKinematics;
-import me.wobblyyyy.pathfinder2.kinematics.RelativeSwerveState;
 import me.wobblyyyy.pathfinder2.kinematics.RelativeSwerveModuleKinematics;
 import me.wobblyyyy.pathfinder2.kinematics.RelativeSwerveModuleState;
+import me.wobblyyyy.pathfinder2.kinematics.RelativeSwerveState;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 
 import java.util.function.Function;

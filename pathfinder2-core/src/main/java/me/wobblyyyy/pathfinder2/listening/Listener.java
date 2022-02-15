@@ -75,9 +75,9 @@ import java.util.function.Supplier;
  * </p>
  *
  * @author Colin Robertson
- * @since 0.7.1
  * @see ListenerManager
  * @see ListenerMode
+ * @since 0.7.1
  */
 public class Listener implements Tickable {
     private final ListenerMode mode;

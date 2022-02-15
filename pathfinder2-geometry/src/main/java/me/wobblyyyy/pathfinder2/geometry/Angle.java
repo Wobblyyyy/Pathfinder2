@@ -23,6 +23,27 @@ import java.io.Serializable;
  * angle-related things you can think of. Super cool!
  *
  * <p>
+ * It's strongly suggested that you use the {@code Angle} class just about
+ * anywhere you would use an angle. Although yes, it is technically slower
+ * and requires more memory to use objects instead of just using primitives,
+ * such as {@code double}, it keeps your code readable and makes it easier
+ * to modify down the line. Also, if you're planning on making any changes
+ * to Pathfinder2's source code, ALL angles should be denoted using the
+ * {@code Angle} class. There should be next to no primitives whatsoever.
+ * </p>
+ *
+ * <p>
+ * In addition to tons of cool and very epic math stuff, the {@code Angle}
+ * class provides some formatting utilities. See:
+ * <ul>
+ *     <li>{@link #formatAsDegLong()}</li>
+ *     <li>{@link #formatAsDegShort()}</li>
+ *     <li>{@link #formatAsRadLong()}</li>
+ *     <li>{@link #formatAsRadShort()}</li>
+ * </ul>
+ * </p>
+ *
+ * <p>
  * This class was created primarily to simplify operations related to angles.
  * Much of the trigonometry previously delegated to {@link Math} has been
  * made available, such as...
@@ -49,26 +70,6 @@ import java.io.Serializable;
  * </ul>
  * </p>
  *
- * <p>
- * It's strongly suggested that you use the {@code Angle} class just about
- * anywhere you would use an angle. Although yes, it is technically slower
- * and requires more memory to use objects instead of just using primitives,
- * such as {@code double}, it keeps your code readable and makes it easier
- * to modify down the line. Also, if you're planning on making any changes
- * to Pathfinder2's source code, ALL angles should be denoted using the
- * {@code Angle} class. There should be next to no primitives whatsoever.
- * </p>
- *
- * <p>
- * In addition to tons of cool and very epic math stuff, the {@code Angle}
- * class provides some formatting utilities. See:
- * <ul>
- *     <li>{@link #formatAsDegLong()}</li>
- *     <li>{@link #formatAsDegShort()}</li>
- *     <li>{@link #formatAsRadLong()}</li>
- *     <li>{@link #formatAsRadShort()}</li>
- * </ul>
- * </p>
  *
  * <p>
  * Finally, one of the key features of the {@code Angle} class is the ability
@@ -96,90 +97,112 @@ public class Angle implements Comparable<Angle>, Serializable {
      * "rad"
      */
     public static final String FORMAT_RAD_SHORT = "rad";
+
     /**
      * "deg"
      */
     public static final String FORMAT_DEG_SHORT = "deg";
+
     /**
      * "radians"
      */
     public static final String FORMAT_RAD_LONG = "radians";
+
     /**
      * "degrees"
      */
     public static final String FORMAT_DEG_LONG = "degrees";
+
     /**
      * Minimum radians - 0
      */
     public static final double MIN_RAD = 0;
+
     /**
      * Maximum radians - 6.28318531
      */
     public static final double MAX_RAD = 6.28318531;
+
     /**
      * Maximum radians, times 10.
      */
     public static final double MAX_RAD_10X = MAX_RAD * 10;
+
     /**
      * Minimum degrees - 0
      */
     public static final double MIN_DEG = 0;
+
     /**
      * Maximum degrees - 360
      */
     public static final double MAX_DEG = 360;
+
     /**
      * Maximum degrees, times 10.
      */
     public static final double MAX_DEG_10X = MAX_DEG * 10;
+
     /**
      * {@link #fromDeg(double)} with an angle of 0
      */
     public static final Angle DEG_0 = Angle.fromDeg(0);
+
     /**
      * {@link #fromDeg(double)} with an angle of 45
      */
     public static final Angle DEG_45 = Angle.fromDeg(45);
+
     /**
      * {@link #fromDeg(double)} with an angle of 90
      */
     public static final Angle DEG_90 = Angle.fromDeg(90);
+
     /**
      * {@link #fromDeg(double)} with an angle of 135
      */
     public static final Angle DEG_135 = Angle.fromDeg(135);
+
     /**
      * {@link #fromDeg(double)} with an angle of 180
      */
     public static final Angle DEG_180 = Angle.fromDeg(180);
+
     /**
      * {@link #fromDeg(double)} with an angle of 225
      */
     public static final Angle DEG_225 = Angle.fromDeg(225);
+
     /**
      * {@link #fromDeg(double)} with an angle of 270
      */
     public static final Angle DEG_270 = Angle.fromDeg(270);
+
     /**
      * {@link #fromDeg(double)} with an angle of 315
      */
     public static final Angle DEG_315 = Angle.fromDeg(315);
+
     /**
      * {@link #fromDeg(double)} with an angle of 360
      */
     public static final Angle DEG_360 = Angle.fromDeg(360);
+
     /**
      * {@link #fromRad(double)} with an angle of 45 deg
      */
     public static final Angle PI_OVER_4 = Angle.fromDeg(45);
+
     /**
      * {@link #fromRad(double)} with an angle of 90 deg
      */
     public static final Angle PI_OVER_2 = Angle.fromDeg(90);
+
     /**
      * {@link #fromRad(double)} with an angle of 135 deg
      */
     public static final Angle THREE_PI_OVER_4 = Angle.fromDeg(135);
+
     /**
      * {@link #fromRad(double)} with an angle of 180 deg
      */
@@ -188,19 +211,27 @@ public class Angle implements Comparable<Angle>, Serializable {
      * {@link #fromRad(double)} with an angle of 225 deg
      */
     public static final Angle FIVE_PI_OVER_4 = Angle.fromDeg(225);
+
     /**
      * {@link #fromRad(double)} with an angle of 270 deg
      */
     public static final Angle THREE_PI_OVER_2 = Angle.fromDeg(270);
+
     /**
      * {@link #fromRad(double)} with an angle of 315 deg
      */
     public static final Angle SEVEN_PI_OVER_4 = Angle.fromDeg(315);
+
     /**
      * {@link #fromRad(double)} with an angle of 360 deg
      */
     public static final Angle TWO_PI = Angle.fromDeg(360);
+
+    /**
+     * A count of how many instances of the ANGLE class have been created.
+     */
     public static long COUNT = 0;
+
     /**
      * Angle stored in radians.
      */

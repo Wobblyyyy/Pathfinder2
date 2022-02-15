@@ -57,8 +57,8 @@ public class FollowerExecutor {
                             Drive drive,
                             List<Follower> followers) {
         if (odometry == null) throw new NullOdometryException(
-                    "A null odometry instance was passed to the constructor " +
-                            "of a FollowerExecutor!");
+                "A null odometry instance was passed to the constructor " +
+                        "of a FollowerExecutor!");
         if (drive == null) throw new NullDriveException(
                 "A null drive instance was passed to the constructor " +
                         "of a FollowerExecutor!");

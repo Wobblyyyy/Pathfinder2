@@ -22,7 +22,7 @@ import java.util.List;
  * used. Each instance of {@link Pathfinder} has one of these, and it allows
  * the user to load {@link PathfinderPlugin}s, which are designed to allow
  * developers to extend the normal limits of Pathfinder's customization.
- *
+ * <p>
  * This is intended to be an internal class, so I'm not sure why you'd need
  * to have access to this, but oh well.
  *

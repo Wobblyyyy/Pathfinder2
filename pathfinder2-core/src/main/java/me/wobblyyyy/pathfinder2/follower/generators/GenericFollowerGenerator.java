@@ -50,7 +50,7 @@ public class GenericFollowerGenerator implements FollowerGenerator {
         if (turnController == null) {
             throw new NullControllerException(
                     "Can't create a generic follower generator with " +
-                        "a null turn controller!"
+                            "a null turn controller!"
             );
         }
         this.turnController = turnController;

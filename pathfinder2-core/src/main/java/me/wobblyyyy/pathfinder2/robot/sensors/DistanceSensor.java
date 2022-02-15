@@ -10,11 +10,11 @@
 
 package me.wobblyyyy.pathfinder2.robot.sensors;
 
-import me.wobblyyyy.pathfinder2.robot.sensors.Sensor;
-
 public interface DistanceSensor extends Sensor<Double> {
     double getDistanceInches();
+
     double getDistanceCentimeters();
+
     double getDistanceMeters();
 
     @Override

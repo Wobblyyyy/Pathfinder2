@@ -71,7 +71,7 @@ public class MeccanumDriveOdometry extends AbstractOdometry {
                                  EncoderConverter converter,
                                  Encoder frontRight,
                                  Encoder frontLeft,
-                                Encoder backRight,
+                                 Encoder backRight,
                                  Encoder backLeft,
                                  Supplier<Angle> getGyroAngle) {
         this(

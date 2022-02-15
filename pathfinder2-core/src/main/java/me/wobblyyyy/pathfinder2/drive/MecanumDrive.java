@@ -91,9 +91,9 @@ public class MecanumDrive implements Drive {
      * @param bl the back-left motor.
      */
     public MecanumDrive(Motor fr,
-                         Motor fl,
-                         Motor br,
-                         Motor bl) {
+                        Motor fl,
+                        Motor br,
+                        Motor bl) {
         this(fr, fl, br, bl, Angle.zero());
     }
 
@@ -107,10 +107,10 @@ public class MecanumDrive implements Drive {
      * @param angleOffset the angle offset to use for applying translations.
      */
     public MecanumDrive(Motor fr,
-                         Motor fl,
-                         Motor br,
-                         Motor bl,
-                         Angle angleOffset) {
+                        Motor fl,
+                        Motor br,
+                        Motor bl,
+                        Angle angleOffset) {
         this(fr, fl, br, bl, angleOffset, false, false, false);
     }
 
@@ -135,13 +135,13 @@ public class MecanumDrive implements Drive {
      *                    the right direction.
      */
     public MecanumDrive(Motor fr,
-                         Motor fl,
-                         Motor br,
-                         Motor bl,
-                         Angle angleOffset,
-                         boolean swapXY,
-                         boolean reflectX,
-                         boolean reflectY) {
+                        Motor fl,
+                        Motor br,
+                        Motor bl,
+                        Angle angleOffset,
+                        boolean swapXY,
+                        boolean reflectX,
+                        boolean reflectY) {
         this(
                 fr,
                 fl,
@@ -185,16 +185,16 @@ public class MecanumDrive implements Drive {
      *                      starting place is 0.001.
      */
     public MecanumDrive(Motor fr,
-                         Motor fl,
-                         Motor br,
-                         Motor bl,
-                         Angle angleOffset,
-                         double minMagnitude,
-                         double maxMagnitude,
-                         double turnMagnitude,
-                         boolean swapXY,
-                         boolean invertX,
-                         boolean invertY) {
+                        Motor fl,
+                        Motor br,
+                        Motor bl,
+                        Angle angleOffset,
+                        double minMagnitude,
+                        double maxMagnitude,
+                        double turnMagnitude,
+                        boolean swapXY,
+                        boolean invertX,
+                        boolean invertY) {
         NotNull.throwExceptionIfNull(
                 "Attempted to create an instance of the MecanumDrive " +
                         "class with one or more null Motor objects.",
@@ -361,9 +361,9 @@ public class MecanumDrive implements Drive {
         }
 
         public MecanumDriveBuilder setMotors(Motor frontRight,
-                                              Motor frontLeft,
-                                              Motor backRight,
-                                              Motor backLeft) {
+                                             Motor frontLeft,
+                                             Motor backRight,
+                                             Motor backLeft) {
             this.frontRight = frontRight;
             this.frontLeft = frontLeft;
             this.backRight = backRight;
@@ -409,8 +409,8 @@ public class MecanumDrive implements Drive {
         }
 
         public MecanumDriveBuilder setMagnitudes(double minMagnitude,
-                                                  double maxMagnitude,
-                                                  double turnMagnitude) {
+                                                 double maxMagnitude,
+                                                 double turnMagnitude) {
             this.minMagnitude = minMagnitude;
             this.maxMagnitude = maxMagnitude;
             this.turnMagnitude = turnMagnitude;
@@ -419,8 +419,8 @@ public class MecanumDrive implements Drive {
         }
 
         public MecanumDriveBuilder setModifiers(boolean swapXY,
-                                                 boolean invertX,
-                                                 boolean invertY) {
+                                                boolean invertX,
+                                                boolean invertY) {
             this.swapXY = swapXY;
             this.invertX = invertX;
             this.invertY = invertY;

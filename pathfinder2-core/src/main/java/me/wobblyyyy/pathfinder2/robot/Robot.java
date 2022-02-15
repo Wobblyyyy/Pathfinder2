@@ -19,9 +19,9 @@ import me.wobblyyyy.pathfinder2.exceptions.NullOdometryException;
  * position, and the drive system should respond to commands given to it.
  *
  * @author Colin Robertson
- * @since 0.0.0
  * @see #drive()
  * @see #odometry()
+ * @since 0.0.0
  */
 public class Robot {
     /**

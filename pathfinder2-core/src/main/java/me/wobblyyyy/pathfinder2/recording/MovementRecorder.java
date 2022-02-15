@@ -11,7 +11,6 @@
 package me.wobblyyyy.pathfinder2.recording;
 
 import me.wobblyyyy.pathfinder2.Pathfinder;
-import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.time.Time;
 
 /**
