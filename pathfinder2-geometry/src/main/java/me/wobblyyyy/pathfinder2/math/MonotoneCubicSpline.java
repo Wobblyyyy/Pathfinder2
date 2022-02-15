@@ -86,12 +86,10 @@ public class MonotoneCubicSpline implements Spline {
         double[] m = new double[n];
         for (int i = 0; i < n - 1; i++) {
             double h = x[i + 1] - x[i];
-            /*
             if (h <= 0D) {
                 throw new IllegalArgumentException("Control points " +
                         "must have strictly increasing X values.");
             }
-             */
             d[i] = (y[i + 1] - y[i]) / h;
         }
         m[0] = d[0];

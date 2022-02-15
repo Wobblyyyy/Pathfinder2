@@ -18,13 +18,8 @@ import java.util.List;
 
 /**
  * A 2d coordinate with an X value, a Y value, and a value "Z" representing
- * a heading angle.
- *
- * <p>
- * As an extension of the {@link PointXY} class, this class inherits many
- * of the methods. Some of them are overridden to accommodate for the extra
- * aspect (Z). Some of them aren't. You never know, right?
- * </p>
+ * a heading angle. This class extends {@link PointXY} and adds an additional
+ * component (Z).
  *
  * <p>
  * Much like the aforementioned {@code PointXY} class, {@code PointXYZ}s are

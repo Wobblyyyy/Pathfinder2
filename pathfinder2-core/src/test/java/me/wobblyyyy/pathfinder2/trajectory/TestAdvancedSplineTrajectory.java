@@ -49,4 +49,54 @@ public class TestAdvancedSplineTrajectory {
         );
         Assertions.assertFalse(pathfinder.isActive());
     }
+
+    @Test
+    public void testNonLinearSplineSpeed() {
+        Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
+        SimulatedOdometry odometry = (SimulatedOdometry) pathfinder.getOdometry();
+        Trajectory trajectory = new AdvancedSplineTrajectoryBuilder()
+                .setStep(0.1)
+                .setSpeed(0.5)
+                .setTolerance(2)
+                .setAngleTolerance(Angle.fromDeg(5))
+                .add(new PointXYZ(0, 0, 0))
+                .setSpeed(0.75)
+                .add(new PointXYZ(10, 10, 0))
+                .setSpeed(1)
+                .add(new PointXYZ(11, 12, 0))
+                .build();
+
+        pathfinder.followTrajectory(trajectory);
+        pathfinder.tick();
+        Assertions.assertTrue(pathfinder.isActive());
+        Assertions.assertEquals(
+                new Translation(0.354, 0.356, -0.018),
+                pathfinder.getTranslation()
+        );
+        Assertions.assertEquals(
+                0.5,
+                trajectory.speed(pathfinder.getPosition())
+        );
+        PointXYZ current = pathfinder.getPosition();
+        Assertions.assertEquals(0.5, trajectory.speed(current));
+        odometry.setRawPosition(new PointXYZ(10, 10, 0));
+        pathfinder.tick();
+        Assertions.assertTrue(pathfinder.isActive());
+        Assertions.assertNotEquals(
+                new Translation(0.354, 0.356, -0.018),
+                pathfinder.getTranslation()
+        );
+        Assertions.assertEquals(
+                0.75,
+                trajectory.speed(pathfinder.getPosition())
+        );
+        Assertions.assertEquals(0.5, trajectory.speed(current));
+        odometry.setRawPosition(new PointXYZ(11, 12, 0));
+        pathfinder.tick();
+        Assertions.assertEquals(
+                new Translation(0, 0, 0),
+                pathfinder.getTranslation()
+        );
+        Assertions.assertFalse(pathfinder.isActive());
+    }
 }
