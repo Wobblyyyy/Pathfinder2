@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A stopwatch, capable of stopping AND watching. It's absolutely bind
+ * A stopwatch, capable of stopping AND watching. It's absolutely mind
  * bending how incredibly complex such a thing is.
  *
  * <p>
