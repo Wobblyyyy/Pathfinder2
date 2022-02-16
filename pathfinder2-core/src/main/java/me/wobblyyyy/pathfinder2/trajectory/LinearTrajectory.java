@@ -144,6 +144,20 @@ public class LinearTrajectory implements Trajectory {
     }
 
     /**
+     * Create a new {@code LinearTrajectory} by copying an existing trajectory.
+     *
+     * @param trajectory the trajectory to copy.
+     */
+    public LinearTrajectory(LinearTrajectory trajectory) {
+        this(
+                trajectory.target,
+                trajectory.speed,
+                trajectory.tolerance,
+                trajectory.angleTolerance
+        );
+    }
+
+    /**
      * Get the follower's target point.
      *
      * @return the follower's target point.

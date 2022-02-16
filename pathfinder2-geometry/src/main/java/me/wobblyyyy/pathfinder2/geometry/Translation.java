@@ -143,6 +143,18 @@ public class Translation implements Serializable {
     }
 
     /**
+     * Create a new {@code Translation} by copying an existing
+     * {@code Translation}.
+     *
+     * @param translation the translation to copy. The new translation will
+     *                    have the same vx, vy, and vz values as
+     *                    this translation.
+     */
+    public Translation(Translation translation) {
+        this(translation.vx, translation.vy, translation.vz);
+    }
+
+    /**
      * Create a new {@code Translation} by using the X and Y values of the
      * provided point. The point will have a vz value of 0.
      *
@@ -266,6 +278,26 @@ public class Translation implements Serializable {
     }
 
     /**
+     * Multiply each of the values of a translation by a value.
+     *
+     * @param a           the initial translation.
+     * @param xMultiplier vx multiplier.
+     * @param yMultiplier vy multiplier.
+     * @param zMultiplier vz multiplier.
+     * @return a new {@code Translation}.
+     */
+    public static Translation multiply(Translation a,
+                                       double xMultiplier,
+                                       double yMultiplier,
+                                       double zMultiplier) {
+        return new Translation(
+                a.vx() * xMultiplier,
+                a.vy() * yMultiplier,
+                a.vz() * zMultiplier
+        );
+    }
+
+    /**
      * Subtract translation B from translation A.
      *
      * @param a the first of the two translations.
@@ -334,6 +366,38 @@ public class Translation implements Serializable {
      */
     public double vz() {
         return this.vz;
+    }
+
+    /**
+     * Get a certain axis.
+     *
+     * @param axis the axis to get.
+     * @return that axis' value.
+     */
+    public double getAxis(Axis axis) {
+        switch (axis) {
+            case X: return vx();
+            case Y: return vy();
+            case Z: return vz();
+            default: throw new RuntimeException();
+        }
+    }
+
+    /**
+     * Create a new translation with a new axis for a certain value.
+     *
+     * @param axis  the axis.
+     * @param value the axis' value.
+     * @return a new {@code Translation}.
+     */
+    public Translation withAxis(Axis axis,
+                                double value) {
+        switch (axis) {
+            case X: return withVx(value);
+            case Y: return withVy(value);
+            case Z: return withVz(value);
+            default: throw new RuntimeException();
+        }
     }
 
     /**
@@ -460,6 +524,25 @@ public class Translation implements Serializable {
     }
 
     /**
+     * Multiply this translation.
+     *
+     * @param xMultiplier vx multiplier.
+     * @param yMultiplier vy multiplier.
+     * @param zMultiplier vz multiplier.
+     * @return a new {@code Translation}.
+     */
+    public Translation multiply(double xMultiplier,
+                                double yMultiplier,
+                                double zMultiplier) {
+        return multiply(
+                this,
+                xMultiplier,
+                yMultiplier,
+                zMultiplier
+        );
+    }
+
+    /**
      * Subtract a translation from this translation.
      *
      * @param a the translation to subtract.
@@ -527,5 +610,25 @@ public class Translation implements Serializable {
     @Override
     public Translation clone() {
         return new Translation(vx, vy, vz);
+    }
+
+    /**
+     * Different axes for a translation.
+     */
+    public enum Axis {
+        /**
+         * The vx axis.
+         */
+        X,
+
+        /**
+         * The vy axis.
+         */
+        Y,
+
+        /**
+         * The vz axis.
+         */
+        Z
     }
 }

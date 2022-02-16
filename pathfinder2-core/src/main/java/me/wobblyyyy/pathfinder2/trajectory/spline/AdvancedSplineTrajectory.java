@@ -15,6 +15,7 @@ import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.math.Spline;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 
@@ -135,6 +136,22 @@ public class AdvancedSplineTrajectory implements Trajectory {
         this.angleTolerance = angleTolerance;
     }
 
+    /**
+     * Create a new {@code AdvancedSplineTrajectory}.
+     *
+     * @param trajectory the trajectory to copy.
+     */
+    public AdvancedSplineTrajectory(AdvancedSplineTrajectory trajectory) {
+        this(
+                trajectory.spline,
+                trajectory.angleSpline,
+                trajectory.speedSpline,
+                trajectory.step,
+                trajectory.tolerance,
+                trajectory.angleTolerance
+        );
+    }
+
     @Override
     public PointXYZ nextMarker(PointXYZ current) {
         double x = current.x() + step;
@@ -182,5 +199,28 @@ public class AdvancedSplineTrajectory implements Trajectory {
                     "speed spline is correctly constructed");
 
         return speed;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof AdvancedSplineTrajectory) {
+            AdvancedSplineTrajectory t = (AdvancedSplineTrajectory) obj;
+            
+            boolean sameSpline = spline.equals(t.spline);
+            boolean sameAngleSpline = angleSpline.equals(t.angleSpline);
+            boolean sameSpeedSpline = speedSpline.equals(t.speedSpline);
+            boolean sameStep = Equals.soft(step, t.step, 0.01);
+            boolean sameTolerance = Equals.soft(tolerance, t.tolerance, 0.01);
+            boolean sameAngleTolerance = angleTolerance.equals(t.angleTolerance);
+
+            return sameSpline
+                    && sameAngleSpline
+                    && sameSpeedSpline
+                    && sameStep
+                    && sameTolerance
+                    && sameAngleTolerance;
+        }
+
+        return false;
     }
 }

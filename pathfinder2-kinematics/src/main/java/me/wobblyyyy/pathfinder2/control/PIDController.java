@@ -47,6 +47,40 @@ public class PIDController extends AbstractController {
         this.derivative = derivative;
     }
 
+    /**
+     * Create a new {@code PIDController}.
+     *
+     * @param controller the controller to copy.
+     */
+    public PIDController(PIDController controller) {
+        this(
+                controller.proportional,
+                controller.integral,
+                controller.derivative
+        );
+    }
+
+    /**
+     * Create a new {@code PIDController}.
+     *
+     * @param controller the controller to copy.
+     */
+    public PIDController(ProportionalController controller) {
+        this(
+                controller.getCoefficient(),
+                0,
+                0
+        );
+    }
+
+    /**
+     * Set a single coefficient of the PID controller.
+     *
+     * @param coefficient the coefficient to set: either proportional,
+     *                    integral, or derivative.
+     * @param value       the value to set to the coefficient.
+     * @return {@code this}, used for method chaining.
+     */
     public PIDController setCoefficient(PIDCoefficient coefficient,
                                         double value) {
         switch (coefficient) {
@@ -62,6 +96,24 @@ public class PIDController extends AbstractController {
             default: throw new RuntimeException();
         }
         
+        return this;
+    }
+
+    /**
+     * Set the controller's coefficients.
+     *
+     * @param proportional the controller's proportional coefficient.
+     * @param integral     the controller's integral coefficient.
+     * @param derivative   the controller's derivative coefficient.
+     * @return {@code this}, used for method chaining.
+     */
+    public PIDController setCoefficients(double proportional,
+                                         double integral,
+                                         double derivative) {
+        this.proportional = proportional;
+        this.integral = integral;
+        this.derivative = derivative;
+
         return this;
     }
 
@@ -129,6 +181,9 @@ public class PIDController extends AbstractController {
         errorSum = 0.0;
     }
 
+    /**
+     * A type of coefficient: either proportional, integral, derivative.
+     */
     public enum PIDCoefficient {
         PROPORTIONAL,
         INTEGRAL,

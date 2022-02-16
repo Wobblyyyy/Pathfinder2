@@ -103,7 +103,7 @@ public class TestAngle {
         // -360 = 0
         // -270 = 90
         // -180 = 180
-        assert Angle.fromDeg(720).fix().deg() == 360;
+        assert Angle.fromDeg(720).fix().deg() == 0;
         assert Angle.fromDeg(-360).fix().deg() == 0;
         assert Angle.fromDeg(-270).fix().deg() == 90;
         assert Angle.fromDeg(-180).fix().deg() == 180;
