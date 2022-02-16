@@ -50,7 +50,11 @@ public class GenericFollower implements Follower {
      * set the turn controller's target to 0.
      * </p>
      *
-     * @param trajectory     the trajectory the follower should follow.
+     * @param trajectory     the trajectory the follower should follow. The
+     *                       follower is responsible for operating the robot
+     *                       such that the robot moves in a way dictated by
+     *                       this {@code Trajectory}. After the trajectory has
+     *                       finished, the follower should also finish.
      * @param turnController a turn controller, responsible for determining
      *                       turn values. This controller's target will be
      *                       set to 0. The controller will receive the current
@@ -115,7 +119,7 @@ public class GenericFollower implements Follower {
         if (trajectory.isDone(current)) {
             // because the trajectory has finished, we give the robot a
             // translation of zero - there's no point in moving anymore, right?
-            consumer.accept(Translation.zero());
+            consumer.accept(Translation.ZERO);
 
             // and because the translation is finished, the tick method should
             // return true. putting a return statement here ensures that the
@@ -145,6 +149,8 @@ public class GenericFollower implements Follower {
         // a value that will minimize that aforementioned delta.
         double turn = turnController.calculate(angleDelta);
 
+        // getRelativeTranslation returns a RELATIVE translation (meaning it
+        // can be applied to the robot)
         Translation translation = Follower.getRelativeTranslation(
                 current,
                 nextMarker,

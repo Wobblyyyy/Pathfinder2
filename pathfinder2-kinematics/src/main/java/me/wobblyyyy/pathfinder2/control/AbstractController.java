@@ -15,6 +15,14 @@ package me.wobblyyyy.pathfinder2.control;
  * to simplify most of the tedious methods.
  *
  * <p>
+ * Anything extending {@link AbstractController} will have a default target
+ * value of 0.0, unless a constructor changes that. Additionally, the
+ * default minimum and maximum values of the controller's output are both
+ * negative infinity and positive infinity respectively. Leaving these values
+ * untouched will mean the controller can output any value.
+ * </p>
+ *
+ * <p>
  * The only method you have to implement is {@link #calculate(double)}. If
  * you need to get the target, you can use {@link #getTarget()}. Of course,
  * minimum and maximum are {@link #getMin()} and {@link #getMax()}.
@@ -84,7 +92,10 @@ public abstract class AbstractController implements Controller {
     /**
      * Reset the controller. By default, there's nothing to reset here. You
      * can (and should) override this method if there IS something to reset,
-     * but otherwise, it doesn't do anything.
+     * but otherwise, it doesn't do anything. A common example where you'd
+     * need to reset the controller is a PID controller. Because the integral
+     * and derivative components of the controller persist, they'll need to
+     * be reset if the controller is to be properly recalibrated.
      */
     @Override
     public void reset() {
