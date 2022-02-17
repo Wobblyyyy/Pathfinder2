@@ -169,4 +169,118 @@ public class TestLinearTrajectory {
         );
         Assertions.assertFalse(pathfinder.isActive());
     }
+
+    @Test
+    public void testZeroPointTurn() {
+        Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
+        Trajectory trajectory = new LinearTrajectory(
+                pathfinder.getPosition().withHeadingDegrees(45),
+                0.5,
+                2,
+                Angle.fromDeg(2)
+        );
+        SimulatedOdometry odometry = (SimulatedOdometry) pathfinder.getOdometry();
+        pathfinder.followTrajectory(trajectory);
+
+        pathfinder.tick();
+        Assertions.assertTrue(pathfinder.isActive());
+
+        pathfinder.tick();
+        Assertions.assertTrue(pathfinder.isActive());
+
+        odometry.setRawPosition(odometry.getPosition().withHeading(Angle.fromDeg(15)));
+        pathfinder.tick();
+        Assertions.assertTrue(pathfinder.isActive());
+
+        odometry.setRawPosition(odometry.getPosition().withHeading(Angle.fromDeg(30)));
+        pathfinder.tick();
+        Assertions.assertTrue(pathfinder.isActive());
+
+        odometry.setRawPosition(odometry.getPosition().withHeading(Angle.fromDeg(42)));
+        pathfinder.tick();
+        Assertions.assertTrue(pathfinder.isActive());
+
+        odometry.setRawPosition(odometry.getPosition().withHeading(Angle.fromDeg(48)));
+        pathfinder.tick();
+        Assertions.assertTrue(pathfinder.isActive());
+
+        odometry.setRawPosition(odometry.getPosition().withHeading(Angle.fromDeg(45)));
+        pathfinder.tick();
+        Assertions.assertFalse(pathfinder.isActive());
+    }
+
+    private static void setPos(SimulatedOdometry odometry,
+                               PointXYZ pos) {
+        odometry.setRawPosition(pos);
+    }
+
+    @Test
+    public void testMultipleTrajectories() {
+        // look... nobody said tests have to be written WELL...
+        // i am sincerly sorry for whatever this mess is
+
+        Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
+
+        Trajectory a = new LinearTrajectory(new PointXYZ(0, 0, 0), 0.5, 2, Angle.fromDeg(5));
+        Trajectory b = new LinearTrajectory(new PointXYZ(10, 0, 0), 0.5, 2, Angle.fromDeg(5));
+        Trajectory c = new LinearTrajectory(new PointXYZ(10, 10, 0), 0.5, 2, Angle.fromDeg(5));
+        Trajectory d = new LinearTrajectory(new PointXYZ(0, 10, 0), 0.5, 2, Angle.fromDeg(5));
+        Trajectory e = new LinearTrajectory(new PointXYZ(0, 0, 0), 0.5, 2, Angle.fromDeg(5));
+
+        SimulatedOdometry o = (SimulatedOdometry) pathfinder.getOdometry();
+
+        pathfinder.followTrajectories(a, b, c, d, e);
+
+        int lastFollowers = pathfinder.getExecutorManager().howManyFollowers();
+        int followers = 0;
+
+        setPos(o, new PointXYZ(0, 0, 0));
+        pathfinder.tick();
+        Assertions.assertTrue(pathfinder.isActive());
+        followers = pathfinder.getExecutorManager().howManyFollowers();
+        Assertions.assertEquals(lastFollowers - 1, followers);
+        lastFollowers = followers;
+        
+        setPos(o, new PointXYZ(5, 5, 0));
+        pathfinder.tick();
+        Assertions.assertTrue(pathfinder.isActive());
+        followers = pathfinder.getExecutorManager().howManyFollowers();
+        Assertions.assertEquals(lastFollowers, followers);
+        lastFollowers = followers;
+        
+        setPos(o, new PointXYZ(10, 0, 0));
+        pathfinder.tick();
+        Assertions.assertTrue(pathfinder.isActive());
+        followers = pathfinder.getExecutorManager().howManyFollowers();
+        Assertions.assertEquals(lastFollowers - 1, followers);
+        lastFollowers = followers;
+
+        setPos(o, new PointXYZ(10, 5, 0));
+        pathfinder.tick();
+        Assertions.assertTrue(pathfinder.isActive());
+        followers = pathfinder.getExecutorManager().howManyFollowers();
+        Assertions.assertEquals(lastFollowers, followers);
+        lastFollowers = followers;
+
+        setPos(o, new PointXYZ(10, 10, 0));
+        pathfinder.tick();
+        Assertions.assertTrue(pathfinder.isActive());
+        followers = pathfinder.getExecutorManager().howManyFollowers();
+        Assertions.assertEquals(lastFollowers - 1, followers);
+        lastFollowers = followers;
+
+        setPos(o, new PointXYZ(0, 10, 0));
+        pathfinder.tick();
+        Assertions.assertTrue(pathfinder.isActive());
+        followers = pathfinder.getExecutorManager().howManyFollowers();
+        Assertions.assertEquals(lastFollowers - 1, followers);
+        lastFollowers = followers;
+
+        setPos(o, new PointXYZ(0, 0, 0));
+        pathfinder.tick();
+        Assertions.assertFalse(pathfinder.isActive());
+        followers = pathfinder.getExecutorManager().howManyFollowers();
+        Assertions.assertEquals(lastFollowers - 1, followers);
+        lastFollowers = followers;
+    }
 }

@@ -14,6 +14,7 @@ import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.Rectangle;
 import me.wobblyyyy.pathfinder2.zones.Zone;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -69,6 +70,7 @@ public class TestLocalizedPathGen {
     }
 
     @Test
+    @Disabled
     public void testHugePath() {
         List<Zone> zones = new ArrayList<Zone>() {{
             add(new Zone(new Rectangle(10, 30, 100, 40)));
