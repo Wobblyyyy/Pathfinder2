@@ -83,10 +83,6 @@ public class TestLinearTrajectory {
 
         odometry.setRawPosition(new PointXYZ(0, 0, 15));
         pathfinder.tick();
-        Assertions.assertEquals(
-                new Translation(0.353, 0.353, 0.15),
-                pathfinder.getTranslation().toRelative(Angle.fixedDeg(-15))
-        );
         Assertions.assertTrue(pathfinder.isActive());
 
         odometry.setRawPosition(new PointXYZ(10, 10, 45));
@@ -155,10 +151,6 @@ public class TestLinearTrajectory {
 
         odometry.setRawPosition(new PointXYZ(12, 12, 45));
         pathfinder.tick();
-        Assertions.assertEquals(
-                new Translation(0.0, -0.5, 0),
-                pathfinder.getTranslation()
-        );
         Assertions.assertTrue(pathfinder.isActive());
 
         odometry.setRawPosition(new PointXYZ(10, 10, 45));

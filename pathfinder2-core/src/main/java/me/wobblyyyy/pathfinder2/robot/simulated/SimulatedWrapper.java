@@ -25,11 +25,7 @@ public class SimulatedWrapper {
     private final SimulatedOdometry odometry;
 
     private static double roundNumber(double value) {
-        double rounded = Math.round(value * 8) / 8.0;
-
-        System.out.println(rounded);
-
-        return rounded;
+        return Math.round(value * 32) / 32.0;
     }
 
     public SimulatedWrapper(SimulatedDrive drive,
@@ -40,11 +36,10 @@ public class SimulatedWrapper {
         this.drive.setModifier(
                 (translation) -> {
                     PointXYZ point = new PointXYZ(
-                            roundNumber(translation.vx() * 2),
-                            roundNumber(translation.vy() * 2),
-                            roundNumber(translation.vz() * 2)
+                            roundNumber(translation.vx()),
+                            roundNumber(translation.vy()),
+                            translation.vz()
                     );
-                    System.out.println("POINT: " + point);
 
                     odometry.setRawPosition(odometry.getPosition().add(point));
 

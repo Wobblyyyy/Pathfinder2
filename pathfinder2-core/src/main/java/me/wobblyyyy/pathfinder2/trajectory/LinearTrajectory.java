@@ -104,7 +104,7 @@ public class LinearTrajectory implements Trajectory {
      *                       the robot is supposed to be facing. A higher angle
      *                       tolerance means the robot will complete the
      *                       trajectory more quickly, as it won't have to
-     *                       compenstae for any over or under adjustments. A
+     *                       compensate for any over or under adjustments. A
      *                       lower angle tolerance makes your robot more
      *                       precise.
      */
@@ -191,8 +191,8 @@ public class LinearTrajectory implements Trajectory {
 
     private boolean isDoneHeading(PointXYZ current) {
         return current.z().isCloseDeg(
-                target.z(),
-                angleTolerance.deg()
+                target.z().fix(),
+                angleTolerance.fix().deg()
         );
     }
 

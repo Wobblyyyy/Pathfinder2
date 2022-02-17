@@ -22,7 +22,6 @@ import org.junit.jupiter.api.Test;
 public class TestAngle {
     private final Angle ANGLE_A = Angle.fromDeg(45);
     private final Angle ANGLE_B = Angle.fromDeg(90);
-    private final Angle ANGLE_C = Angle.fromDeg(135);
     private final Angle ANGLE_D = Angle.fromDeg(180);
 
     private final double SIN_45 = Math.sin(Math.toRadians(45));
@@ -146,6 +145,24 @@ public class TestAngle {
         Assertions.assertEquals(
                 a.add(b),
                 Angle.fromDeg(45)
+        );
+    }
+
+    @Test
+    public void testMoreAngleDelta() {
+        Angle a = Angle.fromDeg(90);
+        Angle b = Angle.fromDeg(271);
+        Angle c = Angle.fromDeg(269);
+        Angle d = Angle.fromDeg(0);
+        Angle e = Angle.fromDeg(270);
+
+        Assertions.assertEquals(
+                Angle.fixedDeg(-179), 
+                Angle.fixedDeg(Angle.minimumDelta(a, b))
+        );
+        Assertions.assertEquals(
+                Angle.fixedDeg(179), 
+                Angle.fixedDeg(Angle.minimumDelta(a, c))
         );
     }
 }

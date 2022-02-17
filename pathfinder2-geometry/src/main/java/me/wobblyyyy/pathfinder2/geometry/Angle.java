@@ -555,34 +555,11 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public static double minimumDelta(Angle a,
                                       Angle b) {
-        // There's definitely a much better way to do this, but for now,
-        // there aren't any problems with this method being too slow.
+        double aDeg = a.fix().deg;
+        double bDeg = b.fix().deg;
 
-        // Fix both of the angles (so we have easy-to-work-with numbers) and
-        // convert them into degrees.
-        double a_deg = a.fix().deg();
-        double b_deg = b.fix().deg();
+        double delta = bDeg - aDeg;
 
-        // Determine the current delta. We assume angle B is the target
-        // angle and angle A is the initial angle.
-        double delta = b_deg - a_deg;
-
-        // If the delta is above 180 degrees, which it never should be,
-        // there has to be a shorter way to get there.
-        if (Math.abs(delta) > 180) {
-            // Fix and flip both angles a and b. Flipping an angle just
-            // adds 180 degrees to it, and fixing it ensures it's within
-            // our lovely 0-360 range.
-            a_deg = a.fixedFlip().deg();
-            b_deg = b.fixedFlip().deg();
-
-            // Recalculate the delta. Once again, we assume b is the target
-            // and an is the initial. This delta should always be below
-            // 180 - if it's not, something's gone seriously wrong.
-            delta = b_deg - a_deg;
-        }
-
-        // And we're done! Would you look at that? Truly incredible, isn't it?
         return delta;
     }
 

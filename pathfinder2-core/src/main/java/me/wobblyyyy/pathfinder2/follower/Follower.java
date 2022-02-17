@@ -124,7 +124,7 @@ public interface Follower {
         if (currentXY.equals(targetXY))
             return Translation.ZERO.withVz(turn);
 
-        Angle angle = current.angleTo(target).fix();
+        Angle angle = current.angleTo(target).fix().subtract(current.z());
 
         PointXYZ targetPoint = PointXYZ.ZERO.inDirection(speed, angle);
 
