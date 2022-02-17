@@ -365,6 +365,26 @@ public class Angle implements Comparable<Angle>, Serializable {
     }
 
     /**
+     * Create a new {@code Angle} by providing a value, in rotations.
+     *
+     * @param rotations the angle's value, in rotations.
+     * @return a new {@code Angle}.
+     */
+    public static Angle fromRotations(double rotations) {
+        return fromDeg(rotations * 360);
+    }
+
+    /**
+     * Create a new {@code Angle} by providing a value, in rotations.
+     *
+     * @param rotations the angle's value, in rotations.
+     * @return a new {@code Angle}.
+     */
+    public static Angle fixedRotations(double rotations) {
+        return fixedDeg(rotations * 360);
+    }
+
+    /**
      * Create a new angle.
      *
      * @param unit  what unit the angle is given in.
