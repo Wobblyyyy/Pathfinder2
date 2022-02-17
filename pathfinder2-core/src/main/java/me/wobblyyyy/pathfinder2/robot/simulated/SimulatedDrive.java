@@ -27,12 +27,12 @@ public class SimulatedDrive implements Drive {
     /**
      * The drivetrain's last set translation.
      */
-    private Translation translation;
+    private Translation translation = Translation.ZERO;
 
     /**
      * The drivetrain's modifier.
      */
-    private Function<Translation, Translation> modifier;
+    private Function<Translation, Translation> modifier = (t) -> t;
 
     /**
      * Get the drivetrain's translation.
@@ -57,7 +57,7 @@ public class SimulatedDrive implements Drive {
      */
     @Override
     public void setTranslation(Translation translation) {
-        this.translation = translation;
+        this.translation = modifier.apply(translation);
     }
 
     /**
