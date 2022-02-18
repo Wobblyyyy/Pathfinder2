@@ -19,20 +19,25 @@
 <h1 align="center"></h1>
 
 Pathfinder2 is a continuation of the
-original [Pathfinder](https://github.com/Wobblyyyy/Pathfinder)
-library - an autonomous motion planning and control system designed for FIRST
-Robotics environments, such as
-the [FIRST Robotics Competition](https://www.firstinspires.org/robotics/frc) and
-the
-[FIRST Tech Challenge](https://www.firstinspires.org/robotics/ftc). This library
-will be actively developed until Q3 2022, and (hopefully) maintained long
-afterwards. Pathfinder2 is focused on providing a streamlined and user-friendly
-interface for interacting with topics such as odometry and motion planning.
-
-For a fun little video tangentially related to the rest of the readme,
-see [this](https://www.reddit.com/r/FTC/comments/rdqitc/guys_we_got_auton_working/).
-No, our robot does not do that anymore, and no, yours won't do that either -
-but you gotta admit, our robot has got some moves.
+original [Pathfinder](https://github.com/Wobblyyyy/Pathfinder) library: a
+streamlined motion planning and control system designed for FIRST events, such
+as [FIRST Robotics Competition](https://www.firstinspires.org/robotics/frc)
+and [FIRST Tech Challenge](https://www.firstinspires.org/robotics/ftc).
+- Track the position of a wheeled mobile robot using different odometry
+  implementations.
+- Dynamically correct for movement error and drift.
+- Plan complex routes using the 
+  [Trajectory](pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/trajectory/Trajectory.java)
+  system. Follow splines, arcs, lines, equations, the little green light at
+  the end of the tunnel - whatever you want, it's really up to you.
+- Full-featured geometry package with polygon collision detection, several
+  shapes, lines, points, and angles.
+- Map gamepad events (button press, trigger press, joystick move, etc) to
+  `Runnable`s, making it easy to create listeners.
+- Incredibly customizable: much of Pathfinder is based on interfaces and
+  there's a plugin system for advance usages.
+- Potentially the coolest piece of code ever written. I don't have any
+  evidence to support that, but we're all about swag here.
 
 <h2 align="center">Example Code</h2>
 
