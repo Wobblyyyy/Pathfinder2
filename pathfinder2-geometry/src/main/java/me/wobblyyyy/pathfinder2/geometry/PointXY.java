@@ -75,6 +75,15 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     private final double y;
 
     /**
+     * Create a new {@code PointXY} by copying an existing point.
+     *
+     * @param point the point to copy.
+     */
+    public PointXY(PointXY point) {
+        this(point.x, point.y);
+    }
+
+    /**
      * Create a new {@code PointXY}.
      *
      * @param x the point's X value.

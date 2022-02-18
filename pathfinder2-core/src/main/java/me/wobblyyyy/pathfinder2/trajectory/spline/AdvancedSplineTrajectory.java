@@ -51,6 +51,10 @@ public class AdvancedSplineTrajectory implements Trajectory {
     private final double tolerance;
     private final Angle angleTolerance;
 
+    private final double endPointX;
+    private final double startPointX;
+    private final boolean approachingInfinity;
+
     /**
      * Create a new {@code AdvancedSplineTrajectory}.
      *
@@ -134,6 +138,10 @@ public class AdvancedSplineTrajectory implements Trajectory {
         this.step = step;
         this.tolerance = tolerance;
         this.angleTolerance = angleTolerance;
+
+        this.endPointX = spline.getEndPoint().x();
+        this.startPointX = spline.getStartPoint().x();
+        this.approachingInfinity = endPointX > startPointX;
     }
 
     /**
@@ -156,6 +164,11 @@ public class AdvancedSplineTrajectory implements Trajectory {
     public PointXYZ nextMarker(PointXYZ current) {
         double x = current.x() + step;
 
+        if (x > endPointX)
+            x = endPointX;
+        else if (x < startPointX)
+            x = startPointX;
+
         PointXY interpolatedPoint = spline.interpolate(x);
         Angle interpolatedAngle = angleSpline.getAngleTarget(x);
 
@@ -168,8 +181,8 @@ public class AdvancedSplineTrajectory implements Trajectory {
 
     private boolean isDoneZ(PointXYZ current) {
         return Angle.isCloseDeg(
-                current.z(),
-                Angle.fixedDeg(angleSpline.getSpline().getEndPoint().y()),
+                current.z().fix(),
+                Angle.fixedDeg(angleSpline.getSpline().getEndPoint().y()).fix(),
                 angleTolerance.deg()
         );
     }

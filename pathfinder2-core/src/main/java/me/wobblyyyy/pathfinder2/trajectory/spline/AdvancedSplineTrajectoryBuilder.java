@@ -157,23 +157,28 @@ public class AdvancedSplineTrajectoryBuilder {
         int size = xValues.size();
         Double[] xBoxed = new Double[size];
         Double[] yBoxed = new Double[size];
-        Angle[] z = new Angle[size];
         Double[] speedBoxed = new Double[size];
+        Angle[] z = new Angle[size];
+
         xValues.toArray(xBoxed);
         yValues.toArray(yBoxed);
         angleTargets.toArray(z);
         speeds.toArray(speedBoxed);
+
         double[] x = new double[size];
         double[] y = new double[size];
         double[] speed = new double[size];
+
         for (int i = 0; i < xBoxed.length; i++) {
             x[i] = xBoxed[i];
             y[i] = yBoxed[i];
             speed[i] = speedBoxed[i];
         }
+
         Spline spline = new MonotoneCubicSpline(x, y);
         AngleSpline angleSpline = new AngleSpline(x, z);
         Spline speedSpline = new MonotoneCubicSpline(x, speed);
+
         return new AdvancedSplineTrajectory(
                 spline,
                 angleSpline,

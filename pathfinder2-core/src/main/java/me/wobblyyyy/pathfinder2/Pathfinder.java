@@ -1264,7 +1264,6 @@ public class Pathfinder {
             recorder.tick();
             listenerManager.tick(this);
             runOnTickOperations();
-            pluginManager.postTick(this);
         }
         pluginManager.postTick(this);
 
@@ -2482,8 +2481,12 @@ public class Pathfinder {
                         .setSpeed(speed)
                         .setTolerance(tolerance)
                         .setAngleTolerance(angleTolerance)
-                        .setStep(step)
-                        .add(getPosition());
+                        .setStep(step);
+
+        PointXYZ robotPosition = getPosition();
+
+        if (!robotPosition.equals(points[0]))
+            builder.add(robotPosition);
 
         for (PointXYZ point : points) {
             if (point == null) throw new NullPointException(

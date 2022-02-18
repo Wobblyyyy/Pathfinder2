@@ -10,7 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.robot.simulated;
 
-import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -19,10 +19,12 @@ import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.control.ProportionalController;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
+import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.robot.Robot;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
+import me.wobblyyyy.pathfinder2.trajectory.spline.SplineBuilderFactory;
 
 public class TestSimulatedChassis {
     private SimulatedDrive drive;
@@ -31,6 +33,7 @@ public class TestSimulatedChassis {
     private Robot robot;
     private Controller turnController;
     private Pathfinder pathfinder;
+    private SplineBuilderFactory factory;
 
     @BeforeEach
     public void beforeEach() {
@@ -39,7 +42,15 @@ public class TestSimulatedChassis {
         odometry = wrapper.getOdometry();
         robot = wrapper.getRobot();
         turnController = new ProportionalController(-0.05);
-        pathfinder = new Pathfinder(robot, turnController);
+        pathfinder = new Pathfinder(robot, turnController)
+            .setSpeed(0.5)
+            .setTolerance(2)
+            .setAngleTolerance(Angle.fromDeg(5));
+        factory = new SplineBuilderFactory()
+                .setSpeed(0.5)
+                .setStep(0.1)
+                .setTolerance(2)
+                .setAngleTolerance(Angle.fromDeg(5));
     }
 
     @Test
@@ -179,7 +190,6 @@ public class TestSimulatedChassis {
     }
 
     @Test
-    @Disabled
     public void testMultipleTrajectories() {
         pathfinder.followTrajectories(new LinearTrajectory(
                 new PointXYZ(10, 10, 270),
@@ -192,6 +202,48 @@ public class TestSimulatedChassis {
                 2,
                 Angle.fromDeg(5)
         ));
+
+        pathfinder.tickUntil();
+    }
+
+    @Test
+    public void testArcSpline() {
+        Trajectory trajectory = factory.builder()
+                .add(new PointXYZ(0, 0, 0))
+                .add(new PointXYZ(10, 0, 0).inDirection(10, Angle.fixedDeg(135)))
+                .add(new PointXYZ(10, 10, 0))
+                .build();
+
+        pathfinder.followTrajectory(trajectory);
+
+        pathfinder.tickUntil();
+    }
+
+    @Test
+    public void testBackwardsArcSpline() {
+        Trajectory trajectory = factory.builder()
+                .setStep(-0.1)
+                .add(new PointXYZ(10, 10, 0))
+                .add(new PointXYZ(10, 0, 0).inDirection(10, Angle.fixedDeg(135)))
+                .add(new PointXYZ(0, 0, 0))
+                .build();
+
+        odometry.setRawPosition(new PointXYZ(10, 10, 0));
+        pathfinder.followTrajectory(trajectory);
+
+        pathfinder.tickUntil();
+
+        Assertions.assertTrue(PointXY.ZERO.distance(pathfinder.getPosition()) <= 2);
+    }
+
+    @Test
+    public void testSplineTo() {
+        pathfinder.splineTo(
+                new PointXYZ(0, 0, 0),
+                new PointXYZ(2, 4, 0),
+                new PointXYZ(4, 8, 0),
+                new PointXYZ(6, 12, 0)
+        );
 
         pathfinder.tickUntil();
     }
