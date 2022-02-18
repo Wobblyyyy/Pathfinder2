@@ -33,7 +33,7 @@ public class MonotoneCubicSpline implements Spline {
     private PointXY start;
     private PointXY end;
 
-    private final boolean isInverted;
+    private boolean isInverted;
     private boolean isXY = false;
 
     /*
@@ -55,13 +55,30 @@ public class MonotoneCubicSpline implements Spline {
     @SuppressWarnings("SuspiciousNameCombination")
     public MonotoneCubicSpline(double[] x,
                                double[] y) {
-        if (x == null || y == null || x.length != y.length || x.length < 2)
+        if (x == null || y == null)
+            throw new IllegalArgumentException("Splines must be created " +
+                    "with non-null control points and arrays");
+
+        if (x.length < 2)
             throw new IllegalArgumentException("Splines must be created " +
                     "with at least 2 control points and arrays of " +
                     "equal lengths.");
 
-        isInverted = x[0] >= x[1];
+        if (x.length != y.length)
+            throw new IllegalArgumentException("Splines must be created " +
+                    "with arrays of equal lengths!");
 
+        isInverted = false;
+        double initialX = x[0];
+
+        for (int i = 1; i < x.length; i++)
+            if (x[i] < initialX) {
+                isInverted = true;
+                break;
+            }
+
+        // check to see if there are any duplicate x values. if there are
+        // duplicate x values, switch the x and y values
         List<Double> xValues = new ArrayList<>();
 
         for (double d : x)
@@ -83,6 +100,7 @@ public class MonotoneCubicSpline implements Spline {
             y = tempX;
         }
 
+        // if the spline is inverted, invert/reflect all of the points
         if (isInverted) {
             double tempX = x[x.length - 1];
             double tempY = y[y.length - 1];
@@ -105,7 +123,10 @@ public class MonotoneCubicSpline implements Spline {
             double h = x[i + 1] - x[i];
             if (h <= 0D) {
                 throw new IllegalArgumentException("Control points " +
-                        "must have strictly increasing X values.");
+                        "must have strictly increasing X values. If you're " +
+                        "seeing this message, you probably had a spline with " +
+                        "X values that increased then decreased or vice versa. " +
+                        "All X values must be approaching the same infinity.");
             }
             d[i] = (y[i + 1] - y[i]) / h;
         }
@@ -127,7 +148,12 @@ public class MonotoneCubicSpline implements Spline {
 
                 if (a < 0D || b < 0D)
                     throw new IllegalArgumentException("The control points " +
-                            "must have monotonic Y values.");
+                            "must have monotonic Y values. If you're seeing " +
+                            "this message, you probably tried to create a " +
+                            "spline that had Y values that decreased then " +
+                            "increased or vice versa. Basically, all of your " +
+                            "Y values must be going in the same direction - " +
+                            "either positive or negataive, but not both.");
 
                 double h = Math.hypot(a, b);
 
@@ -155,51 +181,61 @@ public class MonotoneCubicSpline implements Spline {
     public static Spline create(List<PointXY> controlPoints) {
         double[] x = new double[controlPoints.size()];
         double[] y = new double[controlPoints.size()];
+
         for (int i = 0; i < controlPoints.size(); i++) {
             PointXY controlPoint = controlPoints.get(i);
             x[i] = controlPoint.x();
             y[i] = controlPoint.y();
         }
+
         return new MonotoneCubicSpline(x, y);
     }
 
     public static MonotoneCubicSpline fromPoints(PointXY[] points) {
         double[] x = new double[points.length];
         double[] y = new double[points.length];
+
         for (int i = 0; i < points.length; i++) {
             x[i] = points[i].x();
             y[i] = points[i].y();
         }
+
         return new MonotoneCubicSpline(x, y);
     }
 
     public static MonotoneCubicSpline fromPoints(PointXYZ[] points) {
         double[] x = new double[points.length];
         double[] y = new double[points.length];
+
         for (int i = 0; i < points.length; i++) {
             x[i] = points[i].x();
             y[i] = points[i].y();
         }
+
         return new MonotoneCubicSpline(x, y);
     }
 
     public MonotoneCubicSpline fromVarArgs(PointXY... points) {
         double[] x = new double[points.length];
         double[] y = new double[points.length];
+
         for (int i = 0; i < points.length; i++) {
             x[i] = points[i].x();
             y[i] = points[i].y();
         }
+
         return new MonotoneCubicSpline(x, y);
     }
 
     public MonotoneCubicSpline fromVarArgs(PointXYZ... points) {
         double[] x = new double[points.length];
         double[] y = new double[points.length];
+
         for (int i = 0; i < points.length; i++) {
             x[i] = points[i].x();
             y[i] = points[i].y();
         }
+
         return new MonotoneCubicSpline(x, y);
     }
 

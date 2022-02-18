@@ -91,6 +91,20 @@ import java.util.function.Supplier;
  *     <li>{@link #getRecorder()}</li>
  *     <li>{@link #getListenerManager()}</li>
  * </ul>
+ * Many of these can be disabled using minimal mode, which is explained in
+ * the next paragraph.
+ * </p>
+ *
+ * <p>
+ * Finally, there's a relatively minor feature called "minimal mode." It's
+ * designed to decrease Pathfinder's footprint by skipping over the ticking
+ * of (usually optional) services/managers/listeners. Using minimal mode
+ * will restrict what Pathfinder is capable of, so I'd suggest you only make
+ * use of it in situations where performance is absolutely critical. Because
+ * unused services will usually have empty data structures, and it takes very
+ * little time to iterate over an empty collection, ticking objects that
+ * you're not using has a small impact on performance. To use minimal mode,
+ * check out: {@link #setIsMinimal(boolean)}
  * </p>
  *
  * @author Colin Robertson
@@ -257,6 +271,9 @@ public class Pathfinder {
      */
     private final Map<String, Object> dataMap;
 
+    /**
+     * Is Pathfinder operating in minimal mode?
+     */
     private boolean isMinimal = false;
 
     /**
@@ -280,7 +297,37 @@ public class Pathfinder {
      * </ul>
      * There's a very good chance you're not going to need some or all of those,
      * and that's okay - you simply don't have to worry about them and everything
-     * will work as intended.
+     * will work as intended. If that's the case, check out minimal mode
+     * with {@link #setIsMinimal(boolean)}.
+     * </p>
+     *
+     * <p>
+     * Example implementation:
+     * <code><pre>
+     * public class Example {
+     *     public void doStuff() {
+     *         Drive drive = new SimulatedDrive();
+     *         Odometry odometry = new SimulatedOdometry();
+     *         Robot robot = new Robot(drive, odometry);
+     *
+     *         Controller turnController = 
+     *                 new ProportionalController(0.01);
+     *         FollowGenerator generator = 
+     *                 new GenericFollowerGenerator(turnController);
+     *
+     *         Pathfinder pathfinder = new Pathfinder(
+     *                 robot,
+     *                 generator,
+     *                 turnController,
+     *                 "ExampleDoNotLoadPlugin1",
+     *                 "ExampleDoNotLoadPlugin2
+     *         );
+     *     }
+     * }
+     * </pre></code>
+     * Obviously, you shouldn't uses {@link SimulatedOdometry} or
+     * {@link SimulatedDrive} for an actual robot, because then nothing
+     * would work. But you get the point.
      * </p>
      *
      * @param robot          the {@code Pathfinder} instance's robot. This robot
@@ -351,23 +398,50 @@ public class Pathfinder {
     /**
      * Create a new {@code Pathfinder} instance.
      *
-     * @param robot          the {@code Pathfinder} instance's robot. This robot
-     *                       should have an odometry system that can report the
-     *                       position of the robot and a drive system that can
-     *                       respond to drive commands. This object may not be
-     *                       null or, an exception will be thrown.
-     * @param generator      a generator used in creating followers. This generator
-     *                       functions by accepting a {@link Trajectory} and a
-     *                       {@link Robot} and returning a follower. If you're
-     *                       unsure of what this means, or what you should do here,
-     *                       you should probably use the "generic follower
-     *                       generator," as it's the simplest. This object may not
-     *                       be null, or an exception will be thrown.
-     * @param turnController the controller responsible for turning the robot.
-     *                       This is some bad code on my part, but basically,
-     *                       this constructor assumes that the generator provided
-     *                       makes use of a controller for controlling the
-     *                       robot's heading.
+     * <p>
+     * This constructor will instantiate instances of the following:
+     * <ul>
+     *     <li>{@link ExecutorManager}</li>
+     *     <li>{@link ZoneProcessor}</li>
+     *     <li>{@link Scheduler}</li>
+     *     <li>{@link MovementRecorder}</li>
+     *     <li>{@link MovementPlayback}</li>
+     *     <li>{@link PathfinderPluginManager}</li>
+     *     <li>{@link MovementProfiler}</li>
+     *     <li>{@link ListenerManager}</li>
+     * </ul>
+     * There's a very good chance you're not going to need some or all of those,
+     * and that's okay - you simply don't have to worry about them and everything
+     * will work as intended. If that's the case, check out minimal mode
+     * with {@link #setIsMinimal(boolean)}.
+     * </p>
+     *
+     * <p>
+     * Example implementation:
+     * <code><pre>
+     * public class Example {
+     *     public void doStuff() {
+     *         Drive drive = new SimulatedDrive();
+     *         Odometry odometry = new SimulatedOdometry();
+     *         Robot robot = new Robot(drive, odometry);
+     *
+     *         Controller turnController = 
+     *                 new ProportionalController(0.01);
+     *         FollowGenerator generator = 
+     *                 new GenericFollowerGenerator(turnController);
+     *
+     *         Pathfinder pathfinder = new Pathfinder(
+     *                 robot,
+     *                 generator,
+     *                 turnController
+     *         );
+     *     }
+     * }
+     * </pre></code>
+     * Obviously, you shouldn't uses {@link SimulatedOdometry} or
+     * {@link SimulatedDrive} for an actual robot, because then nothing
+     * would work. But you get the point.
+     * </p>
      */
     public Pathfinder(Robot robot,
                       FollowerGenerator generator,
@@ -410,9 +484,45 @@ public class Pathfinder {
      * Create a new {@code Pathfinder} instance.
      *
      * <p>
-     * This constructor will create a new {@link GenericFollowerGenerator}
-     * by using the provided {@link Controller} as a turn controller. That's...
-     * well, that's pretty much it.
+     * This constructor will instantiate instances of the following:
+     * <ul>
+     *     <li>{@link ExecutorManager}</li>
+     *     <li>{@link ZoneProcessor}</li>
+     *     <li>{@link Scheduler}</li>
+     *     <li>{@link MovementRecorder}</li>
+     *     <li>{@link MovementPlayback}</li>
+     *     <li>{@link PathfinderPluginManager}</li>
+     *     <li>{@link MovementProfiler}</li>
+     *     <li>{@link ListenerManager}</li>
+     * </ul>
+     * There's a very good chance you're not going to need some or all of those,
+     * and that's okay - you simply don't have to worry about them and everything
+     * will work as intended. If that's the case, check out minimal mode
+     * with {@link #setIsMinimal(boolean)}.
+     * </p>
+     *
+     * <p>
+     * Example implementation:
+     * <code><pre>
+     * public class Example {
+     *     public void doStuff() {
+     *         Drive drive = new SimulatedDrive();
+     *         Odometry odometry = new SimulatedOdometry();
+     *         Robot robot = new Robot(drive, odometry);
+     *
+     *         Controller turnController = 
+     *                 new ProportionalController(0.01);
+     *
+     *         Pathfinder pathfinder = new Pathfinder(
+     *                 robot,
+     *                 turnController
+     *         );
+     *     }
+     * }
+     * </pre></code>
+     * Obviously, you shouldn't uses {@link SimulatedOdometry} or
+     * {@link SimulatedDrive} for an actual robot, because then nothing
+     * would work. But you get the point.
      * </p>
      *
      * @param robot          the {@code Pathfinder} instance's robot. This robot
@@ -437,6 +547,45 @@ public class Pathfinder {
 
     /**
      * Create a new {@code Pathfinder} instance.
+     *
+     * <p>
+     * This constructor will instantiate instances of the following:
+     * <ul>
+     *     <li>{@link ExecutorManager}</li>
+     *     <li>{@link ZoneProcessor}</li>
+     *     <li>{@link Scheduler}</li>
+     *     <li>{@link MovementRecorder}</li>
+     *     <li>{@link MovementPlayback}</li>
+     *     <li>{@link PathfinderPluginManager}</li>
+     *     <li>{@link MovementProfiler}</li>
+     *     <li>{@link ListenerManager}</li>
+     * </ul>
+     * There's a very good chance you're not going to need some or all of those,
+     * and that's okay - you simply don't have to worry about them and everything
+     * will work as intended. If that's the case, check out minimal mode
+     * with {@link #setIsMinimal(boolean)}.
+     * </p>
+     *
+     * <p>
+     * Example implementation:
+     * <code><pre>
+     * public class Example {
+     *     public void doStuff() {
+     *         Drive drive = new SimulatedDrive();
+     *         Odometry odometry = new SimulatedOdometry();
+     *         Robot robot = new Robot(drive, odometry);
+     *
+     *         Pathfinder pathfinder = new Pathfinder(
+     *                 robot,
+     *                 0.01
+     *         );
+     *     }
+     * }
+     * </pre></code>
+     * Obviously, you shouldn't uses {@link SimulatedOdometry} or
+     * {@link SimulatedDrive} for an actual robot, because then nothing
+     * would work. But you get the point.
+     * </p>
      *
      * @param robot       the {@code Pathfinder} instance's robot. This robot
      *                    should have an odometry system that can report the
@@ -2466,9 +2615,19 @@ public class Pathfinder {
                                PointXYZ... points) {
         if (points.length < 2) throw new IllegalArgumentException(
                 "At least two control points are required to use the " +
-                        "splineTo method."
-        );
+                        "splineTo method.");
         checkForMissingDefaultValues();
+
+        InvalidSpeedException.throwIfInvalid(
+                "Invalid speed value provided! Speed must be between 0 and 1.", 
+                speed);
+        InvalidToleranceException.throwIfInvalid(
+                "Invalid tolerance! Tolerance must be a positive number.", 
+                tolerance);
+
+        if (angleTolerance.deg() < 0)
+            throw new InvalidToleranceException("Invalid angle tolerance! " +
+                    "Angle tolerance must be greater than 0 degrees.");
 
         double length = PointXY.distance(
                 points[0],
@@ -2488,13 +2647,23 @@ public class Pathfinder {
         if (!robotPosition.equals(points[0]))
             builder.add(robotPosition);
 
-        for (PointXYZ point : points) {
+        PointXYZ lastPoint = points[0];
+        for (int i = 1; i < points.length; i++) {
+            PointXYZ point = points[i];
+
             if (point == null) throw new NullPointException(
                     "Cannot use the splineTo method with a null " +
-                            "control point!"
-            );
+                            "control point!");
 
-            builder.add(point);
+            if (!point.equals(lastPoint)) {
+                builder.add(point);
+                lastPoint = point;
+            } else {
+                throw new IllegalArgumentException(
+                        "There were duplicate adjacent points in the set " +
+                        "of control points! This means there's the same " +
+                        "point, twice in a row.");
+            }
         }
 
         Trajectory trajectory = builder.build();

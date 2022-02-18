@@ -63,7 +63,9 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * A point with X and Y values of 0.
      */
     public static final PointXY ZERO = zero();
+
     public static long COUNT = 0;
+
     /**
      * The point's X value.
      */
@@ -189,6 +191,9 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public static PointXY add(PointXY a,
                               PointXY b) {
+        checkArgument(a);
+        checkArgument(b);
+
         return new PointXY(
                 a.x() + b.x(),
                 a.y() + b.y()
@@ -204,6 +209,9 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public static PointXY subtract(PointXY a,
                                    PointXY b) {
+        checkArgument(a);
+        checkArgument(b);
+
         return new PointXY(
                 a.x() - b.x(),
                 a.y() - b.y()
@@ -224,6 +232,9 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public static PointXY multiply(PointXY a,
                                    PointXY b) {
+        checkArgument(a);
+        checkArgument(b);
+
         return new PointXY(
                 a.x() * b.x(),
                 a.y() * b.y()
@@ -240,6 +251,8 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public static PointXY multiply(PointXY a,
                                    double b) {
+        checkArgument(a);
+
         return new PointXY(
                 a.x() * b,
                 a.y() * b
@@ -303,6 +316,9 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public static double distance(PointXY a,
                                   PointXY b) {
+        checkArgument(a);
+        checkArgument(b);
+
         // The distance formula is essentially as follows:
         // sqrt((Bx-Ax)^2+(By-Ay)^2)
         // Obviously, there's some minor formatting issues there, but you
@@ -332,6 +348,9 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public static double distanceX(PointXY a,
                                    PointXY b) {
+        checkArgument(a);
+        checkArgument(b);
+
         return b.x() - a.x();
     }
 
@@ -354,6 +373,9 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public static double distanceY(PointXY a,
                                    PointXY b) {
+        checkArgument(a);
+        checkArgument(b);
+
         return b.y() - a.y();
     }
 
@@ -452,6 +474,9 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     public static PointXY inDirection(PointXY base,
                                       double distance,
                                       Angle angle) {
+        checkArgument(base);
+        Angle.checkArgument(angle);
+
         return new PointXY(
                 base.x() + (distance * angle.cos()),
                 base.y() + (distance * angle.sin())
@@ -471,6 +496,9 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     public static boolean isNear(PointXY a,
                                  PointXY b,
                                  double tolerance) {
+        checkArgument(a);
+        checkArgument(b);
+
         if (tolerance < 0) {
             throw new InvalidToleranceException(
                     "Cannot have a tolerance below 0!"
@@ -483,9 +511,12 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     public static boolean isNear(PointXY a,
                                  double tolerance,
                                  PointXY... points) {
-        for (PointXY point : points) {
-            if (isNear(a, point, tolerance)) return true;
-        }
+        InvalidToleranceException.throwIfInvalid(
+                "Invalid tolerance!", tolerance);
+
+        for (PointXY point : points)
+            if (isNear(a, point, tolerance)) 
+                return true;
 
         return false;
     }
@@ -519,6 +550,10 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     public static boolean areCollinear(PointXY a,
                                        PointXY b,
                                        PointXY c) {
+        checkArgument(a);
+        checkArgument(b);
+        checkArgument(c);
+
         double dx1 = (b.x() + 0.01) - (a.x() + 0.01);
         double dy1 = (b.y() + 0.01) - (a.y() + 0.01);
         double dx2 = (c.x() + 0.01) - (a.x() + 0.01);
@@ -543,6 +578,9 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     public static PointXY towards(PointXY origin,
                                   PointXY target,
                                   double distance) {
+        checkArgument(origin);
+        checkArgument(target);
+
         Angle angle = origin.angleTo(target);
 
         return origin.inDirection(distance, angle);
@@ -1395,7 +1433,8 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     }
 
     /**
-     * {@inheritDoc}
+     * Compare two {@code PointXY}s. This has a tolerance of 0.01: if
+     * (0, 0) was compared to (0.005, 0), it would still say they're equal.
      */
     @Override
     public boolean equals(Object obj) {

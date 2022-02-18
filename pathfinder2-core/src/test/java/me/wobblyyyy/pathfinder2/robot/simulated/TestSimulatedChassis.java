@@ -240,9 +240,9 @@ public class TestSimulatedChassis {
     public void testSplineTo() {
         pathfinder.splineTo(
                 new PointXYZ(0, 0, 0),
-                new PointXYZ(2, 4, 0),
-                new PointXYZ(4, 8, 0),
-                new PointXYZ(6, 12, 0)
+                new PointXYZ(2, 4, 90),
+                new PointXYZ(4, 8, 100),
+                new PointXYZ(6, 12, 120)
         );
 
         pathfinder.tickUntil();
