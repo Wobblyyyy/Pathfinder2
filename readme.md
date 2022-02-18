@@ -39,6 +39,10 @@ and [FIRST Tech Challenge](https://www.firstinspires.org/robotics/ftc).
 - Potentially the coolest piece of code ever written. I don't have any
   evidence to support that, but we're all about swag here.
 
+Want to get started? Check out the [releases guide](project_releases.md) to
+get everything installed, and then head over to the 
+[documentation portal](https://wobblyyyy.github.io/docs/pathfinder2/documentation.html).
+
 <h2 align="center">Example Code</h2>
 
 Here's a demonstration of Pathfinder's utilization of lambda expressions to
