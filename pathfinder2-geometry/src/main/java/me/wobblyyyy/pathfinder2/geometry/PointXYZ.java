@@ -96,6 +96,16 @@ public class PointXYZ extends PointXY {
     }
 
     /**
+     * Create a new {@code PointXYZ} instance by copying an existing
+     * {@code PointXYZ}.
+     *
+     * @param point the point to copy.
+     */
+    public PointXYZ(PointXYZ point) {
+        this(point.x(), point.y(), point.z);
+    }
+
+    /**
      * Create a new {@code PointXYZ} and convert the provided values from
      * meters to inches.
      *
