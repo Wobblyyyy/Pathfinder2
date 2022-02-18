@@ -41,10 +41,16 @@ Pathfinder pathfinder = new Pathfinder(robot, controller)
 
 From there, it's pretty smooth sailing - check it out.
 ```java
+pathfinder.goTo(new PointXYZ(10, 10, Angle.fromDeg(45)));
+```
+
+You'll still need to tick Pathfinder just like normal. Here's a full example:
+```java
 Pathfinder pathfinder = new Pathfinder(robot, controller)
         .setSpeed(0.5)
         .setTolerance(2)
         .setAngleTolerance(Angle.fromDeg(5));
 
 pathfinder.goTo(new PointXYZ(10, 10, Angle.fromDeg(45)));
+pathfinder.tickUntil();
 ```
