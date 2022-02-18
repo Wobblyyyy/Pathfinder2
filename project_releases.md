@@ -41,12 +41,11 @@ Then select the components you'd like to install. All artifacts have the
 same group (`com.github.Wobblyyyy.Pathfinder2`).
 ```groovy
 dependencies {
-    implementation 'com.github.Wobblyyyy.Pathfinder2:geometry:v0.15.0'
-    implementation 'com.github.Wobblyyyy.Pathfinder2:kinematics:v0.15.0'
-    implementation 'com.github.Wobblyyyy.Pathfinder2:core:v0.15.0'
-    implementation 'com.github.Wobblyyyy.Pathfinder2:frc:v0.15.0'
-    implementation 'com.github.Wobblyyyy.Pathfinder2:OdometryCore:v0.15.0'
-    implementation 'com.github.Wobblyyyy.Pathfinder2:io:v0.15.0'
+    implementation 'com.github.Wobblyyyy.Pathfinder2:geometry:v1.0.0'
+    implementation 'com.github.Wobblyyyy.Pathfinder2:kinematics:v1.0.0'
+    implementation 'com.github.Wobblyyyy.Pathfinder2:core:v1.0.0'
+    implementation 'com.github.Wobblyyyy.Pathfinder2:frc:v1.0.0'
+    implementation 'com.github.Wobblyyyy.Pathfinder2:OdometryCore:v1.0.0'
 }
 ```
 You should only select the modules you need. At the very least, you'll
@@ -54,9 +53,9 @@ need `geometry`, `kinematics`, and `core`, which would be implemented as
 follows:
 ```groovy
 dependencies {
-    implementation 'com.github.Wobblyyyy.Pathfinder2:geometry:v0.15.0'
-    implementation 'com.github.Wobblyyyy.Pathfinder2:kinematics:v0.15.0'
-    implementation 'com.github.Wobblyyyy.Pathfinder2:core:v0.15.0'
+    implementation 'com.github.Wobblyyyy.Pathfinder2:geometry:v1.0.0'
+    implementation 'com.github.Wobblyyyy.Pathfinder2:kinematics:v1.0.0'
+    implementation 'com.github.Wobblyyyy.Pathfinder2:core:v1.0.0'
 }
 ```
 If there's a newer version (newer than v0.15.0 that is) you should use the
