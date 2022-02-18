@@ -247,4 +247,40 @@ public class TestSimulatedChassis {
 
         pathfinder.tickUntil();
     }
+
+    @Test
+    public void testNegativePath() {
+        pathfinder.goTo(new PointXYZ(-10, 0, 0))
+                  .goTo(new PointXYZ(-10, -10, 0))
+                  .goTo(new PointXYZ(0, -10, 0))
+                  .goTo(new PointXYZ(0, 0, 0));
+
+        pathfinder.tickUntil();
+    }
+
+    @Test
+    public void testMultipleSplines() {
+        Trajectory[] splines = new Trajectory[] {
+            factory.builder()
+                    .add(new PointXYZ(0, 0, 0))
+                    .add(new PointXYZ(4, 10, 0))
+                    .add(new PointXYZ(8, 12, 0))
+                    .build(),
+            factory.builder()
+                    .add(new PointXYZ(8, 12, 0))
+                    .add(new PointXYZ(16, 10, 0))
+                    .add(new PointXYZ(18, 5, 0))
+                    .build(),
+            factory.builder()
+                    .add(new PointXYZ(18, 5, 0))
+                    .add(new PointXYZ(20, 10, 0))
+                    .add(new PointXYZ(22, 12, 0))
+                    .build()
+        };
+
+        for (Trajectory spline : splines)
+            pathfinder.followTrajectory(spline);
+
+        pathfinder.tickUntil();
+    }
 }
