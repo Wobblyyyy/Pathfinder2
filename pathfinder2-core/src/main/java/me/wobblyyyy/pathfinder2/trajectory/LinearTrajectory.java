@@ -212,6 +212,17 @@ public class LinearTrajectory implements Trajectory {
         return speed;
     }
 
+    /**
+     * Convert this {@code LinearTrajectory} into a 
+     * {@link MutableLinearTrajectory}.
+     *
+     * @return this trajectory represented as a {@link MutableLinearTrajectory}.
+     */
+    public MutableLinearTrajectory toMutableLinearTrajectory() {
+        return new MutableLinearTrajectory(target, speed,
+                tolerance, angleTolerance);
+    }
+
     @Override
     public int hashCode() {
         return (int) ((target.hashCode() * speed) + (tolerance * 10));
