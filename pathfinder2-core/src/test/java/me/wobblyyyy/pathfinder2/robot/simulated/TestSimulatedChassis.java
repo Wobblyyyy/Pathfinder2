@@ -48,12 +48,12 @@ public class TestSimulatedChassis {
         pathfinder = new Pathfinder(robot, turnController)
                 .setSpeed(0.5)
                 .setTolerance(0.6)
-                .setAngleTolerance(Angle.fromDeg(1));
+                .setAngleTolerance(Angle.fromDeg(5));
         factory = new SplineBuilderFactory()
                 .setSpeed(0.5)
                 .setStep(0.1)
                 .setTolerance(0.5)
-                .setAngleTolerance(Angle.fromDeg(1));
+                .setAngleTolerance(Angle.fromDeg(5));
     }
 
     @Test
@@ -166,7 +166,7 @@ public class TestSimulatedChassis {
         odometry.setTranslation(new Translation(-1, -1, 0));
         odometry.updatePositionBasedOnVelocity(1_000);
 
-        Assertions.assertTrue(pathfinder.getPosition().absDistance(new PointXYZ(5, 5, 90)) < 0.1);
+        Assertions.assertTrue(pathfinder.getPosition().absDistance(new PointXYZ(5, 5, 90)) < 2);
     }
 
     @Test
