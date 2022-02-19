@@ -39,7 +39,7 @@ public class AngleSpline {
                        Angle[] angles) {
         double[] anglesDeg = new double[angles.length];
         for (int i = 0; i < angles.length; i++) {
-            anglesDeg[i] = angles[i].fix().deg() + (360 * i);
+            anglesDeg[i] = angles[i].fix().deg() + (0.00000001 * i);
         }
         this.spline = new MonotoneCubicSpline(
                 x,

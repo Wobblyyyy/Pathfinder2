@@ -14,7 +14,6 @@ import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.Rectangle;
 import me.wobblyyyy.pathfinder2.zones.Zone;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -59,27 +58,6 @@ public class TestLocalizedPathGen {
 
         PointXY start = new PointXY(0, 0);
         PointXY end = new PointXY(10, 10);
-
-        List<PointXY> path = gen.getPath(start, end);
-
-        for (PointXY point : path) {
-            Assertions.assertFalse(zones.get(0).isPointInShape(point));
-        }
-
-        Assertions.assertNotNull(path);
-    }
-
-    @Test
-    @Disabled
-    public void testHugePath() {
-        List<Zone> zones = new ArrayList<Zone>() {{
-            add(new Zone(new Rectangle(10, 30, 100, 40)));
-        }};
-
-        LocalizedPathGen gen = new LocalizedPathGen(zones, 0.75, 0.75);
-
-        PointXY start = new PointXY(0, 0);
-        PointXY end = new PointXY(100, 100);
 
         List<PointXY> path = gen.getPath(start, end);
 

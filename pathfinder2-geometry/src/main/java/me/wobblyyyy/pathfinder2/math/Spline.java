@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.math;
 
+import java.util.List;
+
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 
 /**
@@ -92,4 +94,110 @@ public interface Spline {
      * @return the spline's end point.
      */
     PointXY getEndPoint();
+
+    /**
+     * Are a set of values in strictly increasing order?
+     *
+     * @param values the values to check.
+     * @return true if all of the values are in increasing order, otherwise,
+     * false.
+     */
+    static boolean areIncreasing(double... values) {
+        if (values.length == 0) return true;
+
+        for (int i = 1; i < values.length; i++)
+            if (values[i] <= values[i - 1]) return false;
+
+        return true;
+    }
+
+    /**
+     * Are a set of values in strictly decreasing order?
+     *
+     * @param values the values to check.
+     * @return true if all of the values are in decreasing order, otherwise,
+     * false.
+     */
+    static boolean areDecreasing(double... values) {
+        if (values.length == 0) return true;
+
+        for (int i = 1; i < values.length; i++)
+            if (values[i] >= values[i - 1]) return false;
+
+        return true;
+    }
+
+    /**
+     * Are a set of values monotonic?
+     *
+     * @param values the values to check.
+     * @return true if the values are monotonic, otherwise, false.
+     */
+    static boolean areMonotonic(double... values) {
+        boolean areIncreasing = areIncreasing(values);
+        boolean areDecreasing = areDecreasing(values);
+
+        return areIncreasing || areDecreasing;
+    }
+
+    static boolean areMonotonicX(PointXY... points) {
+        double[] values = new double[points.length];
+        
+        for (int i = 0; i < values.length; i++)
+            values[i] = points[i].x();
+
+        return areMonotonic(values);
+    }
+
+    static boolean areMonotonicY(PointXY... points) {
+        double[] values = new double[points.length];
+        
+        for (int i = 0; i < values.length; i++)
+            values[i] = points[i].x();
+
+        return areMonotonic(values);
+    }
+
+    static boolean areMonotonic(PointXY... points) {
+        double[] x = new double[points.length];
+        double[] y = new double[points.length];
+        
+        for (int i = 0; i < points.length; i++) {
+            x[i] = points[i].x();
+            y[i] = points[i].y();
+        }
+
+        return areMonotonic(x) && areMonotonic(y);
+    }
+
+    /**
+     * Are a set of points "relatively monotonic?" I think relatively
+     * monotonic is a term I made up literally right now, but oh well.
+     *
+     * @param points the points.j
+     * @return true if the points are relatively monotonic. Otherwise, false.
+     * For every group of three points (any possible combination of 3
+     * adjacent points in the provided list), that group of three points
+     * should be monotonic. If those points are NOT monotonic, this method
+     * will return false.
+     */
+    static boolean areRelativelyMonotonic(List<PointXY> points) {
+        int size = points.size();
+
+        if (size < 3)
+            return true;
+
+        for (int i = 0; i < size - 2; i++) {
+            PointXY[] array = new PointXY[]{
+                points.get(i),
+                points.get(i + 1),
+                points.get(i + 2)
+            };
+
+            if (!areMonotonic(array))
+                return false;
+        }
+
+        return true;
+    }
 }

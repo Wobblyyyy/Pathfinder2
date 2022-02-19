@@ -14,12 +14,19 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * Tools for rounding numbers.
+ * Tools for rounding numbers. You can change the default number of places
+ * things are rounded to by modifying {@link #DEFAULT_PLACES}. If left
+ * unmodified, this value is 3.
  *
  * @author Colin Robertson
  * @since 0.1.0
  */
 public class Rounding {
+    /**
+     * The default number of places to round to.
+     */
+    public static int DEFAULT_PLACES = 3;
+
     /**
      * Round a number value to an integer.
      *
@@ -36,7 +43,9 @@ public class Rounding {
      * @param value  the value to round.
      * @param places how many decimal places to round to.
      * @return the rounded decimal.
+     * @deprecated use {@link #fastRound(double, int)} instead.
      */
+    @Deprecated
     public static double round(double value,
                                int places) {
         if (places < 0)
@@ -52,9 +61,11 @@ public class Rounding {
      *
      * @param value the value to round.
      * @return the value, rounded to 3 places.
+     * @deprecated use {@link #fastRound(double)} instead.
      */
+    @Deprecated
     public static double round(double value) {
-        return round(value, 3);
+        return round(value, DEFAULT_PLACES);
     }
 
     /**
@@ -77,6 +88,6 @@ public class Rounding {
      * @return the rounded value.
      */
     public static double fastRound(double value) {
-        return fastRound(value, 3);
+        return fastRound(value, DEFAULT_PLACES);
     }
 }

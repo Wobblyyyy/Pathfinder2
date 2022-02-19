@@ -54,6 +54,8 @@ public class AdvancedSplineTrajectory implements Trajectory {
     private final double endPointX;
     private final double startPointX;
 
+    private boolean hasCompletedTrajectory = false;
+
     /**
      * Create a new {@code AdvancedSplineTrajectory}.
      *
@@ -174,7 +176,10 @@ public class AdvancedSplineTrajectory implements Trajectory {
     }
 
     private boolean isDoneXY(PointXYZ current) {
-        return current.isNear(spline.getEndPoint(), tolerance);
+        if (current.isNear(spline.getEndPoint(), tolerance))
+            hasCompletedTrajectory = true;
+
+        return hasCompletedTrajectory;
     }
 
     private boolean isDoneZ(PointXYZ current) {

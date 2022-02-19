@@ -43,12 +43,6 @@ public class TestLinearTrajectory {
     }
 
     @Test
-    @Disabled
-    public void testGetSpeed() {
-        Assertions.assertEquals(1.0, trajectory.speed(target));
-    }
-
-    @Test
     public void testIsDoneExact() {
         Assertions.assertTrue(trajectory.isDone(target));
     }

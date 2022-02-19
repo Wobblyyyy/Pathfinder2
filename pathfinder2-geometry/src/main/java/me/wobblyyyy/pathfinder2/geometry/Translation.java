@@ -72,6 +72,13 @@ import java.io.Serializable;
  */
 public class Translation implements Serializable {
     /**
+     * The default equality tolerance value. I would encourage you to only
+     * change this if you need to, as it can cause problems that are
+     * difficult to debug.
+     */
+    public static double DEFAULT_EQUALITY_TOLERANCE = 0.01;
+
+    /**
      * A translation with values of (0, 0, 0).
      */
     public static final Translation ZERO = new Translation(0, 0, 0);
@@ -110,6 +117,12 @@ public class Translation implements Serializable {
      * The robot's rotation around its center of rotation.
      */
     private final double vz;
+    
+    /**
+     * The maximum allowable error when determining if two {@code Translation}s
+     * are equal to each other.
+     */
+    private double equalityTolerance = DEFAULT_EQUALITY_TOLERANCE;
 
     /**
      * Create a new {@code Translation} using two translational values. This
@@ -184,6 +197,19 @@ public class Translation implements Serializable {
     }
 
     /**
+     * Set the equality tolerance for this specific translation.
+     *
+     * @param equalityTolerance the equality tolerance for this specific
+     *                          translation.
+     * @return {@code this}, used for method chaining.
+     */
+    public Translation setEqualityTolerance(double equalityTolerance) {
+        this.equalityTolerance = equalityTolerance;
+        
+        return this;
+    }
+
+    /**
      * Convert an absolute translation into a relative translation.
      *
      * <p>
@@ -201,10 +227,17 @@ public class Translation implements Serializable {
      */
     public static Translation absoluteToRelative(Translation translation,
                                                  Angle heading) {
+        /*
         PointXY point = PointXY.ZERO.inDirection(
                 translation.magnitude(),
                 translation.angle()
         ).rotate(PointXY.ZERO, heading);
+        */
+
+        PointXY point = PointXY.ZERO.inDirection(
+                translation.magnitude(),
+                translation.angle().add(heading)
+        );
 
         return new Translation(
                 point.x(),
@@ -587,9 +620,9 @@ public class Translation implements Serializable {
         if (obj instanceof Translation) {
             Translation t = (Translation) obj;
 
-            boolean sameVx = Equals.soft(t.vx, this.vx, 0.01);
-            boolean sameVy = Equals.soft(t.vy, this.vy, 0.01);
-            boolean sameVz = Equals.soft(t.vz, this.vz, 0.01);
+            boolean sameVx = Equals.soft(t.vx, this.vx, equalityTolerance);
+            boolean sameVy = Equals.soft(t.vy, this.vy, equalityTolerance);
+            boolean sameVz = Equals.soft(t.vz, this.vz, equalityTolerance);
 
             return sameVx && sameVy && sameVz;
         }

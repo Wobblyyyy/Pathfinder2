@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.geometry;
 
 import me.wobblyyyy.pathfinder2.math.Equals;
+import me.wobblyyyy.pathfinder2.math.Rounding;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -608,9 +609,9 @@ public class PointXYZ extends PointXY {
     public String toString() {
         return StringUtils.format(
                 "(%s, %s, %s deg)",
-                x(),
-                y(),
-                z.deg()
+                Rounding.fastRound(x()),
+                Rounding.fastRound(y()),
+                Rounding.fastRound(z.deg())
         );
     }
 

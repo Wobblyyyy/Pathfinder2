@@ -1123,6 +1123,12 @@ public class Pathfinder {
         return this;
     }
 
+    /**
+     * Get the ticks per second value. This is useful for measuring performance.
+     * Requires the {@link StatTracker} plugin to be loaded.
+     *
+     * @return Pathfinder's ticks per second.
+     */
     public double ticksPerSecond() {
         Object result = dataMap.get(StatTracker.KEY_TPS);
 
@@ -1130,8 +1136,6 @@ public class Pathfinder {
             throw new RuntimeException("tried to get ticks per second without " +
                     "having any valid entries - make sure you load the " +
                     "StatTracker plugin!");
-        else if (Double.isInfinite((Double) result))
-            throw new RuntimeException("infinite tick rate!");
         else
             return (Double) result;
     }

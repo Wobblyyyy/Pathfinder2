@@ -10,7 +10,6 @@
 
 package me.wobblyyyy.pathfinder2.trajectory.spline;
 
-
 import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
@@ -23,6 +22,7 @@ import me.wobblyyyy.pathfinder2.math.ApacheSpline.Interpolator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  * A builder for the {@link AdvancedSplineTrajectory} class. Please read over
@@ -44,37 +44,86 @@ public class AdvancedSplineTrajectoryBuilder {
     private double tolerance = Double.MAX_VALUE;
     private Angle angleTolerance;
     private InterpolationMode interpolationMode = DEFAULT_INTERPOLATION_MODE;
+    private BiFunction<Double[], Double[], Spline> customSplineGenerator = null;
 
     public AdvancedSplineTrajectoryBuilder() {
 
     }
 
+    /**
+     * Set the trajectory's step value.
+     *
+     * @param step the trajectory's step value.
+     * @return {@code this}, used for method chaining.
+     */
     public AdvancedSplineTrajectoryBuilder setStep(double step) {
         this.step = step;
 
         return this;
     }
 
+    /**
+     * Set the trajectory's speed value.
+     *
+     * @param speed the trajectory's speed value.
+     * @return {@code this}, used for method chaining.
+     */
     public AdvancedSplineTrajectoryBuilder setSpeed(double speed) {
         this.speed = speed;
 
         return this;
     }
 
+    /**
+     * Set the trajectory's tolerance value.
+     *
+     * @param tolerance the trajectory's tolerance value.
+     * @return {@code this}, used for method chaining.
+     */
     public AdvancedSplineTrajectoryBuilder setTolerance(double tolerance) {
         this.tolerance = tolerance;
 
         return this;
     }
 
+    /**
+     * Set the trajectory's angle tolerance value.
+     *
+     * @param step the trajectory's angle tolerance value.
+     * @return {@code this}, used for method chaining.
+     */
     public AdvancedSplineTrajectoryBuilder setAngleTolerance(Angle angleTolerance) {
         this.angleTolerance = angleTolerance;
 
         return this;
     }
 
+    /**
+     * Set the trajectory's interpolation mode.
+     *
+     * @param interpolationMode the trajectory's interpolationMode value.
+     * @return {@code this}, used for method chaining.
+     */
     public AdvancedSplineTrajectoryBuilder setInterpolationMode(InterpolationMode interpolationMode) {
         this.interpolationMode = interpolationMode;
+
+        return this;
+    }
+
+    /**
+     * Set the builder's custom spline generator. If you would like to use
+     * a custom implementation of a spline, you must create a function
+     * that accepts two {@code Double} arrays as values and returns a new
+     * spline. These two values are X and Y respectively.
+     *
+     * @param func the function responsible for generating a spline. Read the
+     *             documentation for {@link #setCustomSplineGenerator(BiFunction)}
+     *             to learn more.
+     * @return {@code this}, used for method chaining.
+     */
+    public AdvancedSplineTrajectoryBuilder setCustomSplineGenerator(
+            BiFunction<Double[], Double[], Spline> func) {
+        this.customSplineGenerator = func;
 
         return this;
     }
@@ -106,6 +155,16 @@ public class AdvancedSplineTrajectoryBuilder {
                                                double speed) {
         return add(
                 new PointXYZ(x, y, z),
+                speed
+        );
+    }
+
+    public AdvancedSplineTrajectoryBuilder add(double x,
+                                               double y,
+                                               double zDegrees,
+                                               double speed) {
+        return add(
+                new PointXYZ(x, y, zDegrees),
                 speed
         );
     }
@@ -187,16 +246,30 @@ public class AdvancedSplineTrajectoryBuilder {
         }
 
         // add support for different types of spline interpolation!
+        // this is a really bad way to implement support for multiple
+        // types of spline interpolation, but... oh well.
         Spline spline;
-        if (interpolationMode == InterpolationMode.DEFAULT)
+        if (interpolationMode == InterpolationMode.DEFAULT) {
             spline = new MonotoneCubicSpline(x, y);
-        else
-            if (interpolationMode == InterpolationMode.CUBIC)
-                spline = 
-                    new ApacheSpline(Interpolator.CUBIC, x, y);
-            else
-                spline = 
-                    new ApacheSpline(Interpolator.AKIMA, x, y);
+        } else {
+            if (interpolationMode == InterpolationMode.CUBIC) {
+                spline = new ApacheSpline(Interpolator.CUBIC, x, y);
+            } else if (interpolationMode == InterpolationMode.AKIMA) {
+                spline = new ApacheSpline(Interpolator.AKIMA, x, y);
+            } else if (interpolationMode == InterpolationMode.CUSTOM) {
+                if (customSplineGenerator != null) {
+                    spline = customSplineGenerator.apply(xBoxed, yBoxed);
+                } else {
+                    throw new NullPointerException("Tried to use custom " +
+                            "spline generator without having set it first: " +
+                            "use setCustomSplineGenerator() to do so. The " +
+                            "function you pass in should accept two arrays " +
+                            "of Double values (x and y).");
+                }
+            } else {
+                throw new RuntimeException("How did you even get here?");
+            }
+        }
 
         AngleSpline angleSpline = new AngleSpline(x, z);
         Spline speedSpline = new MonotoneCubicSpline(x, speed);

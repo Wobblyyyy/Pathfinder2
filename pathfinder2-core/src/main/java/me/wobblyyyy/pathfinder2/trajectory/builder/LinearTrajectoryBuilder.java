@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.trajectory.builder;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
+import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
@@ -42,10 +43,12 @@ public class LinearTrajectoryBuilder {
 
     private static final Angle BACKWARDS = Angle.DEG_270;
 
+    private final PointXYZ start;
+
     /**
      * A list of all the trajectories.
      */
-    private final List<Trajectory> trajectories = new ArrayList<>();
+    private List<Trajectory> trajectories = new ArrayList<>();
 
     /**
      * The speed at which new followers should be created. This is a mutable
@@ -92,6 +95,20 @@ public class LinearTrajectoryBuilder {
         this.tolerance = tolerance;
         this.angleTolerance = angleTolerance;
         this.last = start;
+        this.start = start;
+    }
+
+    public LinearTrajectoryBuilder() {
+        this(0, 0, Angle.fromDeg(0), PointXYZ.zero());
+    }
+
+    public LinearTrajectoryBuilder(LinearTrajectoryBuilder builder) {
+        this.speed = builder.speed;
+        this.tolerance = builder.tolerance;
+        this.angleTolerance = builder.angleTolerance;
+        this.last = builder.start;
+        this.start = builder.start;
+        this.trajectories = new ArrayList<>(builder.trajectories);
     }
 
     public double getSpeed() {

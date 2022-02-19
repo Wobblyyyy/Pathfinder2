@@ -20,8 +20,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class TestMovementRecorder {
-    @Test
-    @Disabled
     public void testMovementRecorder() {
         Pathfinder pf = Pathfinder.newSimulatedPathfinder(0.01);
         SimulatedOdometry odometry = (SimulatedOdometry) pf.getOdometry();

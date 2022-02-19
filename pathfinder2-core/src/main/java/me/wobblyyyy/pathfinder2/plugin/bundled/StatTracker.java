@@ -29,6 +29,8 @@ import me.wobblyyyy.pathfinder2.time.Time;
  * @since 0.10.3
  */
 public class StatTracker extends PathfinderPlugin {
+    public static double SECOND_MS_DURATION = 1_000;
+
     public static final String KEY_TPS = "pf_tps";
     public static final String KEY_TICKS = "pf_ticks";
 
@@ -59,11 +61,12 @@ public class StatTracker extends PathfinderPlugin {
         totalDistance += lastPoint.absDistance(position);
 
         double currentMs = Time.ms();
-        double elapsedSeconds = (currentMs - lastMs) / 1_000;
-        if (elapsedSeconds < 0.001) return;
+        double elapsedSeconds = (currentMs - lastMs) / SECOND_MS_DURATION;
+        if (elapsedSeconds < 1 / SECOND_MS_DURATION) return;
         lastMs = currentMs;
         double tps = 1 / elapsedSeconds;
         ticksPerSecond.add(tps);
+
         pathfinder.putData(KEY_TPS, ticksPerSecond.average());
         pathfinder.putData(KEY_TICKS, ticks);
     }

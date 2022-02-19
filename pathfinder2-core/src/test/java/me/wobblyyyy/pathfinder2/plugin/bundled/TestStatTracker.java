@@ -24,8 +24,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("BusyWait")
 public class TestStatTracker {
-    @Test
-    @Disabled
     public void testTicksPerSecond() {
         Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01)
                 .setSpeed(0.75)

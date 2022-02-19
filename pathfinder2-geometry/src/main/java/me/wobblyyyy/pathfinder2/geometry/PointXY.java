@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.geometry;
 
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.math.Equals;
+import me.wobblyyyy.pathfinder2.math.Rounding;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 import java.io.Serializable;
@@ -1465,8 +1466,8 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     public String toString() {
         return StringUtils.format(
                 "(%s, %s)",
-                x,
-                y
+                Rounding.fastRound(x),
+                Rounding.fastRound(y)
         );
     }
 

@@ -43,7 +43,7 @@ public class TestAdvancedSplineTrajectory {
         pathfinder.tick();
         Assertions.assertTrue(pathfinder.isActive());
         Assertions.assertEquals(
-                new Translation(0.354, 0.356, -0.018),
+                new Translation(0.354, 0.356, 0),
                 pathfinder.getTranslation()
         );
         PointXYZ current = pathfinder.getPosition();
@@ -52,7 +52,7 @@ public class TestAdvancedSplineTrajectory {
         pathfinder.tick();
         Assertions.assertTrue(pathfinder.isActive());
         Assertions.assertNotEquals(
-                new Translation(0.354, 0.356, -0.018),
+                new Translation(0.354, 0.356, 0),
                 pathfinder.getTranslation()
         );
         Assertions.assertEquals(0.5, trajectory.speed(current));
@@ -85,7 +85,7 @@ public class TestAdvancedSplineTrajectory {
         pathfinder.tick();
         Assertions.assertTrue(pathfinder.isActive());
         Assertions.assertEquals(
-                new Translation(0.354, 0.356, -0.018),
+                new Translation(0.354, 0.356, 0),
                 pathfinder.getTranslation()
         );
         Assertions.assertEquals(
@@ -98,7 +98,7 @@ public class TestAdvancedSplineTrajectory {
         pathfinder.tick();
         Assertions.assertTrue(pathfinder.isActive());
         Assertions.assertNotEquals(
-                new Translation(0.354, 0.356, -0.018),
+                new Translation(0.354, 0.356, 0),
                 pathfinder.getTranslation()
         );
         Assertions.assertEquals(

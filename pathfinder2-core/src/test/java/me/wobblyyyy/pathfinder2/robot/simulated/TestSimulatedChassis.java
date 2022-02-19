@@ -17,20 +17,31 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
+import me.wobblyyyy.pathfinder2.plugin.bundled.StatTracker;
 import me.wobblyyyy.pathfinder2.robot.Robot;
 import me.wobblyyyy.pathfinder2.trajectory.ArcTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
+import me.wobblyyyy.pathfinder2.trajectory.builder.LinearTrajectoryBuilder;
+import me.wobblyyyy.pathfinder2.trajectory.multi.segment.MultiSegmentTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.spline.AdvancedSplineTrajectoryBuilder;
 import me.wobblyyyy.pathfinder2.trajectory.spline.InterpolationMode;
+import me.wobblyyyy.pathfinder2.trajectory.spline.MultiSplineBuilder;
 import me.wobblyyyy.pathfinder2.trajectory.spline.SplineBuilderFactory;
+
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 
+import java.util.List;
+
+@TestInstance(Lifecycle.PER_CLASS)
 public class TestSimulatedChassis {
-    private SimulatedDrive drive;
     private SimulatedOdometry odometry;
     private SimulatedWrapper wrapper;
     private Robot robot;
@@ -41,7 +52,6 @@ public class TestSimulatedChassis {
     @BeforeEach
     public void beforeEach() {
         wrapper = new SimulatedWrapper(new SimulatedDrive(), new SimulatedOdometry());
-        drive = wrapper.getDrive();
         odometry = wrapper.getOdometry();
         robot = wrapper.getRobot();
         turnController = new ProportionalController(-0.05);
@@ -54,6 +64,18 @@ public class TestSimulatedChassis {
                 .setStep(0.1)
                 .setTolerance(0.5)
                 .setAngleTolerance(Angle.fromDeg(5));
+    }
+
+    @BeforeAll
+    public void beforeAll() {
+        Translation.DEFAULT_EQUALITY_TOLERANCE = 0.1;
+        StatTracker.SECOND_MS_DURATION = 1_000_000;
+    }
+
+    @AfterAll
+    public void afterAll() {
+        Translation.DEFAULT_EQUALITY_TOLERANCE = 0.01;
+        StatTracker.SECOND_MS_DURATION = 1_000;
     }
 
     @Test
@@ -386,8 +408,6 @@ public class TestSimulatedChassis {
         Assertions.assertTrue(pathfinder.getPosition().distance(new PointXYZ(14, 15, 0)) <= 2);
     }
 
-    @Test
-    @Disabled
     public void testArcTrajectory() {
         ArcTrajectory arc = new ArcTrajectory(
                 new PointXYZ(5, 5, 0),
@@ -402,8 +422,174 @@ public class TestSimulatedChassis {
         pathfinder.followTrajectory(arc);
 
         pathfinder.tickUntil(1_000);
-        System.out.println(pathfinder.getPosition());
 
         Assertions.assertTrue(pathfinder.getPosition().distance(new PointXYZ(5, 5, 0)) <= 2);
+    }
+
+    private void testRectangle(double vx,
+                               double vy,
+                               double vz) {
+        odometry.setRawPosition(new PointXYZ(0, 0, 0));
+
+        // first group of 4
+        odometry.setTranslation(new Translation(vx, 0, vz));
+        odometry.updatePositionBasedOnVelocity(1_000);
+
+        odometry.setTranslation(new Translation(0, vy, vz));
+        odometry.updatePositionBasedOnVelocity(1_000);
+
+        odometry.setTranslation(new Translation(-vx, 0, vz));
+        odometry.updatePositionBasedOnVelocity(1_000);
+
+        odometry.setTranslation(new Translation(0, -vy, vz));
+        odometry.updatePositionBasedOnVelocity(1_000);
+
+        Assertions.assertEquals(
+                new PointXYZ(0, 0, 0),
+                odometry.getPosition()
+        );
+
+        Translation a = new Translation(vx * vx, vy * vy, vz * vz).multiply(4);
+
+        // second group of 4
+        odometry.setTranslation(new Translation(vx, 0, vz).multiply(a));
+        odometry.updatePositionBasedOnVelocity(1_000);
+
+        odometry.setTranslation(new Translation(0, vy, vz).multiply(a));
+        odometry.updatePositionBasedOnVelocity(1_000);
+
+        odometry.setTranslation(new Translation(-vx, 0, vz).multiply(a));
+        odometry.updatePositionBasedOnVelocity(1_000);
+
+        odometry.setTranslation(new Translation(0, -vy, vz).multiply(a));
+        odometry.updatePositionBasedOnVelocity(1_000);
+
+        Assertions.assertEquals(
+                new PointXYZ(0, 0, 0),
+                odometry.getPosition()
+        );
+
+        Translation b = new Translation(3, 3, 3);
+
+        // ... and of course, the third group of 4
+        odometry.setTranslation(new Translation(vx, 0, vz).multiply(b));
+        odometry.updatePositionBasedOnVelocity(1_000);
+
+        odometry.setTranslation(new Translation(0, vy, vz).multiply(b));
+        odometry.updatePositionBasedOnVelocity(1_000);
+
+        odometry.setTranslation(new Translation(-vx, 0, vz).multiply(b));
+        odometry.updatePositionBasedOnVelocity(1_000);
+
+        odometry.setTranslation(new Translation(0, -vy, vz).multiply(b));
+        odometry.updatePositionBasedOnVelocity(1_000);
+
+        Assertions.assertEquals(
+                new PointXYZ(0, 0, 0),
+                odometry.getPosition()
+        );
+    }
+
+    @Test
+    public void testRectangleTranslations() {
+        testRectangle(1, 0, 0);
+        testRectangle(0, 1, 0);
+
+        testRectangle(1, 0.5, 0);
+        testRectangle(0.5, 1, 0);
+
+        testRectangle(1, 0, 1);
+        testRectangle(0, 1, 1);
+
+        testRectangle(10, 5, 1);
+        testRectangle(5, 10, -1);
+    }
+
+    @Test
+    public void testMonotonicMultiSplineTrajectory() {
+        MultiSplineBuilder builder = new MultiSplineBuilder()
+            .setDefaultStep(0.05)
+            .setDefaultSpeed(0.5)
+            .setDefaultTolerance(0.5)
+            .setDefaultAngleTolerance(Angle.fromDeg(5))
+            .add(0, 0, Angle.fromDeg(0), 0.1)
+            .add(2, 3, Angle.fromDeg(0), 0.1)
+            .add(4, 6, Angle.fromDeg(0), 0.1)
+            .add(6, 9, Angle.fromDeg(0), 0.5, 0.1, 2, Angle.fromDeg(5));
+
+        pathfinder.followTrajectory(builder.build());
+
+        pathfinder.tickUntil();
+    }
+
+    @Test
+    public void testNonMonotonicMultiSplineTrajectory() {
+        MultiSplineBuilder builder = new MultiSplineBuilder()
+            .setDefaultStep(0.05)
+            .setDefaultSpeed(0.5)
+            .setDefaultTolerance(0.5)
+            .setDefaultAngleTolerance(Angle.fromDeg(5))
+            .add(0, 0, Angle.fromDeg(0), 0.1)
+            .add(2, 3, Angle.fromDeg(0), 0.1)
+            .add(4, 6, Angle.fromDeg(0), 0.1)
+            .add(6, 9, Angle.fromDeg(0), 0.1)
+            .add(8, 6, Angle.fromDeg(0), 0.1)
+            .add(10, 3, Angle.fromDeg(0), 0.1)
+            .add(12, 6, Angle.fromDeg(0), 0.1)
+            .add(14, 9, Angle.fromDeg(0), 0.1)
+            .add(16, 6, Angle.fromDeg(0), 0.1)
+            .add(18, 3, Angle.fromDeg(0), 0.1)
+            .add(20, 0, Angle.fromDeg(0), 0.5, 0.1, 2, Angle.fromDeg(5));
+
+        pathfinder.followTrajectory(builder.build());
+
+        pathfinder.tickUntil();
+    }
+
+    @Test
+    public void testMultiSegmentTrajectory() {
+        List<Trajectory> trajectories = new LinearTrajectoryBuilder()
+            .setSpeed(0.5)
+            .setTolerance(0.1)
+            .setAngleTolerance(Angle.fromDeg(1))
+            .goTo(new PointXYZ(0, 0, 0))
+            .goTo(new PointXYZ(0, 10, 0))
+            .goTo(new PointXYZ(10, 10, 0))
+            .goTo(new PointXYZ(10, 0, 0))
+            .goTo(new PointXYZ(0, 0, 0))
+            .getTrajectories();
+
+        Trajectory trajectory = new MultiSegmentTrajectory(trajectories);
+
+        pathfinder.followTrajectory(trajectory);
+        
+        pathfinder.tickUntil();
+    }
+
+    @Test
+    public void testSplineTicksPerSecond() {
+        // if your computer is fast enough, this should be 1_000 ticks
+        // per second. if it's not... oh well.
+
+        // gotta load the StatTracker plugin in order to view tps
+        pathfinder.loadBundledPlugins();
+
+        MultiSplineBuilder builder = new MultiSplineBuilder()
+            .setDefaultStep(0.5)
+            .setDefaultSpeed(0.5)
+            .setDefaultTolerance(0.5)
+            .setDefaultInterpolationMode(InterpolationMode.DEFAULT)
+            .setDefaultAngleTolerance(Angle.fromDeg(5));
+
+        for (int i = 0; i < 10; i++) {
+            builder.add(i * 2, Math.pow(i, 2), Angle.fromDeg(0), 
+                    Math.pow((i + 1) / 10d, 2), 0.5, 2, Angle.fromDeg(5));
+        }
+
+        pathfinder.followTrajectory(builder.build());
+
+        pathfinder.tickUntil();
+
+        System.out.println(pathfinder.ticksPerSecond());
     }
 }
