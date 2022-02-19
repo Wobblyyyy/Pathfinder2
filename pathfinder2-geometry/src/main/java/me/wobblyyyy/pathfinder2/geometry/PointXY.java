@@ -78,6 +78,13 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     private final double y;
 
     /**
+     * Create a new {@code PointXY} with 0 for X and Y values.
+     */
+    public PointXY() {
+        this(0, 0);
+    }
+
+    /**
      * Create a new {@code PointXY} by copying an existing point.
      *
      * @param point the point to copy.
@@ -1067,6 +1074,28 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public PointXY add(PointXY a) {
         return add(this, a);
+    }
+
+    /**
+     * Add a value to this point's X value and return a new point with
+     * that new value.
+     *
+     * @param x the value to add.
+     * @return a new point with an added X value.
+     */
+    public PointXY addX(double x) {
+        return new PointXY(this.x + x, y);
+    }
+
+    /**
+     * Add a value to this point's Y value and return a new point with
+     * that new value.
+     *
+     * @param y the value to add.
+     * @return a new point with an added Y value.
+     */
+    public PointXY addY(double y) {
+        return new PointXY(x, this.y + y);
     }
 
     /**

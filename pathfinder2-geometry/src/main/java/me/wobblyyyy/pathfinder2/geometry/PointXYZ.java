@@ -52,6 +52,13 @@ public class PointXYZ extends PointXY {
     private final Angle z;
 
     /**
+     * Create a new {@code PointXYZ} with 0 for all of the values.j
+     */
+    public PointXYZ() {
+        this(0, 0, 0);
+    }
+
+    /**
      * Create a new {@code PointXYZ} instance.
      *
      * @param point a {@code PointXY} to base the new {@code PointXYZ} off
@@ -509,6 +516,46 @@ public class PointXYZ extends PointXY {
      */
     public PointXYZ add(PointXYZ a) {
         return add(this, a);
+    }
+
+    /**
+     * Add an X value to this point and return it.
+     *
+     * @param x the value to add.
+     * @return the new point.
+     */
+    public PointXYZ addX(double x) {
+        return new PointXYZ(x() + x, y(), z);
+    }
+
+    /**
+     * Add an Y value to this point and return it.
+     *
+     * @param y the value to add.
+     * @return the new point.
+     */
+    public PointXYZ addY(double y) {
+        return new PointXYZ(x(), y() + y, z);
+    }
+
+    /**
+     * Add a Z value to this point and return it.
+     *
+     * @param y the value to add.
+     * @return the new point.
+     */
+    public PointXYZ addZ(double zDegrees) {
+        return new PointXYZ(x(), y(), z.rotateDeg(zDegrees));
+    }
+
+    /**
+     * Add a Z value to this point and return it.
+     *
+     * @param y the value to add.
+     * @return the new point.
+     */
+    public PointXYZ addZ(Angle z) {
+        return new PointXYZ(x(), y(), z.add(this.z));
     }
 
     /**

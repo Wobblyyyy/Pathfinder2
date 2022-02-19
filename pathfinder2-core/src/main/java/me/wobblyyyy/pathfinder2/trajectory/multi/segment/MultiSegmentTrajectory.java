@@ -77,9 +77,9 @@ public class MultiSegmentTrajectory implements Trajectory {
     public boolean isDone(PointXYZ current) {
         if (trajectories.size() > 0) {
             Trajectory currentTrajectory = trajectories.get(0);
-            if (currentTrajectory.isDone(current)) {
+
+            if (currentTrajectory.isDone(current))
                 trajectories.remove(0);
-            }
         }
 
         return trajectories.size() == 0;

@@ -243,7 +243,7 @@ public class Angle implements Comparable<Angle>, Serializable {
     private final double deg;
 
     /**
-     * Create a new angle representing 0 degrees or 0 radians.
+     * Create a new {@code Angle} representing 0 degrees or 0 radians.
      */
     public Angle() {
         this(0, 0);
