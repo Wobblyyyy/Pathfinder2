@@ -53,7 +53,6 @@ public class AdvancedSplineTrajectory implements Trajectory {
 
     private final double endPointX;
     private final double startPointX;
-    private final boolean approachingInfinity;
 
     /**
      * Create a new {@code AdvancedSplineTrajectory}.
@@ -141,7 +140,6 @@ public class AdvancedSplineTrajectory implements Trajectory {
 
         this.endPointX = spline.getEndPoint().x();
         this.startPointX = spline.getStartPoint().x();
-        this.approachingInfinity = endPointX > startPointX;
     }
 
     /**

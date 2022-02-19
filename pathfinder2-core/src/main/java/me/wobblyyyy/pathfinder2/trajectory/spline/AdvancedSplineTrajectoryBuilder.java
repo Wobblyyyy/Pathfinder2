@@ -16,8 +16,10 @@ import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.math.ApacheSpline;
 import me.wobblyyyy.pathfinder2.math.MonotoneCubicSpline;
 import me.wobblyyyy.pathfinder2.math.Spline;
+import me.wobblyyyy.pathfinder2.math.ApacheSpline.Interpolator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,8 @@ import java.util.List;
  * @since 0.6.1
  */
 public class AdvancedSplineTrajectoryBuilder {
+    public static InterpolationMode DEFAULT_INTERPOLATION_MODE = InterpolationMode.DEFAULT;
+
     private final List<Double> xValues = new ArrayList<>();
     private final List<Double> yValues = new ArrayList<>();
     private final List<Angle> angleTargets = new ArrayList<>();
@@ -39,6 +43,7 @@ public class AdvancedSplineTrajectoryBuilder {
     private double speed = Double.MAX_VALUE;
     private double tolerance = Double.MAX_VALUE;
     private Angle angleTolerance;
+    private InterpolationMode interpolationMode = DEFAULT_INTERPOLATION_MODE;
 
     public AdvancedSplineTrajectoryBuilder() {
 
@@ -64,6 +69,12 @@ public class AdvancedSplineTrajectoryBuilder {
 
     public AdvancedSplineTrajectoryBuilder setAngleTolerance(Angle angleTolerance) {
         this.angleTolerance = angleTolerance;
+
+        return this;
+    }
+
+    public AdvancedSplineTrajectoryBuilder setInterpolationMode(InterpolationMode interpolationMode) {
+        this.interpolationMode = interpolationMode;
 
         return this;
     }
@@ -175,7 +186,18 @@ public class AdvancedSplineTrajectoryBuilder {
             speed[i] = speedBoxed[i];
         }
 
-        Spline spline = new MonotoneCubicSpline(x, y);
+        // add support for different types of spline interpolation!
+        Spline spline;
+        if (interpolationMode == InterpolationMode.DEFAULT)
+            spline = new MonotoneCubicSpline(x, y);
+        else
+            if (interpolationMode == InterpolationMode.CUBIC)
+                spline = 
+                    new ApacheSpline(Interpolator.CUBIC, x, y);
+            else
+                spline = 
+                    new ApacheSpline(Interpolator.AKIMA, x, y);
+
         AngleSpline angleSpline = new AngleSpline(x, z);
         Spline speedSpline = new MonotoneCubicSpline(x, speed);
 

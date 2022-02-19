@@ -1,6 +1,10 @@
 # Setting up the robot
 This tutorial covers how to set up a basic Pathfinder-enabled robot.
 
+The [calibration guide](https://wobblyyyy.github.io/docs/pathfinder2/calibration.html)
+is a great starting point for trying to make sure your robot is properly
+set up.
+
 ## Setting up the drive train
 Before you begin using Pathfinder, you'll need to make sure your drivetrain
 is both set up and properly calibrated. First, determine what kind of drive
@@ -27,3 +31,25 @@ There are a variety of odometry systems available, including:
 
 If you implement the `AbstractOdometry` interface, setting up an odometry
 system should be pretty simple.
+
+## Setting up an instance of Pathfinder
+To instantiate Pathfinder, at the very least, you should have a `Controller`
+responsible for controlling the robot's angle and a `Robot` object, which
+is simply a wrapper for `Drive` and `Odometry`.
+
+`Controller` tutorial: [click here](../docs/02_controllers.md)
+
+```java
+Controller turnController = new ProportionalController(0.01);
+
+// this assumes you have instances of Drive and Odometry
+Drive drive = null;
+Odometry odometry = null;
+Robot robot = new Robot(drive, odometry);
+
+Pathfinder pathfinder = new Pathfinder(robot, turnController);
+```
+
+## Further reading
+- [Calibration guide](https://wobblyyyy.github.io/docs/pathfinder2/calibration.html)
+- [Basic tutorial](https://wobblyyyy.github.io/docs/pathfinder2/tutorial.html)

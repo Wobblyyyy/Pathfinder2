@@ -10,11 +10,6 @@
 
 package me.wobblyyyy.pathfinder2.robot.simulated;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.control.ProportionalController;
@@ -22,9 +17,16 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.robot.Robot;
+import me.wobblyyyy.pathfinder2.trajectory.ArcTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
+import me.wobblyyyy.pathfinder2.trajectory.spline.AdvancedSplineTrajectoryBuilder;
+import me.wobblyyyy.pathfinder2.trajectory.spline.InterpolationMode;
 import me.wobblyyyy.pathfinder2.trajectory.spline.SplineBuilderFactory;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class TestSimulatedChassis {
     private SimulatedDrive drive;
@@ -43,9 +45,9 @@ public class TestSimulatedChassis {
         robot = wrapper.getRobot();
         turnController = new ProportionalController(-0.05);
         pathfinder = new Pathfinder(robot, turnController)
-            .setSpeed(0.5)
-            .setTolerance(2)
-            .setAngleTolerance(Angle.fromDeg(5));
+                .setSpeed(0.5)
+                .setTolerance(2)
+                .setAngleTolerance(Angle.fromDeg(5));
         factory = new SplineBuilderFactory()
                 .setSpeed(0.5)
                 .setStep(0.1)
@@ -251,36 +253,80 @@ public class TestSimulatedChassis {
     @Test
     public void testNegativePath() {
         pathfinder.goTo(new PointXYZ(-10, 0, 0))
-                  .goTo(new PointXYZ(-10, -10, 0))
-                  .goTo(new PointXYZ(0, -10, 0))
-                  .goTo(new PointXYZ(0, 0, 0));
+                .goTo(new PointXYZ(-10, -10, 0))
+                .goTo(new PointXYZ(0, -10, 0))
+                .goTo(new PointXYZ(0, 0, 0));
 
         pathfinder.tickUntil();
     }
 
     @Test
     public void testMultipleSplines() {
-        Trajectory[] splines = new Trajectory[] {
-            factory.builder()
-                    .add(new PointXYZ(0, 0, 0))
-                    .add(new PointXYZ(4, 10, 0))
-                    .add(new PointXYZ(8, 12, 0))
-                    .build(),
-            factory.builder()
-                    .add(new PointXYZ(8, 12, 0))
-                    .add(new PointXYZ(16, 10, 0))
-                    .add(new PointXYZ(18, 5, 0))
-                    .build(),
-            factory.builder()
-                    .add(new PointXYZ(18, 5, 0))
-                    .add(new PointXYZ(20, 10, 0))
-                    .add(new PointXYZ(22, 12, 0))
-                    .build()
+        Trajectory[] splines = new Trajectory[]{
+                factory.builder()
+                        .add(new PointXYZ(0, 0, 0))
+                        .add(new PointXYZ(4, 10, 0))
+                        .add(new PointXYZ(8, 12, 0))
+                        .build(),
+                factory.builder()
+                        .add(new PointXYZ(8, 12, 0))
+                        .add(new PointXYZ(16, 10, 0))
+                        .add(new PointXYZ(18, 5, 0))
+                        .build(),
+                factory.builder()
+                        .add(new PointXYZ(18, 5, 0))
+                        .add(new PointXYZ(20, 10, 0))
+                        .add(new PointXYZ(22, 12, 0))
+                        .build()
         };
 
         for (Trajectory spline : splines)
             pathfinder.followTrajectory(spline);
 
         pathfinder.tickUntil();
+    }
+
+    @Test
+    public void testAkimaSplineInterpolation() {
+        Trajectory trajectory = new AdvancedSplineTrajectoryBuilder()
+                .setStep(0.1)
+                .setTolerance(2)
+                .setAngleTolerance(Angle.fromDeg(1))
+                .setInterpolationMode(InterpolationMode.AKIMA)
+                .setSpeed(0.5)
+                .add(new PointXYZ(0, 0, 0))
+                .add(new PointXYZ(4, 10, 0))
+                .add(new PointXYZ(8, 12, 0))
+                .add(new PointXYZ(10, 13, 0))
+                .add(new PointXYZ(12, 14, 0))
+                .add(new PointXYZ(14, 15, 0))
+                .build();
+
+        pathfinder.followTrajectory(trajectory);
+
+        pathfinder.tickUntil(1_000);
+
+        Assertions.assertTrue(pathfinder.getPosition().distance(new PointXYZ(14, 15, 0)) <= 2);
+    }
+
+    @Test
+    @Disabled
+    public void testArcTrajectory() {
+        ArcTrajectory arc = new ArcTrajectory(
+                new PointXYZ(5, 5, 0),
+                5,
+                0.5,
+                Angle.fromDeg(-5),
+                Angle.fromDeg(0),
+                Angle.fromDeg(180),
+                Angle.fromDeg(90)
+        );
+
+        pathfinder.followTrajectory(arc);
+
+        pathfinder.tickUntil(1_000);
+        System.out.println(pathfinder.getPosition());
+
+        Assertions.assertTrue(pathfinder.getPosition().distance(new PointXYZ(5, 5, 0)) <= 2);
     }
 }

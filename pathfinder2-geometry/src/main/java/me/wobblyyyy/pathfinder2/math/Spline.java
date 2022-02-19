@@ -75,7 +75,9 @@ public interface Spline {
      * @param x the current X value.
      * @return the interpolated point.
      */
-    PointXY interpolate(double x);
+    default PointXY interpolate(double x) {
+        return new PointXY(x, interpolateY(x));
+    }
 
     /**
      * Get the spline's start point.
