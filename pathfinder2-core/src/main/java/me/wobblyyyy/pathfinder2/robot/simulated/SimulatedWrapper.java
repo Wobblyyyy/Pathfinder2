@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.robot.simulated;
 
+import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.robot.Robot;
 
@@ -35,13 +36,16 @@ public class SimulatedWrapper {
 
         this.drive.setModifier(
                 (translation) -> {
-                    PointXYZ point = new PointXYZ(
-                            roundNumber(translation.vx()),
-                            roundNumber(translation.vy()),
-                            translation.vz()
-                    );
+                    PointXYZ pos = odometry.getPosition();
 
-                    odometry.setRawPosition(odometry.getPosition().add(point));
+                    odometry.setRawPosition(
+                            pos.inDirection(
+                                    translation.magnitude(),
+                                    translation.angle()
+                            ).withHeading(pos.z().add(Angle.fromDeg(
+                                    translation.vz()
+                            )))
+                    );
 
                     return translation;
                 }

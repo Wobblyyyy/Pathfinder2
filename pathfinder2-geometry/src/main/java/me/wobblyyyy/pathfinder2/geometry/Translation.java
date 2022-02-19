@@ -203,8 +203,8 @@ public class Translation implements Serializable {
                                                  Angle heading) {
         PointXY point = PointXY.ZERO.inDirection(
                 translation.magnitude(),
-                translation.angle().add(heading)
-        );
+                translation.angle()
+        ).rotate(PointXY.ZERO, heading);
 
         return new Translation(
                 point.x(),
