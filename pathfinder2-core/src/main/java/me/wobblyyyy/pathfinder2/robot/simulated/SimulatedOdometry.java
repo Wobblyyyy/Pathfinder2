@@ -59,7 +59,7 @@ public class SimulatedOdometry extends AbstractOdometry {
 
         this.setRawPosition(currentPosition.inDirection(
                 travelledUnits,
-                this.movementAngle
+                this.movementAngle.add(currentPosition.z())
         ));
 
         this.lastTimeMs = Time.ms();

@@ -16,6 +16,7 @@ import me.wobblyyyy.pathfinder2.control.ProportionalController;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.Robot;
 import me.wobblyyyy.pathfinder2.trajectory.ArcTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
@@ -46,13 +47,13 @@ public class TestSimulatedChassis {
         turnController = new ProportionalController(-0.05);
         pathfinder = new Pathfinder(robot, turnController)
                 .setSpeed(0.5)
-                .setTolerance(2)
-                .setAngleTolerance(Angle.fromDeg(5));
+                .setTolerance(0.6)
+                .setAngleTolerance(Angle.fromDeg(1));
         factory = new SplineBuilderFactory()
                 .setSpeed(0.5)
                 .setStep(0.1)
-                .setTolerance(2)
-                .setAngleTolerance(Angle.fromDeg(5));
+                .setTolerance(0.5)
+                .setAngleTolerance(Angle.fromDeg(1));
     }
 
     @Test
@@ -116,36 +117,89 @@ public class TestSimulatedChassis {
     }
 
     @Test
+    public void testHalfRotation() {
+        pathfinder.followTrajectory(new LinearTrajectory(
+                pathfinder.getPosition().withHeading(Angle.fromDeg(180)),
+                0.5,
+                0.1,
+                Angle.fromDeg(1)
+        ));
+
+        pathfinder.tickUntil();
+
+        odometry.setTranslation(new Translation(-1, -1, 0));
+        odometry.updatePositionBasedOnVelocity(1000);
+
+        odometry.setTranslation(new Translation(1, 1, 0));
+        odometry.updatePositionBasedOnVelocity(1000);
+    }
+
+    @Test
+    public void testManyTargets() {
+        pathfinder
+                .goTo(new PointXYZ(0, 0, 0))
+                .goTo(new PointXYZ(10, 10, 90))
+                .goTo(new PointXYZ(0, -10, 45))
+                .goTo(new PointXYZ(3, 3, 33))
+                .goTo(new PointXYZ(-3, 6, 88))
+                .goTo(new PointXYZ(2, -2, 87))
+                .goTo(new PointXYZ(3, -6, 22))
+                .goTo(new PointXYZ(-3, 6, 1))
+                .goTo(new PointXYZ(0, 0, 0))
+                .tickUntil();
+    }
+
+    @Test
+    public void testRightTurn() {
+        pathfinder.goTo(new PointXYZ(5, 5, 90));
+        pathfinder.tickUntil();
+
+        odometry.setTranslation(new Translation(1, 0, 0));
+        odometry.updatePositionBasedOnVelocity(1_000);
+
+        odometry.setTranslation(new Translation(-1, 0, 0));
+        odometry.updatePositionBasedOnVelocity(1_000);
+
+        odometry.setTranslation(new Translation(1, 1, 0));
+        odometry.updatePositionBasedOnVelocity(1_000);
+
+        odometry.setTranslation(new Translation(-1, -1, 0));
+        odometry.updatePositionBasedOnVelocity(1_000);
+
+        Assertions.assertTrue(pathfinder.getPosition().absDistance(new PointXYZ(5, 5, 90)) < 0.1);
+    }
+
+    @Test
     public void testTurningRectangle() {
         pathfinder.followTrajectories(
                 new LinearTrajectory(
                         new PointXYZ(0, 0, 0),
                         0.5,
-                        2,
+                        0.1,
                         Angle.fromDeg(5)
                 ),
                 new LinearTrajectory(
                         new PointXYZ(10, 0, 90),
                         0.5,
-                        2,
+                        0.1,
                         Angle.fromDeg(5)
                 ),
                 new LinearTrajectory(
                         new PointXYZ(10, 10, 180),
                         0.5,
-                        2,
+                        0.1,
                         Angle.fromDeg(5)
                 ),
                 new LinearTrajectory(
                         new PointXYZ(0, 10, 270),
                         0.5,
-                        2,
+                        0.1,
                         Angle.fromDeg(5)
                 ),
                 new LinearTrajectory(
                         new PointXYZ(0, 0, 0),
                         0.5,
-                        2,
+                        0.1,
                         Angle.fromDeg(5)
                 )
         );
@@ -293,6 +347,29 @@ public class TestSimulatedChassis {
                 .setTolerance(2)
                 .setAngleTolerance(Angle.fromDeg(1))
                 .setInterpolationMode(InterpolationMode.AKIMA)
+                .setSpeed(0.5)
+                .add(new PointXYZ(0, 0, 0))
+                .add(new PointXYZ(4, 10, 0))
+                .add(new PointXYZ(8, 12, 0))
+                .add(new PointXYZ(10, 13, 0))
+                .add(new PointXYZ(12, 14, 0))
+                .add(new PointXYZ(14, 15, 0))
+                .build();
+
+        pathfinder.followTrajectory(trajectory);
+
+        pathfinder.tickUntil(1_000);
+
+        Assertions.assertTrue(pathfinder.getPosition().distance(new PointXYZ(14, 15, 0)) <= 2);
+    }
+
+    @Test
+    public void testCubicSplineInterpolation() {
+        Trajectory trajectory = new AdvancedSplineTrajectoryBuilder()
+                .setStep(0.1)
+                .setTolerance(2)
+                .setAngleTolerance(Angle.fromDeg(1))
+                .setInterpolationMode(InterpolationMode.CUBIC)
                 .setSpeed(0.5)
                 .add(new PointXYZ(0, 0, 0))
                 .add(new PointXYZ(4, 10, 0))
