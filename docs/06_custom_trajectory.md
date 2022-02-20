@@ -92,7 +92,7 @@ existing implementations:
 - [LinearTrajectory](../pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/trajectory/LinearTrajectory.java)
   is the default implementation of a trajectory in Pathfinder. It moves to
   a single target point at a single speed and has tweakable tolerance values.
-- [AdvancedSplineTrajectory](../pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/trajectory/spline/AdvancedSplineTrajectoryBuilder.java)
+- [AdvancedSplineTrajectory](../pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/trajectory/spline/AdvancedSplineTrajectory.java)
   is, as the name would suggest, the most advanced type of trajectory available
   in Pathfinder. You can use independent spline functions to determine the
   robot's speed and target position (including angle!), allowing you to
