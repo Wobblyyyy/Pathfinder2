@@ -67,6 +67,19 @@ public class MutableLinearTrajectory implements Trajectory {
     private boolean isFinished = false;
     private boolean canFinish = true;
 
+    /**
+     * Create a new {@code MutableLinearTrajectory}.
+     *
+     * <p>
+     * These values will default to:
+     * <ul>
+     *     <li>Target point: (0, 0, 0 deg)</li>
+     *     <li>Speed: 0</li>
+     *     <li>Tolerance: 0</li>
+     *     <li>Angle tolerance: 0 deg</li>
+     * </ul>
+     * </p>
+     */
     public MutableLinearTrajectory() {
         this(PointXYZ.ZERO, 0, 0, Angle.fromDeg(0));
     }

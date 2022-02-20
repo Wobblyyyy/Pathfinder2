@@ -13,7 +13,10 @@ package me.wobblyyyy.pathfinder2.trajectory;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
 /**
- * Completely useless.
+ * Completely useless. That's all there is to say. There is absolutely no
+ * reason to use this, ever. Like. Not even ironically. Are you mad that
+ * there's just a random class you'll never use sitting on your computer
+ * now? Does that make you angry? Sorry.
  *
  * @author Colin Robertson
  * @since 1.0.1

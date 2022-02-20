@@ -665,6 +665,13 @@ public class Pathfinder {
         return new Pathfinder(robot, coefficient);
     }
 
+    /**
+     * Add a plugin to Pathfinder's list of automatically loading plugins.
+     * These plugins will be loaded whenever an instance of Pathfinder
+     * is creataed.
+     *
+     * @param plugin the plugin to load.
+     */
     public static void addAutoLoadPlugin(PathfinderPlugin plugin) {
         AUTO_LOAD_PLUGINS.add(plugin);
     }
@@ -2336,9 +2343,8 @@ public class Pathfinder {
         ElapsedTimer timer = new ElapsedTimer(true);
 
         try {
-            while (!condition.get() && timer.isElapsedLessThan(maxTimeMs)) {
+            while (!condition.get() && timer.isElapsedLessThan(maxTimeMs))
                 Thread.sleep(10);
-            }
         } catch (InterruptedException ignored) {
         }
 
@@ -2430,6 +2436,19 @@ public class Pathfinder {
         followTrajectories(list);
 
         return this;
+    }
+
+    /**
+     * Follow a single trajectory, after shifting it to the robot's
+     * current position. This essentially converts an absolute trajectory
+     * into a relative one.
+     *
+     * @param trajectory the trajectory to shift and follow.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder followRelativeTrajectory(Trajectory trajectory) {
+        return followRelativeTrajectory(
+                trajectory.shiftToRobot(new PointXYZ(0, 0, 0), getPosition()));
     }
 
     /**
@@ -2647,6 +2666,21 @@ public class Pathfinder {
         );
     }
 
+    /**
+     * Use a {@link MultiSplineBuilder} to construct a spline trajectory.
+     *
+     * @param speed          the speed at which the robot should move. This
+     *                       is a constant value.
+     * @param tolerance      the tolerance used for determining whether the
+     *                       robot is at the target point.
+     * @param angleTolerance same thing as {@code tolerance}, but for the
+     *                       robot's angle.
+     * @param points         a set of control points for the spline. This
+     *                       will automatically insert the robot's current
+     *                       position into this array. This array must have
+     *                       AT LEAST two points.
+     * @return {@code this}, used for method chaining.
+     */
     public Pathfinder multiSplineTo(double speed,
                                     double tolerance,
                                     Angle angleTolerance,
@@ -2695,6 +2729,13 @@ public class Pathfinder {
     /**
      * Create a spline trajectory to a certain target point, and then follow
      * that aforementioned trajectory.
+     *
+     * <p>
+     * If this method is called on a set of points with non-monotonic Y
+     * values, this will instead invoke 
+     * {@link #multiSplineTo(double, double, Angle, PointXYZ...)}, which
+     * supports non-monotonic Y values.
+     * </p>
      *
      * @param speed          the speed at which the robot should move. This
      *                       is a constant value.

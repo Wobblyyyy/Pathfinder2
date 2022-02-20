@@ -463,13 +463,13 @@ public interface Trajectory extends Serializable {
             @Override
             public boolean isDone(PointXYZ current) {
                 return isDoneFunction.apply(
-                        current.reflectOverY(xReflectionAxis));
+                        current.reflectOverX(xReflectionAxis));
             }
 
             @Override
             public double speed(PointXYZ current) {
                 return speedFunction.apply(
-                        current.reflectOverY(xReflectionAxis));
+                        current.reflectOverX(xReflectionAxis));
             }
         };
     }
@@ -619,6 +619,99 @@ public interface Trajectory extends Serializable {
             public double speed(PointXYZ current) {
                 return speedFunction.apply(
                         current.add(difference));
+            }
+        };
+    }
+
+    default Trajectory multiply(PointXYZ multiplier) {
+        return multiply(multiplier.x(), multiplier.y(), multiplier.z().deg());
+    }
+
+    default Trajectory multiplyX(double multiplier) {
+        return multiply(multiplier, 1, 1);
+    }
+
+    default Trajectory multiplyY(double multiplier) {
+        return multiply(1, multiplier, 1);
+    }
+
+    default Trajectory multiplyZ(Angle multiplier) {
+        return multiply(1, 1, multiplier.deg());
+    }
+
+    default Trajectory multiply(double multiplier) {
+        return multiply(multiplier, multiplier, multiplier);
+    }
+    
+    default Trajectory multiplyXY(double multiplier) {
+        return multiply(multiplier, multiplier, 1);
+    }
+
+
+    default Trajectory multiply(double xMultiplier,
+                                double yMultiplier,
+                                double zMultiplier) {
+        Function<PointXYZ, PointXYZ> nextMarkerFunction =
+            InternalTrajectoryUtils.nextMarkerFunction(this);
+        Function<PointXYZ, Boolean> isDoneFunction =
+            InternalTrajectoryUtils.isDoneFunction(this);
+        Function<PointXYZ, Double> speedFunction =
+            InternalTrajectoryUtils.speedFunction(this);
+
+        PointXYZ mult = new PointXYZ(xMultiplier,
+                yMultiplier, Angle.fromDeg(zMultiplier));
+
+        return new Trajectory() {
+            @Override
+            public PointXYZ nextMarker(PointXYZ current) {
+                return nextMarkerFunction.apply(
+                        current.multiply(mult)).multiply(mult);
+            }
+
+            @Override
+            public boolean isDone(PointXYZ current) {
+                return isDoneFunction.apply(
+                        current.multiply(mult));
+            }
+
+            @Override
+            public double speed(PointXYZ current) {
+                return speedFunction.apply(
+                        current.multiply(mult));
+            }
+        };
+    }
+
+    default Trajectory add(double xMultiplier,
+                           double yMultiplier,
+                           double zMultiplier) {
+        Function<PointXYZ, PointXYZ> nextMarkerFunction =
+            InternalTrajectoryUtils.nextMarkerFunction(this);
+        Function<PointXYZ, Boolean> isDoneFunction =
+            InternalTrajectoryUtils.isDoneFunction(this);
+        Function<PointXYZ, Double> speedFunction =
+            InternalTrajectoryUtils.speedFunction(this);
+
+        PointXYZ mult = new PointXYZ(xMultiplier,
+                yMultiplier, Angle.fromDeg(zMultiplier));
+
+        return new Trajectory() {
+            @Override
+            public PointXYZ nextMarker(PointXYZ current) {
+                return nextMarkerFunction.apply(
+                        current.add(mult)).add(mult);
+            }
+
+            @Override
+            public boolean isDone(PointXYZ current) {
+                return isDoneFunction.apply(
+                        current.add(mult));
+            }
+
+            @Override
+            public double speed(PointXYZ current) {
+                return speedFunction.apply(
+                        current.add(mult));
             }
         };
     }

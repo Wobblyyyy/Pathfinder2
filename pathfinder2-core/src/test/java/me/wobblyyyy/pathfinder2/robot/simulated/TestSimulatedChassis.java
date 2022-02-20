@@ -38,6 +38,8 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 /**
  * This is the main class for testing Pathfinder's movement. Why, you may
@@ -594,5 +596,79 @@ public class TestSimulatedChassis {
         pathfinder.followTrajectory(builder.build());
 
         pathfinder.tickUntil();
+    }
+
+    @Test
+    public void testReflectedTrajectory() {
+        Trajectory a = new LinearTrajectory(
+                new PointXYZ(10, 10, 0),
+                0.05,
+                0.01,
+                Angle.fromDeg(1)
+        ).reflectX(0);
+        Trajectory b = new LinearTrajectory(
+                new PointXYZ(10, 10, 0),
+                0.05,
+                0.01,
+                Angle.fromDeg(1)
+        ).reflectY(0);
+        Trajectory c = new LinearTrajectory(
+                new PointXYZ(10, 10, 0),
+                0.05,
+                0.01,
+                Angle.fromDeg(1)
+        ).reflectX(0).reflectY(0);
+
+        pathfinder.followTrajectory(a).tickUntil();
+        Assertions.assertEquals(
+                new PointXYZ(-10, 10, 0),
+                pathfinder.getPosition()
+        );
+
+        pathfinder.followTrajectory(b).tickUntil();
+        Assertions.assertEquals(
+                new PointXYZ(10, -10, 0),
+                pathfinder.getPosition()
+        );
+
+        pathfinder.followTrajectory(c).tickUntil();
+        Assertions.assertEquals(
+                new PointXYZ(-10, -10, 0),
+                pathfinder.getPosition()
+        );
+    }
+
+    @Test
+    public void testOnFinishFollower() {
+        AtomicInteger count = new AtomicInteger(0);
+
+        Consumer<PointXYZ> consumer = (position) -> {
+            count.getAndIncrement();
+        };
+
+        Trajectory a = new LinearTrajectory(
+                new PointXYZ(10, 10, 0),
+                0.05,
+                0.01,
+                Angle.fromDeg(1)
+        ).reflectX(0).onFinish(consumer);
+        Trajectory b = new LinearTrajectory(
+                new PointXYZ(10, 10, 0),
+                0.05,
+                0.01,
+                Angle.fromDeg(1)
+        ).reflectY(0).onFinish(consumer);
+        Trajectory c = new LinearTrajectory(
+                new PointXYZ(10, 10, 0),
+                0.05,
+                0.01,
+                Angle.fromDeg(1)
+        ).reflectX(0).reflectY(0).onFinish(consumer);
+
+        pathfinder.followTrajectories(a, b, c);
+
+        pathfinder.tickUntil();
+
+        Assertions.assertEquals(3, count.get());
     }
 }

@@ -677,6 +677,11 @@ public class PointXYZ extends PointXY {
         return false;
     }
 
+    private static double reflect(double value,
+                                  double axis) {
+        return axis - (value - axis);
+    }
+
     /**
      * Reflect a point over a given axis.
      *
@@ -684,7 +689,7 @@ public class PointXYZ extends PointXY {
      * @return the reflected point.
      */
     public PointXYZ reflectOverX(double xAxis) {
-        return withX(x() + (xAxis - x()));
+        return withX(reflect(x(), xAxis));
     }
 
     /**
@@ -694,7 +699,7 @@ public class PointXYZ extends PointXY {
      * @return the reflected point.
      */
     public PointXYZ reflectOverY(double yAxis) {
-        return withY(y() + (yAxis - y()));
+        return withY(reflect(y(), yAxis));
     }
 
     /**
