@@ -589,7 +589,5 @@ public class TestSimulatedChassis {
         pathfinder.followTrajectory(builder.build());
 
         pathfinder.tickUntil();
-
-        System.out.println(pathfinder.ticksPerSecond());
     }
 }

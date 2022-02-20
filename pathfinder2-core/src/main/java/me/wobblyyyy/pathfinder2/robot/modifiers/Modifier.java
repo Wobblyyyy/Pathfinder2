@@ -10,8 +10,6 @@
 
 package me.wobblyyyy.pathfinder2.robot.modifiers;
 
-import java.util.function.Function;
-
 /**
  * A {@code Modifier} is a functional interface used in modifying a value.
  *
@@ -20,5 +18,6 @@ import java.util.function.Function;
  * @since 0.7.1
  */
 @FunctionalInterface
-public interface Modifier<T> extends Function<T, T> {
+public interface Modifier<T> {
+    T apply(T a);
 }

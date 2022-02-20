@@ -38,24 +38,4 @@ public interface Modifiable<E> {
      * @param modifier the modifier.
      */
     void setModifier(Function<E, E> modifier);
-
-    /**
-     * Spawn a new modifier by combining this modifier with another modifier.
-     *
-     * @param layer the modifier to combine with this modifier.
-     * @return a combined modifier. The order that these modifiers will be
-     * applied in is parent -> child.
-     */
-    default Modifier<E> spawnModifier(Modifier<E> layer) {
-        return e -> layer.apply(getModifier().apply(e));
-    }
-
-    /**
-     * Add a modifier to this modifier.
-     *
-     * @param layer the newest layer.
-     */
-    default void addModifier(Modifier<E> layer) {
-        setModifier(spawnModifier(layer));
-    }
 }

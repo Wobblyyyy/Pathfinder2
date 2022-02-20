@@ -74,6 +74,18 @@ public class SimulatedOdometry extends AbstractOdometry {
         this.currentPosition = position;
     }
 
+    public void setRawPosition(double x,
+                               double y,
+                               double zDegrees) {
+        setRawPosition(new PointXYZ(x, y, zDegrees));
+    }
+
+    public void setRawPosition(double x,
+                               double y,
+                               Angle z) {
+        setRawPosition(new PointXYZ(x, y, z));
+    }
+
     /**
      * Get the odometry system's raw position.
      *

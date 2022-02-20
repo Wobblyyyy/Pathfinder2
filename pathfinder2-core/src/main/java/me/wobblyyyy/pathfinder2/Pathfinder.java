@@ -38,7 +38,6 @@ import me.wobblyyyy.pathfinder2.recording.MovementRecording;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.robot.Robot;
-import me.wobblyyyy.pathfinder2.robot.modifiers.Modifier;
 import me.wobblyyyy.pathfinder2.robot.simulated.EmptyDrive;
 import me.wobblyyyy.pathfinder2.robot.simulated.EmptyOdometry;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedDrive;
@@ -59,6 +58,7 @@ import me.wobblyyyy.pathfinder2.zones.ZoneProcessor;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -259,7 +259,7 @@ public class Pathfinder {
      * Last tick, what was the currently active drive modifier? Or
      * something like that.
      */
-    private Modifier<Translation> lastDriveModifier = null;
+    private Function<Translation, Translation> lastDriveModifier = null;
 
     /**
      * A modifiable map of operations to be run after every tick.
@@ -3165,15 +3165,14 @@ public class Pathfinder {
      * @return {@code this}, used for method chaining.
      */
     public Pathfinder lockHeading(Angle heading) {
-        Modifier<Translation> modifier = new HeadingLock(
+        Function<Translation, Translation> modifier = new HeadingLock(
                 heading,
                 turnController,
                 this.getPosition()::z
         );
 
-        lastDriveModifier = (Modifier<Translation>) getDrive().getModifier();
-
-        getDrive().addModifier(modifier);
+        lastDriveModifier = getDrive().getModifier();
+        getDrive().setModifier(modifier);
 
         return this;
     }
@@ -3203,7 +3202,7 @@ public class Pathfinder {
      * @return {@code this}, used for method chaining.
      */
     public Pathfinder lockHeading(PointXY point) {
-        Modifier<Translation> modifier = new AutoRotator(
+        Function<Translation, Translation> modifier = new AutoRotator(
                 this,
                 turnController,
                 point,
@@ -3211,9 +3210,8 @@ public class Pathfinder {
                 true
         );
 
-        lastDriveModifier = (Modifier<Translation>) getDrive().getModifier();
-
-        getDrive().addModifier(modifier);
+        lastDriveModifier = getDrive().getModifier();
+        getDrive().setModifier(modifier);
 
         return this;
     }
@@ -3247,7 +3245,7 @@ public class Pathfinder {
      */
     public Pathfinder lockHeading(PointXY point,
                                   Angle angleOffset) {
-        Modifier<Translation> modifier = new AutoRotator(
+        Function<Translation, Translation> modifier = new AutoRotator(
                 this,
                 turnController,
                 point,
@@ -3255,9 +3253,8 @@ public class Pathfinder {
                 true
         );
 
-        lastDriveModifier = (Modifier<Translation>) getDrive().getModifier();
-
-        getDrive().addModifier(modifier);
+        lastDriveModifier = getDrive().getModifier();
+        getDrive().setModifier(modifier);
 
         return this;
     }

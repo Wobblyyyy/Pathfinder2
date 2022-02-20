@@ -13,8 +13,8 @@ package me.wobblyyyy.pathfinder2.prebuilt;
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
-import me.wobblyyyy.pathfinder2.robot.modifiers.Modifier;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -24,7 +24,7 @@ import java.util.function.Supplier;
  * @author Colin Robertson
  * @since 0.7.1
  */
-public class HeadingLock implements Modifier<Translation> {
+public class HeadingLock implements Function<Translation, Translation> {
     private final Angle target;
     private final Controller turnController;
     private final Supplier<Angle> getCurrentAngle;

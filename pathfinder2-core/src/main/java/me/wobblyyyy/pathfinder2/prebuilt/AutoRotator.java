@@ -10,13 +10,14 @@
 
 package me.wobblyyyy.pathfinder2.prebuilt;
 
+import java.util.function.Function;
+
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
-import me.wobblyyyy.pathfinder2.robot.modifiers.Modifier;
 
 /**
  * An {@code AutoRotator} allows you to automatically rotate around a
@@ -26,7 +27,7 @@ import me.wobblyyyy.pathfinder2.robot.modifiers.Modifier;
  * @author Colin Robertson
  * @since 0.7.1
  */
-public class AutoRotator implements Modifier<Translation> {
+public class AutoRotator implements Function<Translation, Translation> {
     private final Pathfinder pathfinder;
     private final Controller turnController;
     private PointXY centerPoint;
