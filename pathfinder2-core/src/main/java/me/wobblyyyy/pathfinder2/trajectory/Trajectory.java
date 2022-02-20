@@ -10,11 +10,16 @@
 
 package me.wobblyyyy.pathfinder2.trajectory;
 
+import me.wobblyyyy.pathfinder2.geometry.Angle;
+import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
 import me.wobblyyyy.pathfinder2.trajectory.multi.segment.MultiSegmentTrajectory;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * A path-like thing that your robot can follow. Look, I know all this
@@ -37,6 +42,23 @@ import java.util.Arrays;
  * trajectory in an individual follower. These followers are then executed
  * via a {@link me.wobblyyyy.pathfinder2.execution.FollowerExecutor}, which,
  * in turn, are managed via a {@link me.wobblyyyy.pathfinder2.execution.ExecutorManager}.
+ * </p>
+ *
+ * <p>
+ * As of Pathfinder2 v1.1.0, you can also add primitive listeners to a
+ * trajectory using the following methods:
+ * <ul>
+ *     <li>{@link #onStart(Consumer)}</li>
+ *     <li>{@link #onFinish(Consumer)}</li>
+ *     <li>{@link #withModifiers(Function, Function, Function)}</li>
+ *     <li>{@link #addListeners(Consumer, Consumer)}</li>
+ * </ul>
+ * These listeners are relatively ineffective, as the addition of each layer
+ * requires the instantiation of a new trajectory. Although this should not
+ * pose a performance problem in any cases, it's worth mentioning. These
+ * listeners are bound to the trajectory itself and are based on the state
+ * of the trajectory; therefore, you do not need to use Pathfinder's
+ * {@code listening} package in order to use these listeners.
  * </p>
  *
  * @author Colin Robertson
@@ -151,5 +173,479 @@ public interface Trajectory extends Serializable {
         );
         trajectories[0] = this;
         return new MultiSegmentTrajectory(Arrays.asList(trajectories));
+    }
+
+    /**
+     * Add a listener for the trajectory's first execution.
+     *
+     * @param onStart  code to be executed whenever the trajectory begins
+     *                 its execution. This code will be executed once: the
+     *                 very first time the {@link #nextMarker(PointXYZ)} is
+     *                 called. After the first time the {@link #nextMarker(PointXYZ)}
+     *                 is called, this code will not be executed again.
+     * @return a new {@code Trajectory} that has several event listeners
+     * attached. If the listener is empty, it'll simply do nothing - otherwise,
+     * it'll activate whenever a certain condition is met.
+     */
+    default Trajectory onStart(Consumer<PointXYZ> onStart) {
+        return addListeners(onStart, (point) -> {});
+    }
+
+    /**
+     * Add a listener for the first time the trajectory's
+     * {@link #isDone(PointXYZ)} method returns true.
+     *
+     * @param onFinish code to be executed whenever the trajectory has finished
+     *                 its execution. This is a {@code Consumer} that accepts
+     *                 a {@code PointXYZ}, which is the robot's position at
+     *                 the time of finish. This condition will only be
+     *                 triggered the first time the {@code Trajectory}'s
+     *                 {@link #isDone(PointXYZ)} returns true.
+     * @return a new {@code Trajectory} that has several event listeners
+     * attached. If the listener is empty, it'll simply do nothing - otherwise,
+     * it'll activate whenever a certain condition is met.
+     */
+    default Trajectory onFinish(Consumer<PointXYZ> onFinish) {
+        return addListeners((point) -> {}, onFinish);
+    }
+
+    /**
+     * Add listeners to a trajectory by creating a wrapper trajectory and
+     * monitoring for certain conditions. Each of listeners responds to
+     * a specific condition - the most useful of these are {@code onStart}
+     * and {@code onFinish}, as they can be used to do some pretty neat
+     * things without having to make use of a {@code PathfinderPlugin}.
+     *
+     * @param onStart  code to be executed whenever the trajectory begins
+     *                 its execution. This code will be executed once: the
+     *                 very first time the {@link #nextMarker(PointXYZ)} is
+     *                 called. After the first time the {@link #nextMarker(PointXYZ)}
+     *                 is called, this code will not be executed again.
+     * @param onFinish code to be executed whenever the trajectory has finished
+     *                 its execution. This is a {@code Consumer} that accepts
+     *                 a {@code PointXYZ}, which is the robot's position at
+     *                 the time of finish. This condition will only be
+     *                 triggered the first time the {@code Trajectory}'s
+     *                 {@link #isDone(PointXYZ)} returns true.
+     * @return a new {@code Trajectory} that has several event listeners
+     * attached. If the listener is empty, it'll simply do nothing - otherwise,
+     * it'll activate whenever a certain condition is met.
+     */
+    default Trajectory addListeners(Consumer<PointXYZ> onStart,
+                                    Consumer<PointXYZ> onFinish) {
+        Function<PointXYZ, PointXYZ> nextMarkerFunction =
+            InternalTrajectoryUtils.nextMarkerFunction(this);
+        Function<PointXYZ, Boolean> isDoneFunction =
+            InternalTrajectoryUtils.isDoneFunction(this);
+        Function<PointXYZ, Double> speedFunction =
+            InternalTrajectoryUtils.speedFunction(this);
+
+        return new Trajectory() {
+            boolean hasStarted = false;
+            boolean hasFinished = false;
+
+            @Override
+            public PointXYZ nextMarker(PointXYZ current) {
+                if (!hasStarted) {
+                    onStart.accept(current);
+                    hasStarted = true;
+                }
+
+                return nextMarkerFunction.apply(current);
+            }
+
+            @Override
+            public boolean isDone(PointXYZ current) {
+                boolean isDone = isDoneFunction.apply(current);
+
+                if (isDone)
+                    if (!hasFinished) {
+                        onFinish.accept(current);
+                        hasFinished = true;
+                    }
+
+                return isDone;
+            }
+
+            @Override
+            public double speed(PointXYZ current) {
+                return speedFunction.apply(current);
+            }
+        };
+    }
+
+    /**
+     * Add listeners to a trajectory by creating a wrapper trajectory and
+     * monitoring for certain conditions. Each of listeners responds to
+     * a specific condition - the most useful of these are {@code onStart}
+     * and {@code onFinish}, as they can be used to do some pretty neat
+     * things without having to make use of a {@code PathfinderPlugin}.
+     *
+     * @param onStart  code to be executed whenever the trajectory begins
+     *                 its execution. This code will be executed once: the
+     *                 very first time the {@link #nextMarker(PointXYZ)} is
+     *                 called. After the first time the {@link #nextMarker(PointXYZ)}
+     *                 is called, this code will not be executed again.
+     * @param onIsDone code to be executed whenever the {@link #isDone(PointXYZ)}
+     *                 method is called. This code will be executed every
+     *                 time the {@link #isDone(PointXYZ)} method is called,
+     *                 regardless of whether the trajectory is done or not.
+     * @param onSpeed  code to be executed whenever the {@link #speed(PointXYZ)}
+     *                 method is called. This code will be executed every
+     *                 time the speed method is called.
+     * @param onFinish code to be executed whenever the trajectory has finished
+     *                 its execution. This is a {@code Consumer} that accepts
+     *                 a {@code PointXYZ}, which is the robot's position at
+     *                 the time of finish. This condition will only be
+     *                 triggered the first time the {@code Trajectory}'s
+     *                 {@link #isDone(PointXYZ)} returns true.
+     * @return a new {@code Trajectory} that has several event listeners
+     * attached. If the listener is empty, it'll simply do nothing - otherwise,
+     * it'll activate whenever a certain condition is met.
+     */
+    default Trajectory addListeners(Consumer<PointXYZ> onStart,
+                                    Consumer<Boolean> onIsDone,
+                                    Consumer<Double> onSpeed,
+                                    Consumer<PointXYZ> onFinish) {
+        Function<PointXYZ, PointXYZ> nextMarkerFunction =
+            InternalTrajectoryUtils.nextMarkerFunction(this);
+        Function<PointXYZ, Boolean> isDoneFunction =
+            InternalTrajectoryUtils.isDoneFunction(this);
+        Function<PointXYZ, Double> speedFunction =
+            InternalTrajectoryUtils.speedFunction(this);
+
+        return new Trajectory() {
+            boolean hasStarted = false;
+            boolean hasFinished = false;
+
+            @Override
+            public PointXYZ nextMarker(PointXYZ current) {
+                if (!hasStarted) {
+                    onStart.accept(current);
+                    hasStarted = true;
+                }
+
+                return nextMarkerFunction.apply(current);
+            }
+
+            @Override
+            public boolean isDone(PointXYZ current) {
+                boolean isDone = isDoneFunction.apply(current);
+
+                if (isDone)
+                    if (!hasFinished) {
+                        onFinish.accept(current);
+                        hasFinished = true;
+                    }
+
+                onIsDone.accept(isDone);
+
+                return isDone;
+            }
+
+            @Override
+            public double speed(PointXYZ current) {
+                double speed = speedFunction.apply(current);
+
+                onSpeed.accept(speed);
+
+                return speed;
+            }
+        };
+    }
+
+    default Trajectory withModifiers(Function<PointXYZ, PointXYZ> nextMarkerModifier,
+                                     Function<Boolean, Boolean> isDoneModifier,
+                                     Function<Double, Double> speedModifier) {
+        Function<PointXYZ, PointXYZ> nextMarkerFunction =
+            InternalTrajectoryUtils.nextMarkerFunction(this);
+        Function<PointXYZ, Boolean> isDoneFunction =
+            InternalTrajectoryUtils.isDoneFunction(this);
+        Function<PointXYZ, Double> speedFunction =
+            InternalTrajectoryUtils.speedFunction(this);
+
+        return new Trajectory() {
+            @Override
+            public PointXYZ nextMarker(PointXYZ current) {
+                return nextMarkerModifier.apply(nextMarkerFunction.apply(current));
+            }
+
+            @Override
+            public boolean isDone(PointXYZ current) {
+                return isDoneModifier.apply(isDoneFunction.apply(current));
+            }
+
+            @Override
+            public double speed(PointXYZ current) {
+                return speedModifier.apply(speedFunction.apply(current));
+            }
+        };
+    }
+
+    /**
+     * Create a wrapper trajectory around this trajectory that behaves exactly
+     * the same as {@code this} trajectory, but with time limits. The
+     * trajectory will only execute if it has not exceeded
+     * {@code maximumTimeMs}. At the very least, this will execute until
+     * {@code minimumTimeMs} has elapsed.
+     *
+     * @param minimumTimeMs the minimum amount of time the trajectory may
+     *                      execute for, in milliseconds.
+     * @param maximumTimeMs the maximum amount of time the trajectory may
+     *                      execute for, in milliseconds.
+     * @return a wrapper for {@code this} trajectory.
+     */
+    default Trajectory withTimeLimits(double minimumTimeMs,
+                                      double maximumTimeMs) {
+        Function<PointXYZ, PointXYZ> nextMarkerFunction =
+            InternalTrajectoryUtils.nextMarkerFunction(this);
+        Function<PointXYZ, Boolean> isDoneFunction =
+            InternalTrajectoryUtils.isDoneFunction(this);
+        Function<PointXYZ, Double> speedFunction =
+            InternalTrajectoryUtils.speedFunction(this);
+
+        return new Trajectory() {
+            ElapsedTimer timer = new ElapsedTimer();
+
+            @Override
+            public PointXYZ nextMarker(PointXYZ current) {
+                if (!timer.hasStarted())
+                    timer.start();
+
+                return nextMarkerFunction.apply(current);
+            }
+
+            @Override
+            public boolean isDone(PointXYZ current) {
+                double elapsedMs = timer.elapsedMs();
+
+                if (elapsedMs < minimumTimeMs)
+                    return true;
+                else if (elapsedMs < maximumTimeMs)
+                    return isDoneFunction.apply(current);
+                else if (elapsedMs > maximumTimeMs)
+                    return true;
+                else
+                    return false;
+            }
+
+            @Override
+            public double speed(PointXYZ current) {
+                return speedFunction.apply(current);
+            }
+        };
+    }
+
+    /**
+     * Reflect the entire trajectory over a specified axis.
+     *
+     * @param xReflectionAxis the axis to reflect the trajectory over.
+     * @return a reflected trajectory. This will not modify any of the
+     * values of the base trajectory - rather, it'll simply reflect all
+     * inputted points over a specified axis.
+     */
+    default Trajectory reflectX(double xReflectionAxis) {
+        Function<PointXYZ, PointXYZ> nextMarkerFunction =
+            InternalTrajectoryUtils.nextMarkerFunction(this);
+        Function<PointXYZ, Boolean> isDoneFunction =
+            InternalTrajectoryUtils.isDoneFunction(this);
+        Function<PointXYZ, Double> speedFunction =
+            InternalTrajectoryUtils.speedFunction(this);
+
+        return new Trajectory() {
+            @Override
+            public PointXYZ nextMarker(PointXYZ current) {
+                return nextMarkerFunction.apply(
+                        current.reflectOverX(xReflectionAxis))
+                    .reflectOverX(xReflectionAxis);
+            }
+
+            @Override
+            public boolean isDone(PointXYZ current) {
+                return isDoneFunction.apply(
+                        current.reflectOverY(xReflectionAxis));
+            }
+
+            @Override
+            public double speed(PointXYZ current) {
+                return speedFunction.apply(
+                        current.reflectOverY(xReflectionAxis));
+            }
+        };
+    }
+
+    /**
+     * Reflect the entire trajectory over a specified axis.
+     *
+     * @param xReflectionAxis the axis to reflect the trajectory over.
+     * @return a reflected trajectory. This will not modify any of the
+     * values of the base trajectory - rather, it'll simply reflect all
+     * inputted points over a specified axis.
+     */
+    default Trajectory reflectY(double yReflectionAxis) {
+        Function<PointXYZ, PointXYZ> nextMarkerFunction =
+            InternalTrajectoryUtils.nextMarkerFunction(this);
+        Function<PointXYZ, Boolean> isDoneFunction =
+            InternalTrajectoryUtils.isDoneFunction(this);
+        Function<PointXYZ, Double> speedFunction =
+            InternalTrajectoryUtils.speedFunction(this);
+
+        return new Trajectory() {
+            @Override
+            public PointXYZ nextMarker(PointXYZ current) {
+                return nextMarkerFunction.apply(
+                        current.reflectOverY(yReflectionAxis))
+                    .reflectOverY(yReflectionAxis);
+            }
+
+            @Override
+            public boolean isDone(PointXYZ current) {
+                return isDoneFunction.apply(
+                        current.reflectOverY(yReflectionAxis));
+            }
+
+            @Override
+            public double speed(PointXYZ current) {
+                return speedFunction.apply(
+                        current.reflectOverY(yReflectionAxis));
+            }
+        };
+    }
+
+    /**
+     * Offset the entire trajectory.
+     *
+     * @param offset the trajectory's offset.
+     * @return a trajectory with an applied offset.
+     */
+    default Trajectory offset(PointXYZ offset) {
+        Function<PointXYZ, PointXYZ> nextMarkerFunction =
+            InternalTrajectoryUtils.nextMarkerFunction(this);
+        Function<PointXYZ, Boolean> isDoneFunction =
+            InternalTrajectoryUtils.isDoneFunction(this);
+        Function<PointXYZ, Double> speedFunction =
+            InternalTrajectoryUtils.speedFunction(this);
+
+        return new Trajectory() {
+            @Override
+            public PointXYZ nextMarker(PointXYZ current) {
+                return nextMarkerFunction.apply(
+                        current.add(offset)).add(offset);
+            }
+
+            @Override
+            public boolean isDone(PointXYZ current) {
+                return isDoneFunction.apply(
+                        current.add(offset));
+            }
+
+            @Override
+            public double speed(PointXYZ current) {
+                return speedFunction.apply(
+                        current.add(offset));
+            }
+        };
+    }
+
+    /**
+     * Rotate an entire trajectory around a point by a given angle.
+     *
+     * @param center the center of rotation for the trajectory.
+     * @param angle  how far to rotate the trajectory.
+     * @return the rotated trajectory.
+     */
+    default Trajectory rotateAround(PointXY center,
+                                    Angle angle) {
+        Function<PointXYZ, PointXYZ> nextMarkerFunction =
+            InternalTrajectoryUtils.nextMarkerFunction(this);
+        Function<PointXYZ, Boolean> isDoneFunction =
+            InternalTrajectoryUtils.isDoneFunction(this);
+        Function<PointXYZ, Double> speedFunction =
+            InternalTrajectoryUtils.speedFunction(this);
+
+        return new Trajectory() {
+            @Override
+            public PointXYZ nextMarker(PointXYZ current) {
+                return nextMarkerFunction.apply(
+                        current.rotate(center, angle)).rotate(center, angle);
+            }
+
+            @Override
+            public boolean isDone(PointXYZ current) {
+                return isDoneFunction.apply(
+                        current.rotate(center, angle));
+            }
+
+            @Override
+            public double speed(PointXYZ current) {
+                return speedFunction.apply(
+                        current.rotate(center, angle));
+            }
+        };
+    }
+
+    /**
+     * Shift a trajectory.
+     *
+     * @param origin the trajectory's base.
+     * @param target the trajectory's target.
+     * @return a shifted trajectory.
+     */
+    default Trajectory shift(PointXY origin,
+                             PointXY target) {
+        Function<PointXYZ, PointXYZ> nextMarkerFunction =
+            InternalTrajectoryUtils.nextMarkerFunction(this);
+        Function<PointXYZ, Boolean> isDoneFunction =
+            InternalTrajectoryUtils.isDoneFunction(this);
+        Function<PointXYZ, Double> speedFunction =
+            InternalTrajectoryUtils.speedFunction(this);
+
+        PointXYZ difference = origin.subtract(target).withHeading(Angle.fromDeg(0));
+
+        return new Trajectory() {
+            @Override
+            public PointXYZ nextMarker(PointXYZ current) {
+                return nextMarkerFunction.apply(
+                        current.add(difference)).add(difference);
+            }
+
+            @Override
+            public boolean isDone(PointXYZ current) {
+                return isDoneFunction.apply(
+                        current.add(difference));
+            }
+
+            @Override
+            public double speed(PointXYZ current) {
+                return speedFunction.apply(
+                        current.add(difference));
+            }
+        };
+    }
+
+    default Trajectory shiftToRobot(PointXYZ origin,
+                                    PointXYZ target) {
+        return shift(origin, target)
+            .rotateAround(target, target.z().subtract(origin.z()));
+    }
+
+    /**
+     * Utilities intended exclusively for internal use within Pathfinder. This
+     * class only exists because you can't make private methods in interfaces,
+     * so... I had to create a static class to avoid cluttering the main
+     * {@code Trajectory} interface with useless default methods.
+     */
+    static class InternalTrajectoryUtils {
+        static Function<PointXYZ, PointXYZ> nextMarkerFunction(Trajectory trajectory) {
+            return trajectory::nextMarker;
+        }
+
+        static Function<PointXYZ, Boolean> isDoneFunction(Trajectory trajectory) {
+            return trajectory::isDone;
+        }
+
+        static Function<PointXYZ, Double> speedFunction(Trajectory trajectory) {
+            return trajectory::speed;
+        }
     }
 }

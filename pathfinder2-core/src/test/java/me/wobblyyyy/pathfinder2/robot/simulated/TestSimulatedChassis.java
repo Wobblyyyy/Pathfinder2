@@ -33,13 +33,22 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import java.util.List;
 
+/**
+ * This is the main class for testing Pathfinder's movement. Why, you may
+ * ask, would you put so many tests in a single class? Well, I'll tell you.
+ * I'm incredibly lazy and don't have the energy to write a bunch of
+ * boilerplate code, so I'm removing the need for all of that by using
+ * a single class.
+ *
+ * @author Colin Robertson
+ * @since 1.0.0
+ */
 @TestInstance(Lifecycle.PER_CLASS)
 public class TestSimulatedChassis {
     private SimulatedOdometry odometry;
@@ -562,7 +571,7 @@ public class TestSimulatedChassis {
         Trajectory trajectory = new MultiSegmentTrajectory(trajectories);
 
         pathfinder.followTrajectory(trajectory);
-        
+
         pathfinder.tickUntil();
     }
 
@@ -571,9 +580,6 @@ public class TestSimulatedChassis {
         // if your computer is fast enough, this should be 1_000 ticks
         // per second. if it's not... oh well.
 
-        // gotta load the StatTracker plugin in order to view tps
-        pathfinder.loadBundledPlugins();
-
         MultiSplineBuilder builder = new MultiSplineBuilder()
             .setDefaultStep(0.5)
             .setDefaultSpeed(0.5)
@@ -581,10 +587,9 @@ public class TestSimulatedChassis {
             .setDefaultInterpolationMode(InterpolationMode.DEFAULT)
             .setDefaultAngleTolerance(Angle.fromDeg(5));
 
-        for (int i = 0; i < 10; i++) {
-            builder.add(i * 2, Math.pow(i, 2), Angle.fromDeg(0), 
+        for (int i = 0; i < 10; i++)
+            builder.add(i * 2, Math.pow(i, 2), Angle.fromDeg(0),
                     Math.pow((i + 1) / 10d, 2), 0.5, 2, Angle.fromDeg(5));
-        }
 
         pathfinder.followTrajectory(builder.build());
 

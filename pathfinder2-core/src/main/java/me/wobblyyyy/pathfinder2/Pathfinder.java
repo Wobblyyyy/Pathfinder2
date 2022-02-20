@@ -24,6 +24,7 @@ import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.listening.Listener;
 import me.wobblyyyy.pathfinder2.listening.ListenerManager;
 import me.wobblyyyy.pathfinder2.listening.ListenerMode;
+import me.wobblyyyy.pathfinder2.math.Spline;
 import me.wobblyyyy.pathfinder2.math.Velocity;
 import me.wobblyyyy.pathfinder2.movement.MovementProfiler;
 import me.wobblyyyy.pathfinder2.plugin.PathfinderPlugin;
@@ -50,6 +51,7 @@ import me.wobblyyyy.pathfinder2.time.Time;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.trajectory.spline.AdvancedSplineTrajectoryBuilder;
+import me.wobblyyyy.pathfinder2.trajectory.spline.MultiSplineBuilder;
 import me.wobblyyyy.pathfinder2.utils.NotNull;
 import me.wobblyyyy.pathfinder2.utils.RandomString;
 import me.wobblyyyy.pathfinder2.zones.Zone;
@@ -2520,8 +2522,7 @@ public class Pathfinder {
     /**
      * Go to a specific point. This method will create a new linear trajectory.
      *
-     * @param point the target point to go to.
-     * @return this instance of Pathfinder, used for method chaining.
+     * @return {@code this}, used for method chaining.
      * @see #setSpeed(double)
      * @see #setTolerance(double)
      * @see #setAngleTolerance(Angle)
@@ -2534,6 +2535,55 @@ public class Pathfinder {
         );
 
         return this;
+    }
+
+    /**
+     * Go to a specific point. This method will create a new linear trajectory.
+     *
+     * @param x the X coordinate to go to.
+     * @param y the Y coordinate to go to.
+     * @return {@code this}, used for method chaining.
+     * @see #setSpeed(double)
+     * @see #setTolerance(double)
+     * @see #setAngleTolerance(Angle)
+     */
+    public Pathfinder goTo(double x,
+                           double y) {
+        return goTo(new PointXY(x, y));
+    }
+
+    /**
+     * Go to a specific point. This method will create a new linear trajectory.
+     *
+     * @param x        the X coordinate to go to.
+     * @param y        the Y coordinate to go to.
+     * @param zDegrees the Z coordinate to go to (in degrees).
+     * @return {@code this}, used for method chaining.
+     * @see #setSpeed(double)
+     * @see #setTolerance(double)
+     * @see #setAngleTolerance(Angle)
+     */
+    public Pathfinder goTo(double x,
+                           double y,
+                           double zDegrees) {
+        return goTo(new PointXYZ(x, y, zDegrees));
+    }
+
+    /**
+     * Go to a specific point. This method will create a new linear trajectory.
+     *
+     * @param x the X coordinate to go to.
+     * @param y the Y coordinate to go to.
+     * @param z the Z coordinate to go to.
+     * @return {@code this}, used for method chaining.
+     * @see #setSpeed(double)
+     * @see #setTolerance(double)
+     * @see #setAngleTolerance(Angle)
+     */
+    public Pathfinder goTo(double x,
+                           double y,
+                           Angle z) {
+        return goTo(new PointXYZ(x, y, z));
     }
 
     private void checkForMissingDefaultValues() {
@@ -2597,6 +2647,51 @@ public class Pathfinder {
         );
     }
 
+    public Pathfinder multiSplineTo(double speed,
+                                    double tolerance,
+                                    Angle angleTolerance,
+                                    PointXYZ... points) {
+        if (points.length < 2) throw new IllegalArgumentException(
+                "At least two control points are required to use the " +
+                        "splineTo method.");
+        checkForMissingDefaultValues();
+
+        InvalidSpeedException.throwIfInvalid(
+                "Invalid speed value provided! Speed must be between 0 and 1.", 
+                speed);
+        InvalidToleranceException.throwIfInvalid(
+                "Invalid tolerance! Tolerance must be a positive number.", 
+                tolerance);
+
+        if (angleTolerance.deg() < 0)
+            throw new InvalidToleranceException("Invalid angle tolerance! " +
+                    "Angle tolerance must be greater than 0 degrees.");
+
+        if (!Spline.areMonotonicX(points))
+            throw new SplineException("Cannot create a spline with non-" +
+                    "monotonic X values! X values can only be either " +
+                    "increasing or decreasing, but not a combination of both.");
+
+        double totalDistanceX = points[points.length - 1].distanceX(points[0]);
+
+        double step = totalDistanceX / (points.length * 10);
+
+        MultiSplineBuilder builder = new MultiSplineBuilder()
+            .setDefaultSpeed(speed)
+            .setDefaultTolerance(tolerance)
+            .setDefaultAngleTolerance(angleTolerance)
+            .setDefaultStep(step);
+
+        for (PointXYZ point : points)
+            builder.add(point, speed, step);
+
+        Trajectory trajectory = builder.build();
+
+        followTrajectory(trajectory);
+
+        return this;
+    }
+
     /**
      * Create a spline trajectory to a certain target point, and then follow
      * that aforementioned trajectory.
@@ -2632,6 +2727,10 @@ public class Pathfinder {
         if (angleTolerance.deg() < 0)
             throw new InvalidToleranceException("Invalid angle tolerance! " +
                     "Angle tolerance must be greater than 0 degrees.");
+
+        // non-monotonic Y values means we need to use a multi spline instead
+        if (!Spline.areMonotonicY(points))
+            return multiSplineTo(speed, tolerance, angleTolerance, points);
 
         double length = PointXY.distance(
                 points[0],

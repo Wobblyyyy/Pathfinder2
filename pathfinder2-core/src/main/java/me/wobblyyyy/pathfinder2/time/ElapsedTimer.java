@@ -143,4 +143,8 @@ public class ElapsedTimer {
     public boolean isElapsedLessThan(double time) {
         return time <= getElapsed();
     }
+
+    public boolean hasStarted() {
+        return start != 0;
+    }
 }
