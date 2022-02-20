@@ -14,8 +14,11 @@ import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
+import me.wobblyyyy.pathfinder2.geometry.LinearEquation;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.geometry.SlopeIntercept;
 import me.wobblyyyy.pathfinder2.math.ApacheSpline;
+import me.wobblyyyy.pathfinder2.math.LinearSpline;
 import me.wobblyyyy.pathfinder2.math.MonotoneCubicSpline;
 import me.wobblyyyy.pathfinder2.math.Spline;
 import me.wobblyyyy.pathfinder2.math.ApacheSpline.Interpolator;
@@ -238,11 +241,16 @@ public class AdvancedSplineTrajectoryBuilder {
         double[] x = new double[size];
         double[] y = new double[size];
         double[] speed = new double[size];
+        boolean sameSpeedValue = true;
 
         for (int i = 0; i < xBoxed.length; i++) {
             x[i] = xBoxed[i];
             y[i] = yBoxed[i];
             speed[i] = speedBoxed[i];
+
+            if (i != 0)
+                if (speed[i] != speed[i - 1]) 
+                    sameSpeedValue = false;
         }
 
         // add support for different types of spline interpolation!
@@ -272,7 +280,12 @@ public class AdvancedSplineTrajectoryBuilder {
         }
 
         AngleSpline angleSpline = new AngleSpline(x, z);
-        Spline speedSpline = new MonotoneCubicSpline(x, speed);
+
+        Spline speedSpline;
+        if (sameSpeedValue)
+            speedSpline = new LinearSpline(new SlopeIntercept(0, speed[0]));
+        else
+            speedSpline = new MonotoneCubicSpline(x, speed);
 
         return new AdvancedSplineTrajectory(
                 spline,
