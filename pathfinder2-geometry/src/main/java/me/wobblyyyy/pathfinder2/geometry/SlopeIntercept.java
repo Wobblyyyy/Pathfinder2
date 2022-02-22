@@ -135,7 +135,8 @@ public class SlopeIntercept implements LinearEquation {
             // X axis intercept - if they don't, the lines don't intersect,
             // and we should return null
 
-            if (Equals.soft(getVertical(), equation.getVertical(), 0.01)) {
+            if (Equals.soft(getVertical(), equation.getVertical(), 
+                        Geometry.toleranceIsVertical)) {
                 return new PointXY(getVertical(), 0);
             }
 

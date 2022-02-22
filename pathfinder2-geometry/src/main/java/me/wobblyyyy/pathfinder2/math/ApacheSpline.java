@@ -10,8 +10,14 @@
 
 package me.wobblyyyy.pathfinder2.math;
 
+import me.wobblyyyy.pathfinder2.exceptions.SplineException;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
+import me.wobblyyyy.pathfinder2.utils.ArrayUtils;
+
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
+
+import java.util.Arrays;
+
 import org.apache.commons.math3.analysis.interpolation.AkimaSplineInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 
@@ -26,6 +32,7 @@ import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
  * @since 1.0.0
  */
 public class ApacheSpline implements Spline {
+    private final boolean isInverted;
     private final Interpolator interpolator;
     private final PolynomialSplineFunction function;
 
@@ -56,7 +63,23 @@ public class ApacheSpline implements Spline {
     public ApacheSpline(Interpolator interpolator,
                         double[] x,
                         double[] y) {
+        if (!Spline.areMonotonic(x))
+            throw new SplineException("cannot create a spline with " +
+                    "non-monotonic x values! the invalid values were: " + 
+                    Arrays.toString(x));
+
+        this.isInverted = Spline.areDecreasing(x);
         this.interpolator = interpolator;
+
+        startPoint = new PointXY(x[0], y[0]);
+        endPoint = new PointXY(x[x.length - 1], y[y.length - 1]);
+
+        if (isInverted) {
+            double startX = x[0];
+
+            for (int i = 1; i < x.length; i++)
+                x[i] = startX - (x[i] - startX);
+        }
 
         switch (interpolator) {
             case CUBIC:
@@ -71,13 +94,15 @@ public class ApacheSpline implements Spline {
 
         minX = Min.of(x);
         maxX = Max.of(x);
-
-        startPoint = new PointXY(x[0], y[0]);
-        endPoint = new PointXY(x[x.length - 1], y[y.length - 1]);
     }
 
     @Override
     public double interpolateY(double x) {
+        if (isInverted) {
+            double startX = startPoint.x();
+            x = startX - (x - startX);
+        }
+
         if (x < minX) x = minX;
         else if (x > maxX) x = maxX;
         return function.value(x);
@@ -91,6 +116,10 @@ public class ApacheSpline implements Spline {
     @Override
     public PointXY getEndPoint() {
         return endPoint;
+    }
+
+    public Interpolator interpolator() {
+        return interpolator;
     }
 
     public enum Interpolator {

@@ -14,7 +14,6 @@ import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
-import me.wobblyyyy.pathfinder2.geometry.LinearEquation;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.SlopeIntercept;
 import me.wobblyyyy.pathfinder2.math.ApacheSpline;
@@ -22,10 +21,13 @@ import me.wobblyyyy.pathfinder2.math.LinearSpline;
 import me.wobblyyyy.pathfinder2.math.MonotoneCubicSpline;
 import me.wobblyyyy.pathfinder2.math.Spline;
 import me.wobblyyyy.pathfinder2.math.ApacheSpline.Interpolator;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 /**
  * A builder for the {@link AdvancedSplineTrajectory} class. Please read over
@@ -37,6 +39,7 @@ import java.util.function.BiFunction;
  */
 public class AdvancedSplineTrajectoryBuilder {
     public static InterpolationMode DEFAULT_INTERPOLATION_MODE = InterpolationMode.DEFAULT;
+    public static Consumer<String> DEFAULT_LOGGER = (msg) -> {};
 
     private final List<Double> xValues = new ArrayList<>();
     private final List<Double> yValues = new ArrayList<>();
@@ -183,6 +186,18 @@ public class AdvancedSplineTrajectoryBuilder {
 
     public AdvancedSplineTrajectoryBuilder add(PointXYZ target,
                                                double speed) {
+        DEFAULT_LOGGER.accept(StringUtils.format(
+                "--- ADDING TARGET ---\n" +
+                    "target x: %s\n" +
+                    "target y: %s\n" +
+                    "target z: %s\n" +
+                    "speed: %s",
+                target.x(),
+                target.y(),
+                target.z(),
+                speed
+        ));
+
         this.speed = speed;
 
         xValues.add(target.x());
@@ -198,6 +213,19 @@ public class AdvancedSplineTrajectoryBuilder {
         boolean invalidSpeed = speed == Double.MAX_VALUE;
         boolean invalidTolerance = tolerance == Double.MAX_VALUE;
         boolean invalidAngleTolerance = angleTolerance == null;
+
+        DEFAULT_LOGGER.accept("--- BUILDING SPLINE ---");
+
+        DEFAULT_LOGGER.accept(StringUtils.format(
+                "invalid step: %s\n" +
+                    "invalid speed: %s\n" +
+                    "invalid tolerance: %s\n" +
+                    "invalid angle tolerance: %s",
+                invalidStep,
+                invalidSpeed,
+                invalidTolerance,
+                invalidAngleTolerance
+        ));
 
         if (invalidStep &&
                 invalidSpeed &&
@@ -249,34 +277,52 @@ public class AdvancedSplineTrajectoryBuilder {
             speed[i] = speedBoxed[i];
 
             if (i != 0)
-                if (speed[i] != speed[i - 1]) 
+                if (speed[i] != speed[i - 1])
                     sameSpeedValue = false;
         }
+
+        DEFAULT_LOGGER.accept(StringUtils.format(
+                "boxed x: %s\n" +
+                    "boxed y: %s\n" +
+                    "boxed z: %s\n" +
+                    "boxed speed: %s\n" +
+                    "unboxed x: %s\n" +
+                    "unboxed y: %s\n" +
+                    "unboxed speed: %s",
+                Arrays.toString(xBoxed),
+                Arrays.toString(yBoxed),
+                Arrays.toString(z),
+                Arrays.toString(speedBoxed),
+                Arrays.toString(x),
+                Arrays.toString(y),
+                Arrays.toString(speed)
+        ));
 
         // add support for different types of spline interpolation!
         // this is a really bad way to implement support for multiple
         // types of spline interpolation, but... oh well.
         Spline spline;
-        if (interpolationMode == InterpolationMode.DEFAULT) {
-            spline = new MonotoneCubicSpline(x, y);
-        } else {
-            if (interpolationMode == InterpolationMode.CUBIC) {
+        switch (interpolationMode) {
+            case DEFAULT:
+                spline = new MonotoneCubicSpline(x, y);
+            case CUBIC:
                 spline = new ApacheSpline(Interpolator.CUBIC, x, y);
-            } else if (interpolationMode == InterpolationMode.AKIMA) {
+                break;
+            case AKIMA:
                 spline = new ApacheSpline(Interpolator.AKIMA, x, y);
-            } else if (interpolationMode == InterpolationMode.CUSTOM) {
-                if (customSplineGenerator != null) {
+                break;
+            case CUSTOM:
+                if (customSplineGenerator != null)
                     spline = customSplineGenerator.apply(xBoxed, yBoxed);
-                } else {
+                else
                     throw new NullPointerException("Tried to use custom " +
                             "spline generator without having set it first: " +
                             "use setCustomSplineGenerator() to do so. The " +
                             "function you pass in should accept two arrays " +
                             "of Double values (x and y).");
-                }
-            } else {
+                break;
+            default:
                 throw new RuntimeException("How did you even get here?");
-            }
         }
 
         AngleSpline angleSpline = new AngleSpline(x, z);

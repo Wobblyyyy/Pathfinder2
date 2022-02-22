@@ -223,7 +223,8 @@ public class Rectangle implements Shape<Rectangle> {
     public boolean isPointInShape(PointXY reference) {
         PointXY.checkArgument(reference);
 
-        if (PointXY.isNear(reference, 0.01, a, b, c, d))
+        if (PointXY.isNear(reference, 
+                    Geometry.toleranceRectangleReference, a, b, c, d))
             return true;
 
         if (
@@ -237,7 +238,8 @@ public class Rectangle implements Shape<Rectangle> {
 
         PointXY target = center;
 
-        if (PointXY.isNear(reference, center, 0.01))
+        if (PointXY.isNear(reference, center,
+                    Geometry.toleranceRectangleReference))
             target = ab.midpoint();
 
         Line line = new Line(
@@ -258,8 +260,10 @@ public class Rectangle implements Shape<Rectangle> {
         double x = reference.x();
         double y = reference.y();
 
-        boolean sameTargetX = Equals.soft(target.x(), x, 0.01);
-        boolean sameTargetY = Equals.soft(target.y(), y, 0.01);
+        boolean sameTargetX = Equals.soft(target.x(), x, 
+                Geometry.toleranceRectangle);
+        boolean sameTargetY = Equals.soft(target.y(), y, 
+                Geometry.toleranceRectangle);
 
         if (sameTargetX) target.withX(x + 0.69);
         if (sameTargetY) target.withY(y + 0.69);
@@ -276,10 +280,10 @@ public class Rectangle implements Shape<Rectangle> {
                         y > maxY
         ) return false;
 
-        boolean sameMinX = Equals.soft(minX, x, 0.01);
-        boolean sameMinY = Equals.soft(minY, x, 0.01);
-        boolean sameMaxX = Equals.soft(maxX, x, 0.01);
-        boolean sameMaxY = Equals.soft(maxY, x, 0.01);
+        boolean sameMinX = Equals.soft(minX, x, Geometry.toleranceRectangle);
+        boolean sameMinY = Equals.soft(minY, x, Geometry.toleranceRectangle);
+        boolean sameMaxX = Equals.soft(maxX, x, Geometry.toleranceRectangle);
+        boolean sameMaxY = Equals.soft(maxY, x, Geometry.toleranceRectangle);
 
         if (sameMinX || sameMaxX) return minY <= y && y <= maxY;
         if (sameMinY || sameMaxY) return minX <= x && x <= maxX;

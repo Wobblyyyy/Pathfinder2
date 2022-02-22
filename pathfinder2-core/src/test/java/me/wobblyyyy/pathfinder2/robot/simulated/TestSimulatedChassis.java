@@ -79,13 +79,11 @@ public class TestSimulatedChassis {
 
     @BeforeAll
     public void beforeAll() {
-        Translation.DEFAULT_EQUALITY_TOLERANCE = 0.1;
         StatTracker.SECOND_MS_DURATION = 1_000_000;
     }
 
     @AfterAll
     public void afterAll() {
-        Translation.DEFAULT_EQUALITY_TOLERANCE = 0.01;
         StatTracker.SECOND_MS_DURATION = 1_000;
     }
 
@@ -311,7 +309,8 @@ public class TestSimulatedChassis {
     @Test
     public void testBackwardsArcSpline() {
         Trajectory trajectory = factory.builder()
-                .setStep(-0.1)
+                .setInterpolationMode(InterpolationMode.CUBIC)
+                .setStep(0.1)
                 .add(new PointXYZ(10, 10, 0))
                 .add(new PointXYZ(10, 0, 0).inDirection(10, Angle.fixedDeg(135)))
                 .add(new PointXYZ(0, 0, 0))

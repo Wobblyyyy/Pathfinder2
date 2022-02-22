@@ -102,4 +102,14 @@ public class TestSlopeIntercept {
 
         Assertions.assertNull(a.getIntersection(b));
     }
+
+    @Test
+    public void testHorizontalIntersections() {
+        SlopeIntercept a = new SlopeIntercept(0, 0);
+        SlopeIntercept b = new SlopeIntercept(0, 10);
+        SlopeIntercept c = new SlopeIntercept(1, 2);
+
+        Assertions.assertEquals(new PointXY(-2, 0), a.getIntersection(c));
+        Assertions.assertEquals(new PointXY(8, 10), b.getIntersection(c));
+    }
 }

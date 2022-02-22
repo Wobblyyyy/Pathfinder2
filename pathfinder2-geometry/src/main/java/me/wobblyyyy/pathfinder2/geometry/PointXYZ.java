@@ -655,7 +655,7 @@ public class PointXYZ extends PointXY {
     @Override
     public String toString() {
         return StringUtils.format(
-                "(%s, %s, %s deg)",
+                Geometry.formatPointXYZ,
                 Rounding.fastRound(x()),
                 Rounding.fastRound(y()),
                 Rounding.fastRound(z.deg())
@@ -667,8 +667,8 @@ public class PointXYZ extends PointXY {
         if (obj instanceof PointXYZ) {
             PointXYZ p = (PointXYZ) obj;
 
-            boolean sameX = Equals.soft(p.x(), this.x(), 0.01);
-            boolean sameY = Equals.soft(p.y(), this.y(), 0.01);
+            boolean sameX = Equals.soft(p.x(), this.x(), Geometry.tolerancePointXYZ);
+            boolean sameY = Equals.soft(p.y(), this.y(), Geometry.tolerancePointXYZ);
             boolean sameZ = Angle.equals(p.z, this.z);
 
             return sameX && sameY && sameZ;

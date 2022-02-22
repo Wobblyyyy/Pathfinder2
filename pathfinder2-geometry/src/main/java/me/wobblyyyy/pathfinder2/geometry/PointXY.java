@@ -311,7 +311,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * Code example:
      * <code><pre>
      * double distance = PointXY.distance(
-     *     new PointXY(0, 0), 
+     *     new PointXY(0, 0),
      *     new PointXY(1, 1)
      * ); // distance is equal to sqrt2/2 (about 1.41)
      * </pre></code>
@@ -344,7 +344,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * Code example:
      * <code><pre>
      * double distance = PointXY.distanceX(
-     *     new PointXY(0, 0), 
+     *     new PointXY(0, 0),
      *     new PointXY(1, 1)
      * ); // distance is equal to 1
      * </pre></code>
@@ -369,7 +369,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * Code example:
      * <code><pre>
      * double distance = PointXY.distanceY(
-     *     new PointXY(0, 0), 
+     *     new PointXY(0, 0),
      *     new PointXY(1, 1)
      * ); // distance is equal to 1
      * </pre></code>
@@ -455,8 +455,10 @@ public class PointXY implements Comparable<PointXY>, Serializable {
 
         for (PointXY p : points) {
             for (PointXY x : ps) {
-                boolean sameX = Equals.soft(x.x(), p.x(), 0.01);
-                boolean sameY = Equals.soft(x.y(), p.y(), 0.01);
+                boolean sameX = Equals.soft(x.x(), p.x(),
+                        Geometry.tolerancePointXY);
+                boolean sameY = Equals.soft(x.y(), p.y(),
+                        Geometry.tolerancePointXY);
 
                 if (sameX && sameY) return true;
             }
@@ -523,7 +525,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
                 "Invalid tolerance!", tolerance);
 
         for (PointXY point : points)
-            if (isNear(a, point, tolerance)) 
+            if (isNear(a, point, tolerance))
                 return true;
 
         return false;
@@ -562,15 +564,19 @@ public class PointXY implements Comparable<PointXY>, Serializable {
         checkArgument(b);
         checkArgument(c);
 
-        double dx1 = (b.x() + 0.01) - (a.x() + 0.01);
-        double dy1 = (b.y() + 0.01) - (a.y() + 0.01);
-        double dx2 = (c.x() + 0.01) - (a.x() + 0.01);
-        double dy2 = (c.y() + 0.01) - (a.y() + 0.01);
+        double dx1 = (b.x() + Geometry.toleranceCollinear)
+            - (a.x() + Geometry.toleranceCollinear);
+        double dy1 = (b.y() + Geometry.toleranceCollinear)
+            - (a.y() + Geometry.toleranceCollinear);
+        double dx2 = (c.x() + Geometry.toleranceCollinear)
+            - (a.x() + Geometry.toleranceCollinear);
+        double dy2 = (c.y() + Geometry.toleranceCollinear)
+            - (a.y() + Geometry.toleranceCollinear);
 
         return Equals.soft(
                 (dx1 * dy2),
                 (dx2 * dy1),
-                0.01
+                Geometry.toleranceCollinear
         );
     }
 
@@ -1471,8 +1477,10 @@ public class PointXY implements Comparable<PointXY>, Serializable {
         if (obj instanceof PointXY) {
             PointXY point = (PointXY) obj;
 
-            boolean sameX = Equals.soft(x, point.x(), 0.01);
-            boolean sameY = Equals.soft(y, point.y(), 0.01);
+            boolean sameX = Equals.soft(x, point.x(),
+                    Geometry.tolerancePointXY);
+            boolean sameY = Equals.soft(y, point.y(),
+                    Geometry.tolerancePointXY);
 
             return sameX && sameY;
         }
@@ -1494,7 +1502,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     @Override
     public String toString() {
         return StringUtils.format(
-                "(%s, %s)",
+                Geometry.formatPointXY,
                 Rounding.fastRound(x),
                 Rounding.fastRound(y)
         );

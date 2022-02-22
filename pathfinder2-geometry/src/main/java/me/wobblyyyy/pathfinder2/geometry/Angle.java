@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.geometry;
 
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.math.Equals;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 import java.io.Serializable;
 
@@ -486,7 +487,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public static boolean equals(Angle a,
                                  Angle b) {
-        return a.rad() == b.rad() || a.deg() == b.deg();
+        return Equals.soft(a.rad(), b.rad(), Geometry.toleranceAngle.rad());
     }
 
     /**
@@ -1231,7 +1232,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     @Override
     public String toString() {
-        return deg() + " " + FORMAT_DEG_SHORT;
+        return StringUtils.format(Geometry.formatAngle, deg);
     }
 
     @Override
@@ -1244,8 +1245,10 @@ public class Angle implements Comparable<Angle>, Serializable {
         if (obj instanceof Angle) {
             Angle a = (Angle) obj;
 
-            boolean sameDeg = Equals.soft(a.deg, this.deg, 0.01);
-            boolean sameRad = Equals.soft(a.rad, this.rad, 0.01);
+            boolean sameDeg = Equals.soft(a.deg, this.deg,
+                    Geometry.toleranceAngle.rad);
+            boolean sameRad = Equals.soft(a.rad, this.rad,
+                    Geometry.toleranceAngle.deg);
 
             return sameDeg || sameRad;
         }

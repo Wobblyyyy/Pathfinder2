@@ -60,7 +60,7 @@ public class Line implements Serializable {
         this.start = start;
         this.end = end;
 
-        if (Equals.soft(minX, maxX, 0.01)) {
+        if (Equals.soft(minX, maxX, Geometry.toleranceIsVertical)) {
             // line is vertical
 
             equation = SlopeIntercept.newVertical(minX);
@@ -116,7 +116,7 @@ public class Line implements Serializable {
         double aSlope = a.slope();
         double bSlope = b.slope();
 
-        return Equals.soft(aSlope, bSlope, 0.01);
+        return Equals.soft(aSlope, bSlope, Geometry.toleranceParallel);
     }
 
     /**
@@ -387,7 +387,7 @@ public class Line implements Serializable {
         double slope1 = slope();
         double slope2 = line.perpendicularSlope();
 
-        return Equals.soft(slope1, slope2, 0.01);
+        return Equals.soft(slope1, slope2, Geometry.tolerancePerpendicular);
     }
 
     /**
