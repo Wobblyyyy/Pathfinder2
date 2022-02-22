@@ -12,7 +12,6 @@ package me.wobblyyyy.pathfinder2.math;
 
 import me.wobblyyyy.pathfinder2.exceptions.SplineException;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
-import me.wobblyyyy.pathfinder2.utils.ArrayUtils;
 
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
 

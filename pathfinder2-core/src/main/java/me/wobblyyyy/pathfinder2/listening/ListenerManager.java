@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.listening;
 
+import me.wobblyyyy.pathfinder2.Core;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.utils.RandomString;
 import me.wobblyyyy.pathfinder2.utils.Toggle;
@@ -82,7 +83,8 @@ public class ListenerManager implements Tickable {
      */
     public ListenerManager addListener(Listener listener) {
         return addListener(
-                RandomString.randomString(10),
+                RandomString.randomString(
+                    Core.listenerManagerRandomStringLength),
                 listener
         );
     }

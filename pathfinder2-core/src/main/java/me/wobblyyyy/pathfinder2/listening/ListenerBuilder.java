@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.listening;
 
+import me.wobblyyyy.pathfinder2.Core;
 import me.wobblyyyy.pathfinder2.time.Time;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class ListenerBuilder {
     private Runnable whenTriggered;
     private List<Supplier<Boolean>> inputs = new ArrayList<>();
     private int priority;
-    private double expiration = Double.MAX_VALUE;
+    private double expiration = Core.listenerBuilderDefaultExpiration;
     private int maximumExecutions;
     private double cooldownMs;
 

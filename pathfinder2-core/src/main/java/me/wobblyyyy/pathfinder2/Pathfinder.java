@@ -196,39 +196,23 @@ public class Pathfinder {
 
     /**
      * The speed Pathfinder will use in creating linear trajectories.
-     *
-     * <p>
-     * This value defaults to -1.0 if it's not set by the user.
-     * </p>
      */
-    private double speed = -1.0;
+    private double speed = Core.pathfinderDefaultSpeed;
 
     /**
      * The tolerance Pathfinder will use in creating linear trajectories.
-     *
-     * <p>
-     * This value defaults to -1.0 if it's not set by the user.
-     * </p>
      */
-    private double tolerance = -1.0;
+    private double tolerance = Core.pathfinderDefaultTolerance;
 
     /**
      * The angle tolerance Pathfinder will use in creating linear trajectories.
-     *
-     * <p>
-     * This value defaults to null if it's not set by the user.
-     * </p>
      */
-    private Angle angleTolerance = null;
+    private Angle angleTolerance = Core.pathfinderDefaultAngleTolerance;
 
     /**
      * The default tick until timeout.
-     *
-     * <p>
-     * This value defaults to {@link Double#MAX_VALUE} if it's not set by the user.
-     * </p>
      */
-    private double defaultTimeout = Double.MAX_VALUE;
+    private double defaultTimeout = Core.pathfinderDefaultTimeout;
 
     /**
      * The default tick until should run supplier.
@@ -276,7 +260,7 @@ public class Pathfinder {
     /**
      * Is Pathfinder operating in minimal mode?
      */
-    private boolean isMinimal = false;
+    private boolean isMinimal = Core.pathfinderDefaultIsMinimal;
 
     /**
      * Create a new {@code Pathfinder} instance. This constructor will
@@ -374,7 +358,7 @@ public class Pathfinder {
         this.executorManager = new ExecutorManager(robot);
         this.zoneProcessor = new ZoneProcessor();
         this.scheduler = new Scheduler(this);
-        this.recorder = new MovementRecorder(this, 25);
+        this.recorder = new MovementRecorder(this, Core.movementRecorderMinDelayMs);
         this.playback = new MovementPlayback(this);
         this.pluginManager = new PathfinderPluginManager();
         this.profiler = new MovementProfiler();
@@ -610,7 +594,13 @@ public class Pathfinder {
             return gfg.getTurnController();
         }
 
-        return null;
+        throw new IllegalStateException("Could not automatically extract " +
+                "a turn controller from FollowerGenerator " + generator +
+                ". Automatic turn controller extraction relies on using " +
+                "GenericFollowerGenerator as a base class - if you " +
+                "are NOT using that, you'll need to use the constructor " +
+                "that allows you to specify a follower generator and " +
+                "a turn controller.");
     }
 
     /**
@@ -856,7 +846,7 @@ public class Pathfinder {
      */
     public Pathfinder addListener(Listener listener) {
         return addListener(
-                RandomString.randomString(10),
+                RandomString.randomString(Core.pathfinderRandomStringLength),
                 listener
         );
     }
@@ -1333,7 +1323,8 @@ public class Pathfinder {
      * @return {@code this}, used for method chaining.
      */
     public Pathfinder onTick(Consumer<Pathfinder> onTick) {
-        return onTick(RandomString.randomString(10), onTick);
+        return onTick(RandomString.randomString(
+                    Core.pathfinderRandomStringLength), onTick);
     }
 
     /**
@@ -2344,7 +2335,7 @@ public class Pathfinder {
 
         try {
             while (!condition.get() && timer.isElapsedLessThan(maxTimeMs))
-                Thread.sleep(10);
+                Thread.sleep(Core.pathfinderWaitSleepTimeMs);
         } catch (InterruptedException ignored) {
         }
 
@@ -2412,7 +2403,7 @@ public class Pathfinder {
 
         try {
             while (condition.get() && timer.isElapsedLessThan(maxTime))
-                Thread.sleep(10);
+                Thread.sleep(Core.pathfinderWaitSleepTimeMs);
         } catch (InterruptedException ignored) {
         }
 
@@ -2459,6 +2450,21 @@ public class Pathfinder {
      */
     public Pathfinder followTrajectories(Trajectory... trajectories) {
         return followTrajectories(Arrays.asList(trajectories));
+    }
+
+    /**
+     * Follow several trajectories after shifting them to the robot's
+     * current position. This essentially converts an absolute trajectory
+     * into a relative one.
+     *
+     * @param trajectory the trajectory to shift and follow.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder followRelativeTrajectories(Trajectory... trajectories) {
+        for (Trajectory t : trajectories)
+            followTrajectory(t);
+
+        return this;
     }
 
     /**
@@ -2708,7 +2714,8 @@ public class Pathfinder {
 
         double totalDistanceX = points[points.length - 1].distanceX(points[0]);
 
-        double step = totalDistanceX / (points.length * 10);
+        double step = totalDistanceX /
+            (points.length * Core.pathfinderSplineStepCoefficient);
 
         MultiSplineBuilder builder = new MultiSplineBuilder()
             .setDefaultSpeed(speed)
@@ -2777,7 +2784,7 @@ public class Pathfinder {
                 points[0],
                 points[points.length - 1]
         );
-        double step = length / 20;
+        double step = length / Core.pathfinderStepDivisor;
 
         AdvancedSplineTrajectoryBuilder builder =
                 new AdvancedSplineTrajectoryBuilder()
@@ -2872,7 +2879,7 @@ public class Pathfinder {
 
         try {
             while (timer.isElapsedLessThan(timeoutMs))
-                Thread.sleep(10);
+                Thread.sleep(Core.pathfinderWaitSleepTimeMs);
         } catch (Exception ignored) {
         }
 
@@ -2978,7 +2985,7 @@ public class Pathfinder {
 
         return translation != null
                 ? translation
-                : Translation.ZERO;
+                : Core.pathfinderDefaultTranslation;
     }
 
     /**

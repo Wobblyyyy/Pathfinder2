@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.trajectory;
 
+import me.wobblyyyy.pathfinder2.Core;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
@@ -207,7 +208,8 @@ public class LinearTrajectory implements Trajectory {
     public double speed(PointXYZ current) {
         // if the robot has already reached the target X and Y positions,
         // return 0, so that the robot will not move.
-        if (isDoneXY(current)) return 0;
+        if (isDoneXY(current)) 
+            return Core.linearTrajectoryIsDoneSpeedMultiplier * speed;
 
         return speed;
     }
@@ -234,11 +236,15 @@ public class LinearTrajectory implements Trajectory {
             LinearTrajectory t = (LinearTrajectory) obj;
 
             boolean sameTarget = t.target.equals(this.target);
-            boolean sameSpeed = Equals.soft(t.speed, this.speed, 0.01);
-            boolean sameTolerance = Equals.soft(t.tolerance, this.tolerance, 0.01);
-            boolean sameAngleTolerance = t.angleTolerance.equals(this.angleTolerance);
+            boolean sameSpeed = Equals.soft(t.speed, 
+                    this.speed, Core.linearTrajectoryTolerance);
+            boolean sameTolerance = Equals.soft(t.tolerance, 
+                    this.tolerance, Core.linearTrajectoryTolerance);
+            boolean sameAngleTolerance = 
+                t.angleTolerance.equals(this.angleTolerance);
 
-            return sameTarget && sameSpeed && sameTolerance && sameAngleTolerance;
+            return sameTarget && sameSpeed && sameTolerance 
+                && sameAngleTolerance;
         }
 
         return false;
@@ -258,7 +264,7 @@ public class LinearTrajectory implements Trajectory {
     @Override
     public String toString() {
         return StringUtils.format(
-                "Linear trajectory to %s at %s speed (tolerance %s %s)",
+                Core.linearTrajectoryFormat,
                 target,
                 speed,
                 tolerance,

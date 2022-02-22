@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.trajectory.spline;
 
+import me.wobblyyyy.pathfinder2.Core;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
@@ -221,13 +222,16 @@ public class AdvancedSplineTrajectory implements Trajectory {
     public boolean equals(Object obj) {
         if (obj instanceof AdvancedSplineTrajectory) {
             AdvancedSplineTrajectory t = (AdvancedSplineTrajectory) obj;
-            
+
             boolean sameSpline = spline.equals(t.spline);
             boolean sameAngleSpline = angleSpline.equals(t.angleSpline);
             boolean sameSpeedSpline = speedSpline.equals(t.speedSpline);
-            boolean sameStep = Equals.soft(step, t.step, 0.01);
-            boolean sameTolerance = Equals.soft(tolerance, t.tolerance, 0.01);
-            boolean sameAngleTolerance = angleTolerance.equals(t.angleTolerance);
+            boolean sameStep = Equals.soft(step, t.step,
+                    Core.advancedSplineTrajectoryTolerance);
+            boolean sameTolerance = Equals.soft(tolerance, t.tolerance,
+                    Core.advancedSplineTrajectoryTolerance);
+            boolean sameAngleTolerance = 
+            angleTolerance.equals(t.angleTolerance);
 
             return sameSpline
                     && sameAngleSpline

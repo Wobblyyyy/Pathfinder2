@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.trajectory;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
 import me.wobblyyyy.pathfinder2.trajectory.multi.segment.MultiSegmentTrajectory;
 
@@ -22,16 +23,16 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * A path-like thing that your robot can follow. Look, I know all this
- * documentation is supposed to be official and what not, but I can't really
- * define it any better than that.
- *
- * <p>
- * A trajectory works pretty simply, actually. There's a method called
- * {@link #nextMarker(PointXYZ)} that gets the next marker point the robot
- * should attempt to drive to based on the current point. And... that's about
- * it. Yeah. There's really not much more to it.
- * </p>
+ * A {@code Trajectory} specifies to a {@code FollowerExecutor} a set of
+ * information: the trajectory's next "marker position," the trajectory's
+ * current speed, and whether the trajectory has reached its target position.
+ * Trajectories are movement-oriented and can their completion should
+ * correspond with the robot's state. A marker position is a point that
+ * Pathfinder will use in determining where to go next. Simple trajectories
+ * (such as {@link LinearTrajectory}) don't have very complicated uses of
+ * {@link #speed(PointXYZ)} or {@link #nextMarker(PointXYZ)}, but more
+ * advanced types of trajectories, such as trajectories based on splines,
+ * can use these methods to specify a curve for the robot to follow.
  *
  * <p>
  * Each {@code Trajectory} is executed via a {@link me.wobblyyyy.pathfinder2.follower.Follower}.
@@ -61,13 +62,25 @@ import java.util.function.Function;
  * {@code listening} package in order to use these listeners.
  * </p>
  *
+ * <p>
+ * There's a set of default methods that can be used to reproduce an existing
+ * {@code Trajectory}, but with some modifications. For example, take
+ * {@link #multiply(double)}, which multiplies all inputted and outputted
+ * values, essentially scaling the trajectory. There's also
+ * {@link #reflectX(double)} and {@link #reflectY(double)}, which allow you
+ * to create trajectories that are exact mirrors of eachother without
+ * having to recreate or recalculate any of the postions.
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.0.0
  */
 public interface Trajectory extends Serializable {
     /**
      * Get the next marker that the robot should attempt to navigate to. This
-     * should always be a point along the trajectory.
+     * should always be a point along the trajectory. This method may be
+     * stateful, meaning its invokation modifies the {@code Trajectory} it
+     * belongs to.
      *
      * <p>
      * A marker position should provide the robot with a "target." The robot
@@ -81,7 +94,9 @@ public interface Trajectory extends Serializable {
      * A {@code Trajectory} is, in essence, a long sequence of points the
      * robot should navigate to. These points are typically generated
      * dynamically. Simple trajectories, such as linear trajectories, only need
-     * a single marker point - the target point.
+     * a single marker point - the target point. More complex trajectories,
+     * such as {@code AdvancedSplineTrajectory} can utilize this method to
+     * curve the robot's motion by dynamically calculating target points.
      * </p>
      *
      * @param current the robot's current position. This position is used in
@@ -89,9 +104,13 @@ public interface Trajectory extends Serializable {
      *                may use the robot's current position to keep track of
      *                progress through a stateful trajectory, such as a
      *                trajectory that passes through the same point twice.
+     *                This point may not be null.
      * @return the next marker the robot should attempt to navigate to. The
      * robot should calculate, based on the current and marker positions,
-     * how to move in order to reach the target position.
+     * how to move in order to reach the target position. By determining
+     * the {@link Translation} needed to move the robot towards the
+     * returned {@code PointXY}, the robot should then be able to apply
+     * that translation, and thus move towards the marker point.
      */
     PointXYZ nextMarker(PointXYZ current);
 
@@ -100,7 +119,11 @@ public interface Trajectory extends Serializable {
      * return true if the robot has finished executing the trajectory and
      * can move on to the next trajectory or stop. If the robot hasn't finished
      * it's trajectory, meaning it should still continue executing it, this
-     * method should return false.
+     * method should return false. This method should typically not return
+     * false after returning true. If this method's invokation changes the
+     * state of the {@code Trajectory}, the results of this method may be
+     * inaccurate, as this method may be called from anywhere within
+     * Pathfinder.
      *
      * <p>
      * Each trajectory follower can only be marked as "completed" if this
@@ -137,12 +160,10 @@ public interface Trajectory extends Serializable {
      * </p>
      *
      * <p>
-     * If you'd like to control the speed of a trajectory, I'd suggest you
-     * make note of the following class:
-     * {@link me.wobblyyyy.pathfinder2.control.SplineController}
-     * There's absolutely no need to, and you can control the speed using
-     * other methods, but the {@code SplineController} gives you the most
-     * control over what speed your robot will have at what point.
+     * This method should not change the state of the {@code Trajectory}
+     * it belongs to. In most (if not all) cases, this should return the
+     * same output given the same input and should not be dependent on the
+     * state of the trajectory.
      * </p>
      *
      * @param current the robot's current position. This position is used in
@@ -354,6 +375,16 @@ public interface Trajectory extends Serializable {
         };
     }
 
+    /**
+     * Return a new {@code Trajectory} based on this {@code Trajectory}
+     * with modifier functions that modify the values inputted into the
+     * methods of the {@code Trajectory} interface.
+     *
+     * @param nextMarkerModifier the modifier for the next marker method.
+     * @param isDoneModifier     the modifier for the is done method.
+     * @param speedModifier      the modifier for the speed method.
+     * @return a new {@code Trajectory}.
+     */
     default Trajectory withModifiers(Function<PointXYZ, PointXYZ> nextMarkerModifier,
                                      Function<Boolean, Boolean> isDoneModifier,
                                      Function<Double, Double> speedModifier) {
@@ -716,6 +747,13 @@ public interface Trajectory extends Serializable {
         };
     }
 
+    /**
+     * Shift a trajectory to a robot's current position and orientation.
+     *
+     * @param origin the point the original trajectory is based upon.
+     * @param target the point the new trajectory is based upon.
+     * @return a shifted {@code Trajectory}.
+     */
     default Trajectory shiftToRobot(PointXYZ origin,
                                     PointXYZ target) {
         return shift(origin, target)
