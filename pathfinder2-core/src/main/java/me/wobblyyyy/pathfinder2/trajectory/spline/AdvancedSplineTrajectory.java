@@ -39,11 +39,14 @@ import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
  *
  * <p>
  * This is the suggested way to utilize spline trajectories, as it gives the
- * most flexibility without inhibiting usability.
+ * most flexibility without inhibiting usability. Furthermore, it's a good
+ * idea to use builder classes (see the "see" section of this doc).
  * </p>
  *
  * @author Colin Robertson
  * @since 0.6.1
+ * @see AdvancedSplineTrajectoryBuilder
+ * @see MultiSplineBuilder
  */
 public class AdvancedSplineTrajectory implements Trajectory {
     private final Spline spline;

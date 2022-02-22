@@ -62,6 +62,21 @@ public class ApacheSpline implements Spline {
     public ApacheSpline(Interpolator interpolator,
                         double[] x,
                         double[] y) {
+        if (x == null)
+            throw new SplineException("X value array was null!");
+        if (y == null)
+            throw new SplineException("Y value array was null!");
+
+        if (x.length != y.length)
+            throw new SplineException("Cannot create a spline with arrays " +
+                    "of unequal lengths! X length: " + x.length +
+                    "; Y length: " + y.length);
+
+        if (x.length < 3)
+            throw new SplineException("Cannot create a spline with less " +
+                    "than three control points! The control X values you " +
+                    "provided were: " + Arrays.toString(x));
+
         if (!Spline.areMonotonic(x))
             throw new SplineException("cannot create a spline with " +
                     "non-monotonic x values! the invalid values were: " + 

@@ -12,3 +12,6 @@ be browsed from GitHub.
 - [Custom trajectory implementation](./06_custom_trajectory.md)
 - [Modifying global values](./07_global_values.md)
 - [Modifying trajectories](./08_modifying_trajectories.md)
+- [Fast trajectories](./09_fast_trajectory.md)
+- [Example implementation](./10_example_implementation.md)
+- [Zones](./11_zones.md)

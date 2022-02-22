@@ -50,3 +50,17 @@ Of course, that's not all you can do by overriding these methods - you can
 do just about anything! How inspiring. Bet you weren't expecting that, huh?
 Reading code documentation and suddenly being given a motivational speech
 about how you can do anything you put your mind to?
+
+Now: how can we have these zones actually be processed? With the help of
+a `ZoneProcessor`, of course. Conveniently enough, every instance of
+`Pathfinder` comes with an instance of `ZoneProcessor`. You can add a zone
+to the zone processor like so:
+```java
+// method 1
+pathfinder.addZone("cool zone name", zone);
+
+// method 2
+pathfinder.getZoneProcessor().addZone("cool zone name", zone);
+```
+
+Everything should be good from here on out.

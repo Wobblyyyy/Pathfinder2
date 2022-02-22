@@ -54,20 +54,20 @@ public class Core {
     public static int pathfinderRandomStringLength = 10;
 
     /**
-     * The default wait sleep time value (in milliseconds) for new instances 
+     * The default wait sleep time value (in milliseconds) for new instances
      * of {@code Pathfinder}.
      */
     public static int pathfinderWaitSleepTimeMs = 10;
 
     /**
-     * The default coefficient for the 
+     * The default coefficient for the
      * {@link Pathfinder#splineTo(me.wobblyyyy.pathfinder2.geometry.PointXYZ...)}
      * method.
      */
     public static double pathfinderSplineStepCoefficient = 10;
 
     /**
-     * The default coefficient for the 
+     * The default coefficient for the
      * {@link Pathfinder#splineTo(me.wobblyyyy.pathfinder2.geometry.PointXYZ...)}
      * method.
      */
@@ -93,7 +93,7 @@ public class Core {
     /**
      * The default format for a trajectory.
      */
-    public static String linearTrajectoryFormat = 
+    public static String linearTrajectoryFormat =
         "Linear trajectory to %s at %s speed (tolerance %s %s)";
 
     /**
@@ -103,6 +103,8 @@ public class Core {
     public static double linearTrajectoryIsDoneSpeedMultiplier = 0;
 
     public static double advancedSplineTrajectoryTolerance = 0.01;
+
+    public static double advancedSplineTrajectoryDuplicateOffset = 0.01;
 
     public static double listenerBuilderDefaultExpiration = Double.MAX_VALUE;
 

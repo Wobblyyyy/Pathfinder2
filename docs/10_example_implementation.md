@@ -179,3 +179,89 @@ public class Autonomous {
 ```
 
 ## Enabling driver control
+Now it's time to make our lovely robot driveable! Here's our base class:
+```java
+public class TeleOp {
+    BlockGripper blockGripper;
+    Elevator elevator;
+    Arm arm;
+    Pathfinder pathfinder;
+
+    public TeleOp(BlockGripper blockGripper,
+                  Elevator elevator,
+                  Arm arm,
+                  Pathfinder pathfinder) {
+        this.blockGripper = blockGripper;
+        this.elevator = elevator;
+        this.arm = arm;
+        this.pathfinder = pathfinder;
+    }
+
+    public void loop() {
+
+    }
+}
+```
+
+The `loop()` method is called over and over again while the drive control
+period is active.
+
+### Just driving the robot (without hooking into `tick()`)
+There's two ways this could be implemented:
+```java
+public class TeleOp {
+    private final Pathfinder pathfinder;
+    private final Joystick right;
+    private final Joystick left;
+
+    private final Pathfinder pathfinder;
+
+    public TeleOp(Pathfinder pathfinder,
+                  Joystick right,
+                  Joystick left) {
+        this.pathfinder = pathfinder;
+        this.right = right;
+        this.left = left;
+    }
+
+    public void loop() {
+        double vx = left.getX();
+        double vy = -left.getY();
+        double vz = right.getX();
+
+        Translation translation = new Translation(vx, vy, vz);
+        pathfinder.setTranslation(translation);
+    }
+}
+```
+
+### Just driving the robot (using tick)
+Here's the more idiomatic of the two. I'd encourage you to take an approach
+like this because it helps with ensuring code is compartmentalized.
+```java
+public class TeleOp {
+    private final Pathfinder pathfinder;
+
+    public TeleOp(Pathfinder pathfinder,
+                  Joystick right,
+                  Joystick left) {
+        this.pathfinder = pathfinder;
+
+        pathfinder.onTick((pf) -> {
+            double vx = left.getX();
+            double vy = -left.getY();
+            double vz = right.getX();
+
+            Translation translation = new Translation(vx, vy, vz);
+            pathfinder.setTranslation(translation);
+        });
+    }
+
+    public void loop() {
+        pathfinder.tick();
+    }
+}
+```
+
+If you're interested in this paradigm, check out the documentation on
+[listeners](./05_listeners.md).

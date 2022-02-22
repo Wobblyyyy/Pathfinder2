@@ -2681,6 +2681,8 @@ public class Pathfinder {
      * @return {@code this}, used for method chaining.
      */
     public Pathfinder splineTo(PointXYZ... points) {
+        checkForMissingDefaultValues();
+
         return splineTo(
                 speed,
                 tolerance,
@@ -2780,7 +2782,6 @@ public class Pathfinder {
         if (points.length < 2) throw new IllegalArgumentException(
                 "At least two control points are required to use the " +
                         "splineTo method.");
-        checkForMissingDefaultValues();
 
         InvalidSpeedException.throwIfInvalid(
                 "Invalid speed value provided! Speed must be between 0 and 1.", 
@@ -2793,14 +2794,21 @@ public class Pathfinder {
             throw new InvalidToleranceException("Invalid angle tolerance! " +
                     "Angle tolerance must be greater than 0 degrees.");
 
+        NotNull.throwExceptionIfNull
+            ("One or more points provided to splineTo was null!", (Object[]) points);
+
         // non-monotonic Y values means we need to use a multi spline instead
         if (!Spline.areMonotonicY(points))
             return multiSplineTo(speed, tolerance, angleTolerance, points);
 
+        // length is the total distance of the spline (NOT all control points)
         double length = PointXY.distance(
                 points[0],
                 points[points.length - 1]
         );
+
+        // step should be relatively small - by default, it's 1/20th of
+        // the spline's length.
         double step = length / Core.pathfinderStepDivisor;
 
         AdvancedSplineTrajectoryBuilder builder =
@@ -2812,6 +2820,8 @@ public class Pathfinder {
 
         PointXYZ robotPosition = getPosition();
 
+        // if the first point is NOT the robot's current positon, add it
+        // to the trajectory
         if (!robotPosition.equals(points[0]))
             builder.add(robotPosition);
 
@@ -2827,10 +2837,11 @@ public class Pathfinder {
                 builder.add(point);
                 lastPoint = point;
             } else {
-                throw new IllegalArgumentException(
+                throw new SplineException(
                         "There were duplicate adjacent points in the set " +
                         "of control points! This means there's the same " +
-                        "point, twice in a row.");
+                        "point, twice in a row. The points were: " +
+                        Arrays.toString(points));
             }
         }
 

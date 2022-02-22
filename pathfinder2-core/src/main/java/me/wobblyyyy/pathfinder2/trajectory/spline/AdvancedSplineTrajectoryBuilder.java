@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.trajectory.spline;
 
+import me.wobblyyyy.pathfinder2.Core;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
@@ -271,14 +272,28 @@ public class AdvancedSplineTrajectoryBuilder {
         double[] speed = new double[size];
         boolean sameSpeedValue = true;
 
+        int xDuplicates = 0;
+        int yDuplicates = 0;
+
         for (int i = 0; i < xBoxed.length; i++) {
             x[i] = xBoxed[i];
             y[i] = yBoxed[i];
             speed[i] = speedBoxed[i];
 
-            if (i != 0)
+            if (i != 0) {
                 if (speed[i] != speed[i - 1])
                     sameSpeedValue = false;
+
+                // ensure adjacent X values are unique
+                if (x[i] == x[i - 1])
+                    x[i] += Core.advancedSplineTrajectoryDuplicateOffset
+                        * ((xDuplicates++) + 1);
+
+                // ensure adjacent Y values are unique
+                if (y[i] == y[i - 1])
+                    y[i] += Core.advancedSplineTrajectoryDuplicateOffset
+                        * ((yDuplicates++) + 1);
+            }
         }
 
         DEFAULT_LOGGER.accept(StringUtils.format(
