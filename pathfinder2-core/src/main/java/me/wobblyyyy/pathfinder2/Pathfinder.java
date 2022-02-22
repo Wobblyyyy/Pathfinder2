@@ -1586,6 +1586,23 @@ public class Pathfinder {
      * Tick Pathfinder while the provided supplier returns true and the
      * elapsed time is less than the timeout time.
      *
+     * @param shouldContinueRunning a supplier, indicating whether Pathfinder
+     *                              should still continue running.
+     * @param timeoutMs             how long, in milliseconds, Pathfinder will
+     *                              continue ticking (as a maximum). If the
+     *                              path finishes before this time is reached,
+     *                              it'll stop as normal.
+     * @return this instance of Pathfinder, used for method chaining.
+     */
+    public Pathfinder tickUntil(Supplier<Boolean> shouldContinueRunning,
+                                double timeoutMs) {
+        return tickUntil(timeoutMs, shouldContinueRunning, (a, b) -> {});
+    }
+
+    /**
+     * Tick Pathfinder while the provided supplier returns true and the
+     * elapsed time is less than the timeout time.
+     *
      * @param timeoutMs             how long, in milliseconds, Pathfinder will
      *                              continue ticking (as a maximum). If the
      *                              path finishes before this time is reached,

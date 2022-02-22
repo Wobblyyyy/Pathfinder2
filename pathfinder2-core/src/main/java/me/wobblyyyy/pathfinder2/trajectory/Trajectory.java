@@ -673,7 +673,7 @@ public interface Trajectory extends Serializable {
     default Trajectory multiply(double multiplier) {
         return multiply(multiplier, multiplier, multiplier);
     }
-    
+
     default Trajectory multiplyXY(double multiplier) {
         return multiply(multiplier, multiplier, 1);
     }

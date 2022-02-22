@@ -17,6 +17,7 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.math.Equals;
+import me.wobblyyyy.pathfinder2.math.MinMax;
 import me.wobblyyyy.pathfinder2.math.Spline;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 
@@ -97,6 +98,8 @@ public class AdvancedSplineTrajectory implements Trajectory {
      *                       is facing the correct direction. Like the
      *                       {@code tolerance} parameter, this only affects
      *                       the LAST of the points in the trajectory.
+     * @see AdvancedSplineTrajectoryBuilder
+     * @see MultiSplineBuilder
      */
     public AdvancedSplineTrajectory(Spline spline,
                                     AngleSpline angleSpline,
@@ -208,12 +211,17 @@ public class AdvancedSplineTrajectory implements Trajectory {
                     "was null, which it shouldn't be. I'd suggest you " +
                     "fix that, because that would be pretty cool.");
 
-        double speed = speedSpline.interpolateY(current.x());
+        double speed = speedSpline.interpolateY(MinMax.clip(
+                current.x(), 
+                Math.min(startPointX, endPointX),
+                Math.max(startPointX, endPointX)
+        ));
 
         if (speed < 0 || speed > 1)
             throw new InvalidSpeedException("AdvancedSplineTrajectory " +
                     "calculated an invalid speed value, make sure your " +
-                    "speed spline is correctly constructed");
+                    "speed spline is correctly constructed. Speed value: " +
+                    speed);
 
         return speed;
     }
@@ -230,7 +238,7 @@ public class AdvancedSplineTrajectory implements Trajectory {
                     Core.advancedSplineTrajectoryTolerance);
             boolean sameTolerance = Equals.soft(tolerance, t.tolerance,
                     Core.advancedSplineTrajectoryTolerance);
-            boolean sameAngleTolerance = 
+            boolean sameAngleTolerance =
             angleTolerance.equals(t.angleTolerance);
 
             return sameSpline

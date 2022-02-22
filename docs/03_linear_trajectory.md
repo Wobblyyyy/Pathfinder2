@@ -54,3 +54,7 @@ Pathfinder pathfinder = new Pathfinder(robot, controller)
 pathfinder.goTo(new PointXYZ(10, 10, Angle.fromDeg(45)));
 pathfinder.tickUntil();
 ```
+
+## Further reading
+- [Spline trajectories](04_advanced_spline_trajectory.md)
+- [Fast trajectories](09_fast_trajectories.md)
