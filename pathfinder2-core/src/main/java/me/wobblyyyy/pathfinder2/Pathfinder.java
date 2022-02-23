@@ -49,7 +49,9 @@ import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
 import me.wobblyyyy.pathfinder2.time.Stopwatch;
 import me.wobblyyyy.pathfinder2.time.Time;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
+import me.wobblyyyy.pathfinder2.trajectory.TaskTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
+import me.wobblyyyy.pathfinder2.trajectory.TaskTrajectoryBuilder;
 import me.wobblyyyy.pathfinder2.trajectory.spline.AdvancedSplineTrajectoryBuilder;
 import me.wobblyyyy.pathfinder2.trajectory.spline.MultiSplineBuilder;
 import me.wobblyyyy.pathfinder2.utils.NotNull;
@@ -2875,6 +2877,81 @@ public class Pathfinder {
         ));
 
         return this;
+    }
+
+    /**
+     * Create a new {@link TaskTrajectory} and add it to Pathfinder's
+     * queue so that it can be executed
+     *
+     * @param initial    code to be executed the first time the trajectory's
+     *                   {@link #isDone(PointXYZ)} method is called.
+     * @param during     code to be executed any time the trajectory's
+     *                   {@link #isDone(PointXYZ)} method is called.
+     * @param onFinish   code to be executed whenever the task is finished.
+     * @param isFinished a supplier that indicates if the task is finished.
+     *                   If the task is not finished, it should continue stop
+     *                   its execution.
+     * @param minTimeMs  the minimum time, in milliseconds, the trajectory
+     *                   will be active for.
+     * @param maxTimeMs  the maximum time, in milliseconds, the trajectory
+     *                   will be active for.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder task(Runnable initial,
+                           Runnable during,
+                           Runnable onFinish,
+                           Supplier<Boolean> isFinished,
+                           double minTimeMs,
+                           double maxTimeMs) {
+        Trajectory trajectory = new TaskTrajectoryBuilder()
+                .setInitial(initial)
+                .setDuring(during)
+                .setOnFinish(onFinish)
+                .setIsFinished(isFinished)
+                .setMinTimeMs(minTimeMs)
+                .setMaxTimeMs(maxTimeMs)
+                .build();
+
+        followTrajectory(trajectory);
+
+        return this;
+    }
+
+    /**
+     * Create a new {@link TaskTrajectory} and add it to Pathfinder's
+     * queue so that it can be executed
+     *
+     * @param initial    code to be executed the first time the trajectory's
+     *                   {@link #isDone(PointXYZ)} method is called.
+     * @param during     code to be executed any time the trajectory's
+     *                   {@link #isDone(PointXYZ)} method is called.
+     * @param onFinish   code to be executed whenever the task is finished.
+     * @param isFinished a supplier that indicates if the task is finished.
+     *                   If the task is not finished, it should continue stop
+     *                   its execution.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder task(Runnable initial,
+                           Runnable during,
+                           Runnable onFinish,
+                           Supplier<Boolean> isFinished) {
+        return task(initial, during, onFinish, isFinished, 0, Double.MAX_VALUE);
+    }
+
+    /**
+     * Create a new {@link TaskTrajectory} and add it to Pathfinder's
+     * queue so that it can be executed
+     *
+     * @param during     code to be executed any time the trajectory's
+     *                   {@link #isDone(PointXYZ)} method is called.
+     * @param isFinished a supplier that indicates if the task is finished.
+     *                   If the task is not finished, it should continue stop
+     *                   its execution.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder task(Runnable during,
+                           Supplier<Boolean> isFinished) {
+        return task(() -> {}, during, () -> {}, isFinished);
     }
 
     /**
