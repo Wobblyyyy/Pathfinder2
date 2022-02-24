@@ -56,6 +56,7 @@ import me.wobblyyyy.pathfinder2.trajectory.spline.AdvancedSplineTrajectoryBuilde
 import me.wobblyyyy.pathfinder2.trajectory.spline.MultiSplineBuilder;
 import me.wobblyyyy.pathfinder2.utils.NotNull;
 import me.wobblyyyy.pathfinder2.utils.RandomString;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.zones.Zone;
 import me.wobblyyyy.pathfinder2.zones.ZoneProcessor;
 
@@ -131,6 +132,12 @@ public class Pathfinder {
      */
     private static final List<PathfinderPlugin> AUTO_LOAD_PLUGINS =
             new ArrayList<>();
+
+    /**
+     * Globally-accessible map of trajectories.
+     */
+    private static final Map<String, Trajectory> TRAJECTORY_MAP =
+            new HashMap<>();
 
     /**
      * The {@code Robot} (made up of {@code Drive} and {@code Odometry}) that
@@ -298,7 +305,7 @@ public class Pathfinder {
      *         Odometry odometry = new SimulatedOdometry();
      *         Robot robot = new Robot(drive, odometry);
      *
-     *         Controller turnController = 
+     *         Controller turnController =
      *                 new ProportionalController(0.01);
      *         FollowGenerator generator = 
      *                 new GenericFollowerGenerator(turnController);
@@ -666,6 +673,82 @@ public class Pathfinder {
      */
     public static void addAutoLoadPlugin(PathfinderPlugin plugin) {
         AUTO_LOAD_PLUGINS.add(plugin);
+    }
+
+    private static String formatName(String group,
+                                     String name) {
+        return StringUtils.format("%s-%s", group, name);
+    }
+
+    /**
+     * Add a {@code Trajectory} to the global trajectory map.
+     *
+     * @param group      the trajectory's group. A group is a group of
+     *                   trajectories that's designed to improve organization.
+     * @param name       the name of the trajectory.
+     * @param trajectory the trajectory.
+     */
+    public static void addTrajectory(String group,
+                                     String name,
+                                     Trajectory trajectory) {
+        addTrajectory(formatName(group, name), trajectory);
+    }
+
+    /**
+     * Add a {@code Trajectory} to the global trajectory map.
+     *
+     * @param trajectoryName the name of the trajectory.
+     * @param trajectory     the actual trajectory.
+     */
+    public static void addTrajectory(String trajectoryName,
+                                     Trajectory trajectory) {
+        TRAJECTORY_MAP.put(trajectoryName, trajectory);
+    }
+
+    /**
+     * Remove a {@code Trajectory} from the global trajectory map.
+     *
+     * @param trajectoryName the name of the trajectory.
+     */
+    public static void removeTrajectory(String trajectoryName) {
+        TRAJECTORY_MAP.remove(trajectoryName);
+    }
+
+    /**
+     * Get a {@code Trajectory} from the global trajectory map.
+     *
+     * @param group the trajectory's group.
+     * @param name  the trajectory's name.
+     * @return the trajectory.
+     */
+    public static Trajectory getTrajectory(String group,
+                                           String name) {
+        return getTrajectory(formatName(group, name));
+    }
+
+    /**
+     * Get a {@code Trajectory} from the global trajectory map.
+     *
+     * @param trajectoryName the name of the trajectory.
+     * @param trajectory     the actual trajectory.
+     */
+    public static Trajectory getTrajectory(String trajectoryName) {
+        if (!TRAJECTORY_MAP.containsKey(trajectoryName))
+            throw new TrajectoryNotMappedException("Cannot get a trajectory " +
+                    "with name <" + trajectoryName + "> because it has not " +
+                    "been added to the trajectory map! Use the " +
+                    "addTrajectory() method to do that.");
+
+        return TRAJECTORY_MAP.get(trajectoryName);
+    }
+
+    /**
+     * Get Pathfinder's global trajectory map.
+     *
+     * @return Pathfinder's global trajectory map.
+     */
+    public static Map<String, Trajectory> getTrajectoryMap() {
+        return TRAJECTORY_MAP;
     }
 
     /**
@@ -2430,6 +2513,16 @@ public class Pathfinder {
     }
 
     /**
+     * Follow a single trajectory from the global trajectory map.
+     *
+     * @param trajectoryName the name of the trajectory to follow.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder followTrajectory(String trajectoryName) {
+        return followTrajectory(getTrajectory(trajectoryName));
+    }
+
+    /**
      * Follow a single trajectory.
      *
      * @param trajectory the trajectory to follow.
@@ -2718,10 +2811,10 @@ public class Pathfinder {
         checkForMissingDefaultValues();
 
         InvalidSpeedException.throwIfInvalid(
-                "Invalid speed value provided! Speed must be between 0 and 1.", 
+                "Invalid speed value provided! Speed must be between 0 and 1.",
                 speed);
         InvalidToleranceException.throwIfInvalid(
-                "Invalid tolerance! Tolerance must be a positive number.", 
+                "Invalid tolerance! Tolerance must be a positive number.",
                 tolerance);
 
         if (angleTolerance.deg() < 0)
@@ -2760,7 +2853,7 @@ public class Pathfinder {
      *
      * <p>
      * If this method is called on a set of points with non-monotonic Y
-     * values, this will instead invoke 
+     * values, this will instead invoke
      * {@link #multiSplineTo(double, double, Angle, PointXYZ...)}, which
      * supports non-monotonic Y values.
      * </p>
@@ -2786,10 +2879,10 @@ public class Pathfinder {
                         "splineTo method.");
 
         InvalidSpeedException.throwIfInvalid(
-                "Invalid speed value provided! Speed must be between 0 and 1.", 
+                "Invalid speed value provided! Speed must be between 0 and 1.",
                 speed);
         InvalidToleranceException.throwIfInvalid(
-                "Invalid tolerance! Tolerance must be a positive number.", 
+                "Invalid tolerance! Tolerance must be a positive number.",
                 tolerance);
 
         if (angleTolerance.deg() < 0)
