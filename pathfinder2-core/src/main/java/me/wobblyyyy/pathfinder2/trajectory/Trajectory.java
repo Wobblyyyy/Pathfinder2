@@ -18,9 +18,12 @@ import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
 import me.wobblyyyy.pathfinder2.trajectory.multi.segment.MultiSegmentTrajectory;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * A {@code Trajectory} specifies to a {@code FollowerExecutor} a set of
@@ -758,6 +761,101 @@ public interface Trajectory extends Serializable {
                                     PointXYZ target) {
         return shift(origin, target)
             .rotateAround(target, target.z().subtract(origin.z()));
+    }
+
+    default Trajectory addEndCondition(Supplier<Boolean> isFinished) {
+        List<Supplier<Boolean>> list = new ArrayList<>(1);
+        list.add(isFinished);
+        return addEndConditions(list);
+    }
+
+    default Trajectory addEndConditions(Iterable<Supplier<Boolean>> conditions) {
+        Function<PointXYZ, PointXYZ> nextMarkerFunction =
+            InternalTrajectoryUtils.nextMarkerFunction(this);
+        Function<PointXYZ, Boolean> isDoneFunction =
+            InternalTrajectoryUtils.isDoneFunction(this);
+        Function<PointXYZ, Double> speedFunction =
+            InternalTrajectoryUtils.speedFunction(this);
+
+        return new Trajectory() {
+            @Override
+            public PointXYZ nextMarker(PointXYZ current) {
+                return nextMarkerFunction.apply(current);
+            }
+
+            @Override
+            public boolean isDone(PointXYZ current) {
+                for (Supplier<Boolean> condition : conditions)
+                    if (condition.get()) return true;
+
+                return isDoneFunction.apply(current);
+            }
+
+            @Override
+            public double speed(PointXYZ current) {
+                return speedFunction.apply(current);
+            }
+        };
+    }
+
+    default Trajectory addRequirement(Supplier<Boolean> isStillActive) {
+        List<Supplier<Boolean>> list = new ArrayList<>(1);
+        list.add(isStillActive);
+        return addEndConditions(list);
+    }
+
+    default Trajectory addRequirements(Iterable<Supplier<Boolean>> requirements) {
+        Function<PointXYZ, PointXYZ> nextMarkerFunction =
+            InternalTrajectoryUtils.nextMarkerFunction(this);
+        Function<PointXYZ, Boolean> isDoneFunction =
+            InternalTrajectoryUtils.isDoneFunction(this);
+        Function<PointXYZ, Double> speedFunction =
+            InternalTrajectoryUtils.speedFunction(this);
+
+        return new Trajectory() {
+            @Override
+            public PointXYZ nextMarker(PointXYZ current) {
+                return nextMarkerFunction.apply(current);
+            }
+
+            @Override
+            public boolean isDone(PointXYZ current) {
+                for (Supplier<Boolean> requirement : requirements)
+                    if (!requirement.get()) return true;
+
+                return isDoneFunction.apply(current);
+            }
+
+            @Override
+            public double speed(PointXYZ current) {
+                return speedFunction.apply(current);
+            }
+        };
+    }
+
+    /**
+     * Convert {@code this} {@code Trajectory} into an 
+     * {@code AbstractTrajectory}.
+     *
+     * @return a new {@code AbstractTrajectory}.
+     */
+    default AbstractTrajectory toAbstractTrajectory() {
+        return new AbstractTrajectory() {
+            @Override
+            public PointXYZ abstractNextMarker(PointXYZ current) {
+                return nextMarker(current);
+            }
+
+            @Override
+            public double abstractSpeed(PointXYZ current) {
+                return speed(current);
+            }
+
+            @Override
+            public boolean abstractIsDone(PointXYZ current) {
+                return isDone(current);
+            }
+        };
     }
 
     /**
