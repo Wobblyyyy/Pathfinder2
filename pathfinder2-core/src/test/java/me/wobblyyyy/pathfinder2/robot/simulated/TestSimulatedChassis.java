@@ -670,4 +670,23 @@ public class TestSimulatedChassis {
 
         Assertions.assertEquals(3, count.get());
     }
+
+    @Test
+    public void testGlobalTrajectoryMap() {
+        Class<?> clazz = TestSimulatedChassis.class;
+
+        Trajectory trajectory = factory.builder()
+            .add(new PointXYZ(0, 0, 0))
+            .add(new PointXYZ(0, 0, 0).inDirection(10, Angle.fromDeg(45)))
+            .add(new PointXYZ(10, 10, 0))
+            .build();
+
+        Pathfinder.addTrajectory(clazz, "test", trajectory);
+        pathfinder.followTrajectory(clazz, "test");
+        pathfinder.tickUntil(1_000);
+        Pathfinder.removeTrajectory(clazz, "test");
+
+        Assertions.assertTrue(pathfinder.getPosition()
+                .isNear(new PointXY(10, 10), 1));
+    }
 }

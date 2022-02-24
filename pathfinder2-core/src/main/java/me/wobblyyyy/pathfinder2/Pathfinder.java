@@ -307,7 +307,7 @@ public class Pathfinder {
      *
      *         Controller turnController =
      *                 new ProportionalController(0.01);
-     *         FollowGenerator generator = 
+     *         FollowGenerator generator =
      *                 new GenericFollowerGenerator(turnController);
      *
      *         Pathfinder pathfinder = new Pathfinder(
@@ -420,9 +420,9 @@ public class Pathfinder {
      *         Odometry odometry = new SimulatedOdometry();
      *         Robot robot = new Robot(drive, odometry);
      *
-     *         Controller turnController = 
+     *         Controller turnController =
      *                 new ProportionalController(0.01);
-     *         FollowGenerator generator = 
+     *         FollowGenerator generator =
      *                 new GenericFollowerGenerator(turnController);
      *
      *         Pathfinder pathfinder = new Pathfinder(
@@ -505,7 +505,7 @@ public class Pathfinder {
      *         Odometry odometry = new SimulatedOdometry();
      *         Robot robot = new Robot(drive, odometry);
      *
-     *         Controller turnController = 
+     *         Controller turnController =
      *                 new ProportionalController(0.01);
      *
      *         Pathfinder pathfinder = new Pathfinder(
@@ -695,13 +695,27 @@ public class Pathfinder {
     }
 
     /**
+     * Add a trajectory to Pathfinder's global trajectory map.
+     *
+     * @param clazz      the class that added the trajectory to the map. This
+     *                   is used for organizational purposes.
+     * @param name       the name of the trajectory.
+     * @param trajectory the trajectory to add.
+     */
+    public static void addTrajectory(Class<?> clazz,
+                                     String name,
+                                     Trajectory trajectory) {
+        addTrajectory(formatName(clazz.getSimpleName(), name), trajectory);
+    }
+
+    /**
      * Add a {@code Trajectory} to the global trajectory map.
      *
      * @param trajectoryName the name of the trajectory.
      * @param trajectory     the actual trajectory.
      */
-    public static void addTrajectory(String trajectoryName,
-                                     Trajectory trajectory) {
+    private static void addTrajectory(String trajectoryName,
+                                      Trajectory trajectory) {
         TRAJECTORY_MAP.put(trajectoryName, trajectory);
     }
 
@@ -712,6 +726,22 @@ public class Pathfinder {
      */
     public static void removeTrajectory(String trajectoryName) {
         TRAJECTORY_MAP.remove(trajectoryName);
+    }
+
+    public static void removeTrajectory(String group,
+                                        String name) {
+        removeTrajectory(formatName(group, name));
+    }
+
+    /**
+     * Remove a trajectory from Pathfinder's global trajectory map.
+     *
+     * @param clazz the class that added the trajectory.
+     * @param name  the name of the trajectory.
+     */
+    public static void removeTrajectory(Class<?> clazz,
+                                        String name) {
+        removeTrajectory(formatName(clazz.getSimpleName(), name));
     }
 
     /**
@@ -727,12 +757,27 @@ public class Pathfinder {
     }
 
     /**
+     * Get a trajectory based on the trajectory's group/class and the
+     * name of the trajectory. If the trajectory is not contained in the
+     * trajectory map, this will throw a runtime exception.
+     *
+     * @param clazz the class that added the trajectory to the map. This is
+     *              used for organizational purposes.
+     * @param name  the trajectory's name.
+     * @return the corresponding trajectory, if it's in the map.
+     */
+    public static Trajectory getTrajectory(Class<?> clazz,
+                                           String name) {
+        return getTrajectory(formatName(clazz.getSimpleName(), name));
+    }
+
+    /**
      * Get a {@code Trajectory} from the global trajectory map.
      *
      * @param trajectoryName the name of the trajectory.
      * @param trajectory     the actual trajectory.
      */
-    public static Trajectory getTrajectory(String trajectoryName) {
+    private static Trajectory getTrajectory(String trajectoryName) {
         if (!TRAJECTORY_MAP.containsKey(trajectoryName))
             throw new TrajectoryNotMappedException("Cannot get a trajectory " +
                     "with name <" + trajectoryName + "> because it has not " +
@@ -740,6 +785,13 @@ public class Pathfinder {
                     "addTrajectory() method to do that.");
 
         return TRAJECTORY_MAP.get(trajectoryName);
+    }
+
+    /**
+     * Clear Pathfinder's global trajectory map.
+     */
+    public static void clearTrajectoryMap() {
+        TRAJECTORY_MAP.clear();
     }
 
     /**
@@ -2515,10 +2567,102 @@ public class Pathfinder {
     /**
      * Follow a single trajectory from the global trajectory map.
      *
+     * @param group the trajectory's group.
+     * @param name  the name of the trajectory to follow.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder followTrajectory(String group,
+                                       String name) {
+        return followTrajectory(formatName(group, name));
+    }
+
+    /**
+     * Follow a single trajectory from the global trajectory map.
+     *
+     * @param group the trajectory's group.
+     * @param name  the name of the trajectory to follow.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder followTrajectory(Class<?> group,
+                                       String name) {
+        return followTrajectory(formatName(group.getSimpleName(), name));
+    }
+
+    /**
+     * Follow a single trajectory from the global trajectory map. If the
+     * trajectory cannot be found in the map, this method will throw an
+     * exception indicating that the trajectory could not be found, and will
+     * provide suggestions for what the user could have been trying to find.
+     *
      * @param trajectoryName the name of the trajectory to follow.
      * @return {@code this}, used for method chaining.
      */
-    public Pathfinder followTrajectory(String trajectoryName) {
+    public Pathfinder followTrajectory(final String trajectoryName) {
+        if (TRAJECTORY_MAP.size() < 1)
+            throw new IllegalStateException("Cannot follow a trajectory " +
+                    "by name without first adding at least 1 trajectory " +
+                    "to the global trajectory map by using one of the " +
+                    "addTrajectory methods!");
+
+        // if the trajectory isn't contained in the list of trajectory names,
+        // throw an exception containing a list of all of the potential names
+        if (!TRAJECTORY_MAP.containsKey(trajectoryName)) {
+            List<String> potentialNames = new ArrayList<>(10);
+
+            TRAJECTORY_MAP.forEach((name, trajectory) -> {
+                String lowercase = name.toLowerCase();
+
+                // if there's less than 8 trajectories, show all of them
+                // just to make debugging easier
+                if (lowercase.contains(trajectoryName.toLowerCase()))
+                    potentialNames.add(name);
+                else if (TRAJECTORY_MAP.size() < 8)
+                    potentialNames.add(name);
+            });
+
+            // if there are STILL no results, try only searching for the first
+            // three letters of the trajectory's name - ideally, this should
+            // use fuzzy finding, but this is such a minor feature i doubt
+            // anyone is ever going to use and i'm only adding it because i
+            // have free time during class and nothing better to be doing...
+            if (potentialNames.size() == 0) {
+                final String shortName;
+
+                if (trajectoryName.length() > 3)
+                    shortName = trajectoryName.substring(0, 3);
+                else
+                    shortName = trajectoryName;
+
+                TRAJECTORY_MAP.forEach((name, trajectory) -> {
+                    String lowercase = name.toLowerCase();
+
+                    if (lowercase.contains(shortName))
+                        potentialNames.add(name);
+                });
+            }
+
+            StringBuilder builder = new StringBuilder(100);
+
+            builder.append("Could not follow trajectory with name <%s>. ");
+            builder.append("did you mean one of these? ");
+
+            int size = potentialNames.size();
+            for (int i = 0; i < size; i++) {
+                String potentialName = potentialNames.get(i);
+
+                builder.append(potentialName);
+
+                if (i < size - 1)
+                    builder.append(", ");
+            }
+
+            throw new NullTrajectoryException(StringUtils.format(
+                    builder.toString(),
+                    trajectoryName
+            ));
+        }
+
+        // if the trajectory is found, just follow it
         return followTrajectory(getTrajectory(trajectoryName));
     }
 
@@ -2532,6 +2676,8 @@ public class Pathfinder {
         if (trajectory == null)
             throw new NullPointerException("Cannot follow a null trajectory!");
 
+        // this is really bad code but it's not important enough to take
+        // the time to fix right now - maybe later?
         List<Trajectory> list = new ArrayList<Trajectory>(1) {{
             add(trajectory);
         }};
