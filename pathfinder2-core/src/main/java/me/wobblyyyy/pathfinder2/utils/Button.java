@@ -10,7 +10,12 @@
 
 package me.wobblyyyy.pathfinder2.utils;
 
+import java.util.function.Predicate;
 import java.util.function.Supplier;
+
+import me.wobblyyyy.pathfinder2.listening.ListenerBuilder;
+import me.wobblyyyy.pathfinder2.listening.ListenerManager;
+import me.wobblyyyy.pathfinder2.listening.ListenerMode;
 
 /**
  * A very simple boolean button. Buttons are based on a {@link Supplier} that
@@ -27,6 +32,7 @@ import java.util.function.Supplier;
  * @since 0.0.0
  */
 public class Button {
+    private final ListenerManager manager;
     private final Supplier<Boolean> stateSupplier;
     private boolean lastState;
 
@@ -39,7 +45,28 @@ public class Button {
      *                      {@code false} whenever it is not.
      */
     public Button(Supplier<Boolean> stateSupplier) {
+        this(null, stateSupplier);
+    }
+
+    /**
+     * Create a new {@code Button}.
+     *
+     * @param manager       the listener manager instance.
+     * @param stateSupplier a method that returns the button's state. This
+     *                      {@code Supplier} should return {@code true}
+     *                      whenever the physical button is pressed, and
+     *                      {@code false} whenever it is not.
+     */
+    public Button(ListenerManager manager,
+                  Supplier<Boolean> stateSupplier) {
+        this.manager = manager;
         this.stateSupplier = stateSupplier;
+    }
+
+    public <T> Button(ListenerManager manager,
+                      Supplier<T> supplier,
+                      Predicate<T> predicate) {
+        this(manager, () -> predicate.test(supplier.get()));
     }
 
     /**
@@ -84,5 +111,47 @@ public class Button {
      */
     public boolean wasReleased() {
         return (lastState) && (!isPressed());
+    }
+
+    private void addListener(ListenerMode mode,
+                             Runnable runnable) {
+        if (manager == null)
+            throw new NullPointerException("Cannot apply any bindings " +
+                    "to this button because the listener manager was not " +
+                    "set in the Button's constructor!");
+
+        manager.addListener(new ListenerBuilder()
+                .addInput(stateSupplier)
+                .setPriority(0)
+                .setMode(mode)
+                .setWhenTriggered(runnable)
+                .setMaximumExecutions(Integer.MAX_VALUE)
+                .setExpiration(Double.MAX_VALUE)
+                .setCooldownMs(0)
+                .build());
+    }
+
+    public Button whenPressed(Runnable runnable) {
+        addListener(ListenerMode.CONDITION_NEWLY_MET, runnable);
+
+        return this;
+    }
+
+    public Button whilePressed(Runnable runnable) {
+        addListener(ListenerMode.CONDITION_IS_MET, runnable);
+
+        return this;
+    }
+
+    public Button whenReleased(Runnable runnable) {
+        addListener(ListenerMode.CONDITION_NEWLY_NOT_MET, runnable);
+
+        return this;
+    }
+
+    public Button whileReleased(Runnable runnable) {
+        addListener(ListenerMode.CONDITION_IS_NOT_MET, runnable);
+
+        return this;
     }
 }

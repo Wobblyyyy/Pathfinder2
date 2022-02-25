@@ -106,7 +106,13 @@ public class Core {
 
     public static double advancedSplineTrajectoryDuplicateOffset = 0.01;
 
+    public static int listenerBuilderDefaultPriority = 0;
+
     public static double listenerBuilderDefaultExpiration = Double.MAX_VALUE;
+
+    public static int listenerBuilderDefaultMaximumExecutions = Integer.MAX_VALUE;
+
+    public static int listenerBuilderDefaultCooldownMs = 0;
 
     public static int listenerManagerRandomStringLength = 10;
 

@@ -28,10 +28,15 @@ public class ListenerBuilder {
     private ListenerMode mode;
     private Runnable whenTriggered;
     private List<Supplier<Boolean>> inputs = new ArrayList<>();
-    private int priority;
-    private double expiration = Core.listenerBuilderDefaultExpiration;
-    private int maximumExecutions;
-    private double cooldownMs;
+
+    private int priority =
+        Core.listenerBuilderDefaultPriority;
+    private double expiration =
+        Core.listenerBuilderDefaultExpiration;
+    private int maximumExecutions =
+        Core.listenerBuilderDefaultMaximumExecutions;
+    private double cooldownMs =
+        Core.listenerBuilderDefaultCooldownMs;
 
     public ListenerBuilder() {
 

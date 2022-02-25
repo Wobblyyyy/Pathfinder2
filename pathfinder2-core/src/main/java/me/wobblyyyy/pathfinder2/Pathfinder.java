@@ -54,6 +54,7 @@ import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.trajectory.TaskTrajectoryBuilder;
 import me.wobblyyyy.pathfinder2.trajectory.spline.AdvancedSplineTrajectoryBuilder;
 import me.wobblyyyy.pathfinder2.trajectory.spline.MultiSplineBuilder;
+import me.wobblyyyy.pathfinder2.utils.Button;
 import me.wobblyyyy.pathfinder2.utils.NotNull;
 import me.wobblyyyy.pathfinder2.utils.RandomString;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
@@ -101,6 +102,17 @@ import java.util.function.Supplier;
  * </p>
  *
  * <p>
+ * Pathfinder provides a global trajectory map that can be used to reference
+ * trajectories via a {@link String} key, which can be convenient as it
+ * allows trajectories to be accessed globally. To access this map, use
+ * {@link #getTrajectoryMap()}. In addition to a
+ * {@code Map<String, Trajectory>}, there's a {@code Map<String, String>}
+ * that stores the stack trace of each of the trajectories added to the map,
+ * so that in the event there's a naming conflict, it can be resolved
+ * fairly quickly. To access that map, check out {@link #getStackTraceMap()}.
+ * </p>
+ *
+ * <p>
  * Finally, there's a relatively minor feature called "minimal mode." It's
  * designed to decrease Pathfinder's footprint by skipping over the ticking
  * of (usually optional) services/managers/listeners. Using minimal mode
@@ -137,6 +149,13 @@ public class Pathfinder {
      * Globally-accessible map of trajectories.
      */
     private static final Map<String, Trajectory> TRAJECTORY_MAP =
+            new HashMap<>();
+
+    /**
+     * Globally-accessible map of stack traces for where trajectories were
+     * added from.
+     */
+    private static final Map<String, String> STACK_TRACE_MAP =
             new HashMap<>();
 
     /**
@@ -716,6 +735,31 @@ public class Pathfinder {
      */
     private static void addTrajectory(String trajectoryName,
                                       Trajectory trajectory) {
+        if (TRAJECTORY_MAP.containsKey(trajectoryName))
+            throw new IllegalArgumentException("Cannot add a trajectory " +
+                    "named <" + trajectoryName + "> because a trajectory " +
+                    "with that name already exists! The existing " +
+                    "trajectory was added from here: " +
+                    STACK_TRACE_MAP.get(trajectoryName));
+
+        if (true) {
+            StackTraceElement[] stackTrace = new Throwable().getStackTrace();
+
+            if (stackTrace.length > 10) {
+                StackTraceElement[] temp = new StackTraceElement[10];
+                System.arraycopy(stackTrace, 0, temp, 0, 10);
+                stackTrace = temp;
+            }
+
+            StringBuilder builder = new StringBuilder(stackTrace.length * 20);
+            for (StackTraceElement element : stackTrace) {
+                builder.append(element);
+                builder.append("\n");
+            }
+
+            STACK_TRACE_MAP.put(trajectoryName, builder.toString());
+        }
+
         TRAJECTORY_MAP.put(trajectoryName, trajectory);
     }
 
@@ -725,6 +769,7 @@ public class Pathfinder {
      * @param trajectoryName the name of the trajectory.
      */
     public static void removeTrajectory(String trajectoryName) {
+        STACK_TRACE_MAP.remove(trajectoryName);
         TRAJECTORY_MAP.remove(trajectoryName);
     }
 
@@ -791,6 +836,7 @@ public class Pathfinder {
      * Clear Pathfinder's global trajectory map.
      */
     public static void clearTrajectoryMap() {
+        STACK_TRACE_MAP.clear();
         TRAJECTORY_MAP.clear();
     }
 
@@ -801,6 +847,18 @@ public class Pathfinder {
      */
     public static Map<String, Trajectory> getTrajectoryMap() {
         return TRAJECTORY_MAP;
+    }
+
+    /**
+     * Get Pathfinder's global stack trace map. This map is used for debugging
+     * purposes, to prevent users from adding a trajectory with the same
+     * name twice. Ideally, you'll never even know that this map exists, but...
+     * things don't always go ideally, unfortunately.
+     *
+     * @return Pathfinder's global stack trace map.
+     */
+    public static Map<String, String> getStackTraceMap() {
+        return STACK_TRACE_MAP;
     }
 
     /**
@@ -3759,6 +3817,48 @@ public class Pathfinder {
         getDrive().setModifier(lastDriveModifier);
 
         return this;
+    }
+
+    /**
+     * Create a new {@code Button} (sort of, anyways).
+     *
+     * @param supplier  a supplier that returns the system's state.
+     * @param predicate a predicate that evaluates the system's state.
+     * @return a new {@code Button}.
+     */
+    public <T> Button newButton(Supplier<T> supplier,
+                                Predicate<T> predicate) {
+        return new Button(listenerManager, supplier, predicate);
+    }
+
+    /**
+     * Create a new {@code Button} with a pre-attached {@code ListenerManager}.
+     *
+     * @param stateSupplier a supplier that returns the button's state. If
+     *                      the button is pressed, this should return true.
+     *                      Otherwise, this should return false.
+     * @return a new {@code Button}.
+     */
+    public Button newButton(Supplier<Boolean> stateSupplier) {
+        return new Button(listenerManager, stateSupplier);
+    }
+
+    /**
+     * Create a new {@code Button} with a pre-attached {@code ListenerManager}.
+     * This button is based on a trigger.
+     *
+     * @param stateSupplier a supplier that returns the trigger's state. This
+     *                      value should almost always be within the range
+     *                      of 0-1, where 0 is not at all pressed and 1 is
+     *                      completely pressed.
+     * @param deadZone      the minimum value of the trigger that counts as
+     *                      being pressed.
+     * @return a new {@code Button}.
+     */
+    public Button newTriggerButton(Supplier<Double> stateSupplier,
+                                   double deadZone) {
+        return new Button(listenerManager,
+                () -> stateSupplier.get() >= deadZone);
     }
 
     /*
