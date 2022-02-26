@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.robot.components;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -86,6 +88,10 @@ public class AbstractMotor implements Motor {
      * to 0 to prevent motor slippage.
      */
     private double deadband;
+
+    private final List<Supplier<Boolean>> mustBeTrueToSetPowerOtherwiseZero;
+
+    private final List<Supplier<Boolean>> mustBeFalseToSetPowerOtherwiseZero;
 
     /**
      * Create a new {@code AbstractMotor} using a {@link Supplier} and a
@@ -194,6 +200,8 @@ public class AbstractMotor implements Motor {
         this.isSetInverted = isSetInverted;
         this.isGetInverted = isGetInverted;
         this.deadband = deadband;
+        this.mustBeTrueToSetPowerOtherwiseZero = new ArrayList<>(2);
+        this.mustBeFalseToSetPowerOtherwiseZero = new ArrayList<>(2);
     }
 
     /**
@@ -322,6 +330,18 @@ public class AbstractMotor implements Motor {
         return this;
     }
 
+    public AbstractMotor addMustBeTrueRequirement(Supplier<Boolean> req) {
+        mustBeTrueToSetPowerOtherwiseZero.add(req);
+
+        return this;
+    }
+
+    public AbstractMotor addMustBeFalseRequirement(Supplier<Boolean> req) {
+        mustBeFalseToSetPowerOtherwiseZero.add(req);
+
+        return this;
+    }
+
     /**
      * Accept a power value.
      *
@@ -384,6 +404,18 @@ public class AbstractMotor implements Motor {
         // apply motor power inversion
         if (isSetInverted)
             power = power * -1;
+
+        for (Supplier<Boolean> supplier : mustBeTrueToSetPowerOtherwiseZero)
+            if (!supplier.get()) {
+                power = 0;
+                break;
+            }
+
+        for (Supplier<Boolean> supplier : mustBeFalseToSetPowerOtherwiseZero)
+            if (supplier.get()) {
+                power = 0;
+                break;
+            }
 
         // if it's lazy, check to see if power actually needs to be set
         // otherwise, just set the power value anyway
