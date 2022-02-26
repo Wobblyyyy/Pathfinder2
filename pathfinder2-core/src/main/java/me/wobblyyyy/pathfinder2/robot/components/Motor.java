@@ -80,6 +80,19 @@ public interface Motor {
         return applyInversions(true, true);
     }
 
+    /**
+     * Invert the motor by applying an inversion to both the
+     * {@link #setPower(double)} and {@link #getPower()} methods. This method
+     * calls {@link applyInversions(boolean, boolean)} with both parameters
+     * set to {@code isInverted}.
+     *
+     * @param isInverted should the motor be inverted?
+     * @return a new {@code Motor}.
+     */
+    default Motor invert(boolean isInverted) {
+        return applyInversions(isInverted, isInverted);
+    }
+
     default Motor invertSetPower() {
         return applyInversions(true, false);
     }
@@ -112,7 +125,19 @@ public interface Motor {
         return applyMultipliers(multiplier, 1 / multiplier);
     }
 
+    /**
+     * Convert this {@code Motor} to a {@code AbstractMotor}. If {@code this}
+     * motor is an instance of {@code AbstractMotor}, this method will simply
+     * cast {@code this} to {@code AbstractMotor}. If {@code this} is not
+     * an instance of {@code AbstractMotor}, this will create a new
+     * {@code AbstractMotor}.
+     *
+     * @return {@code this}, represented as an abstract motor.
+     */
     default AbstractMotor toAbstractMotor() {
+        if (this instanceof AbstractMotor)
+            return (AbstractMotor) this;
+
         return new AbstractMotor(this::setPower, this::getPower);
     }
 }
