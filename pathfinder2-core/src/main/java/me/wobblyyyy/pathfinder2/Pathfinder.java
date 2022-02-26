@@ -22,6 +22,7 @@ import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.listening.Listener;
+import me.wobblyyyy.pathfinder2.listening.ListenerBuilder;
 import me.wobblyyyy.pathfinder2.listening.ListenerManager;
 import me.wobblyyyy.pathfinder2.listening.ListenerMode;
 import me.wobblyyyy.pathfinder2.math.Spline;
@@ -1520,6 +1521,82 @@ public class Pathfinder {
     public Pathfinder onTick(Consumer<Pathfinder> onTick) {
         return onTick(RandomString.randomString(
                     Core.pathfinderRandomStringLength), onTick);
+    }
+
+    /**
+     * Bind an operation to the invocation of Pathfinder's {@link #tick()}
+     * method. Anything that's bound to Pathfinder's {@link #tick()} method
+     * will be called at the end of the invocation of {@link #tick()}.
+     *
+     * @param onTick an action to be executed whenever Pathfinder ticks. This
+     *               will be executed right before the plugin post-tick stuff,
+     *               meaning it's after everything else.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder onTick(Runnable onTick) {
+        return onTick((pf) -> onTick.run());
+    }
+
+    /**
+     * Bind an operation to the invocation of Pathfinder's {@link #tick()}
+     * method. This utilizes Pathfinder's {@link ListenerManager} to accomodate
+     * for more advanced features, such as expiration time, cooldown, and
+     * the maximum number of executions.
+     *
+     * @param onTick         an action to be executed whenever Pathfinder
+     *                       ticks. This will be executed right before the
+     *                       plugin post-tick stuff, meaning it's after
+     *                       everything else.
+     * @param minimumDelayMs the minimum delay between executions of the
+     *                       {@code Runnable}, in milliseconds.
+     * @param expiration     the time the listener will expire, represented
+     *                       in milliseconds since Jan 1st, 1970.
+     * @param maxExecs       the maximum amount of times the listener can
+     *                       be executed before automatically being dequeued.
+     * @param priority       the event's priority. Events with a higher
+     *                       priority will be executed before events with
+     *                       a lower priority. Defaults to 0.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder onTick(Runnable onTick,
+                             double minimumDelayMs,
+                             double expiration,
+                             int maxExecs,
+                             int priority) {
+        return addListener(new ListenerBuilder()
+                .setPriority(0)
+                .setMode(ListenerMode.CONDITION_IS_MET)
+                .addInput(() -> true)
+                .setExpiration(expiration)
+                .setCooldownMs(minimumDelayMs)
+                .setWhenTriggered(onTick)
+                .setMaximumExecutions(maxExecs)
+                .build());
+    }
+
+    /**
+     * Bind an operation to the invocation of Pathfinder's {@link #tick()}
+     * method. This utilizes Pathfinder's {@link ListenerManager} to accomodate
+     * for more advanced features, such as expiration time, cooldown, and
+     * the maximum number of executions.
+     *
+     * @param onTick         an action to be executed whenever Pathfinder
+     *                       ticks. This will be executed right before the
+     *                       plugin post-tick stuff, meaning it's after
+     *                       everything else.
+     * @param minimumDelayMs the minimum delay between executions of the
+     *                       {@code Runnable}, in milliseconds.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder onTick(Runnable onTick,
+                             double minimumDelayMs) {
+        return onTick(
+                onTick,
+                minimumDelayMs,
+                Core.listenerBuilderDefaultExpiration,
+                Core.listenerBuilderDefaultMaximumExecutions,
+                Core.listenerBuilderDefaultPriority
+        );
     }
 
     /**
