@@ -23,7 +23,7 @@ import static com.revrobotics.CANSparkMaxLowLevel.MotorType.*;
  * @author Colin Robertson
  * @since 0.10.8
  */
-public class SparkMaxMotor extends AbstractMotor {
+public class SparkMaxMotor extends AbstractMotor implements AutoCloseable {
     private final CANSparkMax spark;
 
     /**
@@ -75,5 +75,10 @@ public class SparkMaxMotor extends AbstractMotor {
      */
     public CANSparkMax getSpark() {
         return spark;
+    }
+
+    @Override
+    public void close() {
+        spark.close();
     }
 }
