@@ -19,9 +19,12 @@ import java.util.function.Supplier;
  * @since 1.1.0
  */
 public class TaskTrajectoryBuilder {
-    private Runnable initial = () -> {};
-    private Runnable during = () -> {};
-    private Runnable onFinish = () -> {};
+    private Runnable initial = () -> {
+    };
+    private Runnable during = () -> {
+    };
+    private Runnable onFinish = () -> {
+    };
     private Supplier<Boolean> isFinished = null;
     private double minTimeMs = 0;
     private double maxTimeMs = Double.MAX_VALUE;

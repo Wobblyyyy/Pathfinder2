@@ -10,12 +10,12 @@
 
 package me.wobblyyyy.pathfinder2.trajectory;
 
+import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
 /**
  * A {@code Trajectory} that adds support for end conditions, execution
@@ -94,7 +94,9 @@ public abstract class AbstractTrajectory implements Trajectory {
     }
 
     public abstract PointXYZ abstractNextMarker(PointXYZ current);
+
     public abstract double abstractSpeed(PointXYZ current);
+
     public abstract boolean abstractIsDone(PointXYZ current);
 
     public void clear() {

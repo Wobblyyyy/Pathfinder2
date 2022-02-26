@@ -10,19 +10,19 @@
 
 package me.wobblyyyy.pathfinder2.utils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Various utilities for arrays.
  *
- * @since 1.0.1
  * @author Colin Robertson
+ * @since 1.0.1
  */
 public class ArrayUtils {
     private ArrayUtils() {

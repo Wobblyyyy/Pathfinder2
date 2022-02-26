@@ -57,22 +57,19 @@ public class SwerveDrive implements Drive {
      * The chassis' back left module.
      */
     private final SwerveModule backLeftModule;
-
+    /**
+     * The chassis' kinematics.
+     */
+    private final RelativeSwerveDriveKinematics kinematics;
     /**
      * The translation the chassis is moving according to.
      */
     private Translation translation = Translation.zero();
-
     /**
      * The chassis' modifier - basically, a function that modifies any
      * inputted translations.
      */
     private Function<Translation, Translation> modifier = s -> s;
-
-    /**
-     * The chassis' kinematics.
-     */
-    private final RelativeSwerveDriveKinematics kinematics;
 
     /**
      * Create a new swerve drive.

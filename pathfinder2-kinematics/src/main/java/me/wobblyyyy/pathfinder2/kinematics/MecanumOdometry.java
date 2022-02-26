@@ -12,7 +12,6 @@ package me.wobblyyyy.pathfinder2.kinematics;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-import me.wobblyyyy.pathfinder2.geometry.Translation;
 
 /**
  * Odometry for a mecanum chassis.
@@ -22,8 +21,8 @@ import me.wobblyyyy.pathfinder2.geometry.Translation;
  */
 public class MecanumOdometry extends GenericOdometry<MecanumState> {
     public MecanumOdometry(Kinematics<MecanumState> kinematics,
-                            Angle gyroAngle,
-                            PointXYZ initialPosition) {
+                           Angle gyroAngle,
+                           PointXYZ initialPosition) {
         super(kinematics, gyroAngle, initialPosition);
     }
 }

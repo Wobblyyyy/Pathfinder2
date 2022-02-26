@@ -202,17 +202,18 @@ public interface Trajectory extends Serializable {
     /**
      * Add a listener for the trajectory's first execution.
      *
-     * @param onStart  code to be executed whenever the trajectory begins
-     *                 its execution. This code will be executed once: the
-     *                 very first time the {@link #nextMarker(PointXYZ)} is
-     *                 called. After the first time the {@link #nextMarker(PointXYZ)}
-     *                 is called, this code will not be executed again.
+     * @param onStart code to be executed whenever the trajectory begins
+     *                its execution. This code will be executed once: the
+     *                very first time the {@link #nextMarker(PointXYZ)} is
+     *                called. After the first time the {@link #nextMarker(PointXYZ)}
+     *                is called, this code will not be executed again.
      * @return a new {@code Trajectory} that has several event listeners
      * attached. If the listener is empty, it'll simply do nothing - otherwise,
      * it'll activate whenever a certain condition is met.
      */
     default Trajectory onStart(Consumer<PointXYZ> onStart) {
-        return addListeners(onStart, (point) -> {});
+        return addListeners(onStart, (point) -> {
+        });
     }
 
     /**
@@ -230,7 +231,8 @@ public interface Trajectory extends Serializable {
      * it'll activate whenever a certain condition is met.
      */
     default Trajectory onFinish(Consumer<PointXYZ> onFinish) {
-        return addListeners((point) -> {}, onFinish);
+        return addListeners((point) -> {
+        }, onFinish);
     }
 
     /**
@@ -258,11 +260,11 @@ public interface Trajectory extends Serializable {
     default Trajectory addListeners(Consumer<PointXYZ> onStart,
                                     Consumer<PointXYZ> onFinish) {
         Function<PointXYZ, PointXYZ> nextMarkerFunction =
-            InternalTrajectoryUtils.nextMarkerFunction(this);
+                InternalTrajectoryUtils.nextMarkerFunction(this);
         Function<PointXYZ, Boolean> isDoneFunction =
-            InternalTrajectoryUtils.isDoneFunction(this);
+                InternalTrajectoryUtils.isDoneFunction(this);
         Function<PointXYZ, Double> speedFunction =
-            InternalTrajectoryUtils.speedFunction(this);
+                InternalTrajectoryUtils.speedFunction(this);
 
         return new Trajectory() {
             boolean hasStarted = false;
@@ -332,11 +334,11 @@ public interface Trajectory extends Serializable {
                                     Consumer<Double> onSpeed,
                                     Consumer<PointXYZ> onFinish) {
         Function<PointXYZ, PointXYZ> nextMarkerFunction =
-            InternalTrajectoryUtils.nextMarkerFunction(this);
+                InternalTrajectoryUtils.nextMarkerFunction(this);
         Function<PointXYZ, Boolean> isDoneFunction =
-            InternalTrajectoryUtils.isDoneFunction(this);
+                InternalTrajectoryUtils.isDoneFunction(this);
         Function<PointXYZ, Double> speedFunction =
-            InternalTrajectoryUtils.speedFunction(this);
+                InternalTrajectoryUtils.speedFunction(this);
 
         return new Trajectory() {
             boolean hasStarted = false;
@@ -392,11 +394,11 @@ public interface Trajectory extends Serializable {
                                      Function<Boolean, Boolean> isDoneModifier,
                                      Function<Double, Double> speedModifier) {
         Function<PointXYZ, PointXYZ> nextMarkerFunction =
-            InternalTrajectoryUtils.nextMarkerFunction(this);
+                InternalTrajectoryUtils.nextMarkerFunction(this);
         Function<PointXYZ, Boolean> isDoneFunction =
-            InternalTrajectoryUtils.isDoneFunction(this);
+                InternalTrajectoryUtils.isDoneFunction(this);
         Function<PointXYZ, Double> speedFunction =
-            InternalTrajectoryUtils.speedFunction(this);
+                InternalTrajectoryUtils.speedFunction(this);
 
         return new Trajectory() {
             @Override
@@ -432,11 +434,11 @@ public interface Trajectory extends Serializable {
     default Trajectory withTimeLimits(double minimumTimeMs,
                                       double maximumTimeMs) {
         Function<PointXYZ, PointXYZ> nextMarkerFunction =
-            InternalTrajectoryUtils.nextMarkerFunction(this);
+                InternalTrajectoryUtils.nextMarkerFunction(this);
         Function<PointXYZ, Boolean> isDoneFunction =
-            InternalTrajectoryUtils.isDoneFunction(this);
+                InternalTrajectoryUtils.isDoneFunction(this);
         Function<PointXYZ, Double> speedFunction =
-            InternalTrajectoryUtils.speedFunction(this);
+                InternalTrajectoryUtils.speedFunction(this);
 
         return new Trajectory() {
             ElapsedTimer timer = new ElapsedTimer();
@@ -480,18 +482,18 @@ public interface Trajectory extends Serializable {
      */
     default Trajectory reflectX(double xReflectionAxis) {
         Function<PointXYZ, PointXYZ> nextMarkerFunction =
-            InternalTrajectoryUtils.nextMarkerFunction(this);
+                InternalTrajectoryUtils.nextMarkerFunction(this);
         Function<PointXYZ, Boolean> isDoneFunction =
-            InternalTrajectoryUtils.isDoneFunction(this);
+                InternalTrajectoryUtils.isDoneFunction(this);
         Function<PointXYZ, Double> speedFunction =
-            InternalTrajectoryUtils.speedFunction(this);
+                InternalTrajectoryUtils.speedFunction(this);
 
         return new Trajectory() {
             @Override
             public PointXYZ nextMarker(PointXYZ current) {
                 return nextMarkerFunction.apply(
-                        current.reflectOverX(xReflectionAxis))
-                    .reflectOverX(xReflectionAxis);
+                                current.reflectOverX(xReflectionAxis))
+                        .reflectOverX(xReflectionAxis);
             }
 
             @Override
@@ -518,18 +520,18 @@ public interface Trajectory extends Serializable {
      */
     default Trajectory reflectY(double yReflectionAxis) {
         Function<PointXYZ, PointXYZ> nextMarkerFunction =
-            InternalTrajectoryUtils.nextMarkerFunction(this);
+                InternalTrajectoryUtils.nextMarkerFunction(this);
         Function<PointXYZ, Boolean> isDoneFunction =
-            InternalTrajectoryUtils.isDoneFunction(this);
+                InternalTrajectoryUtils.isDoneFunction(this);
         Function<PointXYZ, Double> speedFunction =
-            InternalTrajectoryUtils.speedFunction(this);
+                InternalTrajectoryUtils.speedFunction(this);
 
         return new Trajectory() {
             @Override
             public PointXYZ nextMarker(PointXYZ current) {
                 return nextMarkerFunction.apply(
-                        current.reflectOverY(yReflectionAxis))
-                    .reflectOverY(yReflectionAxis);
+                                current.reflectOverY(yReflectionAxis))
+                        .reflectOverY(yReflectionAxis);
             }
 
             @Override
@@ -554,11 +556,11 @@ public interface Trajectory extends Serializable {
      */
     default Trajectory offset(PointXYZ offset) {
         Function<PointXYZ, PointXYZ> nextMarkerFunction =
-            InternalTrajectoryUtils.nextMarkerFunction(this);
+                InternalTrajectoryUtils.nextMarkerFunction(this);
         Function<PointXYZ, Boolean> isDoneFunction =
-            InternalTrajectoryUtils.isDoneFunction(this);
+                InternalTrajectoryUtils.isDoneFunction(this);
         Function<PointXYZ, Double> speedFunction =
-            InternalTrajectoryUtils.speedFunction(this);
+                InternalTrajectoryUtils.speedFunction(this);
 
         return new Trajectory() {
             @Override
@@ -591,11 +593,11 @@ public interface Trajectory extends Serializable {
     default Trajectory rotateAround(PointXY center,
                                     Angle angle) {
         Function<PointXYZ, PointXYZ> nextMarkerFunction =
-            InternalTrajectoryUtils.nextMarkerFunction(this);
+                InternalTrajectoryUtils.nextMarkerFunction(this);
         Function<PointXYZ, Boolean> isDoneFunction =
-            InternalTrajectoryUtils.isDoneFunction(this);
+                InternalTrajectoryUtils.isDoneFunction(this);
         Function<PointXYZ, Double> speedFunction =
-            InternalTrajectoryUtils.speedFunction(this);
+                InternalTrajectoryUtils.speedFunction(this);
 
         return new Trajectory() {
             @Override
@@ -628,11 +630,11 @@ public interface Trajectory extends Serializable {
     default Trajectory shift(PointXY origin,
                              PointXY target) {
         Function<PointXYZ, PointXYZ> nextMarkerFunction =
-            InternalTrajectoryUtils.nextMarkerFunction(this);
+                InternalTrajectoryUtils.nextMarkerFunction(this);
         Function<PointXYZ, Boolean> isDoneFunction =
-            InternalTrajectoryUtils.isDoneFunction(this);
+                InternalTrajectoryUtils.isDoneFunction(this);
         Function<PointXYZ, Double> speedFunction =
-            InternalTrajectoryUtils.speedFunction(this);
+                InternalTrajectoryUtils.speedFunction(this);
 
         PointXYZ difference = origin.subtract(target).withHeading(Angle.fromDeg(0));
 
@@ -686,11 +688,11 @@ public interface Trajectory extends Serializable {
                                 double yMultiplier,
                                 double zMultiplier) {
         Function<PointXYZ, PointXYZ> nextMarkerFunction =
-            InternalTrajectoryUtils.nextMarkerFunction(this);
+                InternalTrajectoryUtils.nextMarkerFunction(this);
         Function<PointXYZ, Boolean> isDoneFunction =
-            InternalTrajectoryUtils.isDoneFunction(this);
+                InternalTrajectoryUtils.isDoneFunction(this);
         Function<PointXYZ, Double> speedFunction =
-            InternalTrajectoryUtils.speedFunction(this);
+                InternalTrajectoryUtils.speedFunction(this);
 
         PointXYZ mult = new PointXYZ(xMultiplier,
                 yMultiplier, Angle.fromDeg(zMultiplier));
@@ -720,11 +722,11 @@ public interface Trajectory extends Serializable {
                            double yMultiplier,
                            double zMultiplier) {
         Function<PointXYZ, PointXYZ> nextMarkerFunction =
-            InternalTrajectoryUtils.nextMarkerFunction(this);
+                InternalTrajectoryUtils.nextMarkerFunction(this);
         Function<PointXYZ, Boolean> isDoneFunction =
-            InternalTrajectoryUtils.isDoneFunction(this);
+                InternalTrajectoryUtils.isDoneFunction(this);
         Function<PointXYZ, Double> speedFunction =
-            InternalTrajectoryUtils.speedFunction(this);
+                InternalTrajectoryUtils.speedFunction(this);
 
         PointXYZ mult = new PointXYZ(xMultiplier,
                 yMultiplier, Angle.fromDeg(zMultiplier));
@@ -760,7 +762,7 @@ public interface Trajectory extends Serializable {
     default Trajectory shiftToRobot(PointXYZ origin,
                                     PointXYZ target) {
         return shift(origin, target)
-            .rotateAround(target, target.z().subtract(origin.z()));
+                .rotateAround(target, target.z().subtract(origin.z()));
     }
 
     default Trajectory addEndCondition(Supplier<Boolean> isFinished) {
@@ -771,11 +773,11 @@ public interface Trajectory extends Serializable {
 
     default Trajectory addEndConditions(Iterable<Supplier<Boolean>> conditions) {
         Function<PointXYZ, PointXYZ> nextMarkerFunction =
-            InternalTrajectoryUtils.nextMarkerFunction(this);
+                InternalTrajectoryUtils.nextMarkerFunction(this);
         Function<PointXYZ, Boolean> isDoneFunction =
-            InternalTrajectoryUtils.isDoneFunction(this);
+                InternalTrajectoryUtils.isDoneFunction(this);
         Function<PointXYZ, Double> speedFunction =
-            InternalTrajectoryUtils.speedFunction(this);
+                InternalTrajectoryUtils.speedFunction(this);
 
         return new Trajectory() {
             @Override
@@ -806,11 +808,11 @@ public interface Trajectory extends Serializable {
 
     default Trajectory addRequirements(Iterable<Supplier<Boolean>> requirements) {
         Function<PointXYZ, PointXYZ> nextMarkerFunction =
-            InternalTrajectoryUtils.nextMarkerFunction(this);
+                InternalTrajectoryUtils.nextMarkerFunction(this);
         Function<PointXYZ, Boolean> isDoneFunction =
-            InternalTrajectoryUtils.isDoneFunction(this);
+                InternalTrajectoryUtils.isDoneFunction(this);
         Function<PointXYZ, Double> speedFunction =
-            InternalTrajectoryUtils.speedFunction(this);
+                InternalTrajectoryUtils.speedFunction(this);
 
         return new Trajectory() {
             @Override
@@ -834,7 +836,7 @@ public interface Trajectory extends Serializable {
     }
 
     /**
-     * Convert {@code this} {@code Trajectory} into an 
+     * Convert {@code this} {@code Trajectory} into an
      * {@code AbstractTrajectory}.
      *
      * @return a new {@code AbstractTrajectory}.

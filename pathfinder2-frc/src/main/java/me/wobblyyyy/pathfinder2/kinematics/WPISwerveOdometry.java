@@ -31,11 +31,10 @@ public class WPISwerveOdometry extends AbstractOdometry {
     private final WPISwerveChassis chassis;
     private final Gyroscope gyroscope;
     private final double velocityToUnitsPerSec;
-    private Pose2d pose;
-    private PointXYZ position;
-
     private final SwerveDriveOdometry odometry;
     private final Encoder[] driveEncoders;
+    private Pose2d pose;
+    private PointXYZ position;
 
     /**
      * Create a new {@code WPISwerveOdometry}.

@@ -10,9 +10,9 @@
 
 package me.wobblyyyy.pathfinder2.math;
 
-import java.util.List;
-
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
+
+import java.util.List;
 
 /**
  * A spline. I don't know much of a better way to explain it, to be entirely
@@ -62,40 +62,6 @@ import me.wobblyyyy.pathfinder2.geometry.PointXY;
  */
 public interface Spline {
     /**
-     * Interpolate a Y value from an X value.
-     *
-     * @param x the current X value.
-     * @return the interpolated Y value.
-     */
-    double interpolateY(double x);
-
-    /**
-     * Interpolate a {@link PointXY} from an X value. This should return a
-     * point created with an X value equal to the provided X value and a Y
-     * value found using {@link #interpolateY(double)}.
-     *
-     * @param x the current X value.
-     * @return the interpolated point.
-     */
-    default PointXY interpolate(double x) {
-        return new PointXY(x, interpolateY(x));
-    }
-
-    /**
-     * Get the spline's start point.
-     *
-     * @return the spline's start point.
-     */
-    PointXY getStartPoint();
-
-    /**
-     * Get the spline's end point.
-     *
-     * @return the spline's end point.
-     */
-    PointXY getEndPoint();
-
-    /**
      * Are a set of values in strictly increasing order?
      *
      * @param values the values to check.
@@ -142,7 +108,7 @@ public interface Spline {
 
     static boolean areMonotonicX(PointXY... points) {
         double[] values = new double[points.length];
-        
+
         for (int i = 0; i < values.length; i++)
             values[i] = points[i].x();
 
@@ -151,7 +117,7 @@ public interface Spline {
 
     static boolean areMonotonicY(PointXY... points) {
         double[] values = new double[points.length];
-        
+
         for (int i = 0; i < values.length; i++)
             values[i] = points[i].x();
 
@@ -161,7 +127,7 @@ public interface Spline {
     static boolean areMonotonic(PointXY... points) {
         double[] x = new double[points.length];
         double[] y = new double[points.length];
-        
+
         for (int i = 0; i < points.length; i++) {
             x[i] = points[i].x();
             y[i] = points[i].y();
@@ -189,9 +155,9 @@ public interface Spline {
 
         for (int i = 0; i < size - 2; i++) {
             PointXY[] array = new PointXY[]{
-                points.get(i),
-                points.get(i + 1),
-                points.get(i + 2)
+                    points.get(i),
+                    points.get(i + 1),
+                    points.get(i + 2)
             };
 
             if (!areMonotonic(array))
@@ -200,4 +166,38 @@ public interface Spline {
 
         return true;
     }
+
+    /**
+     * Interpolate a Y value from an X value.
+     *
+     * @param x the current X value.
+     * @return the interpolated Y value.
+     */
+    double interpolateY(double x);
+
+    /**
+     * Interpolate a {@link PointXY} from an X value. This should return a
+     * point created with an X value equal to the provided X value and a Y
+     * value found using {@link #interpolateY(double)}.
+     *
+     * @param x the current X value.
+     * @return the interpolated point.
+     */
+    default PointXY interpolate(double x) {
+        return new PointXY(x, interpolateY(x));
+    }
+
+    /**
+     * Get the spline's start point.
+     *
+     * @return the spline's start point.
+     */
+    PointXY getStartPoint();
+
+    /**
+     * Get the spline's end point.
+     *
+     * @return the spline's end point.
+     */
+    PointXY getEndPoint();
 }

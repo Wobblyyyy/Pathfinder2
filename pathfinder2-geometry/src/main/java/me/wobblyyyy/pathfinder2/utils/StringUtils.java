@@ -131,10 +131,10 @@ public class StringUtils {
 
                 if (sourceIndex > sources.length - 1)
                     throw new IndexOutOfBoundsException(
-                        "ran out of sources while formatting string: " +
-                            "expected at least 1 additional source " +
-                            "parameter but did not find any for " +
-                            "type " + type
+                            "ran out of sources while formatting string: " +
+                                    "expected at least 1 additional source " +
+                                    "parameter but did not find any for " +
+                                    "type " + type
                     );
 
                 appendNext(buffer, type, maxLength, sources[sourceIndex++]);
@@ -154,7 +154,7 @@ public class StringUtils {
      * character buffer with a size equal to the length of {@code template}
      * times the amount of sources in the {@code sources} parameter. This can
      * frequently result in oversized arrays, which may have a negative impact
-     * on memory usage. To resolve this, you can use 
+     * on memory usage. To resolve this, you can use
      * {@link #sizedFormat(String, int, Object...)}, which allows you to
      * specify the size of the byte buffer to prevent overallocation.
      *
@@ -173,19 +173,19 @@ public class StringUtils {
      * the value that gets added to 10 characters maximum.
      * </p>
      *
-     * @param template   the template string to use. Any character preceded
-     *                   by a {@code %} (percent) sign will be used to determine
-     *                   a formatting type.
-     * @param sources    an array of sources to use for {@code %}. If this
-     *                   array is shorter than the amount of {@code %} in the
-     *                   {@code template} string, an exception will be thrown.
+     * @param template the template string to use. Any character preceded
+     *                 by a {@code %} (percent) sign will be used to determine
+     *                 a formatting type.
+     * @param sources  an array of sources to use for {@code %}. If this
+     *                 array is shorter than the amount of {@code %} in the
+     *                 {@code template} string, an exception will be thrown.
      * @return a freshly formatted string.
      */
     public static String format(String template,
                                 Object... sources) {
         return sizedFormat(
-                template, 
-                template.length() * sources.length, 
+                template,
+                template.length() * sources.length,
                 sources
         );
     }

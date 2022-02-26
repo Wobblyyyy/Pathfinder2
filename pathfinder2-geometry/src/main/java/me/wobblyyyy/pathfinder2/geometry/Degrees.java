@@ -12,7 +12,7 @@ package me.wobblyyyy.pathfinder2.geometry;
 
 /**
  * Angle measurement in degrees.
- * 
+ *
  * @since 1.3.0
  */
 public class Degrees extends Angle {

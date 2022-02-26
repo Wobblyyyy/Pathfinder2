@@ -41,7 +41,7 @@ public class ExampleMethodChaining {
 
     /**
      * Drive in autonomous mode! Very cool.
-     *
+     * <p>
      * You don't have to do any looping - this method will execute until
      * Pathfinder has finished following its path. There's a variety of
      * ways to improve upon this that we can explore later.

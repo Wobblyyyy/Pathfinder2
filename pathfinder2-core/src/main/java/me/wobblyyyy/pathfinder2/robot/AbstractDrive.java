@@ -25,9 +25,9 @@ import java.util.function.Supplier;
  * @since 0.0.0
  */
 public class AbstractDrive implements Drive {
-    private Function<Translation, Translation> modifier = t -> t;
     private final Consumer<Translation> consumer;
     private final Supplier<Translation> supplier;
+    private Function<Translation, Translation> modifier = t -> t;
 
     /**
      * Create a new {@code AbstractDrive}.

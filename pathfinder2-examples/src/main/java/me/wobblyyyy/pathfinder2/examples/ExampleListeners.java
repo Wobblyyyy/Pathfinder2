@@ -146,7 +146,8 @@ public class ExampleListeners {
     @SuppressWarnings("InfiniteLoopStatement")
     public void exampleShifter() {
         Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
-        Shifter shifter = new Shifter(1, 1, 5, false, (s) -> {});
+        Shifter shifter = new Shifter(1, 1, 5, false, (s) -> {
+        });
 
         pathfinder.getListenerManager().bind(
                 ListenerMode.CONDITION_NEWLY_MET,

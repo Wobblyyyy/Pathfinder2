@@ -21,9 +21,9 @@ import me.wobblyyyy.pathfinder2.time.Time;
  * @since 0.6.1
  */
 public class MovementPlayback {
+    private final Pathfinder pathfinder;
     private MovementRecording recording;
     private boolean isPlaying = false;
-    private final Pathfinder pathfinder;
     private int lastIndex = 0;
     private double lastSwitchMs = 0;
 

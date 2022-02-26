@@ -24,7 +24,7 @@ import me.wobblyyyy.pathfinder2.math.Range;
 public class Geometry {
     /**
      * Tolerance used in determining if two {@link PointXY}s are equivalent.
-     * 
+     *
      * <p>
      * This tolerance value is used like so:
      * <code><pre>
@@ -49,7 +49,7 @@ public class Geometry {
 
     /**
      * Tolerance used in determining if two {@link PointXYZ}s are equivalent.
-     * 
+     *
      * <p>
      * This tolerance value is used like so:
      * <code><pre>

@@ -119,12 +119,6 @@ public class MutableLinearTrajectory implements Trajectory {
         this.angleTolerance = angleTolerance;
     }
 
-    public MutableLinearTrajectory setTarget(PointXYZ target) {
-        this.target = target;
-
-        return this;
-    }
-
     public MutableLinearTrajectory setSpeed(double speed) {
         this.speed = speed;
 
@@ -157,6 +151,12 @@ public class MutableLinearTrajectory implements Trajectory {
 
     public PointXYZ getTarget() {
         return this.target;
+    }
+
+    public MutableLinearTrajectory setTarget(PointXYZ target) {
+        this.target = target;
+
+        return this;
     }
 
     @Override

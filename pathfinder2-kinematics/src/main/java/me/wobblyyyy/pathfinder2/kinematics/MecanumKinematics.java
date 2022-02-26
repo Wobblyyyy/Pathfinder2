@@ -25,16 +25,14 @@ public class MecanumKinematics implements Kinematics<MecanumState> {
     private final PointXY frontRightPosition;
     private final PointXY backLeftPosition;
     private final PointXY backRightPosition;
-
-    private SimpleMatrix inverseKinematics;
     private final SimpleMatrix forwardsKinematics;
-
+    private SimpleMatrix inverseKinematics;
     private PointXY lastCenterOfRotation = new PointXY(0, 0);
 
     public MecanumKinematics(PointXY frontLeftPosition,
-                              PointXY frontRightPosition,
-                              PointXY backLeftPosition,
-                              PointXY backRightPosition) {
+                             PointXY frontRightPosition,
+                             PointXY backLeftPosition,
+                             PointXY backRightPosition) {
         this.frontLeftPosition = frontLeftPosition;
         this.frontRightPosition = frontRightPosition;
         this.backLeftPosition = backLeftPosition;
@@ -51,7 +49,7 @@ public class MecanumKinematics implements Kinematics<MecanumState> {
     }
 
     public MecanumKinematics(double xSize,
-                              double ySize) {
+                             double ySize) {
         this(
                 new PointXY(-xSize / 2, ySize / 2),
                 new PointXY(xSize / 2, ySize / 2),
@@ -83,7 +81,7 @@ public class MecanumKinematics implements Kinematics<MecanumState> {
     }
 
     public MecanumState calculate(Translation translation,
-                                   PointXY centerOfRotation) {
+                                  PointXY centerOfRotation) {
         if (!centerOfRotation.equals(lastCenterOfRotation)) {
             PointXY fl = frontLeftPosition.subtract(centerOfRotation);
             PointXY fr = frontRightPosition.subtract(centerOfRotation);

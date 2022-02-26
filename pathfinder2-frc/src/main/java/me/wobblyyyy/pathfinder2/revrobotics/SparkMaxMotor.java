@@ -14,7 +14,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
 
-import static com.revrobotics.CANSparkMaxLowLevel.MotorType.*;
+import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushed;
+import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 
 /**
  * Wrapper for {@link CANSparkMax}. Uses {@link AbstractMotor} internally to

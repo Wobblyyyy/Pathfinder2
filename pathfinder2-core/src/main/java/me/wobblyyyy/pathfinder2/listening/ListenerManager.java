@@ -84,7 +84,7 @@ public class ListenerManager implements Tickable {
     public ListenerManager addListener(Listener listener) {
         return addListener(
                 RandomString.randomString(
-                    Core.listenerManagerRandomStringLength),
+                        Core.listenerManagerRandomStringLength),
                 listener
         );
     }

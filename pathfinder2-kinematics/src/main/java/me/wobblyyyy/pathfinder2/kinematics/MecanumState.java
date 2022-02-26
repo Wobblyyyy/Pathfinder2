@@ -53,9 +53,9 @@ public class MecanumState {
      * @param br the back-right motor.
      */
     public MecanumState(double fl,
-                         double fr,
-                         double bl,
-                         double br) {
+                        double fr,
+                        double bl,
+                        double br) {
         this(
                 fl,
                 fr,
@@ -75,10 +75,10 @@ public class MecanumState {
      * @param magnitude the magnitude of the translation.
      */
     public MecanumState(double fl,
-                         double fr,
-                         double bl,
-                         double br,
-                         double magnitude) {
+                        double fr,
+                        double bl,
+                        double br,
+                        double magnitude) {
         this.fl = fl;
         this.fr = fr;
         this.bl = bl;

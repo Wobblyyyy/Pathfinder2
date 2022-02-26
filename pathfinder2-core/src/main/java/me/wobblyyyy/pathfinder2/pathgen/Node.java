@@ -31,15 +31,14 @@ import java.util.stream.Collectors;
  * @since 0.1.0
  */
 public class Node {
+    private final int x;
+    private final int y;
     private Node parent;
     private List<Node> neighbours;
     private double cost;
     private double heuristic;
     private double function;
     private boolean valid = true;
-
-    private final int x;
-    private final int y;
 
     public Node(int x,
                 int y) {
@@ -207,12 +206,12 @@ public class Node {
         return valid;
     }
 
-    public boolean isInvalid() {
-        return !valid;
-    }
-
     public void setValid(boolean valid) {
         this.valid = valid;
+    }
+
+    public boolean isInvalid() {
+        return !valid;
     }
 
     public void reverseValidation() {

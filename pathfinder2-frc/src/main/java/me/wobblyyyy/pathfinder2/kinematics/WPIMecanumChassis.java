@@ -1,7 +1,5 @@
 package me.wobblyyyy.pathfinder2.kinematics;
 
-import java.util.function.Function;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
@@ -10,6 +8,8 @@ import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.components.Motor;
 import me.wobblyyyy.pathfinder2.wpilib.WPIAdapter;
+
+import java.util.function.Function;
 
 /**
  * A wpilib-specific mecanum chassis implementation. The utilizes math from
@@ -22,13 +22,11 @@ import me.wobblyyyy.pathfinder2.wpilib.WPIAdapter;
  * @since 0.10.8
  **/
 public class WPIMecanumChassis implements Drive {
-    private MecanumDriveKinematics kinematics;
-
     private final Motor frontRightMotor;
     private final Motor frontLeftMotor;
     private final Motor backRightMotor;
     private final Motor backLeftMotor;
-
+    private MecanumDriveKinematics kinematics;
     private Function<Translation, Translation> modifier;
     private Translation translation;
 
@@ -72,8 +70,8 @@ public class WPIMecanumChassis implements Drive {
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
-        MecanumDriveWheelSpeeds speeds = 
-            kinematics.toWheelSpeeds(chassisSpeeds);
+        MecanumDriveWheelSpeeds speeds =
+                kinematics.toWheelSpeeds(chassisSpeeds);
 
         frontRightMotor.setPower(speeds.frontRightMetersPerSecond);
         frontLeftMotor.setPower(speeds.frontLeftMetersPerSecond);

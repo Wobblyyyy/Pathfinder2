@@ -56,11 +56,16 @@ public class AHRSGyro extends AbstractGyroscope {
     @Override
     public Angle getRawAngle() {
         switch (mode) {
-            case NORMAL: return Angle.fixedDeg(ahrs.getAngle());
-            case YAW: return Angle.fixedDeg(ahrs.getYaw());
-            case PITCH: return Angle.fixedDeg(ahrs.getPitch());
-            case ROLL: return Angle.fixedDeg(ahrs.getRoll());
-            default: throw new RuntimeException();
+            case NORMAL:
+                return Angle.fixedDeg(ahrs.getAngle());
+            case YAW:
+                return Angle.fixedDeg(ahrs.getYaw());
+            case PITCH:
+                return Angle.fixedDeg(ahrs.getPitch());
+            case ROLL:
+                return Angle.fixedDeg(ahrs.getRoll());
+            default:
+                throw new RuntimeException();
         }
     }
 }

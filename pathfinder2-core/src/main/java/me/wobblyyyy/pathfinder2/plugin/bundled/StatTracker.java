@@ -29,15 +29,12 @@ import me.wobblyyyy.pathfinder2.time.Time;
  * @since 0.10.3
  */
 public class StatTracker extends PathfinderPlugin {
-    public static double SECOND_MS_DURATION = 1_000;
-
     public static final String KEY_TPS = "pf_tps";
     public static final String KEY_TICKS = "pf_ticks";
-
     private static final String NAME = "StatTracker";
-
-    private long ticks = 0;
+    public static double SECOND_MS_DURATION = 1_000;
     private final RollingAverage ticksPerSecond = new RollingAverage(10);
+    private long ticks = 0;
     private long followersFinished = 0;
     private double totalDistance = 0;
     private PointXY lastPoint = null;

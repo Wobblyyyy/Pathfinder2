@@ -24,9 +24,9 @@ import java.util.function.Supplier;
  * library.
  *
  * @author Colin Robertson
- * @since 0.0.0
  * @see EncoderProfile
  * @see ThreeWheelOdometryProfile
+ * @since 0.0.0
  */
 @SuppressWarnings("FieldCanBeLocal")
 public class ThreeWheelOdometry extends AbstractOdometry {
@@ -156,21 +156,21 @@ public class ThreeWheelOdometry extends AbstractOdometry {
          * Create a new odometry profile, which can later be used in an
          * instance of the {@link ThreeWheelOdometry} class.
          *
-         * @param cpr            the encoder's CPR, or counts per revolution.
-         *                       This number should be the same across each
-         *                       of your three encoders.
-         * @param wheelDiameter  the diameter of the odometry wheels. This
-         *                       unit doesn't matter, but it should be the
-         *                       same as the three offset values.
-         * @param offsetLeft     the left odometry wheel's offset from the
-         *                       center of the robot. Only horizontal offset
-         *                       matters.
-         * @param offsetRight    the right odometry wheel's offset from the
-         *                       center of the robot. Only horizontal offset
-         *                       matters.
-         * @param offsetCenter   the front/back odometry wheel's offset from
-         *                       the center of the robot. Only vertical
-         *                       offset from the center matters.
+         * @param cpr           the encoder's CPR, or counts per revolution.
+         *                      This number should be the same across each
+         *                      of your three encoders.
+         * @param wheelDiameter the diameter of the odometry wheels. This
+         *                      unit doesn't matter, but it should be the
+         *                      same as the three offset values.
+         * @param offsetLeft    the left odometry wheel's offset from the
+         *                      center of the robot. Only horizontal offset
+         *                      matters.
+         * @param offsetRight   the right odometry wheel's offset from the
+         *                      center of the robot. Only horizontal offset
+         *                      matters.
+         * @param offsetCenter  the front/back odometry wheel's offset from
+         *                      the center of the robot. Only vertical
+         *                      offset from the center matters.
          */
         public ThreeWheelOdometryProfile(double cpr,
                                          double wheelDiameter,

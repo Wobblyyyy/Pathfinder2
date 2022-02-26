@@ -46,52 +46,42 @@ public class AbstractMotor implements Motor {
      * A {@code Supplier} that returns the motor's current power.
      */
     private final Supplier<Double> getPower;
-
+    private final List<Supplier<Boolean>> mustBeTrueToSetPowerOtherwiseZero;
+    private final List<Supplier<Boolean>> mustBeFalseToSetPowerOtherwiseZero;
     /**
      * Should power values be inverted when being set?
      */
     private boolean isSetInverted;
-
     /**
      * Should power values be inverted when being retrieved?
      */
     private boolean isGetInverted;
-
     /**
      * The motor's minimum power.
      */
     private double minPower = -1.0;
-
     /**
      * The motor's maximum power.
      */
     private double maxPower = 1.0;
-
     /**
      * Is the motor operating in lazy mode? By default, this is true.
      */
     private boolean isLazy = true;
-
     /**
      * Maximum power value gap for lazy mode. By default, this is 0.01.
      */
     private double maxLazyPowerGap = 0.01;
-
     /**
      * The last set power value.
      */
     private double lastPower = 0.0;
-
     /**
      * The motor's deadband. Any power value set to the motor that has an
      * absolute value less than this value will actually set the motor's power
      * to 0 to prevent motor slippage.
      */
     private double deadband;
-
-    private final List<Supplier<Boolean>> mustBeTrueToSetPowerOtherwiseZero;
-
-    private final List<Supplier<Boolean>> mustBeFalseToSetPowerOtherwiseZero;
 
     /**
      * Create a new {@code AbstractMotor} using a {@link Supplier} and a
@@ -422,8 +412,8 @@ public class AbstractMotor implements Motor {
         if (isLazy)
             if (Math.abs(lastPower - power) >= maxLazyPowerGap)
                 accept(power);
-        else
-            accept(power);
+            else
+                accept(power);
     }
 
     @Override

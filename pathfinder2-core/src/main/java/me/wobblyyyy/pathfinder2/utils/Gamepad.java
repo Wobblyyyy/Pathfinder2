@@ -16,17 +16,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Gamepad {
+    private final Map<InputButton, PointXYZ> pointMap = new HashMap<>();
     public Button buttonA;
     public Button buttonB;
     public Button buttonX;
     public Button buttonY;
-
     public Button buttonStart;
     public Button buttonSelect;
-
     public DualJoystick joysticks;
-
-    private final Map<InputButton, PointXYZ> pointMap = new HashMap<>();
 
     public boolean areAnyButtonsPressed() {
         return areLetterButtonsPressed() ||
@@ -54,15 +51,6 @@ public class Gamepad {
                          PointXYZ point) {
         pointMap.remove(input);
         pointMap.put(input, point);
-    }
-
-    public enum InputButton {
-        BUTTON_A,
-        BUTTON_B,
-        BUTTON_X,
-        BUTTON_Y,
-        BUTTON_START,
-        BUTTON_SELECT
     }
 
     public boolean a() {
@@ -135,5 +123,14 @@ public class Gamepad {
 
     public boolean wasSelectReleased() {
         return buttonSelect.wasReleased();
+    }
+
+    public enum InputButton {
+        BUTTON_A,
+        BUTTON_B,
+        BUTTON_X,
+        BUTTON_Y,
+        BUTTON_START,
+        BUTTON_SELECT
     }
 }

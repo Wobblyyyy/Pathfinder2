@@ -133,7 +133,7 @@ public class MonotoneCubicSpline implements Spline {
 
         m[0] = d[0];
 
-        for (int i = 1; i < n - 1; i++) 
+        for (int i = 1; i < n - 1; i++)
             m[i] = (d[i - 1] + d[i]) * 0.5D;
 
         m[n - 1] = d[n - 2];

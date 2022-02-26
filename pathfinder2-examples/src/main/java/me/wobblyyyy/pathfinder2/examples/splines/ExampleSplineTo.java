@@ -23,7 +23,7 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
  * a lot of control over how exactly the spline functions, but that requires
  * you to create a trajectory and all that, and we all know how much of a
  * pain that is (not really, to be honest).
- *
+ * <p>
  * The {@link Pathfinder#splineTo(PointXYZ...)} method that's being used here
  * is the most expressive/idiomatic way to utilize splines, so I'd encourage
  * you to use it if you're not entirely sure what you're doing or if you just

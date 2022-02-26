@@ -63,7 +63,7 @@ public class RelativeSwerveModuleKinematics {
      * a current and a target angle.
      *
      * @param current the swerve module's current angle.
-     * @param target the swerve module's target angle.
+     * @param target  the swerve module's target angle.
      * @return how much power the swerve module's turn motor should receive
      * in order to make the current angle match up with the target angle.
      */

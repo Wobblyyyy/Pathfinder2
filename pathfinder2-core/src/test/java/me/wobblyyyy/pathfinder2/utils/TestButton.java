@@ -10,14 +10,13 @@
 
 package me.wobblyyyy.pathfinder2.utils;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import me.wobblyyyy.pathfinder2.Pathfinder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import me.wobblyyyy.pathfinder2.Pathfinder;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TestButton {
     private Pathfinder pathfinder;

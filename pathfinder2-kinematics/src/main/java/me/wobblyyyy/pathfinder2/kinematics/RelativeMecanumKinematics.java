@@ -61,8 +61,8 @@ public class RelativeMecanumKinematics implements Kinematics<MecanumState> {
      * @param angleOffset  the angle offset for the kinematics.
      */
     public RelativeMecanumKinematics(double minMagnitude,
-                                      double maxMagnitude,
-                                      Angle angleOffset) {
+                                     double maxMagnitude,
+                                     Angle angleOffset) {
         this(
                 minMagnitude,
                 maxMagnitude,
@@ -74,15 +74,15 @@ public class RelativeMecanumKinematics implements Kinematics<MecanumState> {
     /**
      * Create a new instance of the {@code RelativeMecanumKinematics} class.
      *
-     * @param minMagnitude the minimum magnitude.
-     * @param maxMagnitude the maximum magnitude.
+     * @param minMagnitude  the minimum magnitude.
+     * @param maxMagnitude  the maximum magnitude.
      * @param turnMagnitude the turn magnitude.
-     * @param angleOffset  the angle offset for the kinematics.
+     * @param angleOffset   the angle offset for the kinematics.
      */
     public RelativeMecanumKinematics(double minMagnitude,
-                                      double maxMagnitude,
-                                      double turnMagnitude,
-                                      Angle angleOffset) {
+                                     double maxMagnitude,
+                                     double turnMagnitude,
+                                     Angle angleOffset) {
         this.minMagnitude = minMagnitude;
         this.maxMagnitude = maxMagnitude;
         this.turnMagnitude = turnMagnitude;

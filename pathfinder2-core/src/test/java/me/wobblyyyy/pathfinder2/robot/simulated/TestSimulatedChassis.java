@@ -28,13 +28,7 @@ import me.wobblyyyy.pathfinder2.trajectory.spline.AdvancedSplineTrajectoryBuilde
 import me.wobblyyyy.pathfinder2.trajectory.spline.InterpolationMode;
 import me.wobblyyyy.pathfinder2.trajectory.spline.MultiSplineBuilder;
 import me.wobblyyyy.pathfinder2.trajectory.spline.SplineBuilderFactory;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import java.util.List;
@@ -518,14 +512,14 @@ public class TestSimulatedChassis {
     @Test
     public void testMonotonicMultiSplineTrajectory() {
         MultiSplineBuilder builder = new MultiSplineBuilder()
-            .setDefaultStep(0.05)
-            .setDefaultSpeed(0.5)
-            .setDefaultTolerance(0.5)
-            .setDefaultAngleTolerance(Angle.fromDeg(5))
-            .add(0, 0, Angle.fromDeg(0), 0.1)
-            .add(2, 3, Angle.fromDeg(0), 0.1)
-            .add(4, 6, Angle.fromDeg(0), 0.1)
-            .add(6, 9, Angle.fromDeg(0), 0.5, 0.1, 2, Angle.fromDeg(5));
+                .setDefaultStep(0.05)
+                .setDefaultSpeed(0.5)
+                .setDefaultTolerance(0.5)
+                .setDefaultAngleTolerance(Angle.fromDeg(5))
+                .add(0, 0, Angle.fromDeg(0), 0.1)
+                .add(2, 3, Angle.fromDeg(0), 0.1)
+                .add(4, 6, Angle.fromDeg(0), 0.1)
+                .add(6, 9, Angle.fromDeg(0), 0.5, 0.1, 2, Angle.fromDeg(5));
 
         pathfinder.followTrajectory(builder.build());
 
@@ -535,21 +529,21 @@ public class TestSimulatedChassis {
     @Test
     public void testNonMonotonicMultiSplineTrajectory() {
         MultiSplineBuilder builder = new MultiSplineBuilder()
-            .setDefaultStep(0.05)
-            .setDefaultSpeed(0.5)
-            .setDefaultTolerance(0.5)
-            .setDefaultAngleTolerance(Angle.fromDeg(5))
-            .add(0, 0, Angle.fromDeg(0), 0.1)
-            .add(2, 3, Angle.fromDeg(0), 0.1)
-            .add(4, 6, Angle.fromDeg(0), 0.1)
-            .add(6, 9, Angle.fromDeg(0), 0.1)
-            .add(8, 6, Angle.fromDeg(0), 0.1)
-            .add(10, 3, Angle.fromDeg(0), 0.1)
-            .add(12, 6, Angle.fromDeg(0), 0.1)
-            .add(14, 9, Angle.fromDeg(0), 0.1)
-            .add(16, 6, Angle.fromDeg(0), 0.1)
-            .add(18, 3, Angle.fromDeg(0), 0.1)
-            .add(20, 0, Angle.fromDeg(0), 0.5, 0.1, 2, Angle.fromDeg(5));
+                .setDefaultStep(0.05)
+                .setDefaultSpeed(0.5)
+                .setDefaultTolerance(0.5)
+                .setDefaultAngleTolerance(Angle.fromDeg(5))
+                .add(0, 0, Angle.fromDeg(0), 0.1)
+                .add(2, 3, Angle.fromDeg(0), 0.1)
+                .add(4, 6, Angle.fromDeg(0), 0.1)
+                .add(6, 9, Angle.fromDeg(0), 0.1)
+                .add(8, 6, Angle.fromDeg(0), 0.1)
+                .add(10, 3, Angle.fromDeg(0), 0.1)
+                .add(12, 6, Angle.fromDeg(0), 0.1)
+                .add(14, 9, Angle.fromDeg(0), 0.1)
+                .add(16, 6, Angle.fromDeg(0), 0.1)
+                .add(18, 3, Angle.fromDeg(0), 0.1)
+                .add(20, 0, Angle.fromDeg(0), 0.5, 0.1, 2, Angle.fromDeg(5));
 
         pathfinder.followTrajectory(builder.build());
 
@@ -559,15 +553,15 @@ public class TestSimulatedChassis {
     @Test
     public void testMultiSegmentTrajectory() {
         List<Trajectory> trajectories = new LinearTrajectoryBuilder()
-            .setSpeed(0.5)
-            .setTolerance(0.1)
-            .setAngleTolerance(Angle.fromDeg(1))
-            .goTo(new PointXYZ(0, 0, 0))
-            .goTo(new PointXYZ(0, 10, 0))
-            .goTo(new PointXYZ(10, 10, 0))
-            .goTo(new PointXYZ(10, 0, 0))
-            .goTo(new PointXYZ(0, 0, 0))
-            .getTrajectories();
+                .setSpeed(0.5)
+                .setTolerance(0.1)
+                .setAngleTolerance(Angle.fromDeg(1))
+                .goTo(new PointXYZ(0, 0, 0))
+                .goTo(new PointXYZ(0, 10, 0))
+                .goTo(new PointXYZ(10, 10, 0))
+                .goTo(new PointXYZ(10, 0, 0))
+                .goTo(new PointXYZ(0, 0, 0))
+                .getTrajectories();
 
         Trajectory trajectory = new MultiSegmentTrajectory(trajectories);
 
@@ -582,11 +576,11 @@ public class TestSimulatedChassis {
         // per second. if it's not... oh well.
 
         MultiSplineBuilder builder = new MultiSplineBuilder()
-            .setDefaultStep(0.5)
-            .setDefaultSpeed(0.5)
-            .setDefaultTolerance(0.5)
-            .setDefaultInterpolationMode(InterpolationMode.DEFAULT)
-            .setDefaultAngleTolerance(Angle.fromDeg(5));
+                .setDefaultStep(0.5)
+                .setDefaultSpeed(0.5)
+                .setDefaultTolerance(0.5)
+                .setDefaultInterpolationMode(InterpolationMode.DEFAULT)
+                .setDefaultAngleTolerance(Angle.fromDeg(5));
 
         for (int i = 0; i < 10; i++)
             builder.add(i * 2, Math.pow(i, 2), Angle.fromDeg(0),
@@ -676,10 +670,10 @@ public class TestSimulatedChassis {
         Class<?> clazz = TestSimulatedChassis.class;
 
         Trajectory trajectory = factory.builder()
-            .add(new PointXYZ(0, 0, 0))
-            .add(new PointXYZ(0, 0, 0).inDirection(10, Angle.fromDeg(45)))
-            .add(new PointXYZ(10, 10, 0))
-            .build();
+                .add(new PointXYZ(0, 0, 0))
+                .add(new PointXYZ(0, 0, 0).inDirection(10, Angle.fromDeg(45)))
+                .add(new PointXYZ(10, 10, 0))
+                .build();
 
         Pathfinder.addTrajectory(clazz, "test", trajectory);
         pathfinder.followTrajectory(clazz, "test");

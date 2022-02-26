@@ -376,10 +376,14 @@ public class Translation implements Serializable {
      */
     public double getAxis(Axis axis) {
         switch (axis) {
-            case X: return vx();
-            case Y: return vy();
-            case Z: return vz();
-            default: throw new RuntimeException();
+            case X:
+                return vx();
+            case Y:
+                return vy();
+            case Z:
+                return vz();
+            default:
+                throw new RuntimeException();
         }
     }
 
@@ -393,10 +397,14 @@ public class Translation implements Serializable {
     public Translation withAxis(Axis axis,
                                 double value) {
         switch (axis) {
-            case X: return withVx(value);
-            case Y: return withVy(value);
-            case Z: return withVz(value);
-            default: throw new RuntimeException();
+            case X:
+                return withVx(value);
+            case Y:
+                return withVy(value);
+            case Z:
+                return withVz(value);
+            default:
+                throw new RuntimeException();
         }
     }
 
@@ -603,8 +611,8 @@ public class Translation implements Serializable {
     @Override
     public int hashCode() {
         int x = (int) (vx * 1_000_000);
-        int y = (int) (vy *   100_100);
-        int z = (int) (vz *       100);
+        int y = (int) (vy * 100_100);
+        int z = (int) (vz * 100);
 
         return x + y + z;
     }

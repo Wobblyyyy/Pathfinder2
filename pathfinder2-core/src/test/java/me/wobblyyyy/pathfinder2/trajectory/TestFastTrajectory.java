@@ -10,12 +10,11 @@
 
 package me.wobblyyyy.pathfinder2.trajectory;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TestFastTrajectory {
     private static void setPos(SimulatedOdometry odometry,
@@ -27,8 +26,8 @@ public class TestFastTrajectory {
     public void testSimpleFastTrajectory() {
         Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
         Trajectory trajectory = new FastTrajectory(
-                pathfinder.getPosition(), 
-                new PointXYZ(10, 10, 45), 
+                pathfinder.getPosition(),
+                new PointXYZ(10, 10, 45),
                 0.5
         );
         pathfinder.followTrajectory(trajectory);

@@ -16,10 +16,9 @@ import me.wobblyyyy.pathfinder2.geometry.Translation;
 
 public class GenericOdometry<T> {
     private final Kinematics<T> kinematics;
+    private final Angle gyroOffset;
     private PointXYZ position;
     private double previousTimeMs;
-
-    private final Angle gyroOffset;
     private Angle previousAngle;
 
     public GenericOdometry(Kinematics<T> kinematics,

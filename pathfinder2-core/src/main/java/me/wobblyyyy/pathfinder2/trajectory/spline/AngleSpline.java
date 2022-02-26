@@ -57,6 +57,10 @@ public class AngleSpline {
         return Angle.fixedDeg(spline.interpolateY(x));
     }
 
+    public Spline getSpline() {
+        return spline;
+    }
+
     /**
      * A builder for the {@link AngleSpline} class.
      */
@@ -91,9 +95,5 @@ public class AngleSpline {
 
             return new AngleSpline(unboxedX, angles);
         }
-    }
-
-    public Spline getSpline() {
-        return spline;
     }
 }

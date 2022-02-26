@@ -65,15 +65,6 @@ public class SimulatedOdometry extends AbstractOdometry {
         this.lastTimeMs = Time.ms();
     }
 
-    /**
-     * Set the odometry system's raw position.
-     *
-     * @param position the odometry system's position.
-     */
-    public void setRawPosition(PointXYZ position) {
-        this.currentPosition = position;
-    }
-
     public void setRawPosition(double x,
                                double y,
                                double zDegrees) {
@@ -99,6 +90,15 @@ public class SimulatedOdometry extends AbstractOdometry {
         }
 
         return this.currentPosition;
+    }
+
+    /**
+     * Set the odometry system's raw position.
+     *
+     * @param position the odometry system's position.
+     */
+    public void setRawPosition(PointXYZ position) {
+        this.currentPosition = position;
     }
 
     /**

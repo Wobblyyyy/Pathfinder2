@@ -12,13 +12,11 @@ package me.wobblyyyy.pathfinder2.math;
 
 import me.wobblyyyy.pathfinder2.exceptions.SplineException;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
-
+import org.apache.commons.math3.analysis.interpolation.AkimaSplineInterpolator;
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
+import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 
 import java.util.Arrays;
-
-import org.apache.commons.math3.analysis.interpolation.AkimaSplineInterpolator;
-import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 
 /**
  * Implementation of {@link PolynomialSplineFunction} - very cool! This
@@ -34,12 +32,10 @@ public class ApacheSpline implements Spline {
     private final boolean isInverted;
     private final Interpolator interpolator;
     private final PolynomialSplineFunction function;
-
-    private double minX;
-    private double maxX;
-
     private final PointXY startPoint;
     private final PointXY endPoint;
+    private double minX;
+    private double maxX;
 
     /**
      * Create a new {@code ApacheSpline}.
@@ -79,7 +75,7 @@ public class ApacheSpline implements Spline {
 
         if (!Spline.areMonotonic(x))
             throw new SplineException("cannot create a spline with " +
-                    "non-monotonic x values! the invalid values were: " + 
+                    "non-monotonic x values! the invalid values were: " +
                     Arrays.toString(x));
 
         this.isInverted = Spline.areDecreasing(x);

@@ -10,10 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.trajectory;
 
-import java.util.function.Supplier;
-
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
+
+import java.util.function.Supplier;
 
 /**
  * A task-oriented {@code Trajectory} interface that does not require the

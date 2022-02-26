@@ -43,40 +43,6 @@ import java.util.function.Consumer;
  */
 public interface Follower {
     /**
-     * Get the trajectory the follower is following.
-     *
-     * <p>
-     * This method is mostly just here to enforce that any classes implementing
-     * the {@code Follower} interface require a trajectory in the constructor.
-     * </p>
-     *
-     * @return the trajectory the follower is following.
-     */
-    Trajectory getTrajectory();
-
-    /**
-     * "Tick" the follower once.
-     *
-     * <p>
-     * Each time the follower is ticked, a new translation should be generated.
-     * The {@code Consumer<Translation>} that's supplied to this method will
-     * accept that translation, and in doing so, drive the robot accordingly.
-     * This translation will always be relative, meaning relative to whatever
-     * direction the robot is currently facing.
-     * </p>
-     *
-     * @param current  the robot's current position.
-     * @param consumer a consumer that will accept a generated translation.
-     *                 This translation should never have X or Y values
-     *                 outside the bounds (-1.0, 1.0).
-     * @return if the follower has finished, return true, indicating that
-     * the follower can be de-queued and the next follower can begin execution.
-     * If the follower has not finished, however, return false, indicating
-     * that we need to keep going at least a little while longer.
-     */
-    boolean tick(PointXYZ current, Consumer<Translation> consumer);
-
-    /**
      * Get an absolute translation based on a couple of parameters.
      *
      * <p>
@@ -160,4 +126,38 @@ public interface Follower {
                 current.z()
         );
     }
+
+    /**
+     * Get the trajectory the follower is following.
+     *
+     * <p>
+     * This method is mostly just here to enforce that any classes implementing
+     * the {@code Follower} interface require a trajectory in the constructor.
+     * </p>
+     *
+     * @return the trajectory the follower is following.
+     */
+    Trajectory getTrajectory();
+
+    /**
+     * "Tick" the follower once.
+     *
+     * <p>
+     * Each time the follower is ticked, a new translation should be generated.
+     * The {@code Consumer<Translation>} that's supplied to this method will
+     * accept that translation, and in doing so, drive the robot accordingly.
+     * This translation will always be relative, meaning relative to whatever
+     * direction the robot is currently facing.
+     * </p>
+     *
+     * @param current  the robot's current position.
+     * @param consumer a consumer that will accept a generated translation.
+     *                 This translation should never have X or Y values
+     *                 outside the bounds (-1.0, 1.0).
+     * @return if the follower has finished, return true, indicating that
+     * the follower can be de-queued and the next follower can begin execution.
+     * If the follower has not finished, however, return false, indicating
+     * that we need to keep going at least a little while longer.
+     */
+    boolean tick(PointXYZ current, Consumer<Translation> consumer);
 }

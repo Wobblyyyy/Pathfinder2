@@ -11,9 +11,9 @@
 package me.wobblyyyy.pathfinder2.examples;
 
 import me.wobblyyyy.pathfinder2.Pathfinder;
-import me.wobblyyyy.pathfinder2.recording.MovementRecording;
 import me.wobblyyyy.pathfinder2.recording.MovementPlayback;
 import me.wobblyyyy.pathfinder2.recording.MovementRecorder;
+import me.wobblyyyy.pathfinder2.recording.MovementRecording;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.robot.Robot;

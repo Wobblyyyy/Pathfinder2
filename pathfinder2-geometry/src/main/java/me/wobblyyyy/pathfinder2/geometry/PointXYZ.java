@@ -33,8 +33,6 @@ import java.util.List;
  * @since 0.0.0
  */
 public class PointXYZ extends PointXY {
-    public static long COUNT = 0;
-
     /**
      * A point with...
      *
@@ -45,7 +43,7 @@ public class PointXYZ extends PointXY {
      * </ul>
      */
     public static final PointXYZ ZERO = new PointXYZ(0, 0, 0);
-
+    public static long COUNT = 0;
     /**
      * The point's angle, or heading, or whatever you want to call it.
      */
@@ -499,6 +497,11 @@ public class PointXYZ extends PointXY {
         return reflectedPoints;
     }
 
+    private static double reflect(double value,
+                                  double axis) {
+        return axis - (value - axis);
+    }
+
     /**
      * Get the point's heading.
      *
@@ -675,11 +678,6 @@ public class PointXYZ extends PointXY {
         }
 
         return false;
-    }
-
-    private static double reflect(double value,
-                                  double axis) {
-        return axis - (value - axis);
     }
 
     /**

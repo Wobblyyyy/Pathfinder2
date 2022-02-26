@@ -10,14 +10,14 @@
 
 package me.wobblyyyy.pathfinder2.prebuilt;
 
-import java.util.function.Function;
-
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
+
+import java.util.function.Function;
 
 /**
  * An {@code AutoRotator} allows you to automatically rotate around a

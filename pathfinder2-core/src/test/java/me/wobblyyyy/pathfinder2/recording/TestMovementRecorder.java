@@ -16,9 +16,6 @@ import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
 import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
 public class TestMovementRecorder {
     public void testMovementRecorder() {
         Pathfinder pf = Pathfinder.newSimulatedPathfinder(0.01);

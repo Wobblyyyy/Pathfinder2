@@ -51,8 +51,8 @@ import me.wobblyyyy.pathfinder2.time.Stopwatch;
 import me.wobblyyyy.pathfinder2.time.Time;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.TaskTrajectory;
-import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.trajectory.TaskTrajectoryBuilder;
+import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.trajectory.spline.AdvancedSplineTrajectoryBuilder;
 import me.wobblyyyy.pathfinder2.trajectory.spline.MultiSplineBuilder;
 import me.wobblyyyy.pathfinder2.utils.Button;
@@ -63,11 +63,7 @@ import me.wobblyyyy.pathfinder2.zones.Zone;
 import me.wobblyyyy.pathfinder2.zones.ZoneProcessor;
 
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 /**
  * The highest-level interface used for interacting with {@code Pathfinder}.
@@ -222,70 +218,57 @@ public class Pathfinder {
      * Used in event listeners.
      */
     private final ListenerManager listenerManager;
-
+    /**
+     * A modifiable map of operations to be run after every tick.
+     */
+    private final Map<String, Consumer<Pathfinder>> onTickOperations;
+    /**
+     * A map that can be used to communicate between classes.
+     */
+    private final Map<String, Object> dataMap;
     /**
      * The speed Pathfinder will use in creating linear trajectories.
      */
     private double speed = Core.pathfinderDefaultSpeed;
-
     /**
      * The tolerance Pathfinder will use in creating linear trajectories.
      */
     private double tolerance = Core.pathfinderDefaultTolerance;
-
     /**
      * The angle tolerance Pathfinder will use in creating linear trajectories.
      */
     private Angle angleTolerance = Core.pathfinderDefaultAngleTolerance;
-
     /**
      * The default tick until timeout.
      */
     private double defaultTimeout = Core.pathfinderDefaultTimeout;
-
     /**
      * The default tick until should run supplier.
      */
     private Supplier<Boolean> defaultShouldRun = () -> true;
-
     /**
      * The default tick until completion consumer.
      */
     private Consumer<Pathfinder> defaultOnCompletion = pathfinder -> {
     };
-
     /**
      * The default tick until on tick consumer.
      */
     private BiConsumer<Pathfinder, Double> defaultOnTick = (pathfinder, aDouble) -> {
     };
-
     /**
      * Last tick, how many followers were there?
      */
     private int previousFollowerCount = 0;
-
     /**
      * Last tick, what was the currently active follower?
      */
     private Follower previousFollower = null;
-
     /**
      * Last tick, what was the currently active drive modifier? Or
      * something like that.
      */
     private Function<Translation, Translation> lastDriveModifier = null;
-
-    /**
-     * A modifiable map of operations to be run after every tick.
-     */
-    private final Map<String, Consumer<Pathfinder>> onTickOperations;
-
-    /**
-     * A map that can be used to communicate between classes.
-     */
-    private final Map<String, Object> dataMap;
-
     /**
      * Is Pathfinder operating in minimal mode?
      */
@@ -633,20 +616,6 @@ public class Pathfinder {
     }
 
     /**
-     * Set Pathfinder's {@code isMinimal} status.
-     *
-     * @param isMinimal should Pathfinder run in minimal mode, which is
-     *                  designed to reduce performance impact by skipping
-     *                  un-needed operations?
-     * @return {@code this}, used for method chaining.
-     */
-    public Pathfinder setIsMinimal(boolean isMinimal) {
-        this.isMinimal = isMinimal;
-
-        return this;
-    }
-
-    /**
      * Create a new, "simulated" instance of Pathfinder.
      *
      * <p>
@@ -860,6 +829,20 @@ public class Pathfinder {
      */
     public static Map<String, String> getStackTraceMap() {
         return STACK_TRACE_MAP;
+    }
+
+    /**
+     * Set Pathfinder's {@code isMinimal} status.
+     *
+     * @param isMinimal should Pathfinder run in minimal mode, which is
+     *                  designed to reduce performance impact by skipping
+     *                  un-needed operations?
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder setIsMinimal(boolean isMinimal) {
+        this.isMinimal = isMinimal;
+
+        return this;
     }
 
     /**
@@ -1520,7 +1503,7 @@ public class Pathfinder {
      */
     public Pathfinder onTick(Consumer<Pathfinder> onTick) {
         return onTick(RandomString.randomString(
-                    Core.pathfinderRandomStringLength), onTick);
+                Core.pathfinderRandomStringLength), onTick);
     }
 
     /**
@@ -1868,7 +1851,8 @@ public class Pathfinder {
      */
     public Pathfinder tickUntil(Supplier<Boolean> shouldContinueRunning,
                                 double timeoutMs) {
-        return tickUntil(timeoutMs, shouldContinueRunning, (a, b) -> {});
+        return tickUntil(timeoutMs, shouldContinueRunning, (a, b) -> {
+        });
     }
 
     /**
@@ -3110,13 +3094,13 @@ public class Pathfinder {
         double totalDistanceX = points[points.length - 1].distanceX(points[0]);
 
         double step = totalDistanceX /
-            (points.length * Core.pathfinderSplineStepCoefficient);
+                (points.length * Core.pathfinderSplineStepCoefficient);
 
         MultiSplineBuilder builder = new MultiSplineBuilder()
-            .setDefaultSpeed(speed)
-            .setDefaultTolerance(tolerance)
-            .setDefaultAngleTolerance(angleTolerance)
-            .setDefaultStep(step);
+                .setDefaultSpeed(speed)
+                .setDefaultTolerance(tolerance)
+                .setDefaultAngleTolerance(angleTolerance)
+                .setDefaultStep(step);
 
         for (PointXYZ point : points)
             builder.add(point, speed, step);
@@ -3171,7 +3155,7 @@ public class Pathfinder {
                     "Angle tolerance must be greater than 0 degrees.");
 
         NotNull.throwExceptionIfNull
-            ("One or more points provided to splineTo was null!", (Object[]) points);
+                ("One or more points provided to splineTo was null!", (Object[]) points);
 
         // non-monotonic Y values means we need to use a multi spline instead
         if (!Spline.areMonotonicY(points))
@@ -3215,9 +3199,9 @@ public class Pathfinder {
             } else {
                 throw new SplineException(
                         "There were duplicate adjacent points in the set " +
-                        "of control points! This means there's the same " +
-                        "point, twice in a row. The points were: " +
-                        Arrays.toString(points));
+                                "of control points! This means there's the same " +
+                                "point, twice in a row. The points were: " +
+                                Arrays.toString(points));
             }
         }
 
@@ -3325,7 +3309,9 @@ public class Pathfinder {
      */
     public Pathfinder task(Runnable during,
                            Supplier<Boolean> isFinished) {
-        return task(() -> {}, during, () -> {}, isFinished);
+        return task(() -> {
+        }, during, () -> {
+        }, isFinished);
     }
 
     /**

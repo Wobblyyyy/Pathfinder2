@@ -25,10 +25,8 @@ public class MeccanumKinematics implements Kinematics<MeccanumState> {
     private final PointXY frontRightPosition;
     private final PointXY backLeftPosition;
     private final PointXY backRightPosition;
-
-    private SimpleMatrix inverseKinematics;
     private final SimpleMatrix forwardsKinematics;
-
+    private SimpleMatrix inverseKinematics;
     private PointXY lastCenterOfRotation = new PointXY(0, 0);
 
     public MeccanumKinematics(PointXY frontLeftPosition,

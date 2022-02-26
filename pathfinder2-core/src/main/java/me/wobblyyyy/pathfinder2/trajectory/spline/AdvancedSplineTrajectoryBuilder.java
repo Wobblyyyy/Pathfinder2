@@ -18,10 +18,10 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.SlopeIntercept;
 import me.wobblyyyy.pathfinder2.math.ApacheSpline;
+import me.wobblyyyy.pathfinder2.math.ApacheSpline.Interpolator;
 import me.wobblyyyy.pathfinder2.math.LinearSpline;
 import me.wobblyyyy.pathfinder2.math.MonotoneCubicSpline;
 import me.wobblyyyy.pathfinder2.math.Spline;
-import me.wobblyyyy.pathfinder2.math.ApacheSpline.Interpolator;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -40,7 +40,8 @@ import java.util.function.Consumer;
  */
 public class AdvancedSplineTrajectoryBuilder {
     public static InterpolationMode DEFAULT_INTERPOLATION_MODE = InterpolationMode.DEFAULT;
-    public static Consumer<String> DEFAULT_LOGGER = (msg) -> {};
+    public static Consumer<String> DEFAULT_LOGGER = (msg) -> {
+    };
 
     private final List<Double> xValues = new ArrayList<>();
     private final List<Double> yValues = new ArrayList<>();
@@ -189,10 +190,10 @@ public class AdvancedSplineTrajectoryBuilder {
                                                double speed) {
         DEFAULT_LOGGER.accept(StringUtils.format(
                 "--- ADDING TARGET ---\n" +
-                    "target x: %s\n" +
-                    "target y: %s\n" +
-                    "target z: %s\n" +
-                    "speed: %s",
+                        "target x: %s\n" +
+                        "target y: %s\n" +
+                        "target z: %s\n" +
+                        "speed: %s",
                 target.x(),
                 target.y(),
                 target.z(),
@@ -219,9 +220,9 @@ public class AdvancedSplineTrajectoryBuilder {
 
         DEFAULT_LOGGER.accept(StringUtils.format(
                 "invalid step: %s\n" +
-                    "invalid speed: %s\n" +
-                    "invalid tolerance: %s\n" +
-                    "invalid angle tolerance: %s",
+                        "invalid speed: %s\n" +
+                        "invalid tolerance: %s\n" +
+                        "invalid angle tolerance: %s",
                 invalidStep,
                 invalidSpeed,
                 invalidTolerance,
@@ -287,23 +288,23 @@ public class AdvancedSplineTrajectoryBuilder {
                 // ensure adjacent X values are unique
                 if (x[i] == x[i - 1])
                     x[i] += Core.advancedSplineTrajectoryDuplicateOffset
-                        * ((xDuplicates++) + 1);
+                            * ((xDuplicates++) + 1);
 
                 // ensure adjacent Y values are unique
                 if (y[i] == y[i - 1])
                     y[i] += Core.advancedSplineTrajectoryDuplicateOffset
-                        * ((yDuplicates++) + 1);
+                            * ((yDuplicates++) + 1);
             }
         }
 
         DEFAULT_LOGGER.accept(StringUtils.format(
                 "boxed x: %s\n" +
-                    "boxed y: %s\n" +
-                    "boxed z: %s\n" +
-                    "boxed speed: %s\n" +
-                    "unboxed x: %s\n" +
-                    "unboxed y: %s\n" +
-                    "unboxed speed: %s",
+                        "boxed y: %s\n" +
+                        "boxed z: %s\n" +
+                        "boxed speed: %s\n" +
+                        "unboxed x: %s\n" +
+                        "unboxed y: %s\n" +
+                        "unboxed speed: %s",
                 Arrays.toString(xBoxed),
                 Arrays.toString(yBoxed),
                 Arrays.toString(z),

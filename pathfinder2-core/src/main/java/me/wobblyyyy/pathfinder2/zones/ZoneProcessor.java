@@ -52,6 +52,28 @@ public class ZoneProcessor {
 
     }
 
+    private static List<Zone> getEnteredZones(List<Zone> last,
+                                              List<Zone> current) {
+        List<Zone> enteredZones = new ArrayList<>();
+
+        for (Zone zone : current) {
+            if (!last.contains(zone)) enteredZones.add(zone);
+        }
+
+        return enteredZones;
+    }
+
+    private static List<Zone> getExitedZones(List<Zone> last,
+                                             List<Zone> current) {
+        List<Zone> exitedZones = new ArrayList<>();
+
+        for (Zone zone : last) {
+            if (!current.contains(zone)) exitedZones.add(zone);
+        }
+
+        return exitedZones;
+    }
+
     /**
      * Add a zone to collection of zones the processor is handling.
      *
@@ -124,28 +146,6 @@ public class ZoneProcessor {
         }
 
         return containingZones;
-    }
-
-    private static List<Zone> getEnteredZones(List<Zone> last,
-                                              List<Zone> current) {
-        List<Zone> enteredZones = new ArrayList<>();
-
-        for (Zone zone : current) {
-            if (!last.contains(zone)) enteredZones.add(zone);
-        }
-
-        return enteredZones;
-    }
-
-    private static List<Zone> getExitedZones(List<Zone> last,
-                                             List<Zone> current) {
-        List<Zone> exitedZones = new ArrayList<>();
-
-        for (Zone zone : last) {
-            if (!current.contains(zone)) exitedZones.add(zone);
-        }
-
-        return exitedZones;
     }
 
     /**

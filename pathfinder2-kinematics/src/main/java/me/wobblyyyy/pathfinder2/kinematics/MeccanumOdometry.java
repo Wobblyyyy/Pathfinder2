@@ -12,7 +12,6 @@ package me.wobblyyyy.pathfinder2.kinematics;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-import me.wobblyyyy.pathfinder2.geometry.Translation;
 
 /**
  * Odometry for a meccanum chassis.

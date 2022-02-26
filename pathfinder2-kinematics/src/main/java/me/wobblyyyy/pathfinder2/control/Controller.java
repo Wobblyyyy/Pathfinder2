@@ -39,19 +39,19 @@ public interface Controller {
     double getMin();
 
     /**
-     * The controller's maximum output value.
-     *
-     * @return the controller's maximum output value.
-     */
-    double getMax();
-
-    /**
      * Set the controller's minimum output value.
      *
      * @param min the controller's minimum output value. Any output below this
      *            value will automatically be set to this value.
      */
     void setMin(double min);
+
+    /**
+     * The controller's maximum output value.
+     *
+     * @return the controller's maximum output value.
+     */
+    double getMax();
 
     /**
      * Set the controller's maximum output value.

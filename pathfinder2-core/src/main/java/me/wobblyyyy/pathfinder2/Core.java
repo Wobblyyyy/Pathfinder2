@@ -94,7 +94,7 @@ public class Core {
      * The default format for a trajectory.
      */
     public static String linearTrajectoryFormat =
-        "Linear trajectory to %s at %s speed (tolerance %s %s)";
+            "Linear trajectory to %s at %s speed (tolerance %s %s)";
 
     /**
      * The multiplier that will be applied to the trajectory's speed

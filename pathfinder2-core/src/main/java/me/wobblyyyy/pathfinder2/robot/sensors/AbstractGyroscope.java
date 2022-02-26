@@ -29,12 +29,12 @@ public abstract class AbstractGyroscope implements Gyroscope {
     }
 
     @Override
-    public void reset() {
-        setAngle(Angle.DEG_0);
+    public void setAngle(Angle angle) {
+        this.offset = angle.subtract(getAngle());
     }
 
     @Override
-    public void setAngle(Angle angle) {
-        this.offset = angle.subtract(getAngle());
+    public void reset() {
+        setAngle(Angle.DEG_0);
     }
 }

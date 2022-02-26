@@ -17,7 +17,6 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -58,12 +57,12 @@ public class TestHeadingLock {
 
         odometry.setRawPosition(0, 5, 0);
         pathfinder.tick();
-        Assertions.assertTrue(Equals.soft(-0.265, 
-                    pathfinder.getTranslation().vz(), 0.01));
+        Assertions.assertTrue(Equals.soft(-0.265,
+                pathfinder.getTranslation().vz(), 0.01));
 
         odometry.setRawPosition(5, 5, 0);
         pathfinder.tick();
-        Assertions.assertTrue(Equals.soft(-0.45, 
-                    pathfinder.getTranslation().vz(), 0.01));
+        Assertions.assertTrue(Equals.soft(-0.45,
+                pathfinder.getTranslation().vz(), 0.01));
     }
 }

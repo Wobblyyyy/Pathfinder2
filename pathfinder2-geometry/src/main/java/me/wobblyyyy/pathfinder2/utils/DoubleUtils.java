@@ -13,8 +13,8 @@ package me.wobblyyyy.pathfinder2.utils;
 /**
  * Various utilities for {@code Double} and {@code double}.
  *
- * @since 1.0.1
  * @author Colin Robertson
+ * @since 1.0.1
  */
 public class DoubleUtils {
     private DoubleUtils() {

@@ -42,9 +42,8 @@ public class ExampleMeccanumDrive {
             backRight,
             backLeft
     );
-    private final Odometry odometry = new SimulatedOdometry();
     private final Robot robot = new Robot(drive, odometry);
-
+    private final Odometry odometry = new SimulatedOdometry();
     private final Controller turnController = new GenericTurnController(0.05);
     private final FollowerGenerator followerGenerator = new GenericFollowerGenerator(turnController);
     private final Pathfinder pathfinder = new Pathfinder(robot, followerGenerator);
@@ -76,7 +75,7 @@ public class ExampleMeccanumDrive {
 
     /**
      * Drive in autonomous mode! Very cool.
-     *
+     * <p>
      * You don't have to do any looping - this method will execute until
      * Pathfinder has finished following its path. There's a variety of
      * ways to improve upon this that we can explore later.

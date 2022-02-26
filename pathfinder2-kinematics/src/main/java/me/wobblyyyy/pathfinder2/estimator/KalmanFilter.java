@@ -180,7 +180,7 @@ public class KalmanFilter {
         int size = stateTransitionMatrix.numCols;
 
         boolean validPlantNoise = plantNoiseMatrix.numCols == size;
-        boolean validProjection= projectionMatrix.numCols == size;
+        boolean validProjection = projectionMatrix.numCols == size;
 
         if (!validPlantNoise || !validProjection) {
             throw new IllegalArgumentException(

@@ -20,8 +20,8 @@ import me.wobblyyyy.pathfinder2.time.Time;
  * @since 0.6.1
  */
 public class MovementRecorder {
-    private MovementRecording recording;
     private final Pathfinder pathfinder;
+    private MovementRecording recording;
     private boolean isRecording = false;
     private double minDelayMs;
     private double lastRecordMs = 0;

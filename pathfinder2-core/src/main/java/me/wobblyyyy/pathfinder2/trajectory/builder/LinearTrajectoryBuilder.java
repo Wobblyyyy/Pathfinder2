@@ -11,7 +11,6 @@
 package me.wobblyyyy.pathfinder2.trajectory.builder;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
-import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;

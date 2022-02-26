@@ -60,16 +60,6 @@ public abstract class AbstractController implements Controller {
     }
 
     /**
-     * Get the controller's maximum.
-     *
-     * @return the controller's maximum.
-     */
-    @Override
-    public double getMax() {
-        return max;
-    }
-
-    /**
      * Set the controller's minimum.
      *
      * @param min the controller's minimum output value.
@@ -77,6 +67,16 @@ public abstract class AbstractController implements Controller {
     @Override
     public void setMin(double min) {
         this.min = min;
+    }
+
+    /**
+     * Get the controller's maximum.
+     *
+     * @return the controller's maximum.
+     */
+    @Override
+    public double getMax() {
+        return max;
     }
 
     /**

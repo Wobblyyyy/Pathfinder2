@@ -69,7 +69,7 @@ public class SwerveDriveKinematics implements Kinematics<SwerveState> {
                                  PointXY backRightPosition,
                                  PointXY backLeftPosition) {
         this(
-                new PointXY[] {
+                new PointXY[]{
                         frontRightPosition,
                         frontLeftPosition,
                         backRightPosition,

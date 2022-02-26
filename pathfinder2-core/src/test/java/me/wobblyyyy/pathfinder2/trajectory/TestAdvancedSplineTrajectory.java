@@ -45,7 +45,7 @@ public class TestAdvancedSplineTrajectory {
         Assertions.assertTrue(pathfinder.isActive());
         Assertions.assertEquals(
                 Translation.fromPointXY(
-                    PointXY.ZERO.inDirection(0.5, Angle.fromDeg(45))),
+                        PointXY.ZERO.inDirection(0.5, Angle.fromDeg(45))),
                 pathfinder.getTranslation()
         );
         PointXYZ current = pathfinder.getPosition();
@@ -55,7 +55,7 @@ public class TestAdvancedSplineTrajectory {
         Assertions.assertTrue(pathfinder.isActive());
         Assertions.assertEquals(
                 Translation.fromPointXY(
-                    PointXY.ZERO.inDirection(0.5, Angle.fromDeg(45))),
+                        PointXY.ZERO.inDirection(0.5, Angle.fromDeg(45))),
                 pathfinder.getTranslation()
         );
         Assertions.assertEquals(0.5, trajectory.speed(current));

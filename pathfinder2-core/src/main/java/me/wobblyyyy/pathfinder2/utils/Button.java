@@ -10,12 +10,12 @@
 
 package me.wobblyyyy.pathfinder2.utils;
 
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-
 import me.wobblyyyy.pathfinder2.listening.ListenerBuilder;
 import me.wobblyyyy.pathfinder2.listening.ListenerManager;
 import me.wobblyyyy.pathfinder2.listening.ListenerMode;
+
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * A very simple boolean button. Buttons are based on a {@link Supplier} that

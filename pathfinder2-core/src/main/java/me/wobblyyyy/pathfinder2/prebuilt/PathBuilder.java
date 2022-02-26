@@ -39,6 +39,23 @@ public class PathBuilder {
         targets = new ArrayList<>(initialSize);
     }
 
+    public static List<Follower> followersFromTrajectories(Robot robot,
+                                                           FollowerGenerator followerGenerator,
+                                                           List<Trajectory> trajectories) {
+        List<Follower> followers = new ArrayList<>(trajectories.size());
+
+        for (Trajectory trajectory : trajectories) {
+            followers.add(
+                    followerGenerator.generate(
+                            robot,
+                            trajectory
+                    )
+            );
+        }
+
+        return followers;
+    }
+
     public List<PointXYZ> getTargets() {
         return targets;
     }
@@ -80,23 +97,6 @@ public class PathBuilder {
         }
 
         return trajectories;
-    }
-
-    public static List<Follower> followersFromTrajectories(Robot robot,
-                                                           FollowerGenerator followerGenerator,
-                                                           List<Trajectory> trajectories) {
-        List<Follower> followers = new ArrayList<>(trajectories.size());
-
-        for (Trajectory trajectory : trajectories) {
-            followers.add(
-                    followerGenerator.generate(
-                            robot,
-                            trajectory
-                    )
-            );
-        }
-
-        return followers;
     }
 
     public List<Follower> linearPathFollowers(Robot robot,

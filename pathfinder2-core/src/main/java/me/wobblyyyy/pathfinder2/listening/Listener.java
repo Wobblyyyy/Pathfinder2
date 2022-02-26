@@ -157,13 +157,6 @@ public class Listener implements Tickable {
         this.input = input;
     }
 
-    public static Listener withOneInput(int priority,
-                                        ListenerMode mode,
-                                        Runnable whenTriggered,
-                                        Supplier<Boolean> input) {
-        return new Listener(priority, mode, whenTriggered, input);
-    }
-
     public Listener(Listener listener) {
         this.priority = listener.priority;
         this.mode = listener.mode;
@@ -177,6 +170,13 @@ public class Listener implements Tickable {
         this.executions = listener.executions;
         this.cooldownMs = listener.cooldownMs;
         this.lastExecMs = listener.lastExecMs;
+    }
+
+    public static Listener withOneInput(int priority,
+                                        ListenerMode mode,
+                                        Runnable whenTriggered,
+                                        Supplier<Boolean> input) {
+        return new Listener(priority, mode, whenTriggered, input);
     }
 
     public static Listener buttonHeld(Supplier<Boolean> input,

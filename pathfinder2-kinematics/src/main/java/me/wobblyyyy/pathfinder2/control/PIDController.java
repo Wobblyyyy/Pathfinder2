@@ -93,9 +93,10 @@ public class PIDController extends AbstractController {
             case DERIVATIVE:
                 derivative = value;
                 break;
-            default: throw new RuntimeException();
+            default:
+                throw new RuntimeException();
         }
-        
+
         return this;
     }
 
@@ -119,11 +120,19 @@ public class PIDController extends AbstractController {
 
     public double getCoefficient(PIDCoefficient coefficient) {
         switch (coefficient) {
-            case PROPORTIONAL: return proportional;
-            case INTEGRAL: return integral;
-            case DERIVATIVE: return derivative;
-            default: throw new RuntimeException();
+            case PROPORTIONAL:
+                return proportional;
+            case INTEGRAL:
+                return integral;
+            case DERIVATIVE:
+                return derivative;
+            default:
+                throw new RuntimeException();
         }
+    }
+
+    public double getP() {
+        return proportional;
     }
 
     public PIDController setP(double p) {
@@ -132,28 +141,24 @@ public class PIDController extends AbstractController {
         return this;
     }
 
+    public double getI() {
+        return integral;
+    }
+
     public PIDController setI(double i) {
         integral = i;
 
         return this;
     }
 
+    public double getD() {
+        return derivative;
+    }
+
     public PIDController setD(double d) {
         derivative = d;
 
         return this;
-    }
-
-    public double getP() {
-        return proportional;
-    }
-
-    public double getI() {
-        return integral;
-    }
-
-    public double getD() {
-        return derivative;
     }
 
     @Override

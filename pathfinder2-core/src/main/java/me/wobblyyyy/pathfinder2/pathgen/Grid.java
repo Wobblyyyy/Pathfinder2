@@ -23,8 +23,8 @@ import java.util.Map;
 public class Grid {
     private final int width;
     private final int height;
-    private List<Node> nodes;
     private final Map<Coord, Node> map = new HashMap<>();
+    private List<Node> nodes;
 
     private Grid(int width,
                  int height) {

@@ -32,11 +32,9 @@ import java.util.List;
  */
 public class PathGen {
     private final Grid grid;
-    private List<Node> path;
-
     private final Node start;
     private final Node end;
-
+    private List<Node> path;
     private List<Node> openList;
 
     /**

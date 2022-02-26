@@ -74,10 +74,10 @@ public class RelativeMeccanumKinematics implements Kinematics<MeccanumState> {
     /**
      * Create a new instance of the {@code RelativeMeccanumKinematics} class.
      *
-     * @param minMagnitude the minimum magnitude.
-     * @param maxMagnitude the maximum magnitude.
+     * @param minMagnitude  the minimum magnitude.
+     * @param maxMagnitude  the maximum magnitude.
      * @param turnMagnitude the turn magnitude.
-     * @param angleOffset  the angle offset for the kinematics.
+     * @param angleOffset   the angle offset for the kinematics.
      */
     public RelativeMeccanumKinematics(double minMagnitude,
                                       double maxMagnitude,

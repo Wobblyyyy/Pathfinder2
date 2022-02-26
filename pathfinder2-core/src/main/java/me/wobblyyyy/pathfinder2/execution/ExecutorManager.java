@@ -54,27 +54,23 @@ public class ExecutorManager {
      * The manager's drive.
      */
     private final Drive drive;
-
-    /**
-     * How long it took to execute the last follower.
-     */
-    private double executionTime = 0;
-
-    /**
-     * The last start time for execution time tracking.
-     */
-    private double lastStartTime = 0;
-
-    /**
-     * The last follower that was being executed.
-     */
-    private FollowerExecutor lastExecutor;
-
     /**
      * A list of follower executors. This list can be added to and cleared,
      * but otherwise, cannot be modified externally.
      */
     private final List<FollowerExecutor> executors = new ArrayList<>();
+    /**
+     * How long it took to execute the last follower.
+     */
+    private double executionTime = 0;
+    /**
+     * The last start time for execution time tracking.
+     */
+    private double lastStartTime = 0;
+    /**
+     * The last follower that was being executed.
+     */
+    private FollowerExecutor lastExecutor;
 
     /**
      * Create a new {@code ExecutorManager}. By default, new managers will

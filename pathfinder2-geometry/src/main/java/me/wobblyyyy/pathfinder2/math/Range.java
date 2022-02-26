@@ -10,10 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.math;
 
-import java.io.Serializable;
-
 import me.wobblyyyy.pathfinder2.geometry.Geometry;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
+
+import java.io.Serializable;
 
 /**
  * A range of numbers. A {@code Range} is made up of two {@link RangeNode}s,
@@ -230,7 +230,7 @@ public class Range implements Serializable, Comparable<Range> {
             Range r = (Range) obj;
 
             return minimum.equals(r.minimum) &&
-                maximum.equals(r.maximum);
+                    maximum.equals(r.maximum);
         }
 
         return false;

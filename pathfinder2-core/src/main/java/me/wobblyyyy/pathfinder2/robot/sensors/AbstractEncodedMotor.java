@@ -17,8 +17,8 @@ import java.util.function.Supplier;
 
 public class AbstractEncodedMotor extends AbstractEncoder implements Motor {
     private final Consumer<Double> setPower;
-    private double lastPower;
     private final Supplier<Integer> getTicks;
+    private double lastPower;
 
     public AbstractEncodedMotor(Consumer<Double> setPower,
                                 Supplier<Integer> getTicks) {

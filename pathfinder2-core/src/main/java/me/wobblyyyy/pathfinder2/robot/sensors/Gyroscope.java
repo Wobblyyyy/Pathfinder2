@@ -27,14 +27,14 @@ public interface Gyroscope {
     Angle getAngle();
 
     /**
-     * Set the angle of the gyroscope to 0 degrees.
-     */
-    void reset();
-
-    /**
      * Set the current angle of the gyroscope.
      *
      * @param angle the angle to set to the gyroscope.
      */
     void setAngle(Angle angle);
+
+    /**
+     * Set the angle of the gyroscope to 0 degrees.
+     */
+    void reset();
 }

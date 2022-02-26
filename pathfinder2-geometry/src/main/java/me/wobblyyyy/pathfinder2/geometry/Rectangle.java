@@ -223,8 +223,8 @@ public class Rectangle implements Shape<Rectangle> {
     public boolean isPointInShape(PointXY reference) {
         PointXY.checkArgument(reference);
 
-        if (PointXY.isNear(reference, 
-                    Geometry.toleranceRectangleReference, a, b, c, d))
+        if (PointXY.isNear(reference,
+                Geometry.toleranceRectangleReference, a, b, c, d))
             return true;
 
         if (
@@ -239,7 +239,7 @@ public class Rectangle implements Shape<Rectangle> {
         PointXY target = center;
 
         if (PointXY.isNear(reference, center,
-                    Geometry.toleranceRectangleReference))
+                Geometry.toleranceRectangleReference))
             target = ab.midpoint();
 
         Line line = new Line(
@@ -260,9 +260,9 @@ public class Rectangle implements Shape<Rectangle> {
         double x = reference.x();
         double y = reference.y();
 
-        boolean sameTargetX = Equals.soft(target.x(), x, 
+        boolean sameTargetX = Equals.soft(target.x(), x,
                 Geometry.toleranceRectangle);
-        boolean sameTargetY = Equals.soft(target.y(), y, 
+        boolean sameTargetY = Equals.soft(target.y(), y,
                 Geometry.toleranceRectangle);
 
         if (sameTargetX) target.withX(x + 0.69);

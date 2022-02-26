@@ -16,7 +16,6 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class TestLinearTrajectory {
@@ -30,6 +29,11 @@ public class TestLinearTrajectory {
             tolerance,
             angleTolerance
     );
+
+    private static void setPos(SimulatedOdometry odometry,
+                               PointXYZ pos) {
+        odometry.setRawPosition(pos);
+    }
 
     @Test
     public void testGetNextMarker() {
@@ -195,11 +199,6 @@ public class TestLinearTrajectory {
         Assertions.assertFalse(pathfinder.isActive());
     }
 
-    private static void setPos(SimulatedOdometry odometry,
-                               PointXYZ pos) {
-        odometry.setRawPosition(pos);
-    }
-
     @Test
     public void testMultipleTrajectories() {
         // look... nobody said tests have to be written WELL...
@@ -226,14 +225,14 @@ public class TestLinearTrajectory {
         followers = pathfinder.getExecutorManager().howManyFollowers();
         Assertions.assertEquals(lastFollowers - 1, followers);
         lastFollowers = followers;
-        
+
         setPos(o, new PointXYZ(5, 5, 0));
         pathfinder.tick();
         Assertions.assertTrue(pathfinder.isActive());
         followers = pathfinder.getExecutorManager().howManyFollowers();
         Assertions.assertEquals(lastFollowers, followers);
         lastFollowers = followers;
-        
+
         setPos(o, new PointXYZ(10, 0, 0));
         pathfinder.tick();
         Assertions.assertTrue(pathfinder.isActive());

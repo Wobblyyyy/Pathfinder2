@@ -15,7 +15,7 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.robot.Robot;
 
 /**
- * A wrapper for instances of {@link SimulatedDrive} and 
+ * A wrapper for instances of {@link SimulatedDrive} and
  * {@link SimulatedOdometry}.
  *
  * @author Colin Robertson
@@ -24,10 +24,6 @@ import me.wobblyyyy.pathfinder2.robot.Robot;
 public class SimulatedWrapper {
     private final SimulatedDrive drive;
     private final SimulatedOdometry odometry;
-
-    private static double roundNumber(double value) {
-        return Math.round(value * 32) / 32.0;
-    }
 
     public SimulatedWrapper(SimulatedDrive drive,
                             SimulatedOdometry odometry) {
@@ -50,6 +46,10 @@ public class SimulatedWrapper {
                     return translation;
                 }
         );
+    }
+
+    private static double roundNumber(double value) {
+        return Math.round(value * 32) / 32.0;
     }
 
     public SimulatedDrive getDrive() {

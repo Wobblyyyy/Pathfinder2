@@ -18,7 +18,6 @@ import me.wobblyyyy.pathfinder2.follower.generators.GenericFollowerGenerator;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
-import me.wobblyyyy.pathfinder2.prebuilt.TrajectoryFactory;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.robot.Robot;
@@ -35,7 +34,7 @@ import java.util.List;
  * Pathfinder. Note that is just a surface level implementation - there are
  * a ton of features not present here. There are more examples for those -
  * this is just designed to be a simple implementation.
- *
+ * <p>
  * Also, there aren't very many comments in this class. This is because most
  * of the class is named pretty well, so it shouldn't be that challenging to
  * understand. If you're curious about what something's doing, you can
@@ -47,17 +46,9 @@ import java.util.List;
  */
 @SuppressWarnings("FieldCanBeLocal")
 public class ExamplePathfinder {
-    private final Controller turnController = new GenericTurnController(0.1);
-    private final FollowerGenerator followerGenerator = new GenericFollowerGenerator(turnController);
-    private final Drive drive = new SimulatedDrive();
-    private final Odometry odometry = new SimulatedOdometry();
-    private final Robot robot = new Robot(drive, odometry);
-    private final Pathfinder pathfinder = new Pathfinder(robot, followerGenerator);
-
     private static final double SPEED = 0.5;
     private static final double TOLERANCE = 1.0;
     private static final Angle ANGLE_TOLERANCE = Angle.fromDeg(15);
-
     // We'll pretend these are controller inputs. In a real implementation,
     // there would be a Gamepad object, and we'd get input states from there.
     // However, for the sake of simplicity, these are being used in place of
@@ -71,11 +62,16 @@ public class ExamplePathfinder {
     private static final double joystick2x = 0.0;
     private static final double joystick1y = 0.0;
     private static final double joystick2y = 0.0;
-
     private static final PointXYZ TARGET_A = new PointXYZ(0, 0, 0);
     private static final PointXYZ TARGET_B = new PointXYZ(10, 10, 0);
     private static final PointXYZ TARGET_X = new PointXYZ(10, 15, 45);
     private static final PointXYZ TARGET_Y = new PointXYZ(30, 20, 90);
+    private final Controller turnController = new GenericTurnController(0.1);
+    private final FollowerGenerator followerGenerator = new GenericFollowerGenerator(turnController);
+    private final Drive drive = new SimulatedDrive();
+    private final Odometry odometry = new SimulatedOdometry();
+    private final Robot robot = new Robot(drive, odometry);
+    private final Pathfinder pathfinder = new Pathfinder(robot, followerGenerator);
 
     public ExamplePathfinder() {
         pathfinder.setSpeed(SPEED);
@@ -107,11 +103,11 @@ public class ExamplePathfinder {
     public void goToSomePoints() {
         // this is a pretty bad way of going to the points...
         List<PointXYZ> points = new ArrayList<PointXYZ>() {{
-            add(new PointXYZ( 0,  0, 0));
-            add(new PointXYZ(10,  0, 0));
+            add(new PointXYZ(0, 0, 0));
+            add(new PointXYZ(10, 0, 0));
             add(new PointXYZ(10, 10, 0));
-            add(new PointXYZ( 0, 10, 0));
-            add(new PointXYZ( 0,  0, 0));
+            add(new PointXYZ(0, 10, 0));
+            add(new PointXYZ(0, 0, 0));
         }};
 
         for (PointXYZ point : points) {
@@ -154,7 +150,7 @@ public class ExamplePathfinder {
      * following any trajectories), it'll check for user input using the
      * A, B, X, and Y gamepad buttons. If any of those buttons are pressed,
      * the robot will begin automatically navigating to an associated position.
-     *
+     * <p>
      * Let's say Pathfinder IS active... what happens then? There will be times
      * when Pathfinder is attempting to control your robot while you'd like to
      * be the one who's in control of it. In this case, you should clear

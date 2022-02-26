@@ -208,14 +208,14 @@ public class LinearTrajectory implements Trajectory {
     public double speed(PointXYZ current) {
         // if the robot has already reached the target X and Y positions,
         // return 0, so that the robot will not move.
-        if (isDoneXY(current)) 
+        if (isDoneXY(current))
             return Core.linearTrajectoryIsDoneSpeedMultiplier * speed;
 
         return speed;
     }
 
     /**
-     * Convert this {@code LinearTrajectory} into a 
+     * Convert this {@code LinearTrajectory} into a
      * {@link MutableLinearTrajectory}.
      *
      * @return this trajectory represented as a {@link MutableLinearTrajectory}.
@@ -236,15 +236,15 @@ public class LinearTrajectory implements Trajectory {
             LinearTrajectory t = (LinearTrajectory) obj;
 
             boolean sameTarget = t.target.equals(this.target);
-            boolean sameSpeed = Equals.soft(t.speed, 
+            boolean sameSpeed = Equals.soft(t.speed,
                     this.speed, Core.linearTrajectoryTolerance);
-            boolean sameTolerance = Equals.soft(t.tolerance, 
+            boolean sameTolerance = Equals.soft(t.tolerance,
                     this.tolerance, Core.linearTrajectoryTolerance);
-            boolean sameAngleTolerance = 
-                t.angleTolerance.equals(this.angleTolerance);
+            boolean sameAngleTolerance =
+                    t.angleTolerance.equals(this.angleTolerance);
 
-            return sameTarget && sameSpeed && sameTolerance 
-                && sameAngleTolerance;
+            return sameTarget && sameSpeed && sameTolerance
+                    && sameAngleTolerance;
         }
 
         return false;

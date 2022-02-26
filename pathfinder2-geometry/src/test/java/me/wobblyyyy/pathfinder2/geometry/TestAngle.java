@@ -157,11 +157,11 @@ public class TestAngle {
         Angle e = Angle.fromDeg(270);
 
         Assertions.assertEquals(
-                Angle.fixedDeg(-179), 
+                Angle.fixedDeg(-179),
                 Angle.fixedDeg(Angle.minimumDelta(a, b))
         );
         Assertions.assertEquals(
-                Angle.fixedDeg(179), 
+                Angle.fixedDeg(179),
                 Angle.fixedDeg(Angle.minimumDelta(a, c))
         );
     }

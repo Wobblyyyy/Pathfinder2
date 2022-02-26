@@ -40,9 +40,9 @@ public class ExampleTimedRobot extends TimedRobot {
         odometry = new SimulatedOdometry();
         robot = new Robot(drive, odometry);
         pathfinder = new Pathfinder(robot, controller)
-            .setSpeed(0.5)
-            .setTolerance(2)
-            .setAngleTolerance(Angle.fromDeg(5));
+                .setSpeed(0.5)
+                .setTolerance(2)
+                .setAngleTolerance(Angle.fromDeg(5));
     }
 
     @Override

@@ -565,13 +565,13 @@ public class PointXY implements Comparable<PointXY>, Serializable {
         checkArgument(c);
 
         double dx1 = (b.x() + Geometry.toleranceCollinear)
-            - (a.x() + Geometry.toleranceCollinear);
+                - (a.x() + Geometry.toleranceCollinear);
         double dy1 = (b.y() + Geometry.toleranceCollinear)
-            - (a.y() + Geometry.toleranceCollinear);
+                - (a.y() + Geometry.toleranceCollinear);
         double dx2 = (c.x() + Geometry.toleranceCollinear)
-            - (a.x() + Geometry.toleranceCollinear);
+                - (a.x() + Geometry.toleranceCollinear);
         double dy2 = (c.y() + Geometry.toleranceCollinear)
-            - (a.y() + Geometry.toleranceCollinear);
+                - (a.y() + Geometry.toleranceCollinear);
 
         return Equals.soft(
                 (dx1 * dy2),

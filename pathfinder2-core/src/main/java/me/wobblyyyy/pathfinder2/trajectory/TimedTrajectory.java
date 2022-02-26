@@ -28,11 +28,11 @@ import me.wobblyyyy.pathfinder2.time.Time;
  */
 public class TimedTrajectory implements Trajectory {
     private final Translation translation;
-    private double startTime = 0;
-    private double elapsedTime = 0;
     private final double timeoutMs;
     private final double speed;
     private final double turnMultiplier;
+    private double startTime = 0;
+    private double elapsedTime = 0;
 
     /**
      * Create a new {@code TimedTrajectory}.

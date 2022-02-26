@@ -10,9 +10,9 @@
 
 package me.wobblyyyy.pathfinder2.robot.components;
 
-import java.util.List;
-
 import me.wobblyyyy.pathfinder2.utils.ArrayUtils;
+
+import java.util.List;
 
 /**
  * A wrapper that encapsulates several motors. This is most useful for

@@ -44,9 +44,9 @@ import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
  * </p>
  *
  * @author Colin Robertson
- * @since 0.6.1
  * @see AdvancedSplineTrajectoryBuilder
  * @see MultiSplineBuilder
+ * @since 0.6.1
  */
 public class AdvancedSplineTrajectory implements Trajectory {
     private final Spline spline;
@@ -215,7 +215,7 @@ public class AdvancedSplineTrajectory implements Trajectory {
                     "fix that, because that would be pretty cool.");
 
         double speed = speedSpline.interpolateY(MinMax.clip(
-                current.x(), 
+                current.x(),
                 Math.min(startPointX, endPointX),
                 Math.max(startPointX, endPointX)
         ));
@@ -242,7 +242,7 @@ public class AdvancedSplineTrajectory implements Trajectory {
             boolean sameTolerance = Equals.soft(tolerance, t.tolerance,
                     Core.advancedSplineTrajectoryTolerance);
             boolean sameAngleTolerance =
-            angleTolerance.equals(t.angleTolerance);
+                    angleTolerance.equals(t.angleTolerance);
 
             return sameSpline
                     && sameAngleSpline

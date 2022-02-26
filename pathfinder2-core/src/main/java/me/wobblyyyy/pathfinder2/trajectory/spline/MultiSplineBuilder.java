@@ -10,10 +10,6 @@
 
 package me.wobblyyyy.pathfinder2.trajectory.spline;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
@@ -22,13 +18,61 @@ import me.wobblyyyy.pathfinder2.trajectory.multi.segment.MultiSegmentTrajectory;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.Trio;
 
-public class MultiSplineBuilder {
-    private Node defaultNode = new Node();
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
+public class MultiSplineBuilder {
     private final List<Node> nodes = new ArrayList<>();
+    private Node defaultNode = new Node();
 
     public MultiSplineBuilder() {
         defaultNode.mode = InterpolationMode.DEFAULT;
+    }
+
+    private static List<NodeTrio> getTrios(List<Node> nodes) {
+        int size = nodes.size();
+
+        if (size < 3)
+            throw new IllegalArgumentException("You need at least three " +
+                    "or more control points!");
+
+        List<NodeTrio> trios = new ArrayList<>(nodes.size());
+
+        for (int i = 0; i < size - 2; i++)
+            trios.add(new NodeTrio(
+                    nodes.get(i),
+                    nodes.get(i + 1),
+                    nodes.get(i + 2)
+            ));
+
+        return trios;
+    }
+
+    private static void verifyMonotonicity(List<NodeTrio> trios,
+                                           List<Node> allNodes) {
+        return;
+
+        /*
+        for (NodeTrio trio : trios) {
+            PointXYZ a = trio.getA().point();
+            PointXYZ b = trio.getB().point();
+            PointXYZ c = trio.getC().point();
+
+            if (!Spline.areMonotonic(a, b, c))
+                throw new IllegalArgumentException(StringUtils.format(
+                            "Failed to verify monotonicty because one or " +
+                            "more trios (group of 3 adjacent points) were " +
+                            "not monotonic. The set of three points that " +
+                            "are not monotonic are %s, %s, and %s. " +
+                            "All nodes: %s",
+                            trio.getA().point(),
+                            trio.getB().point(),
+                            trio.getC().point(),
+                            allNodes.toString()
+                ));
+        }
+        */
     }
 
     public MultiSplineBuilder setDefaultSpeed(double speed) {
@@ -163,51 +207,6 @@ public class MultiSplineBuilder {
         return this;
     }
 
-    private static List<NodeTrio> getTrios(List<Node> nodes) {
-        int size = nodes.size();
-
-        if (size < 3)
-            throw new IllegalArgumentException("You need at least three " +
-                    "or more control points!");
-
-        List<NodeTrio> trios = new ArrayList<>(nodes.size());
-
-        for (int i = 0; i < size - 2; i++)
-            trios.add(new NodeTrio(
-                        nodes.get(i),
-                        nodes.get(i + 1),
-                        nodes.get(i + 2)
-            ));
-
-        return trios;
-    }
-
-    private static void verifyMonotonicity(List<NodeTrio> trios,
-                                           List<Node> allNodes) {
-        return;
-
-        /*
-        for (NodeTrio trio : trios) {
-            PointXYZ a = trio.getA().point();
-            PointXYZ b = trio.getB().point();
-            PointXYZ c = trio.getC().point();
-
-            if (!Spline.areMonotonic(a, b, c))
-                throw new IllegalArgumentException(StringUtils.format(
-                            "Failed to verify monotonicty because one or " +
-                            "more trios (group of 3 adjacent points) were " +
-                            "not monotonic. The set of three points that " +
-                            "are not monotonic are %s, %s, and %s. " +
-                            "All nodes: %s",
-                            trio.getA().point(),
-                            trio.getB().point(),
-                            trio.getC().point(),
-                            allNodes.toString()
-                ));
-        }
-        */
-    }
-
     public Trajectory build() {
         List<NodeTrio> trios = getTrios(nodes);
 
@@ -215,10 +214,10 @@ public class MultiSplineBuilder {
         verifyMonotonicity(trios, nodes);
 
         SplineBuilderFactory factory = new SplineBuilderFactory()
-            .setSpeed(defaultNode.speed)
-            .setTolerance(defaultNode.tolerance)
-            .setAngleTolerance(defaultNode.angleTolerance)
-            .setStep(defaultNode.step);
+                .setSpeed(defaultNode.speed)
+                .setTolerance(defaultNode.tolerance)
+                .setAngleTolerance(defaultNode.angleTolerance)
+                .setStep(defaultNode.step);
 
         List<Trajectory> trajectories = trios.stream().map((trio) -> {
             Node a = trio.getA();
@@ -234,11 +233,11 @@ public class MultiSplineBuilder {
             double cSpeed = c.speed;
 
             return factory.builder()
-                .setInterpolationMode(a.mode)
-                .add(aPoint, aSpeed)
-                .add(bPoint, bSpeed)
-                .add(cPoint, cSpeed)
-                .build();
+                    .setInterpolationMode(a.mode)
+                    .add(aPoint, aSpeed)
+                    .add(bPoint, bSpeed)
+                    .add(cPoint, cSpeed)
+                    .build();
         }).collect(Collectors.toList());
 
         return new MultiSegmentTrajectory(trajectories);
