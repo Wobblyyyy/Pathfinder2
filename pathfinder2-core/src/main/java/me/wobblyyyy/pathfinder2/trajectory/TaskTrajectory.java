@@ -33,6 +33,8 @@ public class TaskTrajectory implements Trajectory {
     private final double maxTimeMs;
     private final ElapsedTimer timer;
     private boolean hasExecuted = false;
+    private boolean hasFinished = false;
+    private double speed;
 
     /**
      * Create a new {@code TaskTrajectory}.
@@ -73,6 +75,12 @@ public class TaskTrajectory implements Trajectory {
         this(initial, during, onFinish, isFinished, 0, maxTimeMs);
     }
 
+    public TaskTrajectory setSpeed(double speed) {
+        this.speed = speed;
+
+        return this;
+    }
+
     @Override
     public PointXYZ nextMarker(PointXYZ current) {
         return current;
@@ -100,14 +108,16 @@ public class TaskTrajectory implements Trajectory {
 
         during.run();
 
-        if (isDone)
+        if (isDone && !hasFinished) {
+            hasFinished = true;
             onFinish.run();
+        }
 
         return isDone;
     }
 
     @Override
     public double speed(PointXYZ current) {
-        return 0;
+        return speed;
     }
 }
