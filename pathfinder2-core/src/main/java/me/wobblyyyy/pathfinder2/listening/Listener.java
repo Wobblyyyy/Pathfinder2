@@ -157,6 +157,13 @@ public class Listener implements Tickable {
         this.input = input;
     }
 
+    public static Listener withOneInput(int priority,
+                                        ListenerMode mode,
+                                        Runnable whenTriggered,
+                                        Supplier<Boolean> input) {
+        return new Listener(priority, mode, whenTriggered, input);
+    }
+
     public Listener(Listener listener) {
         this.priority = listener.priority;
         this.mode = listener.mode;
@@ -174,7 +181,8 @@ public class Listener implements Tickable {
 
     public static Listener buttonHeld(Supplier<Boolean> input,
                                       Runnable whenTriggered) {
-        return new Listener(
+        return withOneInput(
+                0,
                 ListenerMode.CONDITION_IS_MET,
                 whenTriggered,
                 input
@@ -183,7 +191,8 @@ public class Listener implements Tickable {
 
     public static Listener buttonPressed(Supplier<Boolean> input,
                                          Runnable whenTriggered) {
-        return new Listener(
+        return withOneInput(
+                0,
                 ListenerMode.CONDITION_NEWLY_MET,
                 whenTriggered,
                 input
@@ -192,7 +201,8 @@ public class Listener implements Tickable {
 
     public static Listener buttonReleased(Supplier<Boolean> input,
                                           Runnable whenTriggered) {
-        return new Listener(
+        return withOneInput(
+                0,
                 ListenerMode.CONDITION_NEWLY_NOT_MET,
                 whenTriggered,
                 input
@@ -201,7 +211,8 @@ public class Listener implements Tickable {
 
     public static Listener joystick(Supplier<Double> x,
                                     Consumer<Double> whenTriggered) {
-        return new Listener(
+        return withOneInput(
+                0,
                 ListenerMode.CONDITION_IS_MET,
                 () -> whenTriggered.accept(x.get()),
                 () -> x.get() != 0.0
@@ -210,7 +221,8 @@ public class Listener implements Tickable {
 
     public static Listener trigger(Supplier<Double> triggerPos,
                                    Consumer<Double> whenTriggered) {
-        return new Listener(
+        return withOneInput(
+                0,
                 ListenerMode.CONDITION_IS_MET,
                 () -> whenTriggered.accept(triggerPos.get()),
                 () -> triggerPos.get() > 0.0
@@ -220,7 +232,8 @@ public class Listener implements Tickable {
     public static Listener joystick(Supplier<Double> x,
                                     Supplier<Double> y,
                                     BiConsumer<Double, Double> whenTriggered) {
-        return new Listener(
+        return withOneInput(
+                0,
                 ListenerMode.CONDITION_IS_MET,
                 () -> whenTriggered.accept(x.get(), y.get()),
                 () -> x.get() != 0.0
