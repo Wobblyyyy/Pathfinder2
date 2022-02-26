@@ -11,7 +11,12 @@
 package me.wobblyyyy.pathfinder2.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import me.wobblyyyy.pathfinder2.geometry.Angle;
+import me.wobblyyyy.pathfinder2.geometry.PointXY;
+import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
 /**
  * Various utilities for arrays.
@@ -221,6 +226,13 @@ public class ArrayUtils {
         }
     }
 
+    /**
+     * Convert an array into a list.
+     *
+     * @param <T> the type of elements in the array.
+     * @param arr the array.j
+     * @return the array, represented as a list.
+     */
     public static <T> List<T> toList(T[] arr) {
         List<T> list = new ArrayList<>(arr.length);
 
@@ -228,5 +240,45 @@ public class ArrayUtils {
             list.add(t);
 
         return list;
+    }
+
+    public static double[] toDoubleArray(Collection<? extends Number> collection) {
+        double[] arr = new double[collection.size()];
+
+        int i = 0;
+        for (Number n : collection)
+            arr[i++] = n.doubleValue();
+
+        return arr;
+    }
+
+    public static PointXY[] toPointXYArray(Collection<? extends PointXY> collection) {
+        PointXY[] arr = new PointXY[collection.size()];
+
+        int i = 0;
+        for (PointXY p : collection)
+            arr[i++] = p;
+
+        return arr;
+    }
+
+    public static PointXYZ[] toPointXYZArray(Collection<? extends PointXYZ> collection) {
+        PointXYZ[] arr = new PointXYZ[collection.size()];
+
+        int i = 0;
+        for (PointXYZ p : collection)
+            arr[i++] = p;
+
+        return arr;
+    }
+
+    public static Angle[] toAngleArray(Collection<? extends Angle> collection) {
+        Angle[] arr = new Angle[collection.size()];
+
+        int i = 0;
+        for (Angle a : collection)
+            arr[i++] = a;
+
+        return arr;
     }
 }

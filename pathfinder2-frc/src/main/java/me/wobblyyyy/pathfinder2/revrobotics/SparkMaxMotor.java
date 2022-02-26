@@ -37,6 +37,13 @@ public class SparkMaxMotor extends AbstractMotor implements AutoCloseable {
         this.spark = spark;
     }
 
+    public SparkMaxMotor(CANSparkMax spark,
+                         boolean isInverted) {
+        super(spark::set, spark::get, isInverted);
+
+        this.spark = spark;
+    }
+
     /**
      * Create a new {@code SparkMaxMotor}.
      *
@@ -46,6 +53,12 @@ public class SparkMaxMotor extends AbstractMotor implements AutoCloseable {
     public SparkMaxMotor(int deviceId,
                          MotorType type) {
         this(new CANSparkMax(deviceId, type));
+    }
+
+    public SparkMaxMotor(int deviceId,
+                         MotorType type,
+                         boolean isInverted) {
+        this(new CANSparkMax(deviceId, type), isInverted);
     }
 
     /**
@@ -59,6 +72,18 @@ public class SparkMaxMotor extends AbstractMotor implements AutoCloseable {
     }
 
     /**
+     * Create a new brushed {@code SparkMaxMotor}.
+     *
+     * @param deviceId   the spark's device ID.
+     * @param isInverted is the motor inverted?
+     * @return a new brushed {@code SparkMaxMotor}.
+     */
+    public static SparkMaxMotor brushed(int deviceId,
+                                        boolean isInverted) {
+        return new SparkMaxMotor(deviceId, kBrushed, isInverted);
+    }
+
+    /**
      * Create a new brushless {@code SparkMaxMotor}.
      *
      * @param deviceId the spark's device ID.
@@ -66,6 +91,18 @@ public class SparkMaxMotor extends AbstractMotor implements AutoCloseable {
      */
     public static SparkMaxMotor brushless(int deviceId) {
         return new SparkMaxMotor(deviceId, kBrushless);
+    }
+
+    /**
+     * Create a new brushless {@code SparkMaxMotor}.
+     *
+     * @param deviceId   the spark's device ID.
+     * @param isInverted is the motor inverted?
+     * @return a new brushless {@code SparkMaxMotor}.
+     */
+    public static SparkMaxMotor brushless(int deviceId,
+                                          boolean isInverted) {
+        return new SparkMaxMotor(deviceId, kBrushless, isInverted);
     }
 
     /**

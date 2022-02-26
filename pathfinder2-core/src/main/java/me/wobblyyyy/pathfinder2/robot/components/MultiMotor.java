@@ -34,12 +34,15 @@ public class MultiMotor implements Motor {
     }
 
     public void addMotor(Motor motor) {
+        if (motor == null)
+            throw new NullPointerException("Cannot add a null motor!");
+
         motors.add(motor);
     }
-    
+
     public void addMotor(Motor motor,
                          boolean isInverted) {
-        motors.add(motor.applyInversions(isInverted, isInverted));
+        addMotor(motor.applyInversions(isInverted, isInverted));
     }
 
     public List<Motor> getMotors() {
