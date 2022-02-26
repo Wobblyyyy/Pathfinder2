@@ -10,6 +10,9 @@
 
 package me.wobblyyyy.pathfinder2.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Various utilities for arrays.
  *
@@ -216,5 +219,14 @@ public class ArrayUtils {
             arr[i] = arr[idx];
             arr[idx] = temp;
         }
+    }
+
+    public static <T> List<T> toList(T[] arr) {
+        List<T> list = new ArrayList<>(arr.length);
+
+        for (T t : arr)
+            list.add(t);
+
+        return list;
     }
 }

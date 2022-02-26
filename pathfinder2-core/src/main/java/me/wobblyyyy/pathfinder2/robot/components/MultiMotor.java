@@ -10,6 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.robot.components;
 
+import java.util.List;
+
+import me.wobblyyyy.pathfinder2.utils.ArrayUtils;
+
 /**
  * A wrapper that encapsulates several motors. This is most useful for
  * situations where two motors should be perfectly synchronized.
@@ -18,7 +22,7 @@ package me.wobblyyyy.pathfinder2.robot.components;
  * @since 0.10.7
  */
 public class MultiMotor implements Motor {
-    private final Motor[] motors;
+    private final List<Motor> motors;
 
     public MultiMotor(Motor... motors) {
         if (motors.length == 0)
@@ -26,10 +30,19 @@ public class MultiMotor implements Motor {
                     "Motors array may not have a length of 0!"
             );
 
-        this.motors = motors;
+        this.motors = ArrayUtils.toList(motors);
     }
 
-    public Motor[] getMotors() {
+    public void addMotor(Motor motor) {
+        motors.add(motor);
+    }
+    
+    public void addMotor(Motor motor,
+                         boolean isInverted) {
+        motors.add(motor.applyInversions(isInverted, isInverted));
+    }
+
+    public List<Motor> getMotors() {
         return motors;
     }
 
@@ -37,7 +50,7 @@ public class MultiMotor implements Motor {
     public double getPower() {
         double sum = 0;
         for (Motor motor : motors) sum += motor.getPower();
-        return sum / motors.length;
+        return sum / motors.size();
     }
 
     @Override

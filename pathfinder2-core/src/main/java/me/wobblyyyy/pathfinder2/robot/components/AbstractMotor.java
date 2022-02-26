@@ -48,12 +48,12 @@ public class AbstractMotor implements Motor {
     /**
      * Should power values be inverted when being set?
      */
-    private final boolean isSetInverted;
+    private boolean isSetInverted;
 
     /**
      * Should power values be inverted when being retrieved?
      */
-    private final boolean isGetInverted;
+    private boolean isGetInverted;
 
     /**
      * The motor's minimum power.
@@ -286,6 +286,43 @@ public class AbstractMotor implements Motor {
     }
 
     /**
+     * Set if the motor's set method is inverted.
+     *
+     * @param isSetInverted should the motor's set method be inverted?
+     * @return {@code this}, used for method chaining.
+     */
+    public AbstractMotor setIsSetInverted(boolean isSetInverted) {
+        this.isSetInverted = isSetInverted;
+
+        return this;
+    }
+
+    /**
+     * Set if the motor's get method is inverted.
+     *
+     * @param isGetInverted should the motor's get method be inverted?
+     * @return {@code this}, used for method chaining.
+     */
+    public AbstractMotor setIsGetInverted(boolean isGetInverted) {
+        this.isGetInverted = isGetInverted;
+
+        return this;
+    }
+
+    /**
+     * Set the motor's set and get inversion states.
+     *
+     * @param isInverted should the motor be inverted?
+     * @return {@code this}, used for method chaining.
+     */
+    public AbstractMotor setIsInverted(boolean isInverted) {
+        this.isSetInverted = isInverted;
+        this.isGetInverted = isInverted;
+
+        return this;
+    }
+
+    /**
      * Accept a power value.
      *
      * @param power the power value to accept.
@@ -304,9 +341,8 @@ public class AbstractMotor implements Motor {
     public double getPower() {
         double power = this.getPower.get();
 
-        if (isGetInverted) {
+        if (isGetInverted)
             power *= -1;
-        }
 
         return power;
     }
@@ -351,12 +387,11 @@ public class AbstractMotor implements Motor {
 
         // if it's lazy, check to see if power actually needs to be set
         // otherwise, just set the power value anyway
-        if (isLazy) {
+        if (isLazy)
             if (Math.abs(lastPower - power) >= maxLazyPowerGap)
                 accept(power);
-        } else {
+        else
             accept(power);
-        }
     }
 
     @Override

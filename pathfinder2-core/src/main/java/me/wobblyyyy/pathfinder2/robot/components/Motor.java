@@ -48,4 +48,71 @@ public interface Motor {
      *              reverse and full speed forwards, respectively.
      */
     void setPower(double power);
+
+    /**
+     * Create a new motor with inversion options added.
+     *
+     * @param isSetPowerInverted should all power values inputted to the
+     *                           motor be multiplied by -1?
+     * @param isGetPowerInverted should all power values outputted by the
+     *                           motor be multiplied by -1?
+     * @return a new {@code Motor}.
+     */
+    default Motor applyInversions(boolean isSetPowerInverted,
+                                  boolean isGetPowerInverted) {
+        return new AbstractMotor(
+                this::setPower,
+                this::getPower,
+                isSetPowerInverted,
+                isGetPowerInverted
+        );
+    }
+
+    /**
+     * Invert the motor by applying an inversion to both the
+     * {@link #setPower(double)} and {@link #getPower()} methods. This method
+     * calls {@link applyInversions(boolean, boolean)} with both parameters
+     * set to true.
+     *
+     * @return a new {@code Motor}.
+     */
+    default Motor invert() {
+        return applyInversions(true, true);
+    }
+
+    default Motor invertSetPower() {
+        return applyInversions(true, false);
+    }
+
+    default Motor invertGetPower() {
+        return applyInversions(false, true);
+    }
+
+    default Motor applyMultipliers(double setPowerMultiplier,
+                                   double getPowerMultiplier) {
+        return new AbstractMotor(
+                (power) -> {
+                    setPower(power * setPowerMultiplier);
+                },
+                () -> {
+                    return getPower() * getPowerMultiplier;
+                }
+        );
+    }
+
+    default Motor applySetPowerMultiplier(double setPowerMultiplier) {
+        return applyMultipliers(setPowerMultiplier, 1);
+    }
+
+    default Motor applyGetPowerMultiplier(double getPowerMultiplier) {
+        return applyMultipliers(1, getPowerMultiplier);
+    }
+
+    default Motor applyMultiplier(double multiplier) {
+        return applyMultipliers(multiplier, 1 / multiplier);
+    }
+
+    default AbstractMotor toAbstractMotor() {
+        return new AbstractMotor(this::setPower, this::getPower);
+    }
 }
