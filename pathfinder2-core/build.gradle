@@ -15,13 +15,9 @@ plugins {
 
 tasks {
     compileJava {
-        sourceCompatibility =
+        sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
-
-//    compileTestJava {
-//        sourceCompatibility = 11
-//    }
 }
 
 java {
