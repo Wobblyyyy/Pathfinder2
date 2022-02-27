@@ -9,6 +9,9 @@ position, and target angle are all independent of eachother and are controlled
 by their own individual splines.
 
 ### Creating a spline trajectory
+There are a couple of ways to create a spline trajectory.
+
+#### `AdvancedSplineTrajectoryBuilder`
 Although you could use the `AdvancedSplineTrajectory` constructor, I'd suggest
 you don't, just because of the amount of boilerplate code you'd have to write.
 Instead, you can make use of `AdvancedSplineTrajectoryBuilder`.
@@ -24,6 +27,7 @@ Trajectory trajectory = new AdvancedSplineTrajectoryBuilder()
         .build();
 ```
 
+#### `SplineBuilderFactory`
 As you can see, that's a lot neater and easier to understand. To go even
 further, you could use a `SplineBuilderFactory` to reduce boilerplate code
 when using multiple trajectories.
@@ -42,6 +46,7 @@ Trajectory c = factory.builder().add(new PointXYZ(5, 5, 0))
         .add(new PointXYZ(10, 3, 0)).add(new PointXYZ(12, 0, 0)).build();
 ```
 
+#### Pathfinder's "splineTo" methods
 Once again, as you can see, that can greatly reduce the amount of boilerplate
 code required. You can go a step further and use the convenience method
 `splineTo` in `Pathfinder`. This means you don't have to create a factory
@@ -66,6 +71,18 @@ in only a couple lines of code.
 ## Types of spline interpolation
 [`MonotoneCubicSpline`](../pathfinder2-geometry/src/main/java/me/wobblyyyy/pathfinder2/math/MonotoneCubicSpline.java)
 is the default spline implementation in Pathfinder.
+[`ApacheSpline`](../pathfinder2-geometry/src/main/java/me/wobblyyyy/pathfinder2/math/ApacheSpline.java)
+is another implementation provided with Pathfinder that uses spline
+interpolation from Apache Commons math library. `ApacheSpline` allows you
+to use either cubic or Akima spline interpolation. Note that Akima spline
+interpolation requires at least 4 control points, unlike cubic spline
+interpolation, which only requires three.
+
+Of course, using `ApacheSpline` will require you to include the Apache Commons
+math library in your project, like so:
+```groovy
+implementation 'org.apache.commons:commons-math3:3.6.1'
+```
 
 ### Rules for making splines
 There are a couple guidelines to keep in mind while creating splines.
