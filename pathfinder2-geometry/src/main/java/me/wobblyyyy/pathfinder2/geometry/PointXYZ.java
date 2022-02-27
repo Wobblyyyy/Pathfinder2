@@ -102,6 +102,17 @@ public class PointXYZ extends PointXY {
     }
 
     /**
+     * Create a new {@code PointXYZ} instance.
+     *
+     * @param x the X coordinate of the point.
+     * @param y the Y coordinate of the point.
+     */
+    public PointXYZ(double x,
+                    double y) {
+        this(x, y, 0);
+    }
+
+    /**
      * Create a new {@code PointXYZ} instance by copying an existing
      * {@code PointXYZ}.
      *
@@ -599,6 +610,24 @@ public class PointXYZ extends PointXY {
      */
     public PointXY asPoint() {
         return this;
+    }
+
+    /**
+     * Create a deep clone of this {@code PointXYZ}.
+     *
+     * @return a new {@code PointXYZ}.
+     */
+    public PointXYZ deepClone() {
+        return new PointXYZ(x(), y(), z());
+    }
+
+    /**
+     * Create a deep clone of this {@code PointXYZ} as a {@code PointXY}.
+     *
+     * @return a new {@code PointXY}.
+     */
+    public PointXY deepCloneAsPointXY() {
+        return new PointXY(x(), y());
     }
 
     /**
