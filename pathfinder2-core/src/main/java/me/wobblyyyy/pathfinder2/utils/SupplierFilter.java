@@ -19,7 +19,9 @@ import java.util.function.Supplier;
  *
  * @author Colin Robertson
  * @since 0.8.0
+ * @deprecated Use {@link SupplierFactory} instead!
  */
+@Deprecated
 public class SupplierFilter {
     private SupplierFilter() {
 

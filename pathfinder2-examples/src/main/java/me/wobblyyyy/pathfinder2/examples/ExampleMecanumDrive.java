@@ -42,8 +42,8 @@ public class ExampleMecanumDrive {
             backRight,
             backLeft
     );
-    private final Robot robot = new Robot(drive, odometry);
     private final Odometry odometry = new SimulatedOdometry();
+    private final Robot robot = new Robot(drive, odometry);
     private final Controller turnController = new GenericTurnController(0.05);
     private final FollowerGenerator followerGenerator = new GenericFollowerGenerator(turnController);
     private final Pathfinder pathfinder = new Pathfinder(robot, followerGenerator);

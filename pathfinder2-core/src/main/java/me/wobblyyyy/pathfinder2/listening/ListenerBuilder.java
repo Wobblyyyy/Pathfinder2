@@ -77,6 +77,16 @@ public class ListenerBuilder {
     }
 
     /**
+     * Add an input to the listener, but the input is inverted.
+     *
+     * @param input the input to add.
+     * @return {@code this}, used for method chaining.
+     */
+    public ListenerBuilder addInvertedInput(Supplier<Boolean> input) {
+        return addInput(() -> !input.get());
+    }
+
+    /**
      * Set the list of the listener's inputs.
      *
      * @param inputs a list of inputs the listener should use.

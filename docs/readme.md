@@ -15,3 +15,4 @@ be browsed from GitHub.
 - [Fast trajectories](./09_fast_trajectory.md)
 - [Example implementation](./10_example_implementation.md)
 - [Zones](./11_zones.md)
+- [Global trajectory map](./12_global_trajectory_map.md)

@@ -1,5 +1,9 @@
 package me.wobblyyyy.pathfinder2.utils;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -15,6 +19,44 @@ import java.util.function.Supplier;
 public class SupplierFactory {
     private SupplierFactory() {
 
+    }
+
+    public static Supplier<Boolean> invert(Supplier<Boolean> supplier) {
+        return () -> !supplier.get();
+    }
+
+    public static <T> Supplier<Boolean> supplierFor(Supplier<T> supplier,
+                                                    Predicate<T> predicate) {
+        return () -> predicate.test(supplier.get());
+    }
+
+    public static Supplier<Boolean> fromDouble(Supplier<Double> supplier,
+                                               double tolerance) {
+        return () -> Math.abs(supplier.get()) >= tolerance;
+    }
+
+    public static Supplier<Boolean> fromDouble(Supplier<Double> supplier) {
+        return fromDouble(supplier, 0);
+    }
+
+    public static Collection<Supplier<Boolean>> invertAll(
+            Collection<Supplier<Boolean>> collection) {
+        List<Supplier<Boolean>> list = new ArrayList<>(collection.size());
+
+        for (Supplier<Boolean> supplier : collection)
+            list.add(invert(supplier));
+
+        return list;
+    }
+
+    public static Collection<Supplier<Boolean>> invertAll(
+            Supplier<Boolean>[] collection) {
+        List<Supplier<Boolean>> list = new ArrayList<>(collection.length);
+
+        for (Supplier<Boolean> supplier : collection)
+            list.add(invert(supplier));
+
+        return list;
     }
 
     public static Supplier<Boolean> anyTrue(Supplier<Boolean>... suppliers) {
