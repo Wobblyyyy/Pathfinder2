@@ -656,7 +656,7 @@ public class Pathfinder {
     /**
      * Add a plugin to Pathfinder's list of automatically loading plugins.
      * These plugins will be loaded whenever an instance of Pathfinder
-     * is creataed.
+     * is created.
      *
      * @param plugin the plugin to load.
      */
@@ -712,24 +712,21 @@ public class Pathfinder {
                     "trajectory was added from here: " +
                     STACK_TRACE_MAP.get(trajectoryName));
 
-        if (true) {
-            StackTraceElement[] stackTrace = new Throwable().getStackTrace();
+        StackTraceElement[] stackTrace = new Throwable().getStackTrace();
 
-            if (stackTrace.length > 10) {
-                StackTraceElement[] temp = new StackTraceElement[10];
-                System.arraycopy(stackTrace, 0, temp, 0, 10);
-                stackTrace = temp;
-            }
-
-            StringBuilder builder = new StringBuilder(stackTrace.length * 20);
-            for (StackTraceElement element : stackTrace) {
-                builder.append(element);
-                builder.append("\n");
-            }
-
-            STACK_TRACE_MAP.put(trajectoryName, builder.toString());
+        if (stackTrace.length > 10) {
+            StackTraceElement[] temp = new StackTraceElement[10];
+            System.arraycopy(stackTrace, 0, temp, 0, 10);
+            stackTrace = temp;
         }
 
+        StringBuilder builder = new StringBuilder(stackTrace.length * 20);
+        for (StackTraceElement element : stackTrace) {
+            builder.append(element);
+            builder.append("\n");
+        }
+
+        STACK_TRACE_MAP.put(trajectoryName, builder.toString());
         TRAJECTORY_MAP.put(trajectoryName, trajectory);
     }
 
@@ -790,7 +787,7 @@ public class Pathfinder {
      * Get a {@code Trajectory} from the global trajectory map.
      *
      * @param trajectoryName the name of the trajectory.
-     * @param trajectory     the actual trajectory.
+     * @return the trajectory.
      */
     private static Trajectory getTrajectory(String trajectoryName) {
         if (!TRAJECTORY_MAP.containsKey(trajectoryName))
@@ -1522,7 +1519,7 @@ public class Pathfinder {
 
     /**
      * Bind an operation to the invocation of Pathfinder's {@link #tick()}
-     * method. This utilizes Pathfinder's {@link ListenerManager} to accomodate
+     * method. This utilizes Pathfinder's {@link ListenerManager} to accommodate
      * for more advanced features, such as expiration time, cooldown, and
      * the maximum number of executions.
      *
@@ -1559,7 +1556,7 @@ public class Pathfinder {
 
     /**
      * Bind an operation to the invocation of Pathfinder's {@link #tick()}
-     * method. This utilizes Pathfinder's {@link ListenerManager} to accomodate
+     * method. This utilizes Pathfinder's {@link ListenerManager} to accommodate
      * for more advanced features, such as expiration time, cooldown, and
      * the maximum number of executions.
      *
@@ -2815,7 +2812,7 @@ public class Pathfinder {
      * @return {@code this}, used for method chaining.
      */
     public Pathfinder followRelativeTrajectory(Trajectory trajectory) {
-        return followRelativeTrajectory(
+        return followTrajectory(
                 trajectory.shiftToRobot(new PointXYZ(0, 0, 0), getPosition()));
     }
 
@@ -2834,7 +2831,7 @@ public class Pathfinder {
      * current position. This essentially converts an absolute trajectory
      * into a relative one.
      *
-     * @param trajectory the trajectory to shift and follow.
+     * @param trajectories the trajectories to shift and follow.
      * @return {@code this}, used for method chaining.
      */
     public Pathfinder followRelativeTrajectories(Trajectory... trajectories) {
@@ -3180,7 +3177,7 @@ public class Pathfinder {
 
         PointXYZ robotPosition = getPosition();
 
-        // if the first point is NOT the robot's current positon, add it
+        // if the first point is NOT the robot's current position, add it
         // to the trajectory
         if (!robotPosition.equals(points[0]))
             builder.add(robotPosition);
@@ -3242,9 +3239,9 @@ public class Pathfinder {
      * queue so that it can be executed
      *
      * @param initial    code to be executed the first time the trajectory's
-     *                   {@link #isDone(PointXYZ)} method is called.
+     *                   {@code #isDone(PointXYZ)} method is called.
      * @param during     code to be executed any time the trajectory's
-     *                   {@link #isDone(PointXYZ)} method is called.
+     *                   {@code #isDone(PointXYZ)} method is called.
      * @param onFinish   code to be executed whenever the task is finished.
      * @param isFinished a supplier that indicates if the task is finished.
      *                   If the task is not finished, it should continue stop
@@ -3280,9 +3277,9 @@ public class Pathfinder {
      * queue so that it can be executed
      *
      * @param initial    code to be executed the first time the trajectory's
-     *                   {@link #isDone(PointXYZ)} method is called.
+     *                   {@code #isDone(PointXYZ)} method is called.
      * @param during     code to be executed any time the trajectory's
-     *                   {@link #isDone(PointXYZ)} method is called.
+     *                   {@code #isDone(PointXYZ)} method is called.
      * @param onFinish   code to be executed whenever the task is finished.
      * @param isFinished a supplier that indicates if the task is finished.
      *                   If the task is not finished, it should continue stop
@@ -3301,7 +3298,7 @@ public class Pathfinder {
      * queue so that it can be executed
      *
      * @param during     code to be executed any time the trajectory's
-     *                   {@link #isDone(PointXYZ)} method is called.
+     *                   {@code #isDone(PointXYZ)} method is called.
      * @param isFinished a supplier that indicates if the task is finished.
      *                   If the task is not finished, it should continue stop
      *                   its execution.
