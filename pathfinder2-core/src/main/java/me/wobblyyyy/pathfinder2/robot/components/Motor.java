@@ -12,7 +12,10 @@ package me.wobblyyyy.pathfinder2.robot.components;
 
 /**
  * A (very simple) motor interface. For almost all purposes, it's generally
- * a better idea to use a more abstract implementation of this interface.
+ * a better idea to use a more abstract implementation of this interface. In
+ * Pathfinder, motors should only have power values between -1 and 1. A
+ * motor should be capable of recieving an input via {@link #setPower(double)}
+ * and then spinning according to that input.
  *
  * @author Colin Robertson
  * @see AbstractMotor
@@ -132,12 +135,26 @@ public interface Motor {
      * an instance of {@code AbstractMotor}, this will create a new
      * {@code AbstractMotor}.
      *
-     * @return {@code this}, represented as an abstract motor.
+     * @return {@code this}, represented as an abstract motor. If
+     * {@code this} is already an {@code AbstractMotor}, this will simply
+     * cast this to an {@code AbstractMotor}.
      */
     default AbstractMotor toAbstractMotor() {
         if (this instanceof AbstractMotor)
             return (AbstractMotor) this;
 
         return new AbstractMotor(this::setPower, this::getPower);
+    }
+
+    /**
+     * Convert this {@code Motor} into a {@code AbstractMotor} and apply
+     * a deadband to the new motor.
+     *
+     * @param deadband the deadband to apply to the motor.
+     * @return {@code this}, represented as an abstract motor. This will
+     * also have a deadband applied to it.
+     */
+    default AbstractMotor deadband(double deadband) {
+        return toAbstractMotor().deadband(deadband);
     }
 }
