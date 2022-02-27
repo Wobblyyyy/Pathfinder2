@@ -46,8 +46,8 @@ public class ListenerManager implements Tickable {
      * Create a new {@code ListenerManager}.
      */
     public ListenerManager(Pathfinder pathfinder) {
-        listeners = new HashMap<>();
         this.pathfinder = pathfinder;
+        listeners = new HashMap<>();
     }
 
     /**
