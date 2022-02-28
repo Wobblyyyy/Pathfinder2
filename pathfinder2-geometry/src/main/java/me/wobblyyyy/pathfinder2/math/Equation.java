@@ -27,5 +27,7 @@ public interface Equation {
      * @param x the X value to "look up."
      * @return the point, according to the inputted X value.
      */
-    PointXY getPoint(double x);
+    default PointXY getPoint(double x) {
+        return new PointXY(x, getY(x));
+    }
 }

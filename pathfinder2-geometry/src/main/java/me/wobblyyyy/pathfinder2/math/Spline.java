@@ -60,7 +60,7 @@ import java.util.List;
  * @author Colin Robertson
  * @since 0.0.0
  */
-public interface Spline {
+public interface Spline extends Equation {
     /**
      * Are a set of values in strictly increasing order?
      *
@@ -200,4 +200,8 @@ public interface Spline {
      * @return the spline's end point.
      */
     PointXY getEndPoint();
+
+    default double getY(double x) {
+        return interpolateY(x);
+    }
 }
