@@ -12,6 +12,8 @@ package me.wobblyyyy.pathfinder2.geometry;
 
 import java.io.Serializable;
 
+import me.wobblyyyy.pathfinder2.math.Equation;
+
 /**
  * A representation of a linear equation. A linear equation is a
  * first-degree function, meaning the highest power X is raised to is 1.
@@ -22,23 +24,7 @@ import java.io.Serializable;
  * @author Colin Robertson
  * @since 0.1.0
  */
-public interface LinearEquation extends Serializable {
-    /**
-     * Get a Y value at a specific X value according to the equation.
-     *
-     * @param x the X value to "look up."
-     * @return the Y value, according to the inputted X value.
-     */
-    double getY(double x);
-
-    /**
-     * Get a point based on an X value.
-     *
-     * @param x the X value to "look up."
-     * @return the point, according to the inputted X value.
-     */
-    PointXY getPoint(double x);
-
+public interface LinearEquation extends Serializable, Equation {
     /**
      * Get the line's "point." This is mostly useful for vertical lines.
      *
@@ -109,4 +95,36 @@ public interface LinearEquation extends Serializable {
      * @return if the equations intersect, true. Otherwise, false.
      */
     boolean intersectsWith(LinearEquation equation);
+
+    /**
+     * Create a linear equation based on two points.
+     *
+     * @param x1 the first x value.
+     * @param y1 the first y value.
+     * @param x2 the second x value.
+     * @param y2 the second y value.
+     * @return a new {@code LinearEquation} based on the two points.
+     */
+    static LinearEquation getEquation(double x1,
+                                      double y1,
+                                      double x2,
+                                      double y2) {
+        double rise = y2 - y1;
+        double run = x2 - x1;
+        double slope = rise / run;
+
+        return new PointSlope(new PointXY(x1, y1), slope);
+    }
+
+    /**
+     * Create a linear equation based on two points.
+     *
+     * @param a one of the two points.
+     * @param b one of the two points.
+     * @return a new {@code LinearEquation} based on the two points.
+     */
+    static LinearEquation getEquation(PointXY a,
+                                      PointXY b) {
+        return getEquation(a.x(), a.y(), b.x(), b.y());
+    }
 }

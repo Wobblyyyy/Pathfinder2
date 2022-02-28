@@ -581,6 +581,29 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     }
 
     /**
+     * Are a set of points collinear?
+     *
+     * @param points the points to check.
+     * @return true if the points are collinear, otherwise, false.
+     */
+    public static boolean areCollinear(PointXY... points) {
+        if (points.length < 3)
+            throw new IllegalArgumentException("Must provide at least " +
+                    "3 points, you only provided <" + points.length + ">");
+
+        for (int i = 0; i < points.length - 3; i++) {
+            PointXY a = points[i];
+            PointXY b = points[i + 1];
+            PointXY c = points[i + 2];
+
+            if (!areCollinear(a, b, c))
+                return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Create a new point TOWARDS the target point. This point will be
      * {@code distance} away.
      *
