@@ -49,7 +49,6 @@ public class ExecutorManager {
      * The manager's odometry.
      */
     private final Odometry odometry;
-
     /**
      * The manager's drive.
      */
@@ -79,6 +78,10 @@ public class ExecutorManager {
      * @param robot the robot.
      */
     public ExecutorManager(Robot robot) {
+        if (robot == null)
+            throw new NullPointerException("Attempted to create an " +
+                    "ExecutorManager with a null Robot object!");
+
         this.odometry = robot.odometry();
         this.drive = robot.drive();
     }
@@ -92,6 +95,10 @@ public class ExecutorManager {
      *                  create a new {@link FollowerExecutor}.
      */
     public void addExecutor(List<Follower> followers) {
+        if (followers == null)
+            throw new NullPointerException("Attempted to use addExecutor " +
+                    "with a null List<Follower>!");
+
         executors.add(
                 new FollowerExecutor(
                         odometry,
@@ -109,6 +116,10 @@ public class ExecutorManager {
      * @param follower a single follower to add.
      */
     public void addExecutor(Follower follower) {
+        if (follower == null)
+            throw new NullPointerException("Attempted to use addExecutor " +
+                    "with a null Follower!");
+
         executors.add(
                 new FollowerExecutor(
                         odometry,
