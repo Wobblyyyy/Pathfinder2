@@ -80,4 +80,11 @@ public class DoubleUtils {
 
         return value;
     }
+
+    public static double[] validate(double... values) {
+        for (int i = 0; i < values.length; i++)
+            validate(values[i], String.valueOf(i));
+
+        return values;
+    }
 }

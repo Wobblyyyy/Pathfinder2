@@ -14,6 +14,7 @@ package me.wobblyyyy.pathfinder2.math;
 import me.wobblyyyy.pathfinder2.exceptions.SplineException;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.utils.DoubleUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,10 +55,21 @@ public class MonotoneCubicSpline implements Spline {
      * honest.
      */
 
+    /**
+     * Create a new {@code MonotoneCubicSpline}. Both of the arrays provided
+     * as parameters should be the same length. Additionally, both arrays
+     * should have a length of at least 2. If the X values are decreasing,
+     * rather than increasing, the spline will automatically be inverted, so
+     * that externally, it appears to be decreasing, but internally, it's
+     * not. This constructor copies the arrays provided as a parameters, as
+     * to ensure they're not unintentionally modified.
+     *
+     * @param xInitial an array of X values.
+     * @param yInitial an array of Y values.
+     */
     @SuppressWarnings("SuspiciousNameCombination")
     public MonotoneCubicSpline(double[] xInitial,
-                               double[] yInitial) {
-
+                               double[] yInitial) throws SplineException {
         if (xInitial == null || yInitial == null)
             throw new SplineException("Splines must be created " +
                     "with non-null control points and arrays");
@@ -73,6 +85,9 @@ public class MonotoneCubicSpline implements Spline {
 
         double[] x = new double[xInitial.length];
         double[] y = new double[yInitial.length];
+
+        xInitial = DoubleUtils.validate(xInitial);
+        yInitial = DoubleUtils.validate(yInitial);
 
         System.arraycopy(xInitial, 0, x, 0, x.length);
         System.arraycopy(yInitial, 0, y, 0, y.length);
