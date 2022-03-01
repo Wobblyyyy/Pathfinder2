@@ -17,8 +17,17 @@ package me.wobblyyyy.pathfinder2.math;
  * @since 0.4.0
  */
 public class MinMax {
-    private MinMax() {
+    private final double minimumX;
+    private final double maximumX;
 
+    public MinMax(double minimumX,
+                  double maximumX) {
+        this.minimumX = minimumX;
+        this.maximumX = maximumX;
+    }
+
+    public static MinMax doNotClip() {
+        return new MinMax(0, 0);
     }
 
     /**
@@ -42,5 +51,17 @@ public class MinMax {
         }
 
         return Math.max(Math.min(value, max), min);
+    }
+
+    /**
+     * Clip a value by ensuring it's between the minimum and maximum values.
+     *
+     * @param value the value to clip.
+     * @return the clipped value. If the value is less than the minimum, the
+     * minimum will be returned. If the value is greater than the maximum,
+     * the maximum will be returned. Otherwise, the value will be returned.
+     */
+    public double clip(double value) {
+        return clip(value, minimumX, maximumX);
     }
 }

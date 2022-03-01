@@ -118,13 +118,6 @@ public class StringUtils {
                         }
                     }
 
-//                    if (i == length)
-//                        throw new RuntimeException(format(
-//                                "expected type identifier after %s%s",
-//                                "%",
-//                                numberBuilder
-//                        ));
-
                     maxLength = Integer.parseInt(numberBuilder.toString());
                     type = template.charAt(i);
                 }
