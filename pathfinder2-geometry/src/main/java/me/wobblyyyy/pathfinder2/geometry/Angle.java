@@ -426,6 +426,13 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public static Angle add(Angle a,
                             Angle b) {
+        NullAngleException.throwIfInvalid("The first angle ('a') was " +
+                "null! In case you couldn't guess, that... well, " +
+                "it probably shouldn't be null.", a);
+        NullAngleException.throwIfInvalid("The second angle ('b') was " +
+                "null! In case you couldn't guess, that... well, " +
+                "it probably shouldn't be null.", b);
+
         return Angle.fixedRad(a.rad() + b.rad());
     }
 
@@ -438,6 +445,13 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public static Angle subtract(Angle a,
                                  Angle b) {
+        NullAngleException.throwIfInvalid("The first angle ('a') was " +
+                "null! In case you couldn't guess, that... well, " +
+                "it probably shouldn't be null.", a);
+        NullAngleException.throwIfInvalid("The second angle ('b') was " +
+                "null! In case you couldn't guess, that... well, " +
+                "it probably shouldn't be null.", b);
+
         return add(a, multiply(b, -1));
     }
 
@@ -450,6 +464,13 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public static Angle multiply(Angle a,
                                  Angle b) {
+        NullAngleException.throwIfInvalid("The first angle ('a') was " +
+                "null! In case you couldn't guess, that... well, " +
+                "it probably shouldn't be null.", a);
+        NullAngleException.throwIfInvalid("The second angle ('b') was " +
+                "null! In case you couldn't guess, that... well, " +
+                "it probably shouldn't be null.", b);
+
         return Angle.fixedRad(a.rad() * b.rad());
     }
 
@@ -488,6 +509,13 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public static boolean equals(Angle a,
                                  Angle b) {
+        NullAngleException.throwIfInvalid("The first angle ('a') was " +
+                "null! In case you couldn't guess, that... well, " +
+                "it probably shouldn't be null.", a);
+        NullAngleException.throwIfInvalid("The second angle ('b') was " +
+                "null! In case you couldn't guess, that... well, " +
+                "it probably shouldn't be null.", b);
+
         return Equals.soft(a.rad(), b.rad(), Geometry.toleranceAngle.rad());
     }
 
@@ -502,6 +530,13 @@ public class Angle implements Comparable<Angle>, Serializable {
     public static boolean isCloseRad(Angle a,
                                      Angle b,
                                      double tolerance) {
+        NullAngleException.throwIfInvalid("The first angle ('a') was " +
+                "null! In case you couldn't guess, that... well, " +
+                "it probably shouldn't be null.", a);
+        NullAngleException.throwIfInvalid("The second angle ('b') was " +
+                "null! In case you couldn't guess, that... well, " +
+                "it probably shouldn't be null.", b);
+
         if (tolerance < 0) {
             throw new InvalidToleranceException(
                     "Cannot have a tolerance below 0!"
@@ -522,6 +557,13 @@ public class Angle implements Comparable<Angle>, Serializable {
     public static boolean isCloseDeg(Angle a,
                                      Angle b,
                                      double tolerance) {
+        NullAngleException.throwIfInvalid("The first angle ('a') was " +
+                "null! In case you couldn't guess, that... well, " +
+                "it probably shouldn't be null.", a);
+        NullAngleException.throwIfInvalid("The second angle ('b') was " +
+                "null! In case you couldn't guess, that... well, " +
+                "it probably shouldn't be null.", b);
+
         if (tolerance < 0) {
             throw new InvalidToleranceException(
                     "Cannot have a tolerance below 0!"
@@ -1168,6 +1210,13 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public Angle angleWithMinAndMax(Angle minimum,
                                     Angle maximum) {
+        NullAngleException.throwIfInvalid("The first angle ('minimum') was " +
+                "null! In case you couldn't guess, that... well, " +
+                "it probably shouldn't be null.", minimum);
+        NullAngleException.throwIfInvalid("The second angle ('maximum') was " +
+                "null! In case you couldn't guess, that... well, " +
+                "it probably shouldn't be null.", maximum);
+
         if (greaterThan(maximum)) return maximum;
         else if (lessThan(minimum)) return minimum;
         else return this;
