@@ -5,6 +5,7 @@
       <module name="Pathfinder2.core" target="11" />
       <module name="Pathfinder2.geometry" target="11" />
       <module name="Pathfinder2.kinematiacs" target="11" />
+      <module name="Pathfinder2.pathfinder2-components.test" target="8" />
       <module name="Pathfinder2.pathfinder2-concurrency.test" target="8" />
       <module name="Pathfinder2.pathfinder2-wpilib.main" target="8" />
       <module name="Pathfinder2.pathfinder2-wpilib.test" target="8" />

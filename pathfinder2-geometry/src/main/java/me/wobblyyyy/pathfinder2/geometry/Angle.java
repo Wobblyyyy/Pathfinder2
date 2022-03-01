@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.geometry;
 
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
+import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
@@ -556,10 +557,24 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public static double minimumDelta(Angle a,
                                       Angle b) {
+        NullAngleException.throwIfInvalid("The first angle ('a') was " +
+                "null! In case you couldn't guess, that... well, " +
+                "it probably shouldn't be null.", a);
+        NullAngleException.throwIfInvalid("The second angle ('b') was " +
+                "null! In case you couldn't guess, that... well, " +
+                "it probably shouldn't be null.", b);
+
         double aDeg = a.fix().deg;
         double bDeg = b.fix().deg;
 
         double delta = bDeg - aDeg;
+
+        if (Math.abs(delta) > 180) {
+            aDeg = a.flip().fix().deg;
+            bDeg = b.flip().fix().deg;
+
+            delta = bDeg - aDeg;
+        }
 
         return delta;
     }

@@ -11,8 +11,9 @@
 package me.wobblyyyy.pathfinder2.geometry;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 
 /**
  * Test methods for the {@link Angle} class.
@@ -123,18 +124,14 @@ public class TestAngle {
                 Angle.minimumDelta(c, d),
                 Angle.minimumDelta(d, c) * -1
         );
-    }
-
-    @Test
-    @Disabled
-    public void testAngleDelta2() {
-        Angle a = Angle.fromDeg(0);
-        Angle b = Angle.fromDeg(90);
-        Angle d = Angle.fromDeg(270);
-
-        System.out.println(Angle.minimumDelta(a, b));
-        System.out.println(Angle.minimumDelta(a, d));
-        System.out.println(Angle.minimumDelta(d, a));
+        Assertions.assertEquals(
+                -90,
+                Angle.minimumDelta(c, d)
+        );
+        Assertions.assertEquals(
+                0,
+                Angle.minimumDelta(a, c)
+        );
     }
 
     @Test
@@ -163,6 +160,23 @@ public class TestAngle {
         Assertions.assertEquals(
                 Angle.fixedDeg(179),
                 Angle.fixedDeg(Angle.minimumDelta(a, c))
+        );
+        Assertions.assertEquals(
+                -90,
+                Angle.minimumDelta(d, e)
+        );
+    }
+
+    @Test
+    public void testAngleDeltaThrowsNullAngleException() {
+        Assertions.assertThrows(
+                NullAngleException.class,
+                () -> Angle.minimumDelta(null, Angle.fromDeg(0))
+        );
+
+        Assertions.assertThrows(
+                NullAngleException.class,
+                () -> Angle.minimumDelta(Angle.fromDeg(0), null)
         );
     }
 }
