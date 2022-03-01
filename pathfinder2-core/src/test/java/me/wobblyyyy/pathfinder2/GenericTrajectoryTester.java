@@ -27,7 +27,7 @@ public class GenericTrajectoryTester {
     public double tolerance = 2;
     public Angle angleTolerance = Angle.fromDeg(5);
     public double step = 0.25;
-    public double turnCoefficient = -0.05;
+    public double turnCoefficient = -0.25;
 
     public SimulatedOdometry odometry;
     public SimulatedWrapper wrapper;

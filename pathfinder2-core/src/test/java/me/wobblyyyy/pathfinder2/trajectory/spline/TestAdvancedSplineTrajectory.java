@@ -15,13 +15,18 @@ import org.junit.jupiter.api.Test;
 import me.wobblyyyy.pathfinder2.GenericTrajectoryTester;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
-public class TestAdvancedSplineTrajectory extends GenericTrajectoryTester {
+    public class TestAdvancedSplineTrajectory extends GenericTrajectoryTester {
     private void testSplineTo(PointXYZ... points) {
         if (points.length < 1)
             throw new IllegalArgumentException();
 
-        pathfinder.splineTo(points);
-        pathfinder.tickUntil(1_000);
+        AdvancedSplineTrajectoryBuilder builder = factory.builder();
+
+        for (PointXYZ point : points)
+            builder.add(point);
+
+        builder.setInterpolationMode(InterpolationMode.DEFAULT);
+        pathfinder.followTrajectory(builder.build()).tickUntil(1_000);
         assertPositionIs(points[points.length - 1]);
     }
 
