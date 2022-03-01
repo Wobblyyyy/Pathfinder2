@@ -10,12 +10,16 @@
 
 package me.wobblyyyy.pathfinder2.trajectory.spline;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import me.wobblyyyy.pathfinder2.GenericTrajectoryTester;
+import me.wobblyyyy.pathfinder2.exceptions.SplineException;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.math.Spline;
+import me.wobblyyyy.pathfinder2.math.MonotoneCubicSpline;
 
-    public class TestAdvancedSplineTrajectory extends GenericTrajectoryTester {
+public class TestAdvancedSplineTrajectory extends GenericTrajectoryTester {
     private void testSplineTo(PointXYZ... points) {
         if (points.length < 1)
             throw new IllegalArgumentException();
@@ -64,5 +68,29 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
     public void testTurningNonLinearSpline() {
         testSplineTo(new PointXYZ(0, 0, 45), new PointXYZ(5, 5, 65),
                 new PointXYZ(10, 15, 90), new PointXYZ(15, 30, 180));
+    }
+
+    @Test
+    public void testInvalidSplines() {
+        Assertions.assertThrows(SplineException.class, () -> {
+            Spline spline = new MonotoneCubicSpline(
+                    new double[] { 0 },
+                    new double[] { 0 }
+            );
+        });
+
+        Assertions.assertThrows(SplineException.class, () -> {
+            Spline spline = new MonotoneCubicSpline(
+                    new double[] { 0 },
+                    new double[] { 0, 1 }
+            );
+        });
+
+        Assertions.assertThrows(SplineException.class, () -> {
+            Spline spline = new MonotoneCubicSpline(
+                    new double[] { 0 },
+                    null
+            );
+        });
     }
 }

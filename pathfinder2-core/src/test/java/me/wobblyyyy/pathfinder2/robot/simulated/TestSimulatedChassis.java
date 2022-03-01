@@ -77,7 +77,7 @@ public class TestSimulatedChassis {
 
     @BeforeAll
     public void beforeAll() {
-        StatTracker.SECOND_MS_DURATION = 1_000_000;
+        StatTracker.SECOND_MS_DURATION = 500_000;
         /*
         Geometry.tolerancePointXY = 2.1;
         Geometry.tolerancePointXYZ = 2.1;
@@ -87,7 +87,7 @@ public class TestSimulatedChassis {
 
     @AfterAll
     public void afterAll() {
-        StatTracker.SECOND_MS_DURATION = 1_000;
+        StatTracker.SECOND_MS_DURATION = 500;
         /*
         Geometry.tolerancePointXY = 0.01;
         Geometry.tolerancePointXYZ = 0.01;
@@ -136,7 +136,7 @@ public class TestSimulatedChassis {
                 Angle.fromDeg(5)
         ));
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
         assertPositionIs(new PointXYZ(10, 10, 0));
     }
 
@@ -149,7 +149,7 @@ public class TestSimulatedChassis {
                 Angle.fromDeg(5)
         ));
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
         assertPositionIs(new PointXYZ(0, 0, 10));
     }
 
@@ -162,7 +162,7 @@ public class TestSimulatedChassis {
                 Angle.fromDeg(5)
         ));
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
         assertPositionIs(new PointXYZ(10, 10, 10));
     }
 
@@ -175,7 +175,7 @@ public class TestSimulatedChassis {
                 Angle.fromDeg(5)
         ));
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
         assertPositionIs(new PointXYZ(10, 10, 270));
     }
 
@@ -188,7 +188,7 @@ public class TestSimulatedChassis {
                 Angle.fromDeg(5)
         ));
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
         assertPositionIs(new PointXYZ(-10, -10, 0));
     }
 
@@ -201,7 +201,7 @@ public class TestSimulatedChassis {
                 Angle.fromDeg(1)
         ));
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
 
         odometry.setTranslation(new Translation(-1, -1, 0));
         odometry.updatePositionBasedOnVelocity(1000);
@@ -222,27 +222,27 @@ public class TestSimulatedChassis {
                 .goTo(new PointXYZ(3, -6, 22))
                 .goTo(new PointXYZ(-3, 6, 1))
                 .goTo(new PointXYZ(0, 0, 0))
-                .tickUntil(1_000);
+                .tickUntil(500);
 
         assertPositionIs(new PointXYZ(0, 0, 0));
     }
 
     @Test
     public void testRightTurn() {
-        pathfinder.goTo(new PointXYZ(5, 5, 90)).tickUntil(1_000);
+        pathfinder.goTo(new PointXYZ(5, 5, 90)).tickUntil(500);
         assertPositionIs(new PointXYZ(5, 5, 90));
 
         odometry.setTranslation(new Translation(1, 0, 0));
-        odometry.updatePositionBasedOnVelocity(1_000);
+        odometry.updatePositionBasedOnVelocity(500);
 
         odometry.setTranslation(new Translation(-1, 0, 0));
-        odometry.updatePositionBasedOnVelocity(1_000);
+        odometry.updatePositionBasedOnVelocity(500);
 
         odometry.setTranslation(new Translation(1, 1, 0));
-        odometry.updatePositionBasedOnVelocity(1_000);
+        odometry.updatePositionBasedOnVelocity(500);
 
         odometry.setTranslation(new Translation(-1, -1, 0));
-        odometry.updatePositionBasedOnVelocity(1_000);
+        odometry.updatePositionBasedOnVelocity(500);
 
         Assertions.assertTrue(pathfinder.getPosition().absDistance(new PointXYZ(5, 5, 90)) < 2);
     }
@@ -282,7 +282,7 @@ public class TestSimulatedChassis {
                 )
         );
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
         assertPositionIs(new PointXYZ());
     }
 
@@ -301,7 +301,7 @@ public class TestSimulatedChassis {
                         0.5, 2, Angle.fromDeg(5))
         );
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
         assertPositionIs(new PointXYZ());
     }
 
@@ -319,7 +319,7 @@ public class TestSimulatedChassis {
                 Angle.fromDeg(5)
         ));
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
         assertPositionIs(new PointXYZ(20, 20, 360));
     }
 
@@ -333,7 +333,7 @@ public class TestSimulatedChassis {
 
         pathfinder.followTrajectory(trajectory);
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
         assertPositionIs(new PointXYZ(10, 10, 0));
     }
 
@@ -350,7 +350,7 @@ public class TestSimulatedChassis {
         odometry.setRawPosition(new PointXYZ(10, 10, 0));
         pathfinder.followTrajectory(trajectory);
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
 
         assertPositionIs(new PointXYZ());
     }
@@ -364,7 +364,7 @@ public class TestSimulatedChassis {
                 new PointXYZ(6, 12, 120)
         );
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
         assertPositionIs(new PointXYZ(6, 12, 120));
     }
 
@@ -402,7 +402,7 @@ public class TestSimulatedChassis {
         for (Trajectory spline : splines)
             pathfinder.followTrajectory(spline);
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
         assertPositionIs(new PointXYZ(22, 12, 0));
     }
 
@@ -424,7 +424,7 @@ public class TestSimulatedChassis {
 
         pathfinder.followTrajectory(trajectory);
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
         assertPositionIs(new PointXYZ(14, 15, 0));
     }
 
@@ -446,7 +446,7 @@ public class TestSimulatedChassis {
 
         pathfinder.followTrajectory(trajectory);
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
 
         assertPositionIs(new PointXYZ(14, 15, 0));
     }
@@ -464,7 +464,7 @@ public class TestSimulatedChassis {
 
         pathfinder.followTrajectory(arc);
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
 
         assertPositionIs(new PointXYZ(5, 5, 0));
     }
@@ -476,16 +476,16 @@ public class TestSimulatedChassis {
 
         // first group of 4
         odometry.setTranslation(new Translation(vx, 0, vz));
-        odometry.updatePositionBasedOnVelocity(1_000);
+        odometry.updatePositionBasedOnVelocity(500);
 
         odometry.setTranslation(new Translation(0, vy, vz));
-        odometry.updatePositionBasedOnVelocity(1_000);
+        odometry.updatePositionBasedOnVelocity(500);
 
         odometry.setTranslation(new Translation(-vx, 0, vz));
-        odometry.updatePositionBasedOnVelocity(1_000);
+        odometry.updatePositionBasedOnVelocity(500);
 
         odometry.setTranslation(new Translation(0, -vy, vz));
-        odometry.updatePositionBasedOnVelocity(1_000);
+        odometry.updatePositionBasedOnVelocity(500);
 
         assertPositionIs(new PointXYZ(0, 0, 0));
 
@@ -493,16 +493,16 @@ public class TestSimulatedChassis {
 
         // second group of 4
         odometry.setTranslation(new Translation(vx, 0, vz).multiply(a));
-        odometry.updatePositionBasedOnVelocity(1_000);
+        odometry.updatePositionBasedOnVelocity(500);
 
         odometry.setTranslation(new Translation(0, vy, vz).multiply(a));
-        odometry.updatePositionBasedOnVelocity(1_000);
+        odometry.updatePositionBasedOnVelocity(500);
 
         odometry.setTranslation(new Translation(-vx, 0, vz).multiply(a));
-        odometry.updatePositionBasedOnVelocity(1_000);
+        odometry.updatePositionBasedOnVelocity(500);
 
         odometry.setTranslation(new Translation(0, -vy, vz).multiply(a));
-        odometry.updatePositionBasedOnVelocity(1_000);
+        odometry.updatePositionBasedOnVelocity(500);
 
         assertPositionIs(new PointXYZ(0, 0, 0));
 
@@ -510,16 +510,16 @@ public class TestSimulatedChassis {
 
         // ... and of course, the third group of 4
         odometry.setTranslation(new Translation(vx, 0, vz).multiply(b));
-        odometry.updatePositionBasedOnVelocity(1_000);
+        odometry.updatePositionBasedOnVelocity(500);
 
         odometry.setTranslation(new Translation(0, vy, vz).multiply(b));
-        odometry.updatePositionBasedOnVelocity(1_000);
+        odometry.updatePositionBasedOnVelocity(500);
 
         odometry.setTranslation(new Translation(-vx, 0, vz).multiply(b));
-        odometry.updatePositionBasedOnVelocity(1_000);
+        odometry.updatePositionBasedOnVelocity(500);
 
         odometry.setTranslation(new Translation(0, -vy, vz).multiply(b));
-        odometry.updatePositionBasedOnVelocity(1_000);
+        odometry.updatePositionBasedOnVelocity(500);
 
         assertPositionIs(new PointXYZ(0, 0, 0));
     }
@@ -553,7 +553,7 @@ public class TestSimulatedChassis {
 
         pathfinder.followTrajectory(builder.build());
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
         assertPositionIs(new PointXYZ(6, 9, 0));
     }
 
@@ -578,7 +578,7 @@ public class TestSimulatedChassis {
 
         pathfinder.followTrajectory(builder.build());
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
         assertPositionIs(new PointXYZ(20, 0, 0));
     }
 
@@ -599,13 +599,13 @@ public class TestSimulatedChassis {
 
         pathfinder.followTrajectory(trajectory);
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
         assertPositionIs(new PointXYZ());
     }
 
     @Test
     public void testSplineTicksPerSecond() {
-        // if your computer is fast enough, this should be 1_000 ticks
+        // if your computer is fast enough, this should be 500 ticks
         // per second. if it's not... oh well.
 
         MultiSplineBuilder builder = new MultiSplineBuilder()
@@ -621,7 +621,7 @@ public class TestSimulatedChassis {
 
         pathfinder.followTrajectory(builder.build());
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
     }
 
     @Test
@@ -645,13 +645,13 @@ public class TestSimulatedChassis {
                 Angle.fromDeg(1)
         ).reflectX(0).reflectY(0);
 
-        pathfinder.followTrajectory(a).tickUntil(1_000);
+        pathfinder.followTrajectory(a).tickUntil(500);
         assertPositionIs(new PointXYZ(-10, 10, 0));
 
-        pathfinder.followTrajectory(b).tickUntil(1_000);
+        pathfinder.followTrajectory(b).tickUntil(500);
         assertPositionIs(new PointXYZ(10, -10, 0));
 
-        pathfinder.followTrajectory(c).tickUntil(1_000);
+        pathfinder.followTrajectory(c).tickUntil(500);
         assertPositionIs(new PointXYZ(-10, -10, 0));
     }
 
@@ -684,7 +684,7 @@ public class TestSimulatedChassis {
 
         pathfinder.followTrajectories(a, b, c);
 
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
         assertPositionIs(new PointXYZ(-10, -10, 0));
 
         Assertions.assertEquals(3, count.get());
@@ -702,7 +702,7 @@ public class TestSimulatedChassis {
 
         Pathfinder.addTrajectory(clazz, "test", trajectory);
         pathfinder.followTrajectory(clazz, "test");
-        pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil(500);
         Pathfinder.removeTrajectory(clazz, "test");
 
         assertPositionIs(new PointXYZ(10, 10, 0));

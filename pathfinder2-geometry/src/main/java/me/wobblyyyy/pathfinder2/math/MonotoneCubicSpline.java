@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.math;
 
 
+import me.wobblyyyy.pathfinder2.exceptions.SplineException;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
@@ -56,24 +57,25 @@ public class MonotoneCubicSpline implements Spline {
     @SuppressWarnings("SuspiciousNameCombination")
     public MonotoneCubicSpline(double[] xInitial,
                                double[] yInitial) {
+
+        if (xInitial == null || yInitial == null)
+            throw new SplineException("Splines must be created " +
+                    "with non-null control points and arrays");
+
+        if (xInitial.length < 2)
+            throw new SplineException("Splines must be created " +
+                    "with at least 2 control points and arrays of " +
+                    "equal lengths.");
+
+        if (xInitial.length != yInitial.length)
+            throw new SplineException("Splines must be created " +
+                    "with arrays of equal lengths!");
+
         double[] x = new double[xInitial.length];
         double[] y = new double[yInitial.length];
 
         System.arraycopy(xInitial, 0, x, 0, x.length);
         System.arraycopy(yInitial, 0, y, 0, y.length);
-
-        if (x == null || y == null)
-            throw new IllegalArgumentException("Splines must be created " +
-                    "with non-null control points and arrays");
-
-        if (x.length < 2)
-            throw new IllegalArgumentException("Splines must be created " +
-                    "with at least 2 control points and arrays of " +
-                    "equal lengths.");
-
-        if (x.length != y.length)
-            throw new IllegalArgumentException("Splines must be created " +
-                    "with arrays of equal lengths!");
 
         // check to see if the points are inverted
         isInverted = false;
