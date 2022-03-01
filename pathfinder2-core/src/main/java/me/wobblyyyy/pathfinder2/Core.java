@@ -34,7 +34,8 @@ public class Core {
     public static double pathfinderDefaultTolerance = -1;
 
     /**
-     * The default angle tolerance value for new instances of {@code Pathfinder}.
+     * The default angle tolerance value for new instances of
+     * {@code Pathfinder}.
      */
     public static Angle pathfinderDefaultAngleTolerance = null;
 
@@ -49,7 +50,8 @@ public class Core {
     public static boolean pathfinderDefaultIsMinimal = false;
 
     /**
-     * The default random string length for new instances of {@code Pathfinder}.
+     * The default random string length for new instances of
+     * {@code Pathfinder}.
      */
     public static int pathfinderRandomStringLength = 10;
 
@@ -110,7 +112,8 @@ public class Core {
 
     public static double listenerBuilderDefaultExpiration = Double.MAX_VALUE;
 
-    public static int listenerBuilderDefaultMaximumExecutions = Integer.MAX_VALUE;
+    public static int listenerBuilderDefaultMaximumExecutions =
+        Integer.MAX_VALUE;
 
     public static int listenerBuilderDefaultCooldownMs = 0;
 

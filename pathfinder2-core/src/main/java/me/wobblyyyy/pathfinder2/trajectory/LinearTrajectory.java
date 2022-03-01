@@ -50,22 +50,18 @@ public class LinearTrajectory implements Trajectory {
      * in any project that's used in competition. This is just for fun.
      */
     public static boolean SHOULD_SHUFFLE = false;
-
     /**
      * The trajectory's target point.
      */
     private final PointXYZ target;
-
     /**
      * The speed at which the robot should follow the trajectory.
      */
     private final double speed;
-
     /**
      * The X/Y tolerance.
      */
     private final double tolerance;
-
     /**
      * The heading tolerance.
      */
@@ -137,6 +133,12 @@ public class LinearTrajectory implements Trajectory {
                             "a null angle tolerance value. Make sure whatever " +
                             "angle tolerance you pass isn't null next time, " +
                             "okay? Cool.");
+
+        if (angleTolerance.deg() < 0)
+            throw new IllegalArgumentException(
+                    "Attempted to create a LinearTrajectory instance with " +
+                            "an invalid angle tolerance! The angle tolerance " +
+                            "must be positive.");
 
         this.target = target;
         this.speed = speed;

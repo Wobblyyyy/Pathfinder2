@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.trajectory.spline;
 import me.wobblyyyy.pathfinder2.Core;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
+import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
@@ -91,16 +92,24 @@ public class AdvancedSplineTrajectory implements Trajectory {
      *                       Having a positive step with a negative spline
      *                       (or vice versa) will cause your robot to never
      *                       complete the trajectory, because it'll try to go
-     *                       to the wrong target point.
+     *                       to the wrong target point. If your robot is not
+     *                       moving at all, you might want to try increasing
+     *                       the step value, just in case the value is so
+     *                       small that the robot thinks it's at the target
+     *                       position.
      * @param tolerance      the tolerance used in determining if the robot is
      *                       actually at the target point. This tolerance
      *                       only affects the LAST of the points in the
      *                       trajectory - all of the other points ignore
-     *                       whatever this value is.
+     *                       whatever this value is. This value must be
+     *                       greater than or equal to 0, although I'd suggest
+     *                       you don't make it zero, because... well, that's
+     *                       not going to work out too well for you.
      * @param angleTolerance the tolerance used for determining if the robot
      *                       is facing the correct direction. Like the
      *                       {@code tolerance} parameter, this only affects
-     *                       the LAST of the points in the trajectory.
+     *                       the LAST of the points in the trajectory. This
+     *                       tolerance value must be greater than 0 degrees.
      * @see AdvancedSplineTrajectoryBuilder
      * @see MultiSplineBuilder
      */
@@ -139,6 +148,25 @@ public class AdvancedSplineTrajectory implements Trajectory {
                             "is NOT equal to zero. Or just don't have " +
                             "working code - it's up to you, really."
             );
+
+        if (tolerance < 0)
+            throw new InvalidToleranceException(
+                    "Attempted to create a LinearTrajectory instance with a " +
+                            "tolerance value less than 0. Tolerance values must " +
+                            "be greater than or equal to 0.");
+
+        if (angleTolerance == null)
+            throw new NullAngleException(
+                    "Attempted to create a LinearTrajectory instance with " +
+                            "a null angle tolerance value. Make sure whatever " +
+                            "angle tolerance you pass isn't null next time, " +
+                            "okay? Cool.");
+
+        if (angleTolerance.deg() < 0)
+            throw new IllegalArgumentException(
+                    "Attempted to create a LinearTrajectory instance with " +
+                            "an invalid angle tolerance! The angle tolerance " +
+                            "must be positive.");
 
         this.spline = spline;
         this.angleSpline = angleSpline;
