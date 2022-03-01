@@ -32,6 +32,15 @@ import java.util.function.Supplier;
  * no point in wasting resources trying to do so.
  * </p>
  *
+ * <p>
+ * You can override the following methods instead of passing functional
+ * interfaces to a constructor:
+ * <ul>
+ *     <li>{@link #rawGetPower()}</li>
+ *     <li>{@link #rawSetPower(double)}</li>
+ * </ul>
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.0.0
  */
@@ -40,12 +49,11 @@ public class AbstractMotor implements Motor {
      * A {@code Consumer} that accepts a double value, representing the
      * motor's target power.
      */
-    private final Consumer<Double> setPower;
-
+    private Consumer<Double> setPower;
     /**
      * A {@code Supplier} that returns the motor's current power.
      */
-    private final Supplier<Double> getPower;
+    private Supplier<Double> getPower;
     private final List<Supplier<Boolean>> mustBeTrueToSetPowerOtherwiseZero;
     private final List<Supplier<Boolean>> mustBeFalseToSetPowerOtherwiseZero;
     /**
@@ -192,6 +200,32 @@ public class AbstractMotor implements Motor {
         this.deadband = deadband;
         this.mustBeTrueToSetPowerOtherwiseZero = new ArrayList<>(2);
         this.mustBeFalseToSetPowerOtherwiseZero = new ArrayList<>(2);
+    }
+
+    /**
+     * Create a new {@code AbstractMotor}. In order for this constructor
+     * to function properly, you will need to override the following methods:
+     * <p>
+     * You can override the following methods instead of passing functional
+     * interfaces to a constructor:
+     * <ul>
+     *     <li>{@link #rawGetPower()}</li>
+     *     <li>{@link #rawSetPower(double)}</li>
+     * </ul>
+     * </p>
+     */
+    public AbstractMotor() {
+        this(null, null, false, false, 0);
+    }
+
+    public double rawGetPower() {
+        throw new RuntimeException("Cannot use rawGetPower() on a Motor " +
+                "implementation that does not override rawGetPower()!");
+    }
+
+    public void rawSetPower(double power) {
+        throw new RuntimeException("Cannot use rawSetPower() on a Motor " +
+                "implementation that does not override rawSetPower()!");
     }
 
     /**
@@ -383,6 +417,14 @@ public class AbstractMotor implements Motor {
      */
     @Override
     public void setPower(double power) {
+        // if setPower is null, getPower will (likely) also be null
+        // if that's the case, they just need to be initialized so that
+        // they can be used like normal
+        if (setPower == null) {
+            setPower = this::rawSetPower;
+            getPower = this::rawGetPower;
+        }
+
         // Ensure the power value is between the minimum and maximum
         // power values. By default, these are -1.0 and 1.0, respectively.
         power = Math.max(minPower, Math.min(power, maxPower));

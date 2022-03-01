@@ -54,3 +54,5 @@ be browsed from GitHub.
 - [General documentation](./15_general_documentation.md):
   This is directly stolen from the documentation portal, and I'm only
   including it here to make it easier to find.
+- [Making a motor](./16_making_a_motor.md):
+  A guide on creating a motor.

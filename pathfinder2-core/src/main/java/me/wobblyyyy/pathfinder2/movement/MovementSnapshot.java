@@ -38,71 +38,80 @@ public class MovementSnapshot implements Serializable {
         return velocity;
     }
 
-    public void setVelocity(Velocity velocity) {
+    public MovementSnapshot setVelocity(Velocity velocity) {
         this.velocity = velocity;
+        return this;
     }
 
     public double getVelocityXY() {
         return velocityXY;
     }
 
-    public void setVelocityXY(double velocityXY) {
+    public MovementSnapshot setVelocityXY(double velocityXY) {
         this.velocityXY = velocityXY;
+        return this;
     }
 
     public double getVelocityX() {
         return velocityX;
     }
 
-    public void setVelocityX(double velocityX) {
+    public MovementSnapshot setVelocityX(double velocityX) {
         this.velocityX = velocityX;
+        return this;
     }
 
     public double getVelocityY() {
         return velocityY;
     }
 
-    public void setVelocityY(double velocityY) {
+    public MovementSnapshot setVelocityY(double velocityY) {
         this.velocityY = velocityY;
+        return this;
     }
 
     public Angle getVelocityZ() {
         return velocityZ;
     }
 
-    public void setVelocityZ(Angle velocityZ) {
+    public MovementSnapshot setVelocityZ(Angle velocityZ) {
         this.velocityZ = velocityZ;
+        return this;
     }
 
     public double getAccelerationXY() {
         return accelerationXY;
     }
 
-    public void setAccelerationXY(double accelerationXY) {
+    public MovementSnapshot setAccelerationXY(double accelerationXY) {
         this.accelerationXY = accelerationXY;
+        return this;
     }
 
     public double getAccelerationX() {
         return accelerationX;
     }
 
-    public void setAccelerationX(double accelerationX) {
+    public MovementSnapshot setAccelerationX(double accelerationX) {
         this.accelerationX = accelerationX;
+        return this;
     }
 
     public double getAccelerationY() {
         return accelerationY;
     }
 
-    public void setAccelerationY(double accelerationY) {
+    public MovementSnapshot setAccelerationY(double accelerationY) {
         this.accelerationY = accelerationY;
+        return this;
     }
 
     public Angle getAccelerationZ() {
         return accelerationZ;
     }
 
-    public void setAccelerationZ(Angle accelerationZ) {
+    public MovementSnapshot setAccelerationZ(Angle accelerationZ) {
         this.accelerationZ = accelerationZ;
+        return this;
     }
 }

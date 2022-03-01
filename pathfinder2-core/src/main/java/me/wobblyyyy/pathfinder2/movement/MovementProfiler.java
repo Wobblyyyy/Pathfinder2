@@ -21,10 +21,8 @@ import me.wobblyyyy.pathfinder2.time.Time;
  * @author Colin Robertson
  * @since 0.7.1
  */
-@SuppressWarnings("deprecation")
 public class MovementProfiler {
     private PointXYZ position = PointXYZ.ZERO;
-    private double unitsPerSec;
     private double xUnitsPerSec;
     private double yUnitsPerSec;
     private double zDegreesPerSec;
@@ -53,6 +51,13 @@ public class MovementProfiler {
         return capture(position, Time.ms());
     }
 
+    private static double fixValue(double value) {
+        if (Double.isNaN(value) || Double.isInfinite(value))
+            return 0;
+        else
+            return value;
+    }
+
     /**
      * Capture a single {@link MovementSnapshot}.
      *
@@ -70,46 +75,45 @@ public class MovementProfiler {
 
         if (this.timeMs == 0) this.timeMs = timeMs;
 
-        double deltaMs = timeMs - this.timeMs;
-        double deltaSec = deltaMs / 1_000;
-        double dx = position.distanceX(this.position);
-        double dy = position.distanceY(this.position);
-        double dxy = position.distance(this.position);
-        double dzDeg = position.z().deg() - this.position.z().deg();
-        double dxPs = dx / deltaSec;
-        double dyPs = dy / deltaSec;
-        double dzDegPs = dzDeg / deltaSec;
-        double d = dxy / deltaSec;
+        double deltaMs = fixValue(timeMs - this.timeMs);
+        double deltaSec = fixValue(deltaMs / 1_000);
+        double dx = fixValue(position.distanceX(this.position));
+        double dy = fixValue(position.distanceY(this.position));
+        double dxy = fixValue(position.distance(this.position));
+        double dzDeg = fixValue(position.z().deg() - this.position.z().deg());
+        double dxPs = fixValue(dx / deltaSec);
+        double dyPs = fixValue(dy / deltaSec);
+        double dzDegPs = fixValue(dzDeg / deltaSec);
+        double d = fixValue(dxy / deltaSec);
 
-        double dXp = dxPs - xUnitsPerSec;
-        double dYp = dxPs - xUnitsPerSec;
-        double dZp = dzDegPs - zDegreesPerSec;
-        double dp = d - unitsPerSec;
+        double dXp = fixValue(dxPs - xUnitsPerSec);
+        double dYp = fixValue(dxPs - yUnitsPerSec);
+        double dZp = fixValue(dzDegPs - zDegreesPerSec);
 
-        double dXps = dXp / deltaSec;
-        double dYps = dYp / deltaSec;
-        double dZps = dZp / deltaSec;
-        double dps = d / deltaSec;
+        double dXps = fixValue(dXp / deltaSec);
+        double dYps = fixValue(dYp / deltaSec);
+        double dZps = fixValue(dZp / deltaSec);
+        double dps = fixValue(d / deltaSec);
 
         Angle angle = this.position.angleTo(position);
 
         this.position = position;
-        this.unitsPerSec = dps;
         this.xUnitsPerSec = dxPs;
         this.yUnitsPerSec = dyPs;
         this.zDegreesPerSec = dyPs;
         this.timeMs = timeMs;
 
-        MovementSnapshot snapshot = new MovementSnapshot();
-        snapshot.setAccelerationXY(dps);
-        snapshot.setAccelerationX(dXps);
-        snapshot.setAccelerationY(dYps);
-        snapshot.setAccelerationZ(Angle.fromDeg(dZps));
-        snapshot.setVelocity(new Velocity(d, angle));
-        snapshot.setVelocityXY(d);
-        snapshot.setVelocityX(dxPs);
-        snapshot.setVelocityY(dyPs);
-        snapshot.setVelocityZ(Angle.fromDeg(dzDegPs));
+        MovementSnapshot snapshot = new MovementSnapshot()
+                .setAccelerationXY(dps)
+                .setAccelerationX(dXps)
+                .setAccelerationY(dYps)
+                .setAccelerationZ(Angle.fromDeg(dZps))
+                .setVelocity(new Velocity(d, angle))
+                .setVelocityXY(d)
+                .setVelocityX(dxPs)
+                .setVelocityY(dyPs)
+                .setVelocityZ(Angle.fromDeg(dzDegPs));
+
         lastSnapshot = snapshot;
         return snapshot;
     }
