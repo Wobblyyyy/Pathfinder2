@@ -237,6 +237,9 @@ public abstract class AbstractOdometry implements Odometry {
      */
     @Override
     public void setModifier(Function<PointXYZ, PointXYZ> modifier) {
+        if (modifier == null)
+            throw new NullPointerException("modifier was null!");
+
         this.modifier = modifier;
     }
 }
