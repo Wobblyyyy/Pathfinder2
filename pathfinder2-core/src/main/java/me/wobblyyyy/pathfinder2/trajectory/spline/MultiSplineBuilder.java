@@ -17,6 +17,7 @@ import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.trajectory.multi.segment.MultiSegmentTrajectory;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.Trio;
+import me.wobblyyyy.pathfinder2.math.Spline;
 
 import java.util.ArrayList;
 import java.util.List;

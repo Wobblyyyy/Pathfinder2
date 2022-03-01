@@ -96,6 +96,11 @@ public class ApacheSpline implements Spline {
                 this.function = new SplineInterpolator().interpolate(x, y);
                 break;
             case AKIMA:
+                if (x.length < 4)
+                    throw new SplineException("You need at least 4 points " +
+                            "for Akima spline interpolation, you only " +
+                            "provided " + x.length);
+
                 this.function = new AkimaSplineInterpolator().interpolate(x, y);
                 break;
             default:
