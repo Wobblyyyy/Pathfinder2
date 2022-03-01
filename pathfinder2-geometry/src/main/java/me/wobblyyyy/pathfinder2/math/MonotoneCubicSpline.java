@@ -239,6 +239,10 @@ public class MonotoneCubicSpline implements Spline {
         return new MonotoneCubicSpline(x, y);
     }
 
+    private double reflectX(double x) {
+        return x - (x - mx[0]);
+    }
+
     @SuppressWarnings("SuspiciousNameCombination")
     @Override
     public double interpolateY(double x) {
@@ -255,7 +259,7 @@ public class MonotoneCubicSpline implements Spline {
             my = this.my;
         }
 
-        if (isInverted) x = x - (x - mx[0]);
+        if (isInverted) x = reflectX(x);
         else if (Double.isNaN(x)) return x;
         else if (x <= mx[0]) return my[0];
         else if (x >= mx[n - 1]) return my[n - 1];
@@ -276,7 +280,10 @@ public class MonotoneCubicSpline implements Spline {
 
     @Override
     public PointXY interpolate(double x) {
-        return new PointXY(x, interpolateY(x));
+        if (isInverted)
+            return new PointXY(reflectX(x), interpolateY(x));
+        else
+            return new PointXY(x, interpolateY(x));
     }
 
     @Override
