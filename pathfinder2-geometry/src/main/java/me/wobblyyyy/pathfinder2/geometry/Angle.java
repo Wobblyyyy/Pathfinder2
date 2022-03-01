@@ -270,6 +270,15 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     private Angle(double rad,
                   double deg) {
+        if (Double.isNaN(rad))
+            throw new IllegalArgumentException("Radians was NaN!");
+        if (Double.isNaN(deg))
+            throw new IllegalArgumentException("Degrees was NaN!");
+        if (Double.isInfinite(rad))
+            throw new IllegalArgumentException("Radians was infinite!");
+        if (Double.isInfinite(deg))
+            throw new IllegalArgumentException("Degrees was infinite!");
+
         COUNT++;
 
         this.rad = rad;
@@ -294,6 +303,8 @@ public class Angle implements Comparable<Angle>, Serializable {
                              double min,
                              double max,
                              double max10) {
+        // max10 improves performance on angles that are very far outside
+        // the bounds (say, 7,200 degrees)
         while (value < -max10) value += max10;
         while (value >= max10) value -= max10;
 
