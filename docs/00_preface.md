@@ -16,3 +16,12 @@ things to know about Pathfinder, and those are as follows.
   - As the robot moves backwards, its Y position decreases.
   - As the robot moves rightwards, its X position increases.
   - As the robot moves leftwards, its X position decreases.
+
+# Help! My robot isn't moving!
+There are quite a few potential causes for an immobile robot, which can make
+it frustrating to debug.
+- If you're trying to move your robot to a position that's within the default
+  tolerance (as defined by `Geometry.tolerancePointXYZ`), the robot will NOT
+  move, and it will only turn. There are two ways to fix this:
+  - Change the target point to be farther away.
+  - Change `tolerancePointXYZ` (make it higher!)
