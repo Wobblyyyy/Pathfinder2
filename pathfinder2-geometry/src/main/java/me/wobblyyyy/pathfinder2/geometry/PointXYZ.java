@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.geometry;
 
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.math.Rounding;
+import me.wobblyyyy.pathfinder2.utils.DoubleUtils;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -78,7 +79,10 @@ public class PointXYZ extends PointXY {
     public PointXYZ(double x,
                     double y,
                     Angle z) {
-        super(x, y);
+        super(
+                DoubleUtils.validate(x, "x"),
+                DoubleUtils.validate(y, "y")
+        );
 
         COUNT++;
 
@@ -135,8 +139,8 @@ public class PointXYZ extends PointXY {
                                               double yMeters,
                                               Angle angle) {
         return new PointXYZ(
-                xMeters * 39.37,
-                yMeters * 39.37,
+                xMeters * Geometry.METERS_TO_INCHES,
+                yMeters * Geometry.METERS_TO_INCHES,
                 angle
         );
     }
@@ -154,8 +158,8 @@ public class PointXYZ extends PointXY {
                                               double yInches,
                                               Angle angle) {
         return new PointXYZ(
-                xInches * 0.025,
-                yInches * 0.025,
+                xInches * Geometry.INCHES_TO_METERS,
+                yInches * Geometry.INCHES_TO_METERS,
                 angle
         );
     }
@@ -192,8 +196,8 @@ public class PointXYZ extends PointXY {
                                                    double yCentimeters,
                                                    Angle angle) {
         return new PointXYZ(
-                xCentimeters / 100,
-                yCentimeters / 100,
+                xCentimeters * Geometry.CENTIMETERS_TO_INCHES,
+                yCentimeters * Geometry.CENTIMETERS_TO_INCHES,
                 angle
         );
     }
@@ -211,8 +215,8 @@ public class PointXYZ extends PointXY {
                                                    double yInches,
                                                    Angle angle) {
         return new PointXYZ(
-                (xInches * 0.025) / 100,
-                (yInches * 0.025) / 100,
+                xInches * Geometry.INCHES_TO_CENTIMETERS,
+                yInches * Geometry.INCHES_TO_CENTIMETERS,
                 angle
         );
     }
@@ -699,8 +703,10 @@ public class PointXYZ extends PointXY {
         if (obj instanceof PointXYZ) {
             PointXYZ p = (PointXYZ) obj;
 
-            boolean sameX = Equals.soft(p.x(), this.x(), Geometry.tolerancePointXYZ);
-            boolean sameY = Equals.soft(p.y(), this.y(), Geometry.tolerancePointXYZ);
+            boolean sameX = Equals.soft(p.x(), this.x(),
+                    Geometry.tolerancePointXYZ);
+            boolean sameY = Equals.soft(p.y(), this.y(),
+                    Geometry.tolerancePointXYZ);
             boolean sameZ = Angle.equals(p.z, this.z);
 
             return sameX && sameY && sameZ;

@@ -22,6 +22,19 @@ import me.wobblyyyy.pathfinder2.math.Range;
  * @since 1.1.0
  */
 public class Geometry {
+    public static double METERS_TO_INCHES = 39.37;
+
+    public static double INCHES_TO_METERS = 1 / METERS_TO_INCHES;
+
+    public static double METERS_TO_CENTIMETERS = 100;
+
+    public static double CENTIMETERS_TO_METERS = 1 / METERS_TO_INCHES;
+
+    public static double CENTIMETERS_TO_INCHES =
+        CENTIMETERS_TO_METERS * METERS_TO_INCHES;
+
+    public static double INCHES_TO_CENTIMETERS = 1 / CENTIMETERS_TO_INCHES;
+
     /**
      * Tolerance used in determining if two {@link PointXY}s are equivalent.
      *

@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.geometry;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.math.Rounding;
+import me.wobblyyyy.pathfinder2.utils.DoubleUtils;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 import java.io.Serializable;
@@ -101,6 +102,9 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public PointXY(double x,
                    double y) {
+        DoubleUtils.validate(x, "x");
+        DoubleUtils.validate(y, "y");
+
         COUNT++;
 
         this.x = x;
@@ -260,6 +264,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     public static PointXY multiply(PointXY a,
                                    double b) {
         checkArgument(a);
+        DoubleUtils.validate(b, "b");
 
         return new PointXY(
                 a.x() * b,
@@ -485,6 +490,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
                                       double distance,
                                       Angle angle) {
         checkArgument(base);
+        DoubleUtils.validate(distance, "distance");
         Angle.checkArgument(angle);
 
         return new PointXY(
@@ -508,6 +514,9 @@ public class PointXY implements Comparable<PointXY>, Serializable {
                                  double tolerance) {
         checkArgument(a);
         checkArgument(b);
+        InvalidToleranceException.throwIfInvalid(
+                "Invalid tolerance!", tolerance);
+        DoubleUtils.validate(tolerance, "tolerance");
 
         if (tolerance < 0) {
             throw new InvalidToleranceException(
@@ -542,6 +551,10 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     public static PointXY rotate(PointXY point,
                                  PointXY center,
                                  Angle angle) {
+        checkArgument(point);
+        checkArgument(center);
+        Angle.checkArgument(angle);
+
         return inDirection(
                 center,
                 distance(center, point),
@@ -617,6 +630,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
                                   double distance) {
         checkArgument(origin);
         checkArgument(target);
+        DoubleUtils.validate(distance, "distance");
 
         Angle angle = origin.angleTo(target);
 

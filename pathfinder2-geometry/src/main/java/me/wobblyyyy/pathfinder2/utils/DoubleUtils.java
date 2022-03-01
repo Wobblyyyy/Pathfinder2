@@ -51,4 +51,33 @@ public class DoubleUtils {
 
         return unboxed;
     }
+
+    /**
+     * Validate a double value by ensuring it's not {@code NaN} or infinite.
+     * If the number is {@code NaN} or infinite, this method will throw
+     * an {@link IllegalArgumentException}.
+     *
+     * @param value         the value to validate.
+     * @param parameterName the name of the parameter that's being validated.
+     * @return if the value is validated (meaning it's not {@code NaN} and
+     * it's not infinite), return the value.
+     */
+    public static double validate(double value,
+                                  String parameterName) {
+        if (Double.isNaN(value))
+            throw new IllegalArgumentException(StringUtils.format(
+                    "Failed to validate double <%s> because " +
+                            "the value was not a number!",
+                    parameterName
+            ));
+
+        if (Double.isInfinite(value))
+            throw new IllegalArgumentException(StringUtils.format(
+                    "Failed to validate double <%s> because " +
+                            "the value was infinite!",
+                    parameterName
+            ));
+
+        return value;
+    }
 }
