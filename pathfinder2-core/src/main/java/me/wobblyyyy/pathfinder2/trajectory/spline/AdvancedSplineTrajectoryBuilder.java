@@ -15,7 +15,6 @@ import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
-import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.SlopeIntercept;
 import me.wobblyyyy.pathfinder2.math.ApacheSpline;
@@ -98,7 +97,7 @@ public class AdvancedSplineTrajectoryBuilder {
     /**
      * Set the trajectory's angle tolerance value.
      *
-     * @param step the trajectory's angle tolerance value.
+     * @param angleTolerance the trajectory's angle tolerance value.
      * @return {@code this}, used for method chaining.
      */
     public AdvancedSplineTrajectoryBuilder setAngleTolerance(Angle angleTolerance) {
@@ -125,9 +124,7 @@ public class AdvancedSplineTrajectoryBuilder {
      * that accepts two {@code Double} arrays as values and returns a new
      * spline. These two values are X and Y respectively.
      *
-     * @param func the function responsible for generating a spline. Read the
-     *             documentation for {@link #setCustomSplineGenerator(BiFunction)}
-     *             to learn more.
+     * @param func the function responsible for generating a spline.
      * @return {@code this}, used for method chaining.
      */
     public AdvancedSplineTrajectoryBuilder setCustomSplineGenerator(
@@ -322,6 +319,7 @@ public class AdvancedSplineTrajectoryBuilder {
         switch (interpolationMode) {
             case DEFAULT:
                 spline = new MonotoneCubicSpline(x, y);
+                break;
             case CUBIC:
                 spline = new ApacheSpline(Interpolator.CUBIC, x, y);
                 break;

@@ -202,21 +202,21 @@ disadvantage to using it or not using it. Most of Pathfinder's API-like
 classes have chainable methods by default.
 ```java
 public class ExampleMethodChaining() {
-  private static final PointXYZ TARGET_A = ...;
-  private static final PointXYZ TARGET_B = ...;
-  private static final PointXYZ TARGET_C = ...;
-  private static final PointXYZ TARGET_D = ...;
+    private static final PointXYZ TARGET_A = ...;
+    private static final PointXYZ TARGET_B = ...;
+    private static final PointXYZ TARGET_C = ...;
+    private static final PointXYZ TARGET_D = ...;
 
-  private void doSomething() {
+    private void doSomething() {
 
-  }
+    }
 
-  private boolean shouldRun() {
+    private boolean shouldRun() {
     return true;
-  }
+    }
 
-  @SuppressWarnings("CodeBlock2Expr")
-  public void example() {
+    @SuppressWarnings("CodeBlock2Expr")
+    public void example() {
     pathfinder.goTo(TARGET_A)
             .tickUntil() // will tick Pathfinder until the path finishes
             // executing, regardless of how long it takes
@@ -244,7 +244,7 @@ public class ExampleMethodChaining() {
                       elapsedMs
               );
             });
-  }
+    }
 }
 ```
 

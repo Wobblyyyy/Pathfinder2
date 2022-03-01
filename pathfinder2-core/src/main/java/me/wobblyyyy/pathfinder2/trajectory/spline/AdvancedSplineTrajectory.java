@@ -58,6 +58,7 @@ public class AdvancedSplineTrajectory implements Trajectory {
     private final double step;
     private final double tolerance;
     private final Angle angleTolerance;
+    private final boolean isDecreasing;
 
     private final double minX;
     private final double maxX;
@@ -170,19 +171,20 @@ public class AdvancedSplineTrajectory implements Trajectory {
                             "an invalid angle tolerance! The angle tolerance " +
                             "must be positive.");
 
+        double startX = spline.getStartPoint().x();
+        double endX = spline.getEndPoint().x();
+        this.isDecreasing = startX > endX;
+
+        // if the step value is positive when it should be negative
+        if ((isDecreasing && step > 0 || (!isDecreasing && step < 0)))
+            step *= -1;
+
         this.spline = spline;
         this.angleSpline = angleSpline;
         this.speedSpline = speedSpline;
         this.step = step;
         this.tolerance = tolerance;
         this.angleTolerance = angleTolerance;
-
-        double startX = spline.getStartPoint().x();
-        double endX = spline.getEndPoint().x();
-
-        // if the step value is positive when it should be negative
-        if ((startX > endX && step > 0) || (endX > startX && step < 0))
-            step *= -1;
 
         this.minX = Min.of(startX, endX);
         this.maxX = Max.of(startX, endX);
@@ -193,6 +195,7 @@ public class AdvancedSplineTrajectory implements Trajectory {
      *
      * @param trajectory the trajectory to copy.
      */
+    @SuppressWarnings("CopyConstructorMissesField")
     public AdvancedSplineTrajectory(AdvancedSplineTrajectory trajectory) {
         this(
                 trajectory.spline,
@@ -209,9 +212,9 @@ public class AdvancedSplineTrajectory implements Trajectory {
         double x = current.x() + step;
 
         if (x > maxX)
-            x = maxX + step;
+            x = maxX;
         else if (x < minX)
-            x = minX + step;
+            x = minX;
 
         PointXY interpolatedPoint = spline.interpolate(x);
         Angle interpolatedAngle = angleSpline.getAngleTarget(x);

@@ -54,8 +54,14 @@ public class MonotoneCubicSpline implements Spline {
      */
 
     @SuppressWarnings("SuspiciousNameCombination")
-    public MonotoneCubicSpline(double[] x,
-                               double[] y) {
+    public MonotoneCubicSpline(double[] xInitial,
+                               double[] yInitial) {
+        double[] x = new double[xInitial.length];
+        double[] y = new double[yInitial.length];
+
+        System.arraycopy(xInitial, 0, x, 0, x.length);
+        System.arraycopy(yInitial, 0, y, 0, y.length);
+
         if (x == null || y == null)
             throw new IllegalArgumentException("Splines must be created " +
                     "with non-null control points and arrays");
@@ -144,7 +150,7 @@ public class MonotoneCubicSpline implements Spline {
                             "spline that had Y values that decreased then " +
                             "increased or vice versa. Basically, all of your " +
                             "Y values must be going in the same direction - " +
-                            "either positive or negataive, but not both. " +
+                            "either positive or negative, but not both. " +
                             "Those Y values were: " + Arrays.toString(y));
 
                 double h = Math.hypot(a, b);
@@ -162,7 +168,7 @@ public class MonotoneCubicSpline implements Spline {
 
         this.start = new PointXY(mx[0], my[0]);
         int last = mx.length - 1;
-        this.end = new PointXY(reflectX(mx[last]), my[last]);
+        this.end = new PointXY(mx[last], my[last]);
     }
 
     public static Spline create(List<PointXY> controlPoints) {
@@ -274,6 +280,9 @@ public class MonotoneCubicSpline implements Spline {
 
     @Override
     public PointXY getEndPoint() {
-        return end;
+        if (!isInverted)
+            return end;
+        else
+            return end.withX(reflectX(end.x()));
     }
 }
