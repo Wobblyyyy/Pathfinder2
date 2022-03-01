@@ -15,6 +15,7 @@ import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -68,9 +69,9 @@ public class MonotoneCubicSpline implements Spline {
             throw new IllegalArgumentException("Splines must be created " +
                     "with arrays of equal lengths!");
 
+        // check to see if the points are inverted
         isInverted = false;
         double initialX = x[0];
-
         for (int i = 1; i < x.length; i++)
             if (x[i] < initialX) {
                 isInverted = true;
@@ -80,7 +81,6 @@ public class MonotoneCubicSpline implements Spline {
         // check to see if there are any duplicate x values. if there are
         // duplicate x values, switch the x and y values
         List<Double> xValues = new ArrayList<>();
-
         for (double d : x)
             if (xValues.contains(d)) {
                 isXY = true;
@@ -88,7 +88,6 @@ public class MonotoneCubicSpline implements Spline {
             } else {
                 xValues.add(d);
             }
-
         if (isXY) {
             double[] tempX;
             double[] tempY;
@@ -101,18 +100,9 @@ public class MonotoneCubicSpline implements Spline {
         }
 
         // if the spline is inverted, invert/reflect all of the points
-        if (isInverted) {
-            double tempX = x[x.length - 1];
-            double tempY = y[y.length - 1];
-
-            for (int i = 1; i < x.length; i++) {
-                x[i] = -(x[i] - x[0]);
-                y[i] = -(y[i] - y[0]);
-            }
-
-            x[0] = tempX;
-            y[0] = tempY;
-        }
+        if (isInverted)
+            for (int i = 1; i < x.length; i++)
+                x[i] = reflectX(x[i], x[0]);
 
         final int n = x.length;
 
@@ -126,7 +116,8 @@ public class MonotoneCubicSpline implements Spline {
                         "must have strictly increasing X values. If you're " +
                         "seeing this message, you probably had a spline with " +
                         "X values that increased then decreased or vice versa. " +
-                        "All X values must be approaching the same infinity.");
+                        "All X values must be approaching the same infinity. " +
+                        "Those X values are: " + Arrays.toString(x));
             }
             d[i] = (y[i + 1] - y[i]) / h;
         }
@@ -153,7 +144,8 @@ public class MonotoneCubicSpline implements Spline {
                             "spline that had Y values that decreased then " +
                             "increased or vice versa. Basically, all of your " +
                             "Y values must be going in the same direction - " +
-                            "either positive or negataive, but not both.");
+                            "either positive or negataive, but not both. " +
+                            "Those Y values were: " + Arrays.toString(y));
 
                 double h = Math.hypot(a, b);
 
@@ -169,13 +161,8 @@ public class MonotoneCubicSpline implements Spline {
         this.mm = m;
 
         this.start = new PointXY(mx[0], my[0]);
-        this.end = new PointXY(mx[mx.length - 1], my[my.length - 1]);
-
-        if (isInverted) {
-            PointXY temp = new PointXY(end);
-            end = start;
-            start = temp;
-        }
+        int last = mx.length - 1;
+        this.end = new PointXY(reflectX(mx[last]), my[last]);
     }
 
     public static Spline create(List<PointXY> controlPoints) {
@@ -239,8 +226,13 @@ public class MonotoneCubicSpline implements Spline {
         return new MonotoneCubicSpline(x, y);
     }
 
+    private static double reflectX(double x,
+                                   double axis) {
+        return (axis * 2) - x;
+    }
+
     private double reflectX(double x) {
-        return x - (x - mx[0]);
+        return reflectX(x, mx[0]);
     }
 
     @SuppressWarnings("SuspiciousNameCombination")
@@ -248,16 +240,8 @@ public class MonotoneCubicSpline implements Spline {
     public double interpolateY(double x) {
         final int n = mx.length;
 
-        double[] mx;
-        double[] my;
-
-        if (isXY) {
-            mx = this.my;
-            my = this.mx;
-        } else {
-            mx = this.mx;
-            my = this.my;
-        }
+        double[] mx = isXY ? this.my : this.mx;
+        double[] my = isXY ? this.mx : this.my;
 
         if (isInverted) x = reflectX(x);
         else if (Double.isNaN(x)) return x;
@@ -280,10 +264,7 @@ public class MonotoneCubicSpline implements Spline {
 
     @Override
     public PointXY interpolate(double x) {
-        if (isInverted)
-            return new PointXY(reflectX(x), interpolateY(x));
-        else
-            return new PointXY(x, interpolateY(x));
+        return new PointXY(x, interpolateY(x));
     }
 
     @Override

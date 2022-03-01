@@ -18,6 +18,8 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.math.Equals;
+import me.wobblyyyy.pathfinder2.math.Max;
+import me.wobblyyyy.pathfinder2.math.Min;
 import me.wobblyyyy.pathfinder2.math.MinMax;
 import me.wobblyyyy.pathfinder2.math.Spline;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
@@ -57,8 +59,8 @@ public class AdvancedSplineTrajectory implements Trajectory {
     private final double tolerance;
     private final Angle angleTolerance;
 
-    private final double endPointX;
-    private final double startPointX;
+    private final double minX;
+    private final double maxX;
 
     private boolean hasCompletedTrajectory = false;
 
@@ -175,8 +177,15 @@ public class AdvancedSplineTrajectory implements Trajectory {
         this.tolerance = tolerance;
         this.angleTolerance = angleTolerance;
 
-        this.endPointX = spline.getEndPoint().x();
-        this.startPointX = spline.getStartPoint().x();
+        double startX = spline.getStartPoint().x();
+        double endX = spline.getEndPoint().x();
+
+        // if the step value is positive when it should be negative
+        if ((startX > endX && step > 0) || (endX > startX && step < 0))
+            step *= -1;
+
+        this.minX = Min.of(startX, endX);
+        this.maxX = Max.of(startX, endX);
     }
 
     /**
@@ -199,10 +208,10 @@ public class AdvancedSplineTrajectory implements Trajectory {
     public PointXYZ nextMarker(PointXYZ current) {
         double x = current.x() + step;
 
-        if (x > endPointX)
-            x = endPointX;
-        else if (x < startPointX)
-            x = startPointX;
+        if (x > maxX)
+            x = maxX + step;
+        else if (x < minX)
+            x = minX + step;
 
         PointXY interpolatedPoint = spline.interpolate(x);
         Angle interpolatedAngle = angleSpline.getAngleTarget(x);
@@ -243,10 +252,7 @@ public class AdvancedSplineTrajectory implements Trajectory {
                     "fix that, because that would be pretty cool.");
 
         double speed = speedSpline.interpolateY(MinMax.clip(
-                current.x(),
-                Math.min(startPointX, endPointX),
-                Math.max(startPointX, endPointX)
-        ));
+                    current.x(), minX, maxX));
 
         if (speed < 0 || speed > 1)
             throw new InvalidSpeedException("AdvancedSplineTrajectory " +
