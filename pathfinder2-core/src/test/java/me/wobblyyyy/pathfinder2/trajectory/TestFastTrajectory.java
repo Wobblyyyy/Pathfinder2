@@ -10,39 +10,76 @@
 
 package me.wobblyyyy.pathfinder2.trajectory;
 
+import me.wobblyyyy.pathfinder2.GenericTrajectoryTester;
 import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
+import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class TestFastTrajectory {
-    private static void setPos(SimulatedOdometry odometry,
-                               PointXYZ position) {
-        odometry.setRawPosition(position);
+public class TestFastTrajectory extends GenericTrajectoryTester {
+    private void testFastTrajectory(PointXYZ target) {
+        Trajectory trajectory = new FastTrajectory(pathfinder.getPosition(),
+                target, speed);
+        pathfinder.followTrajectory(trajectory);
+        pathfinder.tickUntil(1_000);
+        assertPositionIs(target);
+    }
+
+    private void testFastTrajectories(PointXYZ... targets) {
+        for (PointXYZ target : targets)
+            testFastTrajectory(target);
     }
 
     @Test
-    public void testSimpleFastTrajectory() {
-        Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
-        Trajectory trajectory = new FastTrajectory(
-                pathfinder.getPosition(),
-                new PointXYZ(10, 10, 45),
-                0.5
+    public void testForwardsFastTrajectory() {
+        testFastTrajectory(new PointXYZ(0, 10, 0));
+    }
+
+    @Test
+    public void testRightwardsFastTrajectory() {
+        testFastTrajectory(new PointXYZ(10, 0, 0));
+    }
+
+    @Test
+    public void testBackwardsFastTrajectory() {
+        testFastTrajectory(new PointXYZ(0, 10, 0));
+    }
+
+    @Test
+    public void testLeftwardsFastTrajectory() {
+        testFastTrajectory(new PointXYZ(-10, 0, 0));
+    }
+
+    @Test
+    public void testAngledTrajectories() {
+        testFastTrajectories(
+                new PointXYZ(10, 10, 0),
+                new PointXYZ(-10, 10, 0),
+                new PointXYZ(-10, -10, 0),
+                new PointXYZ(10, -10, 0),
+                new PointXYZ(0, 0, 0)
         );
-        pathfinder.followTrajectory(trajectory);
-        SimulatedOdometry odometry = (SimulatedOdometry) pathfinder.getOdometry();
+    }
 
-        setPos(odometry, new PointXYZ(0, 0, 0));
-        pathfinder.tick();
-        Assertions.assertTrue(pathfinder.isActive());
+    @Test
+    public void testThrowsExceptions() {
+        Assertions.assertThrows(NullPointException.class, () -> {
+            new FastTrajectory(null, new PointXYZ(), 0.5);
+        });
 
-        setPos(odometry, new PointXYZ(5, 5, 15));
-        pathfinder.tick();
-        Assertions.assertTrue(pathfinder.isActive());
+        Assertions.assertThrows(NullPointException.class, () -> {
+            new FastTrajectory(new PointXYZ(), null, 0.5);
+        });
 
-        setPos(odometry, new PointXYZ(10, 10, 35));
-        pathfinder.tick();
-        Assertions.assertFalse(pathfinder.isActive());
+        Assertions.assertThrows(InvalidSpeedException.class, () -> {
+            new FastTrajectory(new PointXYZ(), new PointXYZ(), -100);
+        });
+
+        Assertions.assertThrows(InvalidSpeedException.class, () -> {
+            new FastTrajectory(new PointXYZ(), new PointXYZ(), 200);
+        });
     }
 }
