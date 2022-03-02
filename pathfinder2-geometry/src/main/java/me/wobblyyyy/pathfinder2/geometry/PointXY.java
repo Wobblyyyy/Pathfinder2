@@ -15,6 +15,7 @@ import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.math.Rounding;
 import me.wobblyyyy.pathfinder2.utils.DoubleUtils;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -203,8 +204,8 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public static PointXY add(PointXY a,
                               PointXY b) {
-        checkArgument(a);
-        checkArgument(b);
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(b, "b");
 
         return new PointXY(
                 a.x() + b.x(),
@@ -221,8 +222,8 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public static PointXY subtract(PointXY a,
                                    PointXY b) {
-        checkArgument(a);
-        checkArgument(b);
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(b, "b");
 
         return new PointXY(
                 a.x() - b.x(),
@@ -244,8 +245,8 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public static PointXY multiply(PointXY a,
                                    PointXY b) {
-        checkArgument(a);
-        checkArgument(b);
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(b, "b");
 
         return new PointXY(
                 a.x() * b.x(),
@@ -263,7 +264,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public static PointXY multiply(PointXY a,
                                    double b) {
-        checkArgument(a);
+        ValidationUtils.validate(a, "a");
         DoubleUtils.validate(b, "b");
 
         return new PointXY(
@@ -329,8 +330,8 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public static double distance(PointXY a,
                                   PointXY b) {
-        checkArgument(a);
-        checkArgument(b);
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(b, "b");
 
         // The distance formula is essentially as follows:
         // sqrt((Bx-Ax)^2+(By-Ay)^2)
@@ -361,8 +362,8 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public static double distanceX(PointXY a,
                                    PointXY b) {
-        checkArgument(a);
-        checkArgument(b);
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(b, "b");
 
         return b.x() - a.x();
     }
@@ -386,8 +387,8 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public static double distanceY(PointXY a,
                                    PointXY b) {
-        checkArgument(a);
-        checkArgument(b);
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(b, "b");
 
         return b.y() - a.y();
     }
@@ -489,7 +490,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     public static PointXY inDirection(PointXY base,
                                       double distance,
                                       Angle angle) {
-        checkArgument(base);
+        ValidationUtils.validate(base, "base");
         DoubleUtils.validate(distance, "distance");
         Angle.checkArgument(angle);
 
@@ -1057,6 +1058,12 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     public static boolean isPointNearShape(PointXY reference,
                                            Shape<?> shape,
                                            double tolerance) {
+        ValidationUtils.validate(reference, "reference");
+        ValidationUtils.validate(shape, "shape");
+        ValidationUtils.validate(tolerance, "tolerance");
+        InvalidToleranceException.throwIfInvalid("Invalid tolerance! " +
+                "Must be greater than 0.", tolerance);
+
         return reference.absDistance(shape.getClosestPoint(reference)) <= tolerance;
     }
 
