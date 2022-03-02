@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.robot;
 import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 import java.util.function.Function;
 
@@ -67,11 +68,7 @@ public abstract class AbstractOdometry implements Odometry {
      */
     @Override
     public void setOffset(PointXYZ offset) {
-        if (offset == null) {
-            throw new NullPointException(
-                    "Attempted to set an offset using a null point!"
-            );
-        }
+        ValidationUtils.validate(offset, "offset");
 
         this.offset = offset;
     }
@@ -107,6 +104,8 @@ public abstract class AbstractOdometry implements Odometry {
      */
     @Override
     public void offsetBy(PointXYZ offset) {
+        ValidationUtils.validate(offset, "offset");
+
         this.offset = PointXYZ.add(this.offset, offset);
     }
 
@@ -125,11 +124,7 @@ public abstract class AbstractOdometry implements Odometry {
      */
     @Override
     public void offsetSoPositionIs(PointXYZ targetPosition) {
-        if (targetPosition == null)
-            throw new NullPointException(
-                    "Attempted to apply an offset using a null target " +
-                            "position!"
-            );
+        ValidationUtils.validate(targetPosition, "targetPosition");
 
         setOffset(getRawPosition().multiply(-1).add(targetPosition));
     }
@@ -237,8 +232,7 @@ public abstract class AbstractOdometry implements Odometry {
      */
     @Override
     public void setModifier(Function<PointXYZ, PointXYZ> modifier) {
-        if (modifier == null)
-            throw new NullPointerException("modifier was null!");
+        ValidationUtils.validate(modifier, "modifier");
 
         this.modifier = modifier;
     }

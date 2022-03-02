@@ -21,8 +21,14 @@ import java.util.function.Supplier;
  * the {@link #getModifier()} and {@link #setModifier(Function)} methods
  * required by the {@code Modifiable} interface.
  *
+ * <p>
+ * ALTHOUGH THIS IS NOT DEPRECATED, I WOULD STRONGLY ENCOURAGE YOU TO USE
+ * {@link ImprovedAbstractDrive} INSTEAD.
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.0.0
+ * @see ImprovedAbstractDrive
  */
 public class AbstractDrive implements Drive {
     private final Consumer<Translation> consumer;
