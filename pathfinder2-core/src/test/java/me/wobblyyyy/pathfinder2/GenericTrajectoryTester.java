@@ -16,12 +16,33 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.robot.Robot;
 import me.wobblyyyy.pathfinder2.robot.simulated.*;
+import me.wobblyyyy.pathfinder2.trajectory.TestFastTrajectory;
+import me.wobblyyyy.pathfinder2.trajectory.TestSequentialLinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.trajectory.spline.SplineBuilderFactory;
+import me.wobblyyyy.pathfinder2.trajectory.spline.TestAdvancedSplineTrajectory;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 import org.junit.jupiter.api.*;
 
+/**
+ * Base class to be used by classes that test a trajectory. This is designed
+ * to abstract away all of the movement-related code, so that the test can
+ * focus JUST on the trajectory.
+ *
+ * <p>
+ * Example implementations:
+ * <ul>
+ *     <li>{@link TestAdvancedSplineTrajectory}</li>
+ *     <li>{@link TestFastTrajectory}</li>
+ *     <li>{@link TestSequentialLinearTrajectory}</li>
+ * </ul>
+ * </p>
+ *
+ * @author Colin Robertson
+ * @since 1.4.1
+ */
 public class GenericTrajectoryTester {
     public double speed = 0.5;
     public double tolerance = 2;
@@ -54,6 +75,8 @@ public class GenericTrajectoryTester {
     }
 
     public void assertPositionIs(PointXYZ target) {
+        ValidationUtils.validate(target, "target");
+
         PointXYZ position = pathfinder.getPosition();
         double distance = position.distance(target);
         Angle angleDistance = Angle.fromDeg(Math.abs(
