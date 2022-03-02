@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.geometry;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.math.Equals;
+import me.wobblyyyy.pathfinder2.utils.DoubleUtils;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 import java.io.Serializable;
@@ -276,14 +277,8 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     protected Angle(double rad,
                     double deg) {
-        if (Double.isNaN(rad))
-            throw new IllegalArgumentException("Radians was NaN!");
-        if (Double.isNaN(deg))
-            throw new IllegalArgumentException("Degrees was NaN!");
-        if (Double.isInfinite(rad))
-            throw new IllegalArgumentException("Radians was infinite!");
-        if (Double.isInfinite(deg))
-            throw new IllegalArgumentException("Degrees was infinite!");
+        DoubleUtils.validate(rad, "rad");
+        DoubleUtils.validate(deg, "deg");
 
         COUNT++;
 
