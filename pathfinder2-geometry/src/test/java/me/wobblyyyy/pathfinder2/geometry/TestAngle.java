@@ -179,4 +179,27 @@ public class TestAngle {
                 () -> Angle.minimumDelta(Angle.fromDeg(0), null)
         );
     }
+
+    @Test
+    public void testValidation() {
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new Angle(Double.NaN, 0)
+        );
+
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new Angle(0, Double.NaN)
+        );
+
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new Angle(Double.POSITIVE_INFINITY, 0)
+        );
+
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new Angle(0, Double.NEGATIVE_INFINITY)
+        );
+    }
 }

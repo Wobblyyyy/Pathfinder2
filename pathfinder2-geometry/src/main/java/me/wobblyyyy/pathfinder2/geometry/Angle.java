@@ -209,6 +209,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * {@link #fromRad(double)} with an angle of 180 deg
      */
     public static final Angle PI = Angle.fromDeg(180);
+
     /**
      * {@link #fromRad(double)} with an angle of 225 deg
      */
@@ -268,8 +269,8 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param rad radians value.
      * @param deg degrees value.
      */
-    private Angle(double rad,
-                  double deg) {
+    protected Angle(double rad,
+                    double deg) {
         if (Double.isNaN(rad))
             throw new IllegalArgumentException("Radians was NaN!");
         if (Double.isNaN(deg))

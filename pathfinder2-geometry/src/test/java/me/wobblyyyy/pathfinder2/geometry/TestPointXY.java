@@ -24,7 +24,6 @@ public class TestPointXY {
     private static final PointXY C = new PointXY(0, 1);
     private static final PointXY D = new PointXY(1, 1);
     private static final PointXY E = new PointXY(-1, 0);
-    private static final PointXY F = new PointXY(0, -1);
     private static final PointXY G = new PointXY(-1, -1);
 
     @Test
@@ -157,5 +156,52 @@ public class TestPointXY {
                 b.angleFrom(a),
                 a.angleTo(b)
         );
+    }
+
+    private void testRotation(Angle angle) {
+        PointXY point = new PointXY(1, 0);
+
+        Assertions.assertEquals(
+                PointXY.ZERO.inDirection(1, angle),
+                point.rotate(PointXY.ZERO, angle)
+        );
+        Assertions.assertEquals(
+                PointXY.ZERO.inDirection(1, angle).rotate(
+                    PointXY.ZERO, Angle.DEG_45),
+                point.rotate(PointXY.ZERO, angle).rotate(
+                    PointXY.ZERO, Angle.DEG_45)
+        );
+        Assertions.assertEquals(
+                PointXY.ZERO.inDirection(1, angle).rotate(
+                    PointXY.ZERO, Angle.DEG_270),
+                point.rotate(PointXY.ZERO, angle).rotate(
+                    PointXY.ZERO, Angle.DEG_270)
+        );
+        Assertions.assertEquals(
+                PointXY.ZERO.inDirection(1, angle).rotate(
+                    PointXY.ZERO, Angle.DEG_90).rotate(PointXY.ZERO, Angle.DEG_180),
+                point.rotate(PointXY.ZERO, angle).rotate(
+                    PointXY.ZERO, Angle.DEG_270)
+        );
+    }
+
+    private void testRotations(Angle... angles) {
+        for (Angle angle : angles)
+            testRotation(angle);
+    }
+
+    @Test
+    public void testPointRotation() {
+        Angle[] angles = new Angle[48];
+
+        for (int i = 0; i < 48; i++)
+            angles[i] = Angle.fromDeg(i * 7.5);
+
+        testRotations(angles);
+
+        for (int i = 0; i < 48; i++)
+            angles[i] = Angle.fromDeg(i * -3.3);
+
+        testRotations(angles);
     }
 }
