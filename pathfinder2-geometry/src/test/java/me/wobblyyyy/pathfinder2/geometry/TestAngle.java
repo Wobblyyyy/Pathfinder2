@@ -138,11 +138,11 @@ public class TestAngle {
     public void testFixedAdd() {
         Angle a = Angle.fromDeg(45);
         Angle b = Angle.fromDeg(360);
-
-        Assertions.assertEquals(
+        
+        Assertions.assertTrue(Math.abs(Angle.minimumDelta(
                 a.add(b),
                 Angle.fromDeg(45)
-        );
+        )) < 1);
     }
 
     @Test

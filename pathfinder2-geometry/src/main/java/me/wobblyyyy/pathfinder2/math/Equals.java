@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.math;
 
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
+import me.wobblyyyy.pathfinder2.utils.DoubleUtils;
 
 /**
  * Simple utilities for determining if numbers are equal to another.
@@ -31,6 +32,10 @@ public class Equals {
     public static boolean soft(double a,
                                double b,
                                double tolerance) {
+        DoubleUtils.validate(a);
+        DoubleUtils.validate(b);
+        DoubleUtils.validate(tolerance);
+
         if (tolerance < 0) {
             throw new InvalidToleranceException(
                     "Cannot have a tolerance value less than 0!"

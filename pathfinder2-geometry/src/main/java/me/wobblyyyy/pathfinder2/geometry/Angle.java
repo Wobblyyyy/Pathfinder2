@@ -149,12 +149,12 @@ public class Angle implements Comparable<Angle>, Serializable {
     /**
      * {@link #fromDeg(double)} with an angle of 0
      */
-    public static final Angle ZERO = Angle.fromDeg(0);
+    public static final Angle ZERO = new Angle();
 
     /**
      * {@link #fromDeg(double)} with an angle of 0
      */
-    public static final Angle DEG_0 = Angle.fromDeg(0);
+    public static final Angle DEG_0 = new Angle();
 
     /**
      * {@link #fromDeg(double)} with an angle of 45
@@ -304,6 +304,8 @@ public class Angle implements Comparable<Angle>, Serializable {
                              double min,
                              double max,
                              double max10) {
+        DoubleUtils.validate(value);
+
         // max10 improves performance on angles that are very far outside
         // the bounds (say, 7,200 degrees)
         while (value < -max10) value += max10;
@@ -342,7 +344,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @return a new angle.
      */
     public static Angle fromRad(double rad) {
-        return new Angle(rad, Math.toDegrees(rad));
+        return fromDeg(Math.toDegrees(rad));
     }
 
     /**
@@ -362,6 +364,9 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @return a new angle.
      */
     public static Angle fromDeg(double deg) {
+        if (Equals.soft(deg, 0, 0.01))
+            return ZERO;
+
         return new Angle(Math.toRadians(deg), deg);
     }
 
