@@ -148,6 +148,11 @@ public class Angle implements Comparable<Angle>, Serializable {
     /**
      * {@link #fromDeg(double)} with an angle of 0
      */
+    public static final Angle ZERO = Angle.fromDeg(0);
+
+    /**
+     * {@link #fromDeg(double)} with an angle of 0
+     */
     public static final Angle DEG_0 = Angle.fromDeg(0);
 
     /**
@@ -345,6 +350,15 @@ public class Angle implements Comparable<Angle>, Serializable {
         return new Angle(rad, Math.toDegrees(rad));
     }
 
+    /**
+     * Create a new angle from a radians value.
+     *
+     * @param rad the value to create the angle based on.
+     * @return a new angle.
+     */
+    public static Angle fromRad(int rad) {
+        return fromRad(rad * 1.0);
+    }
 
     /**
      * Create a new angle from a degrees value.
@@ -354,6 +368,16 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public static Angle fromDeg(double deg) {
         return new Angle(Math.toRadians(deg), deg);
+    }
+
+    /**
+     * Create a new angle from a degrees value.
+     *
+     * @param deg the value to create the angle based on.
+     * @return a new angle.
+     */
+    public static Angle fromDeg(int deg) {
+        return fromDeg(deg * 1.0);
     }
 
     /**
