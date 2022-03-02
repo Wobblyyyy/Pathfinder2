@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.math;
 
 import me.wobblyyyy.pathfinder2.geometry.Geometry;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 import java.io.Serializable;
 
@@ -112,6 +113,29 @@ public class Range implements Serializable, Comparable<Range> {
     public static Range infinite(RangeNode node,
                                  boolean isPositive) {
         return infinite(node.node(), node.isInclusive(), isPositive);
+    }
+
+    /**
+     * Return true if the ranges overlap. Otherwise, return false.
+     *
+     * @param a one of the two ranges.
+     * @param b one of the two ranges.
+     * @return true if the ranges overlap. Otherwise, false.
+     */
+    public static boolean doRangesOverlap(Range a,
+                                          Range b) {
+        ValidationUtils.validate(a);
+        ValidationUtils.validate(b);
+
+        double aMin = a.minimum.node();
+        double aMax = a.maximum.node();
+
+        double bMin = b.minimum.node();
+        double bMax = b.maximum.node();
+
+        if (aMin > bMax) return false;
+        else if (bMin > aMax) return false;
+        else return true;
     }
 
     /**
