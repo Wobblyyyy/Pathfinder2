@@ -12,7 +12,7 @@ package me.wobblyyyy.pathfinder2.geometry;
 
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.math.Rounding;
-import me.wobblyyyy.pathfinder2.utils.DoubleUtils;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -80,8 +80,8 @@ public class PointXYZ extends PointXY {
                     double y,
                     Angle z) {
         super(
-                DoubleUtils.validate(x, "x"),
-                DoubleUtils.validate(y, "y")
+                ValidationUtils.validate(x, "x"),
+                ValidationUtils.validate(y, "y")
         );
 
         COUNT++;

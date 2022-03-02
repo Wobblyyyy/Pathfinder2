@@ -13,7 +13,7 @@ package me.wobblyyyy.pathfinder2.geometry;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.math.Equals;
-import me.wobblyyyy.pathfinder2.utils.DoubleUtils;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 import java.io.Serializable;
@@ -277,8 +277,8 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     protected Angle(double rad,
                     double deg) {
-        DoubleUtils.validate(rad, "rad");
-        DoubleUtils.validate(deg, "deg");
+        ValidationUtils.validate(rad, "rad");
+        ValidationUtils.validate(deg, "deg");
 
         COUNT++;
 
@@ -304,7 +304,7 @@ public class Angle implements Comparable<Angle>, Serializable {
                              double min,
                              double max,
                              double max10) {
-        DoubleUtils.validate(value);
+        ValidationUtils.validate(value);
 
         // max10 improves performance on angles that are very far outside
         // the bounds (say, 7,200 degrees)

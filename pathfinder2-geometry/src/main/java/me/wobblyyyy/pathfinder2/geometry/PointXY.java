@@ -13,7 +13,7 @@ package me.wobblyyyy.pathfinder2.geometry;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.math.Rounding;
-import me.wobblyyyy.pathfinder2.utils.DoubleUtils;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
@@ -103,8 +103,8 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      */
     public PointXY(double x,
                    double y) {
-        DoubleUtils.validate(x, "x");
-        DoubleUtils.validate(y, "y");
+        ValidationUtils.validate(x, "x");
+        ValidationUtils.validate(y, "y");
 
         COUNT++;
 
@@ -265,7 +265,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     public static PointXY multiply(PointXY a,
                                    double b) {
         ValidationUtils.validate(a, "a");
-        DoubleUtils.validate(b, "b");
+        ValidationUtils.validate(b, "b");
 
         return new PointXY(
                 a.x() * b,
@@ -491,7 +491,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
                                       double distance,
                                       Angle angle) {
         ValidationUtils.validate(base, "base");
-        DoubleUtils.validate(distance, "distance");
+        ValidationUtils.validate(distance, "distance");
         Angle.checkArgument(angle);
 
         return new PointXY(
@@ -517,7 +517,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
         checkArgument(b);
         InvalidToleranceException.throwIfInvalid(
                 "Invalid tolerance!", tolerance);
-        DoubleUtils.validate(tolerance, "tolerance");
+        ValidationUtils.validate(tolerance, "tolerance");
 
         if (tolerance < 0) {
             throw new InvalidToleranceException(
@@ -631,7 +631,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
                                   double distance) {
         checkArgument(origin);
         checkArgument(target);
-        DoubleUtils.validate(distance, "distance");
+        ValidationUtils.validate(distance, "distance");
 
         Angle angle = origin.angleTo(target);
 
