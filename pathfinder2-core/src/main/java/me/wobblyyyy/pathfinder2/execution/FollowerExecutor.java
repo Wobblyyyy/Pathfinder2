@@ -57,15 +57,9 @@ public class FollowerExecutor {
     public FollowerExecutor(Odometry odometry,
                             Drive drive,
                             List<Follower> followers) {
-        if (odometry == null) throw new NullOdometryException(
-                "A null odometry instance was passed to the constructor " +
-                        "of a FollowerExecutor!");
-        if (drive == null) throw new NullDriveException(
-                "A null drive instance was passed to the constructor " +
-                        "of a FollowerExecutor!");
-        if (followers == null) throw new NullPointerException(
-                "A null list of followers was passed to the constructor " +
-                        "of a FollowerExecutor!");
+        ValidationUtils.validate(odometry, "odometry");
+        ValidationUtils.validate(drive, "drive");
+        ValidationUtils.validate(followers, "followers");
 
         for (Follower follower : followers)
             ValidationUtils.validate(follower);

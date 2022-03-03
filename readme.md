@@ -27,7 +27,7 @@ and [FIRST Tech Challenge](https://www.firstinspires.org/robotics/ftc).
   implementations.
 - Dynamically correct for movement error and drift.
 - Plan complex routes using the 
-  [Trajectory](pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/trajectory/Trajectory.java)
+  [Trajectory](./docs/17_the_trajectory_system.md)
   system. Follow splines, arcs, lines, equations, the little green light at
   the end of the tunnel - whatever you want, it's really up to you.
 - Full-featured geometry package with polygon collision detection, several
