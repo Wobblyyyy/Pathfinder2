@@ -254,7 +254,7 @@ public class MecanumDrive implements Drive {
      */
     @Override
     public void setTranslation(Translation translation) {
-        this.translation = getModifier().apply(translation);
+        this.translation = getDriveModifier().apply(translation);
 
         MecanumState state = kinematics.calculate(this.translation);
 
@@ -265,12 +265,12 @@ public class MecanumDrive implements Drive {
     }
 
     @Override
-    public Function<Translation, Translation> getModifier() {
+    public Function<Translation, Translation> getDriveModifier() {
         return this.modifier;
     }
 
     @Override
-    public void setModifier(Function<Translation, Translation> modifier) {
+    public void setDriveModifier(Function<Translation, Translation> modifier) {
         this.modifier = modifier;
     }
 

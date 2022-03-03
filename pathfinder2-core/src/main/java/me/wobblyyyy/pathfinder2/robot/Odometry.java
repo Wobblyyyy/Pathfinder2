@@ -12,7 +12,8 @@ package me.wobblyyyy.pathfinder2.robot;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-import me.wobblyyyy.pathfinder2.robot.modifiers.Modifiable;
+
+import java.util.function.Function;
 
 /**
  * A system capable of reporting the position of a robot. Several odometry
@@ -57,7 +58,7 @@ import me.wobblyyyy.pathfinder2.robot.modifiers.Modifiable;
  * @see AbstractOdometry
  * @since 0.0.0
  */
-public interface Odometry extends Modifiable<PointXYZ> {
+public interface Odometry {
     /**
      * Get the raw position reported by the odometry system. This position
      * should not be modified by any user code (unless you really want it
@@ -218,4 +219,8 @@ public interface Odometry extends Modifiable<PointXYZ> {
      * @return the robot's raw heading in degrees.
      */
     double getRawDeg();
+
+    Function<PointXYZ, PointXYZ> getOdometryModifier();
+
+    void setOdometryModifier(Function<PointXYZ, PointXYZ> modifier);
 }

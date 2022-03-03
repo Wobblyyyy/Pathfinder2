@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 
 /**
  * Abstract implementation of the {@link Drive} interface. This class handles
- * the {@link #getModifier()} and {@link #setModifier(Function)} methods
+ * the {@link #getDriveModifier()} and {@link #setDriveModifier(Function)} methods
  * required by the {@code Modifiable} interface.
  *
  * <p>
@@ -61,12 +61,12 @@ public class AbstractDrive implements Drive {
     }
 
     @Override
-    public Function<Translation, Translation> getModifier() {
+    public Function<Translation, Translation> getDriveModifier() {
         return modifier;
     }
 
     @Override
-    public void setModifier(Function<Translation, Translation> modifier) {
+    public void setDriveModifier(Function<Translation, Translation> modifier) {
         this.modifier = modifier;
     }
 }

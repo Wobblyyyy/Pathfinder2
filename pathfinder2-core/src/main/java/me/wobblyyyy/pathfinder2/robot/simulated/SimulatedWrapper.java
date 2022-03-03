@@ -30,7 +30,7 @@ public class SimulatedWrapper {
         this.drive = drive;
         this.odometry = odometry;
 
-        this.drive.setModifier(
+        this.drive.setDriveModifier(
                 (translation) -> {
                     PointXYZ pos = odometry.getPosition();
 

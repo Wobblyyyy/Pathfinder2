@@ -12,7 +12,8 @@ package me.wobblyyyy.pathfinder2.robot;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
-import me.wobblyyyy.pathfinder2.robot.modifiers.Modifiable;
+
+import java.util.function.Function;
 
 /**
  * One of the two major components of your robot - firstly, there's odometry,
@@ -58,7 +59,7 @@ import me.wobblyyyy.pathfinder2.robot.modifiers.Modifiable;
  * @author Colin Robertson
  * @since 0.0.0
  */
-public interface Drive extends Modifiable<Translation> {
+public interface Drive {
     /**
      * Get the drive train's current translation. This shouldn't be determined
      * based on what the robot's actually doing, but rather, whatever the last
@@ -95,4 +96,8 @@ public interface Drive extends Modifiable<Translation> {
      *                    that really sucks for you, doesn't it?
      */
     void setTranslation(Translation translation);
+
+    Function<Translation, Translation> getDriveModifier();
+
+    void setDriveModifier(Function<Translation, Translation> modifier);
 }

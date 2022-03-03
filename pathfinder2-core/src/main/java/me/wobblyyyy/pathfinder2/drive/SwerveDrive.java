@@ -160,7 +160,7 @@ public class SwerveDrive implements Drive {
      * @return the modifier.
      */
     @Override
-    public Function<Translation, Translation> getModifier() {
+    public Function<Translation, Translation> getDriveModifier() {
         return this.modifier;
     }
 
@@ -174,7 +174,7 @@ public class SwerveDrive implements Drive {
      *                 a modifier.
      */
     @Override
-    public void setModifier(Function<Translation, Translation> modifier) {
+    public void setDriveModifier(Function<Translation, Translation> modifier) {
         this.modifier = modifier;
     }
 }

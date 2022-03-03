@@ -3780,8 +3780,8 @@ public class Pathfinder {
                 this.getPosition()::z
         );
 
-        lastDriveModifier = getDrive().getModifier();
-        getDrive().setModifier(modifier);
+        lastDriveModifier = getDrive().getDriveModifier();
+        getDrive().setDriveModifier(modifier);
 
         return this;
     }
@@ -3819,8 +3819,8 @@ public class Pathfinder {
                 true
         );
 
-        lastDriveModifier = getDrive().getModifier();
-        getDrive().setModifier(modifier);
+        lastDriveModifier = getDrive().getDriveModifier();
+        getDrive().setDriveModifier(modifier);
 
         return this;
     }
@@ -3862,8 +3862,8 @@ public class Pathfinder {
                 true
         );
 
-        lastDriveModifier = getDrive().getModifier();
-        getDrive().setModifier(modifier);
+        lastDriveModifier = getDrive().getDriveModifier();
+        getDrive().setDriveModifier(modifier);
 
         return this;
     }
@@ -3874,7 +3874,7 @@ public class Pathfinder {
      * @return {@code this}, used for method chaining.
      */
     public Pathfinder unlockHeading() {
-        getDrive().setModifier(lastDriveModifier);
+        getDrive().setDriveModifier(lastDriveModifier);
 
         return this;
     }

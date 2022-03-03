@@ -66,7 +66,7 @@ public class SimulatedDrive implements Drive {
      * @return the drivetrain's modifier.
      */
     @Override
-    public Function<Translation, Translation> getModifier() {
+    public Function<Translation, Translation> getDriveModifier() {
         return this.modifier;
     }
 
@@ -76,7 +76,7 @@ public class SimulatedDrive implements Drive {
      * @param modifier the modifier.
      */
     @Override
-    public void setModifier(Function<Translation, Translation> modifier) {
+    public void setDriveModifier(Function<Translation, Translation> modifier) {
         this.modifier = modifier;
     }
 }

@@ -29,7 +29,7 @@ public class TestSimulatedDrive {
     public void testModifier() {
         Function<Translation, Translation> modifier = t -> t;
         SimulatedDrive drive = new SimulatedDrive();
-        drive.setModifier(modifier);
-        Assertions.assertEquals(modifier, drive.getModifier());
+        drive.setDriveModifier(modifier);
+        Assertions.assertEquals(modifier, drive.getDriveModifier());
     }
 }

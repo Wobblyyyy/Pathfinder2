@@ -221,7 +221,7 @@ public abstract class AbstractOdometry implements Odometry {
      * {@inheritDoc}
      */
     @Override
-    public Function<PointXYZ, PointXYZ> getModifier() {
+    public Function<PointXYZ, PointXYZ> getOdometryModifier() {
         return this.modifier;
     }
 
@@ -231,7 +231,7 @@ public abstract class AbstractOdometry implements Odometry {
      * @param modifier the modifier.
      */
     @Override
-    public void setModifier(Function<PointXYZ, PointXYZ> modifier) {
+    public void setOdometryModifier(Function<PointXYZ, PointXYZ> modifier) {
         ValidationUtils.validate(modifier, "modifier");
 
         this.modifier = modifier;
