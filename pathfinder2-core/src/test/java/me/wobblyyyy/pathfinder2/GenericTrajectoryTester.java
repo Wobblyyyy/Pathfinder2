@@ -21,6 +21,7 @@ import me.wobblyyyy.pathfinder2.trajectory.TestSequentialLinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.trajectory.spline.SplineBuilderFactory;
 import me.wobblyyyy.pathfinder2.trajectory.spline.TestAdvancedSplineTrajectory;
+import me.wobblyyyy.pathfinder2.utils.AssertionUtils;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
@@ -75,36 +76,11 @@ public class GenericTrajectoryTester {
     }
 
     public void assertPositionIs(PointXYZ target) {
-        ValidationUtils.validate(target, "target");
-
-        PointXYZ position = pathfinder.getPosition();
-        double distance = position.distance(target);
-        Angle angleDistance = Angle.fromDeg(Math.abs(
-                Angle.minimumDelta(position.z(), target.z())));
-
-        Assertions.assertTrue(
-                distance <= tolerance,
-                StringUtils.format(
-                        "Could not assert position! Expected <%s> but got " +
-                                "<%s> instead. Distance <%s> was greater " +
-                                "than maximum distance of <%s>!",
-                        target,
-                        position,
-                        distance,
-                        tolerance
-                )
-        );
-        Assertions.assertTrue(
-                angleDistance.deg() <= angleTolerance.deg(),
-                StringUtils.format(
-                        "Could not assert angle! Expected <%s> but got " +
-                                "<%s> instead. Distance <%s> was greater " +
-                                "than maximum distance of <%s>!",
-                        target.z(),
-                        position.z(),
-                        angleDistance,
-                        angleTolerance.formatAsDegShort()
-                )
+        AssertionUtils.assertIsNear(
+                target,
+                pathfinder.getPosition(),
+                tolerance,
+                angleTolerance
         );
     }
 

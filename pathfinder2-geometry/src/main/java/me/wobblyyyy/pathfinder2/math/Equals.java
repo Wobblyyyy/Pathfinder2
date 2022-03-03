@@ -29,6 +29,21 @@ public class Equals {
      *                  to be "equal."
      * @return true if the numbers are "equal" and false if not.
      */
+    public static boolean softWithoutValidation(double a,
+                                                double b,
+                                                double tolerance) {
+        return Math.abs(a - b) <= tolerance;
+    }
+    
+    /**
+     * Soft-equals - are two numbers within a given distance of another?
+     *
+     * @param a         the first of the two numbers.
+     * @param b         the second of the two numbers.
+     * @param tolerance the maximum allowable value that's still considered
+     *                  to be "equal."
+     * @return true if the numbers are "equal" and false if not.
+     */
     public static boolean soft(double a,
                                double b,
                                double tolerance) {
@@ -42,7 +57,7 @@ public class Equals {
             );
         }
 
-        return Math.abs(a - b) <= tolerance;
+        return softWithoutValidation(a, b, tolerance);
     }
 
     /**
