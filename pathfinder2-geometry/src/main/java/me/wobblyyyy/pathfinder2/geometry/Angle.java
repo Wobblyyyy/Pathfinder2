@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.geometry;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.math.Equals;
+import me.wobblyyyy.pathfinder2.math.Rounding;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
@@ -1332,7 +1333,10 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     @Override
     public String toString() {
-        return StringUtils.format(Geometry.formatAngle, deg);
+        return StringUtils.format(
+                Geometry.formatAngle,
+                Rounding.fastRound(deg)
+        );
     }
 
     @Override

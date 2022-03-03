@@ -13,6 +13,8 @@ package me.wobblyyyy.pathfinder2.math;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
+
 /**
  * Tools for rounding numbers. You can change the default number of places
  * things are rounded to by modifying {@link #DEFAULT_PLACES}. If left
@@ -48,6 +50,8 @@ public class Rounding {
     @Deprecated
     public static double round(double value,
                                int places) {
+        ValidationUtils.validate(value, "value");
+
         if (places < 0)
             throw new IllegalArgumentException("Places must be greater than 0");
 
@@ -77,7 +81,10 @@ public class Rounding {
      */
     public static double fastRound(double value,
                                    int places) {
+        ValidationUtils.validate(value, "value");
+
         double scale = Math.pow(10, places);
+
         return Math.round(value * scale) / scale;
     }
 

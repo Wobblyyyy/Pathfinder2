@@ -45,6 +45,11 @@ public class StringUtils {
             case 'f':
                 builder.append(Float.parseFloat(nextSource.toString()));
                 break;
+            default:
+                throw new IllegalArgumentException(format("Tried to use " +
+                        "format type <%s> but did not find it, valid types " +
+                        "are (percent sign)s, (percent sign)i, (percent " +
+                        "sign)d, and (percent sign)f.", type));
         }
 
         if (maxLength > 0)
@@ -84,6 +89,15 @@ public class StringUtils {
     public static String sizedFormat(String template,
                                      int bufferSize,
                                      Object... sources) {
+        if (bufferSize < 0)
+            throw new IllegalArgumentException("Buffer size must " +
+                    "be a positive integer (or zero) but it was " + bufferSize);
+
+        ValidationUtils.validate(template, "template");
+
+        for (Object source : sources)
+            ValidationUtils.validate(source);
+
         StringBuilder buffer = new StringBuilder(bufferSize);
 
         if (sources.length == 0)
