@@ -12,8 +12,10 @@ package me.wobblyyyy.pathfinder2.robot;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * A system capable of reporting the position of a robot. Several odometry
@@ -100,37 +102,82 @@ public interface Odometry {
     void setOffset(PointXYZ offset);
 
     /**
+     * Set a component of the odometry's system offset.
+     *
+     * @param offset the offset to apply.
+     * @return {@code this}, used for method chaining.
+     */
+    default Odometry setOffsetX(double offset) {
+        setOffset(getOffset().withX(offset));
+        return this;
+    }
+
+    /**
+     * Set a component of the odometry's system offset.
+     *
+     * @param offset the offset to apply.
+     * @return {@code this}, used for method chaining.
+     */
+    default Odometry setOffsetY(double offset) {
+        setOffset(getOffset().withY(offset));
+        return this;
+    }
+
+    /**
+     * Set a component of the odometry's system offset.
+     *
+     * @param offset the offset to apply.
+     * @return {@code this}, used for method chaining.
+     */
+    default Odometry setOffsetZ(Angle offset) {
+        setOffset(getOffset().withHeading(offset));
+        return this;
+    }
+
+    /**
      * Get the X value of the offset.
      *
      * @return the X value of the offset.
      */
-    double getOffsetX();
+    default double getOffsetX() {
+        return getOffset().x();
+    }
 
     /**
      * Get the Y value of the offset.
      *
      * @return the Y value of the offset.
      */
-    double getOffsetY();
+    default double getOffsetY() {
+        return getOffset().y();
+    }
 
     /**
      * Get the Z value of the offset.
      *
      * @return the Z value of the offset.
      */
-    Angle getOffsetZ();
+    default Angle getOffsetZ() {
+        return getOffset().z();
+    }
 
     /**
      * Modify the existing offset by whatever offset you provide.
      *
      * @param offset the offset to add to the existing offset.
      */
-    void offsetBy(PointXYZ offset);
+    default void offsetBy(PointXYZ offset) {
+        ValidationUtils.validate(offset, "offset");
+
+        setOffset(PointXYZ.add(getOffset(), offset));
+    }
 
     /**
      * Remove the current offset. This will set the offset to (0, 0, 0).
      */
-    void removeOffset();
+    default void removeOffset() {
+        setOffset(new PointXYZ());
+    }
 
     /**
      * Create an offset that makes the odometry's current position the
@@ -139,48 +186,64 @@ public interface Odometry {
      * @param targetPosition the position you'd like the odometry system
      *                       to be offset to.
      */
-    void offsetSoPositionIs(PointXYZ targetPosition);
+    default void offsetSoPositionIs(PointXYZ targetPosition) {
+        ValidationUtils.validate(targetPosition, "targetPosition");
+
+        setOffset(getRawPosition().multiply(-1).add(targetPosition));
+    }
 
     /**
      * Find an offset that makes the odometry's current position equal to
      * (0, 0) and apply it.
      */
-    void zeroOdometry();
+    default void zeroOdometry() {
+        offsetSoPositionIs(new PointXYZ(0, 0, Angle.zero()));
+    }
 
     /**
      * Get the robot's X position.
      *
      * @return {@link #getPosition()}.
      */
-    double getX();
+    default double getX() {
+        return getPosition().x();
+    }
 
     /**
      * Get the robot's Y position.
      *
      * @return {@link #getPosition()}.
      */
-    double getY();
+    default double getY() {
+        return getPosition().y();
+    }
 
     /**
      * Get the robot's Z position.
      *
      * @return {@link #getPosition()}.
      */
-    Angle getZ();
+    default Angle getZ() {
+        return getPosition().z();
+    }
 
     /**
      * Get the robot's current heading in radians.
      *
      * @return the robot's current heading in radians.
      */
-    double getRad();
+    default double getRad() {
+        return getPosition().z().rad();
+    }
 
     /**
      * Get the robot's current heading in degrees.
      *
      * @return the robot's current heading in degrees.
      */
-    double getDeg();
+    default double getDeg() {
+        return getPosition().z().deg();
+    }
 
     /**
      * Get the raw X value from the robot.
@@ -188,7 +251,9 @@ public interface Odometry {
      * @return the robot's raw X value.
      * @see #getRawPosition()
      */
-    double getRawX();
+    default double getRawX() {
+        return getRawPosition().x();
+    }
 
     /**
      * Get the raw Y value from the robot.
@@ -196,7 +261,9 @@ public interface Odometry {
      * @return the robot's raw Y value.
      * @see #getRawPosition()
      */
-    double getRawY();
+    default double getRawY() {
+        return getRawPosition().y();
+    }
 
     /**
      * Get the raw Z value from the robot.
@@ -204,21 +271,43 @@ public interface Odometry {
      * @return the robot's raw Z value.
      * @see #getRawPosition()
      */
-    Angle getRawZ();
+    default Angle getRawZ() {
+        return getRawPosition().z();
+    }
 
     /**
      * Get the robot's raw heading in radians.
      *
      * @return the robot's raw heading in radians.
      */
-    double getRawRad();
+    default double getRawRad() {
+        return getRawPosition().z().rad();
+    }
 
     /**
      * Get the robot's raw heading in degrees.
      *
      * @return the robot's raw heading in degrees.
      */
-    double getRawDeg();
+    default double getRawDeg() {
+        return getRawPosition().z().deg();
+    }
+
+    /**
+     * Convert {@code this} to an instance of {@link AbstractOdometry}.
+     *
+     * @return {@code this}, as an {@link AbstractOdometry}.
+     */
+    default AbstractOdometry toAbstractOdometry() {
+        Supplier<PointXYZ> getPos = this::getRawPosition;
+
+        return new AbstractOdometry() {
+            @Override
+            public PointXYZ getRawPosition() {
+                return getPos.get();
+            }
+        };
+    }
 
     Function<PointXYZ, PointXYZ> getOdometryModifier();
 

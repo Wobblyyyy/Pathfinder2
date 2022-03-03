@@ -1407,6 +1407,10 @@ public class PointXY implements Comparable<PointXY>, Serializable {
         return new PointXY(this.x, y);
     }
 
+    public PointXY withZ(Angle z) {
+        return withHeading(z);
+    }
+
     /**
      * Is this point inside a given shape?
      *
