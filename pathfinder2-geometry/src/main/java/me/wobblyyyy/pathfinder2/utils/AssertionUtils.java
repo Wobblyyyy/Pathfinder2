@@ -19,7 +19,11 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.math.Equals;
 
 /**
- * Assertion utilities specific to Pathfinder.
+ * Assertion utilities specific to Pathfinder. This class requires the
+ * {@code Assertions} class from the jUnit API - if you do not have an
+ * implementation of jUnit available at runtime, you'll get compilation errors.
+ * Such, I'd suggest you don't make use of this class, save tests used
+ * inside of Pathfinder.
  *
  * @author Colin Robertson
  * @since 1.4.2
