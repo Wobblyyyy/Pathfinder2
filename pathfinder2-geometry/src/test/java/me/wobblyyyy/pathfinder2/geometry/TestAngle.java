@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
+import me.wobblyyyy.pathfinder2.exceptions.ValidationException;
 
 /**
  * Test methods for the {@link Angle} class.
@@ -183,22 +184,22 @@ public class TestAngle {
     @Test
     public void testValidation() {
         Assertions.assertThrows(
-                IllegalArgumentException.class,
+                ValidationException.class,
                 () -> new Angle(Double.NaN, 0)
         );
 
         Assertions.assertThrows(
-                IllegalArgumentException.class,
+                ValidationException.class,
                 () -> new Angle(0, Double.NaN)
         );
 
         Assertions.assertThrows(
-                IllegalArgumentException.class,
+                ValidationException.class,
                 () -> new Angle(Double.POSITIVE_INFINITY, 0)
         );
 
         Assertions.assertThrows(
-                IllegalArgumentException.class,
+                ValidationException.class,
                 () -> new Angle(0, Double.NEGATIVE_INFINITY)
         );
     }

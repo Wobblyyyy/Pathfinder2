@@ -18,6 +18,7 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 import java.util.function.Consumer;
 
@@ -64,17 +65,8 @@ public class GenericFollower implements Follower {
      */
     public GenericFollower(Trajectory trajectory,
                            Controller turnController) {
-        if (trajectory == null) {
-            throw new NullTrajectoryException(
-                    "Can't create a generic follower with a null trajectory!"
-            );
-        }
-
-        if (turnController == null) {
-            throw new NullControllerException(
-                    "Can't create a generic follower with a null turn controller!"
-            );
-        }
+        ValidationUtils.validate(trajectory, "trajectory");
+        ValidationUtils.validate(turnController, "turnController");
 
         this.trajectory = trajectory;
         this.turnController = turnController;
@@ -106,13 +98,8 @@ public class GenericFollower implements Follower {
         // p.s. i also made all of the comments in this method lowercase now
         // so it matches the vibe better. you know what i mean?
 
-        if (current == null) {
-            throw new NullPointException(
-                    "Attempted to tick a generic follower with a NULL " +
-                            "current point; make sure your position is never " +
-                            "null!"
-            );
-        }
+        ValidationUtils.validate(current, "current");
+        ValidationUtils.validate(consumer, "consumer");
 
         // if the trajectory is done, we should stop executing this method
         // right here.

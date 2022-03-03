@@ -24,7 +24,7 @@ public class ValidationUtils {
     public static double validateNotNaN(double value,
                                         String parameterName) {
         if (Double.isNaN(value))
-            throw new IllegalArgumentException(StringUtils.format(
+            throw new ValidationException(StringUtils.format(
                     "Failed to validate double <%s> because " +
                             "the value was not a number!",
                     parameterName
@@ -36,7 +36,7 @@ public class ValidationUtils {
     public static double validateNotInfinite(double value,
                                              String parameterName) {
         if (Double.isInfinite(value))
-            throw new IllegalArgumentException(StringUtils.format(
+            throw new ValidationException(StringUtils.format(
                     "Failed to validate double <%s> because " +
                             "the value was infinite!",
                     parameterName
@@ -48,7 +48,7 @@ public class ValidationUtils {
     /**
      * Validate a double value by ensuring it's not {@code NaN} or infinite.
      * If the number is {@code NaN} or infinite, this method will throw
-     * an {@link IllegalArgumentException}.
+     * an {@link ValidationException}.
      *
      * @param value         the value to validate.
      * @param parameterName the name of the parameter that's being validated.
@@ -79,7 +79,7 @@ public class ValidationUtils {
     /**
      * Validate a float value by ensuring it's not {@code NaN} or infinite.
      * If the number is {@code NaN} or infinite, this method will throw
-     * an {@link IllegalArgumentException}.
+     * an {@link ValidationException}.
      *
      * @param value         the value to validate.
      * @param parameterName the name of the parameter that's being validated.
@@ -88,14 +88,14 @@ public class ValidationUtils {
      */
     public static float validate(float value,
                                  String parameterName) {
-        validate(value, parameterName);
+        validate((double) value, parameterName);
         return value;
     }
 
     /**
      * Validate a double value by ensuring it's not {@code NaN} or infinite.
      * If the number is {@code NaN} or infinite, this method will throw
-     * an {@link IllegalArgumentException}.
+     * an {@link ValidationException}.
      *
      * @param value         the value to validate.
      * @return if the value is validated (meaning it's not {@code NaN} and

@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.geometry;
 
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 import java.io.Serializable;
 
@@ -137,6 +138,10 @@ public class Translation implements Serializable {
     public Translation(double vx,
                        double vy,
                        double vz) {
+        ValidationUtils.validate(vx, "vx");
+        ValidationUtils.validate(vy, "vx");
+        ValidationUtils.validate(vz, "vx");
+
         this.vx = vx;
         this.vy = vy;
         this.vz = vz;
@@ -201,6 +206,9 @@ public class Translation implements Serializable {
      */
     public static Translation absoluteToRelative(Translation translation,
                                                  Angle heading) {
+        ValidationUtils.validate(translation, "translation");
+        ValidationUtils.validate(heading, "heading");
+
         PointXY point = PointXY.ZERO.inDirection(
                 translation.magnitude(),
                 translation.angle().add(heading)
@@ -237,6 +245,9 @@ public class Translation implements Serializable {
      */
     public static Translation add(Translation a,
                                   Translation b) {
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(b, "b");
+
         return new Translation(
                 a.vx() + b.vx(),
                 a.vy() + b.vy(),
@@ -253,6 +264,9 @@ public class Translation implements Serializable {
      */
     public static Translation multiply(Translation a,
                                        Translation b) {
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(b, "b");
+
         return new Translation(
                 a.vx() * b.vx(),
                 a.vy() * b.vy(),
@@ -270,6 +284,9 @@ public class Translation implements Serializable {
      */
     public static Translation multiply(Translation a,
                                        double b) {
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(b, "b");
+
         return new Translation(
                 a.vx() * b,
                 a.vy() * b,
@@ -290,6 +307,11 @@ public class Translation implements Serializable {
                                        double xMultiplier,
                                        double yMultiplier,
                                        double zMultiplier) {
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(xMultiplier, "xMultiplier");
+        ValidationUtils.validate(yMultiplier, "yMultiplier");
+        ValidationUtils.validate(zMultiplier, "zMultiplier");
+
         return new Translation(
                 a.vx() * xMultiplier,
                 a.vy() * yMultiplier,
@@ -306,6 +328,9 @@ public class Translation implements Serializable {
      */
     public static Translation subtract(Translation a,
                                        Translation b) {
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(b, "b");
+
         return add(a, multiply(b, -1));
     }
 
@@ -318,6 +343,9 @@ public class Translation implements Serializable {
      */
     public static Translation divide(Translation a,
                                      Translation b) {
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(b, "b");
+
         return new Translation(
                 a.vx() / b.vx(),
                 a.vy() / b.vy(),
@@ -334,6 +362,9 @@ public class Translation implements Serializable {
      */
     public static Translation divide(Translation a,
                                      double b) {
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(b, "b");
+
         return new Translation(
                 a.vx() / b,
                 a.vy() / b,
