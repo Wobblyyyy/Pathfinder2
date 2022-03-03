@@ -155,23 +155,12 @@ public class MecanumState {
     public MecanumState normalize(double max) {
         max = Math.abs(max);
         double realMax = maxPower();
+        boolean a = realMax > max;
 
-        double _fl;
-        double _fr;
-        double _bl;
-        double _br;
-
-        if (realMax > max) {
-            _fl = (fl / realMax) * max;
-            _fr = (fr / realMax) * max;
-            _bl = (bl / realMax) * max;
-            _br = (br / realMax) * max;
-        } else {
-            _fl = fl;
-            _fr = fr;
-            _bl = bl;
-            _br = br;
-        }
+        double _fl = a ? (fl / realMax) * max : fl;
+        double _fr = a ? (fr / realMax) * max : fr;
+        double _bl = a ? (bl / realMax) * max : bl;
+        double _br = a ? (br / realMax) * max : br;
 
         return new MecanumState(_fl, _fr, _bl, _br);
     }
