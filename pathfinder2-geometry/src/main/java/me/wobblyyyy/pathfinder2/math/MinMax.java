@@ -10,6 +10,9 @@
 
 package me.wobblyyyy.pathfinder2.math;
 
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
+
 /**
  * Utility class for clipping values.
  *
@@ -43,11 +46,15 @@ public class MinMax {
     public static double clip(double value,
                               double min,
                               double max) {
+        ValidationUtils.validate(value, "value");
+
         if (min >= max) {
-            throw new IllegalArgumentException(
+            throw new IllegalArgumentException(StringUtils.format(
                     "Cannot perform a clip operation with a higher minimum " +
-                            "than maximum!"
-            );
+                            "than maximum! Min: <%s>, Max: <%s>",
+                    min,
+                    max
+            ));
         }
 
         return Math.max(Math.min(value, max), min);

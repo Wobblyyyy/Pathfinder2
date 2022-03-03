@@ -10,6 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.control;
 
+import com.stormbots.MiniPID;
+
+import me.wobblyyyy.pathfinder2.math.MinMax;
+
 /**
  * A proportional, integral, derivative controller. This is like the
  * {@link ProportionalController}'s cool older cousin. Not only does it
@@ -20,178 +24,51 @@ package me.wobblyyyy.pathfinder2.control;
  * @since 0.15.0
  */
 public class PIDController extends AbstractController {
-    private double proportional;
-    private double integral;
-    private double derivative;
+    private MiniPID pid;
 
-    private boolean firstRun = true;
-    private double lastActual;
-    private double errorSum;
-
-    public PIDController() {
-        this(0, 0, 0);
+    public PIDController(double p,
+                         double i,
+                         double d) {
+        this(p, i, d, 0.02);
     }
 
-    /**
-     * Create a new {@code PIDController}.
-     *
-     * @param proportional the controller's proportional coefficient.
-     * @param integral     the controller's integral coefficient.
-     * @param derivative   the controller's derivative coefficient.
-     */
-    public PIDController(double proportional,
-                         double integral,
-                         double derivative) {
-        this.proportional = proportional;
-        this.integral = integral;
-        this.derivative = derivative;
+    public PIDController(double p,
+                         double i,
+                         double d,
+                         double f) {
+        pid = new MiniPID(p, i, d, f);
     }
 
-    /**
-     * Create a new {@code PIDController}.
-     *
-     * @param controller the controller to copy.
-     */
-    public PIDController(PIDController controller) {
-        this(
-                controller.proportional,
-                controller.integral,
-                controller.derivative
+    @Override
+    public double calculate(double value) {
+        return MinMax.clip(
+                pid.getOutput(value, getTarget()),
+                getMin(),
+                getMax()
         );
-    }
-
-    /**
-     * Create a new {@code PIDController}.
-     *
-     * @param controller the controller to copy.
-     */
-    public PIDController(ProportionalController controller) {
-        this(
-                controller.getCoefficient(),
-                0,
-                0
-        );
-    }
-
-    /**
-     * Set a single coefficient of the PID controller.
-     *
-     * @param coefficient the coefficient to set: either proportional,
-     *                    integral, or derivative.
-     * @param value       the value to set to the coefficient.
-     * @return {@code this}, used for method chaining.
-     */
-    public PIDController setCoefficient(PIDCoefficient coefficient,
-                                        double value) {
-        switch (coefficient) {
-            case PROPORTIONAL:
-                proportional = value;
-                break;
-            case INTEGRAL:
-                integral = value;
-                break;
-            case DERIVATIVE:
-                derivative = value;
-                break;
-            default:
-                throw new RuntimeException();
-        }
-
-        return this;
-    }
-
-    /**
-     * Set the controller's coefficients.
-     *
-     * @param proportional the controller's proportional coefficient.
-     * @param integral     the controller's integral coefficient.
-     * @param derivative   the controller's derivative coefficient.
-     * @return {@code this}, used for method chaining.
-     */
-    public PIDController setCoefficients(double proportional,
-                                         double integral,
-                                         double derivative) {
-        this.proportional = proportional;
-        this.integral = integral;
-        this.derivative = derivative;
-
-        return this;
-    }
-
-    public double getCoefficient(PIDCoefficient coefficient) {
-        switch (coefficient) {
-            case PROPORTIONAL:
-                return proportional;
-            case INTEGRAL:
-                return integral;
-            case DERIVATIVE:
-                return derivative;
-            default:
-                throw new RuntimeException();
-        }
-    }
-
-    public double getP() {
-        return proportional;
     }
 
     public PIDController setP(double p) {
-        proportional = p;
+        pid.setP(p);
 
         return this;
-    }
-
-    public double getI() {
-        return integral;
     }
 
     public PIDController setI(double i) {
-        integral = i;
+        pid.setI(i);
 
         return this;
-    }
-
-    public double getD() {
-        return derivative;
     }
 
     public PIDController setD(double d) {
-        derivative = d;
+        pid.setDerivative(d);
 
         return this;
     }
 
-    @Override
-    public double calculate(double actual) {
-        double error = getTarget() - actual;
+    public PIDController setF(double f) {
+        pid.setFeedForward(f);
 
-        double pOutput = proportional * error;
-
-        if (firstRun) {
-            lastActual = actual;
-            firstRun = false;
-        }
-
-        double iOutput = integral * errorSum;
-        double dOutput = -derivative * (actual - lastActual);
-        double output = pOutput + iOutput + dOutput;
-
-        lastActual = actual;
-
-        return output;
-    }
-
-    @Override
-    public void reset() {
-        errorSum = 0.0;
-    }
-
-    /**
-     * A type of coefficient: either proportional, integral, derivative.
-     */
-    public enum PIDCoefficient {
-        PROPORTIONAL,
-        INTEGRAL,
-        DERIVATIVE
+        return this;
     }
 }

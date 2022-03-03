@@ -65,6 +65,21 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+
+    // wpilib-specific stuff
+    testImplementation 'edu.wpi.first.wpimath:wpimath-java:2022.3.1'
+    testImplementation 'edu.wpi.first.wpilibj:wpilibj-java:2022.3.1'
+    testImplementation 'edu.wpi.first.wpiutil:wpiutil-java:2022.3.1'
+    testImplementation 'edu.wpi.first.wpilibNewCommands:wpilibNewCommands-java:2022.3.1'
+
+    // rev robotics
+    testImplementation 'com.revrobotics.frc:REVLib-java:2022.1.0'
+
+    // cross the road electronics
+    testImplementation 'com.ctre.phoenix:api-java:5.21.1'
+
+    // navx
+    testImplementation 'com.kauailabs.navx.frc:navx-java:4.0.435'
 }
 
 test {
