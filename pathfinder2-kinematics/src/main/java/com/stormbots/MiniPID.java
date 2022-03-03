@@ -2,6 +2,10 @@ package com.stormbots;
 
 import me.wobblyyyy.pathfinder2.math.MinMax;
 
+/**
+ * Please note that I didn't write this and all credit goes to the original
+ * authors, which I will credit/link once I have internet access again.
+ */
 public class MiniPID {
     private double proportional;
     private double integral;

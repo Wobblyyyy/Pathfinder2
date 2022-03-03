@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.math;
 import me.wobblyyyy.pathfinder2.exceptions.SplineException;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.utils.ArrayUtils;
 import me.wobblyyyy.pathfinder2.utils.DoubleUtils;
 
 import java.util.ArrayList;
@@ -367,5 +368,19 @@ public class MonotoneCubicSpline implements Spline {
             return end;
         else
             return end.withX(reflectX(end.x()));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof MonotoneCubicSpline) {
+            MonotoneCubicSpline s = (MonotoneCubicSpline) obj;
+
+            boolean sameX = ArrayUtils.arrayEquals(mx, s.mx);
+            boolean sameY = ArrayUtils.arrayEquals(my, s.my);
+
+            return sameX && sameY;
+        }
+
+        return false;
     }
 }

@@ -20,17 +20,23 @@ import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
  * @since 0.4.0
  */
 public class MinMax {
-    private final double minimumX;
-    private final double maximumX;
+    private final double minimum;
+    private final double maximum;
 
-    public MinMax(double minimumX,
-                  double maximumX) {
-        this.minimumX = minimumX;
-        this.maximumX = maximumX;
+    /**
+     * Create a new {@code MinMax}.
+     *
+     * @param minimum the minimum value.
+     * @param maximum the maximum value.
+     */
+    public MinMax(double minimum,
+                  double maximum) {
+        this.minimum = minimum;
+        this.maximum = maximum;
     }
 
     public static MinMax doNotClip() {
-        return new MinMax(0, 0);
+        return new MinMax(Double.MIN_VALUE, Double.MAX_VALUE);
     }
 
     /**
@@ -69,6 +75,6 @@ public class MinMax {
      * the maximum will be returned. Otherwise, the value will be returned.
      */
     public double clip(double value) {
-        return clip(value, minimumX, maximumX);
+        return clip(value, minimum, maximum);
     }
 }
