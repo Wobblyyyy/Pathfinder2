@@ -39,19 +39,6 @@ public class DoubleUtils {
         return unboxed;
     }
 
-    public static double[] unbox(Iterable<Double> collection) {
-        int size = 0;
-        for (Double d : collection)
-            size++;
-
-        double[] unboxed = new double[size];
-        int i = 0;
-        for (Double d : collection)
-            unboxed[i++] = d;
-
-        return unboxed;
-    }
-
     /**
      * Validate a double value by ensuring it's not {@code NaN} or infinite.
      * If the number is {@code NaN} or infinite, this method will throw
@@ -83,7 +70,7 @@ public class DoubleUtils {
 
     public static double[] validate(double... values) {
         for (int i = 0; i < values.length; i++)
-            validate(values[i], String.valueOf(i));
+            validate(values[i], StringUtils.format("index %s", i));
 
         return values;
     }
