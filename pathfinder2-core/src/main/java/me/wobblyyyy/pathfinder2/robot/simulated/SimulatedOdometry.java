@@ -15,6 +15,7 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.AbstractOdometry;
 import me.wobblyyyy.pathfinder2.time.Time;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
  * A simulated odometry system, mostly useful for testing purposes.
@@ -55,6 +56,8 @@ public class SimulatedOdometry extends AbstractOdometry {
      * @see #setVelocity(Angle, double)
      */
     public void updatePositionBasedOnVelocity(double elapsedTimeMs) {
+        ValidationUtils.validate(elapsedTimeMs, "elapsedTimeMs");
+
         double travelledUnits = unitsPerSecond * (elapsedTimeMs / 1_000);
 
         this.setRawPosition(currentPosition.inDirection(
@@ -68,6 +71,10 @@ public class SimulatedOdometry extends AbstractOdometry {
     public void setRawPosition(double x,
                                double y,
                                double zDegrees) {
+        ValidationUtils.validate(x, "x");
+        ValidationUtils.validate(y, "y");
+        ValidationUtils.validate(zDegrees, "zDegrees");
+
         setRawPosition(new PointXYZ(x, y, zDegrees));
     }
 

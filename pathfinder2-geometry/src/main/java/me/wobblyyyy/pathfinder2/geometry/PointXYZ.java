@@ -316,12 +316,9 @@ public class PointXYZ extends PointXY {
     public static PointXYZ inDirection(PointXYZ base,
                                        double distance,
                                        Angle angle) {
-        if (base == null)
-            throw new NullPointerException("Cannot have a null base point!");
-        if (angle == null)
-            throw new NullPointerException("Cannot have a null direction!");
-        if (Double.isNaN(distance))
-            throw new RuntimeException("Invalid distance!");
+        ValidationUtils.validate(base, "base");
+        ValidationUtils.validate(distance, "distance");
+        ValidationUtils.validate(angle, "angle");
 
         return new PointXYZ(
                 base.x() + (distance * angle.cos()),

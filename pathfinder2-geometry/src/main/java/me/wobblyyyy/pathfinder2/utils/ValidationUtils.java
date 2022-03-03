@@ -20,14 +20,38 @@ import me.wobblyyyy.pathfinder2.exceptions.ValidationException;
  */
 public class ValidationUtils {
     private static final String NO_NAME = "parameter name not specified";
+    private static final String NO_MORE_INFO = "no more information specified";
 
     public static double validateNotNaN(double value,
-                                        String parameterName) {
+                                        String parameterName,
+                                        String customMessage) {
         if (Double.isNaN(value))
             throw new ValidationException(StringUtils.format(
                     "Failed to validate double <%s> because " +
-                            "the value was not a number!",
-                    parameterName
+                            "the value was not a number! Value: <%s> (%s)",
+                    parameterName,
+                    value,
+                    customMessage
+            ));
+
+        return value;
+    }
+
+    public static double validateNotNaN(double value,
+                                        String parameterName) {
+        return validateNotNaN(value, parameterName, NO_MORE_INFO);
+    }
+
+    public static double validateNotInfinite(double value,
+                                             String parameterName,
+                                             String customMesssage) {
+        if (Double.isInfinite(value))
+            throw new ValidationException(StringUtils.format(
+                    "Failed to validate double <%s> because " +
+                            "the value was infinite! Value: <%s> (%s)",
+                    parameterName,
+                    value,
+                    customMesssage
             ));
 
         return value;
@@ -35,12 +59,26 @@ public class ValidationUtils {
 
     public static double validateNotInfinite(double value,
                                              String parameterName) {
-        if (Double.isInfinite(value))
-            throw new ValidationException(StringUtils.format(
-                    "Failed to validate double <%s> because " +
-                            "the value was infinite!",
-                    parameterName
-            ));
+        return validateNotInfinite(value, parameterName, NO_MORE_INFO);
+    }
+
+    /**
+     * Validate a double value by ensuring it's not {@code NaN} or infinite.
+     * If the number is {@code NaN} or infinite, this method will throw
+     * an {@link ValidationException}.
+     *
+     * @param value         the value to validate.
+     * @param parameterName the name of the parameter that's being validated.
+     * @param customMessage a custom message to display at the end of the
+     *                      exception that's thrown if validation fails.
+     * @return if the value is validated (meaning it's not {@code NaN} and
+     * it's not infinite), return the value.
+     */
+    public static double validate(double value,
+                                  String parameterName,
+                                  String customMessage) {
+        validateNotNaN(value, parameterName, customMessage);
+        validateNotInfinite(value, parameterName, customMessage);
 
         return value;
     }
@@ -57,10 +95,7 @@ public class ValidationUtils {
      */
     public static double validate(double value,
                                   String parameterName) {
-        validateNotNaN(value, parameterName);
-        validateNotInfinite(value, parameterName);
-
-        return value;
+        return validate(value, parameterName, NO_MORE_INFO);
     }
 
     /**
@@ -105,14 +140,14 @@ public class ValidationUtils {
         return validate(value, NO_NAME);
     }
 
-    public static Object validateNotNull(Object object,
-                                         String parameterName) {
-        if (object == null) throw new ValidationException(StringUtils.format(
+    public static <T> T validateNotNull(T t,
+                                        String parameterName) {
+        if (t == null) throw new ValidationException(StringUtils.format(
                     "Failed to validate object <%s> because it was null!",
                     parameterName
             ));
 
-        return object;
+        return t;
     }
 
     /**
@@ -122,9 +157,9 @@ public class ValidationUtils {
      * @param parameterName the name of the object.
      * @return the object.
      */
-    public static Object validate(Object object,
-                                  String parameterName) {
-        return validateNotNull(object, parameterName);
+    public static <T> T validate(T t,
+                                 String parameterName) {
+        return validateNotNull(t, parameterName);
     }
 
     /**
@@ -134,7 +169,7 @@ public class ValidationUtils {
      * @param parameterName the name of the object.
      * @return the object.
      */
-    public static Object validate(Object object) {
-        return validate(object, NO_NAME);
+    public static <T> T validate(T t) {
+        return validate(t, NO_NAME);
     }
 }

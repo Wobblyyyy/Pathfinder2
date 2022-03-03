@@ -17,6 +17,7 @@ import me.wobblyyyy.pathfinder2.geometry.Geometry;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.math.Equals;
+import me.wobblyyyy.pathfinder2.math.Rounding;
 
 /**
  * Assertion utilities specific to Pathfinder. This class requires the
@@ -40,9 +41,9 @@ public class AssertionUtils {
                 Equals.softWithoutValidation(expected, actual, tolerance),
                 StringUtils.format(
                         "Expected <%s> but got <%s>, tolerance of <%s>",
-                        expected,
-                        actual,
-                        tolerance
+                        Rounding.fastRound(expected),
+                        Rounding.fastRound(actual),
+                        Rounding.fastRound(tolerance)
                 )
         );
     }
@@ -84,8 +85,8 @@ public class AssertionUtils {
                         "Expected a maximum distance of <%s> but got " +
                                 "a distance of <%s> between points <%s> " +
                                 "and <%s>",
-                        tolerance,
-                        absoluteDistance,
+                        Rounding.fastRound(tolerance),
+                        Rounding.fastRound(absoluteDistance),
                         a,
                         b
                 )
@@ -153,8 +154,8 @@ public class AssertionUtils {
                         "Expected a maximum distance of <%s deg> but got " +
                                 "a distance of <%s deg> between angles " +
                                 "<%s> and <%s>",
-                        tolerance,
-                        minimumDeltaDeg,
+                        Rounding.fastRound(toleranceDeg),
+                        Rounding.fastRound(minimumDeltaDeg),
                         a,
                         b
                 )

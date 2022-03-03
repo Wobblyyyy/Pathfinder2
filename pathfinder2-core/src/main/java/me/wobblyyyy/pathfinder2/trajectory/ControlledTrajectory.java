@@ -11,8 +11,11 @@
 package me.wobblyyyy.pathfinder2.trajectory;
 
 import me.wobblyyyy.pathfinder2.control.Controller;
+import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
  * An extension of the {@link LinearTrajectory} that adds a way to control
@@ -50,15 +53,39 @@ public class ControlledTrajectory extends LinearTrajectory {
                                 Controller speedController,
                                 double tolerance,
                                 Angle angleTolerance) {
-        super(target, 0, tolerance, angleTolerance);
+        super(
+                ValidationUtils.validate(target, "target"),
+                0,
+                ValidationUtils.validate(tolerance, "tolerance"),
+                ValidationUtils.validate(angleTolerance, "angleTolerance")
+        );
+
+        ValidationUtils.validate(speedController, "speedController");
+
+        speedController.setMin(-1.0);
+        speedController.setMax(1.0);
 
         this.speedController = speedController;
     }
 
     @Override
     public double speed(PointXYZ current) {
+        ValidationUtils.validate(current, "current");
+
         double distance = current.distance(getTarget());
 
-        return speedController.calculate(distance, 0);
+        ValidationUtils.validate(distance, "distance");
+
+        double speed = Math.abs(speedController.calculate(distance, 0));
+
+        InvalidSpeedException.throwIfInvalid(StringUtils.format(
+                "Turn controller calculated an invalid speed! The speed " +
+                        "value that was calculated was <%s>. This value " +
+                        "should be greater than 0 and less than or " +
+                        "equal to 1!",
+                speed
+        ), speed);
+
+        return speed;
     }
 }

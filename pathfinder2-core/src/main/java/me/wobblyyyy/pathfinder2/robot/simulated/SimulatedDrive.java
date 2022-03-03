@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.robot.simulated;
 
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.Drive;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 import java.util.function.Function;
 
@@ -57,6 +58,11 @@ public class SimulatedDrive implements Drive {
      */
     @Override
     public void setTranslation(Translation translation) {
+        ValidationUtils.validate(translation, "translation");
+        ValidationUtils.validate(translation.vx(), "translation.vz()");
+        ValidationUtils.validate(translation.vy(), "translation.vy()");
+        ValidationUtils.validate(translation.vz(), "translation.vz()");
+
         this.translation = modifier.apply(translation);
     }
 

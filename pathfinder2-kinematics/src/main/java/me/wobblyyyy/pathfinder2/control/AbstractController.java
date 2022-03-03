@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.control;
 
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
+
 /**
  * An abstract implementation of the {@link Controller} interface, designed
  * to simplify most of the tedious methods.
@@ -66,6 +68,8 @@ public abstract class AbstractController implements Controller {
      */
     @Override
     public void setMin(double min) {
+        ValidationUtils.validate(min, "min");
+
         this.min = min;
     }
 
@@ -86,6 +90,8 @@ public abstract class AbstractController implements Controller {
      */
     @Override
     public void setMax(double max) {
+        ValidationUtils.validate(max, "max");
+
         this.max = max;
     }
 
@@ -119,6 +125,8 @@ public abstract class AbstractController implements Controller {
      */
     @Override
     public void setTarget(double target) {
+        ValidationUtils.validate(target, "target");
+
         this.target = target;
     }
 

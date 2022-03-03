@@ -337,10 +337,15 @@ public class PointXY implements Comparable<PointXY>, Serializable {
         // sqrt((Bx-Ax)^2+(By-Ay)^2)
         // Obviously, there's some minor formatting issues there, but you
         // get the general idea.
-        return Math.sqrt(
-                Math.pow(b.x() - a.x(), 2) +
-                        Math.pow(b.y() - a.y(), 2)
-        );
+        double distance = Math.hypot(b.x - a.x, b.y - a.y);
+
+        ValidationUtils.validate(distance, "distance", StringUtils.format(
+                "point a: <%s>, point b: <%s>",
+                a,
+                b
+        ));
+
+        return distance;
     }
 
     /**

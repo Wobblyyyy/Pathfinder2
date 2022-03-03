@@ -1159,7 +1159,11 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @return "? rad"
      */
     public String formatAsRadShort() {
-        return rad() + " " + FORMAT_RAD_SHORT;
+        return StringUtils.format(
+                "%s %s",
+                Rounding.fastRound(rad()),
+                FORMAT_RAD_SHORT
+        );
     }
 
     /**
@@ -1168,7 +1172,11 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @return "? deg"
      */
     public String formatAsDegShort() {
-        return deg() + " " + FORMAT_DEG_SHORT;
+        return StringUtils.format(
+                "%s %s",
+                Rounding.fastRound(deg()),
+                FORMAT_DEG_SHORT
+        );
     }
 
     /**
@@ -1177,7 +1185,11 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @return "? radians"
      */
     public String formatAsRadLong() {
-        return rad() + " " + FORMAT_RAD_LONG;
+        return StringUtils.format(
+                "%s %s",
+                Rounding.fastRound(rad()),
+                FORMAT_RAD_LONG
+        );
     }
 
     /**
@@ -1186,7 +1198,11 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @return "? degrees"
      */
     public String formatAsDegLong() {
-        return deg() + " " + FORMAT_DEG_LONG;
+        return StringUtils.format(
+                "%s %s",
+                Rounding.fastRound(deg()),
+                FORMAT_DEG_LONG
+        );
     }
 
     /**

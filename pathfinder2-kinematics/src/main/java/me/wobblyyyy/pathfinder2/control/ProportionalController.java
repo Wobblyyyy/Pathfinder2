@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.control;
 
 import me.wobblyyyy.pathfinder2.math.MinMax;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
  * The most simple controller - a directly proportional controller. The value
@@ -54,6 +55,8 @@ public class ProportionalController extends AbstractController {
      *                    completely useless.
      */
     public ProportionalController(double coefficient) {
+        ValidationUtils.validate(coefficient, "coefficient");
+
         this.coefficient = coefficient;
     }
 
@@ -77,6 +80,10 @@ public class ProportionalController extends AbstractController {
     @Override
     public double calculate(double value) {
         double delta = getTarget() - value;
+
+        ValidationUtils.validate(value, "value");
+        ValidationUtils.validate(value, "coefficient");
+        ValidationUtils.validate(delta, "delta");
 
         return MinMax.clip(
                 delta * coefficient,
