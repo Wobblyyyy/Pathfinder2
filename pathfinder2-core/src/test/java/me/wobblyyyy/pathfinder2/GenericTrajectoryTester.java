@@ -85,7 +85,6 @@ public class GenericTrajectoryTester {
     public void follow(Trajectory trajectory,
                        PointXYZ point) {
         pathfinder.followTrajectory(trajectory);
-        // pathfinder.tickUntil(1_000);
         pathfinder.tickUntil();
         assertPositionIs(point);
     }
