@@ -16,12 +16,16 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.robot.Robot;
 import me.wobblyyyy.pathfinder2.robot.simulated.*;
+import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
 import me.wobblyyyy.pathfinder2.trajectory.TestFastTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.TestSequentialLinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.trajectory.spline.SplineBuilderFactory;
 import me.wobblyyyy.pathfinder2.trajectory.spline.TestAdvancedSplineTrajectory;
 import me.wobblyyyy.pathfinder2.utils.AssertionUtils;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.jupiter.api.*;
 
@@ -48,6 +52,7 @@ public class GenericTrajectoryTester {
     public Angle angleTolerance = Angle.fromDeg(5);
     public double step = 0.25;
     public double turnCoefficient = -0.25;
+    public double maximumExecutionTimeMs = 1_000;
 
     public SimulatedOdometry odometry;
     public SimulatedWrapper wrapper;
@@ -84,8 +89,45 @@ public class GenericTrajectoryTester {
 
     public void follow(Trajectory trajectory,
                        PointXYZ point) {
+        // this is pretty disgusting code, but it gets the job done
+        // basically just spawn a new monitor thread to ensure that it doesn't
+        // take over a certain amount of time to execute the trajectory. if it
+        // does, something's broken, so the test should fail
         pathfinder.followTrajectory(trajectory);
-        pathfinder.tickUntil();
+        ElapsedTimer timer = new ElapsedTimer();
+        AtomicBoolean hasNotExpired = new AtomicBoolean(true);
+        AtomicBoolean hasExecuted = new AtomicBoolean(false);
+        Thread monitor = new Thread(() -> {
+            timer.start();
+
+            try {
+                while (!hasExecuted.get())
+                    Thread.sleep(1);
+
+                while (timer.elapsedMs() < maximumExecutionTimeMs) {
+                    Thread.sleep(1);
+                    if (!pathfinder.isActive())
+                        break;
+                }
+
+                if (pathfinder.isActive())
+                    hasNotExpired.set(false);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        monitor.start();
+        pathfinder.tickUntil(hasNotExpired::get, (pf) ->
+                hasExecuted.set(true));
+        if (!hasNotExpired.get())
+            throw new RuntimeException(StringUtils.format(
+                        "Trajectory <%s> (target <%s>) took more than %s " +
+                                "milliseconds to execute, meaning something " +
+                                "went wrong with following the trajectory!",
+                        trajectory,
+                        point,
+                        maximumExecutionTimeMs
+                ));
         assertPositionIs(point);
     }
 }
