@@ -97,7 +97,15 @@ public interface Drive {
      */
     void setTranslation(Translation translation);
 
-    Function<Translation, Translation> getDriveModifier();
+    default Function<Translation, Translation> getDriveModifier() {
+        throw new UnsupportedOperationException("The implementation of " +
+                "the Drive interface you're using does not support " +
+                "modifiers!");
+    }
 
-    void setDriveModifier(Function<Translation, Translation> modifier);
+    default void setDriveModifier(Function<Translation, Translation> modifier) {
+        throw new UnsupportedOperationException("The implementation of " +
+                "the Drive interface you're using does not support " +
+                "modifiers!");
+    }
 }

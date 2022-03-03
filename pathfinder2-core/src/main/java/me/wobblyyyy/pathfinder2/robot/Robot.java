@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.robot;
 
 import me.wobblyyyy.pathfinder2.exceptions.NullDriveException;
 import me.wobblyyyy.pathfinder2.exceptions.NullOdometryException;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
  * A representation of a physical robot. Robots are defined by their drive
@@ -27,12 +28,19 @@ public class Robot {
     /**
      * The robot's drive system.
      */
-    private final Drive drive;
+    private Drive drive;
 
     /**
      * The robot's odometry system.
      */
-    private final Odometry odometry;
+    private Odometry odometry;
+
+    /**
+     * Create a new {@code Robot}.
+     */
+    public Robot() {
+
+    }
 
     /**
      * Create a new {@code Robot}.
@@ -74,5 +82,17 @@ public class Robot {
      */
     public Odometry odometry() {
         return this.odometry;
+    }
+
+    public Robot drive(Drive drive) {
+        ValidationUtils.validate(drive, "drive");
+        this.drive = drive;
+        return this;
+    }
+
+    public Robot odometry(Odometry odometry) {
+        ValidationUtils.validate(odometry, "odometry");
+        this.odometry = odometry;
+        return this;
     }
 }

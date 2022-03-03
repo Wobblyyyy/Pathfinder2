@@ -80,14 +80,20 @@ public interface Odometry {
      * this position is not specified. This should always return the very
      * center of the robot's position.
      */
-    PointXYZ getPosition();
+    default PointXYZ getPosition() {
+        return getRawPosition().add(getOffset());
+    }
 
     /**
      * Get the odometry system's offset.
      *
      * @return the odometry system's offset.
      */
-    PointXYZ getOffset();
+    default PointXYZ getOffset() {
+        throw new UnsupportedOperationException("The implementation of " +
+                "the Odometry interface you're using does not support " +
+                "offsets! Maybe use AbstractOdometry?");
+    }
 
     /**
      * Set the odometry system's offset. This will overwrite any existing
@@ -99,7 +105,11 @@ public interface Odometry {
      *               of {@link #getRawPosition()} added to the offset using
      *               {@link PointXYZ#add(PointXYZ)}.
      */
-    void setOffset(PointXYZ offset);
+    default void setOffset(PointXYZ offset) {
+        throw new UnsupportedOperationException("The implementation of " +
+                "the Odometry interface you're using does not support " +
+                "offsets! Maybe use AbstractOdometry?");
+    }
 
     /**
      * Set a component of the odometry's system offset.
@@ -309,7 +319,15 @@ public interface Odometry {
         };
     }
 
-    Function<PointXYZ, PointXYZ> getOdometryModifier();
+    default Function<PointXYZ, PointXYZ> getOdometryModifier() {
+        throw new UnsupportedOperationException("The implementation of " +
+                "the Odometry interface you're using does not support " +
+                "modifiers! Maybe use AbstractOdometry?");
+    }
 
-    void setOdometryModifier(Function<PointXYZ, PointXYZ> modifier);
+    default void setOdometryModifier(Function<PointXYZ, PointXYZ> modifier) {
+        throw new UnsupportedOperationException("The implementation of " +
+                "the Odometry interface you're using does not support " +
+                "modifiers! Maybe use AbstractOdometry?");
+    }
 }

@@ -13,27 +13,35 @@ package me.wobblyyyy.pathfinder2.trajectory.spline;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import me.wobblyyyy.pathfinder2.GenericTrajectoryTester;
+import me.wobblyyyy.pathfinder2.TestableRobot;
 import me.wobblyyyy.pathfinder2.exceptions.SplineException;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.math.MonotoneCubicSpline;
+import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 
-public class TestAdvancedSplineTrajectory extends GenericTrajectoryTester {
+public class TestAdvancedSplineTrajectory extends TestableRobot {
     private InterpolationMode mode = InterpolationMode.DEFAULT;
 
     private void testSplineTo(PointXYZ... points) {
         if (points.length < 1)
             throw new IllegalArgumentException();
 
-        AdvancedSplineTrajectoryBuilder builder = factory.builder();
+        AdvancedSplineTrajectoryBuilder builder =
+                new AdvancedSplineTrajectoryBuilder()
+                        .setStep(0.1)
+                        .setTolerance(tolerance)
+                        .setSpeed(speed)
+                        .setAngleTolerance(angleTolerance);
+
         builder.setInterpolationMode(mode);
 
         for (PointXYZ point : points)
             builder.add(point);
 
         builder.setInterpolationMode(InterpolationMode.DEFAULT);
-        pathfinder.followTrajectory(builder.build()).tickUntil(1_000);
-        assertPositionIs(points[points.length - 1]);
+        Trajectory trajectory = builder.build();
+        PointXYZ target = points[points.length - 1];
+        testTrajectory(trajectory, target);
     }
 
     @Test

@@ -358,6 +358,28 @@ public class PointXYZ extends PointXY {
     }
 
     /**
+     * Apply a translation to a specified point.
+     *
+     * @param base        the point to apply the translation to.
+     * @param translation the translation to apply.
+     * @return the translated point.
+     */
+    public static PointXYZ applyTranslation(PointXYZ base,
+                                            Translation translation) {
+        ValidationUtils.validate(base, "base");
+        ValidationUtils.validate(translation, "translation");
+
+        double distance = translation.magnitude();
+        Angle angle = translation.angle();
+
+        return new PointXYZ(
+                base.x() + (distance * angle.cos()),
+                base.y() + (distance * angle.sin()),
+                base.z().add(Angle.fromDeg(translation.vz()))
+        );
+    }
+
+    /**
      * Rotate a point around a center point.
      *
      * @param point  the point to rotate.
@@ -725,6 +747,17 @@ public class PointXYZ extends PointXY {
     public PointXYZ inDirection(double distance,
                                 Angle angle) {
         return PointXYZ.inDirection(this, distance, angle);
+    }
+
+    /**
+     * Apply a translation to {@code this} point.
+     *
+     * @param translation the translation to apply.
+     * @return the translated point.
+     */
+    @Override
+    public PointXYZ applyTranslation(Translation translation) {
+        return PointXYZ.applyTranslation(this, translation);
     }
 
     /**

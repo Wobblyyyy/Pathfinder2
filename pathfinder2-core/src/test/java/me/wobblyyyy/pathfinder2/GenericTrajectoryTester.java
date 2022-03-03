@@ -94,9 +94,12 @@ public class GenericTrajectoryTester {
         // take over a certain amount of time to execute the trajectory. if it
         // does, something's broken, so the test should fail
         pathfinder.followTrajectory(trajectory);
+
         ElapsedTimer timer = new ElapsedTimer();
+
         AtomicBoolean hasNotExpired = new AtomicBoolean(true);
         AtomicBoolean hasExecuted = new AtomicBoolean(false);
+
         Thread monitor = new Thread(() -> {
             timer.start();
 
@@ -106,6 +109,7 @@ public class GenericTrajectoryTester {
 
                 while (timer.elapsedMs() < maximumExecutionTimeMs) {
                     Thread.sleep(1);
+
                     if (!pathfinder.isActive())
                         break;
                 }
@@ -116,9 +120,11 @@ public class GenericTrajectoryTester {
                 e.printStackTrace();
             }
         });
+
         monitor.start();
         pathfinder.tickUntil(hasNotExpired::get, (pf) ->
                 hasExecuted.set(true));
+
         if (!hasNotExpired.get())
             throw new RuntimeException(StringUtils.format(
                         "Trajectory <%s> (target <%s>) took more than %s " +
@@ -128,6 +134,7 @@ public class GenericTrajectoryTester {
                         point,
                         maximumExecutionTimeMs
                 ));
+
         assertPositionIs(point);
     }
 }

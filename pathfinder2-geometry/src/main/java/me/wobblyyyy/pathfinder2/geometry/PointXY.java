@@ -508,6 +508,23 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     }
 
     /**
+     * Apply a translation to a point.
+     *
+     * @param base        the base point. This serves as the center of
+     *                    whatever transformation the translation will cause.
+     * @param translation the translation to apply.
+     * @return a new point with the provided translation applied to it.
+     */
+    public static PointXY applyTranslation(PointXY base,
+                                           Translation translation) {
+        return inDirection(
+                base,
+                translation.magnitude(),
+                translation.angle()
+        );
+    }
+
+    /**
      * Are two points close to each other?
      *
      * @param a         one of the two points.
@@ -1377,6 +1394,16 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     public PointXY inDirection(double distance,
                                Angle angle) {
         return inDirection(this, distance, angle);
+    }
+
+    /**
+     * Apply a translation to a point.
+     *
+     * @param translation the translation to apply.
+     * @return a new point with the provided translation applied to it.
+     */
+    public PointXY applyTranslation(Translation translation) {
+        return applyTranslation(this, translation);
     }
 
     /**
