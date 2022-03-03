@@ -17,6 +17,7 @@ import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Every rose has its thorns. And every trajectory has its follower. That
@@ -160,4 +161,21 @@ public interface Follower {
      * that we need to keep going at least a little while longer.
      */
     boolean tick(PointXYZ current, Consumer<Translation> consumer);
+
+    /**
+     * Tick a follower once.
+     *
+     * @param follower       the follower to tick.
+     * @param getPosition    a supplier that returns the robot's position.
+     * @param setTranslation a consumer that accepts a translation.
+     * @return true if the follower is finished. Otherwise, false.
+     */
+    static boolean tickFollower(Follower follower,
+                                Supplier<PointXYZ> getPosition,
+                                Consumer<Translation> setTranslation) {
+        return follower.tick(
+                getPosition.get(),
+                setTranslation
+        );
+    }
 }

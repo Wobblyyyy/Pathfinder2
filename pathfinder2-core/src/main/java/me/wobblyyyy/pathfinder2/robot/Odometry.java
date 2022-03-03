@@ -81,21 +81,17 @@ public interface Odometry {
      * center of the robot's position.
      */
     default PointXYZ getPosition() {
-        PointXYZ position = ValidationUtils.validate(
+        return ValidationUtils.validate(
                 getRawPosition(),
                 "getRawPosition()",
                 "your getRawPosition() method implementation returned null, " +
                         "which it should never do!"
-        );
-
-        PointXYZ offset = ValidationUtils.validate(
+        ).add(ValidationUtils.validate(
                 getOffset(),
                 "getOffset()",
                 "your getOffset() method implementation returned null, " +
                         "which it should never do!"
-        );
-
-        return position.add(offset);
+        ));
     }
 
     /**
@@ -104,9 +100,7 @@ public interface Odometry {
      * @return the odometry system's offset.
      */
     default PointXYZ getOffset() {
-        throw new UnsupportedOperationException("The implementation of " +
-                "the Odometry interface you're using does not support " +
-                "offsets! Maybe use AbstractOdometry?");
+        return PointXYZ.ZERO;
     }
 
     /**

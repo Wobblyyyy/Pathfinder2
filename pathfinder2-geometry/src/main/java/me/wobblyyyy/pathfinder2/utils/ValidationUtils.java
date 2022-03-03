@@ -157,10 +157,10 @@ public class ValidationUtils {
         return validateNotNull(t, parameterName, NO_MORE_INFO);
     }
 
-    public static <T> T validatef(T t,
+    public static <T> T validate(T t,
                                  String parameterName,
                                  String customMessageFormat,
-                                 Object... formatSources) {
+                                 Object[] formatSources) {
         if (formatSources == null
                 || formatSources.length < 1
                 || formatSources[0] == null)
@@ -174,10 +174,17 @@ public class ValidationUtils {
         return validateNotNull(t, parameterName, customMessage);
     }
 
+    public static <T> T validateAndFormat(T t,
+                                          String parameterName,
+                                          String customMessage,
+                                          Object... formatSources) {
+        return validate(t, parameterName, customMessage, formatSources);
+    }
+
     public static <T> T validate(T t,
                                  String parameterName,
                                  String customMessage) {
-        return validatef(t, parameterName, customMessage);
+        return validateAndFormat(t, parameterName, customMessage);
     }
 
     /**

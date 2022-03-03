@@ -10,10 +10,9 @@
 
 package me.wobblyyyy.pathfinder2.execution;
 
-import me.wobblyyyy.pathfinder2.exceptions.NullDriveException;
-import me.wobblyyyy.pathfinder2.exceptions.NullOdometryException;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
@@ -21,6 +20,7 @@ import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * An executor that executes followers. I know, I know - it's pretty hard to
@@ -88,6 +88,20 @@ public class FollowerExecutor {
         );
     }
 
+    private boolean tickCurrentFollower() {
+        return Follower.tickFollower(
+                followers.get(0),
+                odometry::getPosition,
+                drive::setTranslation
+        );
+    }
+
+    private void internalTick() {
+        if (howManyFollowers() > 0)
+            if (tickCurrentFollower())
+                followers.remove(0);
+    }
+
     /**
      * Tick the follower executor. Ticking the executor will look at the
      * first {@link Follower} in the {@link #followers} list and tick it
@@ -101,37 +115,8 @@ public class FollowerExecutor {
      * all of its followers.
      */
     public boolean tick() {
-        // Before anything else, check to see if the followers list isn't
-        // completely empty. If it IS empty, ignore the if statement and
-        // return false.
-        if (followers.size() > 0) {
-            // Otherwise, get the current follower, so we can do more stuff
-            // with said follower.
-            Follower current = followers.get(0);
+        internalTick();
 
-            // noinspection StatementWithEmptyBody
-            if (current.tick(odometry.getPosition(), drive::setTranslation)) {
-                // If the tick method returns true, the follower has finished
-                // its execution. We need to remove the follower from the list.
-                followers.remove(current);
-            } else {
-                // If the tick method returns false, the follower has not
-                // finished its execution. So we do... well, nothing.
-                // Please note that there's no reason to have this else
-                // statement here, other than telling the compiler that
-                // it better execute this "else" statement. Now, if you'll
-                // notice, this comment has absolutely no reason to be so
-                // long. None at all. Not even a minor reason. Literally
-                // nothing. If I may ask, why exactly are you still reading
-                // this? Do you have nothing better to do? You should go
-                // outside, or get a drink of water. Yeah, you should get
-                // a drink of water - staying hydrated is important.
-            }
-        }
-
-        // Now that we've ticked whatever follower there is to tick (or not)
-        // we can return TRUE if there are 0 remaining followers and FALSE
-        // if there are 1 or more.
         return followers.size() == 0;
     }
 

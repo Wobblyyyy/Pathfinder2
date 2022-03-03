@@ -257,14 +257,6 @@ public class Pathfinder {
     private BiConsumer<Pathfinder, Double> defaultOnTick = (pathfinder, aDouble) -> {
     };
     /**
-     * Last tick, how many followers were there?
-     */
-    private int previousFollowerCount = 0;
-    /**
-     * Last tick, what was the currently active follower?
-     */
-    private Follower previousFollower = null;
-    /**
      * Last tick, what was the currently active drive modifier? Or
      * something like that.
      */
@@ -1050,12 +1042,6 @@ public class Pathfinder {
         );
     }
 
-    public Pathfinder addListener(ListenerMode mode,
-                                  Runnable runnable,
-                                  Supplier<Boolean>... suppliers) {
-        return addListener(new Listener(mode, runnable, suppliers));
-    }
-
     /**
      * Get the speed at which Pathfinder will generate new linear followers.
      * This speed value is entirely irrelevant if you only generate custom
@@ -1591,6 +1577,50 @@ public class Pathfinder {
         return this;
     }
 
+    private Pathfinder runPreTick() {
+        return TickProcessor.runPreTick(
+                this,
+                isMinimal,
+                pluginManager,
+                scheduler,
+                zoneProcessor
+        );
+    }
+
+    private Pathfinder runExecutorTick() {
+        return TickProcessor.runExecutorTick(
+                this,
+                executorManager
+        );
+    }
+
+    private Pathfinder runOnTick() {
+        return TickProcessor.runOnTick(
+                this,
+                isMinimal,
+                pluginManager,
+                playback,
+                profiler,
+                recorder,
+                listenerManager,
+                this::runOnTickOperations
+        );
+    }
+
+    private static Pathfinder runPostTick(Pathfinder pathfinder,
+                                          PathfinderPluginManager plugins) {
+        plugins.postTick(pathfinder);
+
+        return pathfinder;
+    }
+
+    private Pathfinder runPostTick() {
+        return runPostTick(
+                this,
+                pluginManager
+        );
+    }
+
     /**
      * "Tick" Pathfinder once. This will tell Pathfinder's execution manager
      * to check to see what Pathfinder should be doing right now, and based
@@ -1635,44 +1665,10 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder tick() {
-        pluginManager.preTick(this);
-        if (!isMinimal) {
-            scheduler.tick();
-            zoneProcessor.update(this);
-        }
-        executorManager.tick();
-        if (!isMinimal) {
-            if (executorManager.howManyExecutors() > 0) {
-                int followerCount = executorManager.howManyFollowers();
-                Follower follower =
-                        executorManager.getCurrentExecutor().getCurrentFollower();
-
-                if (followerCount > previousFollowerCount)
-                    pluginManager.onStartFollower(
-                            this,
-                            executorManager.getCurrentExecutor().getCurrentFollower()
-                    );
-                else if (followerCount < previousFollowerCount)
-                    pluginManager.onFinishFollower(
-                            this,
-                            previousFollower
-                    );
-
-                previousFollowerCount = followerCount;
-                previousFollower = follower;
-            }
-        }
-        pluginManager.onTick(this);
-        if (!isMinimal) {
-            playback.tick();
-            profiler.capture(getPosition());
-            recorder.tick();
-            listenerManager.tick(this);
-            runOnTickOperations();
-        }
-        pluginManager.postTick(this);
-
-        return this;
+        return runPreTick()
+                .runExecutorTick()
+                .runOnTick()
+                .runPostTick();
     }
 
     /**
