@@ -22,7 +22,7 @@ public class ValidationUtils {
     private static final String NO_NAME = "parameter name not specified";
 
     public static double validateNotNaN(double value,
-                                      String parameterName) {
+                                        String parameterName) {
         if (Double.isNaN(value))
             throw new IllegalArgumentException(StringUtils.format(
                     "Failed to validate double <%s> because " +

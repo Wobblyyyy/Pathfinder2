@@ -16,6 +16,7 @@ import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +66,9 @@ public class FollowerExecutor {
         if (followers == null) throw new NullPointerException(
                 "A null list of followers was passed to the constructor " +
                         "of a FollowerExecutor!");
+
+        for (Follower follower : followers)
+            ValidationUtils.validate(follower);
 
         this.odometry = odometry;
         this.drive = drive;

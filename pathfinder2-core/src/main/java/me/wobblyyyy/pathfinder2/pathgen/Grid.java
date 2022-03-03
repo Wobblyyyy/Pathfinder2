@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
+
 /**
  * A grid is pretty much a two-dimensional array.
  *
@@ -109,7 +111,7 @@ public class Grid {
             for (int j = 0; j < width; j++) {
                 builder.append(findNode(j, i).isValid() ? "." : "#");
             }
-            builder.append(String.format(
+            builder.append(StringUtils.format(
                     " (row %s)\n",
                     i
             ));

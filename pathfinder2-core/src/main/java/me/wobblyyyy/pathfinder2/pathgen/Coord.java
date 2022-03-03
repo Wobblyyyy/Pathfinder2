@@ -13,6 +13,8 @@ package me.wobblyyyy.pathfinder2.pathgen;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
+
 /**
  * A coordinate is basically a {@link me.wobblyyyy.pathfinder2.geometry.PointXY},
  * but with integers instead of doubles.
@@ -75,7 +77,7 @@ public class Coord {
 
     @Override
     public String toString() {
-        return String.format(
+        return StringUtils.format(
                 "(%s, %s)",
                 x,
                 y

@@ -251,8 +251,6 @@ public class AssertionUtils {
         ValidationUtils.validate(tolerance, "tolerance");
         ValidationUtils.validate(angleTolerance, "angleTolerance");
 
-        tolerance = 0;
-
         assertIsNearWithoutValidation(a, b, tolerance, angleTolerance);
     }
 
