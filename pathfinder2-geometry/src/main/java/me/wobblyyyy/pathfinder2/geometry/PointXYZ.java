@@ -301,6 +301,33 @@ public class PointXYZ extends PointXY {
     }
 
     /**
+     * Are two points close to each other?
+     *
+     * @param a              one of the two points.
+     * @param b              one of the two points.
+     * @param tolerance      the maximum distance value.
+     * @param angleTolerance the maximum angle delta distance value.
+     * @return if the `distance(a, b)` method call returns a value less than
+     * or equal to the {@code tolerance}, this method will return true.
+     * Else, this method will return false. Additionally, the minimum delta
+     * between the two angles must be less than {@code angleTolerance}.
+     */
+    public static boolean isNear(PointXYZ a,
+                                 PointXYZ b,
+                                 double tolerance,
+                                 Angle angleTolerance) {
+        if (!PointXY.isNear(a, b, tolerance))
+            return false;
+
+        ValidationUtils.validate(angleTolerance, "angleTolerance");
+
+        double angleToleranceDeg = Math.abs(angleTolerance.deg());
+        double minimumDeltaDeg = Math.abs(Angle.minimumDelta(a.z, b.z));
+
+        return minimumDeltaDeg <= angleToleranceDeg;
+    }
+
+    /**
      * Create a new {@code PointXYZ} a given distance away from a base point
      * in a specified direction.
      *
@@ -767,6 +794,23 @@ public class PointXYZ extends PointXY {
      */
     public PointXYZ reflectOverY(double yAxis) {
         return withY(reflect(y(), yAxis));
+    }
+
+    /**
+     * Is {@code this} point close to another point?
+     *
+     * @param b              the point.
+     * @param tolerance      the maximum distance value.
+     * @param angleTolerance the maximum angle delta distance value.
+     * @return if the `distance(a, b)` method call returns a value less than
+     * or equal to the {@code tolerance}, this method will return true.
+     * Else, this method will return false. Additionally, the minimum delta
+     * between the two angles must be less than {@code angleTolerance}.
+     */
+    public boolean isNear(PointXYZ a,
+                          double tolerance,
+                          Angle angleTolerance) {
+        return isNear(this, a, tolerance, angleTolerance);
     }
 
     /**

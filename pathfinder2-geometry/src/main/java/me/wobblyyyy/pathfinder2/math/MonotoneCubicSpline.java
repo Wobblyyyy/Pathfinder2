@@ -228,7 +228,7 @@ public class MonotoneCubicSpline implements Spline {
         this.end = new PointXY(mx[last], my[last]);
     }
 
-    public static Spline create(List<PointXY> controlPoints) {
+    public static Spline create(List<? extends PointXY> controlPoints) {
         double[] x = new double[controlPoints.size()];
         double[] y = new double[controlPoints.size()];
 

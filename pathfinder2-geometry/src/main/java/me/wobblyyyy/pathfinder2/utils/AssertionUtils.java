@@ -145,8 +145,7 @@ public class AssertionUtils {
                                                      Angle b,
                                                      Angle tolerance) {
         double minimumDeltaDeg = Math.abs(Angle.minimumDelta(a, b));
-        double toleranceDeg = tolerance.deg();
-
+        double toleranceDeg = Math.abs(tolerance.deg());
 
         Assertions.assertTrue(
                 minimumDeltaDeg <= toleranceDeg,

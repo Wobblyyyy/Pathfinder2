@@ -12,6 +12,9 @@ package me.wobblyyyy.pathfinder2.trajectory.spline;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.math.Min;
+import me.wobblyyyy.pathfinder2.math.Max;
+import me.wobblyyyy.pathfinder2.math.MinMax;
 import me.wobblyyyy.pathfinder2.math.Spline;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 
@@ -34,8 +37,11 @@ public class SplineTrajectory implements Trajectory {
     private final Spline spline;
     private final Angle targetHeading;
     private final double speed;
-    private final double step;
+    private double step;
     private final double tolerance;
+    private final Angle angleTolerance;
+    private final double minX;
+    private final double maxX;
 
     /**
      * Create a new {@code SplineTrajectory}.
@@ -71,23 +77,38 @@ public class SplineTrajectory implements Trajectory {
                             Angle targetHeading,
                             double speed,
                             double step,
-                            double tolerance) {
+                            double tolerance,
+                            Angle angleTolerance) {
         this.spline = spline;
         this.targetHeading = targetHeading;
         this.speed = speed;
         this.step = step;
         this.tolerance = tolerance;
+        this.angleTolerance = angleTolerance;
+
+        double startX = spline.getStartPoint().x();
+        double endX = spline.getEndPoint().x();
+
+        this.minX = Min.of(startX, endX);
+        this.maxX = Max.of(startX, endX);
+
+        if ((startX > endX) && step > 0)
+            this.step *= -1;
+        else if ((endX > startX) && step < 0)
+            this.step *= -1;
     }
 
     @Override
     public PointXYZ nextMarker(PointXYZ current) {
         double x = current.x() + step;
+        x = MinMax.clip(x, minX, maxX);
         return spline.interpolate(x).withHeading(targetHeading);
     }
 
     @Override
     public boolean isDone(PointXYZ current) {
-        return current.isNear(spline.getEndPoint(), tolerance);
+        return current.isNear(spline.getEndPoint().withZ(targetHeading),
+                tolerance, angleTolerance);
     }
 
     @Override

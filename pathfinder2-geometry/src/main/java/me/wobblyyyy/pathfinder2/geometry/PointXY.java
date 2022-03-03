@@ -520,17 +520,16 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     public static boolean isNear(PointXY a,
                                  PointXY b,
                                  double tolerance) {
-        checkArgument(a);
-        checkArgument(b);
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(b, "b");
         InvalidToleranceException.throwIfInvalid(
                 "Invalid tolerance!", tolerance);
-        ValidationUtils.validate(tolerance, "tolerance");
 
-        if (tolerance < 0) {
-            throw new InvalidToleranceException(
-                    "Cannot have a tolerance below 0!"
-            );
-        }
+        if (tolerance < 0)
+            throw new InvalidToleranceException(StringUtils.format(
+                    "Cannot have a tolerance below 0! Tolerance was: <%s>",
+                    tolerance
+            ));
 
         return Math.abs(distance(a, b)) <= Math.abs(tolerance);
     }
@@ -1448,7 +1447,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
         return new PointXY(this.x, y);
     }
 
-    public PointXY withZ(Angle z) {
+    public PointXYZ withZ(Angle z) {
         return withHeading(z);
     }
 

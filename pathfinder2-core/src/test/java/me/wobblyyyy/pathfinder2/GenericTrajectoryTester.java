@@ -22,8 +22,6 @@ import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.trajectory.spline.SplineBuilderFactory;
 import me.wobblyyyy.pathfinder2.trajectory.spline.TestAdvancedSplineTrajectory;
 import me.wobblyyyy.pathfinder2.utils.AssertionUtils;
-import me.wobblyyyy.pathfinder2.utils.StringUtils;
-import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 import org.junit.jupiter.api.*;
 
@@ -87,7 +85,8 @@ public class GenericTrajectoryTester {
     public void follow(Trajectory trajectory,
                        PointXYZ point) {
         pathfinder.followTrajectory(trajectory);
-        pathfinder.tickUntil(1_000);
+        // pathfinder.tickUntil(1_000);
+        pathfinder.tickUntil();
         assertPositionIs(point);
     }
 }

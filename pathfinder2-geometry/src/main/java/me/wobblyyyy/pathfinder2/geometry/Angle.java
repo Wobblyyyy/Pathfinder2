@@ -580,7 +580,7 @@ public class Angle implements Comparable<Angle>, Serializable {
             );
         }
 
-        return Math.abs(a.fix().rad() - b.fix().rad()) <= tolerance;
+        return Math.abs(angleDeltaRad(a, b)) <= tolerance;
     }
 
     /**
@@ -607,7 +607,7 @@ public class Angle implements Comparable<Angle>, Serializable {
             );
         }
 
-        return Math.abs(a.fix().deg() - b.fix().deg()) <= Math.abs(tolerance);
+        return Math.abs(angleDeltaDeg(a, b)) <= tolerance;
     }
 
     /**
