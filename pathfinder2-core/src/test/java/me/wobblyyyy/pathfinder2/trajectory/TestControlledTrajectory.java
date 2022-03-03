@@ -24,13 +24,8 @@ public class TestControlledTrajectory extends GenericTrajectoryTester {
     private final Controller controllerB = new PIDController(1.0, 0, 0);
     private final Controller controllerC = new PIDController(0, 0.5, 0.5);
     private final Controller controllerD = new PIDController(0.5, 0.5, 2.0);
-
-    private final Controller[] controllers = new Controller[] {
-            controllerA,
-            controllerB,
-            controllerC,
-            controllerD
-    };
+    private final Controller controllerE = new ProportionalController(0.1);
+    private final Controller controllerF = new ProportionalController(3.0);
 
     private void testSingleController(Controller controller,
                                       PointXYZ target,
@@ -56,49 +51,57 @@ public class TestControlledTrajectory extends GenericTrajectoryTester {
                 tolerance, angleTolerance);
         testSingleController(controllerD, target,
                 tolerance, angleTolerance);
+        testSingleController(controllerE, target,
+                tolerance, angleTolerance);
+        testSingleController(controllerF, target,
+                tolerance, angleTolerance);
+    }
+
+    private void testMultiples(double x,
+                               double y,
+                               double... zs) {
+        for (double z : zs)
+            for (int i = 0; i < 10; i++)
+                testPoint(new PointXYZ(x * i, y * i, z * i));
     }
 
     @Test
     public void testForwardsNonTurningControlledTrajectory() {
-        testPoint(new PointXYZ(0, 10, 0));
+        testMultiples(0, 1, 0);
     }
 
     @Test
     public void testRightwardsNonTurningControlledTrajectory() {
-        testPoint(new PointXYZ(10, 0, 0));
+        testMultiples(1, 0, 0);
     }
 
     @Test
     public void testBackwardsNonTurningControlledTrajectory() {
-        testPoint(new PointXYZ(0, -10, 0));
+        testMultiples(0, -1, 0);
     }
 
     @Test
     public void testLeftwardsNonTurningControlledTrajectory() {
-        testPoint(new PointXYZ(-10, 0, 0));
+        testMultiples(-1, 0, 0);
     }
 
     @Test
     public void testForwardsTurningControlledTrajectory() {
-        testPoint(new PointXYZ(0, 10, 45));
-        testPoint(new PointXYZ(0, 10, 90));
+        testMultiples(0, 1, 15, 5, 30);
     }
 
     @Test
     public void testRightwardsTurningControlledTrajectory() {
-        testPoint(new PointXYZ(10, 0, 45));
-        testPoint(new PointXYZ(10, 0, 90));
+        testMultiples(1, 0, 15, 5, 30);
     }
 
     @Test
     public void testBackwardsTurningControlledTrajectory() {
-        testPoint(new PointXYZ(0, -10, 45));
-        testPoint(new PointXYZ(0, -10, 90));
+        testMultiples(0, -1, 15, 5, 30);
     }
 
     @Test
     public void testLeftwardsTurningControlledTrajectory() {
-        testPoint(new PointXYZ(-10, 0, 45));
-        testPoint(new PointXYZ(-10, 0, 90));
+        testMultiples(-1, 0, 15, 5, 30);
     }
 }
