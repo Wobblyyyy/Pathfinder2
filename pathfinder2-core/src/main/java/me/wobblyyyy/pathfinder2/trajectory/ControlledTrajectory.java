@@ -37,7 +37,13 @@ public class ControlledTrajectory extends LinearTrajectory {
     private final Controller speedController;
 
     /**
-     * Create a new {@code ControlledTrajectory}.
+     * Create a new {@code ControlledTrajectory}. Calling this modify the
+     * inputted controller as follows:
+     *
+     * <code><pre>
+     * speedController.setMin(-1.0);
+     * speedController.setMax(1.0);
+     * </pre></code>
      *
      * @param target          the trajectory's target point.
      * @param speedController the controller that controls the speed of the

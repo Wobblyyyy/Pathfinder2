@@ -14,11 +14,13 @@ import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.math.Rounding;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
+import me.wobblyyyy.pathfinder2.utils.ArrayUtils;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
-import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -566,6 +568,40 @@ public class PointXY implements Comparable<PointXY>, Serializable {
                 distance(center, point),
                 angleTo(center, point).fix().add(angle).fix()
         );
+    }
+
+    /**
+     * Rotate a {@code Collection} of points around a center point.
+     *
+     * @param points the points to rotate.
+     * @param center the point to rotate all of the points around.
+     * @param angle  how far to rotate the points.
+     * @return a new {@code List} of rotated points.
+     */
+    public static List<PointXY> rotate(Collection<PointXY> points,
+                                       PointXY center,
+                                       Angle angle) {
+        List<PointXY> rotated = new ArrayList<>(points.size());
+
+        for (PointXY point : points)
+            rotated.add(rotate(point, center, angle));
+
+        return rotated;
+    }
+
+    /**
+     * Rotate a {@code Collection} of points around a center point.
+     *
+     * @param points the points to rotate.
+     * @param center the point to rotate all of the points around.
+     * @param angle  how far to rotate the points.
+     * @return a new {@code List} of rotated points.
+     */
+    public static PointXY[] rotate(PointXY[] points,
+                                   PointXY center,
+                                   Angle angle) {
+        return ArrayUtils.toPointXYArray(rotate(
+                    Arrays.asList(points),center, angle));
     }
 
     /**

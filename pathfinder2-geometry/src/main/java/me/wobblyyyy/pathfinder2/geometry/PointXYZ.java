@@ -13,9 +13,12 @@ package me.wobblyyyy.pathfinder2.geometry;
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.math.Rounding;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
+import me.wobblyyyy.pathfinder2.utils.ArrayUtils;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -342,6 +345,40 @@ public class PointXYZ extends PointXY {
         return PointXY.rotate(
                 point, center, angle
         ).withHeading(point.z());
+    }
+
+    /**
+     * Rotate a {@code Collection} of points around a center point.
+     *
+     * @param points the points to rotate.
+     * @param center the point to rotate all of the points around.
+     * @param angle  how far to rotate the points.
+     * @return a new {@code List} of rotated points.
+     */
+    public static List<PointXYZ> rotatePoints(Collection<PointXYZ> points,
+                                              PointXY center,
+                                              Angle angle) {
+        List<PointXYZ> rotated = new ArrayList<>(points.size());
+
+        for (PointXYZ point : points)
+            rotated.add(PointXYZ.rotate(point, center, angle));
+
+        return rotated;
+    }
+
+    /**
+     * Rotate a {@code Collection} of points around a center point.
+     *
+     * @param points the points to rotate.
+     * @param center the point to rotate all of the points around.
+     * @param angle  how far to rotate the points.
+     * @return a new {@code List} of rotated points.
+     */
+    public static PointXYZ[] rotatePoints(PointXYZ[] points,
+                                          PointXY center,
+                                          Angle angle) {
+        return ArrayUtils.toPointXYZArray(rotatePoints(
+                    Arrays.asList(points),center, angle));
     }
 
     /**
