@@ -81,7 +81,21 @@ public interface Odometry {
      * center of the robot's position.
      */
     default PointXYZ getPosition() {
-        return getRawPosition().add(getOffset());
+        PointXYZ position = ValidationUtils.validate(
+                getRawPosition(),
+                "getRawPosition()",
+                "your getRawPosition() method implementation returned null, " +
+                        "which it should never do!"
+        );
+
+        PointXYZ offset = ValidationUtils.validate(
+                getOffset(),
+                "getOffset()",
+                "your getOffset() method implementation returned null, " +
+                        "which it should never do!"
+        );
+
+        return position.add(offset);
     }
 
     /**

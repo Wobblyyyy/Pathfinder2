@@ -141,13 +141,43 @@ public class ValidationUtils {
     }
 
     public static <T> T validateNotNull(T t,
-                                        String parameterName) {
+                                        String parameterName,
+                                        String customMessage) {
         if (t == null) throw new ValidationException(StringUtils.format(
-                    "Failed to validate object <%s> because it was null!",
-                    parameterName
+                    "Failed to validate object <%s> because it was null! (%s)",
+                    parameterName,
+                    customMessage
             ));
 
         return t;
+    }
+
+    public static <T> T validateNotNull(T t,
+                                        String parameterName) {
+        return validateNotNull(t, parameterName, NO_MORE_INFO);
+    }
+
+    public static <T> T validatef(T t,
+                                 String parameterName,
+                                 String customMessageFormat,
+                                 Object... formatSources) {
+        if (formatSources == null
+                || formatSources.length < 1
+                || formatSources[0] == null)
+            return validateNotNull(t, parameterName, customMessageFormat);
+
+        String customMessage = StringUtils.format(
+                customMessageFormat,
+                formatSources
+        );
+
+        return validateNotNull(t, parameterName, customMessage);
+    }
+
+    public static <T> T validate(T t,
+                                 String parameterName,
+                                 String customMessage) {
+        return validatef(t, parameterName, customMessage);
     }
 
     /**
@@ -159,7 +189,7 @@ public class ValidationUtils {
      */
     public static <T> T validate(T t,
                                  String parameterName) {
-        return validateNotNull(t, parameterName);
+        return validate(t, parameterName, NO_MORE_INFO);
     }
 
     /**
