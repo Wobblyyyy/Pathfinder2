@@ -57,6 +57,10 @@ public class Equals {
     public static boolean soft(int a,
                                int b,
                                int tolerance) {
+        ValidationUtils.validate(a);
+        ValidationUtils.validate(b);
+        ValidationUtils.validate(tolerance);
+
         if (tolerance < 0) {
             throw new InvalidToleranceException(
                     "Cannot have a tolerance value less than 0!"
@@ -78,6 +82,10 @@ public class Equals {
     public static boolean soft(float a,
                                float b,
                                float tolerance) {
+        ValidationUtils.validate(a);
+        ValidationUtils.validate(b);
+        ValidationUtils.validate(tolerance);
+
         if (tolerance < 0) {
             throw new InvalidToleranceException(
                     "Cannot have a tolerance value less than 0!"
@@ -99,6 +107,10 @@ public class Equals {
     public static boolean soft(long a,
                                long b,
                                long tolerance) {
+        ValidationUtils.validate(a);
+        ValidationUtils.validate(b);
+        ValidationUtils.validate(tolerance);
+
         if (tolerance < 0) {
             throw new InvalidToleranceException(
                     "Cannot have a tolerance value less than 0!"
