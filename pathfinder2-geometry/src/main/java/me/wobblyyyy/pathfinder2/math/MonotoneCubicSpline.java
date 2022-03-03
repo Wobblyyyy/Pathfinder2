@@ -15,6 +15,7 @@ import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.utils.ArrayUtils;
 import me.wobblyyyy.pathfinder2.utils.DoubleUtils;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -382,5 +383,14 @@ public class MonotoneCubicSpline implements Spline {
         }
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(
+                "MonotoneCubicSpline from <%s> to <%s>",
+                start,
+                isInverted ? end.withX(reflectX(end.x())) : end
+        );
     }
 }
