@@ -11,20 +11,26 @@
 package me.wobblyyyy.pathfinder2;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedRobot;
+import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
+import me.wobblyyyy.pathfinder2.trajectory.EmptyTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.utils.AssertionUtils;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class TestableRobot {
+    public double maxTimeMs = 1_000;
     public SimulatedRobot robot = new SimulatedRobot();
     public double tolerance = 2;
     public Angle angleTolerance = Angle.fromDeg(5);
@@ -48,19 +54,52 @@ public class TestableRobot {
     }
 
     public void testTrajectory(Trajectory trajectory,
-                               PointXYZ target) {
+                               PointXYZ target,
+                               double maxTimeMs) {
         ValidationUtils.validate(trajectory, "trajectory");
         ValidationUtils.validate(target, "target");
 
         pathfinder.followTrajectory(trajectory);
 
-        pathfinder.tickUntil();
+        ElapsedTimer timer = new ElapsedTimer(true);
+
+
+        pathfinder.tickUntil(maxTimeMs);
+
+        if (timer.elapsedMs() >= maxTimeMs)
+            throw new RuntimeException(StringUtils.format(
+                    "Trajectory <%s> to target <%s> took <%s> milliseconds " +
+                            "to execute indiciating there was an issue " +
+                            "following the trajectory.",
+                    trajectory,
+                    target,
+                    timer.elapsedMs()
+            ));
 
         AssertionUtils.assertIsNear(
                 target,
                 pathfinder.getPosition(),
                 tolerance,
                 angleTolerance
+        );
+    }
+
+    public void testTrajectory(Trajectory trajectory,
+                               PointXYZ target) {
+        testTrajectory(trajectory, target, maxTimeMs);
+    }
+
+    @Test
+    public void testTestTrajectory() {
+        Assertions.assertThrows(
+                RuntimeException.class,
+                () -> {
+                    Trajectory trajectory = new EmptyTrajectory();
+                    PointXYZ target = PointXYZ.ZERO;
+                    double maxTimeMs = 0;
+
+                    testTrajectory(trajectory, target, maxTimeMs);
+                }
         );
     }
 }
