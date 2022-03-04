@@ -69,6 +69,34 @@ public class ValidationUtils {
      *
      * @param value         the value to validate.
      * @param parameterName the name of the parameter that's being validated.
+     * @param canBeNaN      can the value be NaN?
+     * @param canBeInfinite can the value be positive or negative infinity?
+     * @param customMessage a custom message to display at the end of the
+     *                      exception that's thrown if validation fails.
+     * @return if the value is validated (meaning it's not {@code NaN} and
+     * it's not infinite), return the value.
+     */
+    public static double validate(double value,
+                                  String parameterName,
+                                  boolean canBeNaN,
+                                  boolean canBeInfinite,
+                                  String customMessage) {
+        if (!canBeNaN)
+            validateNotNaN(value, parameterName, customMessage);
+        if (!canBeInfinite)
+            validateNotInfinite(value, parameterName, customMessage);
+
+        return value;
+    }
+
+    /**
+     * Validate a double value by ensuring it's not {@code NaN} or infinite.
+     * If the number is {@code NaN} or infinite, this method will throw
+     * an {@link ValidationException}.
+     *
+     * @param value         the value to validate.
+     * @param parameterName the name of the parameter that's being validated.
+     * @param mode          the validation mode.
      * @param customMessage a custom message to display at the end of the
      *                      exception that's thrown if validation fails.
      * @return if the value is validated (meaning it's not {@code NaN} and
@@ -78,12 +106,8 @@ public class ValidationUtils {
                                   String parameterName,
                                   DoubleValidationMode mode,
                                   String customMessage) {
-        if (!mode.canBeNaN)
-            validateNotNaN(value, parameterName, customMessage);
-        if (!mode.canBeInfinite)
-            validateNotInfinite(value, parameterName, customMessage);
-
-        return value;
+        return validate(value, parameterName, mode.canBeNaN,
+                mode.canBeInfinite, customMessage);
     }
 
     /**

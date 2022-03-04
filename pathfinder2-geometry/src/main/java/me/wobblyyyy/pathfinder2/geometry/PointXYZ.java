@@ -82,10 +82,7 @@ public class PointXYZ extends PointXY {
     public PointXYZ(double x,
                     double y,
                     Angle z) {
-        super(
-                ValidationUtils.validate(x, "x"),
-                ValidationUtils.validate(y, "y")
-        );
+        super(x, y);
 
         COUNT++;
 
