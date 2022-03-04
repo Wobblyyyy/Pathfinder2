@@ -134,6 +134,15 @@ public abstract class BaseMotor implements Motor {
     }
 
     /**
+     * Get the deadband.
+     *
+     * @return the deadband.
+     */
+    public double getDeadband() {
+        return this.deadband;
+    }
+
+    /**
      * Set the maximum power gap. If the motor is operating in lazy mode,
      * power will only physically be set to the motor if the difference between
      * the motor's current power value and the new power value is greater than
@@ -181,6 +190,18 @@ public abstract class BaseMotor implements Motor {
     public BaseMotor setIsInverted(boolean isInverted) {
         this.isSetInverted = isInverted;
         this.isGetInverted = isInverted;
+
+        return this;
+    }
+
+    /**
+     * Set the deadband.
+     *
+     * @param deadband the deadband.
+     * @return {@code this}, used for method chaining.
+     */
+    public BaseMotor setDeadband(double deadband) {
+        this.deadband = deadband;
 
         return this;
     }

@@ -10,8 +10,6 @@
 
 package me.wobblyyyy.pathfinder2.robot.components;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -44,52 +42,9 @@ import java.util.function.Supplier;
  * @author Colin Robertson
  * @since 0.0.0
  */
-public class AbstractMotor implements Motor {
-    /**
-     * A {@code Consumer} that accepts a double value, representing the
-     * motor's target power.
-     */
+public class AbstractMotor extends BaseMotor {
     private Consumer<Double> setPower;
-    /**
-     * A {@code Supplier} that returns the motor's current power.
-     */
     private Supplier<Double> getPower;
-    private final List<Supplier<Boolean>> mustBeTrueToSetPowerOtherwiseZero;
-    private final List<Supplier<Boolean>> mustBeFalseToSetPowerOtherwiseZero;
-    /**
-     * Should power values be inverted when being set?
-     */
-    private boolean isSetInverted;
-    /**
-     * Should power values be inverted when being retrieved?
-     */
-    private boolean isGetInverted;
-    /**
-     * The motor's minimum power.
-     */
-    private double minPower = -1.0;
-    /**
-     * The motor's maximum power.
-     */
-    private double maxPower = 1.0;
-    /**
-     * Is the motor operating in lazy mode? By default, this is true.
-     */
-    private boolean isLazy = true;
-    /**
-     * Maximum power value gap for lazy mode. By default, this is 0.01.
-     */
-    private double maxLazyPowerGap = 0.01;
-    /**
-     * The last set power value.
-     */
-    private double lastPower = 0.0;
-    /**
-     * The motor's deadband. Any power value set to the motor that has an
-     * absolute value less than this value will actually set the motor's power
-     * to 0 to prevent motor slippage.
-     */
-    private double deadband;
 
     /**
      * Create a new {@code AbstractMotor} using a {@link Supplier} and a
@@ -195,297 +150,19 @@ public class AbstractMotor implements Motor {
                          double deadband) {
         this.setPower = setPower;
         this.getPower = getPower;
-        this.isSetInverted = isSetInverted;
-        this.isGetInverted = isGetInverted;
-        this.deadband = deadband;
-        this.mustBeTrueToSetPowerOtherwiseZero = new ArrayList<>(2);
-        this.mustBeFalseToSetPowerOtherwiseZero = new ArrayList<>(2);
-    }
 
-    /**
-     * Create a new {@code AbstractMotor}. In order for this constructor
-     * to function properly, you will need to override the following methods:
-     * <p>
-     * You can override the following methods instead of passing functional
-     * interfaces to a constructor:
-     * <ul>
-     *     <li>{@link #rawGetPower()}</li>
-     *     <li>{@link #rawSetPower(double)}</li>
-     * </ul>
-     * </p>
-     */
-    public AbstractMotor() {
-        this(null, null, false, false, 0);
-    }
-
-    public double rawGetPower() {
-        throw new RuntimeException("Cannot use rawGetPower() on a Motor " +
-                "implementation that does not override rawGetPower()!");
-    }
-
-    public void rawSetPower(double power) {
-        throw new RuntimeException("Cannot use rawSetPower() on a Motor " +
-                "implementation that does not override rawSetPower()!");
-    }
-
-    /**
-     * Get the motor's minimum power value.
-     *
-     * @return the motor's minimum power value.
-     */
-    public double getMinPower() {
-        return this.minPower;
-    }
-
-    /**
-     * Set the motor's minimum power value.
-     *
-     * @param minPower the motor's minimum power value.
-     * @return {@code this}, used for method chaining.
-     */
-    public AbstractMotor setMinPower(double minPower) {
-        this.minPower = minPower;
-
-        return this;
-    }
-
-    /**
-     * Get the motor's maximum power value.
-     *
-     * @return the motor's maximum power value.
-     */
-    public double getMaxPower() {
-        return this.maxPower;
-    }
-
-    /**
-     * Set the motor's maximum power value.
-     *
-     * @param maxPower the motor's maximum power value.
-     * @return {@code this}, used for method chaining.
-     */
-    public AbstractMotor setMaxPower(double maxPower) {
-        this.maxPower = maxPower;
-
-        return this;
-    }
-
-    /**
-     * Get the motor's minimum power value.
-     *
-     * @return the motor's minimum power value.
-     */
-    public boolean isLazy() {
-        return this.isLazy;
-    }
-
-    /**
-     * Set whether lazy mode is enabled or disabled. By default, lazy mode
-     * is enabled.
-     *
-     * @param isLazy should lazy mode be enabled? If true, lazy mode will be
-     *               enabled. If false, it will not.
-     * @return {@code this}, used for method chaining.
-     */
-    public AbstractMotor setLazy(boolean isLazy) {
-        this.isLazy = isLazy;
-
-        return this;
-    }
-
-    /**
-     * Get the maximum power gap.
-     *
-     * @return the maximum power gap.
-     */
-    public double getMaxPowerGap() {
-        return this.maxLazyPowerGap;
-    }
-
-    /**
-     * Set the maximum power gap. If the motor is operating in lazy mode,
-     * power will only physically be set to the motor if the difference between
-     * the motor's current power value and the new power value is greater than
-     * this value.
-     *
-     * @param maxPowerGap the maximum power gap.
-     * @return {@code this}, used for method chaining.
-     */
-    public AbstractMotor setMaxPowerGap(double maxPowerGap) {
-        this.maxLazyPowerGap = maxPowerGap;
-
-        return this;
-    }
-
-    /**
-     * Set if the motor's set method is inverted.
-     *
-     * @param isSetInverted should the motor's set method be inverted?
-     * @return {@code this}, used for method chaining.
-     */
-    public AbstractMotor setIsSetInverted(boolean isSetInverted) {
-        this.isSetInverted = isSetInverted;
-
-        return this;
-    }
-
-    /**
-     * Set if the motor's get method is inverted.
-     *
-     * @param isGetInverted should the motor's get method be inverted?
-     * @return {@code this}, used for method chaining.
-     */
-    public AbstractMotor setIsGetInverted(boolean isGetInverted) {
-        this.isGetInverted = isGetInverted;
-
-        return this;
-    }
-
-    /**
-     * Set the motor's set and get inversion states.
-     *
-     * @param isInverted should the motor be inverted?
-     * @return {@code this}, used for method chaining.
-     */
-    public AbstractMotor setIsInverted(boolean isInverted) {
-        this.isSetInverted = isInverted;
-        this.isGetInverted = isInverted;
-
-        return this;
-    }
-
-    public AbstractMotor addMustBeTrueRequirement(Supplier<Boolean> req) {
-        mustBeTrueToSetPowerOtherwiseZero.add(req);
-
-        return this;
-    }
-
-    public AbstractMotor addMustBeFalseRequirement(Supplier<Boolean> req) {
-        mustBeFalseToSetPowerOtherwiseZero.add(req);
-
-        return this;
-    }
-
-    /**
-     * Accept a power value.
-     *
-     * @param power the power value to accept.
-     */
-    private void accept(double power) {
-        this.setPower.accept(power);
-        lastPower = power;
-    }
-
-    /**
-     * Get the motor's power.
-     *
-     * @return the motor's power.
-     */
-    @Override
-    public double getPower() {
-        double power = this.getPower.get();
-
-        if (isGetInverted)
-            power *= -1;
-
-        return power;
-    }
-
-    /**
-     * Set power to the motor.
-     *
-     * <p>
-     * This method doesn't just set power to the motor. It also does a couple
-     * of other pretty cool things.
-     * <ul>
-     *     <li>
-     *         Ensure the motor's power value fits between the minimum and
-     *         maximum power values. If the motor's power value is less than
-     *         the minimum power value, the power will be set to the minimum
-     *         power value. If the motor's power is greater than the maximum
-     *         power value, the power will be set to the maximum power value.
-     *     </li>
-     *     <li>
-     *         Do some cool stuff related to "lazy mode." Go read the
-     *         {@link AbstractMotor} class JavaDoc if you're confused about
-     *         what this is.
-     *     </li>
-     * </ul>
-     * </p>
-     *
-     * @param power the power value to set to the motor.
-     */
-    @Override
-    public void setPower(double power) {
-        // if setPower is null, getPower will (likely) also be null
-        // if that's the case, they just need to be initialized so that
-        // they can be used like normal
-        if (setPower == null) {
-            setPower = this::rawSetPower;
-            getPower = this::rawGetPower;
-        }
-
-        // Ensure the power value is between the minimum and maximum
-        // power values. By default, these are -1.0 and 1.0, respectively.
-        power = Math.max(minPower, Math.min(power, maxPower));
-
-        // apply power deadband
-        if (Math.abs(power) < deadband)
-            power = 0;
-
-        // apply motor power inversion
-        if (isSetInverted)
-            power = power * -1;
-
-        for (Supplier<Boolean> supplier : mustBeTrueToSetPowerOtherwiseZero)
-            if (!supplier.get()) {
-                power = 0;
-                break;
-            }
-
-        for (Supplier<Boolean> supplier : mustBeFalseToSetPowerOtherwiseZero)
-            if (supplier.get()) {
-                power = 0;
-                break;
-            }
-
-        // if it's lazy, check to see if power actually needs to be set
-        // otherwise, just set the power value anyway
-        if (isLazy)
-            if (Math.abs(lastPower - power) >= maxLazyPowerGap)
-                accept(power);
-            else
-                accept(power);
+        setIsSetInverted(isSetInverted);
+        setIsGetInverted(isGetInverted);
+        setDeadband(deadband);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof AbstractMotor) {
-            AbstractMotor motor = (AbstractMotor) obj;
-
-            boolean sameSetPower = motor.setPower.equals(this.setPower);
-            boolean sameGetPower = motor.getPower.equals(this.getPower);
-            boolean sameSetInvert = motor.isSetInverted == this.isSetInverted;
-            boolean sameGetInvert = motor.isGetInverted == this.isGetInverted;
-
-
-            return sameSetPower &&
-                    sameGetPower &&
-                    sameSetInvert &&
-                    sameGetInvert;
-        }
-
-        return false;
+    public void abstractSetPower(double power) {
+        setPower.accept(power);
     }
 
-    @SuppressWarnings("ALL")
     @Override
-    protected Object clone() {
-        return new AbstractMotor(
-                this.setPower,
-                this.getPower,
-                this.isSetInverted,
-                this.isGetInverted
-        );
+    public double abstractGetPower() {
+        return getPower.get();
     }
 }
