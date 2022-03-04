@@ -76,11 +76,33 @@ public class ValidationUtils {
      */
     public static double validate(double value,
                                   String parameterName,
+                                  DoubleValidationMode mode,
                                   String customMessage) {
-        validateNotNaN(value, parameterName, customMessage);
-        validateNotInfinite(value, parameterName, customMessage);
+        if (!mode.canBeNaN)
+            validateNotNaN(value, parameterName, customMessage);
+        if (!mode.canBeInfinite)
+            validateNotInfinite(value, parameterName, customMessage);
 
         return value;
+    }
+
+    /**
+     * Validate a double value by ensuring it's not {@code NaN} or infinite.
+     * If the number is {@code NaN} or infinite, this method will throw
+     * an {@link ValidationException}.
+     *
+     * @param value         the value to validate.
+     * @param parameterName the name of the parameter that's being validated.
+     * @param customMessage a custom message to display at the end of the
+     *                      exception that's thrown if validation fails.
+     * @return if the value is validated (meaning it's not {@code NaN} and
+     * it's not infinite), return the value.
+     */
+    public static double validate(double value,
+                                  String parameterName,
+                                  String customMessage) {
+        return validate(value, parameterName,
+                DoubleValidationMode.NOT_NAN_OR_INFINITE, customMessage);
     }
 
     /**
@@ -208,5 +230,21 @@ public class ValidationUtils {
      */
     public static <T> T validate(T t) {
         return validate(t, NO_NAME);
+    }
+
+    public enum DoubleValidationMode {
+        DO_NOT_VALIDATE(true, true),
+        NOT_NAN(false, true),
+        NOT_INFINITE(true, false),
+        NOT_NAN_OR_INFINITE(false, false);
+
+        protected final boolean canBeNaN;
+        protected final boolean canBeInfinite;
+
+        DoubleValidationMode(boolean canBeNaN,
+                             boolean canBeInfinite) {
+            this.canBeNaN = canBeNaN;
+            this.canBeInfinite = canBeInfinite;
+        }
     }
 }
