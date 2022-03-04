@@ -15,6 +15,7 @@ import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -80,18 +81,15 @@ public interface Follower {
                                               PointXYZ target,
                                               double speed,
                                               double turn) {
-        // this is messy, i know, but i don't know how else to do it so uh...
-        PointXY currentXY = new PointXY(current.x(), current.y());
-        PointXY targetXY = new PointXY(target.x(), target.y());
+        ValidationUtils.validate(current, "current");
+        ValidationUtils.validate(target, "target");
+        ValidationUtils.validate(speed, "speed");
+        ValidationUtils.validate(turn, "turn");
 
-        // need to instantiate new PointXY instead of just casting the existing
-        // PointXYZ to PointXY - if you casted it, it would use the PointXYZ
-        // equals method, which also checks if they have the same angle. if
-        // we just use PointXY instead, it just checks for matching X and Y
-        if (currentXY.equals(targetXY))
+        if (PointXY.equals(current, target))
             return Translation.ZERO.withVz(turn);
 
-        Angle angle = current.angleTo(target).fix().subtract(current.z());
+        Angle angle = current.angleTo(target).fix();
 
         PointXYZ targetPoint = PointXYZ.ZERO.inDirection(speed, angle);
 

@@ -209,10 +209,16 @@ public class Translation implements Serializable {
         ValidationUtils.validate(translation, "translation");
         ValidationUtils.validate(heading, "heading");
 
+        /*
         PointXY point = PointXY.ZERO.inDirection(
                 translation.magnitude(),
                 translation.angle().add(heading)
         );
+        */
+        
+        PointXY point = translation
+                .point()
+                .rotate(PointXY.ZERO, heading.multiply(-1));
 
         return new Translation(
                 point.x(),

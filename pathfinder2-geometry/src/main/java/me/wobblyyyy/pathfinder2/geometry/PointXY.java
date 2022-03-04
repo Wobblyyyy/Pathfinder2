@@ -276,6 +276,63 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     }
 
     /**
+     * Does an object have the same X value as a point?
+     *
+     * @param a      the base point.
+     * @param object the object to compare.
+     * @return if they have the same value, true. Otherwise, false.
+     */
+    public static boolean equalsX(PointXY a,
+                                  Object object) {
+        if (object instanceof PointXY) {
+            PointXY b = (PointXY) object;
+
+            return Equals.soft(a.x, b.x, Geometry.tolerancePointXY);
+        }
+
+        return false;
+    }
+
+    /**
+     * Does an object have the same Y value as a point?
+     *
+     * @param a      the base point.
+     * @param object the object to compare.
+     * @return if they have the same value, true. Otherwise, false.
+     */
+    public static boolean equalsY(PointXY a,
+                                  Object object) {
+        if (object instanceof PointXY) {
+            PointXY b = (PointXY) object;
+
+            return Equals.soft(a.y, b.y, Geometry.tolerancePointXY);
+        }
+
+        return false;
+    }
+
+    /**
+     * Does an object have the same Y value as a point?
+     *
+     * @param a      the base point.
+     * @param object the object to compare.
+     * @return if they have the same value, true. Otherwise, false.
+     */
+    public static boolean equals(PointXY a,
+                                 Object object) {
+        if (object instanceof PointXY) {
+            PointXY b = (PointXY) object;
+
+            boolean sameX = Equals.soft(a.x, b.x, Geometry.tolerancePointXY);
+            boolean sameY = Equals.soft(a.y, b.y, Geometry.tolerancePointXY);
+
+            return sameX && sameY;
+        }
+
+        return false;
+    }
+
+    /**
      * Get the average between two points.
      *
      * @param a one of the two points to average.

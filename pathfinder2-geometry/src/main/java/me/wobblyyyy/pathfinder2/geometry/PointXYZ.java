@@ -370,7 +370,7 @@ public class PointXYZ extends PointXY {
         ValidationUtils.validate(translation, "translation");
 
         double distance = translation.magnitude();
-        Angle angle = translation.angle();
+        Angle angle = translation.angle().add(base.z);
 
         return new PointXYZ(
                 base.x() + (distance * angle.cos()),

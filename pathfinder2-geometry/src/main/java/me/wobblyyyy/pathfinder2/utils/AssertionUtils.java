@@ -84,9 +84,11 @@ public class AssertionUtils {
                 StringUtils.format(
                         "Expected a maximum distance of <%s> but got " +
                                 "a distance of <%s> between points <%s> " +
-                                "and <%s>",
+                                "and <%s> (expected: <%s> but was: <%s>)",
                         Rounding.fastRound(tolerance),
                         Rounding.fastRound(absoluteDistance),
+                        a,
+                        b,
                         a,
                         b
                 )
@@ -152,9 +154,11 @@ public class AssertionUtils {
                 StringUtils.format(
                         "Expected a maximum distance of <%s deg> but got " +
                                 "a distance of <%s deg> between angles " +
-                                "<%s> and <%s>",
+                                "<%s> and <%s> (expected: <%s> but was <%s>)",
                         Rounding.fastRound(toleranceDeg),
                         Rounding.fastRound(minimumDeltaDeg),
+                        a,
+                        b,
                         a,
                         b
                 )

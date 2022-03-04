@@ -10,10 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.robot.simulated;
 
-import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.robot.Robot;
-import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
  * A wrapper for instances of {@link SimulatedDrive} and
@@ -35,31 +33,11 @@ public class SimulatedWrapper {
                 (translation) -> {
                     PointXYZ pos = odometry.getPosition();
 
-                    ValidationUtils.validate(pos, "pos");
-                    ValidationUtils.validate(pos.x(), "pos x");
-                    ValidationUtils.validate(pos.y(), "pos y");
-                    ValidationUtils.validate(pos.z(), "pos z");
-                    ValidationUtils.validate(translation, "translation");
-                    ValidationUtils.validate(translation.vx(), "vx");
-                    ValidationUtils.validate(translation.vy(), "vy");
-                    ValidationUtils.validate(translation.vz(), "vz");
-
-                    odometry.setRawPosition(
-                            pos.inDirection(
-                                    translation.magnitude(),
-                                    translation.angle()
-                            ).withHeading(pos.z().add(Angle.fromDeg(
-                                    translation.vz()
-                            )))
-                    );
+                    odometry.setRawPosition(pos.applyTranslation(translation));
 
                     return translation;
                 }
         );
-    }
-
-    private static double roundNumber(double value) {
-        return Math.round(value * 32) / 32.0;
     }
 
     public SimulatedDrive getDrive() {
