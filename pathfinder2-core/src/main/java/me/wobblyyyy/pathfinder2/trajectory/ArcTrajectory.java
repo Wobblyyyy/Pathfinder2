@@ -1,3 +1,13 @@
+/*
+ * Copyright (c) 2021.
+ *
+ * This file is part of the "Pathfinder2" project, available here:
+ * <a href="https://github.com/Wobblyyyy/Pathfinder2">GitHub</a>
+ *
+ * This project is licensed under the GNU GPL V3 license.
+ * <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL V3</a>
+ */
+
 package me.wobblyyyy.pathfinder2.trajectory;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
@@ -13,6 +23,7 @@ public class ArcTrajectory implements Trajectory {
     private final Angle desiredHeading;
     private final Angle start;
     private final Angle stop;
+    private final boolean isInverted;
 
     public ArcTrajectory(PointXY center,
                          double radius,
@@ -26,12 +37,27 @@ public class ArcTrajectory implements Trajectory {
         this.speed = speed;
         this.angleStep = angleStep;
         this.desiredHeading = desiredHeading;
-        this.start = start;
-        this.stop = stop;
+        this.start = start.fix();
+        this.stop = stop.fix();
+        this.isInverted = this.start.deg() > this.stop.deg();
     }
 
     @Override
     public PointXYZ nextMarker(PointXYZ current) {
+        double deg = current.z().fix().deg();
+
+        if (isInverted) {
+            if (deg > start.deg())
+                deg = start.deg();
+            else if (deg < stop.deg())
+                deg = stop.deg();
+        } else {
+            if (deg < start.deg())
+                deg = start.deg();
+            else if (deg > stop.deg())
+                deg = stop.deg();
+        }
+
         return circle.getCenter().inDirection(
                 radius,
                 circle.getCenter().angleTo(current).add(angleStep)
