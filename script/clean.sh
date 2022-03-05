@@ -6,3 +6,5 @@ for artifact in ${artifacts[@]}; do
     rm -f -r "$path/build"
     rm -f -r "$path/bin"
 done
+
+./gradlew spotlessApply
