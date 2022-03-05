@@ -27,7 +27,7 @@ public class TaskTrajectory implements Trajectory {
     private final Runnable initial;
     private final Runnable during;
     private final Runnable onFinish;
-    private final Supplier<Boolean> isFinished;
+    private Supplier<Boolean> isFinished;
     private final double minTimeMs;
     private final double maxTimeMs;
     private final ElapsedTimer timer;
@@ -119,5 +119,12 @@ public class TaskTrajectory implements Trajectory {
     @Override
     public double speed(PointXYZ current) {
         return speed;
+    }
+
+    /**
+     * End the trajectory immediately.
+     */
+    public void end() {
+        isFinished = () -> true;
     }
 }
