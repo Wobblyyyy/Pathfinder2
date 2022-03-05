@@ -13,6 +13,8 @@ package me.wobblyyyy.pathfinder2.robot.components;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
+
 /**
  * An abstract implementation of the {@link Motor} interface. This
  * implementation does a few things - namely, it adds minimum and maximum power
@@ -134,6 +136,10 @@ public class AbstractMotor extends BaseMotor {
         boolean isGetInverted,
         double deadband
     ) {
+        ValidationUtils.validate(setPower, "setPower");
+        ValidationUtils.validate(getPower, "getPower");
+        ValidationUtils.validate(deadband, "deadband");
+
         this.setPower = setPower;
         this.getPower = getPower;
 
