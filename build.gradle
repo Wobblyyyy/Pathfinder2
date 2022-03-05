@@ -35,16 +35,37 @@ allprojects {
 
 spotless {
     java {
-        target project.fileTree(dir: '.', include: '**/*.java')
+        target fileTree('.') {
+            include '**/*.java'
+            exclude '**/build/**', '**/build-*/**'
+        }
+
         indentWithSpaces()
         trimTrailingWhitespace()
+        removeUnusedImports()
+        endWithNewline()
+
         prettier([
             'prettier': '2.0.5',
             'prettier-plugin-java': '0.8.0'
         ]).config([
             'tabWidth': 4,
-            'printWidth': 80
+            'printWidth': 80,
+            'useTabs': false,
+            'semi': true,
+            'singleQuote': false,
+            'bracketSpacing': true
         ])
+    }
+
+    groovyGradle {
+        target fileTree('.') {
+            include '**/*.gradle'
+            exclude '**/build/**', '**/build-*/**'
+        }
+
+        indentWithSpaces()
+        trimTrailingWhitespace()
     }
 }
 
