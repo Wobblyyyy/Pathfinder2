@@ -258,6 +258,27 @@ public class AssertionUtils {
         assertIsNearWithoutValidation(a, b, tolerance, angleTolerance);
     }
 
+    public static void assertEquals(Angle expected,
+                                    Angle actual) {
+        assertIsNear(expected, actual, Geometry.toleranceAngle);
+    }
+
+    public static void assertEquals(PointXY expected,
+                                    PointXY actual) {
+        assertIsNear(expected, actual, Geometry.tolerancePointXY);
+    }
+
+    public static void assertEquals(PointXYZ expected,
+                                    PointXYZ actual) {
+        assertIsNear(expected, actual,
+                Geometry.tolerancePointXYZ, Geometry.toleranceAngle);
+    }
+
+    public static void assertEquals(Object a,
+                                    Object b) {
+        Assertions.assertEquals(a, b);
+    }
+
     public static void assertIsNear(PointXYZ a,
                                     PointXYZ b) {
         assertIsNear(
