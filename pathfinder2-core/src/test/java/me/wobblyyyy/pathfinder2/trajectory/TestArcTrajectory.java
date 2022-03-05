@@ -11,14 +11,9 @@
 package me.wobblyyyy.pathfinder2.trajectory;
 
 import me.wobblyyyy.pathfinder2.GenericTrajectoryTester;
-import me.wobblyyyy.pathfinder2.Pathfinder;
-import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
-import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestArcTrajectory extends GenericTrajectoryTester {

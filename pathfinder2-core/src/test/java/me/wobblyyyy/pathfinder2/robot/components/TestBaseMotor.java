@@ -50,6 +50,7 @@ public class TestBaseMotor {
         Assertions.assertEquals(1.0, motor.getPower());
     }
 
+    @Test
     public void testMaxPower() {
         motor.setPower(100);
         Assertions.assertEquals(1.0, motor.getPower());
@@ -59,6 +60,7 @@ public class TestBaseMotor {
         Assertions.assertEquals(10.0, motor.getPower());
     }
 
+    @Test
     public void testMinPower() {
         motor.setPower(-100);
         Assertions.assertEquals(-1.0, motor.getPower());

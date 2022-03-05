@@ -74,6 +74,16 @@ public abstract class BaseMotor implements Motor {
      * @param minPower the motor's minimum power value.
      * @return {@code this}, used for method chaining.
      */
+    public BaseMotor setMin(double minPower) {
+        return setMinPower(minPower);
+    }
+
+    /**
+     * Set the motor's minimum power value.
+     *
+     * @param minPower the motor's minimum power value.
+     * @return {@code this}, used for method chaining.
+     */
     public BaseMotor setMinPower(double minPower) {
         this.minPower = minPower;
 
@@ -87,6 +97,16 @@ public abstract class BaseMotor implements Motor {
      */
     public double getMaxPower() {
         return this.maxPower;
+    }
+
+    /**
+     * Set the motor's maximum power value.
+     *
+     * @param maxPower the motor's maximum power value.
+     * @return {@code this}, used for method chaining.
+     */
+    public BaseMotor setMax(double maxPower) {
+        return setMaxPower(maxPower);
     }
 
     /**

@@ -29,7 +29,6 @@ import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
  * @since 0.1.0
  */
 public class TrajectoryFactory {
-
     private TrajectoryFactory() {}
 
     public static List<Trajectory> getLinearTrajectories(

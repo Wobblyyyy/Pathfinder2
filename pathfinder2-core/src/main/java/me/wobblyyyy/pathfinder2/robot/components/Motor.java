@@ -157,7 +157,7 @@ public interface Motor {
      * @return {@code this}, represented as an abstract motor. This will
      * also have a deadband applied to it.
      */
-    default AbstractMotor deadband(double deadband) {
+    default BaseMotor deadband(double deadband) {
         return toAbstractMotor().deadband(deadband);
     }
 
@@ -168,7 +168,7 @@ public interface Motor {
      * @param min the value to apply.
      * @return {@code this}, as an {@link AbstractMotor}.
      */
-    default AbstractMotor setMin(double min) {
+    default BaseMotor setMin(double min) {
         return toAbstractMotor().setMin(min);
     }
 
@@ -179,7 +179,7 @@ public interface Motor {
      * @param max the value to apply.
      * @return {@code this}, as an {@link AbstractMotor}.
      */
-    default AbstractMotor setMax(double max) {
+    default BaseMotor setMax(double max) {
         return toAbstractMotor().setMax(max);
     }
 }
