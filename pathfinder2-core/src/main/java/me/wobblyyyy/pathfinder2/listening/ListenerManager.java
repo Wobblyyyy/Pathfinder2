@@ -19,6 +19,7 @@ import me.wobblyyyy.pathfinder2.Core;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.utils.RandomString;
 import me.wobblyyyy.pathfinder2.utils.Toggle;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
  * Manager responsible for several {@link Listener}s. Each {@link Listener}
@@ -58,6 +59,9 @@ public class ListenerManager implements Tickable {
      * @return {@code this}, used for method chaining.
      */
     public ListenerManager addListener(String name, Listener listener) {
+        ValidationUtils.validate(name, "name");
+        ValidationUtils.validate(listener, "listener");
+
         listeners.put(name, listener);
 
         // sort the listeners on insertion so that the map doesn't have to

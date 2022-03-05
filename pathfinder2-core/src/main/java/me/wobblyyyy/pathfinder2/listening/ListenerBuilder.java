@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.Core;
 import me.wobblyyyy.pathfinder2.time.Time;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
  * Builder tool for {@link Listener}. This is designed to make it easier to
@@ -158,6 +159,12 @@ public class ListenerBuilder {
      */
     public Listener build() {
         Supplier<Boolean>[] inputs = new Supplier[this.inputs.size()];
+
+        ValidationUtils.validate(mode, "mode");
+        ValidationUtils.validate(whenTriggered, "whenTriggered");
+        ValidationUtils.validate(inputs, "inputs");
+        ValidationUtils.validateNotNaN(expiration, "expiration");
+        ValidationUtils.validate(cooldownMs, "cooldownMs");
 
         return new Listener(mode, whenTriggered, this.inputs.toArray(inputs))
             .setPriority(priority)

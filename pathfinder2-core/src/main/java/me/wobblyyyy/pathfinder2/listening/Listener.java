@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.time.Time;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
  * Responsible for listening for a condition and executing some functionality
@@ -149,6 +150,10 @@ public class Listener implements Tickable {
         Runnable whenTriggered,
         Supplier<Boolean>... input
     ) {
+        ValidationUtils.validate(mode, "mode");
+        ValidationUtils.validate(whenTriggered, "mode");
+        ValidationUtils.validate(input, "input");
+
         this.priority = priority;
         this.mode = mode;
         this.whenTriggered = whenTriggered;
