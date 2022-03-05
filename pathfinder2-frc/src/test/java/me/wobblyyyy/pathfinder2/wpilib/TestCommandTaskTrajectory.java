@@ -33,7 +33,6 @@ public class TestCommandTaskTrajectory extends TestableRobot {
     @BeforeEach
     public void beforeEach() {
         super.beforeEach();
-
         runInitialize = () -> {};
         runExecute = () -> {};
         runIsFinished = () -> false;
@@ -65,7 +64,6 @@ public class TestCommandTaskTrajectory extends TestableRobot {
     @Test
     public void testSimpleCommandTaskTrajectory() {
         ValidationUtils.validate(pathfinder, "pathfinder");
-
         pathfinder.followTrajectory(trajectory);
         pathfinder.tick();
         Assertions.assertTrue(pathfinder.isActive());
