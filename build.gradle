@@ -42,7 +42,6 @@ spotless {
 
         indentWithSpaces()
         trimTrailingWhitespace()
-        removeUnusedImports()
         endWithNewline()
 
         prettier([
