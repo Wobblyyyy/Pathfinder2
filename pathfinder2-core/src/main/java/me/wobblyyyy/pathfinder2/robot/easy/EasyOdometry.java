@@ -10,13 +10,12 @@
 
 package me.wobblyyyy.pathfinder2.robot.easy;
 
+import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.robot.AbstractOdometry;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
-
-import java.util.function.Supplier;
 
 /**
  * Static methods to create {@link Odometry} instances.
@@ -25,14 +24,16 @@ import java.util.function.Supplier;
  * @since 0.1.0
  */
 public class EasyOdometry {
-    private EasyOdometry() {
 
-    }
+    private EasyOdometry() {}
 
-    public static Odometry buildOdometry(Supplier<Double> xPos,
-                                         Supplier<Double> yPos,
-                                         Supplier<Angle> zPos) {
+    public static Odometry buildOdometry(
+        Supplier<Double> xPos,
+        Supplier<Double> yPos,
+        Supplier<Angle> zPos
+    ) {
         return new AbstractOdometry() {
+
             @Override
             public PointXYZ getRawPosition() {
                 double x = xPos.get();
@@ -44,9 +45,12 @@ public class EasyOdometry {
         };
     }
 
-    public static Odometry buildOdometry(Supplier<PointXY> pointSupplier,
-                                         Supplier<Angle> angleSupplier) {
+    public static Odometry buildOdometry(
+        Supplier<PointXY> pointSupplier,
+        Supplier<Angle> angleSupplier
+    ) {
         return new AbstractOdometry() {
+
             @Override
             public PointXYZ getRawPosition() {
                 return pointSupplier.get().withHeading(angleSupplier.get());

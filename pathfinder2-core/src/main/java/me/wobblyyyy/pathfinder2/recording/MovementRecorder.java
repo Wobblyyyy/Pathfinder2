@@ -40,8 +40,7 @@ public class MovementRecorder {
      *                   "snapshots" this recorder takes, at the price of
      *                   a larger file size.
      */
-    public MovementRecorder(Pathfinder pathfinder,
-                            double minDelayMs) {
+    public MovementRecorder(Pathfinder pathfinder, double minDelayMs) {
         this.pathfinder = pathfinder;
         this.minDelayMs = minDelayMs;
     }
@@ -51,8 +50,8 @@ public class MovementRecorder {
      * there is one) and then begin recording a new recording.
      */
     public void start() {
-        if (recording != null) recording.clear();
-        else recording = new MovementRecording();
+        if (recording != null) recording.clear(); else recording =
+            new MovementRecording();
         isRecording = true;
         lastRecordMs = Time.ms();
     }
@@ -83,10 +82,10 @@ public class MovementRecorder {
 
         if (elapsed >= minDelayMs) {
             MovementRecord record = new MovementRecord(
-                    pathfinder.getPosition(),
-                    pathfinder.getVelocityXY(),
-                    elapsed,
-                    pathfinder.getTranslation()
+                pathfinder.getPosition(),
+                pathfinder.getVelocityXY(),
+                elapsed,
+                pathfinder.getTranslation()
             );
 
             recording.record(record);

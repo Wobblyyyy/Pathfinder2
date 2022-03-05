@@ -52,10 +52,9 @@ public class MovementProfiler {
     }
 
     private static double fixValue(double value) {
-        if (Double.isNaN(value) || Double.isInfinite(value))
-            return 0;
-        else
-            return value;
+        if (
+            Double.isNaN(value) || Double.isInfinite(value)
+        ) return 0; else return value;
     }
 
     /**
@@ -65,8 +64,7 @@ public class MovementProfiler {
      * @param timeMs   the current time, in milliseconds.
      * @return a new {@link MovementSnapshot}.
      */
-    public MovementSnapshot capture(PointXYZ position,
-                                    double timeMs) {
+    public MovementSnapshot capture(PointXYZ position, double timeMs) {
         if (position == null) return new MovementSnapshot();
 
         // look... i'm sorry to whoever is reading this.
@@ -104,15 +102,15 @@ public class MovementProfiler {
         this.timeMs = timeMs;
 
         MovementSnapshot snapshot = new MovementSnapshot()
-                .setAccelerationXY(dps)
-                .setAccelerationX(dXps)
-                .setAccelerationY(dYps)
-                .setAccelerationZ(Angle.fromDeg(dZps))
-                .setVelocity(new Velocity(d, angle))
-                .setVelocityXY(d)
-                .setVelocityX(dxPs)
-                .setVelocityY(dyPs)
-                .setVelocityZ(Angle.fromDeg(dzDegPs));
+            .setAccelerationXY(dps)
+            .setAccelerationX(dXps)
+            .setAccelerationY(dYps)
+            .setAccelerationZ(Angle.fromDeg(dZps))
+            .setVelocity(new Velocity(d, angle))
+            .setVelocityXY(d)
+            .setVelocityX(dxPs)
+            .setVelocityY(dyPs)
+            .setVelocityZ(Angle.fromDeg(dzDegPs));
 
         lastSnapshot = snapshot;
         return snapshot;

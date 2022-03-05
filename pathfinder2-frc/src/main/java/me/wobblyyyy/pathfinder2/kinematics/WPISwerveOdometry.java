@@ -61,27 +61,30 @@ public class WPISwerveOdometry extends AbstractOdometry {
      *                              respect to order, front right, front left,
      *                              back right, and back left.
      */
-    public WPISwerveOdometry(WPISwerveChassis chassis,
-                             Gyroscope gyroscope,
-                             Pose2d initialPosition,
-                             double velocityToUnitsPerSec,
-                             Encoder... driveEncoders) {
-        if (chassis.getModules().length != driveEncoders.length)
-            throw new IllegalArgumentException(
-                    "must have same amount of drive encoders as " +
-                            "swerve modules!"
-            );
+    public WPISwerveOdometry(
+        WPISwerveChassis chassis,
+        Gyroscope gyroscope,
+        Pose2d initialPosition,
+        double velocityToUnitsPerSec,
+        Encoder... driveEncoders
+    ) {
+        if (
+            chassis.getModules().length != driveEncoders.length
+        ) throw new IllegalArgumentException(
+            "must have same amount of drive encoders as " + "swerve modules!"
+        );
 
         this.chassis = chassis;
         this.gyroscope = gyroscope;
         this.velocityToUnitsPerSec = velocityToUnitsPerSec;
         this.pose = initialPosition;
 
-        this.odometry = new SwerveDriveOdometry(
+        this.odometry =
+            new SwerveDriveOdometry(
                 chassis.getKinematics(),
                 WPIAdapter.rotationFromAngle(gyroscope.getAngle()),
                 initialPosition
-        );
+            );
         this.driveEncoders = driveEncoders;
     }
 
@@ -90,15 +93,17 @@ public class WPISwerveOdometry extends AbstractOdometry {
      * time to determine its position based on elapsed time.
      */
     public void update() {
-        Rotation2d rotation = WPIAdapter.rotationFromAngle(gyroscope.getAngle());
+        Rotation2d rotation = WPIAdapter.rotationFromAngle(
+            gyroscope.getAngle()
+        );
 
         SwerveModuleState[] states = new SwerveModuleState[driveEncoders.length];
         WPISwerveModule[] modules = chassis.getModules();
 
-        for (int i = 0; i < modules.length; i++)
-            states[i] = new SwerveModuleState(
-                    driveEncoders[i].getVelocity() * velocityToUnitsPerSec,
-                    modules[i].getTurnRotation()
+        for (int i = 0; i < modules.length; i++) states[i] =
+            new SwerveModuleState(
+                driveEncoders[i].getVelocity() * velocityToUnitsPerSec,
+                modules[i].getTurnRotation()
             );
 
         pose = odometry.update(rotation, states);

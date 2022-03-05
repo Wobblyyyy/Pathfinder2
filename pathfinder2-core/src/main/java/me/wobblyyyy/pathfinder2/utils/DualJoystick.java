@@ -30,8 +30,7 @@ public class DualJoystick {
      * @param joystickLeft  the left joystick.
      * @param joystickRight the right joystick.
      */
-    public DualJoystick(Joystick joystickLeft,
-                        Joystick joystickRight) {
+    public DualJoystick(Joystick joystickLeft, Joystick joystickRight) {
         this.joystickLeft = joystickLeft;
         this.joystickRight = joystickRight;
     }
@@ -177,11 +176,7 @@ public class DualJoystick {
      * @return a translation formed with {@link #translation(Axis, Axis, Axis)}.
      */
     public Translation translation() {
-        return translation(
-                Axis.LEFT_Y,
-                Axis.LEFT_X,
-                Axis.RIGHT_X
-        );
+        return translation(Axis.LEFT_Y, Axis.LEFT_X, Axis.RIGHT_X);
     }
 
     /**
@@ -195,18 +190,16 @@ public class DualJoystick {
      *                     is typically an X axis.
      * @return a translation formed by the values of the joystick's axes.
      */
-    public Translation translation(Axis forwardsAxis,
-                                   Axis strafeAxis,
-                                   Axis turnAxis) {
+    public Translation translation(
+        Axis forwardsAxis,
+        Axis strafeAxis,
+        Axis turnAxis
+    ) {
         double forwardsValue = getAxisValue(forwardsAxis);
         double strafeValue = getAxisValue(turnAxis);
         double turnValue = getAxisValue(turnAxis);
 
-        return new Translation(
-                forwardsValue,
-                strafeValue,
-                turnValue
-        );
+        return new Translation(forwardsValue, strafeValue, turnValue);
     }
 
     /**
@@ -237,6 +230,6 @@ public class DualJoystick {
         /**
          * The right joystick's Y axis.
          */
-        RIGHT_Y
+        RIGHT_Y,
     }
 }

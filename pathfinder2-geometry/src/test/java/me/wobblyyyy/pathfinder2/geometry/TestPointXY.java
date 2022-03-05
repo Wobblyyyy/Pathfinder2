@@ -91,37 +91,24 @@ public class TestPointXY {
 
     @Test
     public void testInDistance() {
+        Assertions.assertEquals(A.inDirection(1, Angle.zero()).x(), B.x());
+        Assertions.assertEquals(A.inDirection(-1, Angle.zero()).x(), E.x());
+        Assertions.assertEquals(A.inDirection(1, Angle.zero()).y(), B.y());
+        Assertions.assertEquals(A.inDirection(-1, Angle.zero()).y(), E.y());
         Assertions.assertEquals(
-                A.inDirection(1, Angle.zero()).x(),
-                B.x()
+            new PointXY(0, 0).inDirection(1, Angle.fixedDeg(45)),
+            new PointXY(0, 0)
+                .inDirection(2, Angle.fixedDeg(45))
+                .inDirection(1, Angle.fixedDeg(45).fixedFlip())
         );
         Assertions.assertEquals(
-                A.inDirection(-1, Angle.zero()).x(),
-                E.x()
-        );
-        Assertions.assertEquals(
-                A.inDirection(1, Angle.zero()).y(),
-                B.y()
-        );
-        Assertions.assertEquals(
-                A.inDirection(-1, Angle.zero()).y(),
-                E.y()
-        );
-        Assertions.assertEquals(
-                new PointXY(0, 0)
-                        .inDirection(1, Angle.fixedDeg(45)),
-                new PointXY(0, 0)
-                        .inDirection(2, Angle.fixedDeg(45))
-                        .inDirection(1, Angle.fixedDeg(45).fixedFlip())
-        );
-        Assertions.assertEquals(
-                new PointXY(0, 0)
-                        .inDirection(-10, Angle.fixedDeg(45))
-                        .inDirection(1, Angle.fixedDeg(45)),
-                new PointXY(0, 0)
-                        .inDirection(-10, Angle.fixedDeg(45))
-                        .inDirection(2, Angle.fixedDeg(45))
-                        .inDirection(1, Angle.fixedDeg(45).fixedFlip())
+            new PointXY(0, 0)
+                .inDirection(-10, Angle.fixedDeg(45))
+                .inDirection(1, Angle.fixedDeg(45)),
+            new PointXY(0, 0)
+                .inDirection(-10, Angle.fixedDeg(45))
+                .inDirection(2, Angle.fixedDeg(45))
+                .inDirection(1, Angle.fixedDeg(45).fixedFlip())
         );
     }
 
@@ -130,10 +117,7 @@ public class TestPointXY {
         PointXY a = new PointXY(0, 0);
         PointXY b = new PointXY(1, 1);
 
-        Assertions.assertEquals(
-                Angle.fromDeg(45),
-                a.angleTo(b)
-        );
+        Assertions.assertEquals(Angle.fromDeg(45), a.angleTo(b));
     }
 
     @Test
@@ -141,10 +125,7 @@ public class TestPointXY {
         PointXY a = new PointXY(2, 2);
         PointXY b = new PointXY(4, 4);
 
-        Assertions.assertEquals(
-                a.angleTo(b),
-                b.angleFrom(a)
-        );
+        Assertions.assertEquals(a.angleTo(b), b.angleFrom(a));
     }
 
     @Test
@@ -152,55 +133,54 @@ public class TestPointXY {
         PointXY a = new PointXY(2, 2);
         PointXY b = new PointXY(4, 4);
 
-        Assertions.assertEquals(
-                b.angleFrom(a),
-                a.angleTo(b)
-        );
+        Assertions.assertEquals(b.angleFrom(a), a.angleTo(b));
     }
 
     private void testRotation(Angle angle) {
         PointXY point = new PointXY(1, 0);
 
         Assertions.assertEquals(
-                PointXY.ZERO.inDirection(1, angle),
-                point.rotate(PointXY.ZERO, angle)
+            PointXY.ZERO.inDirection(1, angle),
+            point.rotate(PointXY.ZERO, angle)
         );
         Assertions.assertEquals(
-                PointXY.ZERO.inDirection(1, angle).rotate(
-                    PointXY.ZERO, Angle.DEG_45),
-                point.rotate(PointXY.ZERO, angle).rotate(
-                    PointXY.ZERO, Angle.DEG_45)
+            PointXY
+                .ZERO.inDirection(1, angle)
+                .rotate(PointXY.ZERO, Angle.DEG_45),
+            point.rotate(PointXY.ZERO, angle).rotate(PointXY.ZERO, Angle.DEG_45)
         );
         Assertions.assertEquals(
-                PointXY.ZERO.inDirection(1, angle).rotate(
-                    PointXY.ZERO, Angle.DEG_270),
-                point.rotate(PointXY.ZERO, angle).rotate(
-                    PointXY.ZERO, Angle.DEG_270)
+            PointXY
+                .ZERO.inDirection(1, angle)
+                .rotate(PointXY.ZERO, Angle.DEG_270),
+            point
+                .rotate(PointXY.ZERO, angle)
+                .rotate(PointXY.ZERO, Angle.DEG_270)
         );
         Assertions.assertEquals(
-                PointXY.ZERO.inDirection(1, angle).rotate(
-                    PointXY.ZERO, Angle.DEG_90).rotate(PointXY.ZERO, Angle.DEG_180),
-                point.rotate(PointXY.ZERO, angle).rotate(
-                    PointXY.ZERO, Angle.DEG_270)
+            PointXY
+                .ZERO.inDirection(1, angle)
+                .rotate(PointXY.ZERO, Angle.DEG_90)
+                .rotate(PointXY.ZERO, Angle.DEG_180),
+            point
+                .rotate(PointXY.ZERO, angle)
+                .rotate(PointXY.ZERO, Angle.DEG_270)
         );
     }
 
     private void testRotations(Angle... angles) {
-        for (Angle angle : angles)
-            testRotation(angle);
+        for (Angle angle : angles) testRotation(angle);
     }
 
     @Test
     public void testPointRotation() {
         Angle[] angles = new Angle[48];
 
-        for (int i = 0; i < 48; i++)
-            angles[i] = Angle.fromDeg(i * 7.5);
+        for (int i = 0; i < 48; i++) angles[i] = Angle.fromDeg(i * 7.5);
 
         testRotations(angles);
 
-        for (int i = 0; i < 48; i++)
-            angles[i] = Angle.fromDeg(i * -3.3);
+        for (int i = 0; i < 48; i++) angles[i] = Angle.fromDeg(i * -3.3);
 
         testRotations(angles);
     }

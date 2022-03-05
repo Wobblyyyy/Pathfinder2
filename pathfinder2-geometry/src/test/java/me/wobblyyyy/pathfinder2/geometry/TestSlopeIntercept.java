@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestSlopeIntercept {
+
     @Test
     public void testIntersection() {
         SlopeIntercept a = new SlopeIntercept(1, 0);
@@ -31,31 +32,40 @@ public class TestSlopeIntercept {
     @Test
     public void testInvalidIntersection() {
         Assertions.assertThrows(
-                IllegalArgumentException.class,
-                () -> {
-                    SlopeIntercept a = new SlopeIntercept(Double.POSITIVE_INFINITY, 0);
-                }
+            IllegalArgumentException.class,
+            () -> {
+                SlopeIntercept a = new SlopeIntercept(
+                    Double.POSITIVE_INFINITY,
+                    0
+                );
+            }
         );
 
         Assertions.assertThrows(
-                IllegalArgumentException.class,
-                () -> {
-                    SlopeIntercept a = new SlopeIntercept(Double.NaN, 0);
-                }
+            IllegalArgumentException.class,
+            () -> {
+                SlopeIntercept a = new SlopeIntercept(Double.NaN, 0);
+            }
         );
 
         Assertions.assertThrows(
-                IllegalArgumentException.class,
-                () -> {
-                    SlopeIntercept a = new SlopeIntercept(Double.NEGATIVE_INFINITY, 0);
-                }
+            IllegalArgumentException.class,
+            () -> {
+                SlopeIntercept a = new SlopeIntercept(
+                    Double.NEGATIVE_INFINITY,
+                    0
+                );
+            }
         );
 
         Assertions.assertThrows(
-                IllegalArgumentException.class,
-                () -> {
-                    SlopeIntercept a = new SlopeIntercept(0, Double.POSITIVE_INFINITY);
-                }
+            IllegalArgumentException.class,
+            () -> {
+                SlopeIntercept a = new SlopeIntercept(
+                    0,
+                    Double.POSITIVE_INFINITY
+                );
+            }
         );
     }
 

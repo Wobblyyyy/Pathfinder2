@@ -10,13 +10,13 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TestRectangle {
+
     @Test
     public void testSimpleRectangle() {
         Rectangle rectangle = new Rectangle(0, 0, 10, 10);
@@ -34,7 +34,8 @@ public class TestRectangle {
 
     @Test
     public void testRotatedRectangle() {
-        Rectangle rectangle = new Rectangle(0, 0, 10, 10).rotate(Angle.fromDeg(45));
+        Rectangle rectangle = new Rectangle(0, 0, 10, 10)
+        .rotate(Angle.fromDeg(45));
 
         PointXY testPoint1 = new PointXY(0, 0);
         PointXY testPoint2 = new PointXY(5, 5);
@@ -50,14 +51,14 @@ public class TestRectangle {
     @Test
     public void testVeryRotatedRectangle() {
         Rectangle rectangle = new Rectangle(0, 0, 10, 10)
-                .rotate(Angle.DEG_45)
-                .rotate(Angle.DEG_45)
-                .rotate(Angle.DEG_45)
-                .rotate(Angle.DEG_45)
-                .rotate(Angle.DEG_45)
-                .rotate(Angle.DEG_45)
-                .rotate(Angle.DEG_45)
-                .rotate(Angle.DEG_45);
+            .rotate(Angle.DEG_45)
+            .rotate(Angle.DEG_45)
+            .rotate(Angle.DEG_45)
+            .rotate(Angle.DEG_45)
+            .rotate(Angle.DEG_45)
+            .rotate(Angle.DEG_45)
+            .rotate(Angle.DEG_45)
+            .rotate(Angle.DEG_45);
 
         PointXY testPoint1 = new PointXY(0, 0);
         PointXY testPoint2 = new PointXY(5, 5);
@@ -70,9 +71,11 @@ public class TestRectangle {
         Assertions.assertFalse(testPoint4.isInside(rectangle));
     }
 
-    private List<Rectangle> constructRectangles(double x,
-                                                double y,
-                                                int amount) {
+    private List<Rectangle> constructRectangles(
+        double x,
+        double y,
+        int amount
+    ) {
         List<Rectangle> rectangles = new ArrayList<>(amount);
 
         for (int i = 0; i < amount; i++) {

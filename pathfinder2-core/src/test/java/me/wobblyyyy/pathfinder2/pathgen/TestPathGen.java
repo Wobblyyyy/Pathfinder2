@@ -10,11 +10,11 @@
 
 package me.wobblyyyy.pathfinder2.pathgen;
 
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 public class TestPathGen {
+
     @Test
     public void testUnobstructedRoute() {
         Grid grid = Grid.generateGrid(10, 10);

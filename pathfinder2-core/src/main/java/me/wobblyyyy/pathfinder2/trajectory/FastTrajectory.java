@@ -89,25 +89,20 @@ public class FastTrajectory implements Trajectory {
      * @param end   the trajectory's end point.
      * @param speed the speed at which the trajectory should operate.
      */
-    public FastTrajectory(PointXYZ start,
-                          PointXYZ end,
-                          double speed) {
+    public FastTrajectory(PointXYZ start, PointXYZ end, double speed) {
         // Exceptions!
 
         NullPointException.throwIfInvalid(
-                "Attempted to create FastTrajectory with " +
-                        "a null start point!",
-                start
+            "Attempted to create FastTrajectory with " + "a null start point!",
+            start
         );
         NullPointException.throwIfInvalid(
-                "Attempted to create FastTrajectory with " +
-                        "a null end point!",
-                end
+            "Attempted to create FastTrajectory with " + "a null end point!",
+            end
         );
         InvalidSpeedException.throwIfInvalid(
-                "Attempted to create FastTrajectory with " +
-                        "an invalid speed!",
-                speed
+            "Attempted to create FastTrajectory with " + "an invalid speed!",
+            speed
         );
 
         this.start = start;

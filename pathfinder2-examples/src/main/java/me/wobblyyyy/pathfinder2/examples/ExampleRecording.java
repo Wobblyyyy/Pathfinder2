@@ -57,7 +57,13 @@ import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
  * @author Colin Robertson
  * @since 0.6.1
  */
-@SuppressWarnings({"FieldCanBeLocal", "ConstantConditions", "LoopConditionNotUpdatedInsideLoop"})
+@SuppressWarnings(
+    {
+        "FieldCanBeLocal",
+        "ConstantConditions",
+        "LoopConditionNotUpdatedInsideLoop",
+    }
+)
 public class ExampleRecording {
     private Drive drive;
     private Odometry odometry;

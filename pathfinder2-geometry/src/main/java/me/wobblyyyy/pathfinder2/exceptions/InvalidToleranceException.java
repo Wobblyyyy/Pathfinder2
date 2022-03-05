@@ -19,12 +19,12 @@ package me.wobblyyyy.pathfinder2.exceptions;
  * @since 0.0.0
  */
 public class InvalidToleranceException extends RuntimeException {
+
     public InvalidToleranceException(String s) {
         super(s);
     }
 
-    public static void throwIfInvalid(String message,
-                                      double tolerance) {
+    public static void throwIfInvalid(String message, double tolerance) {
         if (tolerance < 0) throw new InvalidToleranceException(message);
     }
 }

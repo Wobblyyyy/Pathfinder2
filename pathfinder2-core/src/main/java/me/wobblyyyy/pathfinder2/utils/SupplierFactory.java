@@ -17,21 +17,24 @@ import java.util.function.Supplier;
  * @since 0.10.9
  */
 public class SupplierFactory {
-    private SupplierFactory() {
 
-    }
+    private SupplierFactory() {}
 
     public static Supplier<Boolean> invert(Supplier<Boolean> supplier) {
         return () -> !supplier.get();
     }
 
-    public static <T> Supplier<Boolean> supplierFor(Supplier<T> supplier,
-                                                    Predicate<T> predicate) {
+    public static <T> Supplier<Boolean> supplierFor(
+        Supplier<T> supplier,
+        Predicate<T> predicate
+    ) {
         return () -> predicate.test(supplier.get());
     }
 
-    public static Supplier<Boolean> fromDouble(Supplier<Double> supplier,
-                                               double tolerance) {
+    public static Supplier<Boolean> fromDouble(
+        Supplier<Double> supplier,
+        double tolerance
+    ) {
         return () -> Math.abs(supplier.get()) >= tolerance;
     }
 
@@ -40,29 +43,34 @@ public class SupplierFactory {
     }
 
     public static Collection<Supplier<Boolean>> invertAll(
-            Collection<Supplier<Boolean>> collection) {
+        Collection<Supplier<Boolean>> collection
+    ) {
         List<Supplier<Boolean>> list = new ArrayList<>(collection.size());
 
-        for (Supplier<Boolean> supplier : collection)
-            list.add(invert(supplier));
+        for (Supplier<Boolean> supplier : collection) list.add(
+            invert(supplier)
+        );
 
         return list;
     }
 
     public static Collection<Supplier<Boolean>> invertAll(
-            Supplier<Boolean>[] collection) {
+        Supplier<Boolean>[] collection
+    ) {
         List<Supplier<Boolean>> list = new ArrayList<>(collection.length);
 
-        for (Supplier<Boolean> supplier : collection)
-            list.add(invert(supplier));
+        for (Supplier<Boolean> supplier : collection) list.add(
+            invert(supplier)
+        );
 
         return list;
     }
 
     public static Supplier<Boolean> anyTrue(Supplier<Boolean>... suppliers) {
         return () -> {
-            for (Supplier<Boolean> supplier : suppliers)
-                if (supplier.get()) return true;
+            for (Supplier<Boolean> supplier : suppliers) if (
+                supplier.get()
+            ) return true;
 
             return false;
         };
@@ -70,8 +78,9 @@ public class SupplierFactory {
 
     public static Supplier<Boolean> anyFalse(Supplier<Boolean>... suppliers) {
         return () -> {
-            for (Supplier<Boolean> supplier : suppliers)
-                if (!supplier.get()) return true;
+            for (Supplier<Boolean> supplier : suppliers) if (
+                !supplier.get()
+            ) return true;
 
             return false;
         };
@@ -81,11 +90,10 @@ public class SupplierFactory {
         return () -> {
             boolean allTrue = true;
 
-            for (Supplier<Boolean> supplier : suppliers)
-                if (!supplier.get()) {
-                    allTrue = false;
-                    break;
-                }
+            for (Supplier<Boolean> supplier : suppliers) if (!supplier.get()) {
+                allTrue = false;
+                break;
+            }
 
             return allTrue;
         };
@@ -95,25 +103,28 @@ public class SupplierFactory {
         return () -> {
             boolean allFalse = true;
 
-            for (Supplier<Boolean> supplier : suppliers)
-                if (supplier.get()) {
-                    allFalse = false;
-                    break;
-                }
+            for (Supplier<Boolean> supplier : suppliers) if (supplier.get()) {
+                allFalse = false;
+                break;
+            }
 
             return allFalse;
         };
     }
 
-    public static Supplier<Boolean> trueThenAllFalse(Supplier<Boolean> mustBeTrue,
-                                                     Supplier<Boolean>... suppliers) {
+    public static Supplier<Boolean> trueThenAllFalse(
+        Supplier<Boolean> mustBeTrue,
+        Supplier<Boolean>... suppliers
+    ) {
         Supplier<Boolean> allFalse = allFalse(suppliers);
 
         return () -> mustBeTrue.get() && allFalse.get();
     }
 
-    public static Supplier<Boolean> falseThenAllTrue(Supplier<Boolean> mustBeFalse,
-                                                     Supplier<Boolean>... suppliers) {
+    public static Supplier<Boolean> falseThenAllTrue(
+        Supplier<Boolean> mustBeFalse,
+        Supplier<Boolean>... suppliers
+    ) {
         Supplier<Boolean> allTrue = allFalse(suppliers);
 
         return () -> !mustBeFalse.get() && allTrue.get();

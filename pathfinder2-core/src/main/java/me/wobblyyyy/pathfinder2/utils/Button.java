@@ -10,12 +10,11 @@
 
 package me.wobblyyyy.pathfinder2.utils;
 
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.listening.ListenerBuilder;
 import me.wobblyyyy.pathfinder2.listening.ListenerManager;
 import me.wobblyyyy.pathfinder2.listening.ListenerMode;
-
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 /**
  * A very simple boolean button. Buttons are based on a {@link Supplier} that
@@ -57,15 +56,16 @@ public class Button {
      *                      whenever the physical button is pressed, and
      *                      {@code false} whenever it is not.
      */
-    public Button(ListenerManager manager,
-                  Supplier<Boolean> stateSupplier) {
+    public Button(ListenerManager manager, Supplier<Boolean> stateSupplier) {
         this.manager = manager;
         this.stateSupplier = stateSupplier;
     }
 
-    public <T> Button(ListenerManager manager,
-                      Supplier<T> supplier,
-                      Predicate<T> predicate) {
+    public <T>Button(
+        ListenerManager manager,
+        Supplier<T> supplier,
+        Predicate<T> predicate
+    ) {
         this(manager, () -> predicate.test(supplier.get()));
     }
 
@@ -113,14 +113,15 @@ public class Button {
         return (lastState) && (!isPressed());
     }
 
-    private void addListener(ListenerMode mode,
-                             Runnable runnable) {
-        if (manager == null)
-            throw new NullPointerException("Cannot apply any bindings " +
-                    "to this button because the listener manager was not " +
-                    "set in the Button's constructor!");
+    private void addListener(ListenerMode mode, Runnable runnable) {
+        if (manager == null) throw new NullPointerException(
+            "Cannot apply any bindings " +
+            "to this button because the listener manager was not " +
+            "set in the Button's constructor!"
+        );
 
-        manager.addListener(new ListenerBuilder()
+        manager.addListener(
+            new ListenerBuilder()
                 .addInput(stateSupplier)
                 .setPriority(0)
                 .setMode(mode)
@@ -128,7 +129,8 @@ public class Button {
                 .setMaximumExecutions(Integer.MAX_VALUE)
                 .setExpiration(Double.MAX_VALUE)
                 .setCooldownMs(0)
-                .build());
+                .build()
+        );
     }
 
     public Button whenPressed(Runnable runnable) {

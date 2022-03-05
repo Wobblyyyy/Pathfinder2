@@ -38,8 +38,10 @@ public class TrajectoryCommand extends CommandBase {
      * @param pathfinderSubsystem the Pathfinder subsystem.
      * @param trajectory          the trajectory to follow.
      */
-    public TrajectoryCommand(PathfinderSubsystem pathfinderSubsystem,
-                             Trajectory trajectory) {
+    public TrajectoryCommand(
+        PathfinderSubsystem pathfinderSubsystem,
+        Trajectory trajectory
+    ) {
         this.pathfinder = pathfinderSubsystem.getPathfinder();
         this.trajectory = trajectory;
 

@@ -14,12 +14,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
+import java.util.function.Function;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.components.Motor;
 import me.wobblyyyy.pathfinder2.wpilib.WPIAdapter;
-
-import java.util.function.Function;
 
 /**
  * A wpilib-specific mecanum chassis implementation. The utilizes math from
@@ -52,12 +51,14 @@ public class WPIMecanumChassis implements Drive {
      * @param backRightMotor    the chassis' back right motor.
      * @param backLeftMotor     the chassis' back left motor.
      */
-    public WPIMecanumChassis(double frontBackDistance,
-                             double rightLeftDistance,
-                             Motor frontRightMotor,
-                             Motor frontLeftMotor,
-                             Motor backRightMotor,
-                             Motor backLeftMotor) {
+    public WPIMecanumChassis(
+        double frontBackDistance,
+        double rightLeftDistance,
+        Motor frontRightMotor,
+        Motor frontLeftMotor,
+        Motor backRightMotor,
+        Motor backLeftMotor
+    ) {
         double vertical = frontBackDistance / 2;
         double horizontal = rightLeftDistance / 2;
 
@@ -66,12 +67,13 @@ public class WPIMecanumChassis implements Drive {
         Translation2d backRight = new Translation2d(-vertical, horizontal);
         Translation2d backLeft = new Translation2d(-vertical, -horizontal);
 
-        kinematics = new MecanumDriveKinematics(
+        kinematics =
+            new MecanumDriveKinematics(
                 frontRight,
                 frontLeft,
                 backRight,
                 backLeft
-        );
+            );
 
         this.frontRightMotor = frontRightMotor;
         this.frontLeftMotor = frontLeftMotor;
@@ -80,8 +82,9 @@ public class WPIMecanumChassis implements Drive {
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
-        MecanumDriveWheelSpeeds speeds =
-                kinematics.toWheelSpeeds(chassisSpeeds);
+        MecanumDriveWheelSpeeds speeds = kinematics.toWheelSpeeds(
+            chassisSpeeds
+        );
 
         frontRightMotor.setPower(speeds.frontRightMetersPerSecond);
         frontLeftMotor.setPower(speeds.frontLeftMetersPerSecond);
@@ -111,4 +114,3 @@ public class WPIMecanumChassis implements Drive {
         drive(WPIAdapter.speedsFromTranslation(translation));
     }
 }
-

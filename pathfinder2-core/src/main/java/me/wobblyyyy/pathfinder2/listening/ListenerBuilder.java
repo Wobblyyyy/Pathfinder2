@@ -10,12 +10,11 @@
 
 package me.wobblyyyy.pathfinder2.listening;
 
-import me.wobblyyyy.pathfinder2.Core;
-import me.wobblyyyy.pathfinder2.time.Time;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+import me.wobblyyyy.pathfinder2.Core;
+import me.wobblyyyy.pathfinder2.time.Time;
 
 /**
  * Builder tool for {@link Listener}. This is designed to make it easier to
@@ -29,18 +28,13 @@ public class ListenerBuilder {
     private Runnable whenTriggered;
     private List<Supplier<Boolean>> inputs = new ArrayList<>();
 
-    private int priority =
-            Core.listenerBuilderDefaultPriority;
-    private double expiration =
-            Core.listenerBuilderDefaultExpiration;
+    private int priority = Core.listenerBuilderDefaultPriority;
+    private double expiration = Core.listenerBuilderDefaultExpiration;
     private int maximumExecutions =
-            Core.listenerBuilderDefaultMaximumExecutions;
-    private double cooldownMs =
-            Core.listenerBuilderDefaultCooldownMs;
+        Core.listenerBuilderDefaultMaximumExecutions;
+    private double cooldownMs = Core.listenerBuilderDefaultCooldownMs;
 
-    public ListenerBuilder() {
-
-    }
+    public ListenerBuilder() {}
 
     /**
      * Set the listener's mode.
@@ -165,14 +159,10 @@ public class ListenerBuilder {
     public Listener build() {
         Supplier<Boolean>[] inputs = new Supplier[this.inputs.size()];
 
-        return new Listener(
-                mode,
-                whenTriggered,
-                this.inputs.toArray(inputs)
-        )
-                .setPriority(priority)
-                .setExpiration(expiration)
-                .setCooldownMs(cooldownMs)
-                .setMaximumExecutions(maximumExecutions);
+        return new Listener(mode, whenTriggered, this.inputs.toArray(inputs))
+            .setPriority(priority)
+            .setExpiration(expiration)
+            .setCooldownMs(cooldownMs)
+            .setMaximumExecutions(maximumExecutions);
     }
 }

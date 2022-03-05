@@ -10,11 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.exceptions.ValidationException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test methods for the {@link Angle} class.
@@ -118,32 +117,25 @@ public class TestAngle {
         Angle d = Angle.fromDeg(270);
 
         Assertions.assertEquals(
-                Angle.minimumDelta(a, b),
-                Angle.minimumDelta(b, a) * -1
+            Angle.minimumDelta(a, b),
+            Angle.minimumDelta(b, a) * -1
         );
         Assertions.assertEquals(
-                Angle.minimumDelta(c, d),
-                Angle.minimumDelta(d, c) * -1
+            Angle.minimumDelta(c, d),
+            Angle.minimumDelta(d, c) * -1
         );
-        Assertions.assertEquals(
-                -90,
-                Angle.minimumDelta(c, d)
-        );
-        Assertions.assertEquals(
-                0,
-                Angle.minimumDelta(a, c)
-        );
+        Assertions.assertEquals(-90, Angle.minimumDelta(c, d));
+        Assertions.assertEquals(0, Angle.minimumDelta(a, c));
     }
 
     @Test
     public void testFixedAdd() {
         Angle a = Angle.fromDeg(45);
         Angle b = Angle.fromDeg(360);
-        
-        Assertions.assertTrue(Math.abs(Angle.minimumDelta(
-                a.add(b),
-                Angle.fromDeg(45)
-        )) < 1);
+
+        Assertions.assertTrue(
+            Math.abs(Angle.minimumDelta(a.add(b), Angle.fromDeg(45))) < 1
+        );
     }
 
     @Test
@@ -155,52 +147,49 @@ public class TestAngle {
         Angle e = Angle.fromDeg(270);
 
         Assertions.assertEquals(
-                Angle.fixedDeg(-179),
-                Angle.fixedDeg(Angle.minimumDelta(a, b))
+            Angle.fixedDeg(-179),
+            Angle.fixedDeg(Angle.minimumDelta(a, b))
         );
         Assertions.assertEquals(
-                Angle.fixedDeg(179),
-                Angle.fixedDeg(Angle.minimumDelta(a, c))
+            Angle.fixedDeg(179),
+            Angle.fixedDeg(Angle.minimumDelta(a, c))
         );
-        Assertions.assertEquals(
-                -90,
-                Angle.minimumDelta(d, e)
-        );
+        Assertions.assertEquals(-90, Angle.minimumDelta(d, e));
     }
 
     @Test
     public void testAngleDeltaThrowsNullAngleException() {
         Assertions.assertThrows(
-                NullAngleException.class,
-                () -> Angle.minimumDelta(null, Angle.fromDeg(0))
+            NullAngleException.class,
+            () -> Angle.minimumDelta(null, Angle.fromDeg(0))
         );
 
         Assertions.assertThrows(
-                NullAngleException.class,
-                () -> Angle.minimumDelta(Angle.fromDeg(0), null)
+            NullAngleException.class,
+            () -> Angle.minimumDelta(Angle.fromDeg(0), null)
         );
     }
 
     @Test
     public void testValidation() {
         Assertions.assertThrows(
-                ValidationException.class,
-                () -> new Angle(Double.NaN, 0)
+            ValidationException.class,
+            () -> new Angle(Double.NaN, 0)
         );
 
         Assertions.assertThrows(
-                ValidationException.class,
-                () -> new Angle(0, Double.NaN)
+            ValidationException.class,
+            () -> new Angle(0, Double.NaN)
         );
 
         Assertions.assertThrows(
-                ValidationException.class,
-                () -> new Angle(Double.POSITIVE_INFINITY, 0)
+            ValidationException.class,
+            () -> new Angle(Double.POSITIVE_INFINITY, 0)
         );
 
         Assertions.assertThrows(
-                ValidationException.class,
-                () -> new Angle(0, Double.NEGATIVE_INFINITY)
+            ValidationException.class,
+            () -> new Angle(0, Double.NEGATIVE_INFINITY)
         );
     }
 }

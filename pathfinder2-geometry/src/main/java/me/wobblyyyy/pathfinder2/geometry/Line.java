@@ -10,9 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
-import me.wobblyyyy.pathfinder2.math.Equals;
-
 import java.io.Serializable;
+import me.wobblyyyy.pathfinder2.math.Equals;
 
 /**
  * A line SEGMENT - this is not a line, this is a line segment. If you want
@@ -39,16 +38,15 @@ public class Line implements Serializable {
      * @param start the line's start point.
      * @param end   the line's end point.
      */
-    public Line(PointXY start,
-                PointXY end) {
+    public Line(PointXY start, PointXY end) {
         PointXY.checkArgument(start);
         PointXY.checkArgument(end);
 
         if (PointXY.areDuplicatesPresent(start, end)) {
             throw new IllegalArgumentException(
-                    "Cannot create a line between the same point! " +
-                            "Make sure the start and end points are both " +
-                            "different from each other."
+                "Cannot create a line between the same point! " +
+                "Make sure the start and end points are both " +
+                "different from each other."
             );
         }
 
@@ -72,13 +70,8 @@ public class Line implements Serializable {
         }
     }
 
-    public Line(PointXY origin,
-                Angle angle,
-                double distance) {
-        this(
-                origin,
-                origin.inDirection(distance, angle)
-        );
+    public Line(PointXY origin, Angle angle, double distance) {
+        this(origin, origin.inDirection(distance, angle));
     }
 
     /**
@@ -92,8 +85,7 @@ public class Line implements Serializable {
      * @return the unbounded point of intersection between the two lines.
      * If the lines do not intersect, return null.
      */
-    public static PointXY getUnboundedIntersection(Line a,
-                                                   Line b) {
+    public static PointXY getUnboundedIntersection(Line a, Line b) {
         return a.getEquation().getIntersection(b.getEquation());
     }
 
@@ -104,8 +96,7 @@ public class Line implements Serializable {
      * @param b one of the two lines.
      * @return if the lines are parallel, true. Otherwise, false.
      */
-    public static boolean areLinesParallel(Line a,
-                                           Line b) {
+    public static boolean areLinesParallel(Line a, Line b) {
         boolean aIsVertical = a.equation.isVertical();
         boolean bIsVertical = b.equation.isVertical();
 
@@ -127,8 +118,7 @@ public class Line implements Serializable {
      * @return if the lines intersect at a point on both of the segments,
      * return true. Otherwise, return false.
      */
-    public static boolean doLinesIntersect(Line a,
-                                           Line b) {
+    public static boolean doLinesIntersect(Line a, Line b) {
         PointXY unboundedIntersection = getUnboundedIntersection(a, b);
 
         boolean onLineA = a.isPointOnLineSegment(unboundedIntersection);
@@ -146,8 +136,7 @@ public class Line implements Serializable {
      * @return get the point of intersection between two lines. If the lines
      * don't have any valid points of intersection, return null.
      */
-    public static PointXY getIntersection(Line a,
-                                          Line b) {
+    public static PointXY getIntersection(Line a, Line b) {
         PointXY unboundedIntersection = getUnboundedIntersection(a, b);
 
         boolean validA = BoundingBox.isPointInLine(unboundedIntersection, a);
@@ -167,8 +156,7 @@ public class Line implements Serializable {
      * @return if the point is collinear with both the start and end points,
      * true. Otherwise, false.
      */
-    public static boolean isPointOnLine(Line line,
-                                        PointXY point) {
+    public static boolean isPointOnLine(Line line, PointXY point) {
         if (point == null) return false;
 
         return point.isCollinearWith(line.start, line.end);
@@ -181,12 +169,12 @@ public class Line implements Serializable {
      * @param point the point to test.
      * @return if the point is on the line segment, true. Otherwise, false.
      */
-    public static boolean isPointOnLineSegment(Line line,
-                                               PointXY point) {
+    public static boolean isPointOnLineSegment(Line line, PointXY point) {
         if (point == null) return false;
 
-        return isPointOnLine(line, point) &&
-                BoundingBox.isPointInLine(point, line);
+        return (
+            isPointOnLine(line, point) && BoundingBox.isPointInLine(point, line)
+        );
     }
 
     /**
@@ -196,17 +184,15 @@ public class Line implements Serializable {
      * @param line      the line to use.
      * @return the closest point (to reference) on the line.
      */
-    public static PointXY getClosestPoint(PointXY reference,
-                                          Line line) {
+    public static PointXY getClosestPoint(PointXY reference, Line line) {
         if (
-                isPointOnLine(line, reference) ||
-                        !BoundingBox.isPointInLine(reference, line)
-        )
-            return getClosestEndpoint(reference, line);
+            isPointOnLine(line, reference) ||
+            !BoundingBox.isPointInLine(reference, line)
+        ) return getClosestEndpoint(reference, line);
 
         LinearEquation perpendicular = new PointSlope(
-                reference,
-                line.perpendicularSlope()
+            reference,
+            line.perpendicularSlope()
         );
 
         return perpendicular.getIntersection(line.getEquation());
@@ -219,16 +205,13 @@ public class Line implements Serializable {
      * @param line      the line to get the closest endpoint of.
      * @return the closest endpoint on the line.
      */
-    public static PointXY getClosestEndpoint(PointXY reference,
-                                             Line line) {
+    public static PointXY getClosestEndpoint(PointXY reference, Line line) {
         PointXY.checkArgument(reference);
 
         double distanceToStart = reference.distance(line.start);
         double distanceToEnd = reference.distance(line.end);
 
-        return distanceToStart < distanceToEnd
-                ? line.start
-                : line.end;
+        return distanceToStart < distanceToEnd ? line.start : line.end;
     }
 
     /**
@@ -238,16 +221,13 @@ public class Line implements Serializable {
      * @param line      the line to test.
      * @return the furthest point on the line.
      */
-    public static PointXY getFurthestPoint(PointXY reference,
-                                           Line line) {
+    public static PointXY getFurthestPoint(PointXY reference, Line line) {
         PointXY.checkArgument(reference);
 
         double distanceToStart = reference.distance(line.start);
         double distanceToEnd = reference.distance(line.end);
 
-        return distanceToStart > distanceToEnd
-                ? line.start
-                : line.end;
+        return distanceToStart > distanceToEnd ? line.start : line.end;
     }
 
     /**

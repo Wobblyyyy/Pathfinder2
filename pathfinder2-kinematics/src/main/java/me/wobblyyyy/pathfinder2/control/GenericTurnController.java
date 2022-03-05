@@ -30,6 +30,7 @@ package me.wobblyyyy.pathfinder2.control;
  * @since 0.1.0
  */
 public class GenericTurnController extends AngleDeltaController {
+
     /**
      * Create a new {@code GenericTurnController}.
      *
@@ -72,7 +73,9 @@ public class GenericTurnController extends AngleDeltaController {
      *                    be around 0.01.
      * @return a new {@code GenericTurnController}.
      */
-    public static GenericTurnController newInvertedController(double coefficient) {
+    public static GenericTurnController newInvertedController(
+        double coefficient
+    ) {
         return new GenericTurnController(coefficient * -1);
     }
 }

@@ -28,15 +28,16 @@ import me.wobblyyyy.pathfinder2.zones.ZoneProcessor;
  * @since 1.4.2
  */
 public class TickProcessor {
-    private TickProcessor() {
 
-    }
+    private TickProcessor() {}
 
-    public static Pathfinder runPreTick(Pathfinder pathfinder,
-                                        boolean isMinimal,
-                                        PathfinderPluginManager pluginManager,
-                                        Scheduler scheduler,
-                                        ZoneProcessor zoneProcessor) {
+    public static Pathfinder runPreTick(
+        Pathfinder pathfinder,
+        boolean isMinimal,
+        PathfinderPluginManager pluginManager,
+        Scheduler scheduler,
+        ZoneProcessor zoneProcessor
+    ) {
         pluginManager.preTick(pathfinder);
 
         if (!isMinimal) {
@@ -47,22 +48,25 @@ public class TickProcessor {
         return pathfinder;
     }
 
-    public static Pathfinder runExecutorTick(Pathfinder pathfinder,
-                                             ExecutorManager executorManager) {
+    public static Pathfinder runExecutorTick(
+        Pathfinder pathfinder,
+        ExecutorManager executorManager
+    ) {
         executorManager.tick();
 
         return pathfinder;
     }
 
-
-    public static Pathfinder runOnTick(Pathfinder pathfinder,
-                                       boolean isMinimal,
-                                       PathfinderPluginManager pluginManager,
-                                       MovementPlayback movementPlayback,
-                                       MovementProfiler movementProfiler,
-                                       MovementRecorder movementRecorder,
-                                       ListenerManager listenerManager,
-                                       Runnable runOnTickOperations) {
+    public static Pathfinder runOnTick(
+        Pathfinder pathfinder,
+        boolean isMinimal,
+        PathfinderPluginManager pluginManager,
+        MovementPlayback movementPlayback,
+        MovementProfiler movementProfiler,
+        MovementRecorder movementRecorder,
+        ListenerManager listenerManager,
+        Runnable runOnTickOperations
+    ) {
         pluginManager.onTick(pathfinder);
 
         if (!isMinimal) {

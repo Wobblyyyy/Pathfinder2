@@ -10,11 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.pathgen;
 
-import me.wobblyyyy.pathfinder2.geometry.PointXY;
-import me.wobblyyyy.pathfinder2.zones.Zone;
-
 import java.util.ArrayList;
 import java.util.List;
+import me.wobblyyyy.pathfinder2.geometry.PointXY;
+import me.wobblyyyy.pathfinder2.zones.Zone;
 
 /**
  * A localized implementation of the {@link PathGen} class. This allows you
@@ -38,43 +37,44 @@ public class LocalizedPathGen {
     private final double xScaling;
     private final double yScaling;
 
-    public LocalizedPathGen(double xScaling,
-                            double yScaling) {
-        this(
-                new ArrayList<>(0),
-                xScaling,
-                yScaling
-        );
+    public LocalizedPathGen(double xScaling, double yScaling) {
+        this(new ArrayList<>(0), xScaling, yScaling);
     }
 
-    public LocalizedPathGen(List<Zone> zones,
-                            double xScaling,
-                            double yScaling) {
+    public LocalizedPathGen(
+        List<Zone> zones,
+        double xScaling,
+        double yScaling
+    ) {
         this.zones = zones;
         this.xScaling = xScaling;
         this.yScaling = yScaling;
     }
 
-    public static LocalizedPathGen withInflatedZones(List<Zone> zones,
-                                                     double xScaling,
-                                                     double yScaling,
-                                                     double robotRadius) {
+    public static LocalizedPathGen withInflatedZones(
+        List<Zone> zones,
+        double xScaling,
+        double yScaling,
+        double robotRadius
+    ) {
         return new LocalizedPathGen(
-                Zone.inflate(zones, robotRadius),
-                xScaling,
-                yScaling
+            Zone.inflate(zones, robotRadius),
+            xScaling,
+            yScaling
         );
     }
 
-    public static LocalizedPathGen withInflatedZones(List<Zone> zones,
-                                                     double xScaling,
-                                                     double yScaling,
-                                                     double robotX,
-                                                     double robotY) {
+    public static LocalizedPathGen withInflatedZones(
+        List<Zone> zones,
+        double xScaling,
+        double yScaling,
+        double robotX,
+        double robotY
+    ) {
         return new LocalizedPathGen(
-                Zone.inflate(zones, Math.hypot(robotX, robotY)),
-                xScaling,
-                yScaling
+            Zone.inflate(zones, Math.hypot(robotX, robotY)),
+            xScaling,
+            yScaling
         );
     }
 
@@ -88,28 +88,27 @@ public class LocalizedPathGen {
      * a list containing the start and end points. Otherwise, this will
      * contain several points that allow you to go from point A to point B.
      */
-    public List<PointXY> getPath(PointXY start,
-                                 PointXY end) {
+    public List<PointXY> getPath(PointXY start, PointXY end) {
         double minX = PointXY.minimumX(start, end);
         double minY = PointXY.minimumY(start, end);
         double maxX = PointXY.maximumX(start, end);
         double maxY = PointXY.maximumY(start, end);
 
         LocalizedGrid grid = LocalizedGrid.generateLocalizedGrid(
-                xScaling,
-                yScaling,
-                minX,
-                minY,
-                maxX,
-                maxY
+            xScaling,
+            yScaling,
+            minX,
+            minY,
+            maxX,
+            maxY
         );
 
         NodeValidator.validateNodes(grid, zones);
 
         PathGen gen = new PathGen(
-                grid.getGrid(),
-                grid.getNode(start),
-                grid.getNode(end)
+            grid.getGrid(),
+            grid.getNode(start),
+            grid.getNode(end)
         );
 
         List<PointXY> points = grid.toPoints(gen.findCoordPath());

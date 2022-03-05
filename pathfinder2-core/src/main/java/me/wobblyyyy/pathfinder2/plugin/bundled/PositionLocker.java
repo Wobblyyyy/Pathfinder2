@@ -50,9 +50,7 @@ public class PositionLocker extends PathfinderPlugin {
     private Pathfinder pathfinder;
     private PointXYZ position;
 
-    public PositionLocker() {
-
-    }
+    public PositionLocker() {}
 
     @Override
     public void onLoad(Pathfinder pathfinder) {
@@ -94,29 +92,30 @@ public class PositionLocker extends PathfinderPlugin {
     }
 
     private void ensurePosition() {
-        pathfinder.getOdometry().offsetSoPositionIs(new PointXYZ(
-                lockX ? position.x() : pathfinder.getPosition().x(),
-                lockY ? position.y() : pathfinder.getPosition().y(),
-                lockZ ? position.z() : pathfinder.getPosition().z()
-        ));
+        pathfinder
+            .getOdometry()
+            .offsetSoPositionIs(
+                new PointXYZ(
+                    lockX ? position.x() : pathfinder.getPosition().x(),
+                    lockY ? position.y() : pathfinder.getPosition().y(),
+                    lockZ ? position.z() : pathfinder.getPosition().z()
+                )
+            );
     }
 
     @Override
     public void preTick(Pathfinder pathfinder) {
-        if (shouldEnsurePosition())
-            ensurePosition();
+        if (shouldEnsurePosition()) ensurePosition();
     }
 
     @Override
     public void onTick(Pathfinder pathfinder) {
-        if (shouldEnsurePosition())
-            ensurePosition();
+        if (shouldEnsurePosition()) ensurePosition();
     }
 
     @Override
     public void postTick(Pathfinder pathfinder) {
-        if (shouldEnsurePosition())
-            ensurePosition();
+        if (shouldEnsurePosition()) ensurePosition();
     }
 
     /**

@@ -10,10 +10,9 @@
 
 package me.wobblyyyy.pathfinder2.pathgen;
 
+import java.util.List;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.zones.Zone;
-
-import java.util.List;
 
 /**
  * I'm not entirely sure why I made this class, to be honest.
@@ -24,21 +23,23 @@ import java.util.List;
 public class AStarPathFinder {
     private final LocalizedPathGen pathGen;
 
-    public AStarPathFinder(GridScaling scale,
-                           double robotWidth,
-                           double robotLength,
-                           List<Zone> zones) {
-        pathGen = LocalizedPathGen.withInflatedZones(
+    public AStarPathFinder(
+        GridScaling scale,
+        double robotWidth,
+        double robotLength,
+        List<Zone> zones
+    ) {
+        pathGen =
+            LocalizedPathGen.withInflatedZones(
                 zones,
                 scale.getScaleX(),
                 scale.getScaleY(),
                 robotWidth,
                 robotLength
-        );
+            );
     }
 
-    public List<PointXY> getPath(PointXY start,
-                                 PointXY end) {
+    public List<PointXY> getPath(PointXY start, PointXY end) {
         return pathGen.getPath(start, end);
     }
 }

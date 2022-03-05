@@ -29,5 +29,5 @@ public enum ThreeAxisGyroscopeMode {
     /**
      * Use YAW for {@code getAngle()}.
      */
-    DEFAULT
+    DEFAULT,
 }

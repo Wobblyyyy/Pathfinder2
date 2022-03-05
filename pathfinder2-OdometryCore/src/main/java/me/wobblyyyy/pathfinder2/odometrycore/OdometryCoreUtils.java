@@ -22,9 +22,8 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
  * @since 0.0.0
  */
 public class OdometryCoreUtils {
-    private OdometryCoreUtils() {
 
-    }
+    private OdometryCoreUtils() {}
 
     /**
      * Convert an {@link OdometryPosition} into a {@link PointXYZ}.
@@ -34,9 +33,9 @@ public class OdometryCoreUtils {
      */
     public static PointXYZ fromOdometryPosition(OdometryPosition position) {
         return new PointXYZ(
-                position.getX(),
-                position.getY(),
-                Angle.fromDeg(position.getHeadingDegrees())
+            position.getX(),
+            position.getY(),
+            Angle.fromDeg(position.getHeadingDegrees())
         );
     }
 
@@ -48,10 +47,10 @@ public class OdometryCoreUtils {
      */
     public static OdometryPosition fromPointXYZ(PointXYZ point) {
         return new OdometryPosition(
-                point.x(),
-                point.y(),
-                point.z().deg(),
-                HeadingUnit.DEGREES
+            point.x(),
+            point.y(),
+            point.z().deg(),
+            HeadingUnit.DEGREES
         );
     }
 }

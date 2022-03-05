@@ -10,15 +10,14 @@
 
 package me.wobblyyyy.pathfinder2.prebuilt;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.trajectory.FastTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Utility class used for working with trajectories. Instead of having to
@@ -30,22 +29,23 @@ import java.util.List;
  * @since 0.1.0
  */
 public class TrajectoryFactory {
-    private TrajectoryFactory() {
 
-    }
+    private TrajectoryFactory() {}
 
-    public static List<Trajectory> getLinearTrajectories(List<PointXYZ> points,
-                                                         double speed,
-                                                         double tolerance,
-                                                         Angle angleTolerance) {
+    public static List<Trajectory> getLinearTrajectories(
+        List<PointXYZ> points,
+        double speed,
+        double tolerance,
+        Angle angleTolerance
+    ) {
         List<Trajectory> trajectories = new ArrayList<>(points.size() - 1);
 
         for (PointXYZ point : points) {
             LinearTrajectory trajectory = new LinearTrajectory(
-                    point,
-                    speed,
-                    tolerance,
-                    angleTolerance
+                point,
+                speed,
+                tolerance,
+                angleTolerance
             );
 
             trajectories.add(trajectory);
@@ -54,27 +54,31 @@ public class TrajectoryFactory {
         return trajectories;
     }
 
-    public static List<Trajectory> getLinearTrajectories(List<PointXYZ> points,
-                                                         Pathfinder pathfinder) {
+    public static List<Trajectory> getLinearTrajectories(
+        List<PointXYZ> points,
+        Pathfinder pathfinder
+    ) {
         return getLinearTrajectories(
-                points,
-                pathfinder.getSpeed(),
-                pathfinder.getTolerance(),
-                pathfinder.getAngleTolerance()
+            points,
+            pathfinder.getSpeed(),
+            pathfinder.getTolerance(),
+            pathfinder.getAngleTolerance()
         );
     }
 
-    public static List<Trajectory> getFastTrajectories(PointXYZ start,
-                                                       List<PointXYZ> points,
-                                                       double speed) {
+    public static List<Trajectory> getFastTrajectories(
+        PointXYZ start,
+        List<PointXYZ> points,
+        double speed
+    ) {
         List<Trajectory> trajectories = new ArrayList<>(points.size() - 1);
 
         PointXYZ lastPoint = start;
         for (PointXYZ point : points) {
             FastTrajectory trajectory = new FastTrajectory(
-                    lastPoint,
-                    point,
-                    speed
+                lastPoint,
+                point,
+                speed
             );
 
             trajectories.add(trajectory);
@@ -85,46 +89,41 @@ public class TrajectoryFactory {
         return trajectories;
     }
 
-    public static List<Trajectory> getFastTrajectories(List<PointXYZ> points,
-                                                       Pathfinder pathfinder) {
+    public static List<Trajectory> getFastTrajectories(
+        List<PointXYZ> points,
+        Pathfinder pathfinder
+    ) {
         PointXYZ position = pathfinder.getPosition();
 
-        return getFastTrajectories(
-                position,
-                points,
-                pathfinder.getSpeed()
-        );
+        return getFastTrajectories(position, points, pathfinder.getSpeed());
     }
 
-    public static Trajectory linearTrajectoryTo(PointXYZ target,
-                                                double speed,
-                                                double tolerance,
-                                                Angle angleTolerance) {
-        return new LinearTrajectory(
-                target,
-                speed,
-                tolerance,
-                angleTolerance
-        );
+    public static Trajectory linearTrajectoryTo(
+        PointXYZ target,
+        double speed,
+        double tolerance,
+        Angle angleTolerance
+    ) {
+        return new LinearTrajectory(target, speed, tolerance, angleTolerance);
     }
 
-    public static Trajectory linearTrajectoryTo(PointXYZ target,
-                                                Pathfinder pathfinder) {
+    public static Trajectory linearTrajectoryTo(
+        PointXYZ target,
+        Pathfinder pathfinder
+    ) {
         return linearTrajectoryTo(
-                target,
-                pathfinder.getSpeed(),
-                pathfinder.getTolerance(),
-                pathfinder.getAngleTolerance()
+            target,
+            pathfinder.getSpeed(),
+            pathfinder.getTolerance(),
+            pathfinder.getAngleTolerance()
         );
     }
 
-    public static Trajectory fastTrajectoryTo(PointXYZ start,
-                                              PointXYZ target,
-                                              double speed) {
-        return new FastTrajectory(
-                start,
-                target,
-                speed
-        );
+    public static Trajectory fastTrajectoryTo(
+        PointXYZ start,
+        PointXYZ target,
+        double speed
+    ) {
+        return new FastTrajectory(start, target, speed);
     }
 }

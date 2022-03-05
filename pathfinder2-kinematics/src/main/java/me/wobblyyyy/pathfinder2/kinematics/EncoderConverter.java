@@ -27,8 +27,10 @@ public class EncoderConverter {
      * @param wheelCircumference         the circumference of the wheel that's
      *                                   attached to the encoder.
      */
-    public EncoderConverter(double encoderCountsPerRevolution,
-                            double wheelCircumference) {
+    public EncoderConverter(
+        double encoderCountsPerRevolution,
+        double wheelCircumference
+    ) {
         this.encoderCpr = encoderCountsPerRevolution;
         this.wheelCircumference = wheelCircumference;
     }

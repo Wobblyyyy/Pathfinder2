@@ -11,7 +11,6 @@
 package me.wobblyyyy.pathfinder2.geometry;
 
 import java.io.Serializable;
-
 import me.wobblyyyy.pathfinder2.math.Equation;
 
 /**
@@ -105,10 +104,12 @@ public interface LinearEquation extends Serializable, Equation {
      * @param y2 the second y value.
      * @return a new {@code LinearEquation} based on the two points.
      */
-    static LinearEquation getEquation(double x1,
-                                      double y1,
-                                      double x2,
-                                      double y2) {
+    static LinearEquation getEquation(
+        double x1,
+        double y1,
+        double x2,
+        double y2
+    ) {
         double rise = y2 - y1;
         double run = x2 - x1;
         double slope = rise / run;
@@ -123,8 +124,7 @@ public interface LinearEquation extends Serializable, Equation {
      * @param b one of the two points.
      * @return a new {@code LinearEquation} based on the two points.
      */
-    static LinearEquation getEquation(PointXY a,
-                                      PointXY b) {
+    static LinearEquation getEquation(PointXY a, PointXY b) {
         return getEquation(a.x(), a.y(), b.x(), b.y());
     }
 }

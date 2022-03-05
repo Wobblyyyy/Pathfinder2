@@ -29,8 +29,7 @@ public class MinMax {
      * @param minimum the minimum value.
      * @param maximum the maximum value.
      */
-    public MinMax(double minimum,
-                  double maximum) {
+    public MinMax(double minimum, double maximum) {
         this.minimum = minimum;
         this.maximum = maximum;
     }
@@ -49,18 +48,18 @@ public class MinMax {
      * minimum will be returned. If the value is greater than the maximum,
      * the maximum will be returned. Otherwise, the value will be returned.
      */
-    public static double clip(double value,
-                              double min,
-                              double max) {
+    public static double clip(double value, double min, double max) {
         ValidationUtils.validate(value, "value");
 
         if (min >= max) {
-            throw new IllegalArgumentException(StringUtils.format(
+            throw new IllegalArgumentException(
+                StringUtils.format(
                     "Cannot perform a clip operation with a higher minimum " +
-                            "than maximum! Min: <%s>, Max: <%s>",
+                    "than maximum! Min: <%s>, Max: <%s>",
                     min,
                     max
-            ));
+                )
+            );
         }
 
         return Math.max(Math.min(value, max), min);

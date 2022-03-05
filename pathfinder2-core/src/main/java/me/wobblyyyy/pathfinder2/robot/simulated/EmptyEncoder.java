@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.robot.simulated;
 import me.wobblyyyy.pathfinder2.robot.sensors.AbstractEncoder;
 
 public class EmptyEncoder extends AbstractEncoder {
+
     @Override
     public int getRawTicks() {
         return 0;

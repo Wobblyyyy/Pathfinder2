@@ -36,5 +36,5 @@ public enum AHRSGyroMode {
     /**
      * Use the gyroscope's roll for angle values.
      */
-    ROLL
+    ROLL,
 }

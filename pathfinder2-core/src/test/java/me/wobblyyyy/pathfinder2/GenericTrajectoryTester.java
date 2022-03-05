@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.control.ProportionalController;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
@@ -24,9 +25,6 @@ import me.wobblyyyy.pathfinder2.trajectory.spline.SplineBuilderFactory;
 import me.wobblyyyy.pathfinder2.trajectory.spline.TestAdvancedSplineTrajectory;
 import me.wobblyyyy.pathfinder2.utils.AssertionUtils;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
-
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.junit.jupiter.api.*;
 
 /**
@@ -63,15 +61,18 @@ public class GenericTrajectoryTester {
 
     @BeforeEach
     public void beforeEach() {
-        wrapper = new SimulatedWrapper(new SimulatedDrive(), new SimulatedOdometry());
+        wrapper =
+            new SimulatedWrapper(new SimulatedDrive(), new SimulatedOdometry());
         odometry = wrapper.getOdometry();
         robot = wrapper.getRobot();
         turnController = new ProportionalController(turnCoefficient);
-        pathfinder = new Pathfinder(robot, turnController)
+        pathfinder =
+            new Pathfinder(robot, turnController)
                 .setSpeed(speed)
                 .setTolerance(tolerance)
                 .setAngleTolerance(angleTolerance);
-        factory = new SplineBuilderFactory()
+        factory =
+            new SplineBuilderFactory()
                 .setSpeed(speed)
                 .setStep(step)
                 .setTolerance(tolerance)
@@ -80,15 +81,14 @@ public class GenericTrajectoryTester {
 
     public void assertPositionIs(PointXYZ target) {
         AssertionUtils.assertIsNear(
-                target,
-                pathfinder.getPosition(),
-                tolerance,
-                angleTolerance
+            target,
+            pathfinder.getPosition(),
+            tolerance,
+            angleTolerance
         );
     }
 
-    public void follow(Trajectory trajectory,
-                       PointXYZ point) {
+    public void follow(Trajectory trajectory, PointXYZ point) {
         // this is pretty disgusting code, but it gets the job done
         // basically just spawn a new monitor thread to ensure that it doesn't
         // take over a certain amount of time to execute the trajectory. if it
@@ -100,40 +100,39 @@ public class GenericTrajectoryTester {
         AtomicBoolean hasNotExpired = new AtomicBoolean(true);
         AtomicBoolean hasExecuted = new AtomicBoolean(false);
 
-        Thread monitor = new Thread(() -> {
-            timer.start();
+        Thread monitor = new Thread(
+            () -> {
+                timer.start();
 
-            try {
-                while (!hasExecuted.get())
-                    Thread.sleep(1);
+                try {
+                    while (!hasExecuted.get()) Thread.sleep(1);
 
-                while (timer.elapsedMs() < maximumExecutionTimeMs) {
-                    Thread.sleep(1);
+                    while (timer.elapsedMs() < maximumExecutionTimeMs) {
+                        Thread.sleep(1);
 
-                    if (!pathfinder.isActive())
-                        break;
+                        if (!pathfinder.isActive()) break;
+                    }
+
+                    if (pathfinder.isActive()) hasNotExpired.set(false);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-
-                if (pathfinder.isActive())
-                    hasNotExpired.set(false);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
-        });
+        );
 
         monitor.start();
-        pathfinder.tickUntil(hasNotExpired::get, (pf) ->
-                hasExecuted.set(true));
+        pathfinder.tickUntil(hasNotExpired::get, pf -> hasExecuted.set(true));
 
-        if (!hasNotExpired.get())
-            throw new RuntimeException(StringUtils.format(
-                        "Trajectory <%s> (target <%s>) took more than %s " +
-                                "milliseconds to execute, meaning something " +
-                                "went wrong with following the trajectory!",
-                        trajectory,
-                        point,
-                        maximumExecutionTimeMs
-                ));
+        if (!hasNotExpired.get()) throw new RuntimeException(
+            StringUtils.format(
+                "Trajectory <%s> (target <%s>) took more than %s " +
+                "milliseconds to execute, meaning something " +
+                "went wrong with following the trajectory!",
+                trajectory,
+                point,
+                maximumExecutionTimeMs
+            )
+        );
 
         assertPositionIs(point);
     }

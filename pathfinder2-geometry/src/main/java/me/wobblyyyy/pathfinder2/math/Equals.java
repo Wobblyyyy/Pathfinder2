@@ -21,6 +21,7 @@ import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
  * @since 0.0.0
  */
 public class Equals {
+
     /**
      * Soft-equals - are two numbers within a given distance of another?
      *
@@ -30,9 +31,11 @@ public class Equals {
      *                  to be "equal."
      * @return true if the numbers are "equal" and false if not.
      */
-    public static boolean softWithoutValidation(double a,
-                                                double b,
-                                                double tolerance) {
+    public static boolean softWithoutValidation(
+        double a,
+        double b,
+        double tolerance
+    ) {
         return Math.abs(a - b) <= tolerance;
     }
 
@@ -45,16 +48,14 @@ public class Equals {
      *                  to be "equal."
      * @return true if the numbers are "equal" and false if not.
      */
-    public static boolean soft(double a,
-                               double b,
-                               double tolerance) {
+    public static boolean soft(double a, double b, double tolerance) {
         ValidationUtils.validate(a);
         ValidationUtils.validate(b);
         ValidationUtils.validate(tolerance);
 
         if (tolerance < 0) {
             throw new InvalidToleranceException(
-                    "Cannot have a tolerance value less than 0!"
+                "Cannot have a tolerance value less than 0!"
             );
         }
 
@@ -70,16 +71,14 @@ public class Equals {
      *                  to be "equal."
      * @return true if the numbers are "equal" and false if not.
      */
-    public static boolean soft(int a,
-                               int b,
-                               int tolerance) {
+    public static boolean soft(int a, int b, int tolerance) {
         ValidationUtils.validate(a);
         ValidationUtils.validate(b);
         ValidationUtils.validate(tolerance);
 
         if (tolerance < 0) {
             throw new InvalidToleranceException(
-                    "Cannot have a tolerance value less than 0!"
+                "Cannot have a tolerance value less than 0!"
             );
         }
 
@@ -95,16 +94,14 @@ public class Equals {
      *                  to be "equal."
      * @return true if the numbers are "equal" and false if not.
      */
-    public static boolean soft(float a,
-                               float b,
-                               float tolerance) {
+    public static boolean soft(float a, float b, float tolerance) {
         ValidationUtils.validate(a);
         ValidationUtils.validate(b);
         ValidationUtils.validate(tolerance);
 
         if (tolerance < 0) {
             throw new InvalidToleranceException(
-                    "Cannot have a tolerance value less than 0!"
+                "Cannot have a tolerance value less than 0!"
             );
         }
 
@@ -120,16 +117,14 @@ public class Equals {
      *                  to be "equal."
      * @return true if the numbers are "equal" and false if not.
      */
-    public static boolean soft(long a,
-                               long b,
-                               long tolerance) {
+    public static boolean soft(long a, long b, long tolerance) {
         ValidationUtils.validate(a);
         ValidationUtils.validate(b);
         ValidationUtils.validate(tolerance);
 
         if (tolerance < 0) {
             throw new InvalidToleranceException(
-                    "Cannot have a tolerance value less than 0!"
+                "Cannot have a tolerance value less than 0!"
             );
         }
 
@@ -145,9 +140,11 @@ public class Equals {
      *                  to be "equal."
      * @return true if the {@link Angle}s are "equal" and false if not.
      */
-    public static boolean softWithoutValidation(Angle a,
-                                                Angle b,
-                                                Angle tolerance) {
+    public static boolean softWithoutValidation(
+        Angle a,
+        Angle b,
+        Angle tolerance
+    ) {
         double minimumDeltaDeg = Math.abs(Angle.angleDeltaDeg(a, b));
         double toleranceDeg = Math.abs(tolerance.deg());
 
@@ -163,9 +160,7 @@ public class Equals {
      *                  to be "equal."
      * @return true if the {@link Angle}s are "equal" and false if not.
      */
-    public static boolean soft(Angle a,
-                               Angle b,
-                               Angle tolerance) {
+    public static boolean soft(Angle a, Angle b, Angle tolerance) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
         ValidationUtils.validate(tolerance, "tolerance");

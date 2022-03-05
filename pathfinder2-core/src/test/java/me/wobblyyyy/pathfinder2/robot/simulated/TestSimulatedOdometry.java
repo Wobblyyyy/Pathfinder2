@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestSimulatedOdometry {
+
     @Test
     public void testRawPosition() {
         SimulatedOdometry odometry = new SimulatedOdometry();

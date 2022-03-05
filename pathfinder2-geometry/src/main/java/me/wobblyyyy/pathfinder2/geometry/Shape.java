@@ -40,67 +40,55 @@ import java.util.List;
  * @since 0.1.0
  */
 public interface Shape<T> extends Serializable {
-    static List<Line> getIntersections(Line line,
-                                       List<Line> allLines) {
+    static List<Line> getIntersections(Line line, List<Line> allLines) {
         List<Line> intersectingLines = new ArrayList<>();
 
-        for (Line l : allLines)
-            if (line.doesIntersectWith(l))
-                intersectingLines.add(l);
+        for (Line l : allLines) if (
+            line.doesIntersectWith(l)
+        ) intersectingLines.add(l);
 
         return intersectingLines;
     }
 
-    static int getIntersectionsCount(Line line,
-                                     List<Line> allLines) {
+    static int getIntersectionsCount(Line line, List<Line> allLines) {
         int i = 0;
 
-        for (Line l : allLines)
-            if (line.doesIntersectWith(l))
-                i++;
+        for (Line l : allLines) if (line.doesIntersectWith(l)) i++;
 
         return i;
     }
 
-    static boolean doesIntersectOdd(Line line,
-                                    List<Line> allLines) {
+    static boolean doesIntersectOdd(Line line, List<Line> allLines) {
         return getIntersectionsCount(line, allLines) % 2 == 1;
     }
 
-    static boolean doesIntersectEven(Line line,
-                                     List<Line> allLines) {
+    static boolean doesIntersectEven(Line line, List<Line> allLines) {
         return getIntersectionsCount(line, allLines) % 2 == 0;
     }
 
-    static List<Line> getIntersections(Line line,
-                                       Line... allLines) {
+    static List<Line> getIntersections(Line line, Line... allLines) {
         List<Line> intersectingLines = new ArrayList<>();
 
-        for (Line l : allLines)
-            if (line.doesIntersectWith(l))
-                intersectingLines.add(l);
+        for (Line l : allLines) if (
+            line.doesIntersectWith(l)
+        ) intersectingLines.add(l);
 
         return intersectingLines;
     }
 
-    static int getIntersectionsCount(Line line,
-                                     Line... allLines) {
+    static int getIntersectionsCount(Line line, Line... allLines) {
         int i = 0;
 
-        for (Line l : allLines)
-            if (line.doesIntersectWith(l))
-                i++;
+        for (Line l : allLines) if (line.doesIntersectWith(l)) i++;
 
         return i;
     }
 
-    static boolean doesIntersectOdd(Line line,
-                                    Line... allLines) {
+    static boolean doesIntersectOdd(Line line, Line... allLines) {
         return getIntersectionsCount(line, allLines) % 2 == 1;
     }
 
-    static boolean doesIntersectEven(Line line,
-                                     Line... allLines) {
+    static boolean doesIntersectEven(Line line, Line... allLines) {
         return getIntersectionsCount(line, allLines) % 2 == 0;
     }
 

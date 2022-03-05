@@ -49,8 +49,8 @@ public class GenericFollowerGenerator implements FollowerGenerator {
     public GenericFollowerGenerator(Controller turnController) {
         if (turnController == null) {
             throw new NullControllerException(
-                    "Can't create a generic follower generator with " +
-                            "a null turn controller!"
+                "Can't create a generic follower generator with " +
+                "a null turn controller!"
             );
         }
         this.turnController = turnController;
@@ -64,30 +64,26 @@ public class GenericFollowerGenerator implements FollowerGenerator {
      * @return a new {@link GenericFollower}.
      */
     @Override
-    public Follower generate(Robot robot,
-                             Trajectory trajectory) {
+    public Follower generate(Robot robot, Trajectory trajectory) {
         if (robot.odometry() == null) {
             throw new NullOdometryException(
-                    "Can't generate a follower with null Odometry!"
+                "Can't generate a follower with null Odometry!"
             );
         }
 
         if (robot.drive() == null) {
             throw new NullDriveException(
-                    "Can't generate a follower with null Drive"
+                "Can't generate a follower with null Drive"
             );
         }
 
         if (trajectory == null) {
             throw new NullTrajectoryException(
-                    "Can't generate a follower with a null Trajectory!"
+                "Can't generate a follower with a null Trajectory!"
             );
         }
 
-        return new GenericFollower(
-                trajectory,
-                turnController
-        );
+        return new GenericFollower(trajectory, turnController);
     }
 
     public Controller getTurnController() {

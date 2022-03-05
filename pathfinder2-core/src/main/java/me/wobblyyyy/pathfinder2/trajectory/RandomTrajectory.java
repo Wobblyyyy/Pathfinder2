@@ -22,13 +22,16 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
  * @since 1.0.1
  */
 public class RandomTrajectory implements Trajectory {
+
     @Override
     public PointXYZ nextMarker(PointXYZ current) {
-        return current.add(new PointXYZ(
+        return current.add(
+            new PointXYZ(
                 Math.random() * 2,
                 Math.random() * 2,
                 Math.random() * 2
-        ));
+            )
+        );
     }
 
     @Override

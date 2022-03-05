@@ -10,12 +10,11 @@
 
 package me.wobblyyyy.pathfinder2.robot;
 
+import java.util.function.Function;
+import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
-
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * A system capable of reporting the position of a robot. Several odometry
@@ -81,17 +80,21 @@ public interface Odometry {
      * center of the robot's position.
      */
     default PointXYZ getPosition() {
-        return ValidationUtils.validate(
+        return ValidationUtils
+            .validate(
                 getRawPosition(),
                 "getRawPosition()",
                 "your getRawPosition() method implementation returned null, " +
-                        "which it should never do!"
-        ).add(ValidationUtils.validate(
-                getOffset(),
-                "getOffset()",
-                "your getOffset() method implementation returned null, " +
-                        "which it should never do!"
-        ));
+                "which it should never do!"
+            )
+            .add(
+                ValidationUtils.validate(
+                    getOffset(),
+                    "getOffset()",
+                    "your getOffset() method implementation returned null, " +
+                    "which it should never do!"
+                )
+            );
     }
 
     /**
@@ -114,9 +117,11 @@ public interface Odometry {
      *               {@link PointXYZ#add(PointXYZ)}.
      */
     default void setOffset(PointXYZ offset) {
-        throw new UnsupportedOperationException("The implementation of " +
-                "the Odometry interface you're using does not support " +
-                "offsets! Maybe use AbstractOdometry?");
+        throw new UnsupportedOperationException(
+            "The implementation of " +
+            "the Odometry interface you're using does not support " +
+            "offsets! Maybe use AbstractOdometry?"
+        );
     }
 
     /**
@@ -320,6 +325,7 @@ public interface Odometry {
         Supplier<PointXYZ> getPos = this::getRawPosition;
 
         return new AbstractOdometry() {
+
             @Override
             public PointXYZ getRawPosition() {
                 return getPos.get();
@@ -328,14 +334,18 @@ public interface Odometry {
     }
 
     default Function<PointXYZ, PointXYZ> getOdometryModifier() {
-        throw new UnsupportedOperationException("The implementation of " +
-                "the Odometry interface you're using does not support " +
-                "modifiers! Maybe use AbstractOdometry?");
+        throw new UnsupportedOperationException(
+            "The implementation of " +
+            "the Odometry interface you're using does not support " +
+            "modifiers! Maybe use AbstractOdometry?"
+        );
     }
 
     default void setOdometryModifier(Function<PointXYZ, PointXYZ> modifier) {
-        throw new UnsupportedOperationException("The implementation of " +
-                "the Odometry interface you're using does not support " +
-                "modifiers! Maybe use AbstractOdometry?");
+        throw new UnsupportedOperationException(
+            "The implementation of " +
+            "the Odometry interface you're using does not support " +
+            "modifiers! Maybe use AbstractOdometry?"
+        );
     }
 }

@@ -16,6 +16,7 @@ package me.wobblyyyy.pathfinder2.geometry;
  * @since 1.3.0
  */
 public class Degrees extends Angle {
+
     public Degrees(double degrees) {
         super(degrees);
     }

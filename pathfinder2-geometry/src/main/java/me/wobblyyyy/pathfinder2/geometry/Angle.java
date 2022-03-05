@@ -10,14 +10,13 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+import java.io.Serializable;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.math.Rounding;
-import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
-
-import java.io.Serializable;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
  * An angle, represented both in degrees and radians. {@code Angle} objects
@@ -276,8 +275,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param rad radians value.
      * @param deg degrees value.
      */
-    protected Angle(double rad,
-                    double deg) {
+    protected Angle(double rad, double deg) {
         ValidationUtils.validate(rad, "rad");
         ValidationUtils.validate(deg, "deg");
 
@@ -287,8 +285,7 @@ public class Angle implements Comparable<Angle>, Serializable {
         this.deg = deg;
     }
 
-    public static Angle fromTrig(double sin,
-                                 double cos) {
+    public static Angle fromTrig(double sin, double cos) {
         return atan2(sin, cos);
     }
 
@@ -301,10 +298,12 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param max10 10 times the maximum value.
      * @return a fixed value.
      */
-    public static double fix(double value,
-                             double min,
-                             double max,
-                             double max10) {
+    public static double fix(
+        double value,
+        double min,
+        double max,
+        double max10
+    ) {
         ValidationUtils.validate(value);
 
         // max10 improves performance on angles that are very far outside
@@ -365,8 +364,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @return a new angle.
      */
     public static Angle fromDeg(double deg) {
-        if (Equals.soft(deg, 0, 0.01))
-            return ZERO;
+        if (Equals.soft(deg, 0, 0.01)) return ZERO;
 
         return new Angle(Math.toRadians(deg), deg);
     }
@@ -430,10 +428,10 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param value the value of the angle.
      * @return a new angle.
      */
-    public static Angle angle(AngleUnit unit,
-                              double value) {
-        if (unit == AngleUnit.RADIANS) return fromRad(value);
-        else return fromDeg(value);
+    public static Angle angle(AngleUnit unit, double value) {
+        if (unit == AngleUnit.RADIANS) return fromRad(
+            value
+        ); else return fromDeg(value);
     }
 
     /**
@@ -444,13 +442,10 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param value the angle's value.
      * @return a new angle.
      */
-    public static Angle fixed(AngleUnit unit,
-                              double value) {
+    public static Angle fixed(AngleUnit unit, double value) {
         return angle(
-                unit,
-                unit == AngleUnit.RADIANS ?
-                        fixRad(value) :
-                        fixDeg(value)
+            unit,
+            unit == AngleUnit.RADIANS ? fixRad(value) : fixDeg(value)
         );
     }
 
@@ -461,14 +456,19 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param b angle 2
      * @return angle 1 + angle 2
      */
-    public static Angle add(Angle a,
-                            Angle b) {
-        NullAngleException.throwIfInvalid("The first angle ('a') was " +
-                "null! In case you couldn't guess, that... well, " +
-                "it probably shouldn't be null.", a);
-        NullAngleException.throwIfInvalid("The second angle ('b') was " +
-                "null! In case you couldn't guess, that... well, " +
-                "it probably shouldn't be null.", b);
+    public static Angle add(Angle a, Angle b) {
+        NullAngleException.throwIfInvalid(
+            "The first angle ('a') was " +
+            "null! In case you couldn't guess, that... well, " +
+            "it probably shouldn't be null.",
+            a
+        );
+        NullAngleException.throwIfInvalid(
+            "The second angle ('b') was " +
+            "null! In case you couldn't guess, that... well, " +
+            "it probably shouldn't be null.",
+            b
+        );
 
         return Angle.fixedRad(a.rad() + b.rad());
     }
@@ -480,14 +480,19 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param b angle 2
      * @return angle 1 - angle 2
      */
-    public static Angle subtract(Angle a,
-                                 Angle b) {
-        NullAngleException.throwIfInvalid("The first angle ('a') was " +
-                "null! In case you couldn't guess, that... well, " +
-                "it probably shouldn't be null.", a);
-        NullAngleException.throwIfInvalid("The second angle ('b') was " +
-                "null! In case you couldn't guess, that... well, " +
-                "it probably shouldn't be null.", b);
+    public static Angle subtract(Angle a, Angle b) {
+        NullAngleException.throwIfInvalid(
+            "The first angle ('a') was " +
+            "null! In case you couldn't guess, that... well, " +
+            "it probably shouldn't be null.",
+            a
+        );
+        NullAngleException.throwIfInvalid(
+            "The second angle ('b') was " +
+            "null! In case you couldn't guess, that... well, " +
+            "it probably shouldn't be null.",
+            b
+        );
 
         return add(a, multiply(b, -1));
     }
@@ -499,14 +504,19 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param b angle 2
      * @return angle 1 * angle 2
      */
-    public static Angle multiply(Angle a,
-                                 Angle b) {
-        NullAngleException.throwIfInvalid("The first angle ('a') was " +
-                "null! In case you couldn't guess, that... well, " +
-                "it probably shouldn't be null.", a);
-        NullAngleException.throwIfInvalid("The second angle ('b') was " +
-                "null! In case you couldn't guess, that... well, " +
-                "it probably shouldn't be null.", b);
+    public static Angle multiply(Angle a, Angle b) {
+        NullAngleException.throwIfInvalid(
+            "The first angle ('a') was " +
+            "null! In case you couldn't guess, that... well, " +
+            "it probably shouldn't be null.",
+            a
+        );
+        NullAngleException.throwIfInvalid(
+            "The second angle ('b') was " +
+            "null! In case you couldn't guess, that... well, " +
+            "it probably shouldn't be null.",
+            b
+        );
 
         return Angle.fixedRad(a.rad() * b.rad());
     }
@@ -518,8 +528,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param b multiplier
      * @return angle * multiplier
      */
-    public static Angle multiply(Angle a,
-                                 double b) {
+    public static Angle multiply(Angle a, double b) {
         return Angle.fixedRad(a.rad() * b);
     }
 
@@ -544,14 +553,19 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param b angle 2
      * @return angle 1 == angle 2
      */
-    public static boolean equals(Angle a,
-                                 Angle b) {
-        NullAngleException.throwIfInvalid("The first angle ('a') was " +
-                "null! In case you couldn't guess, that... well, " +
-                "it probably shouldn't be null.", a);
-        NullAngleException.throwIfInvalid("The second angle ('b') was " +
-                "null! In case you couldn't guess, that... well, " +
-                "it probably shouldn't be null.", b);
+    public static boolean equals(Angle a, Angle b) {
+        NullAngleException.throwIfInvalid(
+            "The first angle ('a') was " +
+            "null! In case you couldn't guess, that... well, " +
+            "it probably shouldn't be null.",
+            a
+        );
+        NullAngleException.throwIfInvalid(
+            "The second angle ('b') was " +
+            "null! In case you couldn't guess, that... well, " +
+            "it probably shouldn't be null.",
+            b
+        );
 
         return Equals.soft(a, b, Geometry.toleranceAngle);
     }
@@ -564,19 +578,23 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param tolerance max tolerance
      * @return if the two angles are close in radians
      */
-    public static boolean isCloseRad(Angle a,
-                                     Angle b,
-                                     double tolerance) {
-        NullAngleException.throwIfInvalid("The first angle ('a') was " +
-                "null! In case you couldn't guess, that... well, " +
-                "it probably shouldn't be null.", a);
-        NullAngleException.throwIfInvalid("The second angle ('b') was " +
-                "null! In case you couldn't guess, that... well, " +
-                "it probably shouldn't be null.", b);
+    public static boolean isCloseRad(Angle a, Angle b, double tolerance) {
+        NullAngleException.throwIfInvalid(
+            "The first angle ('a') was " +
+            "null! In case you couldn't guess, that... well, " +
+            "it probably shouldn't be null.",
+            a
+        );
+        NullAngleException.throwIfInvalid(
+            "The second angle ('b') was " +
+            "null! In case you couldn't guess, that... well, " +
+            "it probably shouldn't be null.",
+            b
+        );
 
         if (tolerance < 0) {
             throw new InvalidToleranceException(
-                    "Cannot have a tolerance below 0!"
+                "Cannot have a tolerance below 0!"
             );
         }
 
@@ -591,19 +609,23 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param tolerance max tolerance
      * @return if the two angles are close in degrees
      */
-    public static boolean isCloseDeg(Angle a,
-                                     Angle b,
-                                     double tolerance) {
-        NullAngleException.throwIfInvalid("The first angle ('a') was " +
-                "null! In case you couldn't guess, that... well, " +
-                "it probably shouldn't be null.", a);
-        NullAngleException.throwIfInvalid("The second angle ('b') was " +
-                "null! In case you couldn't guess, that... well, " +
-                "it probably shouldn't be null.", b);
+    public static boolean isCloseDeg(Angle a, Angle b, double tolerance) {
+        NullAngleException.throwIfInvalid(
+            "The first angle ('a') was " +
+            "null! In case you couldn't guess, that... well, " +
+            "it probably shouldn't be null.",
+            a
+        );
+        NullAngleException.throwIfInvalid(
+            "The second angle ('b') was " +
+            "null! In case you couldn't guess, that... well, " +
+            "it probably shouldn't be null.",
+            b
+        );
 
         if (tolerance < 0) {
             throw new InvalidToleranceException(
-                    "Cannot have a tolerance below 0!"
+                "Cannot have a tolerance below 0!"
             );
         }
 
@@ -634,14 +656,19 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @return the minimum delta between these two angles. This is measured
      * in degrees, not radians.
      */
-    public static double minimumDelta(Angle a,
-                                      Angle b) {
-        NullAngleException.throwIfInvalid("The first angle ('a') was " +
-                "null! In case you couldn't guess, that... well, " +
-                "it probably shouldn't be null.", a);
-        NullAngleException.throwIfInvalid("The second angle ('b') was " +
-                "null! In case you couldn't guess, that... well, " +
-                "it probably shouldn't be null.", b);
+    public static double minimumDelta(Angle a, Angle b) {
+        NullAngleException.throwIfInvalid(
+            "The first angle ('a') was " +
+            "null! In case you couldn't guess, that... well, " +
+            "it probably shouldn't be null.",
+            a
+        );
+        NullAngleException.throwIfInvalid(
+            "The second angle ('b') was " +
+            "null! In case you couldn't guess, that... well, " +
+            "it probably shouldn't be null.",
+            b
+        );
 
         double aDeg = a.fix().deg;
         double bDeg = b.fix().deg;
@@ -666,8 +693,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @return the minimum delta between the two angles.
      * @see #minimumDelta(Angle, Angle)
      */
-    public static Angle angleDelta(Angle a,
-                                   Angle b) {
+    public static Angle angleDelta(Angle a, Angle b) {
         return fromDeg(minimumDelta(a, b));
     }
 
@@ -680,8 +706,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @see #minimumDelta(Angle, Angle)
      * @see #angleDelta(Angle, Angle)
      */
-    public static double angleDeltaDeg(Angle a,
-                                       Angle b) {
+    public static double angleDeltaDeg(Angle a, Angle b) {
         return angleDelta(a, b).deg();
     }
 
@@ -694,8 +719,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @see #minimumDelta(Angle, Angle)
      * @see #angleDelta(Angle, Angle)
      */
-    public static double angleDeltaRad(Angle a,
-                                       Angle b) {
+    public static double angleDeltaRad(Angle a, Angle b) {
         return angleDelta(a, b).rad();
     }
 
@@ -762,8 +786,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @see #fixedRotateRad(Angle, double)
      * @see #fixedRotateDeg(Angle, double)
      */
-    public static Angle rotateRad(Angle a,
-                                  double rad) {
+    public static Angle rotateRad(Angle a, double rad) {
         return Angle.fromRad(a.rad() + rad);
     }
 
@@ -777,8 +800,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @see #fixedRotateRad(Angle, double)
      * @see #fixedRotateDeg(Angle, double)
      */
-    public static Angle rotateDeg(Angle a,
-                                  double deg) {
+    public static Angle rotateDeg(Angle a, double deg) {
         return Angle.fromDeg(a.deg() + deg);
     }
 
@@ -792,8 +814,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @see #rotateDeg(Angle, double)
      * @see #fixedRotateDeg(Angle, double)
      */
-    public static Angle fixedRotateRad(Angle a,
-                                       double rad) {
+    public static Angle fixedRotateRad(Angle a, double rad) {
         return Angle.fromRad(fixRad(a.rad() + rad));
     }
 
@@ -807,8 +828,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @see #rotateDeg(Angle, double)
      * @see #fixedRotateRad(Angle, double)
      */
-    public static Angle fixedRotateDeg(Angle a,
-                                       double deg) {
+    public static Angle fixedRotateDeg(Angle a, double deg) {
         return Angle.fromDeg(fixDeg(a.deg() + deg));
     }
 
@@ -852,17 +872,15 @@ public class Angle implements Comparable<Angle>, Serializable {
         return Math.toRadians(deg);
     }
 
-    public static void checkArgument(Angle angle,
-                                     String message) {
-        if (angle == null)
-            throw new IllegalArgumentException(message);
+    public static void checkArgument(Angle angle, String message) {
+        if (angle == null) throw new IllegalArgumentException(message);
     }
 
     public static void checkArgument(Angle angle) {
         checkArgument(
-                angle,
-                "Attempted to operate on a null angle, please " +
-                        "make sure you're not passing a null angle to a method."
+            angle,
+            "Attempted to operate on a null angle, please " +
+            "make sure you're not passing a null angle to a method."
         );
     }
 
@@ -1023,8 +1041,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      *
      * @see #isCloseRad(Angle, Angle, double)
      */
-    public boolean isCloseRad(Angle a,
-                              double tolerance) {
+    public boolean isCloseRad(Angle a, double tolerance) {
         return isCloseRad(this, a, tolerance);
     }
 
@@ -1033,8 +1050,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      *
      * @see #isCloseDeg(Angle, Angle, double)
      */
-    public boolean isCloseDeg(Angle a,
-                              double tolerance) {
+    public boolean isCloseDeg(Angle a, double tolerance) {
         return isCloseDeg(this, a, tolerance);
     }
 
@@ -1160,9 +1176,9 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public String formatAsRadShort() {
         return StringUtils.format(
-                "%s %s",
-                Rounding.fastRound(rad()),
-                FORMAT_RAD_SHORT
+            "%s %s",
+            Rounding.fastRound(rad()),
+            FORMAT_RAD_SHORT
         );
     }
 
@@ -1173,9 +1189,9 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public String formatAsDegShort() {
         return StringUtils.format(
-                "%s %s",
-                Rounding.fastRound(deg()),
-                FORMAT_DEG_SHORT
+            "%s %s",
+            Rounding.fastRound(deg()),
+            FORMAT_DEG_SHORT
         );
     }
 
@@ -1186,9 +1202,9 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public String formatAsRadLong() {
         return StringUtils.format(
-                "%s %s",
-                Rounding.fastRound(rad()),
-                FORMAT_RAD_LONG
+            "%s %s",
+            Rounding.fastRound(rad()),
+            FORMAT_RAD_LONG
         );
     }
 
@@ -1199,9 +1215,9 @@ public class Angle implements Comparable<Angle>, Serializable {
      */
     public String formatAsDegLong() {
         return StringUtils.format(
-                "%s %s",
-                Rounding.fastRound(deg()),
-                FORMAT_DEG_LONG
+            "%s %s",
+            Rounding.fastRound(deg()),
+            FORMAT_DEG_LONG
         );
     }
 
@@ -1261,18 +1277,23 @@ public class Angle implements Comparable<Angle>, Serializable {
      * minimum angle; if this angle is greater than the maximum angle, return
      * the maximum angle; otherwise, return this angle.
      */
-    public Angle angleWithMinAndMax(Angle minimum,
-                                    Angle maximum) {
-        NullAngleException.throwIfInvalid("The first angle ('minimum') was " +
-                "null! In case you couldn't guess, that... well, " +
-                "it probably shouldn't be null.", minimum);
-        NullAngleException.throwIfInvalid("The second angle ('maximum') was " +
-                "null! In case you couldn't guess, that... well, " +
-                "it probably shouldn't be null.", maximum);
+    public Angle angleWithMinAndMax(Angle minimum, Angle maximum) {
+        NullAngleException.throwIfInvalid(
+            "The first angle ('minimum') was " +
+            "null! In case you couldn't guess, that... well, " +
+            "it probably shouldn't be null.",
+            minimum
+        );
+        NullAngleException.throwIfInvalid(
+            "The second angle ('maximum') was " +
+            "null! In case you couldn't guess, that... well, " +
+            "it probably shouldn't be null.",
+            maximum
+        );
 
-        if (greaterThan(maximum)) return maximum;
-        else if (lessThan(minimum)) return minimum;
-        else return this;
+        if (greaterThan(maximum)) return maximum; else if (
+            lessThan(minimum)
+        ) return minimum; else return this;
     }
 
     /**
@@ -1297,10 +1318,7 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @return the {@link Translation} representation of this angle.
      */
     public Translation toTranslation(double vz) {
-        return toTranslation(
-                1.0,
-                vz
-        );
+        return toTranslation(1.0, vz);
     }
 
     /**
@@ -1317,18 +1335,10 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @param vz                   the vz value to add on to the translation.
      * @return the {@link Translation} representation of this angle.
      */
-    public Translation toTranslation(double translationMagnitude,
-                                     double vz) {
-        PointXY point = PointXY.ZERO.inDirection(
-                translationMagnitude,
-                this
-        );
+    public Translation toTranslation(double translationMagnitude, double vz) {
+        PointXY point = PointXY.ZERO.inDirection(translationMagnitude, this);
 
-        return new Translation(
-                point.x(),
-                point.y(),
-                vz
-        );
+        return new Translation(point.x(), point.y(), vz);
     }
 
     /**
@@ -1350,8 +1360,8 @@ public class Angle implements Comparable<Angle>, Serializable {
     @Override
     public String toString() {
         return StringUtils.format(
-                Geometry.formatAngle,
-                Rounding.fastRound(deg)
+            Geometry.formatAngle,
+            Rounding.fastRound(deg)
         );
     }
 
@@ -1365,10 +1375,16 @@ public class Angle implements Comparable<Angle>, Serializable {
         if (obj instanceof Angle) {
             Angle a = (Angle) obj;
 
-            boolean sameDeg = Equals.soft(a.deg, this.deg,
-                    Geometry.toleranceAngle.rad);
-            boolean sameRad = Equals.soft(a.rad, this.rad,
-                    Geometry.toleranceAngle.deg);
+            boolean sameDeg = Equals.soft(
+                a.deg,
+                this.deg,
+                Geometry.toleranceAngle.rad
+            );
+            boolean sameRad = Equals.soft(
+                a.rad,
+                this.rad,
+                Geometry.toleranceAngle.deg
+            );
 
             return sameDeg || sameRad;
         }
@@ -1402,6 +1418,6 @@ public class Angle implements Comparable<Angle>, Serializable {
          * </ul>
          * </p>
          */
-        DEGREES
+        DEGREES,
     }
 }

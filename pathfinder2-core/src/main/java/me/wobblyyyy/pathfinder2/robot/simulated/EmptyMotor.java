@@ -19,9 +19,8 @@ import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
  * @since 0.1.0
  */
 public class EmptyMotor extends AbstractMotor {
-    public EmptyMotor() {
-        super(aDouble -> {
 
-        }, () -> null);
+    public EmptyMotor() {
+        super(aDouble -> {}, () -> null);
     }
 }

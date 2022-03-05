@@ -10,14 +10,13 @@
 
 package me.wobblyyyy.pathfinder2.execution;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.robot.Robot;
 import me.wobblyyyy.pathfinder2.time.Time;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A manager, responsible for... well, managing executors. This manager
@@ -78,9 +77,10 @@ public class ExecutorManager {
      * @param robot the robot.
      */
     public ExecutorManager(Robot robot) {
-        if (robot == null)
-            throw new NullPointerException("Attempted to create an " +
-                    "ExecutorManager with a null Robot object!");
+        if (robot == null) throw new NullPointerException(
+            "Attempted to create an " +
+            "ExecutorManager with a null Robot object!"
+        );
 
         this.odometry = robot.odometry();
         this.drive = robot.drive();
@@ -95,17 +95,11 @@ public class ExecutorManager {
      *                  create a new {@link FollowerExecutor}.
      */
     public void addExecutor(List<Follower> followers) {
-        if (followers == null)
-            throw new NullPointerException("Attempted to use addExecutor " +
-                    "with a null List<Follower>!");
-
-        executors.add(
-                new FollowerExecutor(
-                        odometry,
-                        drive,
-                        followers
-                )
+        if (followers == null) throw new NullPointerException(
+            "Attempted to use addExecutor " + "with a null List<Follower>!"
         );
+
+        executors.add(new FollowerExecutor(odometry, drive, followers));
     }
 
     /**
@@ -116,17 +110,11 @@ public class ExecutorManager {
      * @param follower a single follower to add.
      */
     public void addExecutor(Follower follower) {
-        if (follower == null)
-            throw new NullPointerException("Attempted to use addExecutor " +
-                    "with a null Follower!");
-
-        executors.add(
-                new FollowerExecutor(
-                        odometry,
-                        drive,
-                        follower
-                )
+        if (follower == null) throw new NullPointerException(
+            "Attempted to use addExecutor " + "with a null Follower!"
         );
+
+        executors.add(new FollowerExecutor(odometry, drive, follower));
     }
 
     /**

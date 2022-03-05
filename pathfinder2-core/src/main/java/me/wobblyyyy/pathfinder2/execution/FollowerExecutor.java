@@ -10,17 +10,16 @@
 
 package me.wobblyyyy.pathfinder2.execution;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 /**
  * An executor that executes followers. I know, I know - it's pretty hard to
@@ -54,15 +53,16 @@ public class FollowerExecutor {
      * @param drive     the drivetrain the executor should use.
      * @param followers a list of followers the executor should execute.
      */
-    public FollowerExecutor(Odometry odometry,
-                            Drive drive,
-                            List<Follower> followers) {
+    public FollowerExecutor(
+        Odometry odometry,
+        Drive drive,
+        List<Follower> followers
+    ) {
         ValidationUtils.validate(odometry, "odometry");
         ValidationUtils.validate(drive, "drive");
         ValidationUtils.validate(followers, "followers");
 
-        for (Follower follower : followers)
-            ValidationUtils.validate(follower);
+        for (Follower follower : followers) ValidationUtils.validate(follower);
 
         this.odometry = odometry;
         this.drive = drive;
@@ -76,30 +76,31 @@ public class FollowerExecutor {
      * @param drive    the drivetrain the executor should use.
      * @param follower the follower to execute.
      */
-    public FollowerExecutor(Odometry odometry,
-                            Drive drive,
-                            Follower follower) {
+    public FollowerExecutor(Odometry odometry, Drive drive, Follower follower) {
         this(
-                odometry,
-                drive,
-                new ArrayList<Follower>() {{
+            odometry,
+            drive,
+            new ArrayList<Follower>() {
+
+                {
                     add(follower);
-                }}
+                }
+            }
         );
     }
 
     private boolean tickCurrentFollower() {
         return Follower.tickFollower(
-                followers.get(0),
-                odometry::getPosition,
-                drive::setTranslation
+            followers.get(0),
+            odometry::getPosition,
+            drive::setTranslation
         );
     }
 
     private void internalTick() {
-        if (howManyFollowers() > 0)
-            if (tickCurrentFollower())
-                followers.remove(0);
+        if (howManyFollowers() > 0) if (tickCurrentFollower()) followers.remove(
+            0
+        );
     }
 
     /**

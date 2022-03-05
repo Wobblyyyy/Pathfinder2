@@ -14,6 +14,7 @@ import me.wobblyyyy.pathfinder2.units.Conversions;
 import me.wobblyyyy.pathfinder2.units.Unit;
 
 public abstract class MetersDistanceSensor implements DistanceSensor {
+
     @Override
     public double getDistanceInches() {
         return Conversions.mToInches(getDistanceMeters());

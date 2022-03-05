@@ -10,11 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.plugin.bundled;
 
+import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.plugin.PathfinderPlugin;
-
-import java.util.function.Supplier;
 
 /**
  * @author Colin Robertson
@@ -27,8 +26,10 @@ public class GyroOdometry extends PathfinderPlugin {
     private final double minCombinedVelocity;
     private PointXYZ lastPosition;
 
-    public GyroOdometry(Supplier<Double> getGyroVelocity,
-                        double minCombinedVelocity) {
+    public GyroOdometry(
+        Supplier<Double> getGyroVelocity,
+        double minCombinedVelocity
+    ) {
         this.getGyroVelocity = getGyroVelocity;
         this.minCombinedVelocity = minCombinedVelocity;
     }
@@ -45,7 +46,8 @@ public class GyroOdometry extends PathfinderPlugin {
 
     @Override
     public void postTick(Pathfinder pathfinder) {
-        if (getGyroVelocity.get() < minCombinedVelocity)
-            pathfinder.getOdometry().offsetSoPositionIs(lastPosition);
+        if (getGyroVelocity.get() < minCombinedVelocity) pathfinder
+            .getOdometry()
+            .offsetSoPositionIs(lastPosition);
     }
 }

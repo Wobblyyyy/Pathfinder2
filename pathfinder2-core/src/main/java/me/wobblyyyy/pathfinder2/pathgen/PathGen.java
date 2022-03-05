@@ -44,9 +44,7 @@ public class PathGen {
      * @param start the path's start point.
      * @param end   the path's end point.
      */
-    public PathGen(Grid grid,
-                   Node start,
-                   Node end) {
+    public PathGen(Grid grid, Node start, Node end) {
         this.grid = grid;
         this.start = start;
         this.end = end;
@@ -62,24 +60,33 @@ public class PathGen {
      * @return a path. Or something.
      */
     public List<Node> findPath() {
-        if (start == null)
-            throw new IllegalArgumentException("Start node may not be null!");
-        if (end == null)
-            throw new IllegalArgumentException("End node may not be null!");
+        if (start == null) throw new IllegalArgumentException(
+            "Start node may not be null!"
+        );
+        if (end == null) throw new IllegalArgumentException(
+            "End node may not be null!"
+        );
 
         start.calculateNeighbours(grid);
         end.calculateNeighbours(grid);
 
         this.path = new ArrayList<>();
 
-        if (start.equals(end)) return new ArrayList<Node>() {{
-            add(start);
-            add(end);
-        }};
+        if (start.equals(end)) return new ArrayList<Node>() {
 
-        this.openList = new ArrayList<Node>() {{
-            add(start);
-        }};
+            {
+                add(start);
+                add(end);
+            }
+        };
+
+        this.openList =
+            new ArrayList<Node>() {
+
+                {
+                    add(start);
+                }
+            };
         List<Node> closedList = new ArrayList<>();
         while (!this.openList.isEmpty()) {
             Node current = getLowestF();

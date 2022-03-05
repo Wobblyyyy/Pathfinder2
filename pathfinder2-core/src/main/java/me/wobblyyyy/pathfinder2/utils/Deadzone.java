@@ -17,9 +17,8 @@ package me.wobblyyyy.pathfinder2.utils;
  * @since 0.15.0
  */
 public class Deadzone {
-    private Deadzone() {
 
-    }
+    private Deadzone() {}
 
     /**
      * Apply a deadzone to a value.
@@ -31,14 +30,17 @@ public class Deadzone {
      * @param value            the value to apply the deadzone to.
      * @return a value, that's been deadband-ed?
      */
-    public static double apply(double positiveDeadzone,
-                               double negativeDeadzone,
-                               double deadValue,
-                               double value) {
-        if (value > 0)
-            return value > positiveDeadzone ? value : deadValue;
-        else
-            return value < negativeDeadzone ? value : deadValue;
+    public static double apply(
+        double positiveDeadzone,
+        double negativeDeadzone,
+        double deadValue,
+        double value
+    ) {
+        if (value > 0) return value > positiveDeadzone
+            ? value
+            : deadValue; else return value < negativeDeadzone
+            ? value
+            : deadValue;
     }
 
     /**
@@ -48,9 +50,7 @@ public class Deadzone {
      * @param value    the value to apply the deadzone to.
      * @return a value, that's been deadband-ed?
      */
-    public static double apply(double deadzone,
-                               double value) {
+    public static double apply(double deadzone, double value) {
         return apply(deadzone, -deadzone, 0, value);
     }
 }
-

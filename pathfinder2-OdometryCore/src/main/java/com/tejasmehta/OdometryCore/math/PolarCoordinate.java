@@ -65,9 +65,6 @@ public class PolarCoordinate {
      */
     @Override
     public String toString() {
-        return "PolarCoordinate{" +
-                "r=" + r +
-                ", theta=" + theta +
-                '}';
+        return "PolarCoordinate{" + "r=" + r + ", theta=" + theta + '}';
     }
 }

@@ -11,9 +11,8 @@
 package me.wobblyyyy.pathfinder2.math;
 
 public class Max {
-    private Max() {
 
-    }
+    private Max() {}
 
     public static double of(double... values) {
         double m = values[0];

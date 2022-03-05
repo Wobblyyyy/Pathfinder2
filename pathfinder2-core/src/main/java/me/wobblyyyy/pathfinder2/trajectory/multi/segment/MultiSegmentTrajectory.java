@@ -10,11 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.trajectory.multi.segment;
 
-import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
-
 import java.util.Arrays;
 import java.util.List;
+import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 
 /**
  * A {@code Trajectory} made up of multiple trajectories. Pretty simply, it's
@@ -78,8 +77,7 @@ public class MultiSegmentTrajectory implements Trajectory {
         if (trajectories.size() > 0) {
             Trajectory currentTrajectory = trajectories.get(0);
 
-            if (currentTrajectory.isDone(current))
-                trajectories.remove(0);
+            if (currentTrajectory.isDone(current)) trajectories.remove(0);
         }
 
         return trajectories.size() == 0;

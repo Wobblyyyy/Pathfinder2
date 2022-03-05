@@ -10,12 +10,11 @@
 
 package me.wobblyyyy.pathfinder2.trajectory.spline;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.math.MonotoneCubicSpline;
 import me.wobblyyyy.pathfinder2.math.Spline;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A builder used for creating a specially-tuned {@link Spline}, meant
@@ -34,8 +33,7 @@ public class SpeedSplineBuilder {
      * @param startX the spline's start X value.
      * @param endX   the spline's end X value.
      */
-    public SpeedSplineBuilder(double startX,
-                              double endX) {
+    public SpeedSplineBuilder(double startX, double endX) {
         this.length = endX - startX;
     }
 
@@ -47,8 +45,7 @@ public class SpeedSplineBuilder {
      * @param speed the speed at that specific X value.
      * @return {@code this}, used for method chaining.
      */
-    public SpeedSplineBuilder addExact(double x,
-                                       double speed) {
+    public SpeedSplineBuilder addExact(double x, double speed) {
         points.add(new PointXY(x, speed));
 
         return this;
@@ -65,8 +62,7 @@ public class SpeedSplineBuilder {
      * @param speed    the speed at that specific X value.
      * @return {@code this}, used for method chaining.
      */
-    public SpeedSplineBuilder addPercent(double xPercent,
-                                         double speed) {
+    public SpeedSplineBuilder addPercent(double xPercent, double speed) {
         double x = xPercent * length;
 
         return addExact(x, speed);

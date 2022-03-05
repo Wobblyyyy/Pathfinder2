@@ -10,6 +10,11 @@
 
 package me.wobblyyyy.pathfinder2.trajectory.spline;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import me.wobblyyyy.pathfinder2.Core;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
@@ -24,12 +29,6 @@ import me.wobblyyyy.pathfinder2.math.MonotoneCubicSpline;
 import me.wobblyyyy.pathfinder2.math.Spline;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-
 /**
  * A builder for the {@link AdvancedSplineTrajectory} class. Please read over
  * the documentation in {@link AdvancedSplineTrajectory} before using this
@@ -39,9 +38,9 @@ import java.util.function.Consumer;
  * @since 0.6.1
  */
 public class AdvancedSplineTrajectoryBuilder {
-    public static InterpolationMode DEFAULT_INTERPOLATION_MODE = InterpolationMode.DEFAULT;
-    public static Consumer<String> DEFAULT_LOGGER = (msg) -> {
-    };
+    public static InterpolationMode DEFAULT_INTERPOLATION_MODE =
+        InterpolationMode.DEFAULT;
+    public static Consumer<String> DEFAULT_LOGGER = msg -> {};
 
     private final List<Double> xValues = new ArrayList<>();
     private final List<Double> yValues = new ArrayList<>();
@@ -54,9 +53,7 @@ public class AdvancedSplineTrajectoryBuilder {
     private InterpolationMode interpolationMode = DEFAULT_INTERPOLATION_MODE;
     private BiFunction<Double[], Double[], Spline> customSplineGenerator = null;
 
-    public AdvancedSplineTrajectoryBuilder() {
-
-    }
+    public AdvancedSplineTrajectoryBuilder() {}
 
     /**
      * Set the trajectory's step value.
@@ -100,7 +97,9 @@ public class AdvancedSplineTrajectoryBuilder {
      * @param angleTolerance the trajectory's angle tolerance value.
      * @return {@code this}, used for method chaining.
      */
-    public AdvancedSplineTrajectoryBuilder setAngleTolerance(Angle angleTolerance) {
+    public AdvancedSplineTrajectoryBuilder setAngleTolerance(
+        Angle angleTolerance
+    ) {
         this.angleTolerance = angleTolerance;
 
         return this;
@@ -112,7 +111,9 @@ public class AdvancedSplineTrajectoryBuilder {
      * @param interpolationMode the trajectory's interpolationMode value.
      * @return {@code this}, used for method chaining.
      */
-    public AdvancedSplineTrajectoryBuilder setInterpolationMode(InterpolationMode interpolationMode) {
+    public AdvancedSplineTrajectoryBuilder setInterpolationMode(
+        InterpolationMode interpolationMode
+    ) {
         this.interpolationMode = interpolationMode;
 
         return this;
@@ -128,7 +129,8 @@ public class AdvancedSplineTrajectoryBuilder {
      * @return {@code this}, used for method chaining.
      */
     public AdvancedSplineTrajectoryBuilder setCustomSplineGenerator(
-            BiFunction<Double[], Double[], Spline> func) {
+        BiFunction<Double[], Double[], Spline> func
+    ) {
         this.customSplineGenerator = func;
 
         return this;
@@ -138,65 +140,60 @@ public class AdvancedSplineTrajectoryBuilder {
         return add(target, speed);
     }
 
-    public AdvancedSplineTrajectoryBuilder add(double x,
-                                               double y) {
+    public AdvancedSplineTrajectoryBuilder add(double x, double y) {
         return add(
-                new PointXYZ(x, y, angleTargets.get(angleTargets.size() - 1)),
-                speed
+            new PointXYZ(x, y, angleTargets.get(angleTargets.size() - 1)),
+            speed
         );
     }
 
-    public AdvancedSplineTrajectoryBuilder add(double x,
-                                               double y,
-                                               Angle z) {
+    public AdvancedSplineTrajectoryBuilder add(double x, double y, Angle z) {
+        return add(new PointXYZ(x, y, z), speed);
+    }
+
+    public AdvancedSplineTrajectoryBuilder add(
+        double x,
+        double y,
+        Angle z,
+        double speed
+    ) {
+        return add(new PointXYZ(x, y, z), speed);
+    }
+
+    public AdvancedSplineTrajectoryBuilder add(
+        double x,
+        double y,
+        double zDegrees,
+        double speed
+    ) {
+        return add(new PointXYZ(x, y, zDegrees), speed);
+    }
+
+    public AdvancedSplineTrajectoryBuilder add(
+        double x,
+        double y,
+        double speed
+    ) {
         return add(
-                new PointXYZ(x, y, z),
-                speed
+            new PointXYZ(x, y, angleTargets.get(angleTargets.size() - 1)),
+            speed
         );
     }
 
-    public AdvancedSplineTrajectoryBuilder add(double x,
-                                               double y,
-                                               Angle z,
-                                               double speed) {
-        return add(
-                new PointXYZ(x, y, z),
-                speed
-        );
-    }
-
-    public AdvancedSplineTrajectoryBuilder add(double x,
-                                               double y,
-                                               double zDegrees,
-                                               double speed) {
-        return add(
-                new PointXYZ(x, y, zDegrees),
-                speed
-        );
-    }
-
-    public AdvancedSplineTrajectoryBuilder add(double x,
-                                               double y,
-                                               double speed) {
-        return add(
-                new PointXYZ(x, y, angleTargets.get(angleTargets.size() - 1)),
-                speed
-        );
-    }
-
-    public AdvancedSplineTrajectoryBuilder add(PointXYZ target,
-                                               double speed) {
-        DEFAULT_LOGGER.accept(StringUtils.format(
+    public AdvancedSplineTrajectoryBuilder add(PointXYZ target, double speed) {
+        DEFAULT_LOGGER.accept(
+            StringUtils.format(
                 "--- ADDING TARGET ---\n" +
-                        "target x: %s\n" +
-                        "target y: %s\n" +
-                        "target z: %s\n" +
-                        "speed: %s",
+                "target x: %s\n" +
+                "target y: %s\n" +
+                "target z: %s\n" +
+                "speed: %s",
                 target.x(),
                 target.y(),
                 target.z(),
                 speed
-        ));
+            )
+        );
 
         this.speed = speed;
 
@@ -216,44 +213,47 @@ public class AdvancedSplineTrajectoryBuilder {
 
         DEFAULT_LOGGER.accept("--- BUILDING SPLINE ---");
 
-        DEFAULT_LOGGER.accept(StringUtils.format(
+        DEFAULT_LOGGER.accept(
+            StringUtils.format(
                 "invalid step: %s\n" +
-                        "invalid speed: %s\n" +
-                        "invalid tolerance: %s\n" +
-                        "invalid angle tolerance: %s",
+                "invalid speed: %s\n" +
+                "invalid tolerance: %s\n" +
+                "invalid angle tolerance: %s",
                 invalidStep,
                 invalidSpeed,
                 invalidTolerance,
                 invalidAngleTolerance
-        ));
-
-        if (invalidStep &&
-                invalidSpeed &&
-                invalidTolerance &&
-                invalidAngleTolerance
-        ) throw new IllegalArgumentException(
-                "Did not set a step, speed, tolerance, and angle tolerance " +
-                        "value! You need to use setStep(), setSpeed(), " +
-                        "setTolerance(), and setAngleTolerance() before " +
-                        "calling the build() method."
+            )
         );
 
-        if (invalidStep)
-            throw new IllegalArgumentException(
-                    "Did not set a step value - use setStep().");
+        if (
+            invalidStep &&
+            invalidSpeed &&
+            invalidTolerance &&
+            invalidAngleTolerance
+        ) throw new IllegalArgumentException(
+            "Did not set a step, speed, tolerance, and angle tolerance " +
+            "value! You need to use setStep(), setSpeed(), " +
+            "setTolerance(), and setAngleTolerance() before " +
+            "calling the build() method."
+        );
 
-        if (invalidSpeed)
-            throw new InvalidSpeedException(
-                    "Did not set a speed - use setSpeed().");
+        if (invalidStep) throw new IllegalArgumentException(
+            "Did not set a step value - use setStep()."
+        );
 
-        if (invalidTolerance)
-            throw new InvalidToleranceException(
-                    "Did not set a tolerance - use setTolerance().");
+        if (invalidSpeed) throw new InvalidSpeedException(
+            "Did not set a speed - use setSpeed()."
+        );
 
-        if (invalidAngleTolerance)
-            throw new NullAngleException(
-                    "Null angle tolerance while creating an " +
-                            "AdvancedSplineTrajectory.");
+        if (invalidTolerance) throw new InvalidToleranceException(
+            "Did not set a tolerance - use setTolerance()."
+        );
+
+        if (invalidAngleTolerance) throw new NullAngleException(
+            "Null angle tolerance while creating an " +
+            "AdvancedSplineTrajectory."
+        );
 
         int size = xValues.size();
         Double[] xBoxed = new Double[size];
@@ -280,29 +280,29 @@ public class AdvancedSplineTrajectoryBuilder {
             speed[i] = speedBoxed[i];
 
             if (i != 0) {
-                if (speed[i] != speed[i - 1])
-                    sameSpeedValue = false;
+                if (speed[i] != speed[i - 1]) sameSpeedValue = false;
 
                 // ensure adjacent X values are unique
-                if (x[i] == x[i - 1])
-                    x[i] += Core.advancedSplineTrajectoryDuplicateOffset
-                            * ((xDuplicates++) + 1);
+                if (x[i] == x[i - 1]) x[i] +=
+                    Core.advancedSplineTrajectoryDuplicateOffset *
+                    ((xDuplicates++) + 1);
 
                 // ensure adjacent Y values are unique
-                if (y[i] == y[i - 1])
-                    y[i] += Core.advancedSplineTrajectoryDuplicateOffset
-                            * ((yDuplicates++) + 1);
+                if (y[i] == y[i - 1]) y[i] +=
+                    Core.advancedSplineTrajectoryDuplicateOffset *
+                    ((yDuplicates++) + 1);
             }
         }
 
-        DEFAULT_LOGGER.accept(StringUtils.format(
+        DEFAULT_LOGGER.accept(
+            StringUtils.format(
                 "boxed x: %s\n" +
-                        "boxed y: %s\n" +
-                        "boxed z: %s\n" +
-                        "boxed speed: %s\n" +
-                        "unboxed x: %s\n" +
-                        "unboxed y: %s\n" +
-                        "unboxed speed: %s",
+                "boxed y: %s\n" +
+                "boxed z: %s\n" +
+                "boxed speed: %s\n" +
+                "unboxed x: %s\n" +
+                "unboxed y: %s\n" +
+                "unboxed speed: %s",
                 Arrays.toString(xBoxed),
                 Arrays.toString(yBoxed),
                 Arrays.toString(z),
@@ -310,7 +310,8 @@ public class AdvancedSplineTrajectoryBuilder {
                 Arrays.toString(x),
                 Arrays.toString(y),
                 Arrays.toString(speed)
-        ));
+            )
+        );
 
         // add support for different types of spline interpolation!
         // this is a really bad way to implement support for multiple
@@ -327,14 +328,17 @@ public class AdvancedSplineTrajectoryBuilder {
                 spline = new ApacheSpline(Interpolator.AKIMA, x, y);
                 break;
             case CUSTOM:
-                if (customSplineGenerator != null)
-                    spline = customSplineGenerator.apply(xBoxed, yBoxed);
-                else
-                    throw new NullPointerException("Tried to use custom " +
-                            "spline generator without having set it first: " +
-                            "use setCustomSplineGenerator() to do so. The " +
-                            "function you pass in should accept two arrays " +
-                            "of Double values (x and y).");
+                if (customSplineGenerator != null) spline =
+                    customSplineGenerator.apply(
+                        xBoxed,
+                        yBoxed
+                    ); else throw new NullPointerException(
+                    "Tried to use custom " +
+                    "spline generator without having set it first: " +
+                    "use setCustomSplineGenerator() to do so. The " +
+                    "function you pass in should accept two arrays " +
+                    "of Double values (x and y)."
+                );
                 break;
             default:
                 throw new RuntimeException("How did you even get here?");
@@ -343,18 +347,18 @@ public class AdvancedSplineTrajectoryBuilder {
         AngleSpline angleSpline = new AngleSpline(x, z);
 
         Spline speedSpline;
-        if (sameSpeedValue)
-            speedSpline = new LinearSpline(new SlopeIntercept(0, speed[0]));
-        else
-            speedSpline = new MonotoneCubicSpline(x, speed);
+        if (sameSpeedValue) speedSpline =
+            new LinearSpline(
+                new SlopeIntercept(0, speed[0])
+            ); else speedSpline = new MonotoneCubicSpline(x, speed);
 
         return new AdvancedSplineTrajectory(
-                spline,
-                angleSpline,
-                speedSpline,
-                step,
-                tolerance,
-                angleTolerance
+            spline,
+            angleSpline,
+            speedSpline,
+            step,
+            tolerance,
+            angleTolerance
         );
     }
 }

@@ -14,8 +14,7 @@ public class TankState {
     private final double right;
     private final double left;
 
-    public TankState(double right,
-                     double left) {
+    public TankState(double right, double left) {
         this.right = right;
         this.left = left;
     }
@@ -29,23 +28,14 @@ public class TankState {
     }
 
     public TankState add(TankState state) {
-        return new TankState(
-                right + state.right,
-                left + state.left
-        );
+        return new TankState(right + state.right, left + state.left);
     }
 
     public TankState multiply(TankState state) {
-        return new TankState(
-                right * state.right,
-                left * state.left
-        );
+        return new TankState(right * state.right, left * state.left);
     }
 
     public TankState multiply(double multiplier) {
-        return new TankState(
-                right * multiplier,
-                left * multiplier
-        );
+        return new TankState(right * multiplier, left * multiplier);
     }
 }

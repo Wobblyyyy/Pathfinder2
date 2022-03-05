@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestPointSlope {
+
     @Test
     public void testIntersection() {
         PointSlope a = new PointSlope(new PointXY(0, 0), 1);

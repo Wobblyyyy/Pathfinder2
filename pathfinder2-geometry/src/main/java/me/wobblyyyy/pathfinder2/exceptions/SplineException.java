@@ -16,6 +16,7 @@ package me.wobblyyyy.pathfinder2.exceptions;
  * @since 1.1.0
  */
 public class SplineException extends RuntimeException {
+
     public SplineException(String message) {
         super(message);
     }

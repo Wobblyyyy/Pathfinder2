@@ -33,24 +33,25 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
  * @since 0.6.1
  */
 public class ExampleSplineTo {
+
     public void run() {
         Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
 
         pathfinder
-                .setSpeed(0.5)
-                .setTolerance(2)
-                .setAngleTolerance(Angle.fromDeg(5))
-                .splineTo(
-                        new PointXYZ(0, 10, 0),
-                        new PointXYZ(5, 15, 0),
-                        new PointXYZ(10, 25, 0)
-                )
-                .tickUntil(10_000)
-                .splineTo(
-                        new PointXYZ(20, 15, 0),
-                        new PointXYZ(25, 10, 0),
-                        new PointXYZ(30, 5, 0)
-                )
-                .tickUntil(10_000);
+            .setSpeed(0.5)
+            .setTolerance(2)
+            .setAngleTolerance(Angle.fromDeg(5))
+            .splineTo(
+                new PointXYZ(0, 10, 0),
+                new PointXYZ(5, 15, 0),
+                new PointXYZ(10, 25, 0)
+            )
+            .tickUntil(10_000)
+            .splineTo(
+                new PointXYZ(20, 15, 0),
+                new PointXYZ(25, 10, 0),
+                new PointXYZ(30, 5, 0)
+            )
+            .tickUntil(10_000);
     }
 }

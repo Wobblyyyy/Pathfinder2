@@ -10,5 +10,4 @@
 
 package me.wobblyyyy.pathfinder2;
 
-public class TestPathfinder {
-}
+public class TestPathfinder {}

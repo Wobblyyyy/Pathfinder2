@@ -12,8 +12,8 @@ package me.wobblyyyy.pathfinder2.trajectory.spline;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-import me.wobblyyyy.pathfinder2.math.Min;
 import me.wobblyyyy.pathfinder2.math.Max;
+import me.wobblyyyy.pathfinder2.math.Min;
 import me.wobblyyyy.pathfinder2.math.MinMax;
 import me.wobblyyyy.pathfinder2.math.Spline;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
@@ -73,12 +73,14 @@ public class SplineTrajectory implements Trajectory {
      *                      trajectory - all of the other points ignore
      *                      whatever this value is.
      */
-    public SplineTrajectory(Spline spline,
-                            Angle targetHeading,
-                            double speed,
-                            double step,
-                            double tolerance,
-                            Angle angleTolerance) {
+    public SplineTrajectory(
+        Spline spline,
+        Angle targetHeading,
+        double speed,
+        double step,
+        double tolerance,
+        Angle angleTolerance
+    ) {
         this.spline = spline;
         this.targetHeading = targetHeading;
         this.speed = speed;
@@ -92,10 +94,9 @@ public class SplineTrajectory implements Trajectory {
         this.minX = Min.of(startX, endX);
         this.maxX = Max.of(startX, endX);
 
-        if ((startX > endX) && step > 0)
-            this.step *= -1;
-        else if ((endX > startX) && step < 0)
-            this.step *= -1;
+        if ((startX > endX) && step > 0) this.step *= -1; else if (
+            (endX > startX) && step < 0
+        ) this.step *= -1;
     }
 
     @Override
@@ -107,8 +108,11 @@ public class SplineTrajectory implements Trajectory {
 
     @Override
     public boolean isDone(PointXYZ current) {
-        return current.isNear(spline.getEndPoint().withZ(targetHeading),
-                tolerance, angleTolerance);
+        return current.isNear(
+            spline.getEndPoint().withZ(targetHeading),
+            tolerance,
+            angleTolerance
+        );
     }
 
     @Override

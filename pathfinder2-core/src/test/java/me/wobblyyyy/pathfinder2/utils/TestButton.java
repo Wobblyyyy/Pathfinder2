@@ -10,13 +10,12 @@
 
 package me.wobblyyyy.pathfinder2.utils;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class TestButton {
     private Pathfinder pathfinder;
@@ -34,9 +33,11 @@ public class TestButton {
     public void testWhenPressed() {
         AtomicBoolean hasBeenPressed = new AtomicBoolean(false);
 
-        button.whenPressed(() -> {
-            hasBeenPressed.set(true);
-        });
+        button.whenPressed(
+            () -> {
+                hasBeenPressed.set(true);
+            }
+        );
 
         pathfinder.tick();
         buttonState.set(true);
@@ -51,9 +52,11 @@ public class TestButton {
     public void testWhilePressed() {
         AtomicInteger count = new AtomicInteger(0);
 
-        button.whilePressed(() -> {
-            count.set(count.get() + 1);
-        });
+        button.whilePressed(
+            () -> {
+                count.set(count.get() + 1);
+            }
+        );
 
         pathfinder.tick();
         buttonState.set(true);

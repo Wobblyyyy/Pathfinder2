@@ -10,13 +10,13 @@
 
 package me.wobblyyyy.pathfinder2.robot.simulated;
 
+import java.util.function.Function;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.function.Function;
-
 public class TestSimulatedDrive {
+
     @Test
     public void testTranslation() {
         Translation translation = new Translation(0, 0, 0);

@@ -27,7 +27,12 @@ public class OdometryPosition {
      * @param heading - The robot's current heading (in degrees or radians)
      * @param unit    - The unit for the heading (either HeadingUnit.degrees or HeadingUnit.radians)
      */
-    public OdometryPosition(double x, double y, double heading, HeadingUnit unit) {
+    public OdometryPosition(
+        double x,
+        double y,
+        double heading,
+        HeadingUnit unit
+    ) {
         this.x = x;
         this.y = y;
         this.heading = heading;

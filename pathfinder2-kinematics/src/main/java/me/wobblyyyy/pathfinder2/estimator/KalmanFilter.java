@@ -136,12 +136,11 @@ public class KalmanFilter {
      * @param initialCovariance the initial covariance values. This must be
      *                          the same size as the state array.
      */
-    public KalmanFilter(double[] initialState,
-                        double[] initialCovariance) {
+    public KalmanFilter(double[] initialState, double[] initialCovariance) {
         this(
-                getStateMatrix(initialState),
-                getCovarianceMatrix(initialCovariance),
-                getProjectionMatrix(initialState.length)
+            getStateMatrix(initialState),
+            getCovarianceMatrix(initialCovariance),
+            getProjectionMatrix(initialState.length)
         );
     }
 
@@ -154,13 +153,15 @@ public class KalmanFilter {
      *                          the same size as the state array.
      * @param initialProjection how output values are modified.
      */
-    public KalmanFilter(double[] initialState,
-                        double[] initialCovariance,
-                        double[] initialProjection) {
+    public KalmanFilter(
+        double[] initialState,
+        double[] initialCovariance,
+        double[] initialProjection
+    ) {
         this(
-                getStateMatrix(initialState),
-                getCovarianceMatrix(initialCovariance),
-                getProjectionMatrix(initialProjection)
+            getStateMatrix(initialState),
+            getCovarianceMatrix(initialCovariance),
+            getProjectionMatrix(initialProjection)
         );
     }
 
@@ -174,9 +175,11 @@ public class KalmanFilter {
      * @param projectionMatrix      a matrix containing values that will be
      *                              used when projecting outputs.
      */
-    public KalmanFilter(DMatrixRMaj stateTransitionMatrix,
-                        DMatrixRMaj plantNoiseMatrix,
-                        DMatrixRMaj projectionMatrix) {
+    public KalmanFilter(
+        DMatrixRMaj stateTransitionMatrix,
+        DMatrixRMaj plantNoiseMatrix,
+        DMatrixRMaj projectionMatrix
+    ) {
         int size = stateTransitionMatrix.numCols;
 
         boolean validPlantNoise = plantNoiseMatrix.numCols == size;
@@ -184,9 +187,9 @@ public class KalmanFilter {
 
         if (!validPlantNoise || !validProjection) {
             throw new IllegalArgumentException(
-                    "Cannot create a Kalman filter with matrices of " +
-                            "different sizes - make sure all of the " +
-                            "matrices have the same number of columns!"
+                "Cannot create a Kalman filter with matrices of " +
+                "different sizes - make sure all of the " +
+                "matrices have the same number of columns!"
             );
         }
 
@@ -196,11 +199,16 @@ public class KalmanFilter {
         equation = new Equation();
 
         equation.alias(
-                state, "x",
-                covariance, "p",
-                stateTransitionMatrix, "f",
-                plantNoiseMatrix, "q",
-                projectionMatrix, "h"
+            state,
+            "x",
+            covariance,
+            "p",
+            stateTransitionMatrix,
+            "f",
+            plantNoiseMatrix,
+            "q",
+            projectionMatrix,
+            "h"
         );
 
         equation.alias(new DMatrixRMaj(1, 1), "z");
@@ -293,8 +301,7 @@ public class KalmanFilter {
      * @param state      the state to set to the filter.
      * @param covariance the covariance of the state.
      */
-    public void setState(DMatrixRMaj state,
-                         DMatrixRMaj covariance) {
+    public void setState(DMatrixRMaj state, DMatrixRMaj covariance) {
         this.state.set(state);
         this.covariance.set(covariance);
     }
@@ -314,12 +321,8 @@ public class KalmanFilter {
      * @param state      the state of the input.
      * @param covariance the covariance of the input.
      */
-    public void update(DMatrixRMaj state,
-                       DMatrixRMaj covariance) {
-        equation.alias(
-                state, "z",
-                covariance, "r"
-        );
+    public void update(DMatrixRMaj state, DMatrixRMaj covariance) {
+        equation.alias(state, "z", covariance, "r");
 
         // not sure if the order these are performed in matters or not
         updateY.perform();

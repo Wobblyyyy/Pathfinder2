@@ -10,12 +10,11 @@
 
 package me.wobblyyyy.pathfinder2.trajectory.spline;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.math.MonotoneCubicSpline;
 import me.wobblyyyy.pathfinder2.math.Spline;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A wrapper class for using {@link Spline}s with {@link Angle}s.
@@ -35,16 +34,12 @@ public class AngleSpline {
      *               normalized, so it will always fit between 0 and 360
      *               degrees, inclusive.
      */
-    public AngleSpline(double[] x,
-                       Angle[] angles) {
+    public AngleSpline(double[] x, Angle[] angles) {
         double[] anglesDeg = new double[angles.length];
         for (int i = 0; i < angles.length; i++) {
             anglesDeg[i] = angles[i].fix().deg() + (0.00000001 * i);
         }
-        this.spline = new MonotoneCubicSpline(
-                x,
-                anglesDeg
-        );
+        this.spline = new MonotoneCubicSpline(x, anglesDeg);
     }
 
     /**
@@ -68,12 +63,9 @@ public class AngleSpline {
         private final List<Double> x = new ArrayList<>();
         private final List<Angle> z = new ArrayList<>();
 
-        public AngleSplineBuilder() {
+        public AngleSplineBuilder() {}
 
-        }
-
-        public AngleSplineBuilder add(double x,
-                                      Angle angle) {
+        public AngleSplineBuilder add(double x, Angle angle) {
             this.x.add(x);
             this.z.add(angle);
 

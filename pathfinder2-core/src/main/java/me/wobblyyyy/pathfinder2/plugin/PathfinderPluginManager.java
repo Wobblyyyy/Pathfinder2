@@ -10,12 +10,11 @@
 
 package me.wobblyyyy.pathfinder2.plugin;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.zones.Zone;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A manager for controlling the loading and usage of any plugins being
@@ -32,9 +31,7 @@ import java.util.List;
 public class PathfinderPluginManager {
     private final List<PathfinderPlugin> plugins = new ArrayList<>();
 
-    public PathfinderPluginManager() {
-
-    }
+    public PathfinderPluginManager() {}
 
     public List<PathfinderPlugin> getPlugins() {
         return plugins;
@@ -71,28 +68,25 @@ public class PathfinderPluginManager {
         plugins.forEach(plugin -> plugin.onClear(pathfinder));
     }
 
-    public void onEnterZone(Pathfinder pathfinder,
-                            Zone zone) {
+    public void onEnterZone(Pathfinder pathfinder, Zone zone) {
         plugins.forEach(plugin -> plugin.onEnterZone(pathfinder, zone));
     }
 
-    public void onExitZone(Pathfinder pathfinder,
-                           Zone zone) {
+    public void onExitZone(Pathfinder pathfinder, Zone zone) {
         plugins.forEach(plugin -> plugin.onExitZone(pathfinder, zone));
     }
 
-    public void whileInsideZone(Pathfinder pathfinder,
-                                Zone zone) {
+    public void whileInsideZone(Pathfinder pathfinder, Zone zone) {
         plugins.forEach(plugin -> plugin.whileInsideZone(pathfinder, zone));
     }
 
-    public void onStartFollower(Pathfinder pathfinder,
-                                Follower follower) {
+    public void onStartFollower(Pathfinder pathfinder, Follower follower) {
         plugins.forEach(plugin -> plugin.onStartFollower(pathfinder, follower));
     }
 
-    public void onFinishFollower(Pathfinder pathfinder,
-                                 Follower follower) {
-        plugins.forEach(plugin -> plugin.onFinishFollower(pathfinder, follower));
+    public void onFinishFollower(Pathfinder pathfinder, Follower follower) {
+        plugins.forEach(
+            plugin -> plugin.onFinishFollower(pathfinder, follower)
+        );
     }
 }

@@ -20,9 +20,8 @@ package me.wobblyyyy.pathfinder2.time;
  * @since 0.0.0
  */
 public class Time {
-    private Time() {
 
-    }
+    private Time() {}
 
     /**
      * Get the system's current time in milliseconds.
@@ -68,9 +67,11 @@ public class Time {
      * @param target   the target unit (to convert to).
      * @return a converted measurement of time measured in target units.
      */
-    public static double convert(double value,
-                                 TimeUnit original,
-                                 TimeUnit target) {
+    public static double convert(
+        double value,
+        TimeUnit original,
+        TimeUnit target
+    ) {
         double originalMs = original.getTimeInMs();
         double targetMs = target.getTimeInMs();
 
@@ -84,8 +85,7 @@ public class Time {
      * @param unit the unit the time parameter is measured in.
      * @return a time, in milliseconds, that's TIME units away from now.
      */
-    public static double fromNow(double time,
-                                 TimeUnit unit) {
+    public static double fromNow(double time, TimeUnit unit) {
         double targetMs = unit.getTimeInMs() * time;
 
         return Time.ms() + time;
@@ -138,11 +138,9 @@ public class Time {
      * @param runnable   functionality that will be executed repeatedly for
      *                   {@code durationMs}.
      */
-    public static void runFor(double durationMs,
-                              Runnable runnable) {
+    public static void runFor(double durationMs, Runnable runnable) {
         ElapsedTimer timer = new ElapsedTimer(true);
 
-        while (timer.elapsedMs() <= durationMs)
-            runnable.run();
+        while (timer.elapsedMs() <= durationMs) runnable.run();
     }
 }

@@ -10,31 +10,34 @@
 
 package me.wobblyyyy.pathfinder2.pathgen;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.Rectangle;
 import me.wobblyyyy.pathfinder2.zones.Zone;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TestNodeValidator {
+
     @Test
     public void testNodeValidation() {
         LocalizedGrid grid = new LocalizedGrid(
-                Grid.generateGrid(10, 10),
-                0,
-                0,
-                10,
-                10
+            Grid.generateGrid(10, 10),
+            0,
+            0,
+            10,
+            10
         );
 
         Rectangle blocker = new Rectangle(5, 0, 10, 10);
         Zone blockerZone = new Zone(blocker);
-        List<Zone> zones = new ArrayList<Zone>(1) {{
-            add(blockerZone);
-        }};
+        List<Zone> zones = new ArrayList<Zone>(1) {
+
+            {
+                add(blockerZone);
+            }
+        };
 
         NodeValidator.validateNodes(grid, zones);
 

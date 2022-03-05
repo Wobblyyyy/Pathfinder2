@@ -20,9 +20,12 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
  * @since 0.5.0
  */
 public class MecanumOdometry extends GenericOdometry<MecanumState> {
-    public MecanumOdometry(Kinematics<MecanumState> kinematics,
-                           Angle gyroAngle,
-                           PointXYZ initialPosition) {
+
+    public MecanumOdometry(
+        Kinematics<MecanumState> kinematics,
+        Angle gyroAngle,
+        PointXYZ initialPosition
+    ) {
         super(kinematics, gyroAngle, initialPosition);
     }
 }

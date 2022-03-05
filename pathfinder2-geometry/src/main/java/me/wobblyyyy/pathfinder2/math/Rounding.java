@@ -12,7 +12,6 @@ package me.wobblyyyy.pathfinder2.math;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
@@ -48,15 +47,15 @@ public class Rounding {
      * @deprecated use {@link #fastRound(double, int)} instead.
      */
     @Deprecated
-    public static double round(double value,
-                               int places) {
+    public static double round(double value, int places) {
         ValidationUtils.validate(value, "value");
 
-        if (places < 0)
-            throw new IllegalArgumentException("Places must be greater than 0");
+        if (places < 0) throw new IllegalArgumentException(
+            "Places must be greater than 0"
+        );
 
         BigDecimal decimal = new BigDecimal(Double.toString(value))
-                .setScale(places, RoundingMode.HALF_UP);
+        .setScale(places, RoundingMode.HALF_UP);
         return decimal.doubleValue();
     }
 
@@ -79,8 +78,7 @@ public class Rounding {
      * @param places how many places to round to.
      * @return the rounded value.
      */
-    public static double fastRound(double value,
-                                   int places) {
+    public static double fastRound(double value, int places) {
         ValidationUtils.validate(value, "value");
 
         double scale = Math.pow(10, places);

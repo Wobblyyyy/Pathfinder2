@@ -10,11 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.robot;
 
-import me.wobblyyyy.pathfinder2.geometry.Translation;
-
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import me.wobblyyyy.pathfinder2.geometry.Translation;
 
 /**
  * Abstract implementation of the {@link Drive} interface. This class handles
@@ -44,8 +43,10 @@ public class AbstractDrive implements Drive {
      * @param supplier a supplier for the translation. This method should
      *                 return whatever translation was last set to the robot.
      */
-    public AbstractDrive(Consumer<Translation> consumer,
-                         Supplier<Translation> supplier) {
+    public AbstractDrive(
+        Consumer<Translation> consumer,
+        Supplier<Translation> supplier
+    ) {
         this.consumer = consumer;
         this.supplier = supplier;
     }

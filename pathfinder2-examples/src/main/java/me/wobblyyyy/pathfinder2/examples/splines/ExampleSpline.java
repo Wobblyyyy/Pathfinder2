@@ -30,6 +30,7 @@ import me.wobblyyyy.pathfinder2.trajectory.spline.SplineBuilderFactory;
  * @since 0.6.1
  */
 public class ExampleSpline {
+
     public void run() {
         // before anything else, we have to get some stuff set up.
         Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
@@ -41,51 +42,53 @@ public class ExampleSpline {
         // this method works well, but it's a bit verbose - there's a
         // solution to that problem you'll see in just a moment.
         Trajectory trajectory1 = new AdvancedSplineTrajectoryBuilder()
-                .setSpeed(0.5)
-                .setStep(0.1)
-                .setTolerance(2)
-                .setAngleTolerance(Angle.fromDeg(5))
-                .add(new PointXYZ(0, 0, 0))
-                .add(new PointXYZ(4, 6, 0))
-                .add(new PointXYZ(6, 12, 0))
-                .add(new PointXYZ(8, 24, 0))
-                .build();
+            .setSpeed(0.5)
+            .setStep(0.1)
+            .setTolerance(2)
+            .setAngleTolerance(Angle.fromDeg(5))
+            .add(new PointXYZ(0, 0, 0))
+            .add(new PointXYZ(4, 6, 0))
+            .add(new PointXYZ(6, 12, 0))
+            .add(new PointXYZ(8, 24, 0))
+            .build();
         Trajectory trajectory2 = new AdvancedSplineTrajectoryBuilder()
-                .setSpeed(0.5)
-                .setStep(0.1)
-                .setTolerance(2)
-                .setAngleTolerance(Angle.fromDeg(5))
-                .add(new PointXYZ(8, 24, 0))
-                .add(new PointXYZ(6, 36, 0))
-                .add(new PointXYZ(4, 40, 0))
-                .add(new PointXYZ(0, 42, 0))
-                .build();
+            .setSpeed(0.5)
+            .setStep(0.1)
+            .setTolerance(2)
+            .setAngleTolerance(Angle.fromDeg(5))
+            .add(new PointXYZ(8, 24, 0))
+            .add(new PointXYZ(6, 36, 0))
+            .add(new PointXYZ(4, 40, 0))
+            .add(new PointXYZ(0, 42, 0))
+            .build();
 
         // thankfully, there's an easier way to create trajectories just like
         // that - we can make use of a "SplineBuilderFactory"
         SplineBuilderFactory factory = new SplineBuilderFactory()
-                .setSpeed(0.5)
-                .setStep(0.1)
-                .setTolerance(2)
-                .setAngleTolerance(Angle.fromDeg(5));
+            .setSpeed(0.5)
+            .setStep(0.1)
+            .setTolerance(2)
+            .setAngleTolerance(Angle.fromDeg(5));
         // set the default speed, step, tolerance, and angle tolerance
         // values for the factory. all of the spline builders produced by
         // the factory will have have these values by default.
 
         // now we can create new trajectories, without having to repeat
         // the same 4 lines for each of the trajectories.
-        Trajectory trajectory3 = factory.builder()
-                .add(0, 60, Angle.fromDeg(0))
-                .add(new PointXYZ(20, 60, 0))
-                .add(new PointXYZ(30, 60, 0))
-                .add(new PointXYZ(40, 70, 0))
-                .build();
-        Trajectory trajectory4 = factory.builder()
-                .add(new PointXYZ(40, 70, 0))
-                .add(new PointXYZ(30, 60, 0))
-                .add(new PointXYZ(20, 60, 0))
-                .add(0, 60, Angle.fromDeg(0))
-                .build();
+        Trajectory trajectory3 = factory
+            .builder()
+            .add(0, 60, Angle.fromDeg(0))
+            .add(new PointXYZ(20, 60, 0))
+            .add(new PointXYZ(30, 60, 0))
+            .add(new PointXYZ(40, 70, 0))
+            .build();
+        Trajectory trajectory4 = factory
+            .builder()
+            .add(new PointXYZ(40, 70, 0))
+            .add(new PointXYZ(30, 60, 0))
+            .add(new PointXYZ(20, 60, 0))
+            .add(0, 60, Angle.fromDeg(0))
+            .build();
 
         // time to actually make the robot move now! once again, most of
         // these methods are fairly self-explanatory. basically, follow
@@ -93,15 +96,17 @@ public class ExampleSpline {
         // follow the next two trajectories, but each of those trajectories
         // should have an individual timeout of 10 seconds.
         pathfinder
-                .followTrajectories(trajectory1, trajectory2)
-                .andThen(pf -> {
+            .followTrajectories(trajectory1, trajectory2)
+            .andThen(
+                pf -> {
                     // any other code you want to be executed after the
                     // trajectory is finished
                     pf.setTranslation(new Translation(0, 0, 0));
-                })
-                .followTrajectory(trajectory3)
-                .tickUntil(10_000)
-                .followTrajectory(trajectory4)
-                .tickUntil(10_000);
+                }
+            )
+            .followTrajectory(trajectory3)
+            .tickUntil(10_000)
+            .followTrajectory(trajectory4)
+            .tickUntil(10_000);
     }
 }

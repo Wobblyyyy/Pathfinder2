@@ -10,16 +10,15 @@
 
 package me.wobblyyyy.pathfinder2.listening;
 
-import me.wobblyyyy.pathfinder2.Core;
-import me.wobblyyyy.pathfinder2.Pathfinder;
-import me.wobblyyyy.pathfinder2.utils.RandomString;
-import me.wobblyyyy.pathfinder2.utils.Toggle;
-
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import me.wobblyyyy.pathfinder2.Core;
+import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.utils.RandomString;
+import me.wobblyyyy.pathfinder2.utils.Toggle;
 
 /**
  * Manager responsible for several {@link Listener}s. Each {@link Listener}
@@ -58,19 +57,25 @@ public class ListenerManager implements Tickable {
      * @param listener the actual listener to add.
      * @return {@code this}, used for method chaining.
      */
-    public ListenerManager addListener(String name,
-                                       Listener listener) {
+    public ListenerManager addListener(String name, Listener listener) {
         listeners.put(name, listener);
 
         // sort the listeners on insertion so that the map doesn't have to
         // be sorted every tick
-        listeners = listeners.entrySet().stream()
-                .sorted(Comparator.comparingInt(o -> o.getValue().getPriority()))
-                .collect(Collectors.toMap(
+        listeners =
+            listeners
+                .entrySet()
+                .stream()
+                .sorted(
+                    Comparator.comparingInt(o -> o.getValue().getPriority())
+                )
+                .collect(
+                    Collectors.toMap(
                         Map.Entry::getKey,
                         Map.Entry::getValue,
                         (l1, l2) -> l1
-                ));
+                    )
+                );
 
         return this;
     }
@@ -83,9 +88,8 @@ public class ListenerManager implements Tickable {
      */
     public ListenerManager addListener(Listener listener) {
         return addListener(
-                RandomString.randomString(
-                        Core.listenerManagerRandomStringLength),
-                listener
+            RandomString.randomString(Core.listenerManagerRandomStringLength),
+            listener
         );
     }
 
@@ -124,15 +128,13 @@ public class ListenerManager implements Tickable {
             Listener listener = entry.getValue();
 
             // remove expired listeners, tick non-expired listeners
-            if (listener.hasExpired())
-                expiredListeners.add(name);
-            else
-                listener.tick(pathfinder);
+            if (listener.hasExpired()) expiredListeners.add(
+                name
+            ); else listener.tick(pathfinder);
         }
 
         // actually remove the listener if it's expired
-        for (String key : expiredListeners)
-            listeners.remove(key);
+        for (String key : expiredListeners) listeners.remove(key);
 
         return true;
     }
@@ -148,110 +150,130 @@ public class ListenerManager implements Tickable {
      *                  released.
      * @return {@code this}, used for method chaining.
      */
-    public ListenerManager bindButton(Supplier<Boolean> input,
-                                      Runnable onPress,
-                                      Runnable onRelease) {
-        return addListener(new Listener(
-                ListenerMode.CONDITION_NEWLY_MET,
-                onPress,
-                input
-        )).addListener(new Listener(
-                ListenerMode.CONDITION_NEWLY_NOT_MET,
-                onRelease,
-                input
-        ));
+    public ListenerManager bindButton(
+        Supplier<Boolean> input,
+        Runnable onPress,
+        Runnable onRelease
+    ) {
+        return addListener(
+                new Listener(ListenerMode.CONDITION_NEWLY_MET, onPress, input)
+            )
+            .addListener(
+                new Listener(
+                    ListenerMode.CONDITION_NEWLY_NOT_MET,
+                    onRelease,
+                    input
+                )
+            );
     }
 
-    public ListenerManager bindButton(Supplier<Boolean> input,
-                                      Runnable onPress,
-                                      Runnable whenHeld,
-                                      Runnable onRelease) {
-        return addListener(new Listener(
-                ListenerMode.CONDITION_NEWLY_MET,
-                onPress,
-                input
-        )).addListener(new Listener(
-                ListenerMode.CONDITION_IS_MET,
-                whenHeld,
-                input
-        )).addListener(new Listener(
-                ListenerMode.CONDITION_NEWLY_NOT_MET,
-                onRelease,
-                input
-        ));
+    public ListenerManager bindButton(
+        Supplier<Boolean> input,
+        Runnable onPress,
+        Runnable whenHeld,
+        Runnable onRelease
+    ) {
+        return addListener(
+                new Listener(ListenerMode.CONDITION_NEWLY_MET, onPress, input)
+            )
+            .addListener(
+                new Listener(ListenerMode.CONDITION_IS_MET, whenHeld, input)
+            )
+            .addListener(
+                new Listener(
+                    ListenerMode.CONDITION_NEWLY_NOT_MET,
+                    onRelease,
+                    input
+                )
+            );
     }
 
-    public ListenerManager bindTriggerPressed(Supplier<Double> input,
-                                              Runnable onPress) {
-        return addListener(new Listener(
+    public ListenerManager bindTriggerPressed(
+        Supplier<Double> input,
+        Runnable onPress
+    ) {
+        return addListener(
+            new Listener(
                 ListenerMode.CONDITION_NEWLY_MET,
                 onPress,
                 () -> input.get() > 0
-        ));
-    }
-
-    public ListenerManager bindTrigger(Supplier<Double> input,
-                                       Runnable onPress,
-                                       Runnable onRelease) {
-        return addListener(new Listener(
-                ListenerMode.CONDITION_NEWLY_MET,
-                onPress,
-                () -> input.get() > 0
-        )).addListener(new Listener(
-                ListenerMode.CONDITION_NEWLY_NOT_MET,
-                onRelease,
-                () -> input.get() > 0
-        ));
-    }
-
-    public ListenerManager bindTrigger(Supplier<Double> input,
-                                       Runnable onPress,
-                                       Runnable whenHeld,
-                                       Runnable onRelease) {
-        return bindButton(
-                () -> input.get() > 0,
-                onPress,
-                whenHeld,
-                onRelease
+            )
         );
     }
 
-    public ListenerManager bindTrigger(Supplier<Double> input,
-                                       Runnable onPress,
-                                       Runnable whenHeld,
-                                       Runnable onRelease,
-                                       Runnable whenNotHeld) {
+    public ListenerManager bindTrigger(
+        Supplier<Double> input,
+        Runnable onPress,
+        Runnable onRelease
+    ) {
+        return addListener(
+                new Listener(
+                    ListenerMode.CONDITION_NEWLY_MET,
+                    onPress,
+                    () -> input.get() > 0
+                )
+            )
+            .addListener(
+                new Listener(
+                    ListenerMode.CONDITION_NEWLY_NOT_MET,
+                    onRelease,
+                    () -> input.get() > 0
+                )
+            );
+    }
+
+    public ListenerManager bindTrigger(
+        Supplier<Double> input,
+        Runnable onPress,
+        Runnable whenHeld,
+        Runnable onRelease
+    ) {
+        return bindButton(() -> input.get() > 0, onPress, whenHeld, onRelease);
+    }
+
+    public ListenerManager bindTrigger(
+        Supplier<Double> input,
+        Runnable onPress,
+        Runnable whenHeld,
+        Runnable onRelease,
+        Runnable whenNotHeld
+    ) {
         return bindButton(
-                () -> input.get() > 0,
-                onPress,
-                whenHeld,
-                onRelease,
-                whenNotHeld
+            () -> input.get() > 0,
+            onPress,
+            whenHeld,
+            onRelease,
+            whenNotHeld
         );
     }
 
-    public ListenerManager bindButton(Supplier<Boolean> input,
-                                      Runnable onPress,
-                                      Runnable whenHeld,
-                                      Runnable onRelease,
-                                      Runnable whenNotHeld) {
-        return addListener(new Listener(
-                ListenerMode.CONDITION_NEWLY_MET,
-                onPress,
-                input
-        )).addListener(new Listener(
-                ListenerMode.CONDITION_IS_MET,
-                whenHeld,
-                input
-        )).addListener(new Listener(
-                ListenerMode.CONDITION_NEWLY_NOT_MET,
-                onRelease,
-                input
-        )).addListener(new Listener(
-                ListenerMode.CONDITION_IS_NOT_MET,
-                whenNotHeld,
-                input
-        ));
+    public ListenerManager bindButton(
+        Supplier<Boolean> input,
+        Runnable onPress,
+        Runnable whenHeld,
+        Runnable onRelease,
+        Runnable whenNotHeld
+    ) {
+        return addListener(
+                new Listener(ListenerMode.CONDITION_NEWLY_MET, onPress, input)
+            )
+            .addListener(
+                new Listener(ListenerMode.CONDITION_IS_MET, whenHeld, input)
+            )
+            .addListener(
+                new Listener(
+                    ListenerMode.CONDITION_NEWLY_NOT_MET,
+                    onRelease,
+                    input
+                )
+            )
+            .addListener(
+                new Listener(
+                    ListenerMode.CONDITION_IS_NOT_MET,
+                    whenNotHeld,
+                    input
+                )
+            );
     }
 
     /**
@@ -264,13 +286,13 @@ public class ListenerManager implements Tickable {
      *                pressed.
      * @return {@code this}, used for method chaining.
      */
-    public ListenerManager bindButtonPress(Supplier<Boolean> input,
-                                           Runnable onPress) {
-        return addListener(new Listener(
-                ListenerMode.CONDITION_NEWLY_MET,
-                onPress,
-                input
-        ));
+    public ListenerManager bindButtonPress(
+        Supplier<Boolean> input,
+        Runnable onPress
+    ) {
+        return addListener(
+            new Listener(ListenerMode.CONDITION_NEWLY_MET, onPress, input)
+        );
     }
 
     /**
@@ -283,25 +305,27 @@ public class ListenerManager implements Tickable {
      *                  pressed.
      * @return {@code this}, used for method chaining.
      */
-    public ListenerManager bindButtonRelease(Supplier<Boolean> input,
-                                             Runnable onRelease) {
-        return addListener(new Listener(
-                ListenerMode.CONDITION_NEWLY_NOT_MET,
-                onRelease,
-                input
-        ));
+    public ListenerManager bindButtonRelease(
+        Supplier<Boolean> input,
+        Runnable onRelease
+    ) {
+        return addListener(
+            new Listener(ListenerMode.CONDITION_NEWLY_NOT_MET, onRelease, input)
+        );
     }
 
-    public ListenerManager bindToggle(Toggle toggle,
-                                      Supplier<Boolean> input,
-                                      Consumer<Toggle> onToggle) {
+    public ListenerManager bindToggle(
+        Toggle toggle,
+        Supplier<Boolean> input,
+        Consumer<Toggle> onToggle
+    ) {
         return bind(
-                ListenerMode.CONDITION_NEWLY_MET,
-                input,
-                (b) -> {
-                    toggle.toggle();
-                    onToggle.accept(toggle);
-                }
+            ListenerMode.CONDITION_NEWLY_MET,
+            input,
+            b -> {
+                toggle.toggle();
+                onToggle.accept(toggle);
+            }
         );
     }
 
@@ -328,15 +352,19 @@ public class ListenerManager implements Tickable {
      *                 observed.
      * @return {@code this}, used for method chaining.
      */
-    public <T> ListenerManager bind(ListenerMode mode,
-                                    Supplier<T> input,
-                                    Predicate<T> checker,
-                                    Consumer<T> consumer) {
-        return addListener(new Listener(
+    public <T> ListenerManager bind(
+        ListenerMode mode,
+        Supplier<T> input,
+        Predicate<T> checker,
+        Consumer<T> consumer
+    ) {
+        return addListener(
+            new Listener(
                 mode,
                 () -> consumer.accept(input.get()),
                 () -> checker.test(input.get())
-        ));
+            )
+        );
     }
 
     /**
@@ -360,126 +388,123 @@ public class ListenerManager implements Tickable {
      *                 observed.
      * @return {@code this}, used for method chaining.
      */
-    public <T> ListenerManager bind(ListenerMode mode,
-                                    Supplier<T> input,
-                                    Predicate<T> checker,
-                                    Runnable runnable) {
-        return addListener(new Listener(
-                mode,
-                runnable,
-                () -> checker.test(input.get())
-        ));
-    }
-
-    public ListenerManager bind(ListenerMode mode,
-                                Supplier<Boolean> input,
-                                Consumer<Boolean> onFinish) {
-        return bind(
-                mode,
-                input,
-                (b) -> b,
-                onFinish
+    public <T> ListenerManager bind(
+        ListenerMode mode,
+        Supplier<T> input,
+        Predicate<T> checker,
+        Runnable runnable
+    ) {
+        return addListener(
+            new Listener(mode, runnable, () -> checker.test(input.get()))
         );
     }
 
-    public <T> ListenerManager bindIsMet(Supplier<T> supplier,
-                                         Predicate<T> predicate,
-                                         Consumer<T> consumer) {
+    public ListenerManager bind(
+        ListenerMode mode,
+        Supplier<Boolean> input,
+        Consumer<Boolean> onFinish
+    ) {
+        return bind(mode, input, b -> b, onFinish);
+    }
+
+    public <T> ListenerManager bindIsMet(
+        Supplier<T> supplier,
+        Predicate<T> predicate,
+        Consumer<T> consumer
+    ) {
         return bind(
-                ListenerMode.CONDITION_IS_MET,
-                supplier,
-                predicate,
-                consumer
+            ListenerMode.CONDITION_IS_MET,
+            supplier,
+            predicate,
+            consumer
         );
     }
 
-    public ListenerManager bindIsMet(Supplier<Boolean> supplier,
-                                     Consumer<Boolean> consumer) {
+    public ListenerManager bindIsMet(
+        Supplier<Boolean> supplier,
+        Consumer<Boolean> consumer
+    ) {
+        return bind(ListenerMode.CONDITION_IS_MET, supplier, consumer);
+    }
+
+    public <T> ListenerManager bindIsNotMet(
+        Supplier<T> supplier,
+        Predicate<T> predicate,
+        Consumer<T> consumer
+    ) {
         return bind(
-                ListenerMode.CONDITION_IS_MET,
-                supplier,
-                consumer
+            ListenerMode.CONDITION_IS_NOT_MET,
+            supplier,
+            predicate,
+            consumer
         );
     }
 
-    public <T> ListenerManager bindIsNotMet(Supplier<T> supplier,
-                                            Predicate<T> predicate,
-                                            Consumer<T> consumer) {
+    public ListenerManager bindIsNotMet(
+        Supplier<Boolean> supplier,
+        Consumer<Boolean> consumer
+    ) {
+        return bind(ListenerMode.CONDITION_IS_NOT_MET, supplier, consumer);
+    }
+
+    public <T> ListenerManager bindNewlyMet(
+        Supplier<T> supplier,
+        Predicate<T> predicate,
+        Consumer<T> consumer
+    ) {
         return bind(
-                ListenerMode.CONDITION_IS_NOT_MET,
-                supplier,
-                predicate,
-                consumer
+            ListenerMode.CONDITION_NEWLY_MET,
+            supplier,
+            predicate,
+            consumer
         );
     }
 
-    public ListenerManager bindIsNotMet(Supplier<Boolean> supplier,
-                                        Consumer<Boolean> consumer) {
+    public ListenerManager bindNewlyMet(
+        Supplier<Boolean> supplier,
+        Consumer<Boolean> consumer
+    ) {
+        return bind(ListenerMode.CONDITION_NEWLY_MET, supplier, consumer);
+    }
+
+    public <T> ListenerManager bindNewlyNotMet(
+        Supplier<T> supplier,
+        Predicate<T> predicate,
+        Consumer<T> consumer
+    ) {
         return bind(
-                ListenerMode.CONDITION_IS_NOT_MET,
-                supplier,
-                consumer
+            ListenerMode.CONDITION_NEWLY_NOT_MET,
+            supplier,
+            predicate,
+            consumer
         );
     }
 
-    public <T> ListenerManager bindNewlyMet(Supplier<T> supplier,
-                                            Predicate<T> predicate,
-                                            Consumer<T> consumer) {
+    public ListenerManager bindNewlyNotMet(
+        Supplier<Boolean> supplier,
+        Consumer<Boolean> consumer
+    ) {
+        return bind(ListenerMode.CONDITION_NEWLY_NOT_MET, supplier, consumer);
+    }
+
+    public <T> ListenerManager bindNewlyChanged(
+        Supplier<T> supplier,
+        Predicate<T> predicate,
+        Consumer<T> consumer
+    ) {
         return bind(
-                ListenerMode.CONDITION_NEWLY_MET,
-                supplier,
-                predicate,
-                consumer
+            ListenerMode.CONDITION_NEWLY_CHANGED,
+            supplier,
+            predicate,
+            consumer
         );
     }
 
-    public ListenerManager bindNewlyMet(Supplier<Boolean> supplier,
-                                        Consumer<Boolean> consumer) {
-        return bind(
-                ListenerMode.CONDITION_NEWLY_MET,
-                supplier,
-                consumer
-        );
-    }
-
-    public <T> ListenerManager bindNewlyNotMet(Supplier<T> supplier,
-                                               Predicate<T> predicate,
-                                               Consumer<T> consumer) {
-        return bind(
-                ListenerMode.CONDITION_NEWLY_NOT_MET,
-                supplier,
-                predicate,
-                consumer
-        );
-    }
-
-    public ListenerManager bindNewlyNotMet(Supplier<Boolean> supplier,
-                                           Consumer<Boolean> consumer) {
-        return bind(
-                ListenerMode.CONDITION_NEWLY_NOT_MET,
-                supplier,
-                consumer
-        );
-    }
-
-    public <T> ListenerManager bindNewlyChanged(Supplier<T> supplier,
-                                                Predicate<T> predicate,
-                                                Consumer<T> consumer) {
-        return bind(
-                ListenerMode.CONDITION_NEWLY_CHANGED,
-                supplier,
-                predicate,
-                consumer
-        );
-    }
-
-    public ListenerManager bindNewlyChanged(Supplier<Boolean> supplier,
-                                            Consumer<Boolean> consumer) {
-        return bind(
-                ListenerMode.CONDITION_NEWLY_CHANGED,
-                supplier,
-                consumer
-        );
+    public ListenerManager bindNewlyChanged(
+        Supplier<Boolean> supplier,
+        Consumer<Boolean> consumer
+    ) {
+        return bind(ListenerMode.CONDITION_NEWLY_CHANGED, supplier, consumer);
     }
 
     /**

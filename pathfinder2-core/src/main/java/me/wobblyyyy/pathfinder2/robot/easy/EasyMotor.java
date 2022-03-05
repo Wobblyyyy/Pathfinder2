@@ -10,11 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.robot.easy;
 
-import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
-import me.wobblyyyy.pathfinder2.robot.components.Motor;
-
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
+import me.wobblyyyy.pathfinder2.robot.components.Motor;
 
 /**
  * Static methods to create {@link Motor} instances.
@@ -23,39 +22,36 @@ import java.util.function.Supplier;
  * @since 0.1.0
  */
 public class EasyMotor {
-    private EasyMotor() {
 
+    private EasyMotor() {}
+
+    public static Motor buildMotor(
+        Consumer<Double> setPower,
+        Supplier<Double> getPower,
+        boolean invertSetPower
+    ) {
+        return buildMotor(setPower, getPower, invertSetPower, invertSetPower);
     }
 
-    public static Motor buildMotor(Consumer<Double> setPower,
-                                   Supplier<Double> getPower,
-                                   boolean invertSetPower) {
-        return buildMotor(
-                setPower,
-                getPower,
-                invertSetPower,
-                invertSetPower
-        );
-    }
-
-    public static Motor buildMotor(Consumer<Double> setPower,
-                                   Supplier<Double> getPower,
-                                   boolean invertSetPower,
-                                   boolean invertGetPower) {
+    public static Motor buildMotor(
+        Consumer<Double> setPower,
+        Supplier<Double> getPower,
+        boolean invertSetPower,
+        boolean invertGetPower
+    ) {
         return new AbstractMotor(
-                setPower,
-                getPower,
-                invertSetPower,
-                invertGetPower
+            setPower,
+            getPower,
+            invertSetPower,
+            invertGetPower
         );
     }
 
-    public static Motor buildMotor(Consumer<Double> setPower,
-                                   Supplier<Double> getPower) {
-        return new AbstractMotor(
-                setPower,
-                getPower
-        );
+    public static Motor buildMotor(
+        Consumer<Double> setPower,
+        Supplier<Double> getPower
+    ) {
+        return new AbstractMotor(setPower, getPower);
     }
 
     public static Motor buildMotor(Consumer<Double> setPower) {

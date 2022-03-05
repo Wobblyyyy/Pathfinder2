@@ -84,34 +84,38 @@ public class MutableLinearTrajectory implements Trajectory {
         this(PointXYZ.ZERO, 0, 0, Angle.fromDeg(0));
     }
 
-    public MutableLinearTrajectory(PointXYZ target,
-                                   double speed,
-                                   double tolerance,
-                                   Angle angleTolerance) {
-        if (target == null)
-            throw new NullPointException(
-                    "Attempted to create a LinearTrajectory instance with " +
-                            "a null target point. Target points can't be " +
-                            "null - crazy, I know!");
+    public MutableLinearTrajectory(
+        PointXYZ target,
+        double speed,
+        double tolerance,
+        Angle angleTolerance
+    ) {
+        if (target == null) throw new NullPointException(
+            "Attempted to create a LinearTrajectory instance with " +
+            "a null target point. Target points can't be " +
+            "null - crazy, I know!"
+        );
 
-        if (speed < 0 || speed > 1)
-            throw new InvalidSpeedException(
-                    "Attempted to create a LinearTrajectory instance with speed " +
-                            "(" + speed + "). Speed values must be greater " +
-                            "than 0. and less than 1.0.");
+        if (speed < 0 || speed > 1) throw new InvalidSpeedException(
+            "Attempted to create a LinearTrajectory instance with speed " +
+            "(" +
+            speed +
+            "). Speed values must be greater " +
+            "than 0. and less than 1.0."
+        );
 
-        if (tolerance < 0)
-            throw new InvalidToleranceException(
-                    "Attempted to create a LinearTrajectory instance with a " +
-                            "tolerance value less than 0. Tolerance values must " +
-                            "be greater than or equal to 0.");
+        if (tolerance < 0) throw new InvalidToleranceException(
+            "Attempted to create a LinearTrajectory instance with a " +
+            "tolerance value less than 0. Tolerance values must " +
+            "be greater than or equal to 0."
+        );
 
-        if (angleTolerance == null)
-            throw new NullAngleException(
-                    "Attempted to create a LinearTrajectory instance with " +
-                            "a null angle tolerance value. Make sure whatever " +
-                            "angle tolerance you pass isn't null next time, " +
-                            "okay? Cool.");
+        if (angleTolerance == null) throw new NullAngleException(
+            "Attempted to create a LinearTrajectory instance with " +
+            "a null angle tolerance value. Make sure whatever " +
+            "angle tolerance you pass isn't null next time, " +
+            "okay? Cool."
+        );
 
         this.target = target;
         this.speed = speed;
@@ -161,33 +165,26 @@ public class MutableLinearTrajectory implements Trajectory {
 
     @Override
     public PointXYZ nextMarker(PointXYZ current) {
-        if (isDoneXY(current))
-            return current.withHeading(this.target);
-        else
-            return target;
+        if (isDoneXY(current)) return current.withHeading(
+            this.target
+        ); else return target;
     }
 
     private boolean isDoneXY(PointXYZ current) {
-        return current.isNear(
-                this.target,
-                this.tolerance
-        );
+        return current.isNear(this.target, this.tolerance);
     }
 
     private boolean isDoneHeading(PointXYZ current) {
-        return current.z().isCloseDeg(
-                target.z().fix(),
-                angleTolerance.fix().deg()
-        );
+        return current
+            .z()
+            .isCloseDeg(target.z().fix(), angleTolerance.fix().deg());
     }
 
     @Override
     public boolean isDone(PointXYZ current) {
         if (!isFinished) {
-            if (current == null)
-                return false;
-            if (isDoneXY(current) && isDoneHeading(current))
-                isFinished = true;
+            if (current == null) return false;
+            if (isDoneXY(current) && isDoneHeading(current)) isFinished = true;
         } else {
             return isFinished;
         }
@@ -203,12 +200,7 @@ public class MutableLinearTrajectory implements Trajectory {
     }
 
     public LinearTrajectory toLinearTrajectory() {
-        return new LinearTrajectory(
-                target,
-                speed,
-                tolerance,
-                angleTolerance
-        );
+        return new LinearTrajectory(target, speed, tolerance, angleTolerance);
     }
 
     @Override
@@ -221,4 +213,3 @@ public class MutableLinearTrajectory implements Trajectory {
         return false;
     }
 }
-

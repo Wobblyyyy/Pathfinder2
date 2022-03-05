@@ -231,8 +231,7 @@ public abstract class BaseMotor implements Motor {
     public double getPower() {
         double power = abstractGetPower();
 
-        if (isGetInverted)
-            power *= -1;
+        if (isGetInverted) power *= -1;
 
         return power;
     }
@@ -265,16 +264,12 @@ public abstract class BaseMotor implements Motor {
     public void setPower(double power) {
         power = Math.max(minPower, Math.min(power, maxPower));
 
-        if (Math.abs(power) < deadband)
-            power = 0;
+        if (Math.abs(power) < deadband) power = 0;
 
-        if (isSetInverted)
-            power = power * -1;
+        if (isSetInverted) power = power * -1;
 
-        if (isLazy)
-            if (Math.abs(lastPower - power) >= maxLazyPowerGap)
-                accept(power);
-            else
-                accept(power);
+        if (isLazy) if (Math.abs(lastPower - power) >= maxLazyPowerGap) accept(
+            power
+        ); else accept(power);
     }
 }

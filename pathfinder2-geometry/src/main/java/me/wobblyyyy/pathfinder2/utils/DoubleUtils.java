@@ -17,15 +17,13 @@ package me.wobblyyyy.pathfinder2.utils;
  * @since 1.0.1
  */
 public class DoubleUtils {
-    private DoubleUtils() {
 
-    }
+    private DoubleUtils() {}
 
     public static Double[] box(double[] array) {
         Double[] boxed = new Double[array.length];
 
-        for (int i = 0; i < array.length; i++)
-            boxed[i] = array[i];
+        for (int i = 0; i < array.length; i++) boxed[i] = array[i];
 
         return boxed;
     }
@@ -33,8 +31,7 @@ public class DoubleUtils {
     public static double[] unbox(Double[] array) {
         double[] unboxed = new double[array.length];
 
-        for (int i = 0; i < array.length; i++)
-            unboxed[i] = array[i];
+        for (int i = 0; i < array.length; i++) unboxed[i] = array[i];
 
         return unboxed;
     }
@@ -49,28 +46,31 @@ public class DoubleUtils {
      * @return if the value is validated (meaning it's not {@code NaN} and
      * it's not infinite), return the value.
      */
-    public static double validate(double value,
-                                  String parameterName) {
-        if (Double.isNaN(value))
-            throw new IllegalArgumentException(StringUtils.format(
-                    "Failed to validate double <%s> because " +
-                            "the value was not a number!",
-                    parameterName
-            ));
+    public static double validate(double value, String parameterName) {
+        if (Double.isNaN(value)) throw new IllegalArgumentException(
+            StringUtils.format(
+                "Failed to validate double <%s> because " +
+                "the value was not a number!",
+                parameterName
+            )
+        );
 
-        if (Double.isInfinite(value))
-            throw new IllegalArgumentException(StringUtils.format(
-                    "Failed to validate double <%s> because " +
-                            "the value was infinite!",
-                    parameterName
-            ));
+        if (Double.isInfinite(value)) throw new IllegalArgumentException(
+            StringUtils.format(
+                "Failed to validate double <%s> because " +
+                "the value was infinite!",
+                parameterName
+            )
+        );
 
         return value;
     }
 
     public static double[] validate(double... values) {
-        for (int i = 0; i < values.length; i++)
-            validate(values[i], StringUtils.format("index %s", i));
+        for (int i = 0; i < values.length; i++) validate(
+            values[i],
+            StringUtils.format("index %s", i)
+        );
 
         return values;
     }

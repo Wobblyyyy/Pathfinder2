@@ -10,16 +10,15 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
-import me.wobblyyyy.pathfinder2.math.Equals;
-import me.wobblyyyy.pathfinder2.math.Rounding;
-import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
-import me.wobblyyyy.pathfinder2.utils.ArrayUtils;
-import me.wobblyyyy.pathfinder2.utils.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import me.wobblyyyy.pathfinder2.math.Equals;
+import me.wobblyyyy.pathfinder2.math.Rounding;
+import me.wobblyyyy.pathfinder2.utils.ArrayUtils;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
  * A 2d coordinate with an X value, a Y value, and a value "Z" representing
@@ -67,8 +66,7 @@ public class PointXYZ extends PointXY {
      *              of. See: {@link #withHeading(Angle)}
      * @param z     the heading of the new {@code PointXYZ}.
      */
-    public PointXYZ(PointXY point,
-                    Angle z) {
+    public PointXYZ(PointXY point, Angle z) {
         this(point.x(), point.y(), z);
     }
 
@@ -79,15 +77,13 @@ public class PointXYZ extends PointXY {
      * @param y the Y coordinate of the point.
      * @param z the point's heading, angle, Z - whatever you'd like to call it.
      */
-    public PointXYZ(double x,
-                    double y,
-                    Angle z) {
+    public PointXYZ(double x, double y, Angle z) {
         super(x, y);
-
         COUNT++;
 
-        if (z == null)
-            throw new NullPointerException("Cannot have a null Z value!");
+        if (z == null) throw new NullPointerException(
+            "Cannot have a null Z value!"
+        );
 
         this.z = z;
     }
@@ -99,9 +95,7 @@ public class PointXYZ extends PointXY {
      * @param y        the Y coordinate of the point.
      * @param zDegrees the point's heading, IN DEGREES.
      */
-    public PointXYZ(double x,
-                    double y,
-                    double zDegrees) {
+    public PointXYZ(double x, double y, double zDegrees) {
         this(x, y, Angle.fixedDeg(zDegrees));
     }
 
@@ -111,8 +105,7 @@ public class PointXYZ extends PointXY {
      * @param x the X coordinate of the point.
      * @param y the Y coordinate of the point.
      */
-    public PointXYZ(double x,
-                    double y) {
+    public PointXYZ(double x, double y) {
         this(x, y, 0);
     }
 
@@ -135,13 +128,15 @@ public class PointXYZ extends PointXY {
      * @param angle   the angle the point should have.
      * @return a new {@code PointXYZ}.
      */
-    public static PointXYZ fromMetersToInches(double xMeters,
-                                              double yMeters,
-                                              Angle angle) {
+    public static PointXYZ fromMetersToInches(
+        double xMeters,
+        double yMeters,
+        Angle angle
+    ) {
         return new PointXYZ(
-                xMeters * Geometry.METERS_TO_INCHES,
-                yMeters * Geometry.METERS_TO_INCHES,
-                angle
+            xMeters * Geometry.METERS_TO_INCHES,
+            yMeters * Geometry.METERS_TO_INCHES,
+            angle
         );
     }
 
@@ -154,13 +149,15 @@ public class PointXYZ extends PointXY {
      * @param angle   the angle the point should have.
      * @return a new {@code PointXYZ}.
      */
-    public static PointXYZ fromInchesToMeters(double xInches,
-                                              double yInches,
-                                              Angle angle) {
+    public static PointXYZ fromInchesToMeters(
+        double xInches,
+        double yInches,
+        Angle angle
+    ) {
         return new PointXYZ(
-                xInches * Geometry.INCHES_TO_METERS,
-                yInches * Geometry.INCHES_TO_METERS,
-                angle
+            xInches * Geometry.INCHES_TO_METERS,
+            yInches * Geometry.INCHES_TO_METERS,
+            angle
         );
     }
 
@@ -173,14 +170,12 @@ public class PointXYZ extends PointXY {
      * @param angle   the angle the point should have.
      * @return a new {@code PointXYZ}.
      */
-    public static PointXYZ fromMetersToCentimeters(double xMeters,
-                                                   double yMeters,
-                                                   Angle angle) {
-        return new PointXYZ(
-                xMeters * 100,
-                yMeters * 100,
-                angle
-        );
+    public static PointXYZ fromMetersToCentimeters(
+        double xMeters,
+        double yMeters,
+        Angle angle
+    ) {
+        return new PointXYZ(xMeters * 100, yMeters * 100, angle);
     }
 
     /**
@@ -192,13 +187,15 @@ public class PointXYZ extends PointXY {
      * @param angle        the angle the point should have.
      * @return a new {@code PointXYZ}.
      */
-    public static PointXYZ fromCentimetersToInches(double xCentimeters,
-                                                   double yCentimeters,
-                                                   Angle angle) {
+    public static PointXYZ fromCentimetersToInches(
+        double xCentimeters,
+        double yCentimeters,
+        Angle angle
+    ) {
         return new PointXYZ(
-                xCentimeters * Geometry.CENTIMETERS_TO_INCHES,
-                yCentimeters * Geometry.CENTIMETERS_TO_INCHES,
-                angle
+            xCentimeters * Geometry.CENTIMETERS_TO_INCHES,
+            yCentimeters * Geometry.CENTIMETERS_TO_INCHES,
+            angle
         );
     }
 
@@ -211,13 +208,15 @@ public class PointXYZ extends PointXY {
      * @param angle   the angle the point should have.
      * @return a new {@code PointXYZ}.
      */
-    public static PointXYZ fromInchesToCentimeters(double xInches,
-                                                   double yInches,
-                                                   Angle angle) {
+    public static PointXYZ fromInchesToCentimeters(
+        double xInches,
+        double yInches,
+        Angle angle
+    ) {
         return new PointXYZ(
-                xInches * Geometry.INCHES_TO_CENTIMETERS,
-                yInches * Geometry.INCHES_TO_CENTIMETERS,
-                angle
+            xInches * Geometry.INCHES_TO_CENTIMETERS,
+            yInches * Geometry.INCHES_TO_CENTIMETERS,
+            angle
         );
     }
 
@@ -228,15 +227,14 @@ public class PointXYZ extends PointXY {
      * @param b one of the two points to add.
      * @return the sum of the two points.
      */
-    public static PointXYZ add(PointXYZ a,
-                               PointXYZ b) {
+    public static PointXYZ add(PointXYZ a, PointXYZ b) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
 
         return new PointXYZ(
-                a.x() + b.x(),
-                a.y() + b.y(),
-                Angle.add(a.z(), b.z())
+            a.x() + b.x(),
+            a.y() + b.y(),
+            Angle.add(a.z(), b.z())
         );
     }
 
@@ -247,15 +245,14 @@ public class PointXYZ extends PointXY {
      * @param b one of the points to multiply.
      * @return the product of the two points.
      */
-    public static PointXYZ multiply(PointXYZ a,
-                                    PointXYZ b) {
+    public static PointXYZ multiply(PointXYZ a, PointXYZ b) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
 
         return new PointXYZ(
-                a.x() * b.x(),
-                a.y() * b.y(),
-                Angle.multiply(a.z(), b.z())
+            a.x() * b.x(),
+            a.y() * b.y(),
+            Angle.multiply(a.z(), b.z())
         );
     }
 
@@ -266,16 +263,11 @@ public class PointXYZ extends PointXY {
      * @param b the value to multiply the point's X, Y, and Z values by.
      * @return the newly multiplied point.
      */
-    public static PointXYZ multiply(PointXYZ a,
-                                    double b) {
+    public static PointXYZ multiply(PointXYZ a, double b) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
 
-        return new PointXYZ(
-                a.x() * b,
-                a.y() * b,
-                Angle.multiply(a.z(), b)
-        );
+        return new PointXYZ(a.x() * b, a.y() * b, Angle.multiply(a.z(), b));
     }
 
     /**
@@ -285,8 +277,7 @@ public class PointXYZ extends PointXY {
      * @param b one of the two points to average.
      * @return the average of the two provided points.
      */
-    public static PointXYZ avg(PointXYZ a,
-                               PointXYZ b) {
+    public static PointXYZ avg(PointXYZ a, PointXYZ b) {
         return multiply(add(a, b), 0.5);
     }
 
@@ -312,12 +303,13 @@ public class PointXYZ extends PointXY {
      * Else, this method will return false. Additionally, the minimum delta
      * between the two angles must be less than {@code angleTolerance}.
      */
-    public static boolean isNear(PointXYZ a,
-                                 PointXYZ b,
-                                 double tolerance,
-                                 Angle angleTolerance) {
-        if (!PointXY.isNear(a, b, tolerance))
-            return false;
+    public static boolean isNear(
+        PointXYZ a,
+        PointXYZ b,
+        double tolerance,
+        Angle angleTolerance
+    ) {
+        if (!PointXY.isNear(a, b, tolerance)) return false;
 
         return Equals.soft(a.z, b.z, angleTolerance);
     }
@@ -338,17 +330,19 @@ public class PointXYZ extends PointXY {
      * @return a new point, {@code distance} away from {@code base} in
      * {@code direction}.
      */
-    public static PointXYZ inDirection(PointXYZ base,
-                                       double distance,
-                                       Angle angle) {
+    public static PointXYZ inDirection(
+        PointXYZ base,
+        double distance,
+        Angle angle
+    ) {
         ValidationUtils.validate(base, "base");
         ValidationUtils.validate(distance, "distance");
         ValidationUtils.validate(angle, "angle");
 
         return new PointXYZ(
-                base.x() + (distance * angle.cos()),
-                base.y() + (distance * angle.sin()),
-                base.z()
+            base.x() + (distance * angle.cos()),
+            base.y() + (distance * angle.sin()),
+            base.z()
         );
     }
 
@@ -359,8 +353,10 @@ public class PointXYZ extends PointXY {
      * @param translation the translation to apply.
      * @return the translated point.
      */
-    public static PointXYZ applyTranslation(PointXYZ base,
-                                            Translation translation) {
+    public static PointXYZ applyTranslation(
+        PointXYZ base,
+        Translation translation
+    ) {
         ValidationUtils.validate(base, "base");
         ValidationUtils.validate(translation, "translation");
 
@@ -368,9 +364,9 @@ public class PointXYZ extends PointXY {
         Angle angle = translation.angle().add(base.z);
 
         return new PointXYZ(
-                base.x() + (distance * angle.cos()),
-                base.y() + (distance * angle.sin()),
-                base.z().add(Angle.fromDeg(translation.vz()))
+            base.x() + (distance * angle.cos()),
+            base.y() + (distance * angle.sin()),
+            base.z().add(Angle.fromDeg(translation.vz()))
         );
     }
 
@@ -383,12 +379,8 @@ public class PointXYZ extends PointXY {
      * @param angle  how far to rotate the point.
      * @return a point, rotated around {@code center} by {@code angle}.
      */
-    public static PointXYZ rotate(PointXYZ point,
-                                  PointXY center,
-                                  Angle angle) {
-        return PointXY.rotate(
-                point, center, angle
-        ).withHeading(point.z());
+    public static PointXYZ rotate(PointXYZ point, PointXY center, Angle angle) {
+        return PointXY.rotate(point, center, angle).withHeading(point.z());
     }
 
     /**
@@ -399,13 +391,16 @@ public class PointXYZ extends PointXY {
      * @param angle  how far to rotate the points.
      * @return a new {@code List} of rotated points.
      */
-    public static List<PointXYZ> rotatePoints(Collection<PointXYZ> points,
-                                              PointXY center,
-                                              Angle angle) {
+    public static List<PointXYZ> rotatePoints(
+        Collection<PointXYZ> points,
+        PointXY center,
+        Angle angle
+    ) {
         List<PointXYZ> rotated = new ArrayList<>(points.size());
 
-        for (PointXYZ point : points)
-            rotated.add(PointXYZ.rotate(point, center, angle));
+        for (PointXYZ point : points) rotated.add(
+            PointXYZ.rotate(point, center, angle)
+        );
 
         return rotated;
     }
@@ -418,11 +413,14 @@ public class PointXYZ extends PointXY {
      * @param angle  how far to rotate the points.
      * @return a new {@code List} of rotated points.
      */
-    public static PointXYZ[] rotatePoints(PointXYZ[] points,
-                                          PointXY center,
-                                          Angle angle) {
-        return ArrayUtils.toPointXYZArray(rotatePoints(
-                    Arrays.asList(points),center, angle));
+    public static PointXYZ[] rotatePoints(
+        PointXYZ[] points,
+        PointXY center,
+        Angle angle
+    ) {
+        return ArrayUtils.toPointXYZArray(
+            rotatePoints(Arrays.asList(points), center, angle)
+        );
     }
 
     /**
@@ -455,9 +453,9 @@ public class PointXYZ extends PointXY {
         }
 
         return new PointXYZ(
-                totalX / points.size(),
-                totalY / points.size(),
-                Angle.fixedDeg(totalZ / points.size())
+            totalX / points.size(),
+            totalY / points.size(),
+            Angle.fixedDeg(totalZ / points.size())
         );
     }
 
@@ -480,9 +478,9 @@ public class PointXYZ extends PointXY {
         }
 
         return new PointXYZ(
-                totalX / points.length,
-                totalY / points.length,
-                Angle.fixedDeg(totalZ / points.length)
+            totalX / points.length,
+            totalY / points.length,
+            Angle.fixedDeg(totalZ / points.length)
         );
     }
 
@@ -493,8 +491,10 @@ public class PointXYZ extends PointXY {
      * @param points the points to reflect over the given axis.
      * @return the same list of points, but reflected over a given axis.
      */
-    public static List<PointXYZ> reflectPointsOverX(double axis,
-                                                    List<PointXYZ> points) {
+    public static List<PointXYZ> reflectPointsOverX(
+        double axis,
+        List<PointXYZ> points
+    ) {
         List<PointXYZ> reflectedPoints = new ArrayList<>();
 
         for (PointXYZ point : points) {
@@ -511,8 +511,10 @@ public class PointXYZ extends PointXY {
      * @param points the points to reflect over the given axis.
      * @return the same list of points, but reflected over a given axis.
      */
-    public static List<PointXYZ> reflectPointsOverX(double axis,
-                                                    PointXYZ... points) {
+    public static List<PointXYZ> reflectPointsOverX(
+        double axis,
+        PointXYZ... points
+    ) {
         List<PointXYZ> reflectedPoints = new ArrayList<>();
 
         for (PointXYZ point : points) {
@@ -529,8 +531,10 @@ public class PointXYZ extends PointXY {
      * @param points the points to reflect over the given axis.
      * @return the same list of points, but reflected over a given axis.
      */
-    public static List<PointXYZ> reflectPointsOverY(double axis,
-                                                    List<PointXYZ> points) {
+    public static List<PointXYZ> reflectPointsOverY(
+        double axis,
+        List<PointXYZ> points
+    ) {
         List<PointXYZ> reflectedPoints = new ArrayList<>();
 
         for (PointXYZ point : points) {
@@ -547,8 +551,10 @@ public class PointXYZ extends PointXY {
      * @param points the points to reflect over the given axis.
      * @return the same list of points, but reflected over a given axis.
      */
-    public static List<PointXYZ> reflectPointsOverY(double axis,
-                                                    PointXYZ... points) {
+    public static List<PointXYZ> reflectPointsOverY(
+        double axis,
+        PointXYZ... points
+    ) {
         List<PointXYZ> reflectedPoints = new ArrayList<>();
 
         for (PointXYZ point : points) {
@@ -590,8 +596,7 @@ public class PointXYZ extends PointXY {
         return reflectedPoints;
     }
 
-    private static double reflect(double value,
-                                  double axis) {
+    private static double reflect(double value, double axis) {
         return axis - (value - axis);
     }
 
@@ -719,8 +724,7 @@ public class PointXYZ extends PointXY {
      * @param angle  how far to rotate this point.
      * @return the newly-rotated point.
      */
-    public PointXYZ rotate(PointXY center,
-                           Angle angle) {
+    public PointXYZ rotate(PointXY center, Angle angle) {
         return rotate(this, center, angle);
     }
 
@@ -739,8 +743,7 @@ public class PointXYZ extends PointXY {
      * at {@code angle}.
      */
     @Override
-    public PointXYZ inDirection(double distance,
-                                Angle angle) {
+    public PointXYZ inDirection(double distance, Angle angle) {
         return PointXYZ.inDirection(this, distance, angle);
     }
 
@@ -780,10 +783,10 @@ public class PointXYZ extends PointXY {
     @Override
     public String toString() {
         return StringUtils.format(
-                Geometry.formatPointXYZ,
-                Rounding.fastRound(x()),
-                Rounding.fastRound(y()),
-                Rounding.fastRound(z.deg())
+            Geometry.formatPointXYZ,
+            Rounding.fastRound(x()),
+            Rounding.fastRound(y()),
+            Rounding.fastRound(z.deg())
         );
     }
 
@@ -792,10 +795,16 @@ public class PointXYZ extends PointXY {
         if (obj instanceof PointXYZ) {
             PointXYZ p = (PointXYZ) obj;
 
-            boolean sameX = Equals.soft(p.x(), this.x(),
-                    Geometry.tolerancePointXYZ);
-            boolean sameY = Equals.soft(p.y(), this.y(),
-                    Geometry.tolerancePointXYZ);
+            boolean sameX = Equals.soft(
+                p.x(),
+                this.x(),
+                Geometry.tolerancePointXYZ
+            );
+            boolean sameY = Equals.soft(
+                p.y(),
+                this.y(),
+                Geometry.tolerancePointXYZ
+            );
             boolean sameZ = Angle.equals(p.z, this.z);
 
             return sameX && sameY && sameZ;
@@ -835,9 +844,7 @@ public class PointXYZ extends PointXY {
      * Else, this method will return false. Additionally, the minimum delta
      * between the two angles must be less than {@code angleTolerance}.
      */
-    public boolean isNear(PointXYZ a,
-                          double tolerance,
-                          Angle angleTolerance) {
+    public boolean isNear(PointXYZ a, double tolerance, Angle angleTolerance) {
         return isNear(this, a, tolerance, angleTolerance);
     }
 

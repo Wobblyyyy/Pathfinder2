@@ -41,12 +41,12 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
  * @since 0.0.0
  */
 public class NullPointException extends RuntimeException {
+
     public NullPointException(String s) {
         super(s);
     }
 
-    public static void throwIfInvalid(String message,
-                                      PointXY point) {
+    public static void throwIfInvalid(String message, PointXY point) {
         if (point == null) {
             throw new NullPointException(message);
         }

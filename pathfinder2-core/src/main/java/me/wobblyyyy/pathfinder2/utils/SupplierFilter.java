@@ -23,9 +23,8 @@ import java.util.function.Supplier;
  */
 @Deprecated
 public class SupplierFilter {
-    private SupplierFilter() {
 
-    }
+    private SupplierFilter() {}
 
     /**
      * Are any of the suppliers true?
@@ -34,8 +33,9 @@ public class SupplierFilter {
      * @return true if any of the suppliers are true - otherwise, false.
      */
     public static boolean anyTrue(Supplier<Boolean>... suppliers) {
-        for (Supplier<Boolean> supplier : suppliers)
-            if (supplier.get()) return true;
+        for (Supplier<Boolean> supplier : suppliers) if (
+            supplier.get()
+        ) return true;
 
         return false;
     }
@@ -47,8 +47,9 @@ public class SupplierFilter {
      * @return true if any of the suppliers are false - otherwise, false.
      */
     public static boolean anyFalse(Supplier<Boolean>... suppliers) {
-        for (Supplier<Boolean> supplier : suppliers)
-            if (!supplier.get()) return true;
+        for (Supplier<Boolean> supplier : suppliers) if (
+            !supplier.get()
+        ) return true;
 
         return false;
     }
@@ -62,11 +63,10 @@ public class SupplierFilter {
     public static boolean allTrue(Supplier<Boolean>... suppliers) {
         boolean t = true;
 
-        for (Supplier<Boolean> supplier : suppliers)
-            if (!supplier.get()) {
-                t = false;
-                break;
-            }
+        for (Supplier<Boolean> supplier : suppliers) if (!supplier.get()) {
+            t = false;
+            break;
+        }
 
         return t;
     }
@@ -80,11 +80,10 @@ public class SupplierFilter {
     public static boolean allFalse(Supplier<Boolean>... suppliers) {
         boolean t = true;
 
-        for (Supplier<Boolean> supplier : suppliers)
-            if (supplier.get()) {
-                t = false;
-                break;
-            }
+        for (Supplier<Boolean> supplier : suppliers) if (supplier.get()) {
+            t = false;
+            break;
+        }
 
         return t;
     }
@@ -95,8 +94,10 @@ public class SupplierFilter {
      * @return true if the first supplier returns true and all of the other
      * suppliers also return true.
      */
-    public static boolean trueThenAllTrue(Supplier<Boolean> supplier,
-                                          Supplier<Boolean>... inhibitors) {
+    public static boolean trueThenAllTrue(
+        Supplier<Boolean> supplier,
+        Supplier<Boolean>... inhibitors
+    ) {
         return supplier.get() && allTrue(inhibitors);
     }
 
@@ -106,8 +107,10 @@ public class SupplierFilter {
      * @return true if the first supplier returns true and all of the other
      * suppliers return false.
      */
-    public static boolean trueThenAllFalse(Supplier<Boolean> supplier,
-                                           Supplier<Boolean>... inhibitors) {
+    public static boolean trueThenAllFalse(
+        Supplier<Boolean> supplier,
+        Supplier<Boolean>... inhibitors
+    ) {
         return supplier.get() && allFalse(inhibitors);
     }
 
@@ -117,8 +120,10 @@ public class SupplierFilter {
      * @return true if the first supplier returns false and all of the other
      * suppliers also return true.
      */
-    public static boolean falseThenAllTrue(Supplier<Boolean> supplier,
-                                           Supplier<Boolean>... inhibitors) {
+    public static boolean falseThenAllTrue(
+        Supplier<Boolean> supplier,
+        Supplier<Boolean>... inhibitors
+    ) {
         return !supplier.get() && allTrue(inhibitors);
     }
 
@@ -128,8 +133,10 @@ public class SupplierFilter {
      * @return true if the first supplier returns false and all of the other
      * suppliers return false.
      */
-    public static boolean falseThenAllFalse(Supplier<Boolean> supplier,
-                                            Supplier<Boolean>... inhibitors) {
+    public static boolean falseThenAllFalse(
+        Supplier<Boolean> supplier,
+        Supplier<Boolean>... inhibitors
+    ) {
         return !supplier.get() && allFalse(inhibitors);
     }
 
@@ -139,8 +146,10 @@ public class SupplierFilter {
      * @return true if the first supplier returns true and any of the other
      * suppliers also return true.
      */
-    public static boolean trueThenAnyTrue(Supplier<Boolean> supplier,
-                                          Supplier<Boolean>... inhibitors) {
+    public static boolean trueThenAnyTrue(
+        Supplier<Boolean> supplier,
+        Supplier<Boolean>... inhibitors
+    ) {
         return supplier.get() && anyTrue(inhibitors);
     }
 
@@ -150,8 +159,10 @@ public class SupplierFilter {
      * @return true if the first supplier returns true and any of the other
      * suppliers return false.
      */
-    public static boolean trueThenAnyFalse(Supplier<Boolean> supplier,
-                                           Supplier<Boolean>... inhibitors) {
+    public static boolean trueThenAnyFalse(
+        Supplier<Boolean> supplier,
+        Supplier<Boolean>... inhibitors
+    ) {
         return supplier.get() && anyFalse(inhibitors);
     }
 
@@ -161,8 +172,10 @@ public class SupplierFilter {
      * @return true if the first supplier returns false and any of the other
      * suppliers also return true.
      */
-    public static boolean falseThenAnyTrue(Supplier<Boolean> supplier,
-                                           Supplier<Boolean>... inhibitors) {
+    public static boolean falseThenAnyTrue(
+        Supplier<Boolean> supplier,
+        Supplier<Boolean>... inhibitors
+    ) {
         return !supplier.get() && anyTrue(inhibitors);
     }
 
@@ -172,16 +185,19 @@ public class SupplierFilter {
      * @return true if the first supplier returns false and any of the other
      * suppliers return false.
      */
-    public static boolean falseThenAnyFalse(Supplier<Boolean> supplier,
-                                            Supplier<Boolean>... inhibitors) {
+    public static boolean falseThenAnyFalse(
+        Supplier<Boolean> supplier,
+        Supplier<Boolean>... inhibitors
+    ) {
         return !supplier.get() && anyFalse(inhibitors);
     }
 
     public static int trueCount(Supplier<Boolean>... suppliers) {
         int count = 0;
 
-        for (Supplier<Boolean> supplier : suppliers)
-            if (supplier.get()) count++;
+        for (Supplier<Boolean> supplier : suppliers) if (
+            supplier.get()
+        ) count++;
 
         return count;
     }
@@ -189,8 +205,9 @@ public class SupplierFilter {
     public static int falseCount(Supplier<Boolean>... suppliers) {
         int count = 0;
 
-        for (Supplier<Boolean> supplier : suppliers)
-            if (!supplier.get()) count++;
+        for (Supplier<Boolean> supplier : suppliers) if (
+            !supplier.get()
+        ) count++;
 
         return count;
     }
@@ -202,8 +219,10 @@ public class SupplierFilter {
      * @param suppliers the suppliers.
      * @return true if the amount is greater, otherwise, false.
      */
-    public static boolean trueCountGreaterThan(int minimum,
-                                               Supplier<Boolean>... suppliers) {
+    public static boolean trueCountGreaterThan(
+        int minimum,
+        Supplier<Boolean>... suppliers
+    ) {
         return trueCount(suppliers) > minimum;
     }
 
@@ -214,8 +233,10 @@ public class SupplierFilter {
      * @param suppliers the suppliers.
      * @return true if the amount is greater, otherwise, false.
      */
-    public static boolean trueCountLessThan(int maximum,
-                                            Supplier<Boolean>... suppliers) {
+    public static boolean trueCountLessThan(
+        int maximum,
+        Supplier<Boolean>... suppliers
+    ) {
         return trueCount(suppliers) < maximum;
     }
 
@@ -226,8 +247,10 @@ public class SupplierFilter {
      * @param suppliers the suppliers.
      * @return false if the amount is greater, otherwise, true.
      */
-    public static boolean falseCountGreaterThan(int minimum,
-                                                Supplier<Boolean>... suppliers) {
+    public static boolean falseCountGreaterThan(
+        int minimum,
+        Supplier<Boolean>... suppliers
+    ) {
         return falseCount(suppliers) > minimum;
     }
 
@@ -238,8 +261,10 @@ public class SupplierFilter {
      * @param suppliers the suppliers.
      * @return false if the amount is greater, otherwise, true.
      */
-    public static boolean falseCountLessThan(int maximum,
-                                             Supplier<Boolean>... suppliers) {
+    public static boolean falseCountLessThan(
+        int maximum,
+        Supplier<Boolean>... suppliers
+    ) {
         return falseCount(suppliers) < maximum;
     }
 

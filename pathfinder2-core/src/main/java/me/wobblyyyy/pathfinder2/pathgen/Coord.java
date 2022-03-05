@@ -12,7 +12,6 @@ package me.wobblyyyy.pathfinder2.pathgen;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 /**
@@ -32,8 +31,7 @@ public class Coord {
      * @param x the coordinate's X value.
      * @param y the coordinate's Y value.
      */
-    public Coord(int x,
-                 int y) {
+    public Coord(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -77,10 +75,6 @@ public class Coord {
 
     @Override
     public String toString() {
-        return StringUtils.format(
-                "(%s, %s)",
-                x,
-                y
-        );
+        return StringUtils.format("(%s, %s)", x, y);
     }
 }

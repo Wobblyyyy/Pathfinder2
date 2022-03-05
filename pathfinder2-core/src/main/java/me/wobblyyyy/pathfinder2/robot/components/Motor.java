@@ -61,13 +61,15 @@ public interface Motor {
      *                           motor be multiplied by -1?
      * @return a new {@code Motor}.
      */
-    default Motor applyInversions(boolean isSetPowerInverted,
-                                  boolean isGetPowerInverted) {
+    default Motor applyInversions(
+        boolean isSetPowerInverted,
+        boolean isGetPowerInverted
+    ) {
         return new AbstractMotor(
-                this::setPower,
-                this::getPower,
-                isSetPowerInverted,
-                isGetPowerInverted
+            this::setPower,
+            this::getPower,
+            isSetPowerInverted,
+            isGetPowerInverted
         );
     }
 
@@ -104,15 +106,17 @@ public interface Motor {
         return applyInversions(false, true);
     }
 
-    default Motor applyMultipliers(double setPowerMultiplier,
-                                   double getPowerMultiplier) {
+    default Motor applyMultipliers(
+        double setPowerMultiplier,
+        double getPowerMultiplier
+    ) {
         return new AbstractMotor(
-                (power) -> {
-                    setPower(power * setPowerMultiplier);
-                },
-                () -> {
-                    return getPower() * getPowerMultiplier;
-                }
+            power -> {
+                setPower(power * setPowerMultiplier);
+            },
+            () -> {
+                return getPower() * getPowerMultiplier;
+            }
         );
     }
 
@@ -140,8 +144,7 @@ public interface Motor {
      * cast this to an {@code AbstractMotor}.
      */
     default AbstractMotor toAbstractMotor() {
-        if (this instanceof AbstractMotor)
-            return (AbstractMotor) this;
+        if (this instanceof AbstractMotor) return (AbstractMotor) this;
 
         return new AbstractMotor(this::setPower, this::getPower);
     }

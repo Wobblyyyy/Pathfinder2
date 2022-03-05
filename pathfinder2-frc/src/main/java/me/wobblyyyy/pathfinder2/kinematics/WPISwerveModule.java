@@ -68,22 +68,29 @@ public class WPISwerveModule {
      *                       module's position relative to the center of
      *                       the robot.
      */
-    public WPISwerveModule(Motor turnMotor,
-                           AngleEncoder turnEncoder,
-                           PIDController turnController,
-                           Motor driveMotor,
-                           boolean shouldOptimize,
-                           Translation2d modulePosition) {
-        if (turnMotor == null)
-            throw new RuntimeException("cannot have null turn motor!");
-        if (turnEncoder == null)
-            throw new RuntimeException("cannot have null turn encoder!");
-        if (turnController == null)
-            throw new RuntimeException("cannot have null turn controller!");
-        if (driveMotor == null)
-            throw new RuntimeException("cannot have null drive motor!");
-        if (modulePosition == null)
-            throw new RuntimeException("cannot have null module position!");
+    public WPISwerveModule(
+        Motor turnMotor,
+        AngleEncoder turnEncoder,
+        PIDController turnController,
+        Motor driveMotor,
+        boolean shouldOptimize,
+        Translation2d modulePosition
+    ) {
+        if (turnMotor == null) throw new RuntimeException(
+            "cannot have null turn motor!"
+        );
+        if (turnEncoder == null) throw new RuntimeException(
+            "cannot have null turn encoder!"
+        );
+        if (turnController == null) throw new RuntimeException(
+            "cannot have null turn controller!"
+        );
+        if (driveMotor == null) throw new RuntimeException(
+            "cannot have null drive motor!"
+        );
+        if (modulePosition == null) throw new RuntimeException(
+            "cannot have null module position!"
+        );
 
         this.turnMotor = turnMotor;
         this.turnEncoder = turnEncoder;
@@ -122,21 +129,17 @@ public class WPISwerveModule {
      *              the bounds of -1 to 1, inclusive.
      */
     public void setState(SwerveModuleState state) {
-        if (state == null)
-            throw new IllegalArgumentException(
-                    "cannot set a swerve module's state to a null object! " +
-                            "the state you tried to set to the swerve module " +
-                            "was null, make sure it is NOT"
-            );
-        if (shouldOptimize)
-            state = SwerveModuleState.optimize(
-                    state,
-                    getTurnRotation()
-            );
+        if (state == null) throw new IllegalArgumentException(
+            "cannot set a swerve module's state to a null object! " +
+            "the state you tried to set to the swerve module " +
+            "was null, make sure it is NOT"
+        );
+        if (shouldOptimize) state =
+            SwerveModuleState.optimize(state, getTurnRotation());
 
         double turnPower = turnController.calculate(
-                getTurnAngle().rad(),
-                state.angle.getRadians()
+            getTurnAngle().rad(),
+            state.angle.getRadians()
         );
 
         turnMotor.setPower(turnPower);
@@ -231,9 +234,9 @@ public class WPISwerveModule {
     @Override
     public String toString() {
         return StringUtils.format(
-                "(turn pos: %s, drive speed: %s)",
-                getTurnAngle().formatAsDegShort(),
-                driveMotor.getPower()
+            "(turn pos: %s, drive speed: %s)",
+            getTurnAngle().formatAsDegShort(),
+            driveMotor.getPower()
         );
     }
 }

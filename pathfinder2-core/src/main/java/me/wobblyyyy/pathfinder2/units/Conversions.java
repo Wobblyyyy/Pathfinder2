@@ -19,9 +19,8 @@ import static me.wobblyyyy.pathfinder2.units.Unit.*;
  * @since 0.0.0
  */
 public class Conversions {
-    private Conversions() {
 
-    }
+    private Conversions() {}
 
     /**
      * Convert a measurement from {@code current} unit into {@code target}
@@ -32,9 +31,7 @@ public class Conversions {
      * @param value   the value to convert.
      * @return the converted value.
      */
-    public static double convert(Unit current,
-                                 Unit target,
-                                 double value) {
+    public static double convert(Unit current, Unit target, double value) {
         return target.reciprocal(current.inches(value));
     }
 

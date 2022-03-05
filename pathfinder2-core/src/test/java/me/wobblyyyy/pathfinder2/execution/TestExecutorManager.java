@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.execution;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.control.GenericTurnController;
 import me.wobblyyyy.pathfinder2.follower.Follower;
@@ -24,33 +26,32 @@ import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TestExecutorManager {
+
     @Test
     public void testExecutorManager() {
         SimulatedOdometry odometry = new SimulatedOdometry();
         SimulatedDrive drive = new SimulatedDrive();
         Robot robot = new Robot(drive, odometry);
         Trajectory trajectory = new LinearTrajectory(
-                new PointXYZ(10, 10, 0),
-                1.0,
-                0.1,
-                Angle.fromDeg(3)
+            new PointXYZ(10, 10, 0),
+            1.0,
+            0.1,
+            Angle.fromDeg(3)
         );
         Controller controller = new GenericTurnController(0.1);
-        GenericFollowerGenerator generator = new GenericFollowerGenerator(controller);
-        Follower follower = generator.generate(robot, trajectory);
-        List<Follower> list = new ArrayList<Follower>() {{
-            add(follower);
-        }};
-
-        FollowerExecutor executor = new FollowerExecutor(
-                odometry,
-                drive,
-                list
+        GenericFollowerGenerator generator = new GenericFollowerGenerator(
+            controller
         );
+        Follower follower = generator.generate(robot, trajectory);
+        List<Follower> list = new ArrayList<Follower>() {
+
+            {
+                add(follower);
+            }
+        };
+
+        FollowerExecutor executor = new FollowerExecutor(odometry, drive, list);
 
         Assertions.assertFalse(executor.tick());
 
@@ -81,33 +82,38 @@ public class TestExecutorManager {
         SimulatedDrive drive = new SimulatedDrive();
         Robot robot = new Robot(drive, odometry);
         Trajectory trajectory1 = new LinearTrajectory(
-                new PointXYZ(10, 10, 0),
-                1.0,
-                0.1,
-                Angle.fromDeg(3)
+            new PointXYZ(10, 10, 0),
+            1.0,
+            0.1,
+            Angle.fromDeg(3)
         );
         Trajectory trajectory2 = new LinearTrajectory(
-                new PointXYZ(20, 20, 45),
-                1.0,
-                0.1,
-                Angle.fromDeg(3)
+            new PointXYZ(20, 20, 45),
+            1.0,
+            0.1,
+            Angle.fromDeg(3)
         );
         Trajectory trajectory3 = new LinearTrajectory(
-                new PointXYZ(30, 30, 90),
-                1.0,
-                0.1,
-                Angle.fromDeg(3)
+            new PointXYZ(30, 30, 90),
+            1.0,
+            0.1,
+            Angle.fromDeg(3)
         );
         Controller controller = new GenericTurnController(0.1);
-        GenericFollowerGenerator generator = new GenericFollowerGenerator(controller);
+        GenericFollowerGenerator generator = new GenericFollowerGenerator(
+            controller
+        );
         Follower follower1 = generator.generate(robot, trajectory1);
         Follower follower2 = generator.generate(robot, trajectory2);
         Follower follower3 = generator.generate(robot, trajectory3);
-        List<Follower> followers = new ArrayList<Follower>() {{
-            add(follower1);
-            add(follower2);
-            add(follower3);
-        }};
+        List<Follower> followers = new ArrayList<Follower>() {
+
+            {
+                add(follower1);
+                add(follower2);
+                add(follower3);
+            }
+        };
 
         ExecutorManager manager = new ExecutorManager(robot);
 

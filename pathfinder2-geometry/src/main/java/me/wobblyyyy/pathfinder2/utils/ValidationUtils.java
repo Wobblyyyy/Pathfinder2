@@ -22,43 +22,50 @@ public class ValidationUtils {
     private static final String NO_NAME = "parameter name not specified";
     private static final String NO_MORE_INFO = "no more information specified";
 
-    public static double validateNotNaN(double value,
-                                        String parameterName,
-                                        String customMessage) {
-        if (Double.isNaN(value))
-            throw new ValidationException(StringUtils.format(
-                    "Failed to validate double <%s> because " +
-                            "the value was not a number! Value: <%s> (%s)",
-                    parameterName,
-                    value,
-                    customMessage
-            ));
+    public static double validateNotNaN(
+        double value,
+        String parameterName,
+        String customMessage
+    ) {
+        if (Double.isNaN(value)) throw new ValidationException(
+            StringUtils.format(
+                "Failed to validate double <%s> because " +
+                "the value was not a number! Value: <%s> (%s)",
+                parameterName,
+                value,
+                customMessage
+            )
+        );
 
         return value;
     }
 
-    public static double validateNotNaN(double value,
-                                        String parameterName) {
+    public static double validateNotNaN(double value, String parameterName) {
         return validateNotNaN(value, parameterName, NO_MORE_INFO);
     }
 
-    public static double validateNotInfinite(double value,
-                                             String parameterName,
-                                             String customMesssage) {
-        if (Double.isInfinite(value))
-            throw new ValidationException(StringUtils.format(
-                    "Failed to validate double <%s> because " +
-                            "the value was infinite! Value: <%s> (%s)",
-                    parameterName,
-                    value,
-                    customMesssage
-            ));
+    public static double validateNotInfinite(
+        double value,
+        String parameterName,
+        String customMesssage
+    ) {
+        if (Double.isInfinite(value)) throw new ValidationException(
+            StringUtils.format(
+                "Failed to validate double <%s> because " +
+                "the value was infinite! Value: <%s> (%s)",
+                parameterName,
+                value,
+                customMesssage
+            )
+        );
 
         return value;
     }
 
-    public static double validateNotInfinite(double value,
-                                             String parameterName) {
+    public static double validateNotInfinite(
+        double value,
+        String parameterName
+    ) {
         return validateNotInfinite(value, parameterName, NO_MORE_INFO);
     }
 
@@ -76,15 +83,19 @@ public class ValidationUtils {
      * @return if the value is validated (meaning it's not {@code NaN} and
      * it's not infinite), return the value.
      */
-    public static double validate(double value,
-                                  String parameterName,
-                                  boolean canBeNaN,
-                                  boolean canBeInfinite,
-                                  String customMessage) {
-        if (!canBeNaN)
-            validateNotNaN(value, parameterName, customMessage);
-        if (!canBeInfinite)
-            validateNotInfinite(value, parameterName, customMessage);
+    public static double validate(
+        double value,
+        String parameterName,
+        boolean canBeNaN,
+        boolean canBeInfinite,
+        String customMessage
+    ) {
+        if (!canBeNaN) validateNotNaN(value, parameterName, customMessage);
+        if (!canBeInfinite) validateNotInfinite(
+            value,
+            parameterName,
+            customMessage
+        );
 
         return value;
     }
@@ -102,12 +113,19 @@ public class ValidationUtils {
      * @return if the value is validated (meaning it's not {@code NaN} and
      * it's not infinite), return the value.
      */
-    public static double validate(double value,
-                                  String parameterName,
-                                  DoubleValidationMode mode,
-                                  String customMessage) {
-        return validate(value, parameterName, mode.canBeNaN,
-                mode.canBeInfinite, customMessage);
+    public static double validate(
+        double value,
+        String parameterName,
+        DoubleValidationMode mode,
+        String customMessage
+    ) {
+        return validate(
+            value,
+            parameterName,
+            mode.canBeNaN,
+            mode.canBeInfinite,
+            customMessage
+        );
     }
 
     /**
@@ -122,11 +140,17 @@ public class ValidationUtils {
      * @return if the value is validated (meaning it's not {@code NaN} and
      * it's not infinite), return the value.
      */
-    public static double validate(double value,
-                                  String parameterName,
-                                  String customMessage) {
-        return validate(value, parameterName,
-                DoubleValidationMode.NOT_NAN_OR_INFINITE, customMessage);
+    public static double validate(
+        double value,
+        String parameterName,
+        String customMessage
+    ) {
+        return validate(
+            value,
+            parameterName,
+            DoubleValidationMode.NOT_NAN_OR_INFINITE,
+            customMessage
+        );
     }
 
     /**
@@ -139,8 +163,7 @@ public class ValidationUtils {
      * @return if the value is validated (meaning it's not {@code NaN} and
      * it's not infinite), return the value.
      */
-    public static double validate(double value,
-                                  String parameterName) {
+    public static double validate(double value, String parameterName) {
         return validate(value, parameterName, NO_MORE_INFO);
     }
 
@@ -167,8 +190,7 @@ public class ValidationUtils {
      * @return if the value is validated (meaning it's not {@code NaN} and
      * it's not infinite), return the value.
      */
-    public static float validate(float value,
-                                 String parameterName) {
+    public static float validate(float value, String parameterName) {
         validate((double) value, parameterName);
         return value;
     }
@@ -186,50 +208,60 @@ public class ValidationUtils {
         return validate(value, NO_NAME);
     }
 
-    public static <T> T validateNotNull(T t,
-                                        String parameterName,
-                                        String customMessage) {
-        if (t == null) throw new ValidationException(StringUtils.format(
-                    "Failed to validate object <%s> because it was null! (%s)",
-                    parameterName,
-                    customMessage
-            ));
+    public static <T> T validateNotNull(
+        T t,
+        String parameterName,
+        String customMessage
+    ) {
+        if (t == null) throw new ValidationException(
+            StringUtils.format(
+                "Failed to validate object <%s> because it was null! (%s)",
+                parameterName,
+                customMessage
+            )
+        );
 
         return t;
     }
 
-    public static <T> T validateNotNull(T t,
-                                        String parameterName) {
+    public static <T> T validateNotNull(T t, String parameterName) {
         return validateNotNull(t, parameterName, NO_MORE_INFO);
     }
 
-    public static <T> T validate(T t,
-                                 String parameterName,
-                                 String customMessageFormat,
-                                 Object[] formatSources) {
-        if (formatSources == null
-                || formatSources.length < 1
-                || formatSources[0] == null)
-            return validateNotNull(t, parameterName, customMessageFormat);
+    public static <T> T validate(
+        T t,
+        String parameterName,
+        String customMessageFormat,
+        Object[] formatSources
+    ) {
+        if (
+            formatSources == null ||
+            formatSources.length < 1 ||
+            formatSources[0] == null
+        ) return validateNotNull(t, parameterName, customMessageFormat);
 
         String customMessage = StringUtils.format(
-                customMessageFormat,
-                formatSources
+            customMessageFormat,
+            formatSources
         );
 
         return validateNotNull(t, parameterName, customMessage);
     }
 
-    public static <T> T validateAndFormat(T t,
-                                          String parameterName,
-                                          String customMessage,
-                                          Object... formatSources) {
+    public static <T> T validateAndFormat(
+        T t,
+        String parameterName,
+        String customMessage,
+        Object... formatSources
+    ) {
         return validate(t, parameterName, customMessage, formatSources);
     }
 
-    public static <T> T validate(T t,
-                                 String parameterName,
-                                 String customMessage) {
+    public static <T> T validate(
+        T t,
+        String parameterName,
+        String customMessage
+    ) {
         return validateAndFormat(t, parameterName, customMessage);
     }
 
@@ -240,8 +272,7 @@ public class ValidationUtils {
      * @param parameterName the name of the object.
      * @return the object.
      */
-    public static <T> T validate(T t,
-                                 String parameterName) {
+    public static <T> T validate(T t, String parameterName) {
         return validate(t, parameterName, NO_MORE_INFO);
     }
 
@@ -265,8 +296,7 @@ public class ValidationUtils {
         protected final boolean canBeNaN;
         protected final boolean canBeInfinite;
 
-        DoubleValidationMode(boolean canBeNaN,
-                             boolean canBeInfinite) {
+        DoubleValidationMode(boolean canBeNaN, boolean canBeInfinite) {
             this.canBeNaN = canBeNaN;
             this.canBeInfinite = canBeInfinite;
         }

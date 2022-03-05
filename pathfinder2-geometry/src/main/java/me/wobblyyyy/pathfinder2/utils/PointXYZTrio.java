@@ -13,9 +13,8 @@ package me.wobblyyyy.pathfinder2.utils;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
 public class PointXYZTrio extends Trio<PointXYZ, PointXYZ, PointXYZ> {
-    public PointXYZTrio(PointXYZ a,
-                        PointXYZ b,
-                        PointXYZ c) {
+
+    public PointXYZTrio(PointXYZ a, PointXYZ b, PointXYZ c) {
         super(a, b, c);
     }
 }

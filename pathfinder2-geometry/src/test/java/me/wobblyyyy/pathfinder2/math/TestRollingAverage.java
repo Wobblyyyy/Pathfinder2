@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestRollingAverage {
+
     @Test
     public void testWithEmptyValues() {
         RollingAverage avg = new RollingAverage(10);
@@ -37,9 +38,6 @@ public class TestRollingAverage {
             avg.add(number);
         }
 
-        Assertions.assertEquals(
-                Average.of(numbers),
-                avg.average()
-        );
+        Assertions.assertEquals(Average.of(numbers), avg.average());
     }
 }

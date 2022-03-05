@@ -40,21 +40,21 @@ public class EncoderTracker {
      *                   the only difference is that an inverted encoder has
      *                   all of its values multiplied by -1.
      */
-    public EncoderTracker(EncoderConverter converter,
-                          Supplier<Integer> getTicks,
-                          boolean isInverted) {
+    public EncoderTracker(
+        EncoderConverter converter,
+        Supplier<Integer> getTicks,
+        boolean isInverted
+    ) {
         this.converter = converter;
         this.getTicks = getTicks;
         this.isInverted = isInverted;
     }
 
-    public EncoderTracker(EncoderConverter converter,
-                          Supplier<Integer> getTicks) {
-        this(
-                converter,
-                getTicks,
-                false
-        );
+    public EncoderTracker(
+        EncoderConverter converter,
+        Supplier<Integer> getTicks
+    ) {
+        this(converter, getTicks, false);
     }
 
     public EncoderConverter getSpeedConverter() {

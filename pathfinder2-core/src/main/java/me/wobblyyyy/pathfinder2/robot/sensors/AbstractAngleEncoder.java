@@ -35,8 +35,7 @@ public abstract class AbstractAngleEncoder implements AngleEncoder {
         this(Angle.fromDeg(0), multiplier);
     }
 
-    public AbstractAngleEncoder(Angle offset,
-                                double multiplier) {
+    public AbstractAngleEncoder(Angle offset, double multiplier) {
         this.offset = offset;
         this.multiplier = multiplier;
     }

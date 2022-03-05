@@ -17,9 +17,8 @@ package me.wobblyyyy.pathfinder2.utils;
  * @since 0.2.3
  */
 public class NotNull {
-    private NotNull() {
 
-    }
+    private NotNull() {}
 
     public static boolean isAnythingNull(Object... objects) {
         for (Object obj : objects) {
@@ -35,8 +34,7 @@ public class NotNull {
         return !isAnythingNull(objects);
     }
 
-    public static void throwExceptionIfNull(String message,
-                                            Object... objects) {
+    public static void throwExceptionIfNull(String message, Object... objects) {
         if (isAnythingNull(objects)) {
             throw new NullPointerException(message);
         }

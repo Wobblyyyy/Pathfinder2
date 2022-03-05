@@ -19,14 +19,15 @@ import java.util.function.Consumer;
  * @since 0.10.8
  */
 public class StringUtils {
-    private StringUtils() {
 
-    }
+    private StringUtils() {}
 
-    private static void appendNext(StringBuilder builder,
-                                   char type,
-                                   int maxLength,
-                                   Object nextSource) {
+    private static void appendNext(
+        StringBuilder builder,
+        char type,
+        int maxLength,
+        Object nextSource
+    ) {
         int previousLength = builder.length();
 
         if (nextSource == null) {
@@ -48,15 +49,20 @@ public class StringUtils {
                 builder.append(Float.parseFloat(nextSource.toString()));
                 break;
             default:
-                throw new IllegalArgumentException(format("Tried to use " +
+                throw new IllegalArgumentException(
+                    format(
+                        "Tried to use " +
                         "format type <%s> but did not find it, valid types " +
                         "are (percent sign)s, (percent sign)i, (percent " +
-                        "sign)d, and (percent sign)f.", type));
+                        "sign)d, and (percent sign)f.",
+                        type
+                    )
+                );
         }
 
-        if (maxLength > 0)
-            if (builder.length() - previousLength > maxLength)
-                builder.setLength(previousLength + maxLength);
+        if (maxLength > 0) if (
+            builder.length() - previousLength > maxLength
+        ) builder.setLength(previousLength + maxLength);
     }
 
     /**
@@ -88,26 +94,28 @@ public class StringUtils {
      *                   {@code template} string, an exception will be thrown.
      * @return a freshly formatted string.
      */
-    public static String sizedFormat(String template,
-                                     int bufferSize,
-                                     Object... sources) {
-        if (bufferSize < 0)
-            throw new IllegalArgumentException("Buffer size must " +
-                    "be a positive integer (or zero) but it was " + bufferSize);
+    public static String sizedFormat(
+        String template,
+        int bufferSize,
+        Object... sources
+    ) {
+        if (bufferSize < 0) throw new IllegalArgumentException(
+            "Buffer size must " +
+            "be a positive integer (or zero) but it was " +
+            bufferSize
+        );
 
         ValidationUtils.validate(template, "template");
 
-        for (Object source : sources)
-            ValidationUtils.validate(source);
+        for (Object source : sources) ValidationUtils.validate(source);
 
         StringBuilder buffer = new StringBuilder(bufferSize);
 
-        if (sources.length == 0)
-            throw new IllegalArgumentException(
-                    "tried to format a string without providing any " +
-                            "source parameters - make sure you have " +
-                            "at least one source parameter"
-            );
+        if (sources.length == 0) throw new IllegalArgumentException(
+            "tried to format a string without providing any " +
+            "source parameters - make sure you have " +
+            "at least one source parameter"
+        );
 
         int length = template.length();
         int sourceIndex = 0;
@@ -143,13 +151,15 @@ public class StringUtils {
                     type = template.charAt(i);
                 }
 
-                if (sourceIndex > sources.length - 1)
-                    throw new IndexOutOfBoundsException(
-                            "ran out of sources while formatting string: " +
-                                    "expected at least 1 additional source " +
-                                    "parameter but did not find any for " +
-                                    "type " + type
-                    );
+                if (
+                    sourceIndex > sources.length - 1
+                ) throw new IndexOutOfBoundsException(
+                    "ran out of sources while formatting string: " +
+                    "expected at least 1 additional source " +
+                    "parameter but did not find any for " +
+                    "type " +
+                    type
+                );
 
                 appendNext(buffer, type, maxLength, sources[sourceIndex++]);
             } else {
@@ -195,12 +205,11 @@ public class StringUtils {
      *                 {@code template} string, an exception will be thrown.
      * @return a freshly formatted string.
      */
-    public static String format(String template,
-                                Object... sources) {
+    public static String format(String template, Object... sources) {
         return sizedFormat(
-                template,
-                template.length() * sources.length,
-                sources
+            template,
+            template.length() * sources.length,
+            sources
         );
     }
 
@@ -211,14 +220,16 @@ public class StringUtils {
      * @param objects   all of the objects that will be formatted.
      * @return a formatted array of objects.
      */
-    public static String formatArray(String separator,
-                                     Object[] objects) {
+    public static String formatArray(String separator, Object[] objects) {
         int length = objects.length;
-        if (length == 0) return "";
-        else if (length == 1) return objects[0].toString();
+        if (length == 0) return ""; else if (
+            length == 1
+        ) return objects[0].toString();
 
         String firstString = objects[0].toString();
-        StringBuilder builder = new StringBuilder(firstString.length() * length);
+        StringBuilder builder = new StringBuilder(
+            firstString.length() * length
+        );
 
         for (int i = 1; i < objects.length; i++) {
             builder.append(objects[i]);
@@ -237,10 +248,12 @@ public class StringUtils {
      * @param objects   all of the objects that will be formatted.
      * @return a formatted array of objects.
      */
-    public static String formatArray(String separator,
-                                     String startString,
-                                     String endString,
-                                     Object... objects) {
+    public static String formatArray(
+        String separator,
+        String startString,
+        String endString,
+        Object... objects
+    ) {
         return startString + formatArray(separator, objects) + endString;
     }
 
@@ -251,9 +264,11 @@ public class StringUtils {
      * @param template the template to use for the string.
      * @param sources  sources to use for formatting the string.
      */
-    public static void printf(Consumer<String> consumer,
-                              String template,
-                              Object... sources) {
+    public static void printf(
+        Consumer<String> consumer,
+        String template,
+        Object... sources
+    ) {
         consumer.accept(format(template, sources));
     }
 
@@ -263,9 +278,7 @@ public class StringUtils {
      * @param template the template to use for the string.
      * @param sources  sources to use for formatting the string.
      */
-    public static void printf(String template,
-                              Object... sources) {
+    public static void printf(String template, Object... sources) {
         printf(System.out::println, template, sources);
     }
 }
-

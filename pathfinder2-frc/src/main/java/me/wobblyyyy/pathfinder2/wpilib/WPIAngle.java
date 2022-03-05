@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 
 public class WPIAngle extends Angle {
+
     public WPIAngle(Rotation2d rotation) {
         super(rotation.getDegrees());
     }

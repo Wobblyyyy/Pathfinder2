@@ -25,33 +25,37 @@ public class ButtonMapper {
     private final Pathfinder pathfinder;
     private final Gamepad gamepad;
 
-    public ButtonMapper(Pathfinder pathfinder,
-                        Gamepad gamepad) {
+    public ButtonMapper(Pathfinder pathfinder, Gamepad gamepad) {
         this.pathfinder = pathfinder;
         this.gamepad = gamepad;
     }
 
     public Trajectory getTrajectory() {
-        if (!gamepad.areAnyButtonsPressed())
-            throw new RuntimeException(
-                    "Cannot get a trajectory without any buttons being pressed!"
-            );
+        if (!gamepad.areAnyButtonsPressed()) throw new RuntimeException(
+            "Cannot get a trajectory without any buttons being pressed!"
+        );
 
         PointXYZ point = null;
-        if (gamepad.a()) point = gamepad.getMappedPoint(Gamepad.InputButton.BUTTON_A);
-        else if (gamepad.b()) point = gamepad.getMappedPoint(Gamepad.InputButton.BUTTON_B);
-        else if (gamepad.x()) point = gamepad.getMappedPoint(Gamepad.InputButton.BUTTON_X);
-        else if (gamepad.y()) point = gamepad.getMappedPoint(Gamepad.InputButton.BUTTON_Y);
+        if (gamepad.a()) point =
+            gamepad.getMappedPoint(Gamepad.InputButton.BUTTON_A); else if (
+            gamepad.b()
+        ) point =
+            gamepad.getMappedPoint(Gamepad.InputButton.BUTTON_B); else if (
+            gamepad.x()
+        ) point =
+            gamepad.getMappedPoint(Gamepad.InputButton.BUTTON_X); else if (
+            gamepad.y()
+        ) point = gamepad.getMappedPoint(Gamepad.InputButton.BUTTON_Y);
         if (point != null) {
             double speed = pathfinder.getSpeed();
             double tolerance = pathfinder.getTolerance();
             Angle angleTolerance = pathfinder.getAngleTolerance();
 
             return new LinearTrajectory(
-                    point,
-                    speed,
-                    tolerance,
-                    angleTolerance
+                point,
+                speed,
+                tolerance,
+                angleTolerance
             );
         }
 

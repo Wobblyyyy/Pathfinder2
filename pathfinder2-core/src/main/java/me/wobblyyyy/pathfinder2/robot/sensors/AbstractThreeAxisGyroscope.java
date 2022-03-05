@@ -27,7 +27,9 @@ public abstract class AbstractThreeAxisGyroscope implements ThreeAxisGyroscope {
     private Angle yawOffset = Angle.DEG_0;
 
     public abstract Angle getRawRoll();
+
     public abstract Angle getRawPitch();
+
     public abstract Angle getRawYaw();
 
     /**
@@ -104,7 +106,7 @@ public abstract class AbstractThreeAxisGyroscope implements ThreeAxisGyroscope {
     public Angle getYawOffset() {
         return yawOffset;
     }
-    
+
     @Override
     public Angle getAngle() {
         switch (mode) {

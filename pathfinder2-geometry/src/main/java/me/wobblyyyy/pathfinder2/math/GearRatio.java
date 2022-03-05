@@ -21,16 +21,11 @@ public class GearRatio {
     private final double outOverIn;
 
     @SuppressWarnings("RedundantCast")
-    public GearRatio(int inputTeeth,
-                     int outputTeeth) {
-        this(
-                (double) inputTeeth,
-                (double) outputTeeth
-        );
+    public GearRatio(int inputTeeth, int outputTeeth) {
+        this((double) inputTeeth, (double) outputTeeth);
     }
 
-    public GearRatio(double howManyIn,
-                     double howManyOut) {
+    public GearRatio(double howManyIn, double howManyOut) {
         this.inOverOut = howManyIn / howManyOut;
         this.outOverIn = howManyOut / howManyIn;
     }

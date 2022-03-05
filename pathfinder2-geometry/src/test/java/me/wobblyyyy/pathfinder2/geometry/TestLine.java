@@ -132,10 +132,7 @@ public class TestLine {
 
     @Test
     public void testGetClosestPoint() {
-        Line line = new Line(
-                new PointXY(0, 0),
-                new PointXY(10, 10)
-        );
+        Line line = new Line(new PointXY(0, 0), new PointXY(10, 10));
 
         PointXY a = new PointXY(9, 1);
 
@@ -147,10 +144,7 @@ public class TestLine {
 
     @Test
     public void testGetClosestEndPoint() {
-        Line line = new Line(
-                new PointXY(0, 0),
-                new PointXY(10, 10)
-        );
+        Line line = new Line(new PointXY(0, 0), new PointXY(10, 10));
 
         PointXY a = new PointXY(-10, -10);
         PointXY b = new PointXY(20, 20);

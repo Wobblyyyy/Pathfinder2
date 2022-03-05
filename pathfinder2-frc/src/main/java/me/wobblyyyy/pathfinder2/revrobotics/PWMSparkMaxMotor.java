@@ -37,10 +37,8 @@ public class PWMSparkMaxMotor extends AbstractMotor implements AutoCloseable {
      * @param spark      the spark max.
      * @param isInverted is it inverted?
      */
-    public PWMSparkMaxMotor(PWMSparkMax spark,
-                            boolean isInverted) {
+    public PWMSparkMaxMotor(PWMSparkMax spark, boolean isInverted) {
         super(spark::set, spark::get, isInverted);
-
         this.spark = spark;
     }
 
@@ -59,8 +57,7 @@ public class PWMSparkMaxMotor extends AbstractMotor implements AutoCloseable {
      * @param channel    the motor's channel.
      * @param isInverted is the motor inverted?
      */
-    public PWMSparkMaxMotor(int channel,
-                            boolean isInverted) {
+    public PWMSparkMaxMotor(int channel, boolean isInverted) {
         this(new PWMSparkMax(channel), isInverted);
     }
 

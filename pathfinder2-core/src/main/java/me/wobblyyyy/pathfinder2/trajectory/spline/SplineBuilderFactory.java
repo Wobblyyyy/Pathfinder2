@@ -27,9 +27,7 @@ public class SplineBuilderFactory {
     double tolerance;
     Angle angleTolerance;
 
-    public SplineBuilderFactory() {
-
-    }
+    public SplineBuilderFactory() {}
 
     /**
      * Set the factory's step value.
@@ -100,10 +98,12 @@ public class SplineBuilderFactory {
      * @param autoSetAngleTolerance should angle tolerance be set automatically?
      * @return new {@link AdvancedSplineTrajectoryBuilder}.
      */
-    public AdvancedSplineTrajectoryBuilder builder(boolean autoSetStep,
-                                                   boolean autoSetSpeed,
-                                                   boolean autoSetTolerance,
-                                                   boolean autoSetAngleTolerance) {
+    public AdvancedSplineTrajectoryBuilder builder(
+        boolean autoSetStep,
+        boolean autoSetSpeed,
+        boolean autoSetTolerance,
+        boolean autoSetAngleTolerance
+    ) {
         AdvancedSplineTrajectoryBuilder builder = new AdvancedSplineTrajectoryBuilder();
         if (autoSetStep) builder.setStep(step);
         if (autoSetSpeed) builder.setSpeed(speed);

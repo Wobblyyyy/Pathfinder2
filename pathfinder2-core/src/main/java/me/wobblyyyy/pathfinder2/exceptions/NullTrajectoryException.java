@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.exceptions;
 
 public class NullTrajectoryException extends RuntimeException {
+
     public NullTrajectoryException(String message) {
         super(message);
     }

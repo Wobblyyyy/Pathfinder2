@@ -26,11 +26,11 @@ public class RelativeMecanumKinematics implements Kinematics<MecanumState> {
     /**
      * The angles of each of the wheels.
      */
-    private static final Angle[] WHEEL_ANGLES = new Angle[]{
-            Angle.DEG_45,                  // FRONT LEFT
-            Angle.DEG_315,                 // FRONT RIGHT
-            Angle.DEG_315,                 // BACK LEFT
-            Angle.DEG_45                   // BACK RIGHT
+    private static final Angle[] WHEEL_ANGLES = new Angle[] {
+        Angle.DEG_45, // FRONT LEFT
+        Angle.DEG_315, // FRONT RIGHT
+        Angle.DEG_315, // BACK LEFT
+        Angle.DEG_45, // BACK RIGHT
     };
 
     /**
@@ -60,15 +60,12 @@ public class RelativeMecanumKinematics implements Kinematics<MecanumState> {
      * @param maxMagnitude the maximum magnitude.
      * @param angleOffset  the angle offset for the kinematics.
      */
-    public RelativeMecanumKinematics(double minMagnitude,
-                                     double maxMagnitude,
-                                     Angle angleOffset) {
-        this(
-                minMagnitude,
-                maxMagnitude,
-                1.0,
-                angleOffset
-        );
+    public RelativeMecanumKinematics(
+        double minMagnitude,
+        double maxMagnitude,
+        Angle angleOffset
+    ) {
+        this(minMagnitude, maxMagnitude, 1.0, angleOffset);
     }
 
     /**
@@ -79,18 +76,19 @@ public class RelativeMecanumKinematics implements Kinematics<MecanumState> {
      * @param turnMagnitude the turn magnitude.
      * @param angleOffset   the angle offset for the kinematics.
      */
-    public RelativeMecanumKinematics(double minMagnitude,
-                                     double maxMagnitude,
-                                     double turnMagnitude,
-                                     Angle angleOffset) {
+    public RelativeMecanumKinematics(
+        double minMagnitude,
+        double maxMagnitude,
+        double turnMagnitude,
+        Angle angleOffset
+    ) {
         this.minMagnitude = minMagnitude;
         this.maxMagnitude = maxMagnitude;
         this.turnMagnitude = turnMagnitude;
         this.angleOffset = angleOffset;
     }
 
-    private static double calculatePower(Angle movement,
-                                         Angle wheel) {
+    private static double calculatePower(Angle movement, Angle wheel) {
         double x = movement.sin() * wheel.sin();
         double y = movement.cos() * wheel.cos();
 
@@ -100,20 +98,23 @@ public class RelativeMecanumKinematics implements Kinematics<MecanumState> {
     @Override
     public MecanumState calculate(Translation translation) {
         double xyMagnitude = MinMax.clip(
-                Math.hypot(translation.vx(), translation.vy()),
-                minMagnitude,
-                maxMagnitude
+            Math.hypot(translation.vx(), translation.vy()),
+            minMagnitude,
+            maxMagnitude
         );
-        Angle angle = Angle.atan2(
-                translation.vy(),
-                translation.vx()
-        ).add(angleOffset);
+        Angle angle = Angle
+            .atan2(translation.vy(), translation.vx())
+            .add(angleOffset);
         double turn = translation.vz() * turnMagnitude;
 
-        double fl = (calculatePower(angle, WHEEL_ANGLES[0]) * xyMagnitude) + turn;
-        double fr = (calculatePower(angle, WHEEL_ANGLES[1]) * xyMagnitude) - turn;
-        double bl = (calculatePower(angle, WHEEL_ANGLES[2]) * xyMagnitude) + turn;
-        double br = (calculatePower(angle, WHEEL_ANGLES[3]) * xyMagnitude) - turn;
+        double fl =
+            (calculatePower(angle, WHEEL_ANGLES[0]) * xyMagnitude) + turn;
+        double fr =
+            (calculatePower(angle, WHEEL_ANGLES[1]) * xyMagnitude) - turn;
+        double bl =
+            (calculatePower(angle, WHEEL_ANGLES[2]) * xyMagnitude) + turn;
+        double br =
+            (calculatePower(angle, WHEEL_ANGLES[3]) * xyMagnitude) - turn;
 
         return new MecanumState(fl, fr, bl, br).normalizeFromMaxUnderOne();
     }
@@ -121,8 +122,8 @@ public class RelativeMecanumKinematics implements Kinematics<MecanumState> {
     @Override
     public Translation toTranslation(MecanumState state) {
         throw new RuntimeException(
-                "Cannot convert a mecanum state to a translation " +
-                        "using the relative mecanum kinematics."
+            "Cannot convert a mecanum state to a translation " +
+            "using the relative mecanum kinematics."
         );
     }
 }

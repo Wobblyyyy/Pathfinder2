@@ -10,11 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.robot.simulated;
 
+import java.util.function.Function;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
-
-import java.util.function.Function;
 
 /**
  * A simulated/virtual/not real drive.
@@ -33,7 +32,7 @@ public class SimulatedDrive implements Drive {
     /**
      * The drivetrain's modifier.
      */
-    private Function<Translation, Translation> modifier = (t) -> t;
+    private Function<Translation, Translation> modifier = t -> t;
 
     /**
      * Get the drivetrain's translation.

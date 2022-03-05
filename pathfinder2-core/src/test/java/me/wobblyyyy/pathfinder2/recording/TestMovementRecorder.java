@@ -17,6 +17,7 @@ import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
 import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
 
 public class TestMovementRecorder {
+
     public void testMovementRecorder() {
         Pathfinder pf = Pathfinder.newSimulatedPathfinder(0.01);
         SimulatedOdometry odometry = (SimulatedOdometry) pf.getOdometry();
@@ -31,8 +32,7 @@ public class TestMovementRecorder {
 
         ElapsedTimer timer = new ElapsedTimer(true);
 
-        while (timer.elapsedSeconds() < 2)
-            pf.tick();
+        while (timer.elapsedSeconds() < 2) pf.tick();
 
         return;
     }

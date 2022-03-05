@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestCircle {
+
     @Test
     public void testIsPointInShape() {
         PointXY center = new PointXY(0, 0);

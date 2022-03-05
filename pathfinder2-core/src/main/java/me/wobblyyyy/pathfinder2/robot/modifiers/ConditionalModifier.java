@@ -30,15 +30,16 @@ public class ConditionalModifier<T> implements Modifier<T> {
      *                 modify inputted values.
      * @param modifier the modifier that this class will wrap.
      */
-    public ConditionalModifier(Supplier<Boolean> isActive,
-                               Modifier<T> modifier) {
+    public ConditionalModifier(
+        Supplier<Boolean> isActive,
+        Modifier<T> modifier
+    ) {
         this.isActive = isActive;
         this.modifier = modifier;
     }
 
     @Override
     public T apply(T t) {
-        if (!isActive.get()) return t;
-        else return modifier.apply(t);
+        if (!isActive.get()) return t; else return modifier.apply(t);
     }
 }

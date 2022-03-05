@@ -10,10 +10,9 @@
 
 package me.wobblyyyy.pathfinder2.listening;
 
-import me.wobblyyyy.pathfinder2.Pathfinder;
-
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import me.wobblyyyy.pathfinder2.Pathfinder;
 
 /**
  * A listener that accepts {@code Pathfinder} as a parameter.
@@ -36,8 +35,10 @@ public class PathfinderListener implements Supplier<Boolean> {
      * @param predicate  a predicate that determines whether this supplier
      *                   should return true.
      */
-    public PathfinderListener(Pathfinder pathfinder,
-                              Predicate<Pathfinder> predicate) {
+    public PathfinderListener(
+        Pathfinder pathfinder,
+        Predicate<Pathfinder> predicate
+    ) {
         this.pathfinder = pathfinder;
         this.predicate = predicate;
     }

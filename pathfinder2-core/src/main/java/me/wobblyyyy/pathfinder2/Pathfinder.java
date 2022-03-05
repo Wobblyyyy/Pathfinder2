@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2;
 
+import java.util.*;
+import java.util.function.*;
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.control.ProportionalController;
 import me.wobblyyyy.pathfinder2.exceptions.*;
@@ -61,9 +63,6 @@ import me.wobblyyyy.pathfinder2.utils.RandomString;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.zones.Zone;
 import me.wobblyyyy.pathfinder2.zones.ZoneProcessor;
-
-import java.util.*;
-import java.util.function.*;
 
 /**
  * The highest-level interface used for interacting with {@code Pathfinder}.
@@ -133,27 +132,24 @@ import java.util.function.*;
  * @see #andThen(Consumer, double, Supplier)
  * @since 0.0.0
  */
-@SuppressWarnings({"UnusedReturnValue", "JavaDoc"})
+@SuppressWarnings({ "UnusedReturnValue", "JavaDoc" })
 public class Pathfinder {
     /**
      * A static list of plugins that should be automatically loaded every
      * time an instance of Pathfinder is created.
      */
-    private static final List<PathfinderPlugin> AUTO_LOAD_PLUGINS =
-            new ArrayList<>();
+    private static final List<PathfinderPlugin> AUTO_LOAD_PLUGINS = new ArrayList<>();
 
     /**
      * Globally-accessible map of trajectories.
      */
-    private static final Map<String, Trajectory> TRAJECTORY_MAP =
-            new HashMap<>();
+    private static final Map<String, Trajectory> TRAJECTORY_MAP = new HashMap<>();
 
     /**
      * Globally-accessible map of stack traces for where trajectories were
      * added from.
      */
-    private static final Map<String, String> STACK_TRACE_MAP =
-            new HashMap<>();
+    private static final Map<String, String> STACK_TRACE_MAP = new HashMap<>();
 
     /**
      * The {@code Robot} (made up of {@code Drive} and {@code Odometry}) that
@@ -249,13 +245,11 @@ public class Pathfinder {
     /**
      * The default tick until completion consumer.
      */
-    private Consumer<Pathfinder> defaultOnCompletion = pathfinder -> {
-    };
+    private Consumer<Pathfinder> defaultOnCompletion = pathfinder -> {};
     /**
      * The default tick until on tick consumer.
      */
-    private BiConsumer<Pathfinder, Double> defaultOnTick = (pathfinder, aDouble) -> {
-    };
+    private BiConsumer<Pathfinder, Double> defaultOnTick = (pathfinder, aDouble) -> {};
     /**
      * Last tick, what was the currently active drive modifier? Or
      * something like that.
@@ -347,14 +341,18 @@ public class Pathfinder {
      *                       If you decide you don't want that plugin to be loaded,
      *                       add it's name to this list, and you should be all good.
      */
-    public Pathfinder(Robot robot,
-                      FollowerGenerator generator,
-                      Controller turnController,
-                      String... doNotLoad) {
-        if (robot == null)
-            throw new NullPointerException("Robot cannot be null!");
-        if (generator == null)
-            throw new NullPointerException("Follower generator cannot be null!");
+    public Pathfinder(
+        Robot robot,
+        FollowerGenerator generator,
+        Controller turnController,
+        String... doNotLoad
+    ) {
+        if (robot == null) throw new NullPointerException(
+            "Robot cannot be null!"
+        );
+        if (generator == null) throw new NullPointerException(
+            "Follower generator cannot be null!"
+        );
 
         this.robot = robot;
         this.generator = generator;
@@ -362,7 +360,8 @@ public class Pathfinder {
         this.executorManager = new ExecutorManager(robot);
         this.zoneProcessor = new ZoneProcessor();
         this.scheduler = new Scheduler(this);
-        this.recorder = new MovementRecorder(this, Core.movementRecorderMinDelayMs);
+        this.recorder =
+            new MovementRecorder(this, Core.movementRecorderMinDelayMs);
         this.playback = new MovementPlayback(this);
         this.pluginManager = new PathfinderPluginManager();
         this.profiler = new MovementProfiler();
@@ -374,14 +373,12 @@ public class Pathfinder {
             String pluginName = plugin.getName();
 
             boolean shouldLoad = true;
-            for (String str : doNotLoad)
-                if (str.equals(pluginName)) {
-                    shouldLoad = false;
-                    break;
-                }
+            for (String str : doNotLoad) if (str.equals(pluginName)) {
+                shouldLoad = false;
+                break;
+            }
 
-            if (shouldLoad)
-                loadPlugin(plugin);
+            if (shouldLoad) loadPlugin(plugin);
         }
     }
 
@@ -433,15 +430,12 @@ public class Pathfinder {
      * would work. But you get the point.
      * </p>
      */
-    public Pathfinder(Robot robot,
-                      FollowerGenerator generator,
-                      Controller turnController) {
-        this(
-                robot,
-                generator,
-                turnController,
-                new String[0]
-        );
+    public Pathfinder(
+        Robot robot,
+        FollowerGenerator generator,
+        Controller turnController
+    ) {
+        this(robot, generator, turnController, new String[0]);
     }
 
     /**
@@ -460,14 +454,8 @@ public class Pathfinder {
      *                  generator," as it's the simplest. This object may not
      *                  be null, or an exception will be thrown.
      */
-    public Pathfinder(Robot robot,
-                      FollowerGenerator generator) {
-        this(
-                robot,
-                generator,
-                extractController(generator),
-                new String[0]
-        );
+    public Pathfinder(Robot robot, FollowerGenerator generator) {
+        this(robot, generator, extractController(generator), new String[0]);
     }
 
     /**
@@ -526,12 +514,11 @@ public class Pathfinder {
      *                       makes use of a controller for controlling the
      *                       robot's heading.
      */
-    public Pathfinder(Robot robot,
-                      Controller turnController) {
+    public Pathfinder(Robot robot, Controller turnController) {
         this(
-                robot,
-                new GenericFollowerGenerator(turnController),
-                turnController
+            robot,
+            new GenericFollowerGenerator(turnController),
+            turnController
         );
     }
 
@@ -584,12 +571,8 @@ public class Pathfinder {
      *                    null or, an exception will be thrown.
      * @param coefficient the coefficient used for the turn controller.
      */
-    public Pathfinder(Robot robot,
-                      double coefficient) {
-        this(
-                robot,
-                new ProportionalController(coefficient)
-        );
+    public Pathfinder(Robot robot, double coefficient) {
+        this(robot, new ProportionalController(coefficient));
     }
 
     private static Controller extractController(FollowerGenerator generator) {
@@ -598,13 +581,16 @@ public class Pathfinder {
             return gfg.getTurnController();
         }
 
-        throw new IllegalStateException("Could not automatically extract " +
-                "a turn controller from FollowerGenerator " + generator +
-                ". Automatic turn controller extraction relies on using " +
-                "GenericFollowerGenerator as a base class - if you " +
-                "are NOT using that, you'll need to use the constructor " +
-                "that allows you to specify a follower generator and " +
-                "a turn controller.");
+        throw new IllegalStateException(
+            "Could not automatically extract " +
+            "a turn controller from FollowerGenerator " +
+            generator +
+            ". Automatic turn controller extraction relies on using " +
+            "GenericFollowerGenerator as a base class - if you " +
+            "are NOT using that, you'll need to use the constructor " +
+            "that allows you to specify a follower generator and " +
+            "a turn controller."
+        );
     }
 
     /**
@@ -656,8 +642,7 @@ public class Pathfinder {
         AUTO_LOAD_PLUGINS.add(plugin);
     }
 
-    private static String formatName(String group,
-                                     String name) {
+    private static String formatName(String group, String name) {
         return StringUtils.format("%s-%s", group, name);
     }
 
@@ -669,9 +654,11 @@ public class Pathfinder {
      * @param name       the name of the trajectory.
      * @param trajectory the trajectory.
      */
-    public static void addTrajectory(String group,
-                                     String name,
-                                     Trajectory trajectory) {
+    public static void addTrajectory(
+        String group,
+        String name,
+        Trajectory trajectory
+    ) {
         addTrajectory(formatName(group, name), trajectory);
     }
 
@@ -683,9 +670,11 @@ public class Pathfinder {
      * @param name       the name of the trajectory.
      * @param trajectory the trajectory to add.
      */
-    public static void addTrajectory(Class<?> clazz,
-                                     String name,
-                                     Trajectory trajectory) {
+    public static void addTrajectory(
+        Class<?> clazz,
+        String name,
+        Trajectory trajectory
+    ) {
         addTrajectory(formatName(clazz.getSimpleName(), name), trajectory);
     }
 
@@ -695,14 +684,21 @@ public class Pathfinder {
      * @param trajectoryName the name of the trajectory.
      * @param trajectory     the actual trajectory.
      */
-    private static void addTrajectory(String trajectoryName,
-                                      Trajectory trajectory) {
-        if (TRAJECTORY_MAP.containsKey(trajectoryName))
-            throw new IllegalArgumentException("Cannot add a trajectory " +
-                    "named <" + trajectoryName + "> because a trajectory " +
-                    "with that name already exists! The existing " +
-                    "trajectory was added from here: " +
-                    STACK_TRACE_MAP.get(trajectoryName));
+    private static void addTrajectory(
+        String trajectoryName,
+        Trajectory trajectory
+    ) {
+        if (
+            TRAJECTORY_MAP.containsKey(trajectoryName)
+        ) throw new IllegalArgumentException(
+            "Cannot add a trajectory " +
+            "named <" +
+            trajectoryName +
+            "> because a trajectory " +
+            "with that name already exists! The existing " +
+            "trajectory was added from here: " +
+            STACK_TRACE_MAP.get(trajectoryName)
+        );
 
         StackTraceElement[] stackTrace = new Throwable().getStackTrace();
 
@@ -732,8 +728,7 @@ public class Pathfinder {
         TRAJECTORY_MAP.remove(trajectoryName);
     }
 
-    public static void removeTrajectory(String group,
-                                        String name) {
+    public static void removeTrajectory(String group, String name) {
         removeTrajectory(formatName(group, name));
     }
 
@@ -743,8 +738,7 @@ public class Pathfinder {
      * @param clazz the class that added the trajectory.
      * @param name  the name of the trajectory.
      */
-    public static void removeTrajectory(Class<?> clazz,
-                                        String name) {
+    public static void removeTrajectory(Class<?> clazz, String name) {
         removeTrajectory(formatName(clazz.getSimpleName(), name));
     }
 
@@ -755,8 +749,7 @@ public class Pathfinder {
      * @param name  the trajectory's name.
      * @return the trajectory.
      */
-    public static Trajectory getTrajectory(String group,
-                                           String name) {
+    public static Trajectory getTrajectory(String group, String name) {
         return getTrajectory(formatName(group, name));
     }
 
@@ -770,8 +763,7 @@ public class Pathfinder {
      * @param name  the trajectory's name.
      * @return the corresponding trajectory, if it's in the map.
      */
-    public static Trajectory getTrajectory(Class<?> clazz,
-                                           String name) {
+    public static Trajectory getTrajectory(Class<?> clazz, String name) {
         return getTrajectory(formatName(clazz.getSimpleName(), name));
     }
 
@@ -782,11 +774,16 @@ public class Pathfinder {
      * @return the trajectory.
      */
     private static Trajectory getTrajectory(String trajectoryName) {
-        if (!TRAJECTORY_MAP.containsKey(trajectoryName))
-            throw new TrajectoryNotMappedException("Cannot get a trajectory " +
-                    "with name <" + trajectoryName + "> because it has not " +
-                    "been added to the trajectory map! Use the " +
-                    "addTrajectory() method to do that.");
+        if (
+            !TRAJECTORY_MAP.containsKey(trajectoryName)
+        ) throw new TrajectoryNotMappedException(
+            "Cannot get a trajectory " +
+            "with name <" +
+            trajectoryName +
+            "> because it has not " +
+            "been added to the trajectory map! Use the " +
+            "addTrajectory() method to do that."
+        );
 
         return TRAJECTORY_MAP.get(trajectoryName);
     }
@@ -850,8 +847,7 @@ public class Pathfinder {
      * @param object the data to add.
      * @return {@code this}, used for method chaining.
      */
-    public Pathfinder putData(String key,
-                              Object object) {
+    public Pathfinder putData(String key, Object object) {
         dataMap.put(key, object);
 
         return this;
@@ -999,8 +995,7 @@ public class Pathfinder {
      * @param listener the listener that will be added.
      * @return {@code this}, used for method chaining.
      */
-    public Pathfinder addListener(String name,
-                                  Listener listener) {
+    public Pathfinder addListener(String name, Listener listener) {
         listenerManager.addListener(name, listener);
 
         return this;
@@ -1014,8 +1009,8 @@ public class Pathfinder {
      */
     public Pathfinder addListener(Listener listener) {
         return addListener(
-                RandomString.randomString(Core.pathfinderRandomStringLength),
-                listener
+            RandomString.randomString(Core.pathfinderRandomStringLength),
+            listener
         );
     }
 
@@ -1029,16 +1024,18 @@ public class Pathfinder {
      * @return {@code this}, used for method chaining.
      */
     @SuppressWarnings("unchecked")
-    public Pathfinder addListener(Predicate<Pathfinder> condition,
-                                  Runnable action) {
+    public Pathfinder addListener(
+        Predicate<Pathfinder> condition,
+        Runnable action
+    ) {
         Pathfinder pathfinder = this;
 
         return addListener(
-                new Listener(
-                        ListenerMode.CONDITION_IS_MET,
-                        action,
-                        () -> condition.test(pathfinder)
-                )
+            new Listener(
+                ListenerMode.CONDITION_IS_MET,
+                action,
+                () -> condition.test(pathfinder)
+            )
         );
     }
 
@@ -1074,9 +1071,9 @@ public class Pathfinder {
      */
     public Pathfinder setSpeed(double speed) {
         InvalidSpeedException.throwIfInvalid(
-                "Attempted to set speed to an invalid value - speed " +
-                        "values must be within the range of 0.0 to 1.0.",
-                speed
+            "Attempted to set speed to an invalid value - speed " +
+            "values must be within the range of 0.0 to 1.0.",
+            speed
         );
 
         this.speed = speed;
@@ -1113,9 +1110,9 @@ public class Pathfinder {
      */
     public Pathfinder setTolerance(double tolerance) {
         InvalidToleranceException.throwIfInvalid(
-                "Attempted to set an invalid tolerance - all " +
-                        "tolerance values must be above 0.",
-                tolerance
+            "Attempted to set an invalid tolerance - all " +
+            "tolerance values must be above 0.",
+            tolerance
         );
 
         this.tolerance = tolerance;
@@ -1152,9 +1149,9 @@ public class Pathfinder {
      */
     public Pathfinder setAngleTolerance(Angle angleTolerance) {
         InvalidToleranceException.throwIfInvalid(
-                "Attempted to set an invalid angle tolerance - all " +
-                        "tolerance values must be above 0.",
-                angleTolerance.deg()
+            "Attempted to set an invalid angle tolerance - all " +
+            "tolerance values must be above 0.",
+            angleTolerance.deg()
         );
 
         this.angleTolerance = angleTolerance;
@@ -1219,7 +1216,9 @@ public class Pathfinder {
      * @param defaultOnCompletion the default "on completion" consumer.
      * @return this, used for method chaining.
      */
-    public Pathfinder setDefaultOnCompletion(Consumer<Pathfinder> defaultOnCompletion) {
+    public Pathfinder setDefaultOnCompletion(
+        Consumer<Pathfinder> defaultOnCompletion
+    ) {
         this.defaultOnCompletion = defaultOnCompletion;
 
         return this;
@@ -1240,7 +1239,9 @@ public class Pathfinder {
      * @param defaultOnTick the default "on tick" consumer.
      * @return this, used for method chaining.
      */
-    public Pathfinder setDefaultOnTick(BiConsumer<Pathfinder, Double> defaultOnTick) {
+    public Pathfinder setDefaultOnTick(
+        BiConsumer<Pathfinder, Double> defaultOnTick
+    ) {
         this.defaultOnTick = defaultOnTick;
 
         return this;
@@ -1265,8 +1266,7 @@ public class Pathfinder {
      * @param zone the zone.
      * @return {@code this}, used for method chaining.
      */
-    public Pathfinder addZone(String name,
-                              Zone zone) {
+    public Pathfinder addZone(String name, Zone zone) {
         zoneProcessor.addZone(name, zone);
 
         return this;
@@ -1293,12 +1293,11 @@ public class Pathfinder {
     public double ticksPerSecond() {
         Object result = dataMap.get(StatTracker.KEY_TPS);
 
-        if (result == null)
-            throw new RuntimeException("tried to get ticks per second without " +
-                    "having any valid entries - make sure you load the " +
-                    "StatTracker plugin!");
-        else
-            return (Double) result;
+        if (result == null) throw new RuntimeException(
+            "tried to get ticks per second without " +
+            "having any valid entries - make sure you load the " +
+            "StatTracker plugin!"
+        ); else return (Double) result;
     }
 
     /**
@@ -1465,8 +1464,7 @@ public class Pathfinder {
      *               always be the instance that was just ticked.
      * @return {@code this}, used for method chaining.
      */
-    public Pathfinder onTick(String name,
-                             Consumer<Pathfinder> onTick) {
+    public Pathfinder onTick(String name, Consumer<Pathfinder> onTick) {
         onTickOperations.put(name, onTick);
 
         return this;
@@ -1485,8 +1483,10 @@ public class Pathfinder {
      * @return {@code this}, used for method chaining.
      */
     public Pathfinder onTick(Consumer<Pathfinder> onTick) {
-        return onTick(RandomString.randomString(
-                Core.pathfinderRandomStringLength), onTick);
+        return onTick(
+            RandomString.randomString(Core.pathfinderRandomStringLength),
+            onTick
+        );
     }
 
     /**
@@ -1500,7 +1500,7 @@ public class Pathfinder {
      * @return {@code this}, used for method chaining.
      */
     public Pathfinder onTick(Runnable onTick) {
-        return onTick((pf) -> onTick.run());
+        return onTick(pf -> onTick.run());
     }
 
     /**
@@ -1524,12 +1524,15 @@ public class Pathfinder {
      *                       a lower priority. Defaults to 0.
      * @return {@code this}, used for method chaining.
      */
-    public Pathfinder onTick(Runnable onTick,
-                             double minimumDelayMs,
-                             double expiration,
-                             int maxExecs,
-                             int priority) {
-        return addListener(new ListenerBuilder()
+    public Pathfinder onTick(
+        Runnable onTick,
+        double minimumDelayMs,
+        double expiration,
+        int maxExecs,
+        int priority
+    ) {
+        return addListener(
+            new ListenerBuilder()
                 .setPriority(0)
                 .setMode(ListenerMode.CONDITION_IS_MET)
                 .addInput(() -> true)
@@ -1537,7 +1540,8 @@ public class Pathfinder {
                 .setCooldownMs(minimumDelayMs)
                 .setWhenTriggered(onTick)
                 .setMaximumExecutions(maxExecs)
-                .build());
+                .build()
+        );
     }
 
     /**
@@ -1554,14 +1558,13 @@ public class Pathfinder {
      *                       {@code Runnable}, in milliseconds.
      * @return {@code this}, used for method chaining.
      */
-    public Pathfinder onTick(Runnable onTick,
-                             double minimumDelayMs) {
+    public Pathfinder onTick(Runnable onTick, double minimumDelayMs) {
         return onTick(
-                onTick,
-                minimumDelayMs,
-                Core.listenerBuilderDefaultExpiration,
-                Core.listenerBuilderDefaultMaximumExecutions,
-                Core.listenerBuilderDefaultPriority
+            onTick,
+            minimumDelayMs,
+            Core.listenerBuilderDefaultExpiration,
+            Core.listenerBuilderDefaultMaximumExecutions,
+            Core.listenerBuilderDefaultPriority
         );
     }
 
@@ -1579,46 +1582,42 @@ public class Pathfinder {
 
     private Pathfinder runPreTick() {
         return TickProcessor.runPreTick(
-                this,
-                isMinimal,
-                pluginManager,
-                scheduler,
-                zoneProcessor
+            this,
+            isMinimal,
+            pluginManager,
+            scheduler,
+            zoneProcessor
         );
     }
 
     private Pathfinder runExecutorTick() {
-        return TickProcessor.runExecutorTick(
-                this,
-                executorManager
-        );
+        return TickProcessor.runExecutorTick(this, executorManager);
     }
 
     private Pathfinder runOnTick() {
         return TickProcessor.runOnTick(
-                this,
-                isMinimal,
-                pluginManager,
-                playback,
-                profiler,
-                recorder,
-                listenerManager,
-                this::runOnTickOperations
+            this,
+            isMinimal,
+            pluginManager,
+            playback,
+            profiler,
+            recorder,
+            listenerManager,
+            this::runOnTickOperations
         );
     }
 
-    private static Pathfinder runPostTick(Pathfinder pathfinder,
-                                          PathfinderPluginManager plugins) {
+    private static Pathfinder runPostTick(
+        Pathfinder pathfinder,
+        PathfinderPluginManager plugins
+    ) {
         plugins.postTick(pathfinder);
 
         return pathfinder;
     }
 
     private Pathfinder runPostTick() {
-        return runPostTick(
-                this,
-                pluginManager
-        );
+        return runPostTick(this, pluginManager);
     }
 
     /**
@@ -1665,10 +1664,7 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder tick() {
-        return runPreTick()
-                .runExecutorTick()
-                .runOnTick()
-                .runPostTick();
+        return runPreTick().runExecutorTick().runOnTick().runPostTick();
     }
 
     /**
@@ -1678,10 +1674,7 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder tickUntil() {
-        return tickUntil(
-                Double.MAX_VALUE,
-                () -> true
-        );
+        return tickUntil(Double.MAX_VALUE, () -> true);
     }
 
     /**
@@ -1695,10 +1688,7 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder tickUntil(double timeoutMs) {
-        return tickUntil(
-                timeoutMs,
-                () -> true
-        );
+        return tickUntil(timeoutMs, () -> true);
     }
 
     /**
@@ -1709,10 +1699,7 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder tickUntil(Supplier<Boolean> shouldContinueRunning) {
-        return tickUntil(
-                Double.MAX_VALUE,
-                shouldContinueRunning
-        );
+        return tickUntil(Double.MAX_VALUE, shouldContinueRunning);
     }
 
     /**
@@ -1727,14 +1714,11 @@ public class Pathfinder {
      *                              should still continue running.
      * @return this instance of Pathfinder, used for method chaining.
      */
-    public Pathfinder tickUntil(double timeoutMs,
-                                Supplier<Boolean> shouldContinueRunning) {
-        return tickUntil(
-                timeoutMs,
-                shouldContinueRunning,
-                pathfinder -> {
-                }
-        );
+    public Pathfinder tickUntil(
+        double timeoutMs,
+        Supplier<Boolean> shouldContinueRunning
+    ) {
+        return tickUntil(timeoutMs, shouldContinueRunning, pathfinder -> {});
     }
 
     /**
@@ -1746,13 +1730,11 @@ public class Pathfinder {
      *                              after every successful tick.
      * @return this instance of Pathfinder, used for method chaining.
      */
-    public Pathfinder tickUntil(Supplier<Boolean> shouldContinueRunning,
-                                Consumer<Pathfinder> onTick) {
-        return tickUntil(
-                Double.MAX_VALUE,
-                shouldContinueRunning,
-                onTick
-        );
+    public Pathfinder tickUntil(
+        Supplier<Boolean> shouldContinueRunning,
+        Consumer<Pathfinder> onTick
+    ) {
+        return tickUntil(Double.MAX_VALUE, shouldContinueRunning, onTick);
     }
 
     /**
@@ -1769,13 +1751,11 @@ public class Pathfinder {
      *                              until method has been running for.
      * @return this instance of Pathfinder, used for method chaining.
      */
-    public Pathfinder tickUntil(Supplier<Boolean> shouldContinueRunning,
-                                BiConsumer<Pathfinder, Double> onTick) {
-        return tickUntil(
-                Double.MAX_VALUE,
-                shouldContinueRunning,
-                onTick
-        );
+    public Pathfinder tickUntil(
+        Supplier<Boolean> shouldContinueRunning,
+        BiConsumer<Pathfinder, Double> onTick
+    ) {
+        return tickUntil(Double.MAX_VALUE, shouldContinueRunning, onTick);
     }
 
     /**
@@ -1792,27 +1772,26 @@ public class Pathfinder {
      *                              after every successful tick.
      * @return this instance of Pathfinder, used for method chaining.
      */
-    public Pathfinder tickUntil(double timeoutMs,
-                                Supplier<Boolean> shouldContinueRunning,
-                                Consumer<Pathfinder> onTick) {
-        if (timeoutMs < 0)
-            throw new InvalidTimeException(
-                    "Attempted to use an invalid timeout time in in a call to " +
-                            "the tickUntil method - make sure this time value " +
-                            "is greater than or equal to 0."
-            );
+    public Pathfinder tickUntil(
+        double timeoutMs,
+        Supplier<Boolean> shouldContinueRunning,
+        Consumer<Pathfinder> onTick
+    ) {
+        if (timeoutMs < 0) throw new InvalidTimeException(
+            "Attempted to use an invalid timeout time in in a call to " +
+            "the tickUntil method - make sure this time value " +
+            "is greater than or equal to 0."
+        );
 
-        if (shouldContinueRunning == null)
-            throw new NullPointerException(
-                    "Attempted to use a null supplier with the tickUntil " +
-                            "method - this can't be null, nerd."
-            );
+        if (shouldContinueRunning == null) throw new NullPointerException(
+            "Attempted to use a null supplier with the tickUntil " +
+            "method - this can't be null, nerd."
+        );
 
-        if (onTick == null)
-            throw new NullPointerException(
-                    "Attempted to use a null consumer with the tickUntil " +
-                            "method. This also can't be null, nerd."
-            );
+        if (onTick == null) throw new NullPointerException(
+            "Attempted to use a null consumer with the tickUntil " +
+            "method. This also can't be null, nerd."
+        );
 
         double start = Time.ms();
 
@@ -1820,8 +1799,7 @@ public class Pathfinder {
             double current = Time.ms();
             double elapsed = current - start;
 
-            if (elapsed >= timeoutMs)
-                break;
+            if (elapsed >= timeoutMs) break;
 
             tick();
             onTick.accept(this);
@@ -1842,10 +1820,11 @@ public class Pathfinder {
      *                              it'll stop as normal.
      * @return this instance of Pathfinder, used for method chaining.
      */
-    public Pathfinder tickUntil(Supplier<Boolean> shouldContinueRunning,
-                                double timeoutMs) {
-        return tickUntil(timeoutMs, shouldContinueRunning, (a, b) -> {
-        });
+    public Pathfinder tickUntil(
+        Supplier<Boolean> shouldContinueRunning,
+        double timeoutMs
+    ) {
+        return tickUntil(timeoutMs, shouldContinueRunning, (a, b) -> {});
     }
 
     /**
@@ -1867,14 +1846,16 @@ public class Pathfinder {
      *                              until method has been running for.
      * @return this instance of Pathfinder, used for method chaining.
      */
-    public Pathfinder tickUntil(double timeoutMs,
-                                Supplier<Boolean> shouldContinueRunning,
-                                BiConsumer<Pathfinder, Double> onTick) {
+    public Pathfinder tickUntil(
+        double timeoutMs,
+        Supplier<Boolean> shouldContinueRunning,
+        BiConsumer<Pathfinder, Double> onTick
+    ) {
         NotNull.throwExceptionIfNull(
-                "A null value was passed to the tickUntil method! " +
-                        "Please make sure you don't pass any null values.",
-                shouldContinueRunning,
-                onTick
+            "A null value was passed to the tickUntil method! " +
+            "Please make sure you don't pass any null values.",
+            shouldContinueRunning,
+            onTick
         );
 
         double start = Time.ms();
@@ -1883,8 +1864,7 @@ public class Pathfinder {
             double current = Time.ms();
             double elapsed = current - start;
 
-            if (elapsed >= timeoutMs)
-                break;
+            if (elapsed >= timeoutMs) break;
 
             tick();
             onTick.accept(this, elapsed);
@@ -1936,12 +1916,14 @@ public class Pathfinder {
      *                  instance of Pathfinder as a parameter.
      * @return this instance of Pathfinder, used for method chaining.
      */
-    public Pathfinder tickUntil(double timeoutMs,
-                                Predicate<Pathfinder> isValid) {
+    public Pathfinder tickUntil(
+        double timeoutMs,
+        Predicate<Pathfinder> isValid
+    ) {
         NotNull.throwExceptionIfNull(
-                "A null value was passed to the tickUntil method! " +
-                        "Please make sure you don't pass any null values.",
-                isValid
+            "A null value was passed to the tickUntil method! " +
+            "Please make sure you don't pass any null values.",
+            isValid
         );
 
         double start = Time.ms();
@@ -1950,8 +1932,7 @@ public class Pathfinder {
             double current = Time.ms();
             double elapsed = current - start;
 
-            if (elapsed >= timeoutMs)
-                break;
+            if (elapsed >= timeoutMs) break;
 
             tick();
         }
@@ -1975,28 +1956,27 @@ public class Pathfinder {
      *                              instance of Pathfinder as a parameter.
      * @return this instance of Pathfinder, used for method chaining.
      */
-    public Pathfinder tickUntil(double timeoutMs,
-                                Supplier<Boolean> shouldContinueRunning,
-                                Predicate<Pathfinder> isValid) {
+    public Pathfinder tickUntil(
+        double timeoutMs,
+        Supplier<Boolean> shouldContinueRunning,
+        Predicate<Pathfinder> isValid
+    ) {
         NotNull.throwExceptionIfNull(
-                "A null value was passed to the tickUntil method! " +
-                        "Please make sure you don't pass any null values.",
-                shouldContinueRunning,
-                isValid
+            "A null value was passed to the tickUntil method! " +
+            "Please make sure you don't pass any null values.",
+            shouldContinueRunning,
+            isValid
         );
 
         double start = Time.ms();
 
         while (
-                isActive() &&
-                        shouldContinueRunning.get() &&
-                        isValid.test(this)
+            isActive() && shouldContinueRunning.get() && isValid.test(this)
         ) {
             double current = Time.ms();
             double elapsed = current - start;
 
-            if (elapsed >= timeoutMs)
-                break;
+            if (elapsed >= timeoutMs) break;
 
             tick();
         }
@@ -2014,11 +1994,7 @@ public class Pathfinder {
      * @see #setDefaultOnTick(BiConsumer)
      */
     public Pathfinder defaultTickUntil() {
-        return tickUntil(
-                defaultTimeout,
-                defaultShouldRun,
-                defaultOnTick
-        );
+        return tickUntil(defaultTimeout, defaultShouldRun, defaultOnTick);
     }
 
     /**
@@ -2035,11 +2011,7 @@ public class Pathfinder {
      * @see #setDefaultOnTick(BiConsumer)
      */
     public Pathfinder defaultTickUntil(double timeoutMs) {
-        return tickUntil(
-                timeoutMs,
-                defaultShouldRun,
-                defaultOnTick
-        );
+        return tickUntil(timeoutMs, defaultShouldRun, defaultOnTick);
     }
 
     /**
@@ -2055,11 +2027,7 @@ public class Pathfinder {
      * @see #setDefaultOnTick(BiConsumer)
      */
     public Pathfinder defaultTickUntil(Supplier<Boolean> shouldRun) {
-        return tickUntil(
-                defaultTimeout,
-                shouldRun,
-                defaultOnTick
-        );
+        return tickUntil(defaultTimeout, shouldRun, defaultOnTick);
     }
 
     /**
@@ -2076,11 +2044,7 @@ public class Pathfinder {
      * @see #setDefaultOnTick(BiConsumer)
      */
     public Pathfinder defaultTickUntil(BiConsumer<Pathfinder, Double> onTick) {
-        return tickUntil(
-                defaultTimeout,
-                defaultShouldRun,
-                onTick
-        );
+        return tickUntil(defaultTimeout, defaultShouldRun, onTick);
     }
 
     /**
@@ -2099,13 +2063,11 @@ public class Pathfinder {
      * @see #setDefaultShouldRun(Supplier)
      * @see #setDefaultOnTick(BiConsumer)
      */
-    public Pathfinder defaultTickUntil(double timeoutMs,
-                                       Supplier<Boolean> shouldRun) {
-        return tickUntil(
-                timeoutMs,
-                shouldRun,
-                defaultOnTick
-        );
+    public Pathfinder defaultTickUntil(
+        double timeoutMs,
+        Supplier<Boolean> shouldRun
+    ) {
+        return tickUntil(timeoutMs, shouldRun, defaultOnTick);
     }
 
     /**
@@ -2125,13 +2087,11 @@ public class Pathfinder {
      * @see #setDefaultShouldRun(Supplier)
      * @see #setDefaultOnTick(BiConsumer)
      */
-    public Pathfinder defaultTickUntil(double timeoutMs,
-                                       BiConsumer<Pathfinder, Double> onTick) {
-        return tickUntil(
-                timeoutMs,
-                defaultShouldRun,
-                onTick
-        );
+    public Pathfinder defaultTickUntil(
+        double timeoutMs,
+        BiConsumer<Pathfinder, Double> onTick
+    ) {
+        return tickUntil(timeoutMs, defaultShouldRun, onTick);
     }
 
     /**
@@ -2150,13 +2110,11 @@ public class Pathfinder {
      * @see #setDefaultShouldRun(Supplier)
      * @see #setDefaultOnTick(BiConsumer)
      */
-    public Pathfinder defaultTickUntil(Supplier<Boolean> shouldRun,
-                                       BiConsumer<Pathfinder, Double> onTick) {
-        return tickUntil(
-                defaultTimeout,
-                shouldRun,
-                onTick
-        );
+    public Pathfinder defaultTickUntil(
+        Supplier<Boolean> shouldRun,
+        BiConsumer<Pathfinder, Double> onTick
+    ) {
+        return tickUntil(defaultTimeout, shouldRun, onTick);
     }
 
     /**
@@ -2179,14 +2137,12 @@ public class Pathfinder {
      * @see #setDefaultShouldRun(Supplier)
      * @see #setDefaultOnTick(BiConsumer)
      */
-    public Pathfinder defaultTickUntil(double timeoutMs,
-                                       Supplier<Boolean> shouldRun,
-                                       BiConsumer<Pathfinder, Double> onTick) {
-        return tickUntil(
-                timeoutMs,
-                shouldRun,
-                onTick
-        );
+    public Pathfinder defaultTickUntil(
+        double timeoutMs,
+        Supplier<Boolean> shouldRun,
+        BiConsumer<Pathfinder, Double> onTick
+    ) {
+        return tickUntil(timeoutMs, shouldRun, onTick);
     }
 
     /**
@@ -2201,10 +2157,10 @@ public class Pathfinder {
      */
     public Pathfinder defaultAndThen() {
         return andThen(
-                defaultOnCompletion,
-                defaultTimeout,
-                defaultShouldRun,
-                defaultOnTick
+            defaultOnCompletion,
+            defaultTimeout,
+            defaultShouldRun,
+            defaultOnTick
         );
     }
 
@@ -2224,10 +2180,10 @@ public class Pathfinder {
      */
     public Pathfinder defaultAndThen(double timeoutMs) {
         return andThen(
-                defaultOnCompletion,
-                timeoutMs,
-                defaultShouldRun,
-                defaultOnTick
+            defaultOnCompletion,
+            timeoutMs,
+            defaultShouldRun,
+            defaultOnTick
         );
     }
 
@@ -2244,10 +2200,10 @@ public class Pathfinder {
      */
     public Pathfinder defaultAndThen(Consumer<Pathfinder> onCompletion) {
         return andThen(
-                onCompletion,
-                defaultTimeout,
-                defaultShouldRun,
-                defaultOnTick
+            onCompletion,
+            defaultTimeout,
+            defaultShouldRun,
+            defaultOnTick
         );
     }
 
@@ -2266,10 +2222,10 @@ public class Pathfinder {
      */
     public Pathfinder defaultAndThen(Supplier<Boolean> shouldRun) {
         return andThen(
-                defaultOnCompletion,
-                defaultTimeout,
-                shouldRun,
-                defaultOnTick
+            defaultOnCompletion,
+            defaultTimeout,
+            shouldRun,
+            defaultOnTick
         );
     }
 
@@ -2289,10 +2245,10 @@ public class Pathfinder {
      */
     public Pathfinder defaultAndThen(BiConsumer<Pathfinder, Double> onTick) {
         return andThen(
-                defaultOnCompletion,
-                defaultTimeout,
-                defaultShouldRun,
-                onTick
+            defaultOnCompletion,
+            defaultTimeout,
+            defaultShouldRun,
+            onTick
         );
     }
 
@@ -2311,13 +2267,15 @@ public class Pathfinder {
      * @see #setDefaultShouldRun(Supplier)
      * @see #setDefaultOnTick(BiConsumer)
      */
-    public Pathfinder defaultAndThen(Consumer<Pathfinder> onCompletion,
-                                     double timeoutMs) {
+    public Pathfinder defaultAndThen(
+        Consumer<Pathfinder> onCompletion,
+        double timeoutMs
+    ) {
         return andThen(
-                onCompletion,
-                timeoutMs,
-                defaultShouldRun,
-                defaultOnTick
+            onCompletion,
+            timeoutMs,
+            defaultShouldRun,
+            defaultOnTick
         );
     }
 
@@ -2335,14 +2293,11 @@ public class Pathfinder {
      * @see #setDefaultShouldRun(Supplier)
      * @see #setDefaultOnTick(BiConsumer)
      */
-    public Pathfinder defaultAndThen(Consumer<Pathfinder> onCompletion,
-                                     Supplier<Boolean> shouldRun) {
-        return andThen(
-                onCompletion,
-                defaultTimeout,
-                shouldRun,
-                defaultOnTick
-        );
+    public Pathfinder defaultAndThen(
+        Consumer<Pathfinder> onCompletion,
+        Supplier<Boolean> shouldRun
+    ) {
+        return andThen(onCompletion, defaultTimeout, shouldRun, defaultOnTick);
     }
 
     /**
@@ -2360,14 +2315,11 @@ public class Pathfinder {
      * @see #setDefaultShouldRun(Supplier)
      * @see #setDefaultOnTick(BiConsumer)
      */
-    public Pathfinder defaultAndThen(Consumer<Pathfinder> onCompletion,
-                                     BiConsumer<Pathfinder, Double> onTick) {
-        return andThen(
-                onCompletion,
-                defaultTimeout,
-                defaultShouldRun,
-                onTick
-        );
+    public Pathfinder defaultAndThen(
+        Consumer<Pathfinder> onCompletion,
+        BiConsumer<Pathfinder, Double> onTick
+    ) {
+        return andThen(onCompletion, defaultTimeout, defaultShouldRun, onTick);
     }
 
     /**
@@ -2392,16 +2344,13 @@ public class Pathfinder {
      * @see #setDefaultShouldRun(Supplier)
      * @see #setDefaultOnTick(BiConsumer)
      */
-    public Pathfinder defaultAndThen(Consumer<Pathfinder> onCompletion,
-                                     double timeoutMs,
-                                     Supplier<Boolean> shouldRun,
-                                     BiConsumer<Pathfinder, Double> onTick) {
-        return andThen(
-                onCompletion,
-                timeoutMs,
-                shouldRun,
-                onTick
-        );
+    public Pathfinder defaultAndThen(
+        Consumer<Pathfinder> onCompletion,
+        double timeoutMs,
+        Supplier<Boolean> shouldRun,
+        BiConsumer<Pathfinder, Double> onTick
+    ) {
+        return andThen(onCompletion, timeoutMs, shouldRun, onTick);
     }
 
     /**
@@ -2415,11 +2364,7 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder andThen(Consumer<Pathfinder> onCompletion) {
-        return andThen(
-                onCompletion,
-                Double.MAX_VALUE,
-                () -> true
-        );
+        return andThen(onCompletion, Double.MAX_VALUE, () -> true);
     }
 
     /**
@@ -2435,13 +2380,11 @@ public class Pathfinder {
      *                     this time is reached, it'll stop as normal.
      * @return this instance of Pathfinder, used for method chaining.
      */
-    public Pathfinder andThen(Consumer<Pathfinder> onCompletion,
-                              double timeoutMs) {
-        return andThen(
-                onCompletion,
-                timeoutMs,
-                () -> true
-        );
+    public Pathfinder andThen(
+        Consumer<Pathfinder> onCompletion,
+        double timeoutMs
+    ) {
+        return andThen(onCompletion, timeoutMs, () -> true);
     }
 
     /**
@@ -2457,13 +2400,11 @@ public class Pathfinder {
      *                              should still continue running.
      * @return this instance of Pathfinder, used for method chaining.
      */
-    public Pathfinder andThen(Consumer<Pathfinder> onCompletion,
-                              Supplier<Boolean> shouldContinueRunning) {
-        return andThen(
-                onCompletion,
-                Double.MAX_VALUE,
-                shouldContinueRunning
-        );
+    public Pathfinder andThen(
+        Consumer<Pathfinder> onCompletion,
+        Supplier<Boolean> shouldContinueRunning
+    ) {
+        return andThen(onCompletion, Double.MAX_VALUE, shouldContinueRunning);
     }
 
     /**
@@ -2482,13 +2423,12 @@ public class Pathfinder {
      *                              should still continue running.
      * @return this instance of Pathfinder, used for method chaining.
      */
-    public Pathfinder andThen(Consumer<Pathfinder> onCompletion,
-                              double timeoutMs,
-                              Supplier<Boolean> shouldContinueRunning) {
-        tickUntil(
-                timeoutMs,
-                shouldContinueRunning
-        );
+    public Pathfinder andThen(
+        Consumer<Pathfinder> onCompletion,
+        double timeoutMs,
+        Supplier<Boolean> shouldContinueRunning
+    ) {
+        tickUntil(timeoutMs, shouldContinueRunning);
 
         onCompletion.accept(this);
 
@@ -2513,15 +2453,13 @@ public class Pathfinder {
      *                              once per tick.
      * @return this instance of Pathfinder, used for method chaining.
      */
-    public Pathfinder andThen(Consumer<Pathfinder> onCompletion,
-                              double timeoutMs,
-                              Supplier<Boolean> shouldContinueRunning,
-                              BiConsumer<Pathfinder, Double> onTick) {
-        tickUntil(
-                timeoutMs,
-                shouldContinueRunning,
-                onTick
-        );
+    public Pathfinder andThen(
+        Consumer<Pathfinder> onCompletion,
+        double timeoutMs,
+        Supplier<Boolean> shouldContinueRunning,
+        BiConsumer<Pathfinder, Double> onTick
+    ) {
+        tickUntil(timeoutMs, shouldContinueRunning, onTick);
 
         onCompletion.accept(this);
 
@@ -2583,27 +2521,24 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     @SuppressWarnings("BusyWait")
-    public Pathfinder waitUntil(Supplier<Boolean> condition,
-                                double maxTimeMs) {
-        if (condition == null)
-            throw new NullPointerException(
-                    "Attempted to use the waitUntil method with a null " +
-                            "condition supplier!"
-            );
+    public Pathfinder waitUntil(Supplier<Boolean> condition, double maxTimeMs) {
+        if (condition == null) throw new NullPointerException(
+            "Attempted to use the waitUntil method with a null " +
+            "condition supplier!"
+        );
 
-        if (maxTimeMs < 0)
-            throw new InvalidTimeException(
-                    "Attempted to use an invalid time value! Make sure the " +
-                            "time value you're supplying is 0 or greater."
-            );
+        if (maxTimeMs < 0) throw new InvalidTimeException(
+            "Attempted to use an invalid time value! Make sure the " +
+            "time value you're supplying is 0 or greater."
+        );
 
         ElapsedTimer timer = new ElapsedTimer(true);
 
         try {
-            while (!condition.get() && timer.isElapsedLessThan(maxTimeMs))
-                Thread.sleep(Core.pathfinderWaitSleepTimeMs);
-        } catch (InterruptedException ignored) {
-        }
+            while (
+                !condition.get() && timer.isElapsedLessThan(maxTimeMs)
+            ) Thread.sleep(Core.pathfinderWaitSleepTimeMs);
+        } catch (InterruptedException ignored) {}
 
         return this;
     }
@@ -2651,27 +2586,27 @@ public class Pathfinder {
      * @return {@code this}, used for method chaining.
      */
     @SuppressWarnings("BusyWait")
-    public Pathfinder waitAsLongAs(Supplier<Boolean> condition,
-                                   double maxTime) {
-        if (condition == null)
-            throw new NullPointerException(
-                    "Attempted to use the waitAsLongAs method with a null " +
-                            "condition supplier!"
-            );
+    public Pathfinder waitAsLongAs(
+        Supplier<Boolean> condition,
+        double maxTime
+    ) {
+        if (condition == null) throw new NullPointerException(
+            "Attempted to use the waitAsLongAs method with a null " +
+            "condition supplier!"
+        );
 
-        if (maxTime < 0)
-            throw new InvalidTimeException(
-                    "Attempted to use an invalid time value! Make sure the " +
-                            "time value you're supplying is 0 or greater."
-            );
+        if (maxTime < 0) throw new InvalidTimeException(
+            "Attempted to use an invalid time value! Make sure the " +
+            "time value you're supplying is 0 or greater."
+        );
 
         ElapsedTimer timer = new ElapsedTimer(true);
 
         try {
-            while (condition.get() && timer.isElapsedLessThan(maxTime))
-                Thread.sleep(Core.pathfinderWaitSleepTimeMs);
-        } catch (InterruptedException ignored) {
-        }
+            while (
+                condition.get() && timer.isElapsedLessThan(maxTime)
+            ) Thread.sleep(Core.pathfinderWaitSleepTimeMs);
+        } catch (InterruptedException ignored) {}
 
         return this;
     }
@@ -2683,8 +2618,7 @@ public class Pathfinder {
      * @param name  the name of the trajectory to follow.
      * @return {@code this}, used for method chaining.
      */
-    public Pathfinder followTrajectory(String group,
-                                       String name) {
+    public Pathfinder followTrajectory(String group, String name) {
         return followTrajectory(formatName(group, name));
     }
 
@@ -2695,8 +2629,7 @@ public class Pathfinder {
      * @param name  the name of the trajectory to follow.
      * @return {@code this}, used for method chaining.
      */
-    public Pathfinder followTrajectory(Class<?> group,
-                                       String name) {
+    public Pathfinder followTrajectory(Class<?> group, String name) {
         return followTrajectory(formatName(group.getSimpleName(), name));
     }
 
@@ -2710,27 +2643,31 @@ public class Pathfinder {
      * @return {@code this}, used for method chaining.
      */
     public Pathfinder followTrajectory(final String trajectoryName) {
-        if (TRAJECTORY_MAP.size() < 1)
-            throw new IllegalStateException("Cannot follow a trajectory " +
-                    "by name without first adding at least 1 trajectory " +
-                    "to the global trajectory map by using one of the " +
-                    "addTrajectory methods!");
+        if (TRAJECTORY_MAP.size() < 1) throw new IllegalStateException(
+            "Cannot follow a trajectory " +
+            "by name without first adding at least 1 trajectory " +
+            "to the global trajectory map by using one of the " +
+            "addTrajectory methods!"
+        );
 
         // if the trajectory isn't contained in the list of trajectory names,
         // throw an exception containing a list of all of the potential names
         if (!TRAJECTORY_MAP.containsKey(trajectoryName)) {
             List<String> potentialNames = new ArrayList<>(10);
 
-            TRAJECTORY_MAP.forEach((name, trajectory) -> {
-                String lowercase = name.toLowerCase();
+            TRAJECTORY_MAP.forEach(
+                (name, trajectory) -> {
+                    String lowercase = name.toLowerCase();
 
-                // if there's less than 8 trajectories, show all of them
-                // just to make debugging easier
-                if (lowercase.contains(trajectoryName.toLowerCase()))
-                    potentialNames.add(name);
-                else if (TRAJECTORY_MAP.size() < 8)
-                    potentialNames.add(name);
-            });
+                    // if there's less than 8 trajectories, show all of them
+                    // just to make debugging easier
+                    if (
+                        lowercase.contains(trajectoryName.toLowerCase())
+                    ) potentialNames.add(name); else if (
+                        TRAJECTORY_MAP.size() < 8
+                    ) potentialNames.add(name);
+                }
+            );
 
             // if there are STILL no results, try only searching for the first
             // three letters of the trajectory's name - ideally, this should
@@ -2740,17 +2677,19 @@ public class Pathfinder {
             if (potentialNames.size() == 0) {
                 final String shortName;
 
-                if (trajectoryName.length() > 3)
-                    shortName = trajectoryName.substring(0, 3);
-                else
-                    shortName = trajectoryName;
+                if (trajectoryName.length() > 3) shortName =
+                    trajectoryName.substring(0, 3); else shortName =
+                    trajectoryName;
 
-                TRAJECTORY_MAP.forEach((name, trajectory) -> {
-                    String lowercase = name.toLowerCase();
+                TRAJECTORY_MAP.forEach(
+                    (name, trajectory) -> {
+                        String lowercase = name.toLowerCase();
 
-                    if (lowercase.contains(shortName))
-                        potentialNames.add(name);
-                });
+                        if (lowercase.contains(shortName)) potentialNames.add(
+                            name
+                        );
+                    }
+                );
             }
 
             StringBuilder builder = new StringBuilder(100);
@@ -2764,14 +2703,12 @@ public class Pathfinder {
 
                 builder.append(potentialName);
 
-                if (i < size - 1)
-                    builder.append(", ");
+                if (i < size - 1) builder.append(", ");
             }
 
-            throw new NullTrajectoryException(StringUtils.format(
-                    builder.toString(),
-                    trajectoryName
-            ));
+            throw new NullTrajectoryException(
+                StringUtils.format(builder.toString(), trajectoryName)
+            );
         }
 
         // if the trajectory is found, just follow it
@@ -2785,14 +2722,18 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder followTrajectory(Trajectory trajectory) {
-        if (trajectory == null)
-            throw new NullPointerException("Cannot follow a null trajectory!");
+        if (trajectory == null) throw new NullPointerException(
+            "Cannot follow a null trajectory!"
+        );
 
         // this is really bad code but it's not important enough to take
         // the time to fix right now - maybe later?
-        List<Trajectory> list = new ArrayList<Trajectory>(1) {{
-            add(trajectory);
-        }};
+        List<Trajectory> list = new ArrayList<Trajectory>(1) {
+
+            {
+                add(trajectory);
+            }
+        };
 
         followTrajectories(list);
 
@@ -2809,7 +2750,8 @@ public class Pathfinder {
      */
     public Pathfinder followRelativeTrajectory(Trajectory trajectory) {
         return followTrajectory(
-                trajectory.shiftToRobot(new PointXYZ(0, 0, 0), getPosition()));
+            trajectory.shiftToRobot(new PointXYZ(0, 0, 0), getPosition())
+        );
     }
 
     /**
@@ -2831,8 +2773,7 @@ public class Pathfinder {
      * @return {@code this}, used for method chaining.
      */
     public Pathfinder followRelativeTrajectories(Trajectory... trajectories) {
-        for (Trajectory t : trajectories)
-            followTrajectory(t);
+        for (Trajectory t : trajectories) followTrajectory(t);
 
         return this;
     }
@@ -2844,16 +2785,15 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder followTrajectories(List<Trajectory> trajectories) {
-        if (trajectories == null)
-            throw new NullPointerException("Cannot follow null trajectories!");
+        if (trajectories == null) throw new NullPointerException(
+            "Cannot follow null trajectories!"
+        );
 
         List<Follower> followers = new ArrayList<>();
 
-        for (Trajectory trajectory : trajectories)
-            followers.add(generator.generate(
-                    robot,
-                    trajectory
-            ));
+        for (Trajectory trajectory : trajectories) followers.add(
+            generator.generate(robot, trajectory)
+        );
 
         follow(followers);
 
@@ -2867,11 +2807,10 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder follow(Follower follower) {
-        if (follower == null)
-            throw new NullPointerException(
-                    "Attempted to follow a null Follower object - make sure " +
-                            "this object is not null."
-            );
+        if (follower == null) throw new NullPointerException(
+            "Attempted to follow a null Follower object - make sure " +
+            "this object is not null."
+        );
 
         executorManager.addExecutor(follower);
 
@@ -2885,11 +2824,10 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder follow(List<Follower> followers) {
-        if (followers == null)
-            throw new NullPointerException(
-                    "Attempted to follow a null list of Follower objects - " +
-                            "make sure the list you supply is not null."
-            );
+        if (followers == null) throw new NullPointerException(
+            "Attempted to follow a null list of Follower objects - " +
+            "make sure the list you supply is not null."
+        );
 
         executorManager.addExecutor(followers);
 
@@ -2903,11 +2841,10 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder follow(Follower... followers) {
-        if (followers == null)
-            throw new NullPointerException(
-                    "Attempted to follow a null list of Follower objects - " +
-                            "make sure the list you supply is not null."
-            );
+        if (followers == null) throw new NullPointerException(
+            "Attempted to follow a null list of Follower objects - " +
+            "make sure the list you supply is not null."
+        );
 
         executorManager.addExecutor(Arrays.asList(followers));
 
@@ -2923,11 +2860,7 @@ public class Pathfinder {
      * @see #setAngleTolerance(Angle)
      */
     public Pathfinder goTo(PointXY point) {
-        goTo(
-                point.withHeading(
-                        getOdometry().getZ()
-                )
-        );
+        goTo(point.withHeading(getOdometry().getZ()));
 
         return this;
     }
@@ -2942,8 +2875,7 @@ public class Pathfinder {
      * @see #setTolerance(double)
      * @see #setAngleTolerance(Angle)
      */
-    public Pathfinder goTo(double x,
-                           double y) {
+    public Pathfinder goTo(double x, double y) {
         return goTo(new PointXY(x, y));
     }
 
@@ -2958,9 +2890,7 @@ public class Pathfinder {
      * @see #setTolerance(double)
      * @see #setAngleTolerance(Angle)
      */
-    public Pathfinder goTo(double x,
-                           double y,
-                           double zDegrees) {
+    public Pathfinder goTo(double x, double y, double zDegrees) {
         return goTo(new PointXYZ(x, y, zDegrees));
     }
 
@@ -2975,9 +2905,7 @@ public class Pathfinder {
      * @see #setTolerance(double)
      * @see #setAngleTolerance(Angle)
      */
-    public Pathfinder goTo(double x,
-                           double y,
-                           Angle z) {
+    public Pathfinder goTo(double x, double y, Angle z) {
         return goTo(new PointXYZ(x, y, z));
     }
 
@@ -2989,37 +2917,35 @@ public class Pathfinder {
         // side note, I'm really craving some vanilla ice cream right now,
         // but I don't think I have any :(
 
-        if (speed < 0 && tolerance < 0 && angleTolerance == null)
-            throw new RuntimeException(
-                    "Attempted to use the goTo method without having set " +
-                            "Pathfinder's default speed, tolerance, and angle " +
-                            "tolerance. Use the setSpeed(double), " +
-                            "setTolerance(double), and setAngleTolerance(Angle) " +
-                            "methods to set these values before using any  " +
-                            "variation of the goTo method."
-            );
+        if (
+            speed < 0 && tolerance < 0 && angleTolerance == null
+        ) throw new RuntimeException(
+            "Attempted to use the goTo method without having set " +
+            "Pathfinder's default speed, tolerance, and angle " +
+            "tolerance. Use the setSpeed(double), " +
+            "setTolerance(double), and setAngleTolerance(Angle) " +
+            "methods to set these values before using any  " +
+            "variation of the goTo method."
+        );
 
-        if (speed < 0)
-            throw new InvalidSpeedException(
-                    "Attempted to use the goTo method without having set the " +
-                            "speed of Pathfinder first! Use the setSpeed(double) " +
-                            "method to set a speed value."
-            );
+        if (speed < 0) throw new InvalidSpeedException(
+            "Attempted to use the goTo method without having set the " +
+            "speed of Pathfinder first! Use the setSpeed(double) " +
+            "method to set a speed value."
+        );
 
-        if (tolerance < 0)
-            throw new InvalidToleranceException(
-                    "Attempted to use the goTo method without having set the " +
-                            "tolerance of Pathfinder first! Use the setTolerance(double) " +
-                            "method to set a tolerance value."
-            );
+        if (tolerance < 0) throw new InvalidToleranceException(
+            "Attempted to use the goTo method without having set the " +
+            "tolerance of Pathfinder first! Use the setTolerance(double) " +
+            "method to set a tolerance value."
+        );
 
-        if (angleTolerance == null)
-            throw new NullAngleException(
-                    "Attempted to use the goTo method without having set the " +
-                            "angle tolerance of Pathfinder first! Use the" +
-                            "setAngleTolerance(Angle) method to set a " +
-                            "tolerance value."
-            );
+        if (angleTolerance == null) throw new NullAngleException(
+            "Attempted to use the goTo method without having set the " +
+            "angle tolerance of Pathfinder first! Use the" +
+            "setAngleTolerance(Angle) method to set a " +
+            "tolerance value."
+        );
     }
 
     /**
@@ -3036,12 +2962,7 @@ public class Pathfinder {
     public Pathfinder splineTo(PointXYZ... points) {
         checkForMissingDefaultValues();
 
-        return splineTo(
-                speed,
-                tolerance,
-                angleTolerance,
-                points
-        );
+        return splineTo(speed, tolerance, angleTolerance, points);
     }
 
     /**
@@ -3059,44 +2980,51 @@ public class Pathfinder {
      *                       AT LEAST two points.
      * @return {@code this}, used for method chaining.
      */
-    public Pathfinder multiSplineTo(double speed,
-                                    double tolerance,
-                                    Angle angleTolerance,
-                                    PointXYZ... points) {
+    public Pathfinder multiSplineTo(
+        double speed,
+        double tolerance,
+        Angle angleTolerance,
+        PointXYZ... points
+    ) {
         if (points.length < 2) throw new IllegalArgumentException(
-                "At least two control points are required to use the " +
-                        "splineTo method.");
+            "At least two control points are required to use the " +
+            "splineTo method."
+        );
         checkForMissingDefaultValues();
 
         InvalidSpeedException.throwIfInvalid(
-                "Invalid speed value provided! Speed must be between 0 and 1.",
-                speed);
+            "Invalid speed value provided! Speed must be between 0 and 1.",
+            speed
+        );
         InvalidToleranceException.throwIfInvalid(
-                "Invalid tolerance! Tolerance must be a positive number.",
-                tolerance);
+            "Invalid tolerance! Tolerance must be a positive number.",
+            tolerance
+        );
 
-        if (angleTolerance.deg() < 0)
-            throw new InvalidToleranceException("Invalid angle tolerance! " +
-                    "Angle tolerance must be greater than 0 degrees.");
+        if (angleTolerance.deg() < 0) throw new InvalidToleranceException(
+            "Invalid angle tolerance! " +
+            "Angle tolerance must be greater than 0 degrees."
+        );
 
-        if (!Spline.areMonotonicX(points))
-            throw new SplineException("Cannot create a spline with non-" +
-                    "monotonic X values! X values can only be either " +
-                    "increasing or decreasing, but not a combination of both.");
+        if (!Spline.areMonotonicX(points)) throw new SplineException(
+            "Cannot create a spline with non-" +
+            "monotonic X values! X values can only be either " +
+            "increasing or decreasing, but not a combination of both."
+        );
 
         double totalDistanceX = points[points.length - 1].distanceX(points[0]);
 
-        double step = totalDistanceX /
-                (points.length * Core.pathfinderSplineStepCoefficient);
+        double step =
+            totalDistanceX /
+            (points.length * Core.pathfinderSplineStepCoefficient);
 
         MultiSplineBuilder builder = new MultiSplineBuilder()
-                .setDefaultSpeed(speed)
-                .setDefaultTolerance(tolerance)
-                .setDefaultAngleTolerance(angleTolerance)
-                .setDefaultStep(step);
+            .setDefaultSpeed(speed)
+            .setDefaultTolerance(tolerance)
+            .setDefaultAngleTolerance(angleTolerance)
+            .setDefaultStep(step);
 
-        for (PointXYZ point : points)
-            builder.add(point, speed, step);
+        for (PointXYZ point : points) builder.add(point, speed, step);
 
         Trajectory trajectory = builder.build();
 
@@ -3128,73 +3056,81 @@ public class Pathfinder {
      *                       AT LEAST two points.
      * @return {@code this}, used for method chaining.
      */
-    public Pathfinder splineTo(double speed,
-                               double tolerance,
-                               Angle angleTolerance,
-                               PointXYZ... points) {
+    public Pathfinder splineTo(
+        double speed,
+        double tolerance,
+        Angle angleTolerance,
+        PointXYZ... points
+    ) {
         if (points.length < 2) throw new IllegalArgumentException(
-                "At least two control points are required to use the " +
-                        "splineTo method.");
+            "At least two control points are required to use the " +
+            "splineTo method."
+        );
 
         InvalidSpeedException.throwIfInvalid(
-                "Invalid speed value provided! Speed must be between 0 and 1.",
-                speed);
+            "Invalid speed value provided! Speed must be between 0 and 1.",
+            speed
+        );
         InvalidToleranceException.throwIfInvalid(
-                "Invalid tolerance! Tolerance must be a positive number.",
-                tolerance);
+            "Invalid tolerance! Tolerance must be a positive number.",
+            tolerance
+        );
 
-        if (angleTolerance.deg() < 0)
-            throw new InvalidToleranceException("Invalid angle tolerance! " +
-                    "Angle tolerance must be greater than 0 degrees.");
+        if (angleTolerance.deg() < 0) throw new InvalidToleranceException(
+            "Invalid angle tolerance! " +
+            "Angle tolerance must be greater than 0 degrees."
+        );
 
-        NotNull.throwExceptionIfNull
-                ("One or more points provided to splineTo was null!", (Object[]) points);
+        NotNull.throwExceptionIfNull(
+            "One or more points provided to splineTo was null!",
+            (Object[]) points
+        );
 
         // non-monotonic Y values means we need to use a multi spline instead
-        if (!Spline.areMonotonicY(points))
-            return multiSplineTo(speed, tolerance, angleTolerance, points);
+        if (!Spline.areMonotonicY(points)) return multiSplineTo(
+            speed,
+            tolerance,
+            angleTolerance,
+            points
+        );
 
         // length is the total distance of the spline (NOT all control points)
-        double length = PointXY.distance(
-                points[0],
-                points[points.length - 1]
-        );
+        double length = PointXY.distance(points[0], points[points.length - 1]);
 
         // step should be relatively small - by default, it's 1/20th of
         // the spline's length.
         double step = length / Core.pathfinderStepDivisor;
 
-        AdvancedSplineTrajectoryBuilder builder =
-                new AdvancedSplineTrajectoryBuilder()
-                        .setSpeed(speed)
-                        .setTolerance(tolerance)
-                        .setAngleTolerance(angleTolerance)
-                        .setStep(step);
+        AdvancedSplineTrajectoryBuilder builder = new AdvancedSplineTrajectoryBuilder()
+            .setSpeed(speed)
+            .setTolerance(tolerance)
+            .setAngleTolerance(angleTolerance)
+            .setStep(step);
 
         PointXYZ robotPosition = getPosition();
 
         // if the first point is NOT the robot's current position, add it
         // to the trajectory
-        if (!robotPosition.equals(points[0]))
-            builder.add(robotPosition);
+        if (!robotPosition.equals(points[0])) builder.add(robotPosition);
 
         PointXYZ lastPoint = points[0];
         for (int i = 1; i < points.length; i++) {
             PointXYZ point = points[i];
 
             if (point == null) throw new NullPointException(
-                    "Cannot use the splineTo method with a null " +
-                            "control point!");
+                "Cannot use the splineTo method with a null " + "control point!"
+            );
 
             if (!point.equals(lastPoint)) {
                 builder.add(point);
                 lastPoint = point;
             } else {
                 throw new SplineException(
-                        "There were duplicate adjacent points in the set " +
-                                "of control points! This means there's the same " +
-                                "point, twice in a row. The points were: " +
-                                Arrays.toString(points));
+                    "There were duplicate adjacent points in the set " +
+                    "of control points! This means there's the same " +
+                    "point, twice in a row. The points were: " +
+                    Arrays.toString(points)
+                );
             }
         }
 
@@ -3214,18 +3150,15 @@ public class Pathfinder {
      */
     public Pathfinder goTo(PointXYZ point) {
         NullPointException.throwIfInvalid(
-                "Attempted to navigate to a null point.",
-                point
+            "Attempted to navigate to a null point.",
+            point
         );
 
         checkForMissingDefaultValues();
 
-        followTrajectory(new LinearTrajectory(
-                point,
-                speed,
-                tolerance,
-                angleTolerance
-        ));
+        followTrajectory(
+            new LinearTrajectory(point, speed, tolerance, angleTolerance)
+        );
 
         return this;
     }
@@ -3248,20 +3181,22 @@ public class Pathfinder {
      *                   will be active for.
      * @return {@code this}, used for method chaining.
      */
-    public Pathfinder task(Runnable initial,
-                           Runnable during,
-                           Runnable onFinish,
-                           Supplier<Boolean> isFinished,
-                           double minTimeMs,
-                           double maxTimeMs) {
+    public Pathfinder task(
+        Runnable initial,
+        Runnable during,
+        Runnable onFinish,
+        Supplier<Boolean> isFinished,
+        double minTimeMs,
+        double maxTimeMs
+    ) {
         Trajectory trajectory = new TaskTrajectoryBuilder()
-                .setInitial(initial)
-                .setDuring(during)
-                .setOnFinish(onFinish)
-                .setIsFinished(isFinished)
-                .setMinTimeMs(minTimeMs)
-                .setMaxTimeMs(maxTimeMs)
-                .build();
+            .setInitial(initial)
+            .setDuring(during)
+            .setOnFinish(onFinish)
+            .setIsFinished(isFinished)
+            .setMinTimeMs(minTimeMs)
+            .setMaxTimeMs(maxTimeMs)
+            .build();
 
         followTrajectory(trajectory);
 
@@ -3282,10 +3217,12 @@ public class Pathfinder {
      *                   its execution.
      * @return {@code this}, used for method chaining.
      */
-    public Pathfinder task(Runnable initial,
-                           Runnable during,
-                           Runnable onFinish,
-                           Supplier<Boolean> isFinished) {
+    public Pathfinder task(
+        Runnable initial,
+        Runnable during,
+        Runnable onFinish,
+        Supplier<Boolean> isFinished
+    ) {
         return task(initial, during, onFinish, isFinished, 0, Double.MAX_VALUE);
     }
 
@@ -3300,11 +3237,8 @@ public class Pathfinder {
      *                   its execution.
      * @return {@code this}, used for method chaining.
      */
-    public Pathfinder task(Runnable during,
-                           Supplier<Boolean> isFinished) {
-        return task(() -> {
-        }, during, () -> {
-        }, isFinished);
+    public Pathfinder task(Runnable during, Supplier<Boolean> isFinished) {
+        return task(() -> {}, during, () -> {}, isFinished);
     }
 
     /**
@@ -3320,26 +3254,25 @@ public class Pathfinder {
      * @return {@code this, used for method chaining}
      */
     @SuppressWarnings("BusyWait")
-    public Pathfinder moveFor(Translation translation,
-                              double timeoutMs) {
-        if (translation == null)
-            throw new NullPointerException(
-                    "Cannot use a null translation!"
-            );
+    public Pathfinder moveFor(Translation translation, double timeoutMs) {
+        if (translation == null) throw new NullPointerException(
+            "Cannot use a null translation!"
+        );
 
-        if (timeoutMs <= 0 || Double.isInfinite(timeoutMs) || timeoutMs == Double.MAX_VALUE)
-            throw new IllegalArgumentException(
-                    "Invalid timeout!"
-            );
+        if (
+            timeoutMs <= 0 ||
+            Double.isInfinite(timeoutMs) ||
+            timeoutMs == Double.MAX_VALUE
+        ) throw new IllegalArgumentException("Invalid timeout!");
 
         ElapsedTimer timer = new ElapsedTimer(true);
         setTranslation(translation);
 
         try {
-            while (timer.isElapsedLessThan(timeoutMs))
-                Thread.sleep(Core.pathfinderWaitSleepTimeMs);
-        } catch (Exception ignored) {
-        }
+            while (timer.isElapsedLessThan(timeoutMs)) Thread.sleep(
+                Core.pathfinderWaitSleepTimeMs
+            );
+        } catch (Exception ignored) {}
 
         return this;
     }
@@ -3356,14 +3289,13 @@ public class Pathfinder {
      * @param timeoutMs how long the robot should move for, in milliseconds.
      * @return {@code this}, used for method chaining.
      */
-    public Pathfinder moveFor(double vx,
-                              double vy,
-                              double vz,
-                              double timeoutMs) {
-        return moveFor(
-                new Translation(vx, vy, vz),
-                timeoutMs
-        );
+    public Pathfinder moveFor(
+        double vx,
+        double vy,
+        double vz,
+        double timeoutMs
+    ) {
+        return moveFor(new Translation(vx, vy, vz), timeoutMs);
     }
 
     /**
@@ -3442,8 +3374,8 @@ public class Pathfinder {
         Translation translation = getDrive().getTranslation();
 
         return translation != null
-                ? translation
-                : Core.pathfinderDefaultTranslation;
+            ? translation
+            : Core.pathfinderDefaultTranslation;
     }
 
     /**
@@ -3466,12 +3398,11 @@ public class Pathfinder {
      * @return this instance of Pathfinder, used for method chaining.
      */
     public Pathfinder setTranslation(Translation translation) {
-        if (translation == null)
-            throw new NullPointerException(
-                    "Attempted to use the setTranslation method, but provided " +
-                            "a null translation - make sure this translation " +
-                            "isn't null next time, alright? Cool."
-            );
+        if (translation == null) throw new NullPointerException(
+            "Attempted to use the setTranslation method, but provided " +
+            "a null translation - make sure this translation " +
+            "isn't null next time, alright? Cool."
+        );
 
         getDrive().setTranslation(translation);
 
@@ -3499,13 +3430,7 @@ public class Pathfinder {
      * @return {@code this}, used for method chaining.
      */
     public Pathfinder setVx(double vx) {
-        return setTranslation(
-                new Translation(
-                        vx,
-                        getVy(),
-                        getVz()
-                )
-        );
+        return setTranslation(new Translation(vx, getVy(), getVz()));
     }
 
     /**
@@ -3529,13 +3454,7 @@ public class Pathfinder {
      * @return {@code this}, used for method chaining.
      */
     public Pathfinder setVy(double vy) {
-        return setTranslation(
-                new Translation(
-                        getVx(),
-                        vy,
-                        getVz()
-                )
-        );
+        return setTranslation(new Translation(getVx(), vy, getVz()));
     }
 
     /**
@@ -3559,13 +3478,7 @@ public class Pathfinder {
      * @return {@code this}, used for method chaining.
      */
     public Pathfinder setVz(double vz) {
-        return setTranslation(
-                new Translation(
-                        getVx(),
-                        getVy(),
-                        vz
-                )
-        );
+        return setTranslation(new Translation(getVx(), getVy(), vz));
     }
 
     /**
@@ -3771,9 +3684,9 @@ public class Pathfinder {
      */
     public Pathfinder lockHeading(Angle heading) {
         Function<Translation, Translation> modifier = new HeadingLock(
-                heading,
-                turnController,
-                this.getPosition()::z
+            heading,
+            turnController,
+            this.getPosition()::z
         );
 
         lastDriveModifier = getDrive().getDriveModifier();
@@ -3808,11 +3721,11 @@ public class Pathfinder {
      */
     public Pathfinder lockHeading(PointXY point) {
         Function<Translation, Translation> modifier = new AutoRotator(
-                this,
-                turnController,
-                point,
-                Angle.DEG_0,
-                true
+            this,
+            turnController,
+            point,
+            Angle.DEG_0,
+            true
         );
 
         lastDriveModifier = getDrive().getDriveModifier();
@@ -3848,14 +3761,13 @@ public class Pathfinder {
      *                    determines it needs to face.
      * @return {@code this}, used for method chaining.
      */
-    public Pathfinder lockHeading(PointXY point,
-                                  Angle angleOffset) {
+    public Pathfinder lockHeading(PointXY point, Angle angleOffset) {
         Function<Translation, Translation> modifier = new AutoRotator(
-                this,
-                turnController,
-                point,
-                angleOffset,
-                true
+            this,
+            turnController,
+            point,
+            angleOffset,
+            true
         );
 
         lastDriveModifier = getDrive().getDriveModifier();
@@ -3882,8 +3794,7 @@ public class Pathfinder {
      * @param predicate a predicate that evaluates the system's state.
      * @return a new {@code Button}.
      */
-    public <T> Button newButton(Supplier<T> supplier,
-                                Predicate<T> predicate) {
+    public <T> Button newButton(Supplier<T> supplier, Predicate<T> predicate) {
         return new Button(listenerManager, supplier, predicate);
     }
 
@@ -3911,10 +3822,14 @@ public class Pathfinder {
      *                      being pressed.
      * @return a new {@code Button}.
      */
-    public Button newTriggerButton(Supplier<Double> stateSupplier,
-                                   double deadZone) {
-        return new Button(listenerManager,
-                () -> stateSupplier.get() >= deadZone);
+    public Button newTriggerButton(
+        Supplier<Double> stateSupplier,
+        double deadZone
+    ) {
+        return new Button(
+            listenerManager,
+            () -> stateSupplier.get() >= deadZone
+        );
     }
 
     /*

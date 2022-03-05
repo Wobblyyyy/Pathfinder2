@@ -10,15 +10,14 @@
 
 package me.wobblyyyy.pathfinder2.trajectory.builder;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.trajectory.FastTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A builder class used for creating simple sequences of trajectories.
@@ -61,14 +60,10 @@ public class TrajectoryBuilder {
         return linearTo(target, speed);
     }
 
-    public TrajectoryBuilder linearTo(PointXYZ target,
-                                      double speed) {
-        trajectories.add(new LinearTrajectory(
-                target,
-                speed,
-                tolerance,
-                angleTolerance
-        ));
+    public TrajectoryBuilder linearTo(PointXYZ target, double speed) {
+        trajectories.add(
+            new LinearTrajectory(target, speed, tolerance, angleTolerance)
+        );
 
         lastPoint = target;
 
@@ -79,21 +74,16 @@ public class TrajectoryBuilder {
         return fastTo(target, speed);
     }
 
-    public TrajectoryBuilder fastTo(PointXYZ target,
-                                    double speed) {
+    public TrajectoryBuilder fastTo(PointXYZ target, double speed) {
         if (lastPoint == null) {
             throw new NullPointException(
-                    "Must use the setStartPos method before creating a fast " +
-                            "trajectory to a target! This position should be " +
-                            "the robot's starting position."
+                "Must use the setStartPos method before creating a fast " +
+                "trajectory to a target! This position should be " +
+                "the robot's starting position."
             );
         }
 
-        trajectories.add(new FastTrajectory(
-                lastPoint,
-                target,
-                speed
-        ));
+        trajectories.add(new FastTrajectory(lastPoint, target, speed));
 
         lastPoint = target;
 

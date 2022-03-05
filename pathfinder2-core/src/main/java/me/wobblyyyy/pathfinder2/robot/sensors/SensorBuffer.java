@@ -10,9 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.robot.sensors;
 
-import me.wobblyyyy.pathfinder2.math.RollingAverage;
-
 import java.util.function.Supplier;
+import me.wobblyyyy.pathfinder2.math.RollingAverage;
 
 /**
  * Wrapper for sensors that supply double values, meant to smoothen results
@@ -25,8 +24,7 @@ public class SensorBuffer implements Supplier<Double> {
     private final Supplier<Double> input;
     private final RollingAverage average;
 
-    public SensorBuffer(Supplier<Double> input,
-                        int size) {
+    public SensorBuffer(Supplier<Double> input, int size) {
         this.input = input;
         this.average = new RollingAverage(size);
     }

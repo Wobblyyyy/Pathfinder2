@@ -16,10 +16,12 @@ public class RelativeSwerveState {
     private RelativeSwerveModuleState br;
     private RelativeSwerveModuleState bl;
 
-    public RelativeSwerveState(RelativeSwerveModuleState fr,
-                               RelativeSwerveModuleState fl,
-                               RelativeSwerveModuleState br,
-                               RelativeSwerveModuleState bl) {
+    public RelativeSwerveState(
+        RelativeSwerveModuleState fr,
+        RelativeSwerveModuleState fl,
+        RelativeSwerveModuleState br,
+        RelativeSwerveModuleState bl
+    ) {
         this.fr = fr;
         this.fl = fl;
         this.br = br;

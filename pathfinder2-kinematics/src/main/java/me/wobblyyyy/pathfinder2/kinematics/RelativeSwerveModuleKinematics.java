@@ -67,12 +67,8 @@ public class RelativeSwerveModuleKinematics {
      * @return how much power the swerve module's turn motor should receive
      * in order to make the current angle match up with the target angle.
      */
-    public double calculate(Angle current,
-                            Angle target) {
-        return controller.calculate(
-                current.deg(),
-                target.deg()
-        );
+    public double calculate(Angle current, Angle target) {
+        return controller.calculate(current.deg(), target.deg());
     }
 
     /**

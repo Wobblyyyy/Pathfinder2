@@ -10,13 +10,12 @@
 
 package me.wobblyyyy.pathfinder2.math;
 
-import me.wobblyyyy.pathfinder2.geometry.Angle;
-import me.wobblyyyy.pathfinder2.geometry.PointXY;
-import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import me.wobblyyyy.pathfinder2.geometry.Angle;
+import me.wobblyyyy.pathfinder2.geometry.PointXY;
+import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
 /**
  * A measurement of velocity - motion in a given direction. This velocity can
@@ -44,8 +43,7 @@ public class Velocity implements Serializable {
      *                  a negative or positive number.
      * @param direction the direction the object is moving in.
      */
-    public Velocity(double speed,
-                    Angle direction) {
+    public Velocity(double speed, Angle direction) {
         this.speed = speed;
         this.direction = direction;
     }
@@ -58,8 +56,7 @@ public class Velocity implements Serializable {
      * @param b one of two velocities to blend.
      * @return a blended velocity.
      */
-    public static Velocity blend(Velocity a,
-                                 Velocity b) {
+    public static Velocity blend(Velocity a, Velocity b) {
         double speedA = a.getSpeed();
         double speedB = b.getSpeed();
 
@@ -111,17 +108,18 @@ public class Velocity implements Serializable {
         return applyVelocitySeconds(PointXY.zero(), elapsedSeconds);
     }
 
-    public PointXY applyVelocityMilliseconds(PointXY original,
-                                             double elapsedMilliseconds) {
+    public PointXY applyVelocityMilliseconds(
+        PointXY original,
+        double elapsedMilliseconds
+    ) {
         return applyVelocitySeconds(original, elapsedMilliseconds / 1_000);
     }
 
-    public PointXY applyVelocitySeconds(PointXY original,
-                                        double elapsedSeconds) {
-        return original.inDirection(
-                speed * elapsedSeconds,
-                direction
-        );
+    public PointXY applyVelocitySeconds(
+        PointXY original,
+        double elapsedSeconds
+    ) {
+        return original.inDirection(speed * elapsedSeconds, direction);
     }
 
     /**
@@ -142,10 +140,7 @@ public class Velocity implements Serializable {
      * @return convert the {@code Velocity} into a PointXY.
      */
     public PointXY asPointXY() {
-        return PointXY.zero().inDirection(
-                speed,
-                direction
-        );
+        return PointXY.zero().inDirection(speed, direction);
     }
 
     /**
@@ -156,41 +151,41 @@ public class Velocity implements Serializable {
      * to the direction value.
      */
     public PointXYZ asPointXYZ() {
-        return PointXYZ.zero().inDirection(
-                speed,
-                direction
-        ).withHeading(direction);
+        return PointXYZ
+            .zero()
+            .inDirection(speed, direction)
+            .withHeading(direction);
     }
 
-    public Velocity nearestVelocity(List<Velocity> velocities,
-                                    Velocity velocity) {
-        return nearestVelocities(
-                velocities,
-                velocity,
-                1
-        ).get(0);
+    public Velocity nearestVelocity(
+        List<Velocity> velocities,
+        Velocity velocity
+    ) {
+        return nearestVelocities(velocities, velocity, 1).get(0);
     }
 
-    public List<Velocity> nearestVelocities(List<Velocity> velocities,
-                                            Velocity velocity,
-                                            int howMany) {
-        if (howMany < velocities.size())
-            throw new IllegalArgumentException("Cannot return more velocities than were provided!");
+    public List<Velocity> nearestVelocities(
+        List<Velocity> velocities,
+        Velocity velocity,
+        int howMany
+    ) {
+        if (howMany < velocities.size()) throw new IllegalArgumentException(
+            "Cannot return more velocities than were provided!"
+        );
 
         PointXY velocityPoint = velocity.asPointXY();
 
-        velocities.sort((v1, v2) -> {
-            PointXY point1 = v1.asPointXY();
-            PointXY point2 = v2.asPointXY();
+        velocities.sort(
+            (v1, v2) -> {
+                PointXY point1 = v1.asPointXY();
+                PointXY point2 = v2.asPointXY();
 
-            double distance1 = PointXY.distance(velocityPoint, point1);
-            double distance2 = PointXY.distance(velocityPoint, point2);
+                double distance1 = PointXY.distance(velocityPoint, point1);
+                double distance2 = PointXY.distance(velocityPoint, point2);
 
-            return Double.compare(
-                    distance1,
-                    distance2
-            );
-        });
+                return Double.compare(distance1, distance2);
+            }
+        );
 
         List<Velocity> nearestVelocities = new ArrayList<>(howMany);
 

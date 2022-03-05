@@ -11,6 +11,11 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'com.diffplug.spotless' version '6.3.0'
+}
+
+repositories {
+    mavenCentral()
 }
 
 project.ext {
@@ -25,6 +30,20 @@ allprojects {
     java {
         withJavadocJar()
         withSourcesJar()
+    }
+}
+
+spotless {
+    java {
+        target project.fileTree(dir: '.', include: '**/*.java')
+        indentWithSpaces()
+        trimTrailingWhitespace()
+        prettier([
+            'prettier': '2.0.5',
+            'prettier-plugin-java': '0.8.0'
+        ]).config([
+            'tabWidth': 4
+        ])
     }
 }
 

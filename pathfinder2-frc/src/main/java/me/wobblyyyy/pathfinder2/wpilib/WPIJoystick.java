@@ -20,6 +20,7 @@ import me.wobblyyyy.pathfinder2.utils.Joystick;
  * @since 0.15.0
  */
 public class WPIJoystick extends Joystick {
+
     public WPIJoystick(edu.wpi.first.wpilibj.Joystick joystick) {
         super(joystick::getX, joystick::getY);
     }

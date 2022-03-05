@@ -32,11 +32,12 @@ public class FastSplineTrajectory extends FastTrajectory {
      * @param speedSpline the spline responsible for controlling the
      *                    robot's speed.
      */
-    public FastSplineTrajectory(PointXYZ start,
-                                PointXYZ end,
-                                Spline speedSpline) {
+    public FastSplineTrajectory(
+        PointXYZ start,
+        PointXYZ end,
+        Spline speedSpline
+    ) {
         super(start, end, 0.5);
-
         this.speedSpline = speedSpline;
     }
 

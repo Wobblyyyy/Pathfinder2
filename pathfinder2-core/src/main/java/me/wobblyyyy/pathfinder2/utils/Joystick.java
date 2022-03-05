@@ -10,10 +10,9 @@
 
 package me.wobblyyyy.pathfinder2.utils;
 
+import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
-
-import java.util.function.Supplier;
 
 /**
  * A two-axis joystick. This joystick has two axes - an X axis and a Y
@@ -33,13 +32,8 @@ public class Joystick {
      * @param xAxis the X axis supplier.
      * @param yAxis the Y axis supplier.
      */
-    public Joystick(Supplier<Double> xAxis,
-                    Supplier<Double> yAxis) {
-        this(
-                xAxis,
-                yAxis,
-                0.05
-        );
+    public Joystick(Supplier<Double> xAxis, Supplier<Double> yAxis) {
+        this(xAxis, yAxis, 0.05);
     }
 
     /**
@@ -49,11 +43,14 @@ public class Joystick {
      * @param yAxis    the Y axis supplier.
      * @param deadzone the joystick's deadzone.
      */
-    public Joystick(Supplier<Double> xAxis,
-                    Supplier<Double> yAxis,
-                    double deadzone) {
-        if (xAxis == null || yAxis == null)
-            throw new NullPointerException("Null X or Y axis - not good!");
+    public Joystick(
+        Supplier<Double> xAxis,
+        Supplier<Double> yAxis,
+        double deadzone
+    ) {
+        if (xAxis == null || yAxis == null) throw new NullPointerException(
+            "Null X or Y axis - not good!"
+        );
 
         this.xAxis = xAxis;
         this.yAxis = yAxis;
@@ -68,8 +65,7 @@ public class Joystick {
     public double getX() {
         double x = xAxis.get();
 
-        if (x <= deadzone) return 0;
-        else return x;
+        if (x <= deadzone) return 0; else return x;
     }
 
     /**
@@ -80,8 +76,7 @@ public class Joystick {
     public double getY() {
         double y = yAxis.get();
 
-        if (y <= deadzone) return 0;
-        else return y;
+        if (y <= deadzone) return 0; else return y;
     }
 
     /**
@@ -101,10 +96,7 @@ public class Joystick {
      * @return the magnitude of the joystick input.
      */
     public double getMagnitude() {
-        return PointXY.distance(
-                getPoint(),
-                PointXY.zero()
-        );
+        return PointXY.distance(getPoint(), PointXY.zero());
     }
 
     /**
@@ -141,7 +133,6 @@ public class Joystick {
      * @return true if X or Y has a non-zero value; false otherwise.
      */
     public boolean isNonZero() {
-        return isNonZeroX() ||
-                isNonZeroY();
+        return isNonZeroX() || isNonZeroY();
     }
 }

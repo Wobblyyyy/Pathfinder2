@@ -65,9 +65,6 @@ public class CartesianCoordinate {
      */
     @Override
     public String toString() {
-        return "CartesianCoordinate{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
+        return "CartesianCoordinate{" + "x=" + x + ", y=" + y + '}';
     }
 }

@@ -31,11 +31,13 @@ public class AngleSplineTrajectory implements Trajectory {
     private final double step;
     private final double tolerance;
 
-    public AngleSplineTrajectory(Spline spline,
-                                 AngleSpline angleSpline,
-                                 double speed,
-                                 double step,
-                                 double tolerance) {
+    public AngleSplineTrajectory(
+        Spline spline,
+        AngleSpline angleSpline,
+        double speed,
+        double step,
+        double tolerance
+    ) {
         this.spline = spline;
         this.angleSpline = angleSpline;
         this.speed = speed;

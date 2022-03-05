@@ -22,6 +22,7 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
  * @since 0.0.0
  */
 public class EmptyTrajectory implements Trajectory {
+
     @Override
     public PointXYZ nextMarker(PointXYZ current) {
         return current;

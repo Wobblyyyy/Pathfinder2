@@ -10,16 +10,20 @@
 
 package me.wobblyyyy.pathfinder2.trajectory;
 
-import org.junit.jupiter.api.Test;
-
 import me.wobblyyyy.pathfinder2.GenericTrajectoryTester;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import org.junit.jupiter.api.Test;
 
 public class TestSequentialLinearTrajectory extends GenericTrajectoryTester {
+
     private void testTrajectoryTo(PointXYZ target) {
-        Trajectory trajectory = new LinearTrajectory(target, speed,
-                tolerance, angleTolerance);
+        Trajectory trajectory = new LinearTrajectory(
+            target,
+            speed,
+            tolerance,
+            angleTolerance
+        );
         follow(trajectory, target);
     }
 
@@ -53,8 +57,8 @@ public class TestSequentialLinearTrajectory extends GenericTrajectoryTester {
     private void testTurnTo(double... angles) {
         Angle[] a = new Angle[angles.length];
 
-        for (int i = 0; i < angles.length; i++)
-            a[i] = Angle.fixedDeg(angles[i]);
+        for (int i = 0; i < angles.length; i++) a[i] =
+            Angle.fixedDeg(angles[i]);
 
         testTurnTo(a);
     }

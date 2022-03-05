@@ -18,8 +18,12 @@ package me.wobblyyyy.pathfinder2.math;
  * @since 1.1.0
  */
 public class RangeNode {
-    public static RangeNode POSITIVE_INFINITY = inclusive(Double.POSITIVE_INFINITY);
-    public static RangeNode NEGATIVE_INFINITY = inclusive(Double.NEGATIVE_INFINITY);
+    public static RangeNode POSITIVE_INFINITY = inclusive(
+        Double.POSITIVE_INFINITY
+    );
+    public static RangeNode NEGATIVE_INFINITY = inclusive(
+        Double.NEGATIVE_INFINITY
+    );
 
     private final double node;
     private final boolean isInclusive;
@@ -30,8 +34,7 @@ public class RangeNode {
      * @param node        the node's value.
      * @param isInclusive is the node inclusive?
      */
-    public RangeNode(double node,
-                     boolean isInclusive) {
+    public RangeNode(double node, boolean isInclusive) {
         this.node = node;
         this.isInclusive = isInclusive;
     }

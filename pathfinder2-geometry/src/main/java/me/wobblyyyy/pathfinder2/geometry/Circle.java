@@ -28,8 +28,7 @@ public class Circle implements Shape<Circle> {
      * @param center the circle's center point.
      * @param radius the circle's radius.
      */
-    public Circle(PointXY center,
-                  double radius) {
+    public Circle(PointXY center, double radius) {
         this.center = center;
         this.radius = radius;
     }
@@ -67,18 +66,12 @@ public class Circle implements Shape<Circle> {
 
     @Override
     public Circle rotate(Angle rotation, PointXY centerOfRotation) {
-        return new Circle(
-                center.rotate(centerOfRotation, rotation),
-                radius
-        );
+        return new Circle(center.rotate(centerOfRotation, rotation), radius);
     }
 
     @Override
     public Circle shift(double shiftX, double shiftY) {
-        return new Circle(
-                center.shift(shiftX, shiftY),
-                radius
-        );
+        return new Circle(center.shift(shiftX, shiftY), radius);
     }
 
     @Override

@@ -10,18 +10,19 @@
 
 package me.wobblyyyy.pathfinder2.robot.sensors;
 
-import me.wobblyyyy.pathfinder2.robot.components.Motor;
-
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import me.wobblyyyy.pathfinder2.robot.components.Motor;
 
 public class AbstractEncodedMotor extends AbstractEncoder implements Motor {
     private final Consumer<Double> setPower;
     private final Supplier<Integer> getTicks;
     private double lastPower;
 
-    public AbstractEncodedMotor(Consumer<Double> setPower,
-                                Supplier<Integer> getTicks) {
+    public AbstractEncodedMotor(
+        Consumer<Double> setPower,
+        Supplier<Integer> getTicks
+    ) {
         this.setPower = setPower;
         this.getTicks = getTicks;
     }

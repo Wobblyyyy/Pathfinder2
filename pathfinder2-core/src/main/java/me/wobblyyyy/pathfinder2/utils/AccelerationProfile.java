@@ -21,8 +21,7 @@ public class AccelerationProfile {
         return acceleration;
     }
 
-    public double getDisplacement(double initialVelocity,
-                                  double time) {
+    public double getDisplacement(double initialVelocity, double time) {
         // s = ut + 1/2at^2
         return (initialVelocity * time) + (0.5 * time * acceleration);
     }

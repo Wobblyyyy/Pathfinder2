@@ -62,6 +62,5 @@ public interface FollowerGenerator {
      * and the provided trajectory. This {@link Follower} is responsible for
      * the execution of the inputted trajectory.
      */
-    Follower generate(Robot robot,
-                      Trajectory trajectory);
+    Follower generate(Robot robot, Trajectory trajectory);
 }

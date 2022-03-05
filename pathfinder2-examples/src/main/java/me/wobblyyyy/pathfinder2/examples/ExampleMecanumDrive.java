@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.examples;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.control.GenericTurnController;
@@ -27,9 +29,6 @@ import me.wobblyyyy.pathfinder2.utils.DualJoystick;
 import me.wobblyyyy.pathfinder2.utils.Gamepad;
 import me.wobblyyyy.pathfinder2.utils.Joystick;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ExampleMecanumDrive {
     private final SimulatedMotor frontLeft = new SimulatedMotor();
     private final SimulatedMotor frontRight = new SimulatedMotor();
@@ -37,25 +36,37 @@ public class ExampleMecanumDrive {
     private final SimulatedMotor backRight = new SimulatedMotor();
 
     private final Drive drive = new MecanumDrive(
-            frontRight,
-            frontLeft,
-            backRight,
-            backLeft
+        frontRight,
+        frontLeft,
+        backRight,
+        backLeft
     );
     private final Odometry odometry = new SimulatedOdometry();
     private final Robot robot = new Robot(drive, odometry);
     private final Controller turnController = new GenericTurnController(0.05);
-    private final FollowerGenerator followerGenerator = new GenericFollowerGenerator(turnController);
-    private final Pathfinder pathfinder = new Pathfinder(robot, followerGenerator);
+    private final FollowerGenerator followerGenerator = new GenericFollowerGenerator(
+        turnController
+    );
+    private final Pathfinder pathfinder = new Pathfinder(
+        robot,
+        followerGenerator
+    );
 
-    private final Joystick rightJoystick = new Joystick(this::rightStickX, this::rightStickY);
-    private final Joystick leftJoystick = new Joystick(this::leftStickX, this::leftStickY);
-    private final DualJoystick joysticks = new DualJoystick(leftJoystick, rightJoystick);
+    private final Joystick rightJoystick = new Joystick(
+        this::rightStickX,
+        this::rightStickY
+    );
+    private final Joystick leftJoystick = new Joystick(
+        this::leftStickX,
+        this::leftStickY
+    );
+    private final DualJoystick joysticks = new DualJoystick(
+        leftJoystick,
+        rightJoystick
+    );
     private final Gamepad gamepad = new Gamepad();
 
-    public ExampleMecanumDrive() {
-
-    }
+    public ExampleMecanumDrive() {}
 
     public double leftStickX() {
         return 0.0;
@@ -83,13 +94,16 @@ public class ExampleMecanumDrive {
     @SuppressWarnings("DuplicatedCode")
     public void autonomousDrive() {
         // go in a big rectangle
-        List<PointXYZ> path = new ArrayList<PointXYZ>() {{
-            add(new PointXYZ(0, 0, 0));
-            add(new PointXYZ(10, 0, 0));
-            add(new PointXYZ(10, 10, 0));
-            add(new PointXYZ(0, 10, 0));
-            add(new PointXYZ(0, 0, 0));
-        }};
+        List<PointXYZ> path = new ArrayList<PointXYZ>() {
+
+            {
+                add(new PointXYZ(0, 0, 0));
+                add(new PointXYZ(10, 0, 0));
+                add(new PointXYZ(10, 10, 0));
+                add(new PointXYZ(0, 10, 0));
+                add(new PointXYZ(0, 0, 0));
+            }
+        };
 
         for (PointXYZ point : path) {
             pathfinder.goTo(point);
@@ -124,9 +138,9 @@ public class ExampleMecanumDrive {
             }
 
             Translation translation = joysticks.translation(
-                    DualJoystick.Axis.LEFT_Y,
-                    DualJoystick.Axis.LEFT_X,
-                    DualJoystick.Axis.RIGHT_X
+                DualJoystick.Axis.LEFT_Y,
+                DualJoystick.Axis.LEFT_X,
+                DualJoystick.Axis.RIGHT_X
             );
 
             pathfinder.getDrive().setTranslation(translation);

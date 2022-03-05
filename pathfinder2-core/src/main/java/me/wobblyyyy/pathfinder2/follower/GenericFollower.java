@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.follower;
 
+import java.util.function.Consumer;
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.exceptions.NullControllerException;
 import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
@@ -19,8 +20,6 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
-
-import java.util.function.Consumer;
 
 /**
  * A generic implementation of the {@link Follower} interface. For almost all
@@ -63,8 +62,7 @@ public class GenericFollower implements Follower {
      *                       should output a value to minimize that distance
      *                       and bring it as close to 0 as possible.
      */
-    public GenericFollower(Trajectory trajectory,
-                           Controller turnController) {
+    public GenericFollower(Trajectory trajectory, Controller turnController) {
         ValidationUtils.validate(trajectory, "trajectory");
         ValidationUtils.validate(turnController, "turnController");
 
@@ -85,8 +83,7 @@ public class GenericFollower implements Follower {
     }
 
     @Override
-    public boolean tick(PointXYZ current,
-                        Consumer<Translation> consumer) {
+    public boolean tick(PointXYZ current, Consumer<Translation> consumer) {
         // alright - i'm writing this comment maybe... say... four months?
         // after writing this initial bit of code, and i would just like to
         // say - if you're here because you're trying to figure out what makes
@@ -139,10 +136,10 @@ public class GenericFollower implements Follower {
         // getRelativeTranslation returns a RELATIVE translation (meaning it
         // can be applied to the robot)
         Translation translation = Follower.getRelativeTranslation(
-                current,
-                nextMarker,
-                speed,
-                turn
+            current,
+            nextMarker,
+            speed,
+            turn
         );
 
         // use the consumer to accept a translation we create.

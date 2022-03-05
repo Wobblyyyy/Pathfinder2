@@ -96,10 +96,7 @@ public class Rectangle implements Shape<Rectangle> {
      * @param d one of the rectangle's four points.
      *          Should be adjacent to C and A.
      */
-    public Rectangle(PointXY a,
-                     PointXY b,
-                     PointXY c,
-                     PointXY d) {
+    public Rectangle(PointXY a, PointXY b, PointXY c, PointXY d) {
         PointXY.checkArgument(a);
         PointXY.checkArgument(b);
         PointXY.checkArgument(c);
@@ -107,9 +104,9 @@ public class Rectangle implements Shape<Rectangle> {
 
         if (PointXY.areDuplicatesPresent(a, b, c, d)) {
             throw new IllegalArgumentException(
-                    "Cannot create a rectangle with duplicate points! " +
-                            "Make sure your rectangle has > 0 width and > 0 " +
-                            "height."
+                "Cannot create a rectangle with duplicate points! " +
+                "Make sure your rectangle has > 0 width and > 0 " +
+                "height."
             );
         }
 
@@ -127,8 +124,8 @@ public class Rectangle implements Shape<Rectangle> {
 
         if (!(ab.isParallelWith(cd) && bc.isParallelWith(da))) {
             throw new IllegalArgumentException(
-                    "Invalid points! Please make sure that 1. AB and CD are " +
-                            "parallel, and 2. BC and DA are parallel."
+                "Invalid points! Please make sure that 1. AB and CD are " +
+                "parallel, and 2. BC and DA are parallel."
             );
         }
 
@@ -151,42 +148,36 @@ public class Rectangle implements Shape<Rectangle> {
      * @param maxX the maximum X value.
      * @param maxY the maximum Y value.
      */
-    public Rectangle(double minX,
-                     double minY,
-                     double maxX,
-                     double maxY) {
+    public Rectangle(double minX, double minY, double maxX, double maxY) {
         this(
-                new PointXY(minX, minY),
-                new PointXY(minX, maxY),
-                new PointXY(maxX, maxY),
-                new PointXY(maxX, minY)
+            new PointXY(minX, minY),
+            new PointXY(minX, maxY),
+            new PointXY(maxX, maxY),
+            new PointXY(maxX, minY)
         );
     }
 
-    public static Rectangle newRotatedRectangle(double minX,
-                                                double minY,
-                                                double maxX,
-                                                double maxY,
-                                                Angle rotationAngle) {
+    public static Rectangle newRotatedRectangle(
+        double minX,
+        double minY,
+        double maxX,
+        double maxY,
+        Angle rotationAngle
+    ) {
         Angle.checkArgument(rotationAngle);
 
-        return new Rectangle(
-                minX,
-                minY,
-                maxX,
-                maxY
-        ).rotate(rotationAngle);
+        return new Rectangle(minX, minY, maxX, maxY).rotate(rotationAngle);
     }
 
-    private static boolean testIsCollinear(PointXY test,
-                                           PointXY start,
-                                           PointXY end) {
+    private static boolean testIsCollinear(
+        PointXY test,
+        PointXY start,
+        PointXY end
+    ) {
         return test.isCollinearWith(start, end);
     }
 
-    private static boolean validate(PointXY test,
-                                    PointXY start,
-                                    PointXY end) {
+    private static boolean validate(PointXY test, PointXY start, PointXY end) {
         PointXY.checkArgument(test);
         PointXY.checkArgument(start);
         PointXY.checkArgument(end);
@@ -208,11 +199,11 @@ public class Rectangle implements Shape<Rectangle> {
     @Override
     public PointXY getClosestPoint(PointXY reference) {
         return PointXY.getClosestPoint(
-                reference,
-                ab.getClosestPoint(reference),
-                bc.getClosestPoint(reference),
-                cd.getClosestPoint(reference),
-                da.getClosestPoint(reference)
+            reference,
+            ab.getClosestPoint(reference),
+            bc.getClosestPoint(reference),
+            cd.getClosestPoint(reference),
+            da.getClosestPoint(reference)
         );
     }
 
@@ -223,47 +214,64 @@ public class Rectangle implements Shape<Rectangle> {
     public boolean isPointInShape(PointXY reference) {
         PointXY.checkArgument(reference);
 
-        if (PointXY.isNear(reference,
-                Geometry.toleranceRectangleReference, a, b, c, d))
-            return true;
+        if (
+            PointXY.isNear(
+                reference,
+                Geometry.toleranceRectangleReference,
+                a,
+                b,
+                c,
+                d
+            )
+        ) return true;
 
         if (
-                ab.shouldReturnFalse(reference) ||
-                        bc.shouldReturnFalse(reference) ||
-                        cd.shouldReturnFalse(reference) ||
-                        da.shouldReturnFalse(reference) ||
-                        ac.shouldReturnFalse(reference) ||
-                        bd.shouldReturnFalse(reference)
+            ab.shouldReturnFalse(reference) ||
+            bc.shouldReturnFalse(reference) ||
+            cd.shouldReturnFalse(reference) ||
+            da.shouldReturnFalse(reference) ||
+            ac.shouldReturnFalse(reference) ||
+            bd.shouldReturnFalse(reference)
         ) return false;
 
         PointXY target = center;
 
-        if (PointXY.isNear(reference, center,
-                Geometry.toleranceRectangleReference))
-            target = ab.midpoint();
+        if (
+            PointXY.isNear(
+                reference,
+                center,
+                Geometry.toleranceRectangleReference
+            )
+        ) target = ab.midpoint();
 
         Line line = new Line(
-                reference,
-                reference.angleTo(target).add(Angle.fromDeg(17.31313204182)),
-                sizeX + sizeY
+            reference,
+            reference.angleTo(target).add(Angle.fromDeg(17.31313204182)),
+            sizeX + sizeY
         );
 
         if (
-                ab.isPointOnLineSegment(reference) ||
-                        bc.isPointOnLineSegment(reference) ||
-                        cd.isPointOnLineSegment(reference) ||
-                        da.isPointOnLineSegment(reference) ||
-                        ac.isPointOnLineSegment(reference) ||
-                        bc.isPointOnLineSegment(reference)
+            ab.isPointOnLineSegment(reference) ||
+            bc.isPointOnLineSegment(reference) ||
+            cd.isPointOnLineSegment(reference) ||
+            da.isPointOnLineSegment(reference) ||
+            ac.isPointOnLineSegment(reference) ||
+            bc.isPointOnLineSegment(reference)
         ) return true;
 
         double x = reference.x();
         double y = reference.y();
 
-        boolean sameTargetX = Equals.soft(target.x(), x,
-                Geometry.toleranceRectangle);
-        boolean sameTargetY = Equals.soft(target.y(), y,
-                Geometry.toleranceRectangle);
+        boolean sameTargetX = Equals.soft(
+            target.x(),
+            x,
+            Geometry.toleranceRectangle
+        );
+        boolean sameTargetY = Equals.soft(
+            target.y(),
+            y,
+            Geometry.toleranceRectangle
+        );
 
         if (sameTargetX) target.withX(x + 0.69);
         if (sameTargetY) target.withY(y + 0.69);
@@ -273,12 +281,7 @@ public class Rectangle implements Shape<Rectangle> {
         double maxX = getMaximumX();
         double maxY = getMaximumY();
 
-        if (
-                x < minX ||
-                        x > maxX ||
-                        y < minY ||
-                        y > maxY
-        ) return false;
+        if (x < minX || x > maxX || y < minY || y > maxY) return false;
 
         boolean sameMinX = Equals.soft(minX, x, Geometry.toleranceRectangle);
         boolean sameMinY = Equals.soft(minY, x, Geometry.toleranceRectangle);
@@ -326,19 +329,13 @@ public class Rectangle implements Shape<Rectangle> {
      * @return a rotated rectangle.
      */
     @Override
-    public Rectangle rotate(Angle rotation,
-                            PointXY centerOfRotation) {
+    public Rectangle rotate(Angle rotation, PointXY centerOfRotation) {
         PointXY rotatedA = a.rotate(centerOfRotation, rotation);
         PointXY rotatedB = b.rotate(centerOfRotation, rotation);
         PointXY rotatedC = c.rotate(centerOfRotation, rotation);
         PointXY rotatedD = d.rotate(centerOfRotation, rotation);
 
-        return new Rectangle(
-                rotatedA,
-                rotatedB,
-                rotatedC,
-                rotatedD
-        );
+        return new Rectangle(rotatedA, rotatedB, rotatedC, rotatedD);
     }
 
     /**
@@ -348,8 +345,7 @@ public class Rectangle implements Shape<Rectangle> {
      * @param shiftY the Y shift.
      * @return a shifted rectangle.
      */
-    public Rectangle shift(double shiftX,
-                           double shiftY) {
+    public Rectangle shift(double shiftX, double shiftY) {
         PointXY shift = new PointXY(shiftX, shiftY);
 
         PointXY adjustedA = a.add(shift);
@@ -357,12 +353,7 @@ public class Rectangle implements Shape<Rectangle> {
         PointXY adjustedC = a.add(shift);
         PointXY adjustedD = a.add(shift);
 
-        return new Rectangle(
-                adjustedA,
-                adjustedB,
-                adjustedC,
-                adjustedD
-        );
+        return new Rectangle(adjustedA, adjustedB, adjustedC, adjustedD);
     }
 
     /**
@@ -376,26 +367,18 @@ public class Rectangle implements Shape<Rectangle> {
         return shift(dx, dy);
     }
 
-    private PointXY redrawPoint(PointXY point,
-                                double scale) {
+    private PointXY redrawPoint(PointXY point, double scale) {
         Angle fromCenter = center.angleTo(point);
         double originalDistance = center.distance(point);
 
-        return center.inDirection(
-                scale * originalDistance,
-                fromCenter
-        );
+        return center.inDirection(scale * originalDistance, fromCenter);
     }
 
-    private PointXY addDistance(PointXY point,
-                                double distance) {
+    private PointXY addDistance(PointXY point, double distance) {
         Angle fromCenter = center.angleTo(point);
         double originalDistance = center.distance(point);
 
-        return center.inDirection(
-                originalDistance + distance,
-                fromCenter
-        );
+        return center.inDirection(originalDistance + distance, fromCenter);
     }
 
     @Override

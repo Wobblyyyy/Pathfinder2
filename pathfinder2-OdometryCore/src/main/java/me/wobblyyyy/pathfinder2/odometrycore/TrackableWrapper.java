@@ -14,11 +14,12 @@ import com.tejasmehta.OdometryCore.trackables.OdometryTrackable;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.robot.AbstractOdometry;
 
-public abstract class TrackableWrapper extends AbstractOdometry implements OdometryTrackable {
+public abstract class TrackableWrapper
+    extends AbstractOdometry
+    implements OdometryTrackable {
+
     @Override
     public PointXYZ getRawPosition() {
-        return OdometryCoreUtils.fromOdometryPosition(
-                getCurrentPosition()
-        );
+        return OdometryCoreUtils.fromOdometryPosition(getCurrentPosition());
     }
 }

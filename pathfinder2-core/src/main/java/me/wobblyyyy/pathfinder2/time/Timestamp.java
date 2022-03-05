@@ -59,8 +59,7 @@ public class Timestamp {
      * @param b the final timestamp.
      * @return the difference between the two timestamps.
      */
-    public static double difference(Timestamp a,
-                                    Timestamp b) {
+    public static double difference(Timestamp a, Timestamp b) {
         return b.value() - a.value();
     }
 

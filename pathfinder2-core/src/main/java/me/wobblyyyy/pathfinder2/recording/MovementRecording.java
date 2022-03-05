@@ -56,4 +56,3 @@ public class MovementRecording implements Serializable {
         recording.clear();
     }
 }
-

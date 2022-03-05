@@ -45,8 +45,7 @@ public class RandomString {
     public static String randomString(int length) {
         StringBuilder builder = new StringBuilder(length);
 
-        for (int i = 0; i < length; i++)
-            builder.append(randomChar());
+        for (int i = 0; i < length; i++) builder.append(randomChar());
 
         return builder.toString();
     }

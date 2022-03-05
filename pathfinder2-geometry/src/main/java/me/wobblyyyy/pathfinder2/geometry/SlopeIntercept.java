@@ -26,12 +26,13 @@ public class SlopeIntercept implements LinearEquation {
     private final boolean isVertical;
     private final double verticalX;
 
-    public SlopeIntercept(double slope,
-                          double intercept) {
-        if (!validateDouble(slope))
-            throw new IllegalArgumentException("Invalid slope! Must be a finite number.");
-        if (!validateDouble(intercept))
-            throw new IllegalArgumentException("Invalid intercept! Must be a finite number.");
+    public SlopeIntercept(double slope, double intercept) {
+        if (!validateDouble(slope)) throw new IllegalArgumentException(
+            "Invalid slope! Must be a finite number."
+        );
+        if (!validateDouble(intercept)) throw new IllegalArgumentException(
+            "Invalid intercept! Must be a finite number."
+        );
 
         this.slope = slope;
         this.intercept = intercept;
@@ -40,8 +41,9 @@ public class SlopeIntercept implements LinearEquation {
     }
 
     private SlopeIntercept(double x) {
-        if (!validateDouble(x))
-            throw new IllegalArgumentException("Invalid X value! Must be a finite number.");
+        if (!validateDouble(x)) throw new IllegalArgumentException(
+            "Invalid X value! Must be a finite number."
+        );
 
         this.slope = 0;
         this.intercept = 0;
@@ -68,10 +70,9 @@ public class SlopeIntercept implements LinearEquation {
      */
     @Override
     public double getY(double x) {
-        if (!validateDouble(x))
-            throw new IllegalArgumentException(
-                    "Illegal X value! Must be a finite real number."
-            );
+        if (!validateDouble(x)) throw new IllegalArgumentException(
+            "Illegal X value! Must be a finite real number."
+        );
 
         // y = mx + b
         return (slope * x) + intercept;
@@ -82,10 +83,7 @@ public class SlopeIntercept implements LinearEquation {
      */
     @Override
     public PointXY getPoint(double x) {
-        return new PointXY(
-                x,
-                getY(x)
-        );
+        return new PointXY(x, getY(x));
     }
 
     /**
@@ -135,8 +133,13 @@ public class SlopeIntercept implements LinearEquation {
             // X axis intercept - if they don't, the lines don't intersect,
             // and we should return null
 
-            if (Equals.soft(getVertical(), equation.getVertical(),
-                    Geometry.toleranceIsVertical)) {
+            if (
+                Equals.soft(
+                    getVertical(),
+                    equation.getVertical(),
+                    Geometry.toleranceIsVertical
+                )
+            ) {
                 return new PointXY(getVertical(), 0);
             }
 

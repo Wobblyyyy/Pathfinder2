@@ -15,20 +15,14 @@ public class Trio<A, B, C> {
     private final B b;
     private final C c;
 
-    public Trio(A a,
-                B b,
-                C c) {
+    public Trio(A a, B b, C c) {
         this.a = a;
         this.b = b;
         this.c = c;
     }
 
     public Trio(Trio<A, B, C> trio) {
-        this(
-                trio.getA(),
-                trio.getB(),
-                trio.getC()
-        );
+        this(trio.getA(), trio.getB(), trio.getC());
     }
 
     public A getA() {

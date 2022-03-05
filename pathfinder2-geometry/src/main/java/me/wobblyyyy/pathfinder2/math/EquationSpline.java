@@ -32,9 +32,7 @@ public class EquationSpline implements Spline {
         this.endPoint = null;
     }
 
-    public EquationSpline(Equation equation,
-                          double minimumX,
-                          double maximumX) {
+    public EquationSpline(Equation equation, double minimumX, double maximumX) {
         this.equation = equation;
         this.clipper = new MinMax(minimumX, maximumX);
         this.startPoint = interpolate(minimumX);
@@ -49,22 +47,24 @@ public class EquationSpline implements Spline {
 
     @Override
     public PointXY getStartPoint() {
-        if (startPoint == null)
-            throw new NullPointerException("Could not access the start " +
-                    "point because it's null! Make sure to use the " +
-                    "constructor that accepts 3 parameters to specify " +
-                    "minimum and maximum X values.");
+        if (startPoint == null) throw new NullPointerException(
+            "Could not access the start " +
+            "point because it's null! Make sure to use the " +
+            "constructor that accepts 3 parameters to specify " +
+            "minimum and maximum X values."
+        );
 
         return startPoint;
     }
 
     @Override
     public PointXY getEndPoint() {
-        if (endPoint == null)
-            throw new NullPointerException("Could not access the end " +
-                    "point because it's null! Make sure to use the " +
-                    "constructor that accepts 3 parameters to specify " +
-                    "minimum and maximum X values.");
+        if (endPoint == null) throw new NullPointerException(
+            "Could not access the end " +
+            "point because it's null! Make sure to use the " +
+            "constructor that accepts 3 parameters to specify " +
+            "minimum and maximum X values."
+        );
 
         return endPoint;
     }

@@ -30,10 +30,12 @@ public class SwerveState {
      * @param backRight  the back right module state.
      * @param backLeft   the back left module position.
      */
-    public SwerveState(SwerveModuleState frontRight,
-                       SwerveModuleState frontLeft,
-                       SwerveModuleState backRight,
-                       SwerveModuleState backLeft) {
+    public SwerveState(
+        SwerveModuleState frontRight,
+        SwerveModuleState frontLeft,
+        SwerveModuleState backRight,
+        SwerveModuleState backLeft
+    ) {
         this.frontRight = frontRight;
         this.frontLeft = frontLeft;
         this.backRight = backRight;

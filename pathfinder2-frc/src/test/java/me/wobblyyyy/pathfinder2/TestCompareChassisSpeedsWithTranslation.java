@@ -10,15 +10,14 @@
 
 package me.wobblyyyy.pathfinder2;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.utils.AssertionUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 import me.wobblyyyy.pathfinder2.wpilib.WPIAdapter;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TestCompareChassisSpeedsWithTranslation {
     private static final double[] MULTIPLIERS = new double[64];
@@ -26,54 +25,58 @@ public class TestCompareChassisSpeedsWithTranslation {
     static {
         int split = MULTIPLIERS.length / 2;
 
-        for (int i = 0; i < split; i++)
-            MULTIPLIERS[i] = i / 10d;
+        for (int i = 0; i < split; i++) MULTIPLIERS[i] = i / 10d;
 
-        for (int i = split; i < MULTIPLIERS.length; i++)
-            MULTIPLIERS[i] = MULTIPLIERS[i - split] * -1;
+        for (int i = split; i < MULTIPLIERS.length; i++) MULTIPLIERS[i] =
+            MULTIPLIERS[i - split] * -1;
     }
 
-    private static void compare(ChassisSpeeds speeds,
-                                Translation translation) {
-        ChassisSpeeds fromTranslation =
-            WPIAdapter.speedsFromTranslation(translation);
+    private static void compare(ChassisSpeeds speeds, Translation translation) {
+        ChassisSpeeds fromTranslation = WPIAdapter.speedsFromTranslation(
+            translation
+        );
 
         Assertions.assertEquals(
-                translation,
-                WPIAdapter.translationFromSpeeds(speeds)
+            translation,
+            WPIAdapter.translationFromSpeeds(speeds)
         );
 
-        AssertionUtils.assertSoftEquals(speeds.vxMetersPerSecond,
-                fromTranslation.vxMetersPerSecond, 0.01);
-        AssertionUtils.assertSoftEquals(speeds.vyMetersPerSecond,
-                fromTranslation.vyMetersPerSecond, 0.01);
-        AssertionUtils.assertSoftEquals(speeds.omegaRadiansPerSecond,
-                fromTranslation.omegaRadiansPerSecond, 0.01);
-    }
-
-    private static void compare(ChassisSpeeds speeds,
-                                Translation translation,
-                                Angle angle) {
-        compare(
-                speeds,
-                translation
+        AssertionUtils.assertSoftEquals(
+            speeds.vxMetersPerSecond,
+            fromTranslation.vxMetersPerSecond,
+            0.01
         );
-
-        compare(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                    speeds.vxMetersPerSecond,
-                    speeds.vyMetersPerSecond,
-                    speeds.omegaRadiansPerSecond,
-                    WPIAdapter.rotationFromAngle(angle)
-                ),
-                translation.toRelative(angle)
+        AssertionUtils.assertSoftEquals(
+            speeds.vyMetersPerSecond,
+            fromTranslation.vyMetersPerSecond,
+            0.01
+        );
+        AssertionUtils.assertSoftEquals(
+            speeds.omegaRadiansPerSecond,
+            fromTranslation.omegaRadiansPerSecond,
+            0.01
         );
     }
 
-    private static void compare(double vx,
-                                double vy,
-                                double vz,
-                                Angle angle) {
+    private static void compare(
+        ChassisSpeeds speeds,
+        Translation translation,
+        Angle angle
+    ) {
+        compare(speeds, translation);
+
+        compare(
+            ChassisSpeeds.fromFieldRelativeSpeeds(
+                speeds.vxMetersPerSecond,
+                speeds.vyMetersPerSecond,
+                speeds.omegaRadiansPerSecond,
+                WPIAdapter.rotationFromAngle(angle)
+            ),
+            translation.toRelative(angle)
+        );
+    }
+
+    private static void compare(double vx, double vy, double vz, Angle angle) {
         ValidationUtils.validate(vx, "vx");
         ValidationUtils.validate(vy, "vy");
         ValidationUtils.validate(vz, "vz");
@@ -85,17 +88,18 @@ public class TestCompareChassisSpeedsWithTranslation {
         compare(speeds, translation, angle);
     }
 
-    private static void compareMultiplies(double vx,
-                                          double vy,
-                                          double vz,
-                                          Angle angle) {
-        for (double multiplier : MULTIPLIERS)
-            compare(
-                    vx * multiplier,
-                    vy * multiplier,
-                    vz * multiplier,
-                    angle
-            );
+    private static void compareMultiplies(
+        double vx,
+        double vy,
+        double vz,
+        Angle angle
+    ) {
+        for (double multiplier : MULTIPLIERS) compare(
+            vx * multiplier,
+            vy * multiplier,
+            vz * multiplier,
+            angle
+        );
     }
 
     private static void testAbsoluteToRelativeForAngle(Angle angle) {

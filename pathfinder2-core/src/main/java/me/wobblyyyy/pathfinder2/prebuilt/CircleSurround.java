@@ -34,12 +34,11 @@ import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
  * @since 0.1.0
  */
 public class CircleSurround {
+
     /**
      * Utility classes can not be instantiated.
      */
-    private CircleSurround() {
-
-    }
+    private CircleSurround() {}
 
     /**
      * Get the point along a circle closest to the robot.
@@ -50,23 +49,27 @@ public class CircleSurround {
      * @return the point along a circle closest to the robot. This point's
      * heading will be facing towards the center of the circle.
      */
-    public static PointXYZ closestPoint(PointXYZ robotPosition,
-                                        PointXY center,
-                                        double radius) {
-        if (robotPosition == null)
-            throw new NullPointException("Robot position may not be null!");
-        if (center == null)
-            throw new NullPointException("Center point may not be null!");
-        if (radius < 0)
-            throw new IllegalArgumentException("Radius values must be greater than 0!");
+    public static PointXYZ closestPoint(
+        PointXYZ robotPosition,
+        PointXY center,
+        double radius
+    ) {
+        if (robotPosition == null) throw new NullPointException(
+            "Robot position may not be null!"
+        );
+        if (center == null) throw new NullPointException(
+            "Center point may not be null!"
+        );
+        if (radius < 0) throw new IllegalArgumentException(
+            "Radius values must be greater than 0!"
+        );
 
         Angle centerToRobot = center.angleTo(robotPosition);
         Angle robotToCenter = robotPosition.angleTo(center);
 
-        return center.inDirection(
-                radius,
-                centerToRobot
-        ).withHeading(robotToCenter);
+        return center
+            .inDirection(radius, centerToRobot)
+            .withHeading(robotToCenter);
     }
 
     /**
@@ -82,30 +85,31 @@ public class CircleSurround {
      * @return the point along a circle closest to the robot. This point's
      * heading will be facing towards the center of the circle.
      */
-    public static PointXYZ closestPointBetweenAngles(PointXYZ robotPosition,
-                                                     PointXY center,
-                                                     double radius,
-                                                     Angle minimumAngle,
-                                                     Angle maximumAngle) {
-        if (robotPosition == null)
-            throw new NullPointException("Robot position may not be null!");
-        if (center == null)
-            throw new NullPointException("Center point may not be null!");
-        if (radius < 0)
-            throw new IllegalArgumentException("Radius values must be greater than 0!");
+    public static PointXYZ closestPointBetweenAngles(
+        PointXYZ robotPosition,
+        PointXY center,
+        double radius,
+        Angle minimumAngle,
+        Angle maximumAngle
+    ) {
+        if (robotPosition == null) throw new NullPointException(
+            "Robot position may not be null!"
+        );
+        if (center == null) throw new NullPointException(
+            "Center point may not be null!"
+        );
+        if (radius < 0) throw new IllegalArgumentException(
+            "Radius values must be greater than 0!"
+        );
 
         Angle centerToRobot = center
-                .angleTo(robotPosition)
-                .angleWithMinAndMax(
-                        minimumAngle,
-                        maximumAngle
-                );
+            .angleTo(robotPosition)
+            .angleWithMinAndMax(minimumAngle, maximumAngle);
         Angle robotToCenter = robotPosition.angleTo(center);
 
-        return center.inDirection(
-                radius,
-                centerToRobot
-        ).withHeading(robotToCenter);
+        return center
+            .inDirection(radius, centerToRobot)
+            .withHeading(robotToCenter);
     }
 
     /**
@@ -118,14 +122,14 @@ public class CircleSurround {
      * @return the point along a circle closest to the robot. This point's
      * heading will be the same as the robot position.
      */
-    public static PointXYZ closestPointWithoutHeading(PointXYZ robotPosition,
-                                                      PointXY center,
-                                                      double radius) {
-        return CircleSurround.closestPoint(
-                robotPosition,
-                center,
-                radius
-        ).withHeading(robotPosition.z());
+    public static PointXYZ closestPointWithoutHeading(
+        PointXYZ robotPosition,
+        PointXY center,
+        double radius
+    ) {
+        return CircleSurround
+            .closestPoint(robotPosition, center, radius)
+            .withHeading(robotPosition.z());
     }
 
     /**
@@ -138,18 +142,18 @@ public class CircleSurround {
      * @param customHeading the custom heading for the point to have.
      * @return the point along a circle closest to the robot.
      */
-    public static PointXYZ closestPointWithCustomHeading(PointXYZ robotPosition,
-                                                         PointXY center,
-                                                         double radius,
-                                                         Angle customHeading) {
-        if (customHeading == null)
-            throw new NullAngleException("Custom heading may not be null!");
+    public static PointXYZ closestPointWithCustomHeading(
+        PointXYZ robotPosition,
+        PointXY center,
+        double radius,
+        Angle customHeading
+    ) {
+        if (customHeading == null) throw new NullAngleException(
+            "Custom heading may not be null!"
+        );
 
-        return closestPoint(
-                robotPosition,
-                center,
-                radius
-        ).withHeading(customHeading);
+        return closestPoint(robotPosition, center, radius)
+            .withHeading(customHeading);
     }
 
     /**
@@ -166,23 +170,21 @@ public class CircleSurround {
      * @return a {@link LinearTrajectory} from the robot's current position to
      * the closest point along the circle.
      */
-    public static Trajectory trajectoryToClosestPoint(PointXYZ robotPosition,
-                                                      PointXY center,
-                                                      double radius,
-                                                      double speed,
-                                                      double tolerance,
-                                                      Angle angleTolerance) {
-        PointXYZ closestPoint = closestPoint(
-                robotPosition,
-                center,
-                radius
-        );
+    public static Trajectory trajectoryToClosestPoint(
+        PointXYZ robotPosition,
+        PointXY center,
+        double radius,
+        double speed,
+        double tolerance,
+        Angle angleTolerance
+    ) {
+        PointXYZ closestPoint = closestPoint(robotPosition, center, radius);
 
         return new LinearTrajectory(
-                closestPoint,
-                speed,
-                tolerance,
-                angleTolerance
+            closestPoint,
+            speed,
+            tolerance,
+            angleTolerance
         );
     }
 
@@ -201,23 +203,25 @@ public class CircleSurround {
      * @return a {@link LinearTrajectory} from the robot's current position to
      * the closest point along the circle.
      */
-    public static Trajectory trajectoryToClosestPointWithoutHeading(PointXYZ robotPosition,
-                                                                    PointXY center,
-                                                                    double radius,
-                                                                    double speed,
-                                                                    double tolerance,
-                                                                    Angle angleTolerance) {
+    public static Trajectory trajectoryToClosestPointWithoutHeading(
+        PointXYZ robotPosition,
+        PointXY center,
+        double radius,
+        double speed,
+        double tolerance,
+        Angle angleTolerance
+    ) {
         PointXYZ closestPointWithoutHeading = closestPointWithoutHeading(
-                robotPosition,
-                center,
-                radius
+            robotPosition,
+            center,
+            radius
         );
 
         return new LinearTrajectory(
-                closestPointWithoutHeading,
-                speed,
-                tolerance,
-                angleTolerance
+            closestPointWithoutHeading,
+            speed,
+            tolerance,
+            angleTolerance
         );
     }
 
@@ -236,24 +240,27 @@ public class CircleSurround {
      * @return a {@link LinearTrajectory} from the robot's current position to
      * the closest point along the circle.
      */
-    public static Trajectory trajectoryToClosestPointWithHeading(PointXYZ robotPosition,
-                                                                 PointXY center,
-                                                                 double radius,
-                                                                 double speed,
-                                                                 double tolerance,
-                                                                 Angle angleTolerance,
-                                                                 Angle customHeading) {
+    public static Trajectory trajectoryToClosestPointWithHeading(
+        PointXYZ robotPosition,
+        PointXY center,
+        double radius,
+        double speed,
+        double tolerance,
+        Angle angleTolerance,
+        Angle customHeading
+    ) {
         PointXYZ closestPointWithCustomHeading = closestPoint(
                 robotPosition,
                 center,
                 radius
-        ).withHeading(customHeading);
+            )
+            .withHeading(customHeading);
 
         return new LinearTrajectory(
-                closestPointWithCustomHeading,
-                speed,
-                tolerance,
-                angleTolerance
+            closestPointWithCustomHeading,
+            speed,
+            tolerance,
+            angleTolerance
         );
     }
 
@@ -267,21 +274,15 @@ public class CircleSurround {
      * @param speed         the speed at which the trajectory should operate at.
      * @return a {@link FastTrajectory}.
      */
-    public static Trajectory fastTrajectoryToClosestPoint(PointXYZ robotPosition,
-                                                          PointXY center,
-                                                          double radius,
-                                                          double speed) {
-        PointXYZ closestPoint = closestPoint(
-                robotPosition,
-                center,
-                radius
-        );
+    public static Trajectory fastTrajectoryToClosestPoint(
+        PointXYZ robotPosition,
+        PointXY center,
+        double radius,
+        double speed
+    ) {
+        PointXYZ closestPoint = closestPoint(robotPosition, center, radius);
 
-        return new FastTrajectory(
-                robotPosition,
-                closestPoint,
-                speed
-        );
+        return new FastTrajectory(robotPosition, closestPoint, speed);
     }
 
     /**
@@ -294,20 +295,22 @@ public class CircleSurround {
      * @param speed         the speed at which the trajectory should operate at.
      * @return a {@link FastTrajectory}.
      */
-    public static Trajectory fastTrajectoryToClosestPointWithoutHeading(PointXYZ robotPosition,
-                                                                        PointXY center,
-                                                                        double radius,
-                                                                        double speed) {
+    public static Trajectory fastTrajectoryToClosestPointWithoutHeading(
+        PointXYZ robotPosition,
+        PointXY center,
+        double radius,
+        double speed
+    ) {
         PointXYZ closestPointWithoutHeading = closestPointWithoutHeading(
-                robotPosition,
-                center,
-                radius
+            robotPosition,
+            center,
+            radius
         );
 
         return new FastTrajectory(
-                robotPosition,
-                closestPointWithoutHeading,
-                speed
+            robotPosition,
+            closestPointWithoutHeading,
+            speed
         );
     }
 
@@ -322,21 +325,24 @@ public class CircleSurround {
      * @param customHeading the heading the robot should face.
      * @return a {@link FastTrajectory}.
      */
-    public static Trajectory fastTrajectoryToClosestPointWithHeading(PointXYZ robotPosition,
-                                                                     PointXY center,
-                                                                     double radius,
-                                                                     double speed,
-                                                                     Angle customHeading) {
+    public static Trajectory fastTrajectoryToClosestPointWithHeading(
+        PointXYZ robotPosition,
+        PointXY center,
+        double radius,
+        double speed,
+        Angle customHeading
+    ) {
         PointXYZ closestPointWithCustomHeading = closestPoint(
                 robotPosition,
                 center,
                 radius
-        ).withHeading(customHeading);
+            )
+            .withHeading(customHeading);
 
         return new FastTrajectory(
-                robotPosition,
-                closestPointWithCustomHeading,
-                radius
+            robotPosition,
+            closestPointWithCustomHeading,
+            radius
         );
     }
 }

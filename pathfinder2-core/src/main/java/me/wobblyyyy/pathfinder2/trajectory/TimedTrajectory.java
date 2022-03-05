@@ -55,10 +55,12 @@ public class TimedTrajectory implements Trajectory {
      *                       having a lower turn multiplier means your robot
      *                       will attempt to turn more slowly.
      */
-    public TimedTrajectory(Translation translation,
-                           double timeoutMs,
-                           double speed,
-                           double turnMultiplier) {
+    public TimedTrajectory(
+        Translation translation,
+        double timeoutMs,
+        double speed,
+        double turnMultiplier
+    ) {
         this.translation = translation;
         this.timeoutMs = timeoutMs;
         this.speed = speed;
@@ -83,16 +85,12 @@ public class TimedTrajectory implements Trajectory {
         // go forward for 10 seconds - matt
         // right foot right stomp - alec
 
-        return current.inDirection(
+        return current
+            .inDirection(
                 speed,
-                current.z().add(Angle.atan2(
-                        translation.vy(),
-                        translation.vx()
-                ))
-        ).rotate(
-                current,
-                Angle.fixedRad(translation.vz() * turnMultiplier)
-        );
+                current.z().add(Angle.atan2(translation.vy(), translation.vx()))
+            )
+            .rotate(current, Angle.fixedRad(translation.vz() * turnMultiplier));
     }
 
     @Override

@@ -44,17 +44,15 @@ public class Triangle implements Shape<Triangle> {
      * @param b one of the triangle's vertices.
      * @param c one of the triangle's vertices.
      */
-    public Triangle(PointXY a,
-                    PointXY b,
-                    PointXY c) {
+    public Triangle(PointXY a, PointXY b, PointXY c) {
         PointXY.checkArgument(a);
         PointXY.checkArgument(b);
         PointXY.checkArgument(c);
 
         if (PointXY.areDuplicatesPresent(a, b, c)) {
             throw new IllegalArgumentException(
-                    "Cannot create a triangle with duplicate points! All three " +
-                            "of the triangle's points must be unique."
+                "Cannot create a triangle with duplicate points! All three " +
+                "of the triangle's points must be unique."
             );
         }
 
@@ -79,9 +77,7 @@ public class Triangle implements Shape<Triangle> {
      * @return the triangle's "centroid." If there is an issue computing the
      * centroid (which shouldn't ever happen) return null.
      */
-    public static PointXY getCentroid(Line ab,
-                                      Line bc,
-                                      Line ca) {
+    public static PointXY getCentroid(Line ab, Line bc, Line ca) {
         /*
          * https://tutors.com/math-tutors/geometry-help/how-to-find-centroid-of-a-triangle-definition-formula
          * ^ very simple explanation of what's going on ^
@@ -118,18 +114,14 @@ public class Triangle implements Shape<Triangle> {
         // if any of the intersections are null (meaning there's no
         // intersection) return null - this shouldn't ever happen!
         if (
-                intersection1_2 == null ||
-                        intersection2_3 == null ||
-                        intersection3_1 == null
+            intersection1_2 == null ||
+            intersection2_3 == null ||
+            intersection3_1 == null
         ) {
             return null;
         }
 
-        return Average.of(
-                intersection1_2,
-                intersection2_3,
-                intersection3_1
-        );
+        return Average.of(intersection1_2, intersection2_3, intersection3_1);
     }
 
     /**
@@ -148,10 +140,10 @@ public class Triangle implements Shape<Triangle> {
         PointXY caClosest = ca.getClosestPoint(reference);
 
         return PointXY.getClosestPoint(
-                reference,
-                abClosest,
-                bcClosest,
-                caClosest
+            reference,
+            abClosest,
+            bcClosest,
+            caClosest
         );
     }
 
@@ -169,19 +161,14 @@ public class Triangle implements Shape<Triangle> {
         }
 
         Line line = new Line(
-                reference,
-                reference.inDirection(
-                        ab.length() + bc.length() + ca.length(),
-                        reference.angleTo(target)
-                )
+            reference,
+            reference.inDirection(
+                ab.length() + bc.length() + ca.length(),
+                reference.angleTo(target)
+            )
         );
 
-        return Shape.doesIntersectOdd(
-                line,
-                ab,
-                bc,
-                ca
-        );
+        return Shape.doesIntersectOdd(line, ab, bc, ca);
     }
 
     /**
@@ -211,30 +198,21 @@ public class Triangle implements Shape<Triangle> {
         PointXY rotatedB = b.rotate(centerOfRotation, rotation);
         PointXY rotatedC = c.rotate(centerOfRotation, rotation);
 
-        return new Triangle(
-                rotatedA,
-                rotatedB,
-                rotatedC
-        );
+        return new Triangle(rotatedA, rotatedB, rotatedC);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Triangle shift(double shiftX,
-                          double shiftY) {
+    public Triangle shift(double shiftX, double shiftY) {
         PointXY shift = new PointXY(shiftX, shiftY);
 
         PointXY adjustedA = a.add(shift);
         PointXY adjustedB = a.add(shift);
         PointXY adjustedC = a.add(shift);
 
-        return new Triangle(
-                adjustedA,
-                adjustedB,
-                adjustedC
-        );
+        return new Triangle(adjustedA, adjustedB, adjustedC);
     }
 
     @Override
@@ -245,26 +223,18 @@ public class Triangle implements Shape<Triangle> {
         return shift(dx, dy);
     }
 
-    private PointXY redrawPoint(PointXY point,
-                                double scale) {
+    private PointXY redrawPoint(PointXY point, double scale) {
         Angle fromCenter = center.angleTo(point);
         double originalDistance = center.distance(point);
 
-        return center.inDirection(
-                scale * originalDistance,
-                fromCenter
-        );
+        return center.inDirection(scale * originalDistance, fromCenter);
     }
 
-    private PointXY addDistance(PointXY point,
-                                double distance) {
+    private PointXY addDistance(PointXY point, double distance) {
         Angle fromCenter = center.angleTo(point);
         double originalDistance = center.distance(point);
 
-        return center.inDirection(
-                originalDistance + distance,
-                fromCenter
-        );
+        return center.inDirection(originalDistance + distance, fromCenter);
     }
 
     @Override

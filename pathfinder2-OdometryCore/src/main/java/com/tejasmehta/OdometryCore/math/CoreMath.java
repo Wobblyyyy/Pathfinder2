@@ -40,7 +40,11 @@ public class CoreMath {
      * @param diameter - The encoder wheel's diameter
      * @return - The inch measurement of the given ticks
      */
-    public static double ticksToInches(double ticks, double cpr, double diameter) {
+    public static double ticksToInches(
+        double ticks,
+        double cpr,
+        double diameter
+    ) {
         return ticks * (Math.PI * diameter) / cpr;
     }
 
@@ -54,8 +58,14 @@ public class CoreMath {
      * @param rightOffset - The horizontal offset of the right odometry wheel from the robot's center (in inches)
      * @return - The radian value of the current heading
      */
-    public static double getHeading(double leftChange, double rightChange, double leftOffset, double rightOffset) {
-        double angleRads = (rightChange - leftChange) / (leftOffset + rightOffset);
+    public static double getHeading(
+        double leftChange,
+        double rightChange,
+        double leftOffset,
+        double rightOffset
+    ) {
+        double angleRads =
+            (rightChange - leftChange) / (leftOffset + rightOffset);
         double normalized = angleRads % (2 * Math.PI);
         if (normalized < 0) {
             normalized += 2 * Math.PI;
@@ -71,7 +81,10 @@ public class CoreMath {
      * @param headingChange   - The change in heading from the previous heading to the current one (in radians)
      * @return - The average heading to rotate the local vector by (in radians)
      */
-    public static double getAverageHeading(double previousHeading, double headingChange) {
+    public static double getAverageHeading(
+        double previousHeading,
+        double headingChange
+    ) {
         return previousHeading + headingChange / 2.0;
     }
 
@@ -84,9 +97,17 @@ public class CoreMath {
      * @param headingChange   - The change in the heading from the previous measurement (in radians)
      * @return - The raw x coordinate (in inches) of the robot without the conversion to the local coordinate plane (relative to the robot)
      */
-    public static double getRawXCoordinate(double frontBackChange, double frontBackOffset, double headingChange) {
+    public static double getRawXCoordinate(
+        double frontBackChange,
+        double frontBackOffset,
+        double headingChange
+    ) {
         if (headingChange == 0) return frontBackChange;
-        return 2 * Math.sin(headingChange / 2) * (frontBackChange / headingChange + frontBackOffset);
+        return (
+            2 *
+            Math.sin(headingChange / 2) *
+            (frontBackChange / headingChange + frontBackOffset)
+        );
     }
 
     /**
@@ -100,8 +121,28 @@ public class CoreMath {
      * @param headingChange - The change in the heading from the previous measurement (in radians)
      * @return - The average of the results of both the `getRawYCoordinateWithRightOnly()` and `getRawYCoordinateWithLeftOnly()` methods (in inches)
      */
-    public static double getRawYCoordinate(double leftChange, double rightChange, double leftOffset, double rightOffset, double headingChange) {
-        return (getRawYCoordinateWithRightOnly(rightChange, rightOffset, headingChange) + getRawYCoordinateWithLeftOnly(leftChange, leftOffset, headingChange)) / 2;
+    public static double getRawYCoordinate(
+        double leftChange,
+        double rightChange,
+        double leftOffset,
+        double rightOffset,
+        double headingChange
+    ) {
+        return (
+            (
+                getRawYCoordinateWithRightOnly(
+                    rightChange,
+                    rightOffset,
+                    headingChange
+                ) +
+                getRawYCoordinateWithLeftOnly(
+                    leftChange,
+                    leftOffset,
+                    headingChange
+                )
+            ) /
+            2
+        );
     }
 
     /**
@@ -113,9 +154,17 @@ public class CoreMath {
      * @param headingChange - The change in heading from the previous measurement (in radians)
      * @return - The raw y coordinate (in inches) of the robot without conversion to the local coordinate plane (relative to the robot)
      */
-    public static double getRawYCoordinateWithRightOnly(double rightChange, double rightOffset, double headingChange) {
+    public static double getRawYCoordinateWithRightOnly(
+        double rightChange,
+        double rightOffset,
+        double headingChange
+    ) {
         if (headingChange == 0) return rightChange;
-        return 2 * Math.sin(headingChange / 2) * (rightChange / headingChange + rightOffset);
+        return (
+            2 *
+            Math.sin(headingChange / 2) *
+            (rightChange / headingChange + rightOffset)
+        );
     }
 
     /**
@@ -127,9 +176,17 @@ public class CoreMath {
      * @param headingChange - The change in heading from the previous measurement (in radians)
      * @return - The raw y coordinate (in inches) of the robot without conversion to the local coordinate plane (relative to the robot)
      */
-    public static double getRawYCoordinateWithLeftOnly(double leftChange, double leftOffset, double headingChange) {
+    public static double getRawYCoordinateWithLeftOnly(
+        double leftChange,
+        double leftOffset,
+        double headingChange
+    ) {
         if (headingChange == 0) return leftChange;
-        return 2 * Math.sin(headingChange / 2) * (leftChange / headingChange - leftOffset);
+        return (
+            2 *
+            Math.sin(headingChange / 2) *
+            (leftChange / headingChange - leftOffset)
+        );
     }
 
     /**
@@ -144,10 +201,32 @@ public class CoreMath {
      * @param frontBackOffset - The horizontal offset of the front/back odometry wheel from the robot's center (in inches)
      * @return - The Polar coordinate that coincides with the robot's relative coordinate
      */
-    public static PolarCoordinate getPolarCoordinate(double leftChange, double rightChange, double frontBackChange, double leftOffset, double rightOffset, double frontBackOffset) {
-        double heading = getHeading(leftChange, rightChange, leftOffset, rightOffset);
-        double rawXCoordinate = getRawXCoordinate(frontBackChange, frontBackOffset, heading);
-        double rawYCoordinate = getRawYCoordinate(leftChange, rightChange, leftOffset, rightOffset, heading);
+    public static PolarCoordinate getPolarCoordinate(
+        double leftChange,
+        double rightChange,
+        double frontBackChange,
+        double leftOffset,
+        double rightOffset,
+        double frontBackOffset
+    ) {
+        double heading = getHeading(
+            leftChange,
+            rightChange,
+            leftOffset,
+            rightOffset
+        );
+        double rawXCoordinate = getRawXCoordinate(
+            frontBackChange,
+            frontBackOffset,
+            heading
+        );
+        double rawYCoordinate = getRawYCoordinate(
+            leftChange,
+            rightChange,
+            leftOffset,
+            rightOffset,
+            heading
+        );
         double rawMovement = rightChange / heading + rightOffset;
         return getPolarCoordinate(rawXCoordinate, rawYCoordinate);
     }
@@ -159,8 +238,13 @@ public class CoreMath {
      * @param rawYCoordinate - The raw y coordinate that is still relative to the robot's position and not the local coordinate plane
      * @return - The polar coordinate that is equivalent to the raw cartesian coordinates given
      */
-    public static PolarCoordinate getPolarCoordinate(double rawXCoordinate, double rawYCoordinate) {
-        return PolarCoordinate.fromCartesian(new CartesianCoordinate(rawXCoordinate, rawYCoordinate));
+    public static PolarCoordinate getPolarCoordinate(
+        double rawXCoordinate,
+        double rawYCoordinate
+    ) {
+        return PolarCoordinate.fromCartesian(
+            new CartesianCoordinate(rawXCoordinate, rawYCoordinate)
+        );
     }
 
     /**
@@ -178,15 +262,36 @@ public class CoreMath {
      * @param frontBackOffset           - The horizontal offset of the front/back odometry wheel from the robot's center (in inches)
      * @return - The converted Cartesian Coordinate on the local plane of the field
      */
-    public static CartesianCoordinate getConvertedCoordinate(double currentLeftPosition, double currentRightPosition, double currentFrontBackPosition, double previousLeftPosition, double previousRightPosition, double previousFrontBackPosition, double leftOffset, double rightOffset, double frontBackOffset) {
+    public static CartesianCoordinate getConvertedCoordinate(
+        double currentLeftPosition,
+        double currentRightPosition,
+        double currentFrontBackPosition,
+        double previousLeftPosition,
+        double previousRightPosition,
+        double previousFrontBackPosition,
+        double leftOffset,
+        double rightOffset,
+        double frontBackOffset
+    ) {
         double leftChange = currentLeftPosition - previousLeftPosition;
         double rightChange = currentRightPosition - previousRightPosition;
-        double frontBackChange = currentFrontBackPosition - previousFrontBackPosition;
-        PolarCoordinate relativePolarCoordinate = getPolarCoordinate(leftChange, rightChange, frontBackChange, leftOffset, rightOffset, frontBackOffset);
+        double frontBackChange =
+            currentFrontBackPosition - previousFrontBackPosition;
+        PolarCoordinate relativePolarCoordinate = getPolarCoordinate(
+            leftChange,
+            rightChange,
+            frontBackChange,
+            leftOffset,
+            rightOffset,
+            frontBackOffset
+        );
         double xVal = currentFrontBackPosition;
         double yVal = (currentLeftPosition + currentRightPosition) / 2;
         double tanVal = xVal == 0 ? 0 : yVal / xVal;
-        return getConvertedCoordinate(relativePolarCoordinate, Math.atan(tanVal));
+        return getConvertedCoordinate(
+            relativePolarCoordinate,
+            Math.atan(tanVal)
+        );
     }
 
     /**
@@ -201,11 +306,32 @@ public class CoreMath {
      * @param frontBackOffset - The vertical offset of the front/back odometry wheel from the robot's center (in inches)
      * @return - The converted Cartesian Coordinate on the local plane of the field
      */
-    public static CartesianCoordinate getConvertedCoordinate(double leftChange, double rightChange, double frontBackChange, double leftOffset, double rightOffset, double frontBackOffset) {
-        PolarCoordinate relativePolarCoordinate = getPolarCoordinate(leftChange, rightChange, frontBackChange, leftOffset, rightOffset, frontBackOffset);
-        double tanVal = frontBackChange == 0 ? 0 : ((leftChange + rightChange) / 2) / frontBackChange;
-        CartesianCoordinate relativeCartesian = CartesianCoordinate.fromPolar(relativePolarCoordinate);
-        double newAngle = Math.atan2(relativeCartesian.getY(), relativeCartesian.getX());
+    public static CartesianCoordinate getConvertedCoordinate(
+        double leftChange,
+        double rightChange,
+        double frontBackChange,
+        double leftOffset,
+        double rightOffset,
+        double frontBackOffset
+    ) {
+        PolarCoordinate relativePolarCoordinate = getPolarCoordinate(
+            leftChange,
+            rightChange,
+            frontBackChange,
+            leftOffset,
+            rightOffset,
+            frontBackOffset
+        );
+        double tanVal = frontBackChange == 0
+            ? 0
+            : ((leftChange + rightChange) / 2) / frontBackChange;
+        CartesianCoordinate relativeCartesian = CartesianCoordinate.fromPolar(
+            relativePolarCoordinate
+        );
+        double newAngle = Math.atan2(
+            relativeCartesian.getY(),
+            relativeCartesian.getX()
+        );
         return getConvertedCoordinate(relativePolarCoordinate, newAngle);
     }
 
@@ -223,15 +349,44 @@ public class CoreMath {
      * @param previousHeading - The robot's previous heading (in radians)
      * @return - An OdometryPosition with the robot's global vector (to be added to the previous one) and the robot's absolute heading
      */
-    public static OdometryPosition getOdometryPosition(double leftChange, double rightChange, double frontBackChange, double leftOffset, double rightOffset, double frontBackOffset, double previousHeading) {
+    public static OdometryPosition getOdometryPosition(
+        double leftChange,
+        double rightChange,
+        double frontBackChange,
+        double leftOffset,
+        double rightOffset,
+        double frontBackOffset,
+        double previousHeading
+    ) {
         double yLength = (leftChange + rightChange) / 2.0;
-        double headingChange = getHeading(leftChange, rightChange, leftOffset, rightOffset);
-//        if (Math.floor(leftChange/10) == Math.floor(-1 * rightChange/10)) frontBackChange = 0;
-        frontBackChange = frontBackChange - headingChange * (2 * frontBackOffset * Math.PI * 0.25) / (Math.PI / 2);
-        double averageHeading = getAverageHeading(previousHeading, headingChange);
-        CartesianCoordinate rotatedX = CartesianCoordinate.fromPolar(new PolarCoordinate(frontBackChange, averageHeading));
-        CartesianCoordinate rotatedY = CartesianCoordinate.fromPolar(new PolarCoordinate(yLength, averageHeading));
-        return new OdometryPosition(-rotatedX.getX() - rotatedY.getY(), -rotatedX.getY() + rotatedY.getX(), CoreMath.simplifyRadians(previousHeading + averageHeading), HeadingUnit.RADIANS);
+        double headingChange = getHeading(
+            leftChange,
+            rightChange,
+            leftOffset,
+            rightOffset
+        );
+        //        if (Math.floor(leftChange/10) == Math.floor(-1 * rightChange/10)) frontBackChange = 0;
+        frontBackChange =
+            frontBackChange -
+            headingChange *
+            (2 * frontBackOffset * Math.PI * 0.25) /
+            (Math.PI / 2);
+        double averageHeading = getAverageHeading(
+            previousHeading,
+            headingChange
+        );
+        CartesianCoordinate rotatedX = CartesianCoordinate.fromPolar(
+            new PolarCoordinate(frontBackChange, averageHeading)
+        );
+        CartesianCoordinate rotatedY = CartesianCoordinate.fromPolar(
+            new PolarCoordinate(yLength, averageHeading)
+        );
+        return new OdometryPosition(
+            -rotatedX.getX() - rotatedY.getY(),
+            -rotatedX.getY() + rotatedY.getX(),
+            CoreMath.simplifyRadians(previousHeading + averageHeading),
+            HeadingUnit.RADIANS
+        );
     }
 
     /**
@@ -241,8 +396,15 @@ public class CoreMath {
      * @param absoluteHeading - The absolute heading of the robot (in radians)
      * @return - The converted Cartesian Coordinate on the local plane of the field
      */
-    public static CartesianCoordinate getConvertedCoordinate(PolarCoordinate polarCoordinate, double absoluteHeading) {
-        return CartesianCoordinate.fromPolar(new PolarCoordinate(polarCoordinate.getR(), absoluteHeading + Math.PI / 2));
+    public static CartesianCoordinate getConvertedCoordinate(
+        PolarCoordinate polarCoordinate,
+        double absoluteHeading
+    ) {
+        return CartesianCoordinate.fromPolar(
+            new PolarCoordinate(
+                polarCoordinate.getR(),
+                absoluteHeading + Math.PI / 2
+            )
+        );
     }
-
 }

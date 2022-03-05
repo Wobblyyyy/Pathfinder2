@@ -56,8 +56,7 @@ public class ModularModifier<T> implements Modifier<T> {
 
     @Override
     public T apply(T t) {
-        for (Modifier<T> modifier : modifiers)
-            t = modifier.apply(t);
+        for (Modifier<T> modifier : modifiers) t = modifier.apply(t);
 
         return t;
     }

@@ -16,6 +16,7 @@ package me.wobblyyyy.pathfinder2.geometry;
  * @since 1.3.0
  */
 public class Radians extends Angle {
+
     public Radians(double radians) {
         super(Math.toDegrees(radians));
     }

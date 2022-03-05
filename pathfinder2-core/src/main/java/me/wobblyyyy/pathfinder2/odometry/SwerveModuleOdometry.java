@@ -10,17 +10,18 @@
 
 package me.wobblyyyy.pathfinder2.odometry;
 
+import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.kinematics.SwerveModuleState;
-
-import java.util.function.Supplier;
 
 public class SwerveModuleOdometry {
     private final Supplier<Double> getSpeed;
     private final Supplier<Angle> getAngle;
 
-    public SwerveModuleOdometry(Supplier<Double> getSpeed,
-                                Supplier<Angle> getAngle) {
+    public SwerveModuleOdometry(
+        Supplier<Double> getSpeed,
+        Supplier<Angle> getAngle
+    ) {
         this.getSpeed = getSpeed;
         this.getAngle = getAngle;
     }
@@ -34,9 +35,6 @@ public class SwerveModuleOdometry {
     }
 
     public SwerveModuleState getState() {
-        return new SwerveModuleState(
-                getSpeed(),
-                getAngle()
-        );
+        return new SwerveModuleState(getSpeed(), getAngle());
     }
 }

@@ -10,11 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.pathgen;
 
-import me.wobblyyyy.pathfinder2.geometry.Line;
-import me.wobblyyyy.pathfinder2.geometry.PointXY;
-
 import java.util.ArrayList;
 import java.util.List;
+import me.wobblyyyy.pathfinder2.geometry.Line;
+import me.wobblyyyy.pathfinder2.geometry.PointXY;
 
 /**
  * Utilities used for optimizing paths.
@@ -23,6 +22,7 @@ import java.util.List;
  * @since 0.1.0
  */
 public class PathOptimizer {
+
     /**
      * Determine the length of a set of points/path.
      *
@@ -90,7 +90,9 @@ public class PathOptimizer {
 
         // make sure the optimized path includes the start and end points
         if (!optimized.get(0).equals(start)) optimized.add(0, start);
-        if (!optimized.get(optimized.size() - 1).equals(end)) optimized.add(end);
+        if (!optimized.get(optimized.size() - 1).equals(end)) optimized.add(
+            end
+        );
 
         // edge case - if the path is entirely linear, return a 2-point
         // path

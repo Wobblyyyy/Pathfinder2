@@ -10,12 +10,11 @@
 
 package me.wobblyyyy.pathfinder2.listening;
 
-import me.wobblyyyy.pathfinder2.Pathfinder;
-import me.wobblyyyy.pathfinder2.time.Time;
-
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.time.Time;
 
 /**
  * Responsible for listening for a condition and executing some functionality
@@ -114,15 +113,12 @@ public class Listener implements Tickable {
      *                      being "true" is by having all of the suppliers
      *                      provided in this parameter also return true.
      */
-    public Listener(ListenerMode mode,
-                    Runnable whenTriggered,
-                    Supplier<Boolean>... input) {
-        this(
-                0,
-                mode,
-                whenTriggered,
-                input
-        );
+    public Listener(
+        ListenerMode mode,
+        Runnable whenTriggered,
+        Supplier<Boolean>... input
+    ) {
+        this(0, mode, whenTriggered, input);
     }
 
     /**
@@ -147,10 +143,12 @@ public class Listener implements Tickable {
      *                      being "true" is by having all of the suppliers
      *                      provided in this parameter also return true.
      */
-    public Listener(int priority,
-                    ListenerMode mode,
-                    Runnable whenTriggered,
-                    Supplier<Boolean>... input) {
+    public Listener(
+        int priority,
+        ListenerMode mode,
+        Runnable whenTriggered,
+        Supplier<Boolean>... input
+    ) {
         this.priority = priority;
         this.mode = mode;
         this.whenTriggered = whenTriggered;
@@ -172,71 +170,85 @@ public class Listener implements Tickable {
         this.lastExecMs = listener.lastExecMs;
     }
 
-    public static Listener withOneInput(int priority,
-                                        ListenerMode mode,
-                                        Runnable whenTriggered,
-                                        Supplier<Boolean> input) {
+    public static Listener withOneInput(
+        int priority,
+        ListenerMode mode,
+        Runnable whenTriggered,
+        Supplier<Boolean> input
+    ) {
         return new Listener(priority, mode, whenTriggered, input);
     }
 
-    public static Listener buttonHeld(Supplier<Boolean> input,
-                                      Runnable whenTriggered) {
+    public static Listener buttonHeld(
+        Supplier<Boolean> input,
+        Runnable whenTriggered
+    ) {
         return withOneInput(
-                0,
-                ListenerMode.CONDITION_IS_MET,
-                whenTriggered,
-                input
+            0,
+            ListenerMode.CONDITION_IS_MET,
+            whenTriggered,
+            input
         );
     }
 
-    public static Listener buttonPressed(Supplier<Boolean> input,
-                                         Runnable whenTriggered) {
+    public static Listener buttonPressed(
+        Supplier<Boolean> input,
+        Runnable whenTriggered
+    ) {
         return withOneInput(
-                0,
-                ListenerMode.CONDITION_NEWLY_MET,
-                whenTriggered,
-                input
+            0,
+            ListenerMode.CONDITION_NEWLY_MET,
+            whenTriggered,
+            input
         );
     }
 
-    public static Listener buttonReleased(Supplier<Boolean> input,
-                                          Runnable whenTriggered) {
+    public static Listener buttonReleased(
+        Supplier<Boolean> input,
+        Runnable whenTriggered
+    ) {
         return withOneInput(
-                0,
-                ListenerMode.CONDITION_NEWLY_NOT_MET,
-                whenTriggered,
-                input
+            0,
+            ListenerMode.CONDITION_NEWLY_NOT_MET,
+            whenTriggered,
+            input
         );
     }
 
-    public static Listener joystick(Supplier<Double> x,
-                                    Consumer<Double> whenTriggered) {
+    public static Listener joystick(
+        Supplier<Double> x,
+        Consumer<Double> whenTriggered
+    ) {
         return withOneInput(
-                0,
-                ListenerMode.CONDITION_IS_MET,
-                () -> whenTriggered.accept(x.get()),
-                () -> x.get() != 0.0
+            0,
+            ListenerMode.CONDITION_IS_MET,
+            () -> whenTriggered.accept(x.get()),
+            () -> x.get() != 0.0
         );
     }
 
-    public static Listener trigger(Supplier<Double> triggerPos,
-                                   Consumer<Double> whenTriggered) {
+    public static Listener trigger(
+        Supplier<Double> triggerPos,
+        Consumer<Double> whenTriggered
+    ) {
         return withOneInput(
-                0,
-                ListenerMode.CONDITION_IS_MET,
-                () -> whenTriggered.accept(triggerPos.get()),
-                () -> triggerPos.get() > 0.0
+            0,
+            ListenerMode.CONDITION_IS_MET,
+            () -> whenTriggered.accept(triggerPos.get()),
+            () -> triggerPos.get() > 0.0
         );
     }
 
-    public static Listener joystick(Supplier<Double> x,
-                                    Supplier<Double> y,
-                                    BiConsumer<Double, Double> whenTriggered) {
+    public static Listener joystick(
+        Supplier<Double> x,
+        Supplier<Double> y,
+        BiConsumer<Double, Double> whenTriggered
+    ) {
         return withOneInput(
-                0,
-                ListenerMode.CONDITION_IS_MET,
-                () -> whenTriggered.accept(x.get(), y.get()),
-                () -> x.get() != 0.0
+            0,
+            ListenerMode.CONDITION_IS_MET,
+            () -> whenTriggered.accept(x.get(), y.get()),
+            () -> x.get() != 0.0
         );
     }
 
@@ -251,8 +263,7 @@ public class Listener implements Tickable {
     }
 
     public boolean hasExpired() {
-        return Time.ms() > expiration
-                || executions > maximumExecutions;
+        return Time.ms() > expiration || executions > maximumExecutions;
     }
 
     public int getPriority() {
@@ -289,7 +300,6 @@ public class Listener implements Tickable {
         return this;
     }
 
-
     @Override
     public boolean tick(Pathfinder pathfinder) {
         if (executions++ > maximumExecutions) return false;
@@ -300,11 +310,10 @@ public class Listener implements Tickable {
 
         boolean input = true;
 
-        for (Supplier<Boolean> supplier : this.input)
-            if (!supplier.get()) {
-                input = false;
-                break;
-            }
+        for (Supplier<Boolean> supplier : this.input) if (!supplier.get()) {
+            input = false;
+            break;
+        }
 
         switch (mode) {
             case CONDITION_IS_MET:
@@ -320,7 +329,9 @@ public class Listener implements Tickable {
                 if (previousInput && !input) whenTriggered.run();
                 break;
             case CONDITION_NEWLY_CHANGED:
-                if ((!previousInput && input) || (previousInput && !input)) whenTriggered.run();
+                if (
+                    (!previousInput && input) || (previousInput && !input)
+                ) whenTriggered.run();
                 break;
             case CONDITION_NEVER_MET:
                 if (hasBeenMet) setExpiration(0);
@@ -334,11 +345,9 @@ public class Listener implements Tickable {
 
         previousInput = input;
 
-        if (!hasBeenMet)
-            hasBeenMet = true;
+        if (!hasBeenMet) hasBeenMet = true;
 
-        if (!hasBeenNotMet)
-            hasBeenNotMet = true;
+        if (!hasBeenNotMet) hasBeenNotMet = true;
 
         return true;
     }

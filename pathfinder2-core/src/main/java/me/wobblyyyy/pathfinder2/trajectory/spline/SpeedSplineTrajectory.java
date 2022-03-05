@@ -25,12 +25,13 @@ import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 public class SpeedSplineTrajectory extends LinearTrajectory {
     private final Spline speedSpline;
 
-    public SpeedSplineTrajectory(PointXYZ target,
-                                 double tolerance,
-                                 Angle angleTolerance,
-                                 Spline speedSpline) {
+    public SpeedSplineTrajectory(
+        PointXYZ target,
+        double tolerance,
+        Angle angleTolerance,
+        Spline speedSpline
+    ) {
         super(target, 0.5, tolerance, angleTolerance);
-
         this.speedSpline = speedSpline;
     }
 

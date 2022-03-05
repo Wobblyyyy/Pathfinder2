@@ -14,11 +14,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import java.util.function.Function;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.wpilib.WPIAdapter;
-
-import java.util.function.Function;
 
 /**
  * wpilib-specific swerve chassis implementation based on
@@ -33,7 +32,7 @@ public class WPISwerveChassis implements Drive {
     private final SwerveDriveKinematics kinematics;
     private final WPISwerveModule[] modules;
     private Translation translation;
-    private Function<Translation, Translation> modifier = (t) -> t;
+    private Function<Translation, Translation> modifier = t -> t;
 
     /**
      * Create a new {@code WPISwerveChassis}.
@@ -48,8 +47,8 @@ public class WPISwerveChassis implements Drive {
     public WPISwerveChassis(WPISwerveModule... modules) {
         Translation2d[] modulePositions = new Translation2d[modules.length];
 
-        for (int i = 0; i < modules.length; i++)
-            modulePositions[i] = modules[i].getModulePosition();
+        for (int i = 0; i < modules.length; i++) modulePositions[i] =
+            modules[i].getModulePosition();
 
         this.kinematics = new SwerveDriveKinematics(modulePositions);
         this.modules = modules;
@@ -66,8 +65,7 @@ public class WPISwerveChassis implements Drive {
     public void drive(ChassisSpeeds speeds) {
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
 
-        for (int i = 0; i < modules.length; i++)
-            modules[i].setState(states[i]);
+        for (int i = 0; i < modules.length; i++) modules[i].setState(states[i]);
     }
 
     @Override
@@ -96,8 +94,7 @@ public class WPISwerveChassis implements Drive {
     public int hashCode() {
         int sum = 0;
 
-        for (WPISwerveModule module : modules)
-            sum += module.hashCode();
+        for (WPISwerveModule module : modules) sum += module.hashCode();
 
         return sum;
     }
@@ -111,11 +108,12 @@ public class WPISwerveChassis implements Drive {
 
             boolean valid = true;
 
-            for (int i = 0; i < modules.length; i++)
-                if (!modules[i].equals(c.modules[i])) {
-                    valid = false;
-                    break;
-                }
+            for (int i = 0; i < modules.length; i++) if (
+                !modules[i].equals(c.modules[i])
+            ) {
+                valid = false;
+                break;
+            }
 
             return valid;
         }

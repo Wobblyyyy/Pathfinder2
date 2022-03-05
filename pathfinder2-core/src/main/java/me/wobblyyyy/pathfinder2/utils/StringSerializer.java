@@ -23,44 +23,39 @@ import me.wobblyyyy.pathfinder2.geometry.Translation;
  * @since 0.10.7
  */
 public class StringSerializer {
-    private StringSerializer() {
 
-    }
+    private StringSerializer() {}
 
-    private static double[] deserialize(String string,
-                                        int expectedValues) {
+    private static double[] deserialize(String string, int expectedValues) {
         String[] split = string.split(",");
         double[] values = new double[split.length];
 
-        for (int i = 0; i < split.length; i++)
-            values[i] = Double.parseDouble(split[i]);
+        for (int i = 0; i < split.length; i++) values[i] =
+            Double.parseDouble(split[i]);
 
-        if (values.length != expectedValues)
-            throw new IllegalArgumentException(
-                    String.format(
-                            "Tried to deserialize string, expected %s " +
-                                    "values but found %s",
-                            expectedValues,
-                            values.length
-                    )
-            );
+        if (values.length != expectedValues) throw new IllegalArgumentException(
+            String.format(
+                "Tried to deserialize string, expected %s " +
+                "values but found %s",
+                expectedValues,
+                values.length
+            )
+        );
 
         return values;
     }
 
     private static String fastFormat(double... values) {
-        if (values.length == 0)
-            throw new IllegalArgumentException(
-                    "Cannot format a string with 0 values!"
-            );
+        if (values.length == 0) throw new IllegalArgumentException(
+            "Cannot format a string with 0 values!"
+        );
 
         StringBuilder builder = new StringBuilder(50);
 
         for (int i = 0; i < values.length; i++) {
             builder.append(values[i]);
 
-            if (i != values.length - 1)
-                builder.append(',');
+            if (i != values.length - 1) builder.append(',');
         }
 
         return builder.toString();

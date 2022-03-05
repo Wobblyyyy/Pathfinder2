@@ -10,14 +10,13 @@
 
 package me.wobblyyyy.pathfinder2.zones;
 
-import me.wobblyyyy.pathfinder2.Pathfinder;
-import me.wobblyyyy.pathfinder2.geometry.PointXY;
-import me.wobblyyyy.pathfinder2.plugin.PathfinderPluginManager;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.geometry.PointXY;
+import me.wobblyyyy.pathfinder2.plugin.PathfinderPluginManager;
 
 /**
  * A {@code ZoneProcessor} is responsible for dealing with {@link Zone}
@@ -48,12 +47,12 @@ public class ZoneProcessor {
     /**
      * Create a new {@code ZoneProcessor}.
      */
-    public ZoneProcessor() {
+    public ZoneProcessor() {}
 
-    }
-
-    private static List<Zone> getEnteredZones(List<Zone> last,
-                                              List<Zone> current) {
+    private static List<Zone> getEnteredZones(
+        List<Zone> last,
+        List<Zone> current
+    ) {
         List<Zone> enteredZones = new ArrayList<>();
 
         for (Zone zone : current) {
@@ -63,8 +62,10 @@ public class ZoneProcessor {
         return enteredZones;
     }
 
-    private static List<Zone> getExitedZones(List<Zone> last,
-                                             List<Zone> current) {
+    private static List<Zone> getExitedZones(
+        List<Zone> last,
+        List<Zone> current
+    ) {
         List<Zone> exitedZones = new ArrayList<>();
 
         for (Zone zone : last) {
@@ -83,17 +84,18 @@ public class ZoneProcessor {
      *             of zones.
      * @param zone the zone.
      */
-    public void addZone(String name,
-                        Zone zone) {
-        if (name == null)
-            throw new IllegalArgumentException("Zones must have a non-null name!");
-        if (zone == null)
-            throw new IllegalArgumentException("Zones cannot be null!");
+    public void addZone(String name, Zone zone) {
+        if (name == null) throw new IllegalArgumentException(
+            "Zones must have a non-null name!"
+        );
+        if (zone == null) throw new IllegalArgumentException(
+            "Zones cannot be null!"
+        );
 
         if (zones.containsKey(name)) {
             throw new IllegalArgumentException(
-                    "Zones cannot have duplicate names! Make sure " +
-                            "every name is unique."
+                "Zones cannot have duplicate names! Make sure " +
+                "every name is unique."
             );
         }
 
@@ -106,8 +108,9 @@ public class ZoneProcessor {
      * @param name the name of the zone to remove.
      */
     public void removeZone(String name) {
-        if (name == null)
-            throw new IllegalArgumentException("Zones must have a non-null name!");
+        if (name == null) throw new IllegalArgumentException(
+            "Zones must have a non-null name!"
+        );
 
         zones.remove(name);
     }

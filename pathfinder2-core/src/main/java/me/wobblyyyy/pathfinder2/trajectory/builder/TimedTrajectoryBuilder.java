@@ -10,13 +10,12 @@
 
 package me.wobblyyyy.pathfinder2.trajectory.builder;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.trajectory.TimedTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Builder for creating a {@link List} of {@link TimedTrajectory}s.
@@ -37,79 +36,58 @@ public class TimedTrajectoryBuilder {
         this(defaultSpeed, 0);
     }
 
-    public TimedTrajectoryBuilder(double defaultSpeed,
-                                  double defaultTurnMultiplier) {
+    public TimedTrajectoryBuilder(
+        double defaultSpeed,
+        double defaultTurnMultiplier
+    ) {
         this.defaultSpeed = defaultSpeed;
         this.defaultTurnMultiplier = defaultTurnMultiplier;
     }
 
-    public TimedTrajectoryBuilder add(Translation translation,
-                                      double timeMs) {
-        return add(
-                translation,
-                timeMs,
-                defaultSpeed,
-                defaultTurnMultiplier
-        );
+    public TimedTrajectoryBuilder add(Translation translation, double timeMs) {
+        return add(translation, timeMs, defaultSpeed, defaultTurnMultiplier);
     }
 
-    public TimedTrajectoryBuilder add(Translation translation,
-                                      double timeMs,
-                                      double speed) {
-        return add(
-                translation,
-                timeMs,
-                speed,
-                defaultTurnMultiplier
-        );
+    public TimedTrajectoryBuilder add(
+        Translation translation,
+        double timeMs,
+        double speed
+    ) {
+        return add(translation, timeMs, speed, defaultTurnMultiplier);
     }
 
-    public TimedTrajectoryBuilder add(Translation translation,
-                                      double timeMs,
-                                      double speed,
-                                      double turnMultiplier) {
-        trajectories.add(new TimedTrajectory(
-                translation,
-                timeMs,
-                speed,
-                turnMultiplier
-        ));
+    public TimedTrajectoryBuilder add(
+        Translation translation,
+        double timeMs,
+        double speed,
+        double turnMultiplier
+    ) {
+        trajectories.add(
+            new TimedTrajectory(translation, timeMs, speed, turnMultiplier)
+        );
 
         return this;
     }
 
-    public TimedTrajectoryBuilder add(Angle direction,
-                                      double timeMs) {
-
-        return add(
-                direction,
-                timeMs,
-                defaultSpeed,
-                defaultTurnMultiplier
-        );
+    public TimedTrajectoryBuilder add(Angle direction, double timeMs) {
+        return add(direction, timeMs, defaultSpeed, defaultTurnMultiplier);
     }
 
-    public TimedTrajectoryBuilder add(Angle direction,
-                                      double timeMs,
-                                      double speed) {
-        return add(
-                direction,
-                timeMs,
-                speed,
-                defaultTurnMultiplier
-        );
+    public TimedTrajectoryBuilder add(
+        Angle direction,
+        double timeMs,
+        double speed
+    ) {
+        return add(direction, timeMs, speed, defaultTurnMultiplier);
     }
 
-    public TimedTrajectoryBuilder add(Angle direction,
-                                      double timeMs,
-                                      double speed,
-                                      double turnMultiplier) {
-        return add(
-                direction.toTranslation(),
-                timeMs,
-                speed,
-                turnMultiplier
-        );
+    public TimedTrajectoryBuilder add(
+        Angle direction,
+        double timeMs,
+        double speed,
+        double turnMultiplier
+    ) {
+        return add(direction.toTranslation(), timeMs, speed, turnMultiplier);
     }
 
     public List<Trajectory> getTrajectories() {

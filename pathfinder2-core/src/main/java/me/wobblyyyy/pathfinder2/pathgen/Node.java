@@ -10,15 +10,14 @@
 
 package me.wobblyyyy.pathfinder2.pathgen;
 
-import me.wobblyyyy.pathfinder2.geometry.PointXY;
-import me.wobblyyyy.pathfinder2.utils.StringUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import me.wobblyyyy.pathfinder2.geometry.PointXY;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 /**
  * "I don't even know to be honest."
@@ -40,22 +39,18 @@ public class Node {
     private double function;
     private boolean valid = true;
 
-    public Node(int x,
-                int y) {
+    public Node(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public static void calculateNeighborsFor(List<Node> nodes,
-                                             Grid grid) {
+    public static void calculateNeighborsFor(List<Node> nodes, Grid grid) {
         for (Node node : nodes) {
             node.calculateNeighbours(grid);
         }
     }
 
-    public static List<Node> getNodes(int x,
-                                      int y,
-                                      Grid grid) {
+    public static List<Node> getNodes(int x, int y, Grid grid) {
         List<Node> nodes = new ArrayList<>(x * y);
 
         for (int i = 0; i < x; i++) {
@@ -67,40 +62,44 @@ public class Node {
         return nodes;
     }
 
-    private static void tryAddNode(boolean condition,
-                                   int x,
-                                   int y,
-                                   Function<Coord, Node> getNode,
-                                   List<Node> nodes) {
+    private static void tryAddNode(
+        boolean condition,
+        int x,
+        int y,
+        Function<Coord, Node> getNode,
+        List<Node> nodes
+    ) {
         if (condition) {
             Node node = getNode.apply(new Coord(x, y));
             nodes.add(node);
         }
     }
 
-    private static void tryAddNodes(Map<Coord, Boolean> map,
-                                    Function<Coord, Node> getNode,
-                                    List<Node> nodes) {
+    private static void tryAddNodes(
+        Map<Coord, Boolean> map,
+        Function<Coord, Node> getNode,
+        List<Node> nodes
+    ) {
         for (Map.Entry<Coord, Boolean> entry : map.entrySet()) {
             Coord coord = entry.getKey();
             boolean condition = entry.getValue();
 
-            tryAddNode(
-                    condition,
-                    coord.x(),
-                    coord.y(),
-                    getNode,
-                    nodes
-            );
+            tryAddNode(condition, coord.x(), coord.y(), getNode, nodes);
         }
     }
 
     public static List<Node> getValidNodes(List<Node> nodes) {
-        return nodes.stream().filter(Node::isValid).collect(Collectors.toList());
+        return nodes
+            .stream()
+            .filter(Node::isValid)
+            .collect(Collectors.toList());
     }
 
     public static List<Node> getInvalidNodes(List<Node> nodes) {
-        return nodes.stream().filter(Node::isInvalid).collect(Collectors.toList());
+        return nodes
+            .stream()
+            .filter(Node::isInvalid)
+            .collect(Collectors.toList());
     }
 
     public void calculateNeighbours(Grid grid) {
@@ -138,11 +137,7 @@ public class Node {
         map.put(new Coord(x + 1, y - 1), validDiagNorthwest);
         map.put(new Coord(x - 1, y + 1), validDiagSouthwest);
 
-        tryAddNodes(
-                map,
-                grid::findNode,
-                nodes
-        );
+        tryAddNodes(map, grid::findNode, nodes);
 
         setNeighbours(nodes);
     }
@@ -188,9 +183,11 @@ public class Node {
 
     public void setNeighbours(List<Node> neighbours) {
         List<Node> noNull = new ArrayList<>(neighbours.size());
-        neighbours.forEach((n) -> {
-            if (n != null) noNull.add(n);
-        });
+        neighbours.forEach(
+            n -> {
+                if (n != null) noNull.add(n);
+            }
+        );
         this.neighbours = noNull;
     }
 
@@ -243,12 +240,6 @@ public class Node {
 
     @Override
     public String toString() {
-        return StringUtils.format(
-                "(%s, %s, valid: %s)",
-                x,
-                y,
-                valid
-        );
+        return StringUtils.format("(%s, %s, valid: %s)", x, y, valid);
     }
 }
-

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestTranslation {
+
     @Test
     public void testAdd() {
         Translation a = new Translation(0, 0, 0);
@@ -21,19 +22,14 @@ public class TestTranslation {
         Translation c = new Translation(0, 1, 0);
         Translation d = new Translation(1, 0, 0);
 
+        Assertions.assertEquals(a, b.add(new Translation(-1, -1, 0)));
         Assertions.assertEquals(
-                a,
-                b.add(new Translation(-1, -1, 0))
+            c.add(new Translation(1, 0, 0)),
+            d.add(new Translation(0, 1, 0))
         );
         Assertions.assertEquals(
-                c.add(new Translation(1, 0, 0)),
-                d.add(new Translation(0, 1, 0))
-        );
-        Assertions.assertEquals(
-                c.add(new Translation(1, 0, 0))
-                        .add(new Translation(10, 10, 10)),
-                d.add(new Translation(0, 1, 0))
-                        .add(new Translation(10, 10, 10))
+            c.add(new Translation(1, 0, 0)).add(new Translation(10, 10, 10)),
+            d.add(new Translation(0, 1, 0)).add(new Translation(10, 10, 10))
         );
     }
 
@@ -42,17 +38,11 @@ public class TestTranslation {
         Translation a = new Translation(1, 1, 0.5);
         Translation b = new Translation(0.5, 0.5, 0.25);
 
+        Assertions.assertEquals(b, a.multiply(0.5));
+        Assertions.assertEquals(b.multiply(5.3), a.multiply(0.5).multiply(5.3));
         Assertions.assertEquals(
-                b,
-                a.multiply(0.5)
-        );
-        Assertions.assertEquals(
-                b.multiply(5.3),
-                a.multiply(0.5).multiply(5.3)
-        );
-        Assertions.assertEquals(
-                b.multiply(5.3).multiply(0.1),
-                a.multiply(0.5).multiply(5.3).multiply(0.1)
+            b.multiply(5.3).multiply(0.1),
+            a.multiply(0.5).multiply(5.3).multiply(0.1)
         );
     }
 
@@ -69,10 +59,7 @@ public class TestTranslation {
         Translation a = new Translation(1, 1, 1);
         Translation b = new Translation(0, 1, 1);
 
-        Assertions.assertEquals(
-                a,
-                b.withVx(1)
-        );
+        Assertions.assertEquals(a, b.withVx(1));
     }
 
     @Test
@@ -80,10 +67,7 @@ public class TestTranslation {
         Translation a = new Translation(1, 1, 1);
         Translation b = new Translation(1, 0, 1);
 
-        Assertions.assertEquals(
-                a,
-                b.withVy(1)
-        );
+        Assertions.assertEquals(a, b.withVy(1));
     }
 
     @Test
@@ -91,84 +75,81 @@ public class TestTranslation {
         Translation a = new Translation(1, 1, 1);
         Translation b = new Translation(1, 1, 0);
 
-        Assertions.assertEquals(
-                a,
-                b.withVz(1)
-        );
+        Assertions.assertEquals(a, b.withVz(1));
     }
 
     @Test
     public void testAbsoluteToRelativeButAgain() {
         Translation a = new Translation(1, 0, 0);
         Assertions.assertEquals(
-                new Translation(0, -1, 0),
-                a.toRelative(Angle.fromDeg(90))
+            new Translation(0, -1, 0),
+            a.toRelative(Angle.fromDeg(90))
         );
         Assertions.assertEquals(
-                new Translation(-1, 0, 0),
-                a.toRelative(Angle.fromDeg(180))
+            new Translation(-1, 0, 0),
+            a.toRelative(Angle.fromDeg(180))
         );
         Assertions.assertEquals(
-                new Translation(0, 1, 0),
-                a.toRelative(Angle.fromDeg(270))
+            new Translation(0, 1, 0),
+            a.toRelative(Angle.fromDeg(270))
         );
         Assertions.assertEquals(
-                new Translation(1, 0, 0),
-                a.toRelative(Angle.fromDeg(360))
+            new Translation(1, 0, 0),
+            a.toRelative(Angle.fromDeg(360))
         );
 
         Translation b = new Translation(0, 1, 0);
         Assertions.assertEquals(
-                new Translation(1, 0, 0),
-                b.toRelative(Angle.fromDeg(90))
+            new Translation(1, 0, 0),
+            b.toRelative(Angle.fromDeg(90))
         );
         Assertions.assertEquals(
-                new Translation(0, -1, 0),
-                b.toRelative(Angle.fromDeg(180))
+            new Translation(0, -1, 0),
+            b.toRelative(Angle.fromDeg(180))
         );
         Assertions.assertEquals(
-                new Translation(-1, 0, 0),
-                b.toRelative(Angle.fromDeg(270))
+            new Translation(-1, 0, 0),
+            b.toRelative(Angle.fromDeg(270))
         );
         Assertions.assertEquals(
-                new Translation(0, 1, 0),
-                b.toRelative(Angle.fromDeg(360))
+            new Translation(0, 1, 0),
+            b.toRelative(Angle.fromDeg(360))
         );
 
         Translation c = new Translation(1, 0, 1);
         Assertions.assertEquals(
-                new Translation(0, -1, 1),
-                c.toRelative(Angle.fromDeg(90))
+            new Translation(0, -1, 1),
+            c.toRelative(Angle.fromDeg(90))
         );
         Assertions.assertEquals(
-                new Translation(-1, 0, 1),
-                c.toRelative(Angle.fromDeg(180))
+            new Translation(-1, 0, 1),
+            c.toRelative(Angle.fromDeg(180))
         );
         Assertions.assertEquals(
-                new Translation(0, 1, 1),
-                c.toRelative(Angle.fromDeg(270))
+            new Translation(0, 1, 1),
+            c.toRelative(Angle.fromDeg(270))
         );
         Assertions.assertEquals(
-                new Translation(1, 0, 1),
-                c.toRelative(Angle.fromDeg(360))
+            new Translation(1, 0, 1),
+            c.toRelative(Angle.fromDeg(360))
         );
 
         Translation d = new Translation(0, 1, 1);
         Assertions.assertEquals(
-                new Translation(1, 0, 1),
-                d.toRelative(Angle.fromDeg(90))
+            new Translation(1, 0, 1),
+            d.toRelative(Angle.fromDeg(90))
         );
         Assertions.assertEquals(
-                new Translation(0, -1, 1),
-                d.toRelative(Angle.fromDeg(180))
+            new Translation(0, -1, 1),
+            d.toRelative(Angle.fromDeg(180))
         );
         Assertions.assertEquals(
-                new Translation(-1, 0, 1),
-                d.toRelative(Angle.fromDeg(270))
+            new Translation(-1, 0, 1),
+            d.toRelative(Angle.fromDeg(270))
         );
         Assertions.assertEquals(
-                new Translation(0, 1, 1),
-                d.toRelative(Angle.fromDeg(360))
+            new Translation(0, 1, 1),
+            d.toRelative(Angle.fromDeg(360))
         );
     }
 }

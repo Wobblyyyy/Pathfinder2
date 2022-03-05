@@ -48,11 +48,6 @@ public interface ARGBColorSensor extends Sensor<ARGB> {
 
     @Override
     default ARGB read() {
-        return new ARGB(
-                getAlpha(),
-                getRed(),
-                getGreen(),
-                getBlue()
-        );
+        return new ARGB(getAlpha(), getRed(), getGreen(), getBlue());
     }
 }

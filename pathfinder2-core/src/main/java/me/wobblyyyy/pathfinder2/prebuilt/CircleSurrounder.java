@@ -35,9 +35,11 @@ public class CircleSurrounder {
      * @param center     the center of the circle.
      * @param radius     the radius of the circle.
      */
-    public CircleSurrounder(Pathfinder pathfinder,
-                            PointXY center,
-                            double radius) {
+    public CircleSurrounder(
+        Pathfinder pathfinder,
+        PointXY center,
+        double radius
+    ) {
         this.pathfinder = pathfinder;
         this.center = center;
         this.radius = radius;
@@ -55,12 +57,12 @@ public class CircleSurrounder {
         Angle angleTolerance = pathfinder.getAngleTolerance();
 
         Trajectory trajectory = CircleSurround.trajectoryToClosestPoint(
-                robotPosition,
-                center,
-                radius,
-                speed,
-                tolerance,
-                angleTolerance
+            robotPosition,
+            center,
+            radius,
+            speed,
+            tolerance,
+            angleTolerance
         );
 
         pathfinder.followTrajectory(trajectory);
@@ -78,10 +80,10 @@ public class CircleSurrounder {
         Angle angleTolerance = pathfinder.getAngleTolerance();
 
         Trajectory trajectory = CircleSurround.fastTrajectoryToClosestPoint(
-                robotPosition,
-                center,
-                radius,
-                speed
+            robotPosition,
+            center,
+            radius,
+            speed
         );
 
         pathfinder.followTrajectory(trajectory);

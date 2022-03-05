@@ -52,17 +52,8 @@ public class MecanumState {
      * @param bl the back-left motor.
      * @param br the back-right motor.
      */
-    public MecanumState(double fl,
-                        double fr,
-                        double bl,
-                        double br) {
-        this(
-                fl,
-                fr,
-                bl,
-                br,
-                0
-        );
+    public MecanumState(double fl, double fr, double bl, double br) {
+        this(fl, fr, bl, br, 0);
     }
 
     /**
@@ -74,11 +65,13 @@ public class MecanumState {
      * @param br        the back-right motor.
      * @param magnitude the magnitude of the translation.
      */
-    public MecanumState(double fl,
-                        double fr,
-                        double bl,
-                        double br,
-                        double magnitude) {
+    public MecanumState(
+        double fl,
+        double fr,
+        double bl,
+        double br,
+        double magnitude
+    ) {
         this.fl = fl;
         this.fr = fr;
         this.bl = bl;
@@ -137,12 +130,7 @@ public class MecanumState {
      * @return the maximum power value.
      */
     public double maxPower() {
-        return Max.absoluteOf(
-                fl,
-                fr,
-                bl,
-                br
-        );
+        return Max.absoluteOf(fl, fr, bl, br);
     }
 
     /**
@@ -187,10 +175,10 @@ public class MecanumState {
      */
     public MecanumState add(MecanumState state) {
         return new MecanumState(
-                fl + state.fl,
-                fr + state.fr,
-                bl + state.bl,
-                br + state.br
+            fl + state.fl,
+            fr + state.fr,
+            bl + state.bl,
+            br + state.br
         );
     }
 
@@ -202,10 +190,10 @@ public class MecanumState {
      */
     public MecanumState multiply(MecanumState state) {
         return new MecanumState(
-                fl * state.fl,
-                fr * state.fr,
-                bl * state.bl,
-                br * state.br
+            fl * state.fl,
+            fr * state.fr,
+            bl * state.bl,
+            br * state.br
         );
     }
 
@@ -217,11 +205,8 @@ public class MecanumState {
      * @return the multiplied mecanum state.
      */
     public MecanumState multiply(double multiplier) {
-        return multiply(new MecanumState(
-                multiplier,
-                multiplier,
-                multiplier,
-                multiplier
-        ));
+        return multiply(
+            new MecanumState(multiplier, multiplier, multiplier, multiplier)
+        );
     }
 }

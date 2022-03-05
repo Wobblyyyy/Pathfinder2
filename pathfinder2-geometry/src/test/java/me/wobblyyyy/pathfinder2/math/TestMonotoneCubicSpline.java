@@ -14,11 +14,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestMonotoneCubicSpline {
+
     @Test
     public void testNonReflectedSpline() {
         Spline spline = new MonotoneCubicSpline(
-                new double[] { 0, 5, 10, 15 },
-                new double[] { 0, 10, 15, 25 }
+            new double[] { 0, 5, 10, 15 },
+            new double[] { 0, 10, 15, 25 }
         );
 
         Assertions.assertEquals(0, spline.interpolateY(0));
@@ -30,8 +31,8 @@ public class TestMonotoneCubicSpline {
     @Test
     public void testReflectedSpline() {
         Spline spline = new MonotoneCubicSpline(
-                new double[] { 0, -5, -10, -15 },
-                new double[] { 0, 10, 15, 25 }
+            new double[] { 0, -5, -10, -15 },
+            new double[] { 0, 10, 15, 25 }
         );
 
         Assertions.assertEquals(0, spline.interpolateY(0));

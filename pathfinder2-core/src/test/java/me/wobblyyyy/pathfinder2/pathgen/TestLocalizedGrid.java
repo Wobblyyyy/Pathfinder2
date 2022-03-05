@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestLocalizedGrid {
+
     @Test
     public void testPointToCoordConversion() {
         double minX = 5;
@@ -29,8 +30,20 @@ public class TestLocalizedGrid {
         Grid grid1 = Grid.generateGrid(10, 10);
         Grid grid2 = Grid.generateGrid(20, 20);
 
-        LocalizedGrid localized1 = new LocalizedGrid(grid1, minX, minY, maxX, maxY);
-        LocalizedGrid localized2 = new LocalizedGrid(grid2, minX, minY, maxX, maxY);
+        LocalizedGrid localized1 = new LocalizedGrid(
+            grid1,
+            minX,
+            minY,
+            maxX,
+            maxY
+        );
+        LocalizedGrid localized2 = new LocalizedGrid(
+            grid2,
+            minX,
+            minY,
+            maxX,
+            maxY
+        );
 
         Coord coord1 = localized1.toCoord(point1);
         Coord coord2 = localized1.toCoord(point2);

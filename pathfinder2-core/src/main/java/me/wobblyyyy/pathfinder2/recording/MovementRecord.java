@@ -10,11 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.recording;
 
+import java.io.Serializable;
 import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
-
-import java.io.Serializable;
 
 /**
  * A snapshot of Pathfinder's movement. Each {@code MovementRecord} represents
@@ -33,9 +32,7 @@ public class MovementRecord implements Serializable {
     /**
      * Create a new {@code MovementRecord} without any data.
      */
-    public MovementRecord() {
-
-    }
+    public MovementRecord() {}
 
     /**
      * Create a new {@code MovementRecord} with data.
@@ -46,20 +43,20 @@ public class MovementRecord implements Serializable {
      *                    elapsed since the last record.
      * @param translation the current translation of the robot.
      */
-    public MovementRecord(PointXYZ position,
-                          double velocity,
-                          double elapsedMs,
-                          Translation translation) {
-        if (position == null)
-            throw new NullPointException(
-                    "attempted to create a MovementRecord with a null " +
-                            "position, make sure this position isn't null"
-            );
-        if (translation == null)
-            throw new NullPointerException(
-                    "attempted to create a MovementRecord with a null " +
-                            "translation, make sure this translation isn't null"
-            );
+    public MovementRecord(
+        PointXYZ position,
+        double velocity,
+        double elapsedMs,
+        Translation translation
+    ) {
+        if (position == null) throw new NullPointException(
+            "attempted to create a MovementRecord with a null " +
+            "position, make sure this position isn't null"
+        );
+        if (translation == null) throw new NullPointerException(
+            "attempted to create a MovementRecord with a null " +
+            "translation, make sure this translation isn't null"
+        );
 
         this.position = position;
         this.velocity = velocity;

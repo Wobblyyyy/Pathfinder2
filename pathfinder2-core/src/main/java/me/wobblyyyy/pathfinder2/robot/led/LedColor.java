@@ -21,9 +21,7 @@ public class LedColor {
     private final int green;
     private final int blue;
 
-    public LedColor(int red,
-                    int green,
-                    int blue) {
+    public LedColor(int red, int green, int blue) {
         this.red = red;
         this.green = green;
         this.blue = blue;

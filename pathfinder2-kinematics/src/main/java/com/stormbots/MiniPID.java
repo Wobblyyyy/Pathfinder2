@@ -118,7 +118,12 @@ public class MiniPID {
         double fOut;
         this.setpoint = setpoint;
         if (setpointRange != 0) {
-            setpoint = constrain(setpoint, actual - setpointRange, actual + setpointRange);
+            setpoint =
+                constrain(
+                    setpoint,
+                    actual - setpointRange,
+                    actual + setpointRange
+                );
         }
         double error = setpoint - actual;
         fOut = feedForward * setpoint;
@@ -137,7 +142,14 @@ public class MiniPID {
         output = fOut + pOut + iOut + dOut;
         if (minOutput != maxOutput && !bounded(output, minOutput, maxOutput)) {
             errorSum = error;
-        } else if (outputRampRate != 0 && !bounded(output, lastOutput - outputRampRate, lastOutput + outputRampRate)) {
+        } else if (
+            outputRampRate != 0 &&
+            !bounded(
+                output,
+                lastOutput - outputRampRate,
+                lastOutput + outputRampRate
+            )
+        ) {
             errorSum = error;
         } else if (maxIOutput != 0) {
             errorSum = constrain(errorSum + error, -maxError, maxError);
@@ -145,7 +157,12 @@ public class MiniPID {
             errorSum += error;
         }
         if (outputRampRate != 0) {
-            output = constrain(output, lastOutput - outputRampRate, lastOutput + outputRampRate);
+            output =
+                constrain(
+                    output,
+                    lastOutput - outputRampRate,
+                    lastOutput + outputRampRate
+                );
         }
         if (minOutput != maxOutput) {
             output = constrain(output, minOutput, maxOutput);

@@ -10,10 +10,9 @@
 
 package me.wobblyyyy.pathfinder2.movement;
 
+import java.io.Serializable;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.math.Velocity;
-
-import java.io.Serializable;
 
 /**
  * A snapshot of a robot's movement. Primarily, the robot's velocity and

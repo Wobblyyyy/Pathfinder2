@@ -10,10 +10,9 @@
 
 package me.wobblyyyy.pathfinder2.robot.modifiers;
 
+import java.util.function.Function;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-
-import java.util.function.Function;
 
 /**
  * Easy-to-use builder class for creating odometry modifiers.
@@ -98,8 +97,7 @@ public class OdometryModifier {
      *                 use an axis of 0.0.
      * @return {@code this}, used for method chaining.
      */
-    public OdometryModifier reflectX(boolean reflectX,
-                                     double axis) {
+    public OdometryModifier reflectX(boolean reflectX, double axis) {
         this.reflectX = reflectX;
         this.xReflectionAxis = axis;
 
@@ -118,8 +116,7 @@ public class OdometryModifier {
      *                 use an axis of 0.0.
      * @return {@code this}, used for method chaining.
      */
-    public OdometryModifier reflectY(boolean reflectY,
-                                     double axis) {
+    public OdometryModifier reflectY(boolean reflectY, double axis) {
         this.reflectY = reflectY;
         this.yReflectionAxis = axis;
 
@@ -162,8 +159,7 @@ public class OdometryModifier {
         return this;
     }
 
-    private double reflect(double value,
-                           double axis) {
+    private double reflect(double value, double axis) {
         return axis - (value - axis);
     }
 
@@ -176,11 +172,7 @@ public class OdometryModifier {
      */
     public PointXYZ modify(PointXYZ point) {
         if (swapXY) {
-            point = new PointXYZ(
-                    point.y(),
-                    point.x(),
-                    point.z()
-            );
+            point = new PointXYZ(point.y(), point.x(), point.z());
         }
 
         if (reflectX) {
@@ -191,11 +183,7 @@ public class OdometryModifier {
             point = point.withY(reflect(point.y(), yReflectionAxis));
         }
 
-        PointXYZ offset = new PointXYZ(
-                xOffset,
-                yOffset,
-                zOffset
-        );
+        PointXYZ offset = new PointXYZ(xOffset, yOffset, zOffset);
 
         return point.add(offset);
     }

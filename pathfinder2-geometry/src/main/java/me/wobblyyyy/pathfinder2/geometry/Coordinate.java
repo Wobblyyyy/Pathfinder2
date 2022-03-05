@@ -22,8 +22,7 @@ public class Coordinate {
     private final int x;
     private final int y;
 
-    public Coordinate(int x,
-                      int y) {
+    public Coordinate(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -37,46 +36,27 @@ public class Coordinate {
     }
 
     public PointXY toPointXY() {
-        return new PointXY(
-                this.x,
-                this.y
-        );
+        return new PointXY(this.x, this.y);
     }
 
     public PointXYZ toPointXYZ(Angle z) {
-        return new PointXYZ(
-                this.x,
-                this.y,
-                z
-        );
+        return new PointXYZ(this.x, this.y, z);
     }
 
     public Coordinate add(Coordinate coordinate) {
-        return new Coordinate(
-                this.x + coordinate.x,
-                this.y + coordinate.y
-        );
+        return new Coordinate(this.x + coordinate.x, this.y + coordinate.y);
     }
 
     public Coordinate subtract(Coordinate coordinate) {
-        return new Coordinate(
-                this.x - coordinate.x,
-                this.y - coordinate.y
-        );
+        return new Coordinate(this.x - coordinate.x, this.y - coordinate.y);
     }
 
     public Coordinate multiply(Coordinate coordinate) {
-        return new Coordinate(
-                this.x * coordinate.x,
-                this.y * coordinate.y
-        );
+        return new Coordinate(this.x * coordinate.x, this.y * coordinate.y);
     }
 
     public Coordinate divide(Coordinate coordinate) {
-        return new Coordinate(
-                this.x / coordinate.x,
-                this.y / coordinate.y
-        );
+        return new Coordinate(this.x / coordinate.x, this.y / coordinate.y);
     }
 
     @Override
@@ -96,10 +76,6 @@ public class Coordinate {
 
     @Override
     public String toString() {
-        return StringUtils.format(
-                "(%s, %s)",
-                this.x,
-                this.y
-        );
+        return StringUtils.format("(%s, %s)", this.x, this.y);
     }
 }

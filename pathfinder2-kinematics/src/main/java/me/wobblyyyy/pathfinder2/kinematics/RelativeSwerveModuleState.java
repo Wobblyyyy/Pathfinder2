@@ -39,8 +39,7 @@ public class RelativeSwerveModuleState {
      * @param turn  the swerve module's turn power.
      * @param drive the swerve module's drive power.
      */
-    public RelativeSwerveModuleState(double turn,
-                                     double drive) {
+    public RelativeSwerveModuleState(double turn, double drive) {
         this.turn = turn;
         this.drive = drive;
     }
@@ -58,26 +57,19 @@ public class RelativeSwerveModuleState {
      *                   kinematics.
      * @return an optimized swerve module state.
      */
-    public static RelativeSwerveModuleState optimized(Angle target,
-                                                      double drive,
-                                                      Angle current,
-                                                      Controller controller) {
+    public static RelativeSwerveModuleState optimized(
+        Angle target,
+        double drive,
+        Angle current,
+        Controller controller
+    ) {
         double delta = Math.abs(target.deg() - current.deg());
-        double calculated = controller.calculate(
-                current.deg(),
-                target.deg()
-        );
+        double calculated = controller.calculate(current.deg(), target.deg());
 
         if (delta > 90) {
-            return new RelativeSwerveModuleState(
-                    -calculated,
-                    -drive
-            );
+            return new RelativeSwerveModuleState(-calculated, -drive);
         } else {
-            return new RelativeSwerveModuleState(
-                    calculated,
-                    drive
-            );
+            return new RelativeSwerveModuleState(calculated, drive);
         }
     }
 
@@ -93,16 +85,13 @@ public class RelativeSwerveModuleState {
      * @param kinematics the module's kinematics.
      * @return an optimized swerve module state.
      */
-    public static RelativeSwerveModuleState optimized(Angle target,
-                                                      double drive,
-                                                      Angle current,
-                                                      RelativeSwerveModuleKinematics kinematics) {
-        return optimized(
-                target,
-                drive,
-                current,
-                kinematics.getController()
-        );
+    public static RelativeSwerveModuleState optimized(
+        Angle target,
+        double drive,
+        Angle current,
+        RelativeSwerveModuleKinematics kinematics
+    ) {
+        return optimized(target, drive, current, kinematics.getController());
     }
 
     /**

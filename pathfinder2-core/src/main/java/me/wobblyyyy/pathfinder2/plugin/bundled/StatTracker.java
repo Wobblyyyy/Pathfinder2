@@ -69,8 +69,7 @@ public class StatTracker extends PathfinderPlugin {
     }
 
     @Override
-    public void onFinishFollower(Pathfinder pathfinder,
-                                 Follower follower) {
+    public void onFinishFollower(Pathfinder pathfinder, Follower follower) {
         followersFinished++;
     }
 }

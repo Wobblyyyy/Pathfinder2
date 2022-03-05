@@ -66,8 +66,7 @@ public class AngleDeltaController extends AbstractController {
      * @param angleUnit   the unit the angle's delta is measured in
      * @see AngleDeltaController
      */
-    public AngleDeltaController(double coefficient,
-                                Angle.AngleUnit angleUnit) {
+    public AngleDeltaController(double coefficient, Angle.AngleUnit angleUnit) {
         this.coefficient = coefficient;
         this.angleUnit = angleUnit;
     }
@@ -79,9 +78,9 @@ public class AngleDeltaController extends AbstractController {
         Angle current = Angle.fixedDeg(value);
         Angle target = Angle.fixedRad(this.getTarget());
 
-        double delta = isDegrees ?
-                Angle.angleDeltaDeg(current, target) :
-                Angle.angleDeltaRad(current, target);
+        double delta = isDegrees
+            ? Angle.angleDeltaDeg(current, target)
+            : Angle.angleDeltaRad(current, target);
 
         return delta * this.coefficient;
     }

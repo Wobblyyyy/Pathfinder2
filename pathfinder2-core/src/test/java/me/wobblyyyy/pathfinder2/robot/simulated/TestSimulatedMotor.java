@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestSimulatedMotor {
+
     @Test
     public void testPower() {
         SimulatedMotor motor = new SimulatedMotor();

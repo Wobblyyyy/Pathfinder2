@@ -60,9 +60,9 @@ public class MultiTargetTrajectory implements Trajectory {
      */
     public MultiTargetTrajectory(TrajectoryTarget[] targets) {
         NotNull.throwExceptionIfNull(
-                "Cannot create a multi-target trajectory with " +
-                        "any null targets!",
-                (Object[]) targets
+            "Cannot create a multi-target trajectory with " +
+            "any null targets!",
+            (Object[]) targets
         );
 
         this.targets = targets;
@@ -98,12 +98,18 @@ public class MultiTargetTrajectory implements Trajectory {
         double translationY = currentY - lastStartY;
         double translationZ = currentAngle.subtract(lastStartZ).fix().deg();
 
-        boolean hasCompletedX =
-                Magnitude.higherMagnitude(translationX, requiredTranslationX);
-        boolean hasCompletedY =
-                Magnitude.higherMagnitude(translationY, requiredTranslationY);
-        boolean hasCompletedZ =
-                Magnitude.higherMagnitude(translationZ, requiredTranslationZ);
+        boolean hasCompletedX = Magnitude.higherMagnitude(
+            translationX,
+            requiredTranslationX
+        );
+        boolean hasCompletedY = Magnitude.higherMagnitude(
+            translationY,
+            requiredTranslationY
+        );
+        boolean hasCompletedZ = Magnitude.higherMagnitude(
+            translationZ,
+            requiredTranslationZ
+        );
 
         if (hasCompletedX && hasCompletedY && hasCompletedZ) {
             // precision targets need to be treated differently - we have
@@ -112,13 +118,14 @@ public class MultiTargetTrajectory implements Trajectory {
                 PointXYZ targetPoint = target.target();
                 double distance = current.absDistance(targetPoint);
                 Angle angleDistance = Angle.angleDelta(
-                        current.z(),
-                        targetPoint.z()
+                    current.z(),
+                    targetPoint.z()
                 );
 
                 boolean validDistance = distance < target.tolerance();
                 boolean validAngle = angleDistance.lessThanOrEqualTo(
-                        target.angleTolerance());
+                    target.angleTolerance()
+                );
 
                 if (!(validDistance && validAngle)) {
                     return targetPoint;
@@ -142,8 +149,8 @@ public class MultiTargetTrajectory implements Trajectory {
 
                 requiredTranslationX = next.x() - currentX;
                 requiredTranslationY = next.y() - currentY;
-                requiredTranslationZ = next.z().subtract(currentAngle)
-                        .fix().deg();
+                requiredTranslationZ =
+                    next.z().subtract(currentAngle).fix().deg();
             }
         }
 

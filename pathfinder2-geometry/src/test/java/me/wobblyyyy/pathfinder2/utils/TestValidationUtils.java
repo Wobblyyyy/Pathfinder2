@@ -2,11 +2,11 @@ package me.wobblyyyy.pathfinder2.utils;
 
 import me.wobblyyyy.pathfinder2.exceptions.ValidationException;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestValidationUtils {
+
     @Test
     public void testValidateNonNullObject() {
         ValidationUtils.validate(new PointXYZ());
@@ -16,13 +16,13 @@ public class TestValidationUtils {
     @Test
     public void testValidateNullObject() {
         Assertions.assertThrows(
-                ValidationException.class,
-                () -> ValidationUtils.validate(null)
+            ValidationException.class,
+            () -> ValidationUtils.validate(null)
         );
 
         Assertions.assertThrows(
-                ValidationException.class,
-                () -> ValidationUtils.validate(null, "hello")
+            ValidationException.class,
+            () -> ValidationUtils.validate(null, "hello")
         );
     }
 
@@ -35,41 +35,39 @@ public class TestValidationUtils {
     @Test
     public void testValidateNaNDouble() {
         Assertions.assertThrows(
-                ValidationException.class,
-                () -> ValidationUtils.validate(Double.NaN)
+            ValidationException.class,
+            () -> ValidationUtils.validate(Double.NaN)
         );
 
         Assertions.assertThrows(
-                ValidationException.class,
-                () -> ValidationUtils.validate(Double.NaN, "hello")
+            ValidationException.class,
+            () -> ValidationUtils.validate(Double.NaN, "hello")
         );
     }
 
     @Test
     public void testValidatePositiveInfinityDouble() {
         Assertions.assertThrows(
-                ValidationException.class,
-                () -> ValidationUtils.validate(Double.POSITIVE_INFINITY)
+            ValidationException.class,
+            () -> ValidationUtils.validate(Double.POSITIVE_INFINITY)
         );
 
         Assertions.assertThrows(
-                ValidationException.class,
-                () -> ValidationUtils.validate(Double.POSITIVE_INFINITY,
-                                               "hello")
+            ValidationException.class,
+            () -> ValidationUtils.validate(Double.POSITIVE_INFINITY, "hello")
         );
     }
 
     @Test
     public void testValidateNegativeInfinityDouble() {
         Assertions.assertThrows(
-                ValidationException.class,
-                () -> ValidationUtils.validate(Double.NEGATIVE_INFINITY)
+            ValidationException.class,
+            () -> ValidationUtils.validate(Double.NEGATIVE_INFINITY)
         );
 
         Assertions.assertThrows(
-                ValidationException.class,
-                () -> ValidationUtils.validate(Double.NEGATIVE_INFINITY,
-                                               "hello")
+            ValidationException.class,
+            () -> ValidationUtils.validate(Double.NEGATIVE_INFINITY, "hello")
         );
     }
 }

@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 
 public class WPIPointXY extends PointXY {
+
     public WPIPointXY(Pose2d pose) {
         super(pose.getX(), pose.getY());
     }

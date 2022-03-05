@@ -10,16 +10,16 @@
 
 package me.wobblyyyy.pathfinder2.pathgen;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.Rectangle;
 import me.wobblyyyy.pathfinder2.zones.Zone;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TestPathOptimizer {
+
     @Test
     public void testLinearOptimization() {
         List<Zone> zones = new ArrayList<>();
@@ -40,9 +40,12 @@ public class TestPathOptimizer {
     public void testNonlinearOptimization() {
         Rectangle blockerShape = new Rectangle(5, 1, 6, 10);
         Zone blockerZone = new Zone(blockerShape);
-        List<Zone> zones = new ArrayList<Zone>() {{
-            add(blockerZone);
-        }};
+        List<Zone> zones = new ArrayList<Zone>() {
+
+            {
+                add(blockerZone);
+            }
+        };
 
         LocalizedPathGen gen = new LocalizedPathGen(zones, 0.5, 0.5);
 
@@ -63,13 +66,14 @@ public class TestPathOptimizer {
 
         double unoptimizedLength = PathOptimizer.determineLength(unoptimized);
         double optimizedLength = PathOptimizer.determineLength(optimized);
-        double overOptimizedLength = PathOptimizer.determineLength(overOptimized);
+        double overOptimizedLength = PathOptimizer.determineLength(
+            overOptimized
+        );
+        //        Assertions.assertEquals(30, unoptimizedSize);
+        //        Assertions.assertEquals(16, optimizedSize);
+        //        Assertions.assertEquals(16, overOptimizedSize);
 
-//        Assertions.assertEquals(30, unoptimizedSize);
-//        Assertions.assertEquals(16, optimizedSize);
-//        Assertions.assertEquals(16, overOptimizedSize);
-
-//        Assertions.assertTrue(Equals.soft(16.778, unoptimizedLength, 0.01));
-//        Assertions.assertEquals(optimizedLength, overOptimizedLength);
+        //        Assertions.assertTrue(Equals.soft(16.778, unoptimizedLength, 0.01));
+        //        Assertions.assertEquals(optimizedLength, overOptimizedLength);
     }
 }

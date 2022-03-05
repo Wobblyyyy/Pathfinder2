@@ -19,19 +19,20 @@ public class TestBaseMotor {
 
     @BeforeEach
     public void beforeEach() {
-        motor = new BaseMotor() {
-            private double power;
+        motor =
+            new BaseMotor() {
+                private double power;
 
-            @Override
-            public void abstractSetPower(double power) {
-                this.power = power;
-            }
+                @Override
+                public void abstractSetPower(double power) {
+                    this.power = power;
+                }
 
-            @Override
-            public double abstractGetPower() {
-                return power;
-            }
-        };
+                @Override
+                public double abstractGetPower() {
+                    return power;
+                }
+            };
     }
 
     @Test

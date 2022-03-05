@@ -11,8 +11,8 @@
 package me.wobblyyyy.pathfinder2.math;
 
 public class Magnitude {
-    public static boolean higherMagnitude(double a,
-                                          double b) {
+
+    public static boolean higherMagnitude(double a, double b) {
         boolean greaterAbs = Math.abs(a) >= Math.abs(b);
         if (greaterAbs) {
             return (a <= 0 && b <= 0) || (a >= 0 && b >= 0);
@@ -20,8 +20,7 @@ public class Magnitude {
         return false;
     }
 
-    public static boolean lowerMagnitude(double a,
-                                         double b) {
+    public static boolean lowerMagnitude(double a, double b) {
         return !higherMagnitude(a, b);
     }
 }

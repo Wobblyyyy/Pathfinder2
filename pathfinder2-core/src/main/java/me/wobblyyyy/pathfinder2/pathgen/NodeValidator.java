@@ -10,12 +10,11 @@
 
 package me.wobblyyyy.pathfinder2.pathgen;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.Rectangle;
 import me.wobblyyyy.pathfinder2.zones.Zone;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Validate a set of nodes.
@@ -24,6 +23,7 @@ import java.util.List;
  * @since 0.1.0
  */
 public class NodeValidator {
+
     /**
      * Validate a set of nodes. This will iterate through a grid's nodes and
      * update the validity of each of the nodes by determining if the node
@@ -32,8 +32,7 @@ public class NodeValidator {
      * @param grid  the grid to validate the nodes of.
      * @param zones the list of zones to use for validation.
      */
-    public static void validateNodes(LocalizedGrid grid,
-                                     List<Zone> zones) {
+    public static void validateNodes(LocalizedGrid grid, List<Zone> zones) {
         List<Node> nodes = grid.getGrid().getNodes();
 
         Rectangle bounds = grid.getRectangle();

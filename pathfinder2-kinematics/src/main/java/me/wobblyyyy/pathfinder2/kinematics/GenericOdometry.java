@@ -21,21 +21,25 @@ public class GenericOdometry<T> {
     private double previousTimeMs;
     private Angle previousAngle;
 
-    public GenericOdometry(Kinematics<T> kinematics,
-                           Angle gyroAngle,
-                           PointXYZ initialPosition) {
+    public GenericOdometry(
+        Kinematics<T> kinematics,
+        Angle gyroAngle,
+        PointXYZ initialPosition
+    ) {
         this.kinematics = kinematics;
         this.position = initialPosition;
         this.gyroOffset = position.z().subtract(gyroAngle);
         this.previousAngle = position.z();
     }
 
-    public PointXYZ updateWithTime(double currentTimeMs,
-                                   Angle gyroAngle,
-                                   T state) {
+    public PointXYZ updateWithTime(
+        double currentTimeMs,
+        Angle gyroAngle,
+        T state
+    ) {
         double period = previousTimeMs > 0
-                ? (currentTimeMs - previousTimeMs)
-                : 0.0;
+            ? (currentTimeMs - previousTimeMs)
+            : 0.0;
         previousTimeMs = currentTimeMs;
         Angle angle = gyroAngle.add(gyroOffset);
         Translation translation = kinematics.toTranslation(state);
@@ -54,11 +58,9 @@ public class GenericOdometry<T> {
             s = sin / dt;
             c = (1 - cos) / dt;
         }
-        PointXYZ newPosition = position.add(new PointXYZ(
-                dx * s - dy * c,
-                dx * c + dy * s,
-                angle
-        ));
+        PointXYZ newPosition = position.add(
+            new PointXYZ(dx * s - dy * c, dx * c + dy * s, angle)
+        );
         previousAngle = angle;
         position = newPosition;
         return position;

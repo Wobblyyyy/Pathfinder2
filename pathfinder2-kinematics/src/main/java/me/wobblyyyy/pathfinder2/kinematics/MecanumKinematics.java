@@ -29,39 +29,42 @@ public class MecanumKinematics implements Kinematics<MecanumState> {
     private SimpleMatrix inverseKinematics;
     private PointXY lastCenterOfRotation = new PointXY(0, 0);
 
-    public MecanumKinematics(PointXY frontLeftPosition,
-                             PointXY frontRightPosition,
-                             PointXY backLeftPosition,
-                             PointXY backRightPosition) {
+    public MecanumKinematics(
+        PointXY frontLeftPosition,
+        PointXY frontRightPosition,
+        PointXY backLeftPosition,
+        PointXY backRightPosition
+    ) {
         this.frontLeftPosition = frontLeftPosition;
         this.frontRightPosition = frontRightPosition;
         this.backLeftPosition = backLeftPosition;
         this.backRightPosition = backRightPosition;
 
         setInverseKinematics(
-                frontLeftPosition,
-                frontRightPosition,
-                backLeftPosition,
-                backRightPosition
+            frontLeftPosition,
+            frontRightPosition,
+            backLeftPosition,
+            backRightPosition
         );
 
         forwardsKinematics = inverseKinematics.pseudoInverse();
     }
 
-    public MecanumKinematics(double xSize,
-                             double ySize) {
+    public MecanumKinematics(double xSize, double ySize) {
         this(
-                new PointXY(-xSize / 2, ySize / 2),
-                new PointXY(xSize / 2, ySize / 2),
-                new PointXY(-xSize / 2, -ySize / 2),
-                new PointXY(xSize / 2, -ySize / 2)
+            new PointXY(-xSize / 2, ySize / 2),
+            new PointXY(xSize / 2, ySize / 2),
+            new PointXY(-xSize / 2, -ySize / 2),
+            new PointXY(xSize / 2, -ySize / 2)
         );
     }
 
-    public void setInverseKinematics(PointXY frontLeftPosition,
-                                     PointXY frontRightPosition,
-                                     PointXY backLeftPosition,
-                                     PointXY backRightPosition) {
+    public void setInverseKinematics(
+        PointXY frontLeftPosition,
+        PointXY frontRightPosition,
+        PointXY backLeftPosition,
+        PointXY backRightPosition
+    ) {
         double fl_x = frontLeftPosition.x();
         double fr_x = frontRightPosition.x();
         double bl_x = backLeftPosition.x();
@@ -80,8 +83,10 @@ public class MecanumKinematics implements Kinematics<MecanumState> {
         inverseKinematics = temp.scale(1d / Math.sqrt(2));
     }
 
-    public MecanumState calculate(Translation translation,
-                                  PointXY centerOfRotation) {
+    public MecanumState calculate(
+        Translation translation,
+        PointXY centerOfRotation
+    ) {
         if (!centerOfRotation.equals(lastCenterOfRotation)) {
             PointXY fl = frontLeftPosition.subtract(centerOfRotation);
             PointXY fr = frontRightPosition.subtract(centerOfRotation);
@@ -93,11 +98,11 @@ public class MecanumKinematics implements Kinematics<MecanumState> {
 
         SimpleMatrix speedVector = new SimpleMatrix(3, 1);
         speedVector.setColumn(
-                0,
-                0,
-                translation.vx(),
-                translation.vy(),
-                translation.vz()
+            0,
+            0,
+            translation.vx(),
+            translation.vy(),
+            translation.vz()
         );
 
         SimpleMatrix wheelMatrix = inverseKinematics.mult(speedVector);
@@ -118,18 +123,18 @@ public class MecanumKinematics implements Kinematics<MecanumState> {
     public Translation toTranslation(MecanumState state) {
         SimpleMatrix wheelSpeedsMatrix = new SimpleMatrix(4, 1);
         wheelSpeedsMatrix.setColumn(
-                0,
-                0,
-                state.fl(),
-                state.fr(),
-                state.bl(),
-                state.br()
+            0,
+            0,
+            state.fl(),
+            state.fr(),
+            state.bl(),
+            state.br()
         );
         SimpleMatrix speedVector = forwardsKinematics.mult(wheelSpeedsMatrix);
         return new Translation(
-                speedVector.get(0, 0),
-                speedVector.get(1, 0),
-                speedVector.get(2, 0)
+            speedVector.get(0, 0),
+            speedVector.get(1, 0),
+            speedVector.get(2, 0)
         );
     }
 }

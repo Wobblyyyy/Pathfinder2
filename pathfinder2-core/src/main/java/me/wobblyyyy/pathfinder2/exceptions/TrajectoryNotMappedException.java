@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.exceptions;
 
 public class TrajectoryNotMappedException extends RuntimeException {
+
     public TrajectoryNotMappedException(String message) {
         super(message);
     }

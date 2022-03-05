@@ -21,6 +21,7 @@ import me.wobblyyyy.pathfinder2.robot.AbstractOdometry;
  * @since 0.1.0
  */
 public class EmptyOdometry extends AbstractOdometry {
+
     @Override
     public PointXYZ getRawPosition() {
         return PointXYZ.zero();

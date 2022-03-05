@@ -17,6 +17,7 @@ package me.wobblyyyy.pathfinder2.exceptions;
  * @since 0.0.0
  */
 public class NullOdometryException extends RuntimeException {
+
     public NullOdometryException(String message) {
         super(message);
     }

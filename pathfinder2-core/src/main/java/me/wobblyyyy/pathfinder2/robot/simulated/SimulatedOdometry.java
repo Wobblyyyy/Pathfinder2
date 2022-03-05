@@ -60,17 +60,17 @@ public class SimulatedOdometry extends AbstractOdometry {
 
         double travelledUnits = unitsPerSecond * (elapsedTimeMs / 1_000);
 
-        this.setRawPosition(currentPosition.inDirection(
-                travelledUnits,
-                this.movementAngle.add(currentPosition.z())
-        ));
+        this.setRawPosition(
+                currentPosition.inDirection(
+                    travelledUnits,
+                    this.movementAngle.add(currentPosition.z())
+                )
+            );
 
         this.lastTimeMs = Time.ms();
     }
 
-    public void setRawPosition(double x,
-                               double y,
-                               double zDegrees) {
+    public void setRawPosition(double x, double y, double zDegrees) {
         ValidationUtils.validate(x, "x");
         ValidationUtils.validate(y, "y");
         ValidationUtils.validate(zDegrees, "zDegrees");
@@ -78,9 +78,7 @@ public class SimulatedOdometry extends AbstractOdometry {
         setRawPosition(new PointXYZ(x, y, zDegrees));
     }
 
-    public void setRawPosition(double x,
-                               double y,
-                               Angle z) {
+    public void setRawPosition(double x, double y, Angle z) {
         setRawPosition(new PointXYZ(x, y, z));
     }
 
@@ -115,16 +113,12 @@ public class SimulatedOdometry extends AbstractOdometry {
      * @param angle          the angle at which the robot should move.
      * @param unitsPerSecond how many units per second the robot should move.
      */
-    public void setVelocity(Angle angle,
-                            double unitsPerSecond) {
+    public void setVelocity(Angle angle, double unitsPerSecond) {
         this.movementAngle = angle;
         this.unitsPerSecond = unitsPerSecond;
     }
 
     public void setTranslation(Translation translation) {
-        setVelocity(
-                translation.angle(),
-                translation.magnitude()
-        );
+        setVelocity(translation.angle(), translation.magnitude());
     }
 }

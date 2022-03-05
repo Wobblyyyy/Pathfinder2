@@ -10,10 +10,9 @@
 
 package me.wobblyyyy.pathfinder2.robot;
 
+import java.util.function.Function;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
-
-import java.util.function.Function;
 
 /**
  * One of the two major components of your robot - firstly, there's odometry,
@@ -98,14 +97,18 @@ public interface Drive {
     void setTranslation(Translation translation);
 
     default Function<Translation, Translation> getDriveModifier() {
-        throw new UnsupportedOperationException("The implementation of " +
-                "the Drive interface you're using does not support " +
-                "modifiers!");
+        throw new UnsupportedOperationException(
+            "The implementation of " +
+            "the Drive interface you're using does not support " +
+            "modifiers!"
+        );
     }
 
     default void setDriveModifier(Function<Translation, Translation> modifier) {
-        throw new UnsupportedOperationException("The implementation of " +
-                "the Drive interface you're using does not support " +
-                "modifiers!");
+        throw new UnsupportedOperationException(
+            "The implementation of " +
+            "the Drive interface you're using does not support " +
+            "modifiers!"
+        );
     }
 }

@@ -19,9 +19,8 @@ import me.wobblyyyy.pathfinder2.robot.AbstractDrive;
  * @author Colin Robertson
  */
 public class EmptyDrive extends AbstractDrive {
-    public EmptyDrive() {
-        super(translation -> {
 
-        }, () -> null);
+    public EmptyDrive() {
+        super(translation -> {}, () -> null);
     }
 }

@@ -33,8 +33,7 @@ public class WPIEncoder extends AbstractEncoder {
      *                WPI's encoder, so I'm including it here too. You
      *                know the vibe.
      */
-    public WPIEncoder(Encoder encoder,
-                      boolean isRaw) {
+    public WPIEncoder(Encoder encoder, boolean isRaw) {
         this.encoder = encoder;
         this.isRaw = isRaw;
     }
@@ -55,20 +54,16 @@ public class WPIEncoder extends AbstractEncoder {
      * @param encoderChannelB  one of the encoder's channels.
      * @param reverseDirection should the encoder's direction be reversed?
      */
-    public WPIEncoder(int encoderChannelA,
-                      int encoderChannelB,
-                      boolean reverseDirection) {
-        this(new Encoder(
-                encoderChannelA,
-                encoderChannelB,
-                reverseDirection
-        ));
+    public WPIEncoder(
+        int encoderChannelA,
+        int encoderChannelB,
+        boolean reverseDirection
+    ) {
+        this(new Encoder(encoderChannelA, encoderChannelB, reverseDirection));
     }
 
     @Override
     public int getRawTicks() {
-        return isRaw
-                ? encoder.getRaw()
-                : encoder.get();
+        return isRaw ? encoder.getRaw() : encoder.get();
     }
 }

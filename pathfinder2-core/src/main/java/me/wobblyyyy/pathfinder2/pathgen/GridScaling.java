@@ -18,8 +18,7 @@ public class GridScaling {
         this(scale, scale);
     }
 
-    public GridScaling(double scaleX,
-                       double scaleY) {
+    public GridScaling(double scaleX, double scaleY) {
         this.scaleX = scaleX;
         this.scaleY = scaleY;
     }

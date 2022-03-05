@@ -25,32 +25,22 @@ public class TestGenericFollower {
     private static final PointXYZ target = new PointXYZ(10, 10, 90);
 
     private static final Trajectory trajectory = new LinearTrajectory(
-            target,
-            1.0,
-            1.0,
-            Angle.fromDeg(0.5)
+        target,
+        1.0,
+        1.0,
+        Angle.fromDeg(0.5)
     );
 
-    private static final Controller turnController = new GenericTurnController(0.1);
+    private static final Controller turnController = new GenericTurnController(
+        0.1
+    );
 
     private void testTranslationConsumer(Translation translation) {
-        Assertions.assertTrue(Equals.soft(
-                45,
-                translation.angle().deg(),
-                0.1
-        ));
+        Assertions.assertTrue(Equals.soft(45, translation.angle().deg(), 0.1));
 
-        Assertions.assertTrue(Equals.soft(
-                0.7,
-                translation.vx(),
-                0.1
-        ));
+        Assertions.assertTrue(Equals.soft(0.7, translation.vx(), 0.1));
 
-        Assertions.assertTrue(Equals.soft(
-                0.7,
-                translation.vy(),
-                0.1
-        ));
+        Assertions.assertTrue(Equals.soft(0.7, translation.vy(), 0.1));
     }
 
     @Test
@@ -63,8 +53,8 @@ public class TestGenericFollower {
     @Test
     public void testGetTrajectory() {
         Assertions.assertEquals(
-                trajectory,
-                new GenericFollower(trajectory, turnController).getTrajectory()
+            trajectory,
+            new GenericFollower(trajectory, turnController).getTrajectory()
         );
     }
 }

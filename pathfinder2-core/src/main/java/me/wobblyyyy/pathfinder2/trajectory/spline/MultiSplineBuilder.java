@@ -10,18 +10,17 @@
 
 package me.wobblyyyy.pathfinder2.trajectory.spline;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.math.Spline;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.trajectory.multi.segment.MultiSegmentTrajectory;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.Trio;
-import me.wobblyyyy.pathfinder2.math.Spline;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MultiSplineBuilder {
     private final List<Node> nodes = new ArrayList<>();
@@ -34,26 +33,24 @@ public class MultiSplineBuilder {
     private static List<NodeTrio> getTrios(List<Node> nodes) {
         int size = nodes.size();
 
-        if (size < 3)
-            throw new IllegalArgumentException("You need at least three " +
-                    "or more control points!");
+        if (size < 3) throw new IllegalArgumentException(
+            "You need at least three " + "or more control points!"
+        );
 
         List<NodeTrio> trios = new ArrayList<>(nodes.size());
 
-        for (int i = 0; i < size - 2; i++)
-            trios.add(new NodeTrio(
-                    nodes.get(i),
-                    nodes.get(i + 1),
-                    nodes.get(i + 2)
-            ));
+        for (int i = 0; i < size - 2; i++) trios.add(
+            new NodeTrio(nodes.get(i), nodes.get(i + 1), nodes.get(i + 2))
+        );
 
         return trios;
     }
 
-    private static void verifyMonotonicity(List<NodeTrio> trios,
-                                           List<Node> allNodes) {
+    private static void verifyMonotonicity(
+        List<NodeTrio> trios,
+        List<Node> allNodes
+    ) {
         return;
-
         /*
         for (NodeTrio trio : trios) {
             PointXYZ a = trio.getA().point();
@@ -100,19 +97,23 @@ public class MultiSplineBuilder {
         return this;
     }
 
-    public MultiSplineBuilder setDefaultInterpolationMode(InterpolationMode mode) {
+    public MultiSplineBuilder setDefaultInterpolationMode(
+        InterpolationMode mode
+    ) {
         defaultNode.mode = mode;
 
         return this;
     }
 
-    public MultiSplineBuilder add(double x,
-                                  double y,
-                                  double zDeg,
-                                  double speed,
-                                  double step,
-                                  double tolerance,
-                                  Angle angleTolerance) {
+    public MultiSplineBuilder add(
+        double x,
+        double y,
+        double zDeg,
+        double speed,
+        double step,
+        double tolerance,
+        Angle angleTolerance
+    ) {
         Node node = new Node(defaultNode);
 
         node.x = x;
@@ -128,13 +129,15 @@ public class MultiSplineBuilder {
         return this;
     }
 
-    public MultiSplineBuilder add(double x,
-                                  double y,
-                                  Angle z,
-                                  double speed,
-                                  double step,
-                                  double tolerance,
-                                  Angle angleTolerance) {
+    public MultiSplineBuilder add(
+        double x,
+        double y,
+        Angle z,
+        double speed,
+        double step,
+        double tolerance,
+        Angle angleTolerance
+    ) {
         Node node = new Node(defaultNode);
 
         node.x = x;
@@ -150,10 +153,7 @@ public class MultiSplineBuilder {
         return this;
     }
 
-    public MultiSplineBuilder add(double x,
-                                  double y,
-                                  Angle z,
-                                  double step) {
+    public MultiSplineBuilder add(double x, double y, Angle z, double step) {
         Node node = new Node(defaultNode);
 
         node.x = x;
@@ -166,18 +166,19 @@ public class MultiSplineBuilder {
         return this;
     }
 
-    public MultiSplineBuilder add(PointXY point,
-                                  double speed,
-                                  double tolerance,
-                                  Angle angleTolerance,
-                                  double step) {
+    public MultiSplineBuilder add(
+        PointXY point,
+        double speed,
+        double tolerance,
+        Angle angleTolerance,
+        double step
+    ) {
         Node node = new Node(defaultNode);
 
         node.x = point.x();
         node.y = point.y();
 
-        if (point instanceof PointXYZ)
-            node.zDeg = ((PointXYZ) point).z().deg();
+        if (point instanceof PointXYZ) node.zDeg = ((PointXYZ) point).z().deg();
 
         node.speed = speed;
         node.tolerance = tolerance;
@@ -189,16 +190,13 @@ public class MultiSplineBuilder {
         return this;
     }
 
-    public MultiSplineBuilder add(PointXY point,
-                                  double speed,
-                                  double step) {
+    public MultiSplineBuilder add(PointXY point, double speed, double step) {
         Node node = new Node(defaultNode);
 
         node.x = point.x();
         node.y = point.y();
 
-        if (point instanceof PointXYZ)
-            node.zDeg = ((PointXYZ) point).z().deg();
+        if (point instanceof PointXYZ) node.zDeg = ((PointXYZ) point).z().deg();
 
         node.speed = speed;
         node.step = step;
@@ -215,31 +213,37 @@ public class MultiSplineBuilder {
         verifyMonotonicity(trios, nodes);
 
         SplineBuilderFactory factory = new SplineBuilderFactory()
-                .setSpeed(defaultNode.speed)
-                .setTolerance(defaultNode.tolerance)
-                .setAngleTolerance(defaultNode.angleTolerance)
-                .setStep(defaultNode.step);
+            .setSpeed(defaultNode.speed)
+            .setTolerance(defaultNode.tolerance)
+            .setAngleTolerance(defaultNode.angleTolerance)
+            .setStep(defaultNode.step);
 
-        List<Trajectory> trajectories = trios.stream().map((trio) -> {
-            Node a = trio.getA();
-            Node b = trio.getB();
-            Node c = trio.getC();
+        List<Trajectory> trajectories = trios
+            .stream()
+            .map(
+                trio -> {
+                    Node a = trio.getA();
+                    Node b = trio.getB();
+                    Node c = trio.getC();
 
-            PointXYZ aPoint = a.point();
-            PointXYZ bPoint = b.point();
-            PointXYZ cPoint = c.point();
+                    PointXYZ aPoint = a.point();
+                    PointXYZ bPoint = b.point();
+                    PointXYZ cPoint = c.point();
 
-            double aSpeed = a.speed;
-            double bSpeed = b.speed;
-            double cSpeed = c.speed;
+                    double aSpeed = a.speed;
+                    double bSpeed = b.speed;
+                    double cSpeed = c.speed;
 
-            return factory.builder()
-                    .setInterpolationMode(a.mode)
-                    .add(aPoint, aSpeed)
-                    .add(bPoint, bSpeed)
-                    .add(cPoint, cSpeed)
-                    .build();
-        }).collect(Collectors.toList());
+                    return factory
+                        .builder()
+                        .setInterpolationMode(a.mode)
+                        .add(aPoint, aSpeed)
+                        .add(bPoint, bSpeed)
+                        .add(cPoint, cSpeed)
+                        .build();
+                }
+            )
+            .collect(Collectors.toList());
 
         return new MultiSegmentTrajectory(trajectories);
     }
@@ -249,9 +253,7 @@ public class MultiSplineBuilder {
         Angle angleTolerance;
         InterpolationMode mode;
 
-        Node() {
-
-        }
+        Node() {}
 
         Node(Node node) {
             this.x = node.x;
@@ -275,6 +277,7 @@ public class MultiSplineBuilder {
     }
 
     private static class NodeTrio extends Trio<Node, Node, Node> {
+
         NodeTrio(Node a, Node b, Node c) {
             super(a, b, c);
         }

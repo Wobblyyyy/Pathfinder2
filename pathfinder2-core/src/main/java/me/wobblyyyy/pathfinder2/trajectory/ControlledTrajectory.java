@@ -55,17 +55,18 @@ public class ControlledTrajectory extends LinearTrajectory {
      * @param angleTolerance  the tolerance used in determining whether the
      *                        robot's heading matches up with whatever heading
      */
-    public ControlledTrajectory(PointXYZ target,
-                                Controller speedController,
-                                double tolerance,
-                                Angle angleTolerance) {
+    public ControlledTrajectory(
+        PointXYZ target,
+        Controller speedController,
+        double tolerance,
+        Angle angleTolerance
+    ) {
         super(
-                ValidationUtils.validate(target, "target"),
-                0,
-                ValidationUtils.validate(tolerance, "tolerance"),
-                ValidationUtils.validate(angleTolerance, "angleTolerance")
+            ValidationUtils.validate(target, "target"),
+            0,
+            ValidationUtils.validate(tolerance, "tolerance"),
+            ValidationUtils.validate(angleTolerance, "angleTolerance")
         );
-
         ValidationUtils.validate(speedController, "speedController");
 
         speedController.setMin(-1.0);
@@ -84,13 +85,16 @@ public class ControlledTrajectory extends LinearTrajectory {
 
         double speed = Math.abs(speedController.calculate(distance, 0));
 
-        InvalidSpeedException.throwIfInvalid(StringUtils.format(
+        InvalidSpeedException.throwIfInvalid(
+            StringUtils.format(
                 "Turn controller calculated an invalid speed! The speed " +
-                        "value that was calculated was <%s>. This value " +
-                        "should be greater than 0 and less than or " +
-                        "equal to 1!",
+                "value that was calculated was <%s>. This value " +
+                "should be greater than 0 and less than or " +
+                "equal to 1!",
                 speed
-        ), speed);
+            ),
+            speed
+        );
 
         return speed;
     }

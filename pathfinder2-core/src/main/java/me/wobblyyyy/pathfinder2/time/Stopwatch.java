@@ -43,9 +43,7 @@ public class Stopwatch {
      * @see #now()
      * @see #start()
      */
-    public Stopwatch() {
-
-    }
+    public Stopwatch() {}
 
     /**
      * Create a new {@code Stopwatch} instance and start it. This is a chain
@@ -112,8 +110,8 @@ public class Stopwatch {
     public double elapsedSince(int index) {
         if (index > 1) {
             return Timestamp.difference(
-                    timestamps.get(0),
-                    timestamps.get(index)
+                timestamps.get(0),
+                timestamps.get(index)
             );
         } else {
             return 0;
@@ -144,13 +142,14 @@ public class Stopwatch {
      * first and last recorded timestamps. These CAN both be the same.
      */
     public double elapsed() {
-        if (timestamps.size() < 1)
-            throw new RuntimeException("you need to start the stopwatch " +
-                    "before getting the elapsed time!");
+        if (timestamps.size() < 1) throw new RuntimeException(
+            "you need to start the stopwatch " +
+            "before getting the elapsed time!"
+        );
 
         return Timestamp.difference(
-                timestamps.get(0),
-                timestamps.get(laps() - 1)
+            timestamps.get(0),
+            timestamps.get(laps() - 1)
         );
     }
 

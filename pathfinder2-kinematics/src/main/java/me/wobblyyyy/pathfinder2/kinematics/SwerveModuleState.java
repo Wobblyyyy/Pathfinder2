@@ -16,8 +16,7 @@ public class SwerveModuleState {
     private final double speed;
     private final Angle direction;
 
-    public SwerveModuleState(double speed,
-                             Angle direction) {
+    public SwerveModuleState(double speed, Angle direction) {
         this.speed = speed;
         this.direction = direction;
     }
@@ -32,8 +31,8 @@ public class SwerveModuleState {
 
     public SwerveModuleState add(SwerveModuleState state) {
         return new SwerveModuleState(
-                speed + state.speed,
-                direction.add(state.direction)
+            speed + state.speed,
+            direction.add(state.direction)
         );
     }
 }

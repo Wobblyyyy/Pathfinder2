@@ -10,13 +10,12 @@
 
 package me.wobblyyyy.pathfinder2.trajectory.builder;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Simple trajectory builder used in creating trajectory groupings made solely
@@ -86,10 +85,12 @@ public class LinearTrajectoryBuilder {
      *                       doesn't really matter all that much - you'll
      *                       be fine if you just set it to (0, 0, 0).
      */
-    public LinearTrajectoryBuilder(double speed,
-                                   double tolerance,
-                                   Angle angleTolerance,
-                                   PointXYZ start) {
+    public LinearTrajectoryBuilder(
+        double speed,
+        double tolerance,
+        Angle angleTolerance,
+        PointXYZ start
+    ) {
         this.speed = speed;
         this.tolerance = tolerance;
         this.angleTolerance = angleTolerance;
@@ -148,17 +149,21 @@ public class LinearTrajectoryBuilder {
      * @param targetAngle the angle the trajectory should attempt to turn to.
      * @param angle       the angle at which the line should be drawn.
      */
-    public LinearTrajectoryBuilder rotateLine(double distance,
-                                              Angle targetAngle,
-                                              Angle angle) {
+    public LinearTrajectoryBuilder rotateLine(
+        double distance,
+        Angle targetAngle,
+        Angle angle
+    ) {
         PointXYZ next = last.inDirection(distance, angle);
 
-        trajectories.add(new LinearTrajectory(
+        trajectories.add(
+            new LinearTrajectory(
                 next.withHeading(targetAngle),
                 speed,
                 tolerance,
                 angleTolerance
-        ));
+            )
+        );
 
         last = next;
 
@@ -171,8 +176,7 @@ public class LinearTrajectoryBuilder {
      * @param distance how long the line should be.
      * @param angle    the direction the line should be drawn in.
      */
-    public LinearTrajectoryBuilder line(double distance,
-                                        Angle angle) {
+    public LinearTrajectoryBuilder line(double distance, Angle angle) {
         rotateLine(distance, last.z(), angle);
 
         return this;
@@ -228,13 +232,11 @@ public class LinearTrajectoryBuilder {
      * @param distance   how far to move.
      * @param toRotateBy how much to rotate.
      */
-    public LinearTrajectoryBuilder rotateForwards(double distance,
-                                                  Angle toRotateBy) {
-        rotateLine(
-                distance,
-                last.z().add(toRotateBy),
-                FORWARDS.add(last.z())
-        );
+    public LinearTrajectoryBuilder rotateForwards(
+        double distance,
+        Angle toRotateBy
+    ) {
+        rotateLine(distance, last.z().add(toRotateBy), FORWARDS.add(last.z()));
 
         return this;
     }
@@ -245,12 +247,14 @@ public class LinearTrajectoryBuilder {
      * @param distance   how far to move.
      * @param toRotateBy how much to rotate.
      */
-    public LinearTrajectoryBuilder rotateRightwards(double distance,
-                                                    Angle toRotateBy) {
+    public LinearTrajectoryBuilder rotateRightwards(
+        double distance,
+        Angle toRotateBy
+    ) {
         rotateLine(
-                distance,
-                last.z().add(toRotateBy),
-                RIGHTWARDS.add(last.z())
+            distance,
+            last.z().add(toRotateBy),
+            RIGHTWARDS.add(last.z())
         );
 
         return this;
@@ -262,13 +266,11 @@ public class LinearTrajectoryBuilder {
      * @param distance   how far to move.
      * @param toRotateBy how much to rotate.
      */
-    public LinearTrajectoryBuilder rotateLeftwards(double distance,
-                                                   Angle toRotateBy) {
-        rotateLine(
-                distance,
-                last.z().add(toRotateBy),
-                LEFTWARDS.add(last.z())
-        );
+    public LinearTrajectoryBuilder rotateLeftwards(
+        double distance,
+        Angle toRotateBy
+    ) {
+        rotateLine(distance, last.z().add(toRotateBy), LEFTWARDS.add(last.z()));
 
         return this;
     }
@@ -279,13 +281,11 @@ public class LinearTrajectoryBuilder {
      * @param distance   how far to move.
      * @param toRotateBy how much to rotate.
      */
-    public LinearTrajectoryBuilder rotateBackwards(double distance,
-                                                   Angle toRotateBy) {
-        rotateLine(
-                distance,
-                last.z().add(toRotateBy),
-                BACKWARDS.add(last.z())
-        );
+    public LinearTrajectoryBuilder rotateBackwards(
+        double distance,
+        Angle toRotateBy
+    ) {
+        rotateLine(distance, last.z().add(toRotateBy), BACKWARDS.add(last.z()));
 
         return this;
     }
@@ -296,12 +296,9 @@ public class LinearTrajectoryBuilder {
      * @param target the target point.
      */
     public LinearTrajectoryBuilder goTo(PointXYZ target) {
-        trajectories.add(new LinearTrajectory(
-                target,
-                speed,
-                tolerance,
-                angleTolerance
-        ));
+        trajectories.add(
+            new LinearTrajectory(target, speed, tolerance, angleTolerance)
+        );
 
         last = target;
 
@@ -337,8 +334,7 @@ public class LinearTrajectoryBuilder {
      * @param x target X coordinate.
      * @param y target Y coordinate.
      */
-    public LinearTrajectoryBuilder goTo(double x,
-                                        double y) {
+    public LinearTrajectoryBuilder goTo(double x, double y) {
         goTo(new PointXYZ(x, y, last.z()));
 
         return this;

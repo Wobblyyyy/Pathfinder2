@@ -17,6 +17,7 @@ package me.wobblyyyy.pathfinder2.exceptions;
  * @since 0.3.0
  */
 public class InvalidTimeException extends RuntimeException {
+
     public InvalidTimeException(String message) {
         super(message);
     }

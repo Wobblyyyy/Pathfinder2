@@ -10,9 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.robot;
 
-import me.wobblyyyy.pathfinder2.geometry.Translation;
-
 import java.util.function.Function;
+import me.wobblyyyy.pathfinder2.geometry.Translation;
 
 /**
  * An improved implementation of {@link Drive}. All you need to do to create
@@ -23,7 +22,7 @@ import java.util.function.Function;
  * @since 1.4.2
  */
 public abstract class ImprovedAbstractDrive implements Drive {
-    private Function<Translation, Translation> modifier = (t) -> t;
+    private Function<Translation, Translation> modifier = t -> t;
     private Translation translation;
 
     public Translation abstractGetTranslation() {

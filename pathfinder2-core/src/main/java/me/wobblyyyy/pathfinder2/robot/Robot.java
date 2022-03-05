@@ -38,9 +38,7 @@ public class Robot {
     /**
      * Create a new {@code Robot}.
      */
-    public Robot() {
-
-    }
+    public Robot() {}
 
     /**
      * Create a new {@code Robot}.
@@ -48,21 +46,20 @@ public class Robot {
      * @param drive    the robot's drive system.
      * @param odometry the robot's odometry system.
      */
-    public Robot(Drive drive,
-                 Odometry odometry) {
+    public Robot(Drive drive, Odometry odometry) {
         if (drive == null) {
             throw new NullDriveException(
-                    "Attempted to create a robot with a null instance of the " +
-                            "Drive interface, please ensure you're passing " +
-                            "a non-null object to the Robot constructor!"
+                "Attempted to create a robot with a null instance of the " +
+                "Drive interface, please ensure you're passing " +
+                "a non-null object to the Robot constructor!"
             );
         }
 
         if (odometry == null) {
             throw new NullOdometryException(
-                    "Attempted to create a robot with a null instance of the " +
-                            "Odometry interface, please ensure you're passing " +
-                            "a non-null object to the Robot constructor!"
+                "Attempted to create a robot with a null instance of the " +
+                "Odometry interface, please ensure you're passing " +
+                "a non-null object to the Robot constructor!"
             );
         }
 

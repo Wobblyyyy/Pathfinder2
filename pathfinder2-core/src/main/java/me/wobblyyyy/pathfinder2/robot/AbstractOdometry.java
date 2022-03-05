@@ -10,11 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.robot;
 
+import java.util.function.Function;
 import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
-
-import java.util.function.Function;
 
 /**
  * An abstract implementation of the {@link Odometry} interface. This
@@ -43,9 +42,9 @@ public abstract class AbstractOdometry implements Odometry {
 
         if (rawPosition == null) {
             throw new NullPointException(
-                    "An Odometry system reported a null position, please " +
-                            "ensure the getRawPosition() method is always " +
-                            "returning a non-null object!"
+                "An Odometry system reported a null position, please " +
+                "ensure the getRawPosition() method is always " +
+                "returning a non-null object!"
             );
         }
 

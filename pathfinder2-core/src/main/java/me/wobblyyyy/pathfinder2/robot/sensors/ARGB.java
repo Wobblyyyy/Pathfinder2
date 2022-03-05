@@ -22,10 +22,7 @@ public class ARGB {
     private final int green;
     private final int blue;
 
-    public ARGB(int alpha,
-                int red,
-                int green,
-                int blue) {
+    public ARGB(int alpha, int red, int green, int blue) {
         this.alpha = alpha;
         this.red = red;
         this.green = green;

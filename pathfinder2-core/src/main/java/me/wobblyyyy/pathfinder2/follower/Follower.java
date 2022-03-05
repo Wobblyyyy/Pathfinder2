@@ -10,15 +10,14 @@
 
 package me.wobblyyyy.pathfinder2.follower;
 
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
-
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 /**
  * Every rose has its thorns. And every trajectory has its follower. That
@@ -77,17 +76,20 @@ public interface Follower {
      * and Y values that fit within the bounds (-1.0, 1.0). This translation
      * is also absolute, NOT relative.
      */
-    static Translation getAbsoluteTranslation(PointXYZ current,
-                                              PointXYZ target,
-                                              double speed,
-                                              double turn) {
+    static Translation getAbsoluteTranslation(
+        PointXYZ current,
+        PointXYZ target,
+        double speed,
+        double turn
+    ) {
         ValidationUtils.validate(current, "current");
         ValidationUtils.validate(target, "target");
         ValidationUtils.validate(speed, "speed");
         ValidationUtils.validate(turn, "turn");
 
-        if (PointXY.equals(current, target))
-            return Translation.ZERO.withVz(turn);
+        if (PointXY.equals(current, target)) return Translation.ZERO.withVz(
+            turn
+        );
 
         Angle angle = current.angleTo(target).fix();
 
@@ -109,20 +111,21 @@ public interface Follower {
      * (-1.0, 1.0). The Z aspect of the translation will always be equal to
      * whatever turn value is provided.
      */
-    static Translation getRelativeTranslation(PointXYZ current,
-                                              PointXYZ target,
-                                              double speed,
-                                              double turn) {
+    static Translation getRelativeTranslation(
+        PointXYZ current,
+        PointXYZ target,
+        double speed,
+        double turn
+    ) {
         return Translation.absoluteToRelative(
-                // We start by creating an absolute translation using the
-                // "getAbsoluteTranslation" method. From there, we convert it to
-                // a relative one. Complicated stuff, right?
-                getAbsoluteTranslation(current, target, speed, turn),
-
-                // Translation.absoluteToRelative requires a heading value that
-                // represents the robot's current heading to generate the
-                // new relative translation - that's exactly what this is.
-                current.z()
+            // We start by creating an absolute translation using the
+            // "getAbsoluteTranslation" method. From there, we convert it to
+            // a relative one. Complicated stuff, right?
+            getAbsoluteTranslation(current, target, speed, turn),
+            // Translation.absoluteToRelative requires a heading value that
+            // represents the robot's current heading to generate the
+            // new relative translation - that's exactly what this is.
+            current.z()
         );
     }
 
@@ -168,12 +171,11 @@ public interface Follower {
      * @param setTranslation a consumer that accepts a translation.
      * @return true if the follower is finished. Otherwise, false.
      */
-    static boolean tickFollower(Follower follower,
-                                Supplier<PointXYZ> getPosition,
-                                Consumer<Translation> setTranslation) {
-        return follower.tick(
-                getPosition.get(),
-                setTranslation
-        );
+    static boolean tickFollower(
+        Follower follower,
+        Supplier<PointXYZ> getPosition,
+        Consumer<Translation> setTranslation
+    ) {
+        return follower.tick(getPosition.get(), setTranslation);
     }
 }

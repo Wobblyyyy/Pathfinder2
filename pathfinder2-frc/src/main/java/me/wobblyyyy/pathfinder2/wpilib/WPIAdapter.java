@@ -25,12 +25,9 @@ import me.wobblyyyy.pathfinder2.geometry.Translation;
  * @since 0.10.8
  */
 public class WPIAdapter {
+
     public static Pose2d poseFromPointXY(PointXY point) {
-        return new Pose2d(
-                point.x(),
-                point.y(),
-                new Rotation2d()
-        );
+        return new Pose2d(point.x(), point.y(), new Rotation2d());
     }
 
     public static PointXY pointXYFromPose(Pose2d pose) {
@@ -38,11 +35,7 @@ public class WPIAdapter {
     }
 
     public static Pose2d poseFromPointXYZ(PointXYZ point) {
-        return new Pose2d(
-                point.x(),
-                point.y(),
-                rotationFromAngle(point.z())
-        );
+        return new Pose2d(point.x(), point.y(), rotationFromAngle(point.z()));
     }
 
     public static PointXYZ pointXYZFromPose(Pose2d pose) {
@@ -59,17 +52,17 @@ public class WPIAdapter {
 
     public static Translation translationFromSpeeds(ChassisSpeeds speeds) {
         return new Translation(
-                speeds.vxMetersPerSecond,
-                speeds.vyMetersPerSecond,
-                speeds.omegaRadiansPerSecond
+            speeds.vxMetersPerSecond,
+            speeds.vyMetersPerSecond,
+            speeds.omegaRadiansPerSecond
         );
     }
 
     public static ChassisSpeeds speedsFromTranslation(Translation translation) {
         return new ChassisSpeeds(
-                translation.vx(),
-                translation.vy(),
-                translation.vz()
+            translation.vx(),
+            translation.vy(),
+            translation.vz()
         );
     }
 }

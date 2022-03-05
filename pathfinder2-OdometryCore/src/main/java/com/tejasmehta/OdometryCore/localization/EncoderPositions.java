@@ -24,7 +24,11 @@ public class EncoderPositions {
      * @param rightPosition     - The right encoder's position in ticks
      * @param frontBackPosition - The Front or back encoder's position in ticks
      */
-    public EncoderPositions(double leftPosition, double rightPosition, double frontBackPosition) {
+    public EncoderPositions(
+        double leftPosition,
+        double rightPosition,
+        double frontBackPosition
+    ) {
         this.leftPosition = leftPosition;
         this.rightPosition = rightPosition;
         this.frontBackPosition = frontBackPosition;

@@ -10,12 +10,12 @@
 
 package me.wobblyyyy.pathfinder2.revrobotics;
 
+import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushed;
+import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
-
-import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushed;
-import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 
 /**
  * Wrapper for {@link CANSparkMax}. Uses {@link AbstractMotor} internally to
@@ -34,14 +34,11 @@ public class SparkMaxMotor extends AbstractMotor implements AutoCloseable {
      */
     public SparkMaxMotor(CANSparkMax spark) {
         super(spark::set, spark::get);
-
         this.spark = spark;
     }
 
-    public SparkMaxMotor(CANSparkMax spark,
-                         boolean isInverted) {
+    public SparkMaxMotor(CANSparkMax spark, boolean isInverted) {
         super(spark::set, spark::get, isInverted);
-
         this.spark = spark;
     }
 
@@ -51,14 +48,11 @@ public class SparkMaxMotor extends AbstractMotor implements AutoCloseable {
      * @param deviceId the spark's device ID.
      * @param type     the spark's type - either brushless or brushed.
      */
-    public SparkMaxMotor(int deviceId,
-                         MotorType type) {
+    public SparkMaxMotor(int deviceId, MotorType type) {
         this(new CANSparkMax(deviceId, type));
     }
 
-    public SparkMaxMotor(int deviceId,
-                         MotorType type,
-                         boolean isInverted) {
+    public SparkMaxMotor(int deviceId, MotorType type, boolean isInverted) {
         this(new CANSparkMax(deviceId, type), isInverted);
     }
 
@@ -79,8 +73,7 @@ public class SparkMaxMotor extends AbstractMotor implements AutoCloseable {
      * @param isInverted is the motor inverted?
      * @return a new brushed {@code SparkMaxMotor}.
      */
-    public static SparkMaxMotor brushed(int deviceId,
-                                        boolean isInverted) {
+    public static SparkMaxMotor brushed(int deviceId, boolean isInverted) {
         return new SparkMaxMotor(deviceId, kBrushed, isInverted);
     }
 
@@ -101,8 +94,7 @@ public class SparkMaxMotor extends AbstractMotor implements AutoCloseable {
      * @param isInverted is the motor inverted?
      * @return a new brushless {@code SparkMaxMotor}.
      */
-    public static SparkMaxMotor brushless(int deviceId,
-                                          boolean isInverted) {
+    public static SparkMaxMotor brushless(int deviceId, boolean isInverted) {
         return new SparkMaxMotor(deviceId, kBrushless, isInverted);
     }
 

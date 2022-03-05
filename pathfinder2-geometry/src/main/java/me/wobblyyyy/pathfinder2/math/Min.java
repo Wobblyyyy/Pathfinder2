@@ -11,9 +11,8 @@
 package me.wobblyyyy.pathfinder2.math;
 
 public class Min {
-    private Min() {
 
-    }
+    private Min() {}
 
     public static double of(double... values) {
         double m = values[0];

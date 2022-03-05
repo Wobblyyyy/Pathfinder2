@@ -33,13 +33,15 @@ public class ArcTrajectory implements Trajectory {
     private final Angle stop;
     private final boolean isInverted;
 
-    public ArcTrajectory(PointXY center,
-                         double radius,
-                         double speed,
-                         Angle angleStep,
-                         Angle desiredHeading,
-                         Angle start,
-                         Angle stop) {
+    public ArcTrajectory(
+        PointXY center,
+        double radius,
+        double speed,
+        Angle angleStep,
+        Angle desiredHeading,
+        Angle start,
+        Angle stop
+    ) {
         circle = new Circle(center, radius);
         this.radius = radius;
         this.speed = speed;
@@ -55,21 +57,22 @@ public class ArcTrajectory implements Trajectory {
         double deg = current.z().fix().deg();
 
         if (isInverted) {
-            if (deg > start.deg())
-                deg = start.deg();
-            else if (deg < stop.deg())
-                deg = stop.deg();
+            if (deg > start.deg()) deg = start.deg(); else if (
+                deg < stop.deg()
+            ) deg = stop.deg();
         } else {
-            if (deg < start.deg())
-                deg = start.deg();
-            else if (deg > stop.deg())
-                deg = stop.deg();
+            if (deg < start.deg()) deg = start.deg(); else if (
+                deg > stop.deg()
+            ) deg = stop.deg();
         }
 
-        return circle.getCenter().inDirection(
+        return circle
+            .getCenter()
+            .inDirection(
                 radius,
                 circle.getCenter().angleTo(current).add(angleStep)
-        ).withHeading(desiredHeading);
+            )
+            .withHeading(desiredHeading);
     }
 
     @Override

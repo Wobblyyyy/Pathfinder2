@@ -10,11 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.pathgen;
 
-import me.wobblyyyy.pathfinder2.geometry.PointXY;
-import me.wobblyyyy.pathfinder2.geometry.Rectangle;
-
 import java.util.ArrayList;
 import java.util.List;
+import me.wobblyyyy.pathfinder2.geometry.PointXY;
+import me.wobblyyyy.pathfinder2.geometry.Rectangle;
 
 /**
  * Wrapper class for localizing a {@link Grid}.
@@ -40,11 +39,13 @@ public class LocalizedGrid {
      * @param maxX the "real" maximum x.
      * @param maxY the "real" maximum y.
      */
-    public LocalizedGrid(Grid grid,
-                         double minX,
-                         double minY,
-                         double maxX,
-                         double maxY) {
+    public LocalizedGrid(
+        Grid grid,
+        double minX,
+        double minY,
+        double maxX,
+        double maxY
+    ) {
         this.grid = grid;
 
         this.minX = minX;
@@ -73,27 +74,23 @@ public class LocalizedGrid {
      * @param maxY     the grid's maximum Y value.
      * @return a new localized grid.
      */
-    public static LocalizedGrid generateLocalizedGrid(double xScaling,
-                                                      double yScaling,
-                                                      double minX,
-                                                      double minY,
-                                                      double maxX,
-                                                      double maxY) {
+    public static LocalizedGrid generateLocalizedGrid(
+        double xScaling,
+        double yScaling,
+        double minX,
+        double minY,
+        double maxX,
+        double maxY
+    ) {
         double sizeX = maxX - minX;
         double sizeY = maxY - minY;
 
         Grid grid = Grid.generateGrid(
-                (int) Math.ceil(sizeX / xScaling),
-                (int) Math.ceil(sizeY / yScaling)
+            (int) Math.ceil(sizeX / xScaling),
+            (int) Math.ceil(sizeY / yScaling)
         );
 
-        return new LocalizedGrid(
-                grid,
-                minX,
-                minY,
-                maxX,
-                maxY
-        );
+        return new LocalizedGrid(grid, minX, minY, maxX, maxY);
     }
 
     /**
@@ -160,11 +157,6 @@ public class LocalizedGrid {
     }
 
     public Rectangle getRectangle() {
-        return new Rectangle(
-                minX,
-                minY,
-                maxX,
-                maxY
-        );
+        return new Rectangle(minX, minY, maxX, maxY);
     }
 }

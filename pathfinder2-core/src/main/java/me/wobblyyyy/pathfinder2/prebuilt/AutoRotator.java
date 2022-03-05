@@ -10,14 +10,13 @@
 
 package me.wobblyyyy.pathfinder2.prebuilt;
 
+import java.util.function.Function;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
-
-import java.util.function.Function;
 
 /**
  * An {@code AutoRotator} allows you to automatically rotate around a
@@ -34,15 +33,8 @@ public class AutoRotator implements Function<Translation, Translation> {
     private Angle angleOffset;
     private boolean isActive;
 
-    public AutoRotator(Pathfinder pathfinder,
-                       Controller turnController) {
-        this(
-                pathfinder,
-                turnController,
-                null,
-                Angle.DEG_0,
-                true
-        );
+    public AutoRotator(Pathfinder pathfinder, Controller turnController) {
+        this(pathfinder, turnController, null, Angle.DEG_0, true);
     }
 
     /**
@@ -63,11 +55,13 @@ public class AutoRotator implements Function<Translation, Translation> {
      *                       offset, you can use an angle offset.
      * @param isActive       is the rotator active?
      */
-    public AutoRotator(Pathfinder pathfinder,
-                       Controller turnController,
-                       PointXY centerPoint,
-                       Angle angleOffset,
-                       boolean isActive) {
+    public AutoRotator(
+        Pathfinder pathfinder,
+        Controller turnController,
+        PointXY centerPoint,
+        Angle angleOffset,
+        boolean isActive
+    ) {
         this.pathfinder = pathfinder;
         this.turnController = turnController;
         this.centerPoint = centerPoint;
@@ -101,17 +95,16 @@ public class AutoRotator implements Function<Translation, Translation> {
     public Translation apply(Translation translation) {
         if (!isActive) return translation;
 
-        if (centerPoint == null)
-            throw new NullPointerException(
-                    "Attempted to use an AutoRotator without having previously " +
-                            "set a center point, make sure to use the" +
-                            "setCenterPoint(PointXY) method to do that."
-            );
+        if (centerPoint == null) throw new NullPointerException(
+            "Attempted to use an AutoRotator without having previously " +
+            "set a center point, make sure to use the" +
+            "setCenterPoint(PointXY) method to do that."
+        );
 
         PointXYZ position = pathfinder.getPosition();
         double delta = Angle.minimumDelta(
-                position.z(),
-                position.angleTo(centerPoint).add(angleOffset)
+            position.z(),
+            position.angleTo(centerPoint).add(angleOffset)
         );
 
         return translation.withVz(turnController.calculate(delta));

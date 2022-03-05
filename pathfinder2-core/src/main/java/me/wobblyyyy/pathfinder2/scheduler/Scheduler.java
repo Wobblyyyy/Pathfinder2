@@ -10,15 +10,14 @@
 
 package me.wobblyyyy.pathfinder2.scheduler;
 
-import me.wobblyyyy.pathfinder2.Pathfinder;
-import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-import me.wobblyyyy.pathfinder2.time.Time;
-import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
+import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.time.Time;
+import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 
 /**
  * A scheduler is an easy way to automate Pathfinder's operation.
@@ -127,16 +126,25 @@ public class Scheduler {
             this.pathfinder.followTrajectory(currentTask.getTrajectory());
         } else {
             if (!(Math.abs(currentTask.getMinTimeMilliseconds()) > 1_000_000)) {
-                if (!currentTask.isMinimumTimeLimitValid(currentTimeMilliseconds)) {
+                if (
+                    !currentTask.isMinimumTimeLimitValid(
+                        currentTimeMilliseconds
+                    )
+                ) {
                     this.pathfinder.tick();
                     return;
                 }
 
                 Trajectory currentTrajectory = currentTask.getTrajectory();
-                PointXYZ currentRobotPosition = this.pathfinder.getOdometry().getPosition();
+                PointXYZ currentRobotPosition =
+                    this.pathfinder.getOdometry().getPosition();
 
-                boolean isMaximumTimeInvalid = !currentTask.isMaximumTimeLimitValid(currentTimeMilliseconds);
-                boolean isTrajectoryCompleted = currentTrajectory.isDone(currentRobotPosition);
+                boolean isMaximumTimeInvalid = !currentTask.isMaximumTimeLimitValid(
+                    currentTimeMilliseconds
+                );
+                boolean isTrajectoryCompleted = currentTrajectory.isDone(
+                    currentRobotPosition
+                );
 
                 if (isMaximumTimeInvalid || isTrajectoryCompleted) {
                     this.dequeueTask(currentTask);
@@ -187,20 +195,26 @@ public class Scheduler {
      * @see #enableAutomaticTicking()
      * @see #disableAutomaticTicking()
      */
-    public void enableAutomaticTicking(Supplier<Boolean> shouldContinueTicking) {
+    public void enableAutomaticTicking(
+        Supplier<Boolean> shouldContinueTicking
+    ) {
         this.isAutomaticallyTicking = true;
 
-        Thread automaticTickingThread = new Thread(() -> {
-            while (isAutomaticallyTicking() && shouldContinueTicking.get()) {
-                // originally pathfinder was written with jdk11
-                // but because FIRST doesn't like updating their tech
-                // we have to use jdk8 instead... so if this ever does get
-                // updated to jdk11 again, uncomment the next line:
-                // Thread.onSpinWait();
+        Thread automaticTickingThread = new Thread(
+            () -> {
+                while (
+                    isAutomaticallyTicking() && shouldContinueTicking.get()
+                ) {
+                    // originally pathfinder was written with jdk11
+                    // but because FIRST doesn't like updating their tech
+                    // we have to use jdk8 instead... so if this ever does get
+                    // updated to jdk11 again, uncomment the next line:
+                    // Thread.onSpinWait();
 
-                this.tick();
+                    this.tick();
+                }
             }
-        });
+        );
 
         automaticTickingThread.start();
     }

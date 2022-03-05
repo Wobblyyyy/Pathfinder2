@@ -39,7 +39,8 @@ public class ExampleTimedRobot extends TimedRobot {
         drive = new SimulatedDrive();
         odometry = new SimulatedOdometry();
         robot = new Robot(drive, odometry);
-        pathfinder = new Pathfinder(robot, controller)
+        pathfinder =
+            new Pathfinder(robot, controller)
                 .setSpeed(0.5)
                 .setTolerance(2)
                 .setAngleTolerance(Angle.fromDeg(5));
@@ -67,11 +68,11 @@ public class ExampleTimedRobot extends TimedRobot {
 
         // make the robot follow a spline: all we have to do now is tick it!
         pathfinder.splineTo(
-                new PointXYZ(0, 0, 0),
-                new PointXYZ(10, 0, 0),
-                new PointXYZ(10, 10, 0),
-                new PointXYZ(0, 10, 0),
-                new PointXYZ(0, 0, 0)
+            new PointXYZ(0, 0, 0),
+            new PointXYZ(10, 0, 0),
+            new PointXYZ(10, 10, 0),
+            new PointXYZ(0, 10, 0),
+            new PointXYZ(0, 0, 0)
         );
     }
 

@@ -10,11 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.math;
 
+import java.io.Serializable;
 import me.wobblyyyy.pathfinder2.geometry.Geometry;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
-
-import java.io.Serializable;
 
 /**
  * A range of numbers. A {@code Range} is made up of two {@link RangeNode}s,
@@ -33,11 +32,11 @@ public class Range implements Serializable, Comparable<Range> {
      * @param minimum the range's minimum node.
      * @param minimum the range's maximum node.
      */
-    public Range(RangeNode minimum,
-                 RangeNode maximum) {
-        if (minimum.node() < maximum.node())
-            throw new IllegalArgumentException("Cannot create a Range if " +
-                    "the minimum value is greater than the maximum!");
+    public Range(RangeNode minimum, RangeNode maximum) {
+        if (minimum.node() < maximum.node()) throw new IllegalArgumentException(
+            "Cannot create a Range if " +
+            "the minimum value is greater than the maximum!"
+        );
 
         this.minimum = minimum;
         this.maximum = maximum;
@@ -59,11 +58,10 @@ public class Range implements Serializable, Comparable<Range> {
      * @param maximum the range's maximum value (inclusive).
      * @return a new {@code Range}.
      */
-    public static Range inclusive(double minimum,
-                                  double maximum) {
+    public static Range inclusive(double minimum, double maximum) {
         return new Range(
-                new RangeNode(minimum, true),
-                new RangeNode(maximum, true)
+            new RangeNode(minimum, true),
+            new RangeNode(maximum, true)
         );
     }
 
@@ -74,11 +72,10 @@ public class Range implements Serializable, Comparable<Range> {
      * @param maximum the range's maximum value (exclusive).
      * @return
      */
-    public static Range exclusive(double minimum,
-                                  double maximum) {
+    public static Range exclusive(double minimum, double maximum) {
         return new Range(
-                new RangeNode(minimum, false),
-                new RangeNode(maximum, false)
+            new RangeNode(minimum, false),
+            new RangeNode(maximum, false)
         );
     }
 
@@ -91,14 +88,18 @@ public class Range implements Serializable, Comparable<Range> {
      *                    infinity, otherwise, false.
      * @return a new {@code Range}.
      */
-    public static Range infinite(double value,
-                                 boolean isInclusive,
-                                 boolean isPositive) {
+    public static Range infinite(
+        double value,
+        boolean isInclusive,
+        boolean isPositive
+    ) {
         return new Range(
-                isPositive ? new RangeNode(value, isInclusive)
-                        : RangeNode.NEGATIVE_INFINITY,
-                !isPositive ? new RangeNode(value, isInclusive)
-                        : RangeNode.POSITIVE_INFINITY
+            isPositive
+                ? new RangeNode(value, isInclusive)
+                : RangeNode.NEGATIVE_INFINITY,
+            !isPositive
+                ? new RangeNode(value, isInclusive)
+                : RangeNode.POSITIVE_INFINITY
         );
     }
 
@@ -110,8 +111,7 @@ public class Range implements Serializable, Comparable<Range> {
      *                   infinity, otherwise, false.
      * @return a new {@code Range}.
      */
-    public static Range infinite(RangeNode node,
-                                 boolean isPositive) {
+    public static Range infinite(RangeNode node, boolean isPositive) {
         return infinite(node.node(), node.isInclusive(), isPositive);
     }
 
@@ -122,8 +122,7 @@ public class Range implements Serializable, Comparable<Range> {
      * @param b one of the two ranges.
      * @return true if the ranges overlap. Otherwise, false.
      */
-    public static boolean doRangesOverlap(Range a,
-                                          Range b) {
+    public static boolean doRangesOverlap(Range a, Range b) {
         ValidationUtils.validate(a);
         ValidationUtils.validate(b);
 
@@ -133,9 +132,9 @@ public class Range implements Serializable, Comparable<Range> {
         double bMin = b.minimum.node();
         double bMax = b.maximum.node();
 
-        if (aMin > bMax) return false;
-        else if (bMin > aMax) return false;
-        else return true;
+        if (aMin > bMax) return false; else if (
+            bMin > aMax
+        ) return false; else return true;
     }
 
     /**
@@ -187,9 +186,7 @@ public class Range implements Serializable, Comparable<Range> {
      * false.
      */
     public boolean includesAll(double... values) {
-        for (double d : values)
-            if (excludes(d))
-                return false;
+        for (double d : values) if (excludes(d)) return false;
 
         return true;
     }
@@ -202,9 +199,7 @@ public class Range implements Serializable, Comparable<Range> {
      * false.
      */
     public boolean includesAny(double... values) {
-        for (double d : values)
-            if (includes(d))
-                return true;
+        for (double d : values) if (includes(d)) return true;
 
         return false;
     }
@@ -217,9 +212,7 @@ public class Range implements Serializable, Comparable<Range> {
      * false.
      */
     public boolean excludesAll(double... values) {
-        for (double d : values)
-            if (includes(d))
-                return false;
+        for (double d : values) if (includes(d)) return false;
 
         return true;
     }
@@ -232,9 +225,7 @@ public class Range implements Serializable, Comparable<Range> {
      * false.
      */
     public boolean excludesAny(double... values) {
-        for (double d : values)
-            if (excludes(d))
-                return true;
+        for (double d : values) if (excludes(d)) return true;
 
         return false;
     }
@@ -253,8 +244,7 @@ public class Range implements Serializable, Comparable<Range> {
         if (obj instanceof Range) {
             Range r = (Range) obj;
 
-            return minimum.equals(r.minimum) &&
-                    maximum.equals(r.maximum);
+            return minimum.equals(r.minimum) && maximum.equals(r.maximum);
         }
 
         return false;
@@ -268,11 +258,11 @@ public class Range implements Serializable, Comparable<Range> {
     @Override
     public String toString() {
         return StringUtils.format(
-                Geometry.formatRange,
-                minimum.isInclusive() ? '[' : ']',
-                minimum.node(),
-                maximum.isInclusive() ? '[' : ']',
-                maximum.node()
+            Geometry.formatRange,
+            minimum.isInclusive() ? '[' : ']',
+            minimum.node(),
+            maximum.isInclusive() ? '[' : ']',
+            maximum.node()
         );
     }
 

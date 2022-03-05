@@ -10,13 +10,12 @@
 
 package me.wobblyyyy.pathfinder2.math;
 
+import java.util.Arrays;
 import me.wobblyyyy.pathfinder2.exceptions.SplineException;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import org.apache.commons.math3.analysis.interpolation.AkimaSplineInterpolator;
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
-
-import java.util.Arrays;
 
 /**
  * Implementation of {@link PolynomialSplineFunction} - very cool! This
@@ -43,8 +42,7 @@ public class ApacheSpline implements Spline {
      * @param x control point X values.
      * @param y control point Y values.
      */
-    public ApacheSpline(double[] x,
-                        double[] y) {
+    public ApacheSpline(double[] x, double[] y) {
         this(Interpolator.CUBIC, x, y);
     }
 
@@ -55,28 +53,30 @@ public class ApacheSpline implements Spline {
      * @param x            control point X values.
      * @param y            control point Y values.
      */
-    public ApacheSpline(Interpolator interpolator,
-                        double[] x,
-                        double[] y) {
-        if (x == null)
-            throw new SplineException("X value array was null!");
-        if (y == null)
-            throw new SplineException("Y value array was null!");
+    public ApacheSpline(Interpolator interpolator, double[] x, double[] y) {
+        if (x == null) throw new SplineException("X value array was null!");
+        if (y == null) throw new SplineException("Y value array was null!");
 
-        if (x.length != y.length)
-            throw new SplineException("Cannot create a spline with arrays " +
-                    "of unequal lengths! X length: " + x.length +
-                    "; Y length: " + y.length);
+        if (x.length != y.length) throw new SplineException(
+            "Cannot create a spline with arrays " +
+            "of unequal lengths! X length: " +
+            x.length +
+            "; Y length: " +
+            y.length
+        );
 
-        if (x.length < 3)
-            throw new SplineException("Cannot create a spline with less " +
-                    "than three control points! The control X values you " +
-                    "provided were: " + Arrays.toString(x));
+        if (x.length < 3) throw new SplineException(
+            "Cannot create a spline with less " +
+            "than three control points! The control X values you " +
+            "provided were: " +
+            Arrays.toString(x)
+        );
 
-        if (!Spline.areMonotonic(x))
-            throw new SplineException("cannot create a spline with " +
-                    "non-monotonic x values! the invalid values were: " +
-                    Arrays.toString(x));
+        if (!Spline.areMonotonic(x)) throw new SplineException(
+            "cannot create a spline with " +
+            "non-monotonic x values! the invalid values were: " +
+            Arrays.toString(x)
+        );
 
         this.isInverted = Spline.areDecreasing(x);
         this.interpolator = interpolator;
@@ -87,8 +87,7 @@ public class ApacheSpline implements Spline {
         if (isInverted) {
             double startX = x[0];
 
-            for (int i = 1; i < x.length; i++)
-                x[i] = startX - (x[i] - startX);
+            for (int i = 1; i < x.length; i++) x[i] = startX - (x[i] - startX);
         }
 
         switch (interpolator) {
@@ -96,10 +95,12 @@ public class ApacheSpline implements Spline {
                 this.function = new SplineInterpolator().interpolate(x, y);
                 break;
             case AKIMA:
-                if (x.length < 4)
-                    throw new SplineException("You need at least 4 points " +
-                            "for Akima spline interpolation, you only " +
-                            "provided " + x.length);
+                if (x.length < 4) throw new SplineException(
+                    "You need at least 4 points " +
+                    "for Akima spline interpolation, you only " +
+                    "provided " +
+                    x.length
+                );
 
                 this.function = new AkimaSplineInterpolator().interpolate(x, y);
                 break;
@@ -118,8 +119,7 @@ public class ApacheSpline implements Spline {
             x = startX - (x - startX);
         }
 
-        if (x < minX) x = minX;
-        else if (x > maxX) x = maxX;
+        if (x < minX) x = minX; else if (x > maxX) x = maxX;
         return function.value(x);
     }
 
@@ -139,6 +139,6 @@ public class ApacheSpline implements Spline {
 
     public enum Interpolator {
         CUBIC,
-        AKIMA
+        AKIMA,
     }
 }

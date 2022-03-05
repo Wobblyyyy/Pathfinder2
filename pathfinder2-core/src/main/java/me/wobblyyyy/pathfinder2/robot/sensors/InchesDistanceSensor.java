@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.robot.sensors;
 import me.wobblyyyy.pathfinder2.units.Conversions;
 
 public abstract class InchesDistanceSensor implements DistanceSensor {
+
     @Override
     public double getDistanceCentimeters() {
         return Conversions.inchesToCm(getDistanceInches());

@@ -11,7 +11,6 @@
 package me.wobblyyyy.pathfinder2.control;
 
 import com.stormbots.MiniPID;
-
 import me.wobblyyyy.pathfinder2.math.MinMax;
 
 /**
@@ -26,25 +25,20 @@ import me.wobblyyyy.pathfinder2.math.MinMax;
 public class PIDController extends AbstractController {
     private MiniPID pid;
 
-    public PIDController(double p,
-                         double i,
-                         double d) {
+    public PIDController(double p, double i, double d) {
         this(p, i, d, 0.02);
     }
 
-    public PIDController(double p,
-                         double i,
-                         double d,
-                         double f) {
+    public PIDController(double p, double i, double d, double f) {
         pid = new MiniPID(p, i, d, f);
     }
 
     @Override
     public double calculate(double value) {
         return MinMax.clip(
-                pid.getOutput(value, getTarget()),
-                getMin(),
-                getMax()
+            pid.getOutput(value, getTarget()),
+            getMin(),
+            getMax()
         );
     }
 

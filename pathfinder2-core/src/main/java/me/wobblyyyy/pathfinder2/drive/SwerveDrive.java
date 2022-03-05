@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.drive;
 
+import java.util.function.Function;
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.kinematics.RelativeSwerveDriveKinematics;
@@ -17,8 +18,6 @@ import me.wobblyyyy.pathfinder2.kinematics.RelativeSwerveModuleKinematics;
 import me.wobblyyyy.pathfinder2.kinematics.RelativeSwerveModuleState;
 import me.wobblyyyy.pathfinder2.kinematics.RelativeSwerveState;
 import me.wobblyyyy.pathfinder2.robot.Drive;
-
-import java.util.function.Function;
 
 /**
  * A very simple (and very lovely) swerve drive implementation.
@@ -88,25 +87,28 @@ public class SwerveDrive implements Drive {
      *                         be around 0.1, but it'll take some testing to
      *                         figure out what number works best for you.
      */
-    public SwerveDrive(SwerveModule frontRightModule,
-                       SwerveModule frontLeftModule,
-                       SwerveModule backRightModule,
-                       SwerveModule backLeftModule,
-                       Controller moduleController,
-                       double turnCoefficient) {
+    public SwerveDrive(
+        SwerveModule frontRightModule,
+        SwerveModule frontLeftModule,
+        SwerveModule backRightModule,
+        SwerveModule backLeftModule,
+        Controller moduleController,
+        double turnCoefficient
+    ) {
         this.frontRightModule = frontRightModule;
         this.frontLeftModule = frontLeftModule;
         this.backRightModule = backRightModule;
         this.backLeftModule = backLeftModule;
 
-        this.kinematics = new RelativeSwerveDriveKinematics(
+        this.kinematics =
+            new RelativeSwerveDriveKinematics(
                 new RelativeSwerveModuleKinematics(moduleController),
                 frontRightModule::getAngle,
                 frontLeftModule::getAngle,
                 backRightModule::getAngle,
                 backLeftModule::getAngle,
                 turnCoefficient
-        );
+            );
     }
 
     /**

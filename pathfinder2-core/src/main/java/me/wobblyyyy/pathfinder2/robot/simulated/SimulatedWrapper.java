@@ -24,20 +24,19 @@ public class SimulatedWrapper {
     private final SimulatedDrive drive;
     private final SimulatedOdometry odometry;
 
-    public SimulatedWrapper(SimulatedDrive drive,
-                            SimulatedOdometry odometry) {
+    public SimulatedWrapper(SimulatedDrive drive, SimulatedOdometry odometry) {
         this.drive = drive;
         this.odometry = odometry;
 
         this.drive.setDriveModifier(
-                (translation) -> {
+                translation -> {
                     PointXYZ pos = odometry.getPosition();
 
                     odometry.setRawPosition(pos.applyTranslation(translation));
 
                     return translation;
                 }
-        );
+            );
     }
 
     public SimulatedDrive getDrive() {

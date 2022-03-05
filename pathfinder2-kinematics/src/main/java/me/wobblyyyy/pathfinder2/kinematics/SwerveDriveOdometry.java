@@ -14,9 +14,12 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
 public class SwerveDriveOdometry extends GenericOdometry<SwerveState> {
-    public SwerveDriveOdometry(Kinematics<SwerveState> kinematics,
-                               Angle gyroAngle,
-                               PointXYZ initialPosition) {
+
+    public SwerveDriveOdometry(
+        Kinematics<SwerveState> kinematics,
+        Angle gyroAngle,
+        PointXYZ initialPosition
+    ) {
         super(kinematics, gyroAngle, initialPosition);
     }
 }

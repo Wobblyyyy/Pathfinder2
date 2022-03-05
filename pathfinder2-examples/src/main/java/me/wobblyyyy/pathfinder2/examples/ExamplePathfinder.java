@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.examples;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.control.GenericTurnController;
@@ -25,9 +27,6 @@ import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedDrive;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.trajectory.builder.LinearTrajectoryBuilder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Very simple example implementation demonstrating the basic usage of
@@ -67,11 +66,16 @@ public class ExamplePathfinder {
     private static final PointXYZ TARGET_X = new PointXYZ(10, 15, 45);
     private static final PointXYZ TARGET_Y = new PointXYZ(30, 20, 90);
     private final Controller turnController = new GenericTurnController(0.1);
-    private final FollowerGenerator followerGenerator = new GenericFollowerGenerator(turnController);
+    private final FollowerGenerator followerGenerator = new GenericFollowerGenerator(
+        turnController
+    );
     private final Drive drive = new SimulatedDrive();
     private final Odometry odometry = new SimulatedOdometry();
     private final Robot robot = new Robot(drive, odometry);
-    private final Pathfinder pathfinder = new Pathfinder(robot, followerGenerator);
+    private final Pathfinder pathfinder = new Pathfinder(
+        robot,
+        followerGenerator
+    );
 
     public ExamplePathfinder() {
         pathfinder.setSpeed(SPEED);
@@ -102,13 +106,16 @@ public class ExamplePathfinder {
     @SuppressWarnings("DuplicatedCode")
     public void goToSomePoints() {
         // this is a pretty bad way of going to the points...
-        List<PointXYZ> points = new ArrayList<PointXYZ>() {{
-            add(new PointXYZ(0, 0, 0));
-            add(new PointXYZ(10, 0, 0));
-            add(new PointXYZ(10, 10, 0));
-            add(new PointXYZ(0, 10, 0));
-            add(new PointXYZ(0, 0, 0));
-        }};
+        List<PointXYZ> points = new ArrayList<PointXYZ>() {
+
+            {
+                add(new PointXYZ(0, 0, 0));
+                add(new PointXYZ(10, 0, 0));
+                add(new PointXYZ(10, 10, 0));
+                add(new PointXYZ(0, 10, 0));
+                add(new PointXYZ(0, 0, 0));
+            }
+        };
 
         for (PointXYZ point : points) {
             goToPoint(point);
@@ -121,26 +128,25 @@ public class ExamplePathfinder {
         // the robot - for example, the speed is halved, then the speed
         // is reset, then the speed is doubled
         List<Trajectory> trajectories = new LinearTrajectoryBuilder(
-                SPEED,
-                TOLERANCE,
-                ANGLE_TOLERANCE,
-                PointXYZ.ZERO
+            SPEED,
+            TOLERANCE,
+            ANGLE_TOLERANCE,
+            PointXYZ.ZERO
         )
-                .goTo(new PointXYZ(0, 0, 0))
-                .goTo(new PointXYZ(10, 0, 0))
-                .setSpeed(SPEED / 2)
-                .goTo(new PointXYZ(10, 10, 0))
-                .setSpeed(SPEED)
-                .goTo(new PointXYZ(0, 10, 0))
-                .setSpeed(SPEED * 2)
-                .goTo(new PointXYZ(0, 0, 0))
-                .getTrajectories();
+            .goTo(new PointXYZ(0, 0, 0))
+            .goTo(new PointXYZ(10, 0, 0))
+            .setSpeed(SPEED / 2)
+            .goTo(new PointXYZ(10, 10, 0))
+            .setSpeed(SPEED)
+            .goTo(new PointXYZ(0, 10, 0))
+            .setSpeed(SPEED * 2)
+            .goTo(new PointXYZ(0, 0, 0))
+            .getTrajectories();
 
         // follow the trajectories with a timeout of 10 seconds. if more than
         // 10 seconds pass and the trajectories haven't finished yet, stop
         // following the trajectories
-        pathfinder.followTrajectories(trajectories)
-                .tickUntil(10_000);
+        pathfinder.followTrajectories(trajectories).tickUntil(10_000);
     }
 
     /**
@@ -172,14 +178,10 @@ public class ExamplePathfinder {
             // Y: Power Shot 3
             // The robot will automatically move to the associated positions.
             // Pretty cool, right?
-            if (gamepadA)
-                targetPoint = TARGET_A;
-            else if (gamepadB)
-                targetPoint = TARGET_B;
-            else if (gamepadX)
-                targetPoint = TARGET_X;
-            else if (gamepadY)
-                targetPoint = TARGET_Y;
+            if (gamepadA) targetPoint = TARGET_A; else if (
+                gamepadB
+            ) targetPoint = TARGET_B; else if (gamepadX) targetPoint =
+                TARGET_X; else if (gamepadY) targetPoint = TARGET_Y;
 
             if (targetPoint != null) {
                 pathfinder.goTo(targetPoint);
@@ -191,9 +193,9 @@ public class ExamplePathfinder {
                 double moveRotate = joystick2x;
 
                 Translation translation = new Translation(
-                        moveForwards,
-                        moveStrafe,
-                        moveRotate
+                    moveForwards,
+                    moveStrafe,
+                    moveRotate
                 );
 
                 pathfinder.getRobot().drive().setTranslation(translation);

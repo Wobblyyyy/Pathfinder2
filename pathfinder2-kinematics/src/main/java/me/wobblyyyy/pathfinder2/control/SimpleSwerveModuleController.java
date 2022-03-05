@@ -22,6 +22,7 @@ package me.wobblyyyy.pathfinder2.control;
  * @since 0.0.0
  */
 public class SimpleSwerveModuleController extends AngleDeltaController {
+
     /**
      * Create a new {@code SimpleSwerveModuleController}.
      *

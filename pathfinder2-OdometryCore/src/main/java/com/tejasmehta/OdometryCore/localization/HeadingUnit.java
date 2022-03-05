@@ -14,5 +14,5 @@ package com.tejasmehta.OdometryCore.localization;
  */
 public enum HeadingUnit {
     DEGREES,
-    RADIANS
+    RADIANS,
 }

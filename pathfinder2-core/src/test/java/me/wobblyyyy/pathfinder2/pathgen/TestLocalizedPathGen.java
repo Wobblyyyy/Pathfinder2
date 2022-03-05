@@ -10,16 +10,16 @@
 
 package me.wobblyyyy.pathfinder2.pathgen;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.Rectangle;
 import me.wobblyyyy.pathfinder2.zones.Zone;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TestLocalizedPathGen {
+
     @Test
     public void testUnobstructedPath() {
         List<Zone> zones = new ArrayList<>();
@@ -34,9 +34,12 @@ public class TestLocalizedPathGen {
 
     @Test
     public void testFullyObstructedPath() {
-        List<Zone> zones = new ArrayList<Zone>() {{
-            add(new Zone(new Rectangle(0, 3, 10, 4)));
-        }};
+        List<Zone> zones = new ArrayList<Zone>() {
+
+            {
+                add(new Zone(new Rectangle(0, 3, 10, 4)));
+            }
+        };
 
         LocalizedPathGen gen = new LocalizedPathGen(zones, 0.5, 0.5);
 
@@ -50,9 +53,12 @@ public class TestLocalizedPathGen {
 
     @Test
     public void testPartiallyObstructedPath() {
-        List<Zone> zones = new ArrayList<Zone>() {{
-            add(new Zone(new Rectangle(1, 3, 10, 4)));
-        }};
+        List<Zone> zones = new ArrayList<Zone>() {
+
+            {
+                add(new Zone(new Rectangle(1, 3, 10, 4)));
+            }
+        };
 
         LocalizedPathGen gen = new LocalizedPathGen(zones, 0.5, 0.5);
 
@@ -81,9 +87,12 @@ public class TestLocalizedPathGen {
 
     @Test
     public void testObstructedNegativePathfinding() {
-        List<Zone> zones = new ArrayList<Zone>() {{
-            add(new Zone(new Rectangle(-3, -2, 8, 3)));
-        }};
+        List<Zone> zones = new ArrayList<Zone>() {
+
+            {
+                add(new Zone(new Rectangle(-3, -2, 8, 3)));
+            }
+        };
         LocalizedPathGen gen = new LocalizedPathGen(zones, 0.5, 0.5);
         PointXY start = new PointXY(-5, -5);
         PointXY end = new PointXY(5, 5);

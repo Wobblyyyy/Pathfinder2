@@ -10,9 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.math;
 
-import me.wobblyyyy.pathfinder2.geometry.PointXY;
-
 import java.util.List;
+import me.wobblyyyy.pathfinder2.geometry.PointXY;
 
 /**
  * A spline. I don't know much of a better way to explain it, to be entirely
@@ -71,8 +70,9 @@ public interface Spline extends Equation {
     static boolean areIncreasing(double... values) {
         if (values.length == 0) return true;
 
-        for (int i = 1; i < values.length; i++)
-            if (values[i] <= values[i - 1]) return false;
+        for (int i = 1; i < values.length; i++) if (
+            values[i] <= values[i - 1]
+        ) return false;
 
         return true;
     }
@@ -87,8 +87,9 @@ public interface Spline extends Equation {
     static boolean areDecreasing(double... values) {
         if (values.length == 0) return true;
 
-        for (int i = 1; i < values.length; i++)
-            if (values[i] >= values[i - 1]) return false;
+        for (int i = 1; i < values.length; i++) if (
+            values[i] >= values[i - 1]
+        ) return false;
 
         return true;
     }
@@ -109,8 +110,7 @@ public interface Spline extends Equation {
     static boolean areMonotonicX(PointXY... points) {
         double[] values = new double[points.length];
 
-        for (int i = 0; i < values.length; i++)
-            values[i] = points[i].x();
+        for (int i = 0; i < values.length; i++) values[i] = points[i].x();
 
         return areMonotonic(values);
     }
@@ -118,8 +118,7 @@ public interface Spline extends Equation {
     static boolean areMonotonicY(PointXY... points) {
         double[] values = new double[points.length];
 
-        for (int i = 0; i < values.length; i++)
-            values[i] = points[i].x();
+        for (int i = 0; i < values.length; i++) values[i] = points[i].x();
 
         return areMonotonic(values);
     }
@@ -150,18 +149,16 @@ public interface Spline extends Equation {
     static boolean areRelativelyMonotonic(List<PointXY> points) {
         int size = points.size();
 
-        if (size < 3)
-            return true;
+        if (size < 3) return true;
 
         for (int i = 0; i < size - 2; i++) {
-            PointXY[] array = new PointXY[]{
-                    points.get(i),
-                    points.get(i + 1),
-                    points.get(i + 2)
+            PointXY[] array = new PointXY[] {
+                points.get(i),
+                points.get(i + 1),
+                points.get(i + 2),
             };
 
-            if (!areMonotonic(array))
-                return false;
+            if (!areMonotonic(array)) return false;
         }
 
         return true;

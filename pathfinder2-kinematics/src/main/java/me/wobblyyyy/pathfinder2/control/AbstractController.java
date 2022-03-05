@@ -104,9 +104,7 @@ public abstract class AbstractController implements Controller {
      * be reset if the controller is to be properly recalibrated.
      */
     @Override
-    public void reset() {
-
-    }
+    public void reset() {}
 
     /**
      * Get the controller's target.

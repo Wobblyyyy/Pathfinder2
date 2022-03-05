@@ -31,8 +31,7 @@ public class AHRSGyro extends AbstractGyroscope {
      * @param ahrs the gyroscope to use.
      * @param mode the mode the gyroscope should operate in.
      */
-    public AHRSGyro(AHRS ahrs,
-                    AHRSGyroMode mode) {
+    public AHRSGyro(AHRS ahrs, AHRSGyroMode mode) {
         this.ahrs = ahrs;
         this.mode = mode;
     }

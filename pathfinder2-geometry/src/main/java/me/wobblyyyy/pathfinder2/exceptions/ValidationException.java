@@ -17,6 +17,7 @@ package me.wobblyyyy.pathfinder2.exceptions;
  * @since 1.4.2
  */
 public class ValidationException extends RuntimeException {
+
     public ValidationException(String message) {
         super(message);
     }

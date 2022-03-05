@@ -38,9 +38,7 @@ public class TargetBuilder {
     private double tolerance = 2;
     private Angle angleTolerance = Angle.fromDeg(5);
 
-    public TargetBuilder() {
-
-    }
+    public TargetBuilder() {}
 
     public TargetBuilder setTarget(PointXYZ target) {
         this.target = target;
@@ -75,17 +73,17 @@ public class TargetBuilder {
     public TrajectoryTarget build() {
         if (target == null) {
             throw new NullPointException(
-                    "Attempted to build a TrajectoryTarget without a " +
-                            "target point!"
+                "Attempted to build a TrajectoryTarget without a " +
+                "target point!"
             );
         }
 
         return new TrajectoryTarget(
-                target,
-                precision,
-                speed,
-                tolerance,
-                angleTolerance
+            target,
+            precision,
+            speed,
+            tolerance,
+            angleTolerance
         );
     }
 }

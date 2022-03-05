@@ -10,11 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.drive;
 
+import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.kinematics.RelativeSwerveModuleState;
 import me.wobblyyyy.pathfinder2.robot.components.Motor;
-
-import java.util.function.Supplier;
 
 /**
  * A representation of a swerve module. In a typical swerve drive chassis,
@@ -62,9 +61,7 @@ public class SwerveModule {
      *                 angle should almost always come from an encoder on
      *                 the turn motor.
      */
-    public SwerveModule(Motor turn,
-                        Motor drive,
-                        Supplier<Angle> getAngle) {
+    public SwerveModule(Motor turn, Motor drive, Supplier<Angle> getAngle) {
         this.turn = turn;
         this.drive = drive;
         this.getAngle = getAngle;

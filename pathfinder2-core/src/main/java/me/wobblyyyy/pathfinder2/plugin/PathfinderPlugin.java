@@ -47,6 +47,7 @@ import me.wobblyyyy.pathfinder2.zones.Zone;
  * @since 0.6.1
  */
 public abstract class PathfinderPlugin {
+
     /**
      * Get the name of the plugin. This can be just about anything you'd like
      * it to be.
@@ -61,9 +62,7 @@ public abstract class PathfinderPlugin {
      * @param pathfinder the instance of Pathfinder that the plugin
      *                   was loaded by.
      */
-    public void onLoad(Pathfinder pathfinder) {
-
-    }
+    public void onLoad(Pathfinder pathfinder) {}
 
     /**
      * Before every tick, this method will be called.
@@ -71,9 +70,7 @@ public abstract class PathfinderPlugin {
      * @param pathfinder the instance of Pathfinder that the plugin
      *                   was loaded by.
      */
-    public void preTick(Pathfinder pathfinder) {
-
-    }
+    public void preTick(Pathfinder pathfinder) {}
 
     /**
      * Immediately after every tick, this method will be called.
@@ -81,9 +78,7 @@ public abstract class PathfinderPlugin {
      * @param pathfinder the instance of Pathfinder that the plugin
      *                   was loaded by.
      */
-    public void onTick(Pathfinder pathfinder) {
-
-    }
+    public void onTick(Pathfinder pathfinder) {}
 
     /**
      * After a tick, and then after the recording and playback managers have
@@ -92,9 +87,7 @@ public abstract class PathfinderPlugin {
      * @param pathfinder the instance of Pathfinder that the plugin
      *                   was loaded by.
      */
-    public void postTick(Pathfinder pathfinder) {
-
-    }
+    public void postTick(Pathfinder pathfinder) {}
 
     /**
      * Whenever the {@link Pathfinder#clear()} method is called, this method
@@ -103,9 +96,7 @@ public abstract class PathfinderPlugin {
      * @param pathfinder the instance of Pathfinder that the plugin
      *                   was loaded by.
      */
-    public void preClear(Pathfinder pathfinder) {
-
-    }
+    public void preClear(Pathfinder pathfinder) {}
 
     /**
      * Whenever the {@link Pathfinder#clear()} method is called, this method
@@ -114,9 +105,7 @@ public abstract class PathfinderPlugin {
      * @param pathfinder the instance of Pathfinder that the plugin
      *                   was loaded by.
      */
-    public void onClear(Pathfinder pathfinder) {
-
-    }
+    public void onClear(Pathfinder pathfinder) {}
 
     /**
      * Whenever Pathfinder detects that a zone has been entered, call
@@ -126,10 +115,7 @@ public abstract class PathfinderPlugin {
      *                   was loaded by.
      * @param zone       the zone that was just entered.
      */
-    public void onEnterZone(Pathfinder pathfinder,
-                            Zone zone) {
-
-    }
+    public void onEnterZone(Pathfinder pathfinder, Zone zone) {}
 
     /**
      * Whenever Pathfinder detects that a zone has been exited, call
@@ -139,10 +125,7 @@ public abstract class PathfinderPlugin {
      *                   was loaded by.
      * @param zone       the zone that was just exited.
      */
-    public void onExitZone(Pathfinder pathfinder,
-                           Zone zone) {
-
-    }
+    public void onExitZone(Pathfinder pathfinder, Zone zone) {}
 
     /**
      * Whenever Pathfinder detects that it's in a zone, this method will
@@ -152,10 +135,7 @@ public abstract class PathfinderPlugin {
      *                   was loaded by.
      * @param zone       the zone that Pathfinder is currently inside.
      */
-    public void whileInsideZone(Pathfinder pathfinder,
-                                Zone zone) {
-
-    }
+    public void whileInsideZone(Pathfinder pathfinder, Zone zone) {}
 
     /**
      * Whenever Pathfinder detects that the amount of followers has changed,
@@ -165,10 +145,7 @@ public abstract class PathfinderPlugin {
      *                   was loaded by.
      * @param follower   the follower that was just started.
      */
-    public void onStartFollower(Pathfinder pathfinder,
-                                Follower follower) {
-
-    }
+    public void onStartFollower(Pathfinder pathfinder, Follower follower) {}
 
     /**
      * Whenever Pathfinder detects that the amount of followers has changed,
@@ -178,8 +155,5 @@ public abstract class PathfinderPlugin {
      *                   was loaded by.
      * @param follower   the follower that has just finished.
      */
-    public void onFinishFollower(Pathfinder pathfinder,
-                                 Follower follower) {
-
-    }
+    public void onFinishFollower(Pathfinder pathfinder, Follower follower) {}
 }

@@ -43,18 +43,12 @@ public class PathfinderSubsystem extends SubsystemBase {
      * @param odometry        the robot's odometry system.
      * @param turnCoefficient the robot's turn coefficient.
      */
-    public PathfinderSubsystem(Drive drive,
-                               Odometry odometry,
-                               double turnCoefficient) {
-        this(
-                new Pathfinder(
-                        new Robot(
-                                drive,
-                                odometry
-                        ),
-                        turnCoefficient
-                )
-        );
+    public PathfinderSubsystem(
+        Drive drive,
+        Odometry odometry,
+        double turnCoefficient
+    ) {
+        this(new Pathfinder(new Robot(drive, odometry), turnCoefficient));
     }
 
     /**

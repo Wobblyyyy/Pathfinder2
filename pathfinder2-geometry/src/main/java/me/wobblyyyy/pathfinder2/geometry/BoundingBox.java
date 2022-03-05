@@ -18,21 +18,20 @@ package me.wobblyyyy.pathfinder2.geometry;
  * @since 0.1.0
  */
 public class BoundingBox {
-    private BoundingBox() {
 
-    }
+    private BoundingBox() {}
 
-    public static boolean validate(double number,
-                                   double min,
-                                   double max) {
+    public static boolean validate(double number, double min, double max) {
         return (min - 0.01) <= number && number <= (max + 0.01);
     }
 
-    public static boolean isPointInBox(PointXY point,
-                                       double minX,
-                                       double minY,
-                                       double maxX,
-                                       double maxY) {
+    public static boolean isPointInBox(
+        PointXY point,
+        double minX,
+        double minY,
+        double maxX,
+        double maxY
+    ) {
         if (point == null) return false;
 
         double x = point.x();
@@ -44,14 +43,13 @@ public class BoundingBox {
         return validX && validY;
     }
 
-    public static boolean isPointInLine(PointXY point,
-                                        Line line) {
+    public static boolean isPointInLine(PointXY point, Line line) {
         return isPointInBox(
-                point,
-                line.getMinX(),
-                line.getMinY(),
-                line.getMaxX(),
-                line.getMaxY()
+            point,
+            line.getMinX(),
+            line.getMinY(),
+            line.getMaxX(),
+            line.getMaxY()
         );
     }
 }

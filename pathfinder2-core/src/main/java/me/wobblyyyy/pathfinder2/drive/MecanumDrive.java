@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.drive;
 
+import java.util.function.Function;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.kinematics.MecanumState;
@@ -18,8 +19,6 @@ import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.components.Motor;
 import me.wobblyyyy.pathfinder2.robot.modifiers.DriveModifier;
 import me.wobblyyyy.pathfinder2.utils.NotNull;
-
-import java.util.function.Function;
 
 /**
  * Simple mecanum drive implementation. This implementation makes use of the
@@ -90,10 +89,7 @@ public class MecanumDrive implements Drive {
      * @param br the back-right motor.
      * @param bl the back-left motor.
      */
-    public MecanumDrive(Motor fr,
-                        Motor fl,
-                        Motor br,
-                        Motor bl) {
+    public MecanumDrive(Motor fr, Motor fl, Motor br, Motor bl) {
         this(fr, fl, br, bl, Angle.zero());
     }
 
@@ -106,11 +102,13 @@ public class MecanumDrive implements Drive {
      * @param bl          the back-left motor.
      * @param angleOffset the angle offset to use for applying translations.
      */
-    public MecanumDrive(Motor fr,
-                        Motor fl,
-                        Motor br,
-                        Motor bl,
-                        Angle angleOffset) {
+    public MecanumDrive(
+        Motor fr,
+        Motor fl,
+        Motor br,
+        Motor bl,
+        Angle angleOffset
+    ) {
         this(fr, fl, br, bl, angleOffset, false, false, false);
     }
 
@@ -134,26 +132,28 @@ public class MecanumDrive implements Drive {
      *                    Try changing this if your robot isn't moving in
      *                    the right direction.
      */
-    public MecanumDrive(Motor fr,
-                        Motor fl,
-                        Motor br,
-                        Motor bl,
-                        Angle angleOffset,
-                        boolean swapXY,
-                        boolean reflectX,
-                        boolean reflectY) {
+    public MecanumDrive(
+        Motor fr,
+        Motor fl,
+        Motor br,
+        Motor bl,
+        Angle angleOffset,
+        boolean swapXY,
+        boolean reflectX,
+        boolean reflectY
+    ) {
         this(
-                fr,
-                fl,
-                br,
-                bl,
-                angleOffset,
-                0.0,
-                1.0,
-                0.5,
-                swapXY,
-                reflectX,
-                reflectY
+            fr,
+            fl,
+            br,
+            bl,
+            angleOffset,
+            0.0,
+            1.0,
+            0.5,
+            swapXY,
+            reflectX,
+            reflectY
         );
     }
 
@@ -184,27 +184,30 @@ public class MecanumDrive implements Drive {
      *                      it fits within the bounds of 0.0 to 1.0. A good
      *                      starting place is 0.001.
      */
-    public MecanumDrive(Motor fr,
-                        Motor fl,
-                        Motor br,
-                        Motor bl,
-                        Angle angleOffset,
-                        double minMagnitude,
-                        double maxMagnitude,
-                        double turnMagnitude,
-                        boolean swapXY,
-                        boolean invertX,
-                        boolean invertY) {
+    public MecanumDrive(
+        Motor fr,
+        Motor fl,
+        Motor br,
+        Motor bl,
+        Angle angleOffset,
+        double minMagnitude,
+        double maxMagnitude,
+        double turnMagnitude,
+        boolean swapXY,
+        boolean invertX,
+        boolean invertY
+    ) {
         NotNull.throwExceptionIfNull(
-                "Attempted to create an instance of the MecanumDrive " +
-                        "class with one or more null Motor objects.",
-                fr,
-                fl,
-                br,
-                bl
+            "Attempted to create an instance of the MecanumDrive " +
+            "class with one or more null Motor objects.",
+            fr,
+            fl,
+            br,
+            bl
         );
 
-        this.modifier = new DriveModifier()
+        this.modifier =
+            new DriveModifier()
                 .swapXY(swapXY)
                 .invertX(invertX)
                 .invertY(invertY)::modify;
@@ -214,12 +217,8 @@ public class MecanumDrive implements Drive {
         this.br = br;
         this.bl = bl;
 
-        kinematics = new RelativeMecanumKinematics(
-                0,
-                1,
-                turnMagnitude,
-                angleOffset
-        );
+        kinematics =
+            new RelativeMecanumKinematics(0, 1, turnMagnitude, angleOffset);
     }
 
     /**
@@ -308,9 +307,7 @@ public class MecanumDrive implements Drive {
         private double turnMagnitude = 0.001;
         private Angle angleOffset = Angle.DEG_0;
 
-        public MecanumDriveBuilder() {
-
-        }
+        public MecanumDriveBuilder() {}
 
         public MecanumDriveBuilder setFrontRight(Motor frontRight) {
             this.frontRight = frontRight;
@@ -360,10 +357,12 @@ public class MecanumDrive implements Drive {
             return this;
         }
 
-        public MecanumDriveBuilder setMotors(Motor frontRight,
-                                             Motor frontLeft,
-                                             Motor backRight,
-                                             Motor backLeft) {
+        public MecanumDriveBuilder setMotors(
+            Motor frontRight,
+            Motor frontLeft,
+            Motor backRight,
+            Motor backLeft
+        ) {
             this.frontRight = frontRight;
             this.frontLeft = frontLeft;
             this.backRight = backRight;
@@ -408,9 +407,11 @@ public class MecanumDrive implements Drive {
             return this;
         }
 
-        public MecanumDriveBuilder setMagnitudes(double minMagnitude,
-                                                 double maxMagnitude,
-                                                 double turnMagnitude) {
+        public MecanumDriveBuilder setMagnitudes(
+            double minMagnitude,
+            double maxMagnitude,
+            double turnMagnitude
+        ) {
             this.minMagnitude = minMagnitude;
             this.maxMagnitude = maxMagnitude;
             this.turnMagnitude = turnMagnitude;
@@ -418,9 +419,11 @@ public class MecanumDrive implements Drive {
             return this;
         }
 
-        public MecanumDriveBuilder setModifiers(boolean swapXY,
-                                                boolean invertX,
-                                                boolean invertY) {
+        public MecanumDriveBuilder setModifiers(
+            boolean swapXY,
+            boolean invertX,
+            boolean invertY
+        ) {
             this.swapXY = swapXY;
             this.invertX = invertX;
             this.invertY = invertY;
@@ -430,35 +433,35 @@ public class MecanumDrive implements Drive {
 
         public MecanumDrive build() {
             boolean areAnyMotorsNull = NotNull.isAnythingNull(
-                    frontRight,
-                    frontLeft,
-                    backRight,
-                    backLeft
+                frontRight,
+                frontLeft,
+                backRight,
+                backLeft
             );
 
             if (areAnyMotorsNull) {
                 throw new NullPointerException(
-                        "Attempted to create an instance of the mecanum drive " +
-                                "class using the MecanumDriveBuilder without " +
-                                "setting 1 or more of the motors to a non-null " +
-                                "value! Each of the motors (frontRight, frontLeft," +
-                                "backRight, and backLeft) need to have a non-null " +
-                                "value in order to build a MecanumDrive."
+                    "Attempted to create an instance of the mecanum drive " +
+                    "class using the MecanumDriveBuilder without " +
+                    "setting 1 or more of the motors to a non-null " +
+                    "value! Each of the motors (frontRight, frontLeft," +
+                    "backRight, and backLeft) need to have a non-null " +
+                    "value in order to build a MecanumDrive."
                 );
             }
 
             return new MecanumDrive(
-                    frontRight,
-                    frontLeft,
-                    backRight,
-                    backLeft,
-                    angleOffset,
-                    minMagnitude,
-                    maxMagnitude,
-                    turnMagnitude,
-                    swapXY,
-                    invertX,
-                    invertY
+                frontRight,
+                frontLeft,
+                backRight,
+                backLeft,
+                angleOffset,
+                minMagnitude,
+                maxMagnitude,
+                turnMagnitude,
+                swapXY,
+                invertX,
+                invertY
             );
         }
     }

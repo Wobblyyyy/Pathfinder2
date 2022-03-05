@@ -10,13 +10,12 @@
 
 package me.wobblyyyy.pathfinder2.zones;
 
-import me.wobblyyyy.pathfinder2.Pathfinder;
-import me.wobblyyyy.pathfinder2.geometry.PointXY;
-import me.wobblyyyy.pathfinder2.geometry.Shape;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.geometry.PointXY;
+import me.wobblyyyy.pathfinder2.geometry.Shape;
 
 /**
  * A zone is a wrapper for a shape that provides some additional utilities
@@ -53,9 +52,9 @@ public class Zone implements Serializable {
         this.shape = shape;
     }
 
-    public static Zone inflate(Zone zone,
-                               double inflationRadius) {
+    public static Zone inflate(Zone zone, double inflationRadius) {
         return new Zone((Shape<?>) zone.getShape().growBy(inflationRadius)) {
+
             @Override
             public void onEnter(Pathfinder pathfinder) {
                 zone.onEnter(pathfinder);
@@ -78,8 +77,7 @@ public class Zone implements Serializable {
         };
     }
 
-    public static List<Zone> inflate(List<Zone> zones,
-                                     double inflationRadius) {
+    public static List<Zone> inflate(List<Zone> zones, double inflationRadius) {
         List<Zone> inflated = new ArrayList<>(zones.size());
 
         for (Zone zone : zones) {
@@ -145,18 +143,14 @@ public class Zone implements Serializable {
      *
      * @param pathfinder the instance of Pathfinder.
      */
-    public void onEnter(Pathfinder pathfinder) {
-
-    }
+    public void onEnter(Pathfinder pathfinder) {}
 
     /**
      * Code to be executed whenever a robot exits the zone.
      *
      * @param pathfinder the instance of Pathfinder.
      */
-    public void onExit(Pathfinder pathfinder) {
-
-    }
+    public void onExit(Pathfinder pathfinder) {}
 
     /**
      * Code to be executed whenever the robot is inside the zone. This code is
@@ -165,9 +159,7 @@ public class Zone implements Serializable {
      *
      * @param pathfinder the instance of Pathfinder.
      */
-    public void whileInside(Pathfinder pathfinder) {
-
-    }
+    public void whileInside(Pathfinder pathfinder) {}
 
     /**
      * Is the zone solid? There's no use for this right now, but it'll be

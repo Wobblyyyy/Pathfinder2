@@ -24,14 +24,13 @@ public class TestLinearTrajectory {
     private static final double tolerance = 0.1;
     private static final Angle angleTolerance = Angle.fromDeg(5);
     private static final LinearTrajectory trajectory = new LinearTrajectory(
-            target,
-            speed,
-            tolerance,
-            angleTolerance
+        target,
+        speed,
+        tolerance,
+        angleTolerance
     );
 
-    private static void setPos(SimulatedOdometry odometry,
-                               PointXYZ pos) {
+    private static void setPos(SimulatedOdometry odometry, PointXYZ pos) {
         odometry.setRawPosition(pos);
     }
 
@@ -62,10 +61,10 @@ public class TestLinearTrajectory {
     public void testSimulation() {
         Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
         Trajectory a = new LinearTrajectory(
-                new PointXYZ(10, 10, 0),
-                0.5,
-                2,
-                Angle.fromDeg(5)
+            new PointXYZ(10, 10, 0),
+            0.5,
+            2,
+            Angle.fromDeg(5)
         );
         SimulatedOdometry odometry = (SimulatedOdometry) pathfinder.getOdometry();
 
@@ -74,8 +73,8 @@ public class TestLinearTrajectory {
         odometry.setRawPosition(new PointXYZ(0, 0, 0));
         pathfinder.tick();
         Assertions.assertEquals(
-                new Translation(0.353, 0.353, 0.0),
-                pathfinder.getTranslation()
+            new Translation(0.353, 0.353, 0.0),
+            pathfinder.getTranslation()
         );
         Assertions.assertTrue(pathfinder.isActive());
 
@@ -86,64 +85,64 @@ public class TestLinearTrajectory {
         odometry.setRawPosition(new PointXYZ(10, 10, 45));
         pathfinder.tick();
         Assertions.assertEquals(
-                new Translation(0.0, 0.0, 0.45),
-                pathfinder.getTranslation()
+            new Translation(0.0, 0.0, 0.45),
+            pathfinder.getTranslation()
         );
         Assertions.assertTrue(pathfinder.isActive());
 
         odometry.setRawPosition(new PointXYZ(10, 10, 40));
         pathfinder.tick();
         Assertions.assertEquals(
-                new Translation(0.0, 0.0, 0.4),
-                pathfinder.getTranslation()
+            new Translation(0.0, 0.0, 0.4),
+            pathfinder.getTranslation()
         );
         Assertions.assertTrue(pathfinder.isActive());
 
         odometry.setRawPosition(new PointXYZ(10, 10, 3));
         pathfinder.tick();
         Assertions.assertEquals(
-                new Translation(0.0, 0.0, 0.0),
-                pathfinder.getTranslation()
+            new Translation(0.0, 0.0, 0.0),
+            pathfinder.getTranslation()
         );
         Assertions.assertFalse(pathfinder.isActive());
 
         Trajectory b = new LinearTrajectory(
-                new PointXYZ(10, 10, 45),
-                0.5,
-                2,
-                Angle.fromDeg(5)
+            new PointXYZ(10, 10, 45),
+            0.5,
+            2,
+            Angle.fromDeg(5)
         );
         pathfinder.followTrajectory(b);
 
         odometry.setRawPosition(new PointXYZ(10, 10, 0));
         pathfinder.tick();
         Assertions.assertEquals(
-                new Translation(0.0, 0.0, -0.45),
-                pathfinder.getTranslation()
+            new Translation(0.0, 0.0, -0.45),
+            pathfinder.getTranslation()
         );
         Assertions.assertTrue(pathfinder.isActive());
 
         odometry.setRawPosition(new PointXYZ(10, 10, 10));
         pathfinder.tick();
         Assertions.assertEquals(
-                new Translation(0.0, 0.0, -0.35),
-                pathfinder.getTranslation()
+            new Translation(0.0, 0.0, -0.35),
+            pathfinder.getTranslation()
         );
         Assertions.assertTrue(pathfinder.isActive());
 
         odometry.setRawPosition(new PointXYZ(10, 10, 20));
         pathfinder.tick();
         Assertions.assertEquals(
-                new Translation(0.0, 0.0, -0.25),
-                pathfinder.getTranslation()
+            new Translation(0.0, 0.0, -0.25),
+            pathfinder.getTranslation()
         );
         Assertions.assertTrue(pathfinder.isActive());
 
         odometry.setRawPosition(new PointXYZ(12, 12, 0));
         pathfinder.tick();
         Assertions.assertEquals(
-                new Translation(-0.353, -0.353, -0.45),
-                pathfinder.getTranslation()
+            new Translation(-0.353, -0.353, -0.45),
+            pathfinder.getTranslation()
         );
         Assertions.assertTrue(pathfinder.isActive());
 
@@ -154,8 +153,8 @@ public class TestLinearTrajectory {
         odometry.setRawPosition(new PointXYZ(10, 10, 45));
         pathfinder.tick();
         Assertions.assertEquals(
-                new Translation(0.0, 0.0, 0.0),
-                pathfinder.getTranslation()
+            new Translation(0.0, 0.0, 0.0),
+            pathfinder.getTranslation()
         );
         Assertions.assertFalse(pathfinder.isActive());
     }
@@ -164,10 +163,10 @@ public class TestLinearTrajectory {
     public void testZeroPointTurn() {
         Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
         Trajectory trajectory = new LinearTrajectory(
-                pathfinder.getPosition().withHeadingDegrees(45),
-                0.5,
-                2,
-                Angle.fromDeg(2)
+            pathfinder.getPosition().withHeadingDegrees(45),
+            0.5,
+            2,
+            Angle.fromDeg(2)
         );
         SimulatedOdometry odometry = (SimulatedOdometry) pathfinder.getOdometry();
         pathfinder.followTrajectory(trajectory);
@@ -178,23 +177,33 @@ public class TestLinearTrajectory {
         pathfinder.tick();
         Assertions.assertTrue(pathfinder.isActive());
 
-        odometry.setRawPosition(odometry.getPosition().withHeading(Angle.fromDeg(15)));
+        odometry.setRawPosition(
+            odometry.getPosition().withHeading(Angle.fromDeg(15))
+        );
         pathfinder.tick();
         Assertions.assertTrue(pathfinder.isActive());
 
-        odometry.setRawPosition(odometry.getPosition().withHeading(Angle.fromDeg(30)));
+        odometry.setRawPosition(
+            odometry.getPosition().withHeading(Angle.fromDeg(30))
+        );
         pathfinder.tick();
         Assertions.assertTrue(pathfinder.isActive());
 
-        odometry.setRawPosition(odometry.getPosition().withHeading(Angle.fromDeg(42)));
+        odometry.setRawPosition(
+            odometry.getPosition().withHeading(Angle.fromDeg(42))
+        );
         pathfinder.tick();
         Assertions.assertTrue(pathfinder.isActive());
 
-        odometry.setRawPosition(odometry.getPosition().withHeading(Angle.fromDeg(48)));
+        odometry.setRawPosition(
+            odometry.getPosition().withHeading(Angle.fromDeg(48))
+        );
         pathfinder.tick();
         Assertions.assertTrue(pathfinder.isActive());
 
-        odometry.setRawPosition(odometry.getPosition().withHeading(Angle.fromDeg(45)));
+        odometry.setRawPosition(
+            odometry.getPosition().withHeading(Angle.fromDeg(45))
+        );
         pathfinder.tick();
         Assertions.assertFalse(pathfinder.isActive());
     }
@@ -206,11 +215,36 @@ public class TestLinearTrajectory {
 
         Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
 
-        Trajectory a = new LinearTrajectory(new PointXYZ(0, 0, 0), 0.5, 2, Angle.fromDeg(5));
-        Trajectory b = new LinearTrajectory(new PointXYZ(10, 0, 0), 0.5, 2, Angle.fromDeg(5));
-        Trajectory c = new LinearTrajectory(new PointXYZ(10, 10, 0), 0.5, 2, Angle.fromDeg(5));
-        Trajectory d = new LinearTrajectory(new PointXYZ(0, 10, 0), 0.5, 2, Angle.fromDeg(5));
-        Trajectory e = new LinearTrajectory(new PointXYZ(0, 0, 0), 0.5, 2, Angle.fromDeg(5));
+        Trajectory a = new LinearTrajectory(
+            new PointXYZ(0, 0, 0),
+            0.5,
+            2,
+            Angle.fromDeg(5)
+        );
+        Trajectory b = new LinearTrajectory(
+            new PointXYZ(10, 0, 0),
+            0.5,
+            2,
+            Angle.fromDeg(5)
+        );
+        Trajectory c = new LinearTrajectory(
+            new PointXYZ(10, 10, 0),
+            0.5,
+            2,
+            Angle.fromDeg(5)
+        );
+        Trajectory d = new LinearTrajectory(
+            new PointXYZ(0, 10, 0),
+            0.5,
+            2,
+            Angle.fromDeg(5)
+        );
+        Trajectory e = new LinearTrajectory(
+            new PointXYZ(0, 0, 0),
+            0.5,
+            2,
+            Angle.fromDeg(5)
+        );
 
         SimulatedOdometry o = (SimulatedOdometry) pathfinder.getOdometry();
 

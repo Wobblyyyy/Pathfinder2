@@ -10,18 +10,17 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
-import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
-import me.wobblyyyy.pathfinder2.math.Equals;
-import me.wobblyyyy.pathfinder2.math.Rounding;
-import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
-import me.wobblyyyy.pathfinder2.utils.ArrayUtils;
-import me.wobblyyyy.pathfinder2.utils.StringUtils;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
+import me.wobblyyyy.pathfinder2.math.Equals;
+import me.wobblyyyy.pathfinder2.math.Rounding;
+import me.wobblyyyy.pathfinder2.utils.ArrayUtils;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
  * A 2d coordinate with X and Y values. The foundation Pathfinder's
@@ -103,8 +102,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param x the point's X value.
      * @param y the point's Y value.
      */
-    public PointXY(double x,
-                   double y) {
+    public PointXY(double x, double y) {
         ValidationUtils.validate(x, "x");
         ValidationUtils.validate(y, "y");
 
@@ -122,12 +120,8 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param yMeters the Y value.
      * @return a new {@code PointXY}.
      */
-    public static PointXY fromMetersToInches(double xMeters,
-                                             double yMeters) {
-        return new PointXY(
-                xMeters * 39.37,
-                yMeters * 39.37
-        );
+    public static PointXY fromMetersToInches(double xMeters, double yMeters) {
+        return new PointXY(xMeters * 39.37, yMeters * 39.37);
     }
 
     /**
@@ -138,12 +132,8 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param yInches the Y value.
      * @return a new {@code PointXY}.
      */
-    public static PointXY fromInchesToMeters(double xInches,
-                                             double yInches) {
-        return new PointXY(
-                xInches * 0.025,
-                yInches * 0.025
-        );
+    public static PointXY fromInchesToMeters(double xInches, double yInches) {
+        return new PointXY(xInches * 0.025, yInches * 0.025);
     }
 
     /**
@@ -154,12 +144,11 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param yMeters the Y value.
      * @return a new {@code PointXY}.
      */
-    public static PointXY fromMetersToCentimeters(double xMeters,
-                                                  double yMeters) {
-        return new PointXY(
-                xMeters * 100,
-                yMeters * 100
-        );
+    public static PointXY fromMetersToCentimeters(
+        double xMeters,
+        double yMeters
+    ) {
+        return new PointXY(xMeters * 100, yMeters * 100);
     }
 
     /**
@@ -170,12 +159,11 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param yCentimeters the Y value.
      * @return a new {@code PointXY}.
      */
-    public static PointXY fromCentimetersToInches(double xCentimeters,
-                                                  double yCentimeters) {
-        return new PointXY(
-                xCentimeters / 100,
-                yCentimeters / 100
-        );
+    public static PointXY fromCentimetersToInches(
+        double xCentimeters,
+        double yCentimeters
+    ) {
+        return new PointXY(xCentimeters / 100, yCentimeters / 100);
     }
 
     /**
@@ -186,12 +174,11 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param yInches the Y value.
      * @return a new {@code PointXY}.
      */
-    public static PointXY fromInchesToCentimeters(double xInches,
-                                                  double yInches) {
-        return new PointXY(
-                (xInches * 0.025) / 100,
-                (yInches * 0.025) / 100
-        );
+    public static PointXY fromInchesToCentimeters(
+        double xInches,
+        double yInches
+    ) {
+        return new PointXY((xInches * 0.025) / 100, (yInches * 0.025) / 100);
     }
 
     /**
@@ -204,15 +191,11 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return a new point, created by adding the component X and Y values of
      * each of the points together.
      */
-    public static PointXY add(PointXY a,
-                              PointXY b) {
+    public static PointXY add(PointXY a, PointXY b) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
 
-        return new PointXY(
-                a.x() + b.x(),
-                a.y() + b.y()
-        );
+        return new PointXY(a.x() + b.x(), a.y() + b.y());
     }
 
     /**
@@ -226,13 +209,8 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return a new point, created by adding the component X and Y values of
      * each of the points together.
      */
-    public static PointXY add(PointXY a,
-                              double x,
-                              double y) {
-        return new PointXY(
-                a.x + x,
-                a.y + y
-        );
+    public static PointXY add(PointXY a, double x, double y) {
+        return new PointXY(a.x + x, a.y + y);
     }
 
     /**
@@ -242,15 +220,11 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param b the second point.
      * @return a new point - the difference between a and b.
      */
-    public static PointXY subtract(PointXY a,
-                                   PointXY b) {
+    public static PointXY subtract(PointXY a, PointXY b) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
 
-        return new PointXY(
-                a.x() - b.x(),
-                a.y() - b.y()
-        );
+        return new PointXY(a.x() - b.x(), a.y() - b.y());
     }
 
     /**
@@ -265,15 +239,11 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param b one of the two points to multiply.
      * @return the product of the two point's component X and Y values.
      */
-    public static PointXY multiply(PointXY a,
-                                   PointXY b) {
+    public static PointXY multiply(PointXY a, PointXY b) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
 
-        return new PointXY(
-                a.x() * b.x(),
-                a.y() * b.y()
-        );
+        return new PointXY(a.x() * b.x(), a.y() * b.y());
     }
 
     /**
@@ -284,15 +254,11 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return a new point, the result of multiplying {@code a}'s component
      * X and Y values by {@code b}.
      */
-    public static PointXY multiply(PointXY a,
-                                   double b) {
+    public static PointXY multiply(PointXY a, double b) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
 
-        return new PointXY(
-                a.x() * b,
-                a.y() * b
-        );
+        return new PointXY(a.x() * b, a.y() * b);
     }
 
     /**
@@ -302,8 +268,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param object the object to compare.
      * @return if they have the same value, true. Otherwise, false.
      */
-    public static boolean equalsX(PointXY a,
-                                  Object object) {
+    public static boolean equalsX(PointXY a, Object object) {
         if (object instanceof PointXY) {
             PointXY b = (PointXY) object;
 
@@ -320,8 +285,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param object the object to compare.
      * @return if they have the same value, true. Otherwise, false.
      */
-    public static boolean equalsY(PointXY a,
-                                  Object object) {
+    public static boolean equalsY(PointXY a, Object object) {
         if (object instanceof PointXY) {
             PointXY b = (PointXY) object;
 
@@ -338,8 +302,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param object the object to compare.
      * @return if they have the same value, true. Otherwise, false.
      */
-    public static boolean equals(PointXY a,
-                                 Object object) {
+    public static boolean equals(PointXY a, Object object) {
         if (object instanceof PointXY) {
             PointXY b = (PointXY) object;
 
@@ -359,8 +322,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param b one of the two points to average.
      * @return the average (midpoint, if you will) of the two points.
      */
-    public static PointXY avg(PointXY a,
-                              PointXY b) {
+    public static PointXY avg(PointXY a, PointXY b) {
         return multiply(add(a, b), 0.5);
     }
 
@@ -384,8 +346,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * by taking the change in Y over the change in X - in other words,
      * (y2 minus y1) divided by (x2 minus x1).
      */
-    public static double slope(PointXY a,
-                               PointXY b) {
+    public static double slope(PointXY a, PointXY b) {
         return distanceY(a, b) / distanceX(a, b);
     }
 
@@ -407,8 +368,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return the distance between the two points.
      * @see <a href="https://en.wikipedia.org/wiki/Distance">Distance</a>
      */
-    public static double distance(PointXY a,
-                                  PointXY b) {
+    public static double distance(PointXY a, PointXY b) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
 
@@ -418,11 +378,11 @@ public class PointXY implements Comparable<PointXY>, Serializable {
         // get the general idea.
         double distance = Math.hypot(b.x - a.x, b.y - a.y);
 
-        ValidationUtils.validate(distance, "distance", StringUtils.format(
-                "point a: <%s>, point b: <%s>",
-                a,
-                b
-        ));
+        ValidationUtils.validate(
+            distance,
+            "distance",
+            StringUtils.format("point a: <%s>, point b: <%s>", a, b)
+        );
 
         return distance;
     }
@@ -444,8 +404,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param b the second of the two points.
      * @return {@code b}'s X value minus {@code a}'s X value.
      */
-    public static double distanceX(PointXY a,
-                                   PointXY b) {
+    public static double distanceX(PointXY a, PointXY b) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
 
@@ -469,8 +428,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param b the second of the two points.
      * @return {@code b}'s Y value minus {@code a}'s Y value.
      */
-    public static double distanceY(PointXY a,
-                                   PointXY b) {
+    public static double distanceY(PointXY a, PointXY b) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
 
@@ -499,8 +457,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return the angle from {@code a} to {@code b}.
      * @see <a href="https://en.wikipedia.org/wiki/Atan2">atan2</a>
      */
-    public static Angle angleTo(PointXY a,
-                                PointXY b) {
+    public static Angle angleTo(PointXY a, PointXY b) {
         return Angle.atan2(distanceY(a, b), distanceX(a, b));
     }
 
@@ -526,8 +483,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return the angle from {@code a} to {@code b}.
      * @see <a href="https://en.wikipedia.org/wiki/Atan2">atan2</a>
      */
-    public static Angle angleFrom(PointXY a,
-                                  PointXY b) {
+    public static Angle angleFrom(PointXY a, PointXY b) {
         return angleTo(b, a);
     }
 
@@ -545,10 +501,16 @@ public class PointXY implements Comparable<PointXY>, Serializable {
 
         for (PointXY p : points) {
             for (PointXY x : ps) {
-                boolean sameX = Equals.soft(x.x(), p.x(),
-                        Geometry.tolerancePointXY);
-                boolean sameY = Equals.soft(x.y(), p.y(),
-                        Geometry.tolerancePointXY);
+                boolean sameX = Equals.soft(
+                    x.x(),
+                    p.x(),
+                    Geometry.tolerancePointXY
+                );
+                boolean sameY = Equals.soft(
+                    x.y(),
+                    p.y(),
+                    Geometry.tolerancePointXY
+                );
 
                 if (sameX && sameY) return true;
             }
@@ -571,16 +533,18 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return a new point, a given distance away from {@code base}, drawn
      * at {@code angle}.
      */
-    public static PointXY inDirection(PointXY base,
-                                      double distance,
-                                      Angle angle) {
+    public static PointXY inDirection(
+        PointXY base,
+        double distance,
+        Angle angle
+    ) {
         ValidationUtils.validate(base, "base");
         ValidationUtils.validate(distance, "distance");
         ValidationUtils.validate(angle, "angle");
 
         return new PointXY(
-                base.x() + (distance * angle.cos()),
-                base.y() + (distance * angle.sin())
+            base.x() + (distance * angle.cos()),
+            base.y() + (distance * angle.sin())
         );
     }
 
@@ -592,13 +556,11 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param translation the translation to apply.
      * @return a new point with the provided translation applied to it.
      */
-    public static PointXY applyTranslation(PointXY base,
-                                           Translation translation) {
-        return inDirection(
-                base,
-                translation.magnitude(),
-                translation.angle()
-        );
+    public static PointXY applyTranslation(
+        PointXY base,
+        Translation translation
+    ) {
+        return inDirection(base, translation.magnitude(), translation.angle());
     }
 
     /**
@@ -611,32 +573,37 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * or equal to the {@code tolerance}, this method will return true.
      * Else, this method will return false.
      */
-    public static boolean isNear(PointXY a,
-                                 PointXY b,
-                                 double tolerance) {
+    public static boolean isNear(PointXY a, PointXY b, double tolerance) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
         InvalidToleranceException.throwIfInvalid(
-                "Invalid tolerance!", tolerance);
+            "Invalid tolerance!",
+            tolerance
+        );
 
-        if (tolerance < 0)
-            throw new InvalidToleranceException(StringUtils.format(
-                    "Cannot have a tolerance below 0! Tolerance was: <%s>",
-                    tolerance
-            ));
+        if (tolerance < 0) throw new InvalidToleranceException(
+            StringUtils.format(
+                "Cannot have a tolerance below 0! Tolerance was: <%s>",
+                tolerance
+            )
+        );
 
         return Math.abs(distance(a, b)) <= Math.abs(tolerance);
     }
 
-    public static boolean isNear(PointXY a,
-                                 double tolerance,
-                                 PointXY... points) {
+    public static boolean isNear(
+        PointXY a,
+        double tolerance,
+        PointXY... points
+    ) {
         InvalidToleranceException.throwIfInvalid(
-                "Invalid tolerance!", tolerance);
+            "Invalid tolerance!",
+            tolerance
+        );
 
-        for (PointXY point : points)
-            if (isNear(a, point, tolerance))
-                return true;
+        for (PointXY point : points) if (
+            isNear(a, point, tolerance)
+        ) return true;
 
         return false;
     }
@@ -649,17 +616,15 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param angle  how far the point should be rotated.
      * @return a new point, rotated around {@code center} by {@code angle}.
      */
-    public static PointXY rotate(PointXY point,
-                                 PointXY center,
-                                 Angle angle) {
+    public static PointXY rotate(PointXY point, PointXY center, Angle angle) {
         checkArgument(point);
         checkArgument(center);
         Angle.checkArgument(angle);
 
         return inDirection(
-                center,
-                distance(center, point),
-                angleTo(center, point).fix().add(angle).fix()
+            center,
+            distance(center, point),
+            angleTo(center, point).fix().add(angle).fix()
         );
     }
 
@@ -671,13 +636,14 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param angle  how far to rotate the points.
      * @return a new {@code List} of rotated points.
      */
-    public static List<PointXY> rotate(Collection<PointXY> points,
-                                       PointXY center,
-                                       Angle angle) {
+    public static List<PointXY> rotate(
+        Collection<PointXY> points,
+        PointXY center,
+        Angle angle
+    ) {
         List<PointXY> rotated = new ArrayList<>(points.size());
 
-        for (PointXY point : points)
-            rotated.add(rotate(point, center, angle));
+        for (PointXY point : points) rotated.add(rotate(point, center, angle));
 
         return rotated;
     }
@@ -690,11 +656,14 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param angle  how far to rotate the points.
      * @return a new {@code List} of rotated points.
      */
-    public static PointXY[] rotate(PointXY[] points,
-                                   PointXY center,
-                                   Angle angle) {
-        return ArrayUtils.toPointXYArray(rotate(
-                    Arrays.asList(points),center, angle));
+    public static PointXY[] rotate(
+        PointXY[] points,
+        PointXY center,
+        Angle angle
+    ) {
+        return ArrayUtils.toPointXYArray(
+            rotate(Arrays.asList(points), center, angle)
+        );
     }
 
     /**
@@ -705,26 +674,28 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param c one of the three points.
      * @return true if the points are collinear, false if not.
      */
-    public static boolean areCollinear(PointXY a,
-                                       PointXY b,
-                                       PointXY c) {
+    public static boolean areCollinear(PointXY a, PointXY b, PointXY c) {
         checkArgument(a);
         checkArgument(b);
         checkArgument(c);
 
-        double dx1 = (b.x() + Geometry.toleranceCollinear)
-                - (a.x() + Geometry.toleranceCollinear);
-        double dy1 = (b.y() + Geometry.toleranceCollinear)
-                - (a.y() + Geometry.toleranceCollinear);
-        double dx2 = (c.x() + Geometry.toleranceCollinear)
-                - (a.x() + Geometry.toleranceCollinear);
-        double dy2 = (c.y() + Geometry.toleranceCollinear)
-                - (a.y() + Geometry.toleranceCollinear);
+        double dx1 =
+            (b.x() + Geometry.toleranceCollinear) -
+            (a.x() + Geometry.toleranceCollinear);
+        double dy1 =
+            (b.y() + Geometry.toleranceCollinear) -
+            (a.y() + Geometry.toleranceCollinear);
+        double dx2 =
+            (c.x() + Geometry.toleranceCollinear) -
+            (a.x() + Geometry.toleranceCollinear);
+        double dy2 =
+            (c.y() + Geometry.toleranceCollinear) -
+            (a.y() + Geometry.toleranceCollinear);
 
         return Equals.soft(
-                (dx1 * dy2),
-                (dx2 * dy1),
-                Geometry.toleranceCollinear
+            (dx1 * dy2),
+            (dx2 * dy1),
+            Geometry.toleranceCollinear
         );
     }
 
@@ -735,17 +706,19 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return true if the points are collinear, otherwise, false.
      */
     public static boolean areCollinear(PointXY... points) {
-        if (points.length < 3)
-            throw new IllegalArgumentException("Must provide at least " +
-                    "3 points, you only provided <" + points.length + ">");
+        if (points.length < 3) throw new IllegalArgumentException(
+            "Must provide at least " +
+            "3 points, you only provided <" +
+            points.length +
+            ">"
+        );
 
         for (int i = 0; i < points.length - 3; i++) {
             PointXY a = points[i];
             PointXY b = points[i + 1];
             PointXY c = points[i + 2];
 
-            if (!areCollinear(a, b, c))
-                return false;
+            if (!areCollinear(a, b, c)) return false;
         }
 
         return true;
@@ -760,9 +733,11 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param distance how far away the point should be.
      * @return a new point.
      */
-    public static PointXY towards(PointXY origin,
-                                  PointXY target,
-                                  double distance) {
+    public static PointXY towards(
+        PointXY origin,
+        PointXY target,
+        double distance
+    ) {
         checkArgument(origin);
         checkArgument(target);
         ValidationUtils.validate(distance, "distance");
@@ -779,8 +754,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param b one of the two points.
      * @return the midpoint between the two points.
      */
-    public static PointXY midpoint(PointXY a,
-                                   PointXY b) {
+    public static PointXY midpoint(PointXY a, PointXY b) {
         return avg(a, b);
     }
 
@@ -804,8 +778,10 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return out of the set of points provided, the point that is closest
      * to the reference point.
      */
-    public static PointXY getClosestPoint(PointXY reference,
-                                          PointXY... points) {
+    public static PointXY getClosestPoint(
+        PointXY reference,
+        PointXY... points
+    ) {
         double distance = Double.POSITIVE_INFINITY;
         PointXY point = points[0];
 
@@ -830,8 +806,10 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return out of the set of points provided, the point that is closest
      * to the reference point.
      */
-    public static PointXY getClosestPoint(PointXY reference,
-                                          List<PointXY> points) {
+    public static PointXY getClosestPoint(
+        PointXY reference,
+        List<PointXY> points
+    ) {
         double distance = Double.POSITIVE_INFINITY;
         PointXY point = points.get(0);
 
@@ -856,8 +834,10 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return out of the set of points provided, the point that is furthest
      * from the reference point.
      */
-    public static PointXY getFurthestPoint(PointXY reference,
-                                           PointXY... points) {
+    public static PointXY getFurthestPoint(
+        PointXY reference,
+        PointXY... points
+    ) {
         double distance = Double.NEGATIVE_INFINITY;
         PointXY point = points[0];
 
@@ -882,8 +862,10 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return out of the set of points provided, the point that is furthest
      * from the reference point.
      */
-    public static PointXY getFurthestPoint(PointXY reference,
-                                           List<PointXY> points) {
+    public static PointXY getFurthestPoint(
+        PointXY reference,
+        List<PointXY> points
+    ) {
         double distance = Double.NEGATIVE_INFINITY;
         PointXY point = points.get(0);
 
@@ -915,10 +897,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
             totalY += point.y();
         }
 
-        return new PointXY(
-                totalX / points.size(),
-                totalY / points.size()
-        );
+        return new PointXY(totalX / points.size(), totalY / points.size());
     }
 
     /**
@@ -937,10 +916,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
             totalY += point.y();
         }
 
-        return new PointXY(
-                totalX / points.length,
-                totalY / points.length
-        );
+        return new PointXY(totalX / points.length, totalY / points.length);
     }
 
     /**
@@ -1035,8 +1011,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
         return new PointXY(x, y);
     }
 
-    public static void checkArgument(PointXY point,
-                                     String message) {
+    public static void checkArgument(PointXY point, String message) {
         if (point == null) {
             throw new IllegalArgumentException(message);
         }
@@ -1049,17 +1024,17 @@ public class PointXY implements Comparable<PointXY>, Serializable {
 
         if (invalidX || invalidY) {
             throw new IllegalArgumentException(
-                    "Invalid X or Y value - please make sure " +
-                            "your X and Y values are finite real numbers."
+                "Invalid X or Y value - please make sure " +
+                "your X and Y values are finite real numbers."
             );
         }
     }
 
     public static void checkArgument(PointXY point) {
         checkArgument(
-                point,
-                "Attempted to operate on a null PointXY, please " +
-                        "make sure you're not passing a null point to a method."
+            point,
+            "Attempted to operate on a null PointXY, please " +
+            "make sure you're not passing a null point to a method."
         );
     }
 
@@ -1070,8 +1045,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param shape     the shape.
      * @return the closest point in the shape.
      */
-    public static PointXY closestPoint(PointXY reference,
-                                       Shape<?> shape) {
+    public static PointXY closestPoint(PointXY reference, Shape<?> shape) {
         return shape.getClosestPoint(reference);
     }
 
@@ -1083,13 +1057,12 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param shiftY    the Y translation/shift.
      * @return the shifted point.
      */
-    public static PointXY shift(PointXY reference,
-                                double shiftX,
-                                double shiftY) {
-        return new PointXY(
-                reference.x() + shiftX,
-                reference.y() + shiftY
-        );
+    public static PointXY shift(
+        PointXY reference,
+        double shiftX,
+        double shiftY
+    ) {
+        return new PointXY(reference.x() + shiftX, reference.y() + shiftY);
     }
 
     /**
@@ -1099,8 +1072,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param shiftX    the X translation/shift.
      * @return the shifted point.
      */
-    public static PointXY shiftX(PointXY reference,
-                                 double shiftX) {
+    public static PointXY shiftX(PointXY reference, double shiftX) {
         return shift(reference, shiftX, 0);
     }
 
@@ -1111,8 +1083,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param shiftY    the Y translation/shift.
      * @return the shifted point.
      */
-    public static PointXY shiftY(PointXY reference,
-                                 double shiftY) {
+    public static PointXY shiftY(PointXY reference, double shiftY) {
         return shift(reference, 0, shiftY);
     }
 
@@ -1124,9 +1095,11 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param points the points to shift.
      * @return shifted points.
      */
-    public static List<PointXY> shift(double shiftX,
-                                      double shiftY,
-                                      List<PointXY> points) {
+    public static List<PointXY> shift(
+        double shiftX,
+        double shiftY,
+        List<PointXY> points
+    ) {
         List<PointXY> newPoints = new ArrayList<>(points.size());
 
         for (PointXY point : points) {
@@ -1144,9 +1117,11 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param points the points to shift.
      * @return shifted points.
      */
-    public static List<PointXY> shift(double shiftX,
-                                      double shiftY,
-                                      PointXY... points) {
+    public static List<PointXY> shift(
+        double shiftX,
+        double shiftY,
+        PointXY... points
+    ) {
         List<PointXY> newPoints = new ArrayList<>(points.length);
 
         for (PointXY point : points) {
@@ -1168,11 +1143,14 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return if the reference point is near any of the points in the provided
      * set of points, return true. Otherwise, return false.
      */
-    public static boolean isPointNearPoints(PointXY reference,
-                                            double tolerance,
-                                            PointXY... points) {
-        for (PointXY point : points)
-            if (reference.isNear(point, tolerance)) return true;
+    public static boolean isPointNearPoints(
+        PointXY reference,
+        double tolerance,
+        PointXY... points
+    ) {
+        for (PointXY point : points) if (
+            reference.isNear(point, tolerance)
+        ) return true;
 
         return false;
     }
@@ -1189,16 +1167,22 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return if the reference point is "near" the shape, return true.
      * Otherwise, return false.
      */
-    public static boolean isPointNearShape(PointXY reference,
-                                           Shape<?> shape,
-                                           double tolerance) {
+    public static boolean isPointNearShape(
+        PointXY reference,
+        Shape<?> shape,
+        double tolerance
+    ) {
         ValidationUtils.validate(reference, "reference");
         ValidationUtils.validate(shape, "shape");
         ValidationUtils.validate(tolerance, "tolerance");
-        InvalidToleranceException.throwIfInvalid("Invalid tolerance! " +
-                "Must be greater than 0.", tolerance);
+        InvalidToleranceException.throwIfInvalid(
+            "Invalid tolerance! " + "Must be greater than 0.",
+            tolerance
+        );
 
-        return reference.absDistance(shape.getClosestPoint(reference)) <= tolerance;
+        return (
+            reference.absDistance(shape.getClosestPoint(reference)) <= tolerance
+        );
     }
 
     /**
@@ -1209,8 +1193,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param distance how far away the point should be.
      * @return a new point.
      */
-    public PointXY towards(PointXY target,
-                           double distance) {
+    public PointXY towards(PointXY target, double distance) {
         return towards(this, target, distance);
     }
 
@@ -1468,8 +1451,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param angle    the angle the new point should be created at.
      * @return a new point, {@code distance} away in {@code angle} direction.
      */
-    public PointXY inDirection(double distance,
-                               Angle angle) {
+    public PointXY inDirection(double distance, Angle angle) {
         return inDirection(this, distance, angle);
     }
 
@@ -1490,8 +1472,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param tolerance the maximum distance value.
      * @return whether the two points are near.
      */
-    public boolean isNear(PointXY a,
-                          double tolerance) {
+    public boolean isNear(PointXY a, double tolerance) {
         return isNear(this, a, tolerance);
     }
 
@@ -1502,8 +1483,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param angle  how far to rotate this point.
      * @return a new, rotated point.
      */
-    public PointXY rotate(PointXY center,
-                          Angle angle) {
+    public PointXY rotate(PointXY center, Angle angle) {
         return rotate(this, center, angle);
     }
 
@@ -1514,8 +1494,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param b one of the points to check.
      * @return whether all three points are collinear.
      */
-    public boolean isCollinearWith(PointXY a,
-                                   PointXY b) {
+    public boolean isCollinearWith(PointXY a, PointXY b) {
         return areCollinear(this, a, b);
     }
 
@@ -1603,8 +1582,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @param shiftY the Y translation/shift.
      * @return the shifted point.
      */
-    public PointXY shift(double shiftX,
-                         double shiftY) {
+    public PointXY shift(double shiftX, double shiftY) {
         return shift(this, shiftX, shiftY);
     }
 
@@ -1639,8 +1617,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return if the reference point is near any of the points in the provided
      * set of points, return true. Otherwise, return false.
      */
-    public boolean isPointNearPoints(double tolerance,
-                                     PointXY... points) {
+    public boolean isPointNearPoints(double tolerance, PointXY... points) {
         return isPointNearPoints(this, tolerance, points);
     }
 
@@ -1655,8 +1632,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
      * @return if this point is "near" the shape, return true. Otherwise,
      * return false.
      */
-    public boolean isPointNearShape(Shape<?> shape,
-                                    double tolerance) {
+    public boolean isPointNearShape(Shape<?> shape, double tolerance) {
         return isPointNearShape(this, shape, tolerance);
     }
 
@@ -1669,10 +1645,16 @@ public class PointXY implements Comparable<PointXY>, Serializable {
         if (obj instanceof PointXY) {
             PointXY point = (PointXY) obj;
 
-            boolean sameX = Equals.soft(x, point.x(),
-                    Geometry.tolerancePointXY);
-            boolean sameY = Equals.soft(y, point.y(),
-                    Geometry.tolerancePointXY);
+            boolean sameX = Equals.soft(
+                x,
+                point.x(),
+                Geometry.tolerancePointXY
+            );
+            boolean sameY = Equals.soft(
+                y,
+                point.y(),
+                Geometry.tolerancePointXY
+            );
 
             return sameX && sameY;
         }
@@ -1694,9 +1676,9 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     @Override
     public String toString() {
         return StringUtils.format(
-                Geometry.formatPointXY,
-                Rounding.fastRound(x),
-                Rounding.fastRound(y)
+            Geometry.formatPointXY,
+            Rounding.fastRound(x),
+            Rounding.fastRound(y)
         );
     }
 

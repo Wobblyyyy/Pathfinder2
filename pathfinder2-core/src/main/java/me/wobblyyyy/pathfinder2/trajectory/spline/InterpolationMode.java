@@ -42,5 +42,5 @@ public enum InterpolationMode {
     /**
      * Use a custom spline interpolator generator.
      */
-    CUSTOM
+    CUSTOM,
 }

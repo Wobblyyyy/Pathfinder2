@@ -16,17 +16,18 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestMultiTargetTrajectory {
+
     @Test
     public void testMultiTargetTrajectory() {
         TrajectoryTarget[] targets = new MultiTargetBuilder()
-                .setPrecision(TargetPrecision.FAST)
-                .setSpeed(0.5)
-                .setTolerance(2.0)
-                .setAngleTolerance(Angle.fromDeg(5))
-                .addTargetPoint(new PointXYZ(10, 10, 0))
-                .addTargetPoint(new PointXYZ(10, 10, 10))
-                .addTargetPoint(new PointXYZ(-10, -10, 0))
-                .build();
+            .setPrecision(TargetPrecision.FAST)
+            .setSpeed(0.5)
+            .setTolerance(2.0)
+            .setAngleTolerance(Angle.fromDeg(5))
+            .addTargetPoint(new PointXYZ(10, 10, 0))
+            .addTargetPoint(new PointXYZ(10, 10, 10))
+            .addTargetPoint(new PointXYZ(-10, -10, 0))
+            .build();
 
         MultiTargetTrajectory trajectory = new MultiTargetTrajectory(targets);
 

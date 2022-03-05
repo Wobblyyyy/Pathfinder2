@@ -153,7 +153,5 @@ public class Geometry {
      */
     public static String formatTranslation = "(vx: %s, vy: %s, vz: %s)";
 
-    private Geometry() {
-
-    }
+    private Geometry() {}
 }

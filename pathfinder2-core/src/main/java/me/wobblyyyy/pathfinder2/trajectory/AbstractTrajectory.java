@@ -10,12 +10,11 @@
 
 package me.wobblyyyy.pathfinder2.trajectory;
 
-import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
 /**
  * A {@code Trajectory} that adds support for end conditions, execution
@@ -43,26 +42,26 @@ public abstract class AbstractTrajectory implements Trajectory {
 
     public AbstractTrajectory() {
         this(
-                new ArrayList<>(1),
-                new ArrayList<>(1),
-                new ArrayList<>(1),
-                new ArrayList<>(1),
-                new ArrayList<>(1),
-                new ArrayList<>(1),
-                new ArrayList<>(1),
-                new ArrayList<>(1)
+            new ArrayList<>(1),
+            new ArrayList<>(1),
+            new ArrayList<>(1),
+            new ArrayList<>(1),
+            new ArrayList<>(1),
+            new ArrayList<>(1),
+            new ArrayList<>(1),
+            new ArrayList<>(1)
         );
     }
 
     public AbstractTrajectory(
-            Collection<Supplier<Boolean>> endConditions,
-            Collection<Supplier<Boolean>> requirements,
-            Collection<Function<PointXYZ, PointXYZ>> nextMarkerInputModifiers,
-            Collection<Function<PointXYZ, PointXYZ>> nextMarkerOutputModifiers,
-            Collection<Function<PointXYZ, PointXYZ>> speedInputModifiers,
-            Collection<Function<Double, Double>> speedOutputModifiers,
-            Collection<Function<PointXYZ, PointXYZ>> isDoneInputModifiers,
-            Collection<Function<Boolean, Boolean>> isDoneOutputModifiers
+        Collection<Supplier<Boolean>> endConditions,
+        Collection<Supplier<Boolean>> requirements,
+        Collection<Function<PointXYZ, PointXYZ>> nextMarkerInputModifiers,
+        Collection<Function<PointXYZ, PointXYZ>> nextMarkerOutputModifiers,
+        Collection<Function<PointXYZ, PointXYZ>> speedInputModifiers,
+        Collection<Function<Double, Double>> speedOutputModifiers,
+        Collection<Function<PointXYZ, PointXYZ>> isDoneInputModifiers,
+        Collection<Function<Boolean, Boolean>> isDoneOutputModifiers
     ) {
         this.endConditions = endConditions;
         this.requirements = requirements;
@@ -73,22 +72,27 @@ public abstract class AbstractTrajectory implements Trajectory {
         this.isDoneInputModifiers = isDoneInputModifiers;
         this.isDoneOutputModifiers = isDoneOutputModifiers;
 
-        this.collections = new ArrayList<Collection<?>>() {{
-            add(endConditions);
-            add(requirements);
-            add(nextMarkerInputModifiers);
-            add(nextMarkerOutputModifiers);
-            add(speedInputModifiers);
-            add(speedOutputModifiers);
-            add(isDoneInputModifiers);
-            add(isDoneOutputModifiers);
-        }};
+        this.collections =
+            new ArrayList<Collection<?>>() {
+
+                {
+                    add(endConditions);
+                    add(requirements);
+                    add(nextMarkerInputModifiers);
+                    add(nextMarkerOutputModifiers);
+                    add(speedInputModifiers);
+                    add(speedOutputModifiers);
+                    add(isDoneInputModifiers);
+                    add(isDoneOutputModifiers);
+                }
+            };
     }
 
-    private static <T> T applyModifiers(T value,
-                                        Iterable<Function<T, T>> modifiers) {
-        for (Function<T, T> modifier : modifiers)
-            value = modifier.apply(value);
+    private static <T> T applyModifiers(
+        T value,
+        Iterable<Function<T, T>> modifiers
+    ) {
+        for (Function<T, T> modifier : modifiers) value = modifier.apply(value);
 
         return value;
     }
@@ -100,8 +104,7 @@ public abstract class AbstractTrajectory implements Trajectory {
     public abstract boolean abstractIsDone(PointXYZ current);
 
     public void clear() {
-        for (Collection<?> collection : collections)
-            collection.clear();
+        for (Collection<?> collection : collections) collection.clear();
     }
 
     public void addInputModifier(Function<PointXYZ, PointXYZ> modifier) {
@@ -156,11 +159,13 @@ public abstract class AbstractTrajectory implements Trajectory {
 
     @Override
     public boolean isDone(PointXYZ current) {
-        for (Supplier<Boolean> supplier : endConditions)
-            if (supplier.get()) return true;
+        for (Supplier<Boolean> supplier : endConditions) if (
+            supplier.get()
+        ) return true;
 
-        for (Supplier<Boolean> supplier : requirements)
-            if (!supplier.get()) return true;
+        for (Supplier<Boolean> supplier : requirements) if (
+            !supplier.get()
+        ) return true;
 
         current = applyModifiers(current, isDoneInputModifiers);
         boolean isDone = abstractIsDone(current);

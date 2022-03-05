@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.odometry;
 
+import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.kinematics.Kinematics;
@@ -19,8 +20,6 @@ import me.wobblyyyy.pathfinder2.kinematics.SwerveState;
 import me.wobblyyyy.pathfinder2.robot.AbstractOdometry;
 import me.wobblyyyy.pathfinder2.time.Time;
 
-import java.util.function.Supplier;
-
 public class SwerveChassisOdometry extends AbstractOdometry {
     private final SwerveModuleOdometry frontRightOdometry;
     private final SwerveModuleOdometry frontLeftOdometry;
@@ -29,22 +28,25 @@ public class SwerveChassisOdometry extends AbstractOdometry {
     private final Supplier<Angle> getGyroAngle;
     private final SwerveDriveOdometry odometry;
 
-    public SwerveChassisOdometry(Kinematics<SwerveState> kinematics,
-                                 SwerveModuleOdometry frontRightOdometry,
-                                 SwerveModuleOdometry frontLeftOdometry,
-                                 SwerveModuleOdometry backRightOdometry,
-                                 SwerveModuleOdometry backLeftOdometry,
-                                 Supplier<Angle> getGyroAngle) {
+    public SwerveChassisOdometry(
+        Kinematics<SwerveState> kinematics,
+        SwerveModuleOdometry frontRightOdometry,
+        SwerveModuleOdometry frontLeftOdometry,
+        SwerveModuleOdometry backRightOdometry,
+        SwerveModuleOdometry backLeftOdometry,
+        Supplier<Angle> getGyroAngle
+    ) {
         this.frontRightOdometry = frontRightOdometry;
         this.frontLeftOdometry = frontLeftOdometry;
         this.backRightOdometry = backRightOdometry;
         this.backLeftOdometry = backLeftOdometry;
         this.getGyroAngle = getGyroAngle;
-        this.odometry = new SwerveDriveOdometry(
+        this.odometry =
+            new SwerveDriveOdometry(
                 kinematics,
                 getGyroAngle.get(),
                 new PointXYZ(0, 0, 0)
-        );
+            );
     }
 
     @Override
@@ -58,16 +60,12 @@ public class SwerveChassisOdometry extends AbstractOdometry {
         SwerveModuleState backLeftState = backLeftOdometry.getState();
 
         SwerveState state = new SwerveState(
-                frontRightState,
-                frontLeftState,
-                backRightState,
-                backLeftState
+            frontRightState,
+            frontLeftState,
+            backRightState,
+            backLeftState
         );
 
-        return odometry.updateWithTime(
-                currentTimeMs,
-                gyroAngle,
-                state
-        );
+        return odometry.updateWithTime(currentTimeMs, gyroAngle, state);
     }
 }

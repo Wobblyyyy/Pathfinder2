@@ -28,12 +28,15 @@ public class ExampleMethodChaining {
     private final Robot robot = new Robot(drive, odometry);
 
     private final Controller turnController = new GenericTurnController(0.05);
-    private final FollowerGenerator followerGenerator = new GenericFollowerGenerator(turnController);
-    private final Pathfinder pathfinder = new Pathfinder(robot, followerGenerator);
+    private final FollowerGenerator followerGenerator = new GenericFollowerGenerator(
+        turnController
+    );
+    private final Pathfinder pathfinder = new Pathfinder(
+        robot,
+        followerGenerator
+    );
 
-    public ExampleMethodChaining() {
-
-    }
+    public ExampleMethodChaining() {}
 
     private boolean shouldRun() {
         return true;
@@ -49,28 +52,33 @@ public class ExampleMethodChaining {
     @SuppressWarnings("DuplicatedCode")
     public void autonomousDrive() {
         pathfinder
-                .goTo(new PointXYZ(0, 0, 0))
-                .tickUntil()
-                .goTo(new PointXYZ(10, 0, 0))
-                .tickUntil()
-                .goTo(new PointXYZ(10, 10, 0))
-                .tickUntil()
-                .goTo(new PointXYZ(0, 10, 0))
-                .tickUntil(4_000, this::shouldRun, (pathfinder, elapsedMs) -> {
+            .goTo(new PointXYZ(0, 0, 0))
+            .tickUntil()
+            .goTo(new PointXYZ(10, 0, 0))
+            .tickUntil()
+            .goTo(new PointXYZ(10, 10, 0))
+            .tickUntil()
+            .goTo(new PointXYZ(0, 10, 0))
+            .tickUntil(
+                4_000,
+                this::shouldRun,
+                (pathfinder, elapsedMs) -> {
                     System.out.printf(
-                            "Current position: %s%n" +
-                                    "Elapsed time: %sms%n",
-                            pathfinder.getPosition(),
-                            elapsedMs
+                        "Current position: %s%n" + "Elapsed time: %sms%n",
+                        pathfinder.getPosition(),
+                        elapsedMs
                     );
-                })
-                .goTo(new PointXYZ(0, 0, 0))
-                .andThen((pf) -> {
+                }
+            )
+            .goTo(new PointXYZ(0, 0, 0))
+            .andThen(
+                pf -> {
                     // print the position at the very end
                     System.out.printf(
-                            "Current position: %s%n",
-                            pf.getPosition()
+                        "Current position: %s%n",
+                        pf.getPosition()
                     );
-                });
+                }
+            );
     }
 }

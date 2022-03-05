@@ -18,6 +18,7 @@ package me.wobblyyyy.pathfinder2.exceptions;
  * @since 0.7.1
  */
 public class SensorInitializationException extends RuntimeException {
+
     public SensorInitializationException(String message) {
         super(message);
     }

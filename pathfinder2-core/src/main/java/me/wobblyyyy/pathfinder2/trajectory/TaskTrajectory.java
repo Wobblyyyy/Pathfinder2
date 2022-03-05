@@ -10,10 +10,9 @@
 
 package me.wobblyyyy.pathfinder2.trajectory;
 
+import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
-
-import java.util.function.Supplier;
 
 /**
  * A task-oriented {@code Trajectory} interface that does not require the
@@ -52,12 +51,14 @@ public class TaskTrajectory implements Trajectory {
      * @param maxTimeMs  the maximum time, in milliseconds, the trajectory
      *                   will be active for.
      */
-    public TaskTrajectory(Runnable initial,
-                          Runnable during,
-                          Runnable onFinish,
-                          Supplier<Boolean> isFinished,
-                          double minTimeMs,
-                          double maxTimeMs) {
+    public TaskTrajectory(
+        Runnable initial,
+        Runnable during,
+        Runnable onFinish,
+        Supplier<Boolean> isFinished,
+        double minTimeMs,
+        double maxTimeMs
+    ) {
         this.initial = initial;
         this.during = during;
         this.onFinish = onFinish;
@@ -67,11 +68,13 @@ public class TaskTrajectory implements Trajectory {
         this.timer = new ElapsedTimer();
     }
 
-    public TaskTrajectory(Runnable initial,
-                          Runnable during,
-                          Runnable onFinish,
-                          Supplier<Boolean> isFinished,
-                          double maxTimeMs) {
+    public TaskTrajectory(
+        Runnable initial,
+        Runnable during,
+        Runnable onFinish,
+        Supplier<Boolean> isFinished,
+        double maxTimeMs
+    ) {
         this(initial, during, onFinish, isFinished, 0, maxTimeMs);
     }
 
@@ -94,11 +97,9 @@ public class TaskTrajectory implements Trajectory {
         boolean validMin = elapsedTime > minTimeMs;
         boolean validMax = elapsedTime < maxTimeMs;
 
-        if (!validMin)
-            isDone = false;
+        if (!validMin) isDone = false;
 
-        if (!validMax)
-            isDone = true;
+        if (!validMax) isDone = true;
 
         if (!hasExecuted) {
             timer.start();

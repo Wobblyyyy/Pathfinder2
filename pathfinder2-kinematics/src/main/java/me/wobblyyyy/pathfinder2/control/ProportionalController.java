@@ -85,10 +85,6 @@ public class ProportionalController extends AbstractController {
         ValidationUtils.validate(value, "coefficient");
         ValidationUtils.validate(delta, "delta");
 
-        return MinMax.clip(
-                delta * coefficient,
-                getMin(),
-                getMax()
-        );
+        return MinMax.clip(delta * coefficient, getMin(), getMax());
     }
 }

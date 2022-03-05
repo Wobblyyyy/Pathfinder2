@@ -10,10 +10,9 @@
 
 package me.wobblyyyy.pathfinder2.robot.sensors;
 
+import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.kinematics.EncoderConverter;
 import me.wobblyyyy.pathfinder2.kinematics.EncoderTracker;
-
-import java.util.function.Supplier;
 
 /**
  * Used in tracking the speed of an encoder that outputs ticks.
@@ -44,17 +43,19 @@ public class TickWheelEncoder {
      *                                   output for every complete revolution.
      * @param wheelCircumference         the circumference of the wheel.
      */
-    public TickWheelEncoder(Supplier<Integer> getTicks,
-                            double encoderCountsPerRevolution,
-                            double wheelCircumference) {
+    public TickWheelEncoder(
+        Supplier<Integer> getTicks,
+        double encoderCountsPerRevolution,
+        double wheelCircumference
+    ) {
         this(
-                new EncoderTracker(
-                        new EncoderConverter(
-                                encoderCountsPerRevolution,
-                                wheelCircumference
-                        ),
-                        getTicks
-                )
+            new EncoderTracker(
+                new EncoderConverter(
+                    encoderCountsPerRevolution,
+                    wheelCircumference
+                ),
+                getTicks
+            )
         );
     }
 

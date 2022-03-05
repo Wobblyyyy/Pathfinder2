@@ -10,10 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.units;
 
+import static me.wobblyyyy.pathfinder2.units.Unit.*;
+
 import java.util.EnumMap;
 import java.util.Map;
-
-import static me.wobblyyyy.pathfinder2.units.Unit.*;
 
 /**
  * Utilities for formatting different units.
@@ -22,41 +22,53 @@ import static me.wobblyyyy.pathfinder2.units.Unit.*;
  * @since 0.0.0
  */
 public class UnitFormatter {
-    private static final Map<Unit, String> NAMES_SHORT =
-            new EnumMap<Unit, String>(Unit.class) {{
-                put(INCH, "in");
-                put(CM, "cm");
-                put(M, "m");
-                put(KM, "km");
-                put(MM, "mm");
-                put(MILE, "mi");
-                put(YARD, "yd");
-                put(FOOT, "ft");
-                put(NAUTICAL_MILE, "NM");
-            }};
+    private static final Map<Unit, String> NAMES_SHORT = new EnumMap<Unit, String>(
+        Unit.class
+    ) {
 
-    private static final Map<Unit, String> NAMES_SINGULAR =
-            new EnumMap<Unit, String>(Unit.class) {{
-                put(INCH, "inch");
-                put(CM, "centimeter");
-                put(M, "meter");
-                put(KM, "kilometer");
-                put(MM, "millimeter");
-                put(MILE, "mile");
-                put(YARD, "yard");
-                put(FOOT, "foot");
-                put(NAUTICAL_MILE, "nautical mile");
-            }};
+        {
+            put(INCH, "in");
+            put(CM, "cm");
+            put(M, "m");
+            put(KM, "km");
+            put(MM, "mm");
+            put(MILE, "mi");
+            put(YARD, "yd");
+            put(FOOT, "ft");
+            put(NAUTICAL_MILE, "NM");
+        }
+    };
 
-    private static final Map<Unit, String> NAMES_PLURAL =
-            new EnumMap<Unit, String>(Unit.class) {{
-                for (Unit unit : Unit.values())
-                    put(unit, NAMES_SINGULAR.get(unit) + "s");
-            }};
+    private static final Map<Unit, String> NAMES_SINGULAR = new EnumMap<Unit, String>(
+        Unit.class
+    ) {
 
-    private UnitFormatter() {
+        {
+            put(INCH, "inch");
+            put(CM, "centimeter");
+            put(M, "meter");
+            put(KM, "kilometer");
+            put(MM, "millimeter");
+            put(MILE, "mile");
+            put(YARD, "yard");
+            put(FOOT, "foot");
+            put(NAUTICAL_MILE, "nautical mile");
+        }
+    };
 
-    }
+    private static final Map<Unit, String> NAMES_PLURAL = new EnumMap<Unit, String>(
+        Unit.class
+    ) {
+
+        {
+            for (Unit unit : Unit.values()) put(
+                unit,
+                NAMES_SINGULAR.get(unit) + "s"
+            );
+        }
+    };
+
+    private UnitFormatter() {}
 
     public static String getShortName(Unit unit) {
         return NAMES_SHORT.get(unit);
@@ -75,9 +87,9 @@ public class UnitFormatter {
     }
 
     public static String format(Unit unit, double value) {
-        String suffix = Math.abs(value - 1) < 0.001 ?
-                getSingularName(unit) :
-                getPluralName(unit);
+        String suffix = Math.abs(value - 1) < 0.001
+            ? getSingularName(unit)
+            : getPluralName(unit);
 
         return value + " " + suffix;
     }

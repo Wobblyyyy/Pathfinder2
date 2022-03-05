@@ -59,14 +59,8 @@ public class AbstractMotor extends BaseMotor {
      *                 a method is not provided, you should go about making
      *                 it function in some other way. Sorry!
      */
-    public AbstractMotor(Consumer<Double> setPower,
-                         Supplier<Double> getPower) {
-        this(
-                setPower,
-                getPower,
-                false,
-                false
-        );
+    public AbstractMotor(Consumer<Double> setPower, Supplier<Double> getPower) {
+        this(setPower, getPower, false, false);
     }
 
     /**
@@ -85,15 +79,12 @@ public class AbstractMotor extends BaseMotor {
      *                   {@code getPower} operations will multiply any
      *                   inputted/outputted power values by -1.
      */
-    public AbstractMotor(Consumer<Double> setPower,
-                         Supplier<Double> getPower,
-                         boolean isInverted) {
-        this(
-                setPower,
-                getPower,
-                isInverted,
-                isInverted
-        );
+    public AbstractMotor(
+        Consumer<Double> setPower,
+        Supplier<Double> getPower,
+        boolean isInverted
+    ) {
+        this(setPower, getPower, isInverted, isInverted);
     }
 
     /**
@@ -113,10 +104,12 @@ public class AbstractMotor extends BaseMotor {
      * @param isGetInverted if this is true, all {@code getPower} operations
      *                      will multiply the outputted power by -1.
      */
-    public AbstractMotor(Consumer<Double> setPower,
-                         Supplier<Double> getPower,
-                         boolean isSetInverted,
-                         boolean isGetInverted) {
+    public AbstractMotor(
+        Consumer<Double> setPower,
+        Supplier<Double> getPower,
+        boolean isSetInverted,
+        boolean isGetInverted
+    ) {
         this(setPower, getPower, isSetInverted, isGetInverted, 0.0);
     }
 
@@ -143,11 +136,13 @@ public class AbstractMotor extends BaseMotor {
      *                      in case you'd like to try to prevent motor
      *                      slippage, leading to encoder inaccuracies.
      */
-    public AbstractMotor(Consumer<Double> setPower,
-                         Supplier<Double> getPower,
-                         boolean isSetInverted,
-                         boolean isGetInverted,
-                         double deadband) {
+    public AbstractMotor(
+        Consumer<Double> setPower,
+        Supplier<Double> getPower,
+        boolean isSetInverted,
+        boolean isGetInverted,
+        double deadband
+    ) {
         this.setPower = setPower;
         this.getPower = getPower;
 

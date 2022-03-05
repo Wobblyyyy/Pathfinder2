@@ -20,12 +20,12 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
  * @since 0.0.0
  */
 public class NullAngleException extends RuntimeException {
+
     public NullAngleException(String message) {
         super(message);
     }
 
-    public static void throwIfInvalid(String message,
-                                      Angle angle) {
+    public static void throwIfInvalid(String message, Angle angle) {
         if (angle == null) {
             throw new NullAngleException(message);
         }

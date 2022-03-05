@@ -13,10 +13,9 @@ package me.wobblyyyy.pathfinder2.odometrycore;
 import com.tejasmehta.OdometryCore.OdometryCore;
 import com.tejasmehta.OdometryCore.localization.EncoderPositions;
 import com.tejasmehta.OdometryCore.localization.OdometryPosition;
+import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.robot.AbstractOdometry;
-
-import java.util.function.Supplier;
 
 /**
  * A generic three wheel odometry implementation. This odometry depends on
@@ -54,17 +53,19 @@ public class ThreeWheelOdometry extends AbstractOdometry {
      * @param encoders a group of suppliers, representing physical encoders
      *                 on the robot.
      */
-    public ThreeWheelOdometry(ThreeWheelOdometryProfile profile,
-                              EncoderProfile encoders) {
+    public ThreeWheelOdometry(
+        ThreeWheelOdometryProfile profile,
+        EncoderProfile encoders
+    ) {
         this.profile = profile;
         this.encoders = encoders;
 
         OdometryCore.initialize(
-                profile.getCpr(),
-                profile.getWheelDiameter(),
-                profile.getOffsetLeft(),
-                profile.getOffsetRight(),
-                profile.getOffsetCenter()
+            profile.getCpr(),
+            profile.getWheelDiameter(),
+            profile.getOffsetLeft(),
+            profile.getOffsetRight(),
+            profile.getOffsetCenter()
         );
 
         odometryCore = OdometryCore.getInstance();
@@ -78,9 +79,9 @@ public class ThreeWheelOdometry extends AbstractOdometry {
      */
     private EncoderPositions getEncoderPositions() {
         return new EncoderPositions(
-                encoders.left(),
-                encoders.right(),
-                encoders.center()
+            encoders.left(),
+            encoders.right(),
+            encoders.center()
         );
     }
 
@@ -92,7 +93,7 @@ public class ThreeWheelOdometry extends AbstractOdometry {
     @Override
     public PointXYZ getRawPosition() {
         OdometryPosition odometryPosition = odometryCore.getCurrentPosition(
-                getEncoderPositions()
+            getEncoderPositions()
         );
 
         return OdometryCoreUtils.fromOdometryPosition(odometryPosition);
@@ -116,9 +117,11 @@ public class ThreeWheelOdometry extends AbstractOdometry {
          * @param encoderRight  a method to access the right encoder's count.
          * @param encoderCenter a method to access the center encoder's count.
          */
-        public EncoderProfile(Supplier<Double> encoderLeft,
-                              Supplier<Double> encoderRight,
-                              Supplier<Double> encoderCenter) {
+        public EncoderProfile(
+            Supplier<Double> encoderLeft,
+            Supplier<Double> encoderRight,
+            Supplier<Double> encoderCenter
+        ) {
             this.encoderLeft = encoderLeft;
             this.encoderRight = encoderRight;
             this.encoderCenter = encoderCenter;
@@ -172,11 +175,13 @@ public class ThreeWheelOdometry extends AbstractOdometry {
          *                      the center of the robot. Only vertical
          *                      offset from the center matters.
          */
-        public ThreeWheelOdometryProfile(double cpr,
-                                         double wheelDiameter,
-                                         double offsetLeft,
-                                         double offsetRight,
-                                         double offsetCenter) {
+        public ThreeWheelOdometryProfile(
+            double cpr,
+            double wheelDiameter,
+            double offsetLeft,
+            double offsetRight,
+            double offsetCenter
+        ) {
             this.cpr = cpr;
             this.wheelDiameter = wheelDiameter;
 

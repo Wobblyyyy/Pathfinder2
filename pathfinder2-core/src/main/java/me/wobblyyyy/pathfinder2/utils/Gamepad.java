@@ -10,10 +10,9 @@
 
 package me.wobblyyyy.pathfinder2.utils;
 
-import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-
 import java.util.HashMap;
 import java.util.Map;
+import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
 public class Gamepad {
     private final Map<InputButton, PointXYZ> pointMap = new HashMap<>();
@@ -26,29 +25,31 @@ public class Gamepad {
     public DualJoystick joysticks;
 
     public boolean areAnyButtonsPressed() {
-        return areLetterButtonsPressed() ||
-                buttonStart.isPressed() ||
-                buttonSelect.isPressed();
+        return (
+            areLetterButtonsPressed() ||
+            buttonStart.isPressed() ||
+            buttonSelect.isPressed()
+        );
     }
 
     public boolean areLetterButtonsPressed() {
-        return buttonA.isPressed() ||
-                buttonB.isPressed() ||
-                buttonX.isPressed() ||
-                buttonY.isPressed();
+        return (
+            buttonA.isPressed() ||
+            buttonB.isPressed() ||
+            buttonX.isPressed() ||
+            buttonY.isPressed()
+        );
     }
 
     public boolean areJoysticksInUse() {
-        return joysticks.left().isNonZero() ||
-                joysticks.right().isNonZero();
+        return joysticks.left().isNonZero() || joysticks.right().isNonZero();
     }
 
     public PointXYZ getMappedPoint(InputButton button) {
         return pointMap.get(button);
     }
 
-    public void mapPoint(InputButton input,
-                         PointXYZ point) {
+    public void mapPoint(InputButton input, PointXYZ point) {
         pointMap.remove(input);
         pointMap.put(input, point);
     }
@@ -131,6 +132,6 @@ public class Gamepad {
         BUTTON_X,
         BUTTON_Y,
         BUTTON_START,
-        BUTTON_SELECT
+        BUTTON_SELECT,
     }
 }

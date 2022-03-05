@@ -10,11 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+import java.io.Serializable;
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
-
-import java.io.Serializable;
 
 /**
  * A two-dimensional translation. Robots should be capable of receiving
@@ -121,8 +120,7 @@ public class Translation implements Serializable {
      * @param vy the robot's translation along its Y axis. This value should
      *           not have any units, but should be scaled the same as vx.
      */
-    public Translation(double vx,
-                       double vy) {
+    public Translation(double vx, double vy) {
         this(vx, vy, 0);
     }
 
@@ -135,9 +133,7 @@ public class Translation implements Serializable {
      *           not have any units, but should be scaled the same as vx.
      * @param vz the robot's rotation around its center of rotation.
      */
-    public Translation(double vx,
-                       double vy,
-                       double vz) {
+    public Translation(double vx, double vy, double vz) {
         ValidationUtils.validate(vx, "vx");
         ValidationUtils.validate(vy, "vx");
         ValidationUtils.validate(vz, "vx");
@@ -166,10 +162,7 @@ public class Translation implements Serializable {
      * @param point the point to create a {@code Translation} based on.
      */
     public static Translation fromPointXY(PointXY point) {
-        return new Translation(
-                point.x(),
-                point.y()
-        );
+        return new Translation(point.x(), point.y());
     }
 
     /**
@@ -181,11 +174,7 @@ public class Translation implements Serializable {
      * @return a new {@code Translation}.
      */
     public static Translation fromPointXYZ(PointXYZ point) {
-        return new Translation(
-                point.x(),
-                point.y(),
-                point.z().deg()
-        );
+        return new Translation(point.x(), point.y(), point.z().deg());
     }
 
     /**
@@ -204,8 +193,10 @@ public class Translation implements Serializable {
      * @return a relative translation.
      * @see <a href="https://pdocs.kauailabs.com/navx-mxp/examples/field-oriented-drive/">Field-oriented drive</a>
      */
-    public static Translation absoluteToRelative(Translation translation,
-                                                 Angle heading) {
+    public static Translation absoluteToRelative(
+        Translation translation,
+        Angle heading
+    ) {
         ValidationUtils.validate(translation, "translation");
         ValidationUtils.validate(heading, "heading");
 
@@ -215,16 +206,12 @@ public class Translation implements Serializable {
                 translation.angle().add(heading)
         );
         */
-        
-        PointXY point = translation
-                .point()
-                .rotate(PointXY.ZERO, heading.multiply(-1));
 
-        return new Translation(
-                point.x(),
-                point.y(),
-                translation.vz()
-        );
+        PointXY point = translation
+            .point()
+            .rotate(PointXY.ZERO, heading.multiply(-1));
+
+        return new Translation(point.x(), point.y(), translation.vz());
     }
 
     /**
@@ -249,15 +236,14 @@ public class Translation implements Serializable {
      * @param b one of the translations.
      * @return the sum of the two translations.
      */
-    public static Translation add(Translation a,
-                                  Translation b) {
+    public static Translation add(Translation a, Translation b) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
 
         return new Translation(
-                a.vx() + b.vx(),
-                a.vy() + b.vy(),
-                a.vz() + b.vz()
+            a.vx() + b.vx(),
+            a.vy() + b.vy(),
+            a.vz() + b.vz()
         );
     }
 
@@ -268,15 +254,14 @@ public class Translation implements Serializable {
      * @param b one of the translations.
      * @return the product of the two translations.
      */
-    public static Translation multiply(Translation a,
-                                       Translation b) {
+    public static Translation multiply(Translation a, Translation b) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
 
         return new Translation(
-                a.vx() * b.vx(),
-                a.vy() * b.vy(),
-                a.vz() * b.vz()
+            a.vx() * b.vx(),
+            a.vy() * b.vy(),
+            a.vz() * b.vz()
         );
     }
 
@@ -288,16 +273,11 @@ public class Translation implements Serializable {
      *          values.
      * @return the product of the translation and the multiplier.
      */
-    public static Translation multiply(Translation a,
-                                       double b) {
+    public static Translation multiply(Translation a, double b) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
 
-        return new Translation(
-                a.vx() * b,
-                a.vy() * b,
-                a.vz() * b
-        );
+        return new Translation(a.vx() * b, a.vy() * b, a.vz() * b);
     }
 
     /**
@@ -309,19 +289,21 @@ public class Translation implements Serializable {
      * @param zMultiplier vz multiplier.
      * @return a new {@code Translation}.
      */
-    public static Translation multiply(Translation a,
-                                       double xMultiplier,
-                                       double yMultiplier,
-                                       double zMultiplier) {
+    public static Translation multiply(
+        Translation a,
+        double xMultiplier,
+        double yMultiplier,
+        double zMultiplier
+    ) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(xMultiplier, "xMultiplier");
         ValidationUtils.validate(yMultiplier, "yMultiplier");
         ValidationUtils.validate(zMultiplier, "zMultiplier");
 
         return new Translation(
-                a.vx() * xMultiplier,
-                a.vy() * yMultiplier,
-                a.vz() * zMultiplier
+            a.vx() * xMultiplier,
+            a.vy() * yMultiplier,
+            a.vz() * zMultiplier
         );
     }
 
@@ -332,8 +314,7 @@ public class Translation implements Serializable {
      * @param b the second of the two translations.
      * @return the remainder of the two translations.
      */
-    public static Translation subtract(Translation a,
-                                       Translation b) {
+    public static Translation subtract(Translation a, Translation b) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
 
@@ -347,15 +328,14 @@ public class Translation implements Serializable {
      * @param b the denominator.
      * @return the quotient of the two translations.
      */
-    public static Translation divide(Translation a,
-                                     Translation b) {
+    public static Translation divide(Translation a, Translation b) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
 
         return new Translation(
-                a.vx() / b.vx(),
-                a.vy() / b.vy(),
-                a.vz() / b.vz()
+            a.vx() / b.vx(),
+            a.vy() / b.vy(),
+            a.vz() / b.vz()
         );
     }
 
@@ -366,16 +346,11 @@ public class Translation implements Serializable {
      * @param b the denominator.
      * @return the quotient.
      */
-    public static Translation divide(Translation a,
-                                     double b) {
+    public static Translation divide(Translation a, double b) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
 
-        return new Translation(
-                a.vx() / b,
-                a.vy() / b,
-                a.vz() / b
-        );
+        return new Translation(a.vx() / b, a.vy() / b, a.vz() / b);
     }
 
     /**
@@ -431,8 +406,7 @@ public class Translation implements Serializable {
      * @param value the axis' value.
      * @return a new {@code Translation}.
      */
-    public Translation withAxis(Axis axis,
-                                double value) {
+    public Translation withAxis(Axis axis, double value) {
         switch (axis) {
             case X:
                 return withVx(value);
@@ -503,11 +477,7 @@ public class Translation implements Serializable {
      * @return a new {@code Translation}.
      */
     public Translation withVx(double vx) {
-        return new Translation(
-                vx,
-                this.vy,
-                this.vz
-        );
+        return new Translation(vx, this.vy, this.vz);
     }
 
     /**
@@ -517,11 +487,7 @@ public class Translation implements Serializable {
      * @return a new {@code Translation}.
      */
     public Translation withVy(double vy) {
-        return new Translation(
-                this.vx,
-                vy,
-                this.vz
-        );
+        return new Translation(this.vx, vy, this.vz);
     }
 
     /**
@@ -531,11 +497,7 @@ public class Translation implements Serializable {
      * @return a new {@code Translation}.
      */
     public Translation withVz(double vz) {
-        return new Translation(
-                this.vx,
-                this.vy,
-                vz
-        );
+        return new Translation(this.vx, this.vy, vz);
     }
 
     /**
@@ -576,15 +538,12 @@ public class Translation implements Serializable {
      * @param zMultiplier vz multiplier.
      * @return a new {@code Translation}.
      */
-    public Translation multiply(double xMultiplier,
-                                double yMultiplier,
-                                double zMultiplier) {
-        return multiply(
-                this,
-                xMultiplier,
-                yMultiplier,
-                zMultiplier
-        );
+    public Translation multiply(
+        double xMultiplier,
+        double yMultiplier,
+        double zMultiplier
+    ) {
+        return multiply(this, xMultiplier, yMultiplier, zMultiplier);
     }
 
     /**
@@ -619,12 +578,7 @@ public class Translation implements Serializable {
 
     @Override
     public String toString() {
-        return StringUtils.format(
-                Geometry.formatTranslation,
-                vx,
-                vy,
-                vz
-        );
+        return StringUtils.format(Geometry.formatTranslation, vx, vy, vz);
     }
 
     @Override
@@ -632,12 +586,21 @@ public class Translation implements Serializable {
         if (obj instanceof Translation) {
             Translation t = (Translation) obj;
 
-            boolean sameVx = Equals.soft(t.vx, this.vx,
-                    Geometry.toleranceTranslation);
-            boolean sameVy = Equals.soft(t.vy, this.vy,
-                    Geometry.toleranceTranslation);
-            boolean sameVz = Equals.soft(t.vz, this.vz,
-                    Geometry.toleranceTranslation);
+            boolean sameVx = Equals.soft(
+                t.vx,
+                this.vx,
+                Geometry.toleranceTranslation
+            );
+            boolean sameVy = Equals.soft(
+                t.vy,
+                this.vy,
+                Geometry.toleranceTranslation
+            );
+            boolean sameVz = Equals.soft(
+                t.vz,
+                this.vz,
+                Geometry.toleranceTranslation
+            );
 
             return sameVx && sameVy && sameVz;
         }
@@ -677,6 +640,6 @@ public class Translation implements Serializable {
         /**
          * The vz axis.
          */
-        Z
+        Z,
     }
 }

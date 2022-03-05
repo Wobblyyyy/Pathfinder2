@@ -10,14 +10,13 @@
 
 package me.wobblyyyy.pathfinder2.utils;
 
-import org.junit.jupiter.api.Assertions;
-
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.Geometry;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.math.Rounding;
+import org.junit.jupiter.api.Assertions;
 
 /**
  * Assertion utilities specific to Pathfinder. This class requires the
@@ -30,27 +29,30 @@ import me.wobblyyyy.pathfinder2.math.Rounding;
  * @since 1.4.2
  */
 public class AssertionUtils {
-    private AssertionUtils() {
 
-    }
+    private AssertionUtils() {}
 
-    public static void assertSoftEqualsWithoutValidation(double expected,
-                                                         double actual,
-                                                         double tolerance) {
+    public static void assertSoftEqualsWithoutValidation(
+        double expected,
+        double actual,
+        double tolerance
+    ) {
         Assertions.assertTrue(
-                Equals.softWithoutValidation(expected, actual, tolerance),
-                StringUtils.format(
-                        "Expected <%s> but got <%s>, tolerance of <%s>",
-                        Rounding.fastRound(expected),
-                        Rounding.fastRound(actual),
-                        Rounding.fastRound(tolerance)
-                )
+            Equals.softWithoutValidation(expected, actual, tolerance),
+            StringUtils.format(
+                "Expected <%s> but got <%s>, tolerance of <%s>",
+                Rounding.fastRound(expected),
+                Rounding.fastRound(actual),
+                Rounding.fastRound(tolerance)
+            )
         );
     }
 
-    public static void assertSoftEquals(double expected,
-                                        double actual,
-                                        double tolerance) {
+    public static void assertSoftEquals(
+        double expected,
+        double actual,
+        double tolerance
+    ) {
         ValidationUtils.validate(expected, "expected");
         ValidationUtils.validate(actual, "actual");
         ValidationUtils.validate(tolerance, "tolerance");
@@ -74,24 +76,26 @@ public class AssertionUtils {
      *                  points is greater than this value, the points are
      *                  not considered near.
      */
-    public static void assertIsNearWithoutValidation(PointXY a,
-                                                     PointXY b,
-                                                     double tolerance) {
+    public static void assertIsNearWithoutValidation(
+        PointXY a,
+        PointXY b,
+        double tolerance
+    ) {
         double absoluteDistance = Math.abs(a.distance(b));
 
         Assertions.assertTrue(
-                absoluteDistance <= tolerance,
-                StringUtils.format(
-                        "Expected a maximum distance of <%s> but got " +
-                                "a distance of <%s> between points <%s> " +
-                                "and <%s> (expected: <%s> but was: <%s>)",
-                        Rounding.fastRound(tolerance),
-                        Rounding.fastRound(absoluteDistance),
-                        a,
-                        b,
-                        a,
-                        b
-                )
+            absoluteDistance <= tolerance,
+            StringUtils.format(
+                "Expected a maximum distance of <%s> but got " +
+                "a distance of <%s> between points <%s> " +
+                "and <%s> (expected: <%s> but was: <%s>)",
+                Rounding.fastRound(tolerance),
+                Rounding.fastRound(absoluteDistance),
+                a,
+                b,
+                a,
+                b
+            )
         );
     }
 
@@ -110,9 +114,7 @@ public class AssertionUtils {
      *                  points is greater than this value, the points are
      *                  not considered near.
      */
-    public static void assertIsNear(PointXY a,
-                                    PointXY b,
-                                    double tolerance) {
+    public static void assertIsNear(PointXY a, PointXY b, double tolerance) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
         ValidationUtils.validate(tolerance, "tolerance");
@@ -120,13 +122,8 @@ public class AssertionUtils {
         assertIsNearWithoutValidation(a, b, tolerance);
     }
 
-    public static void assertIsNear(PointXY a,
-                                    PointXY b) {
-        assertIsNear(
-                a,
-                b,
-                Geometry.tolerancePointXY
-        );
+    public static void assertIsNear(PointXY a, PointXY b) {
+        assertIsNear(a, b, Geometry.tolerancePointXY);
     }
 
     /**
@@ -143,25 +140,27 @@ public class AssertionUtils {
      *                  equal to this value, the angles are considered
      *                  near. Otherwise, the angles are not near.
      */
-    public static void assertIsNearWithoutValidation(Angle a,
-                                                     Angle b,
-                                                     Angle tolerance) {
+    public static void assertIsNearWithoutValidation(
+        Angle a,
+        Angle b,
+        Angle tolerance
+    ) {
         double minimumDeltaDeg = Math.abs(Angle.minimumDelta(a, b));
         double toleranceDeg = Math.abs(tolerance.deg());
 
         Assertions.assertTrue(
-                minimumDeltaDeg <= toleranceDeg,
-                StringUtils.format(
-                        "Expected a maximum distance of <%s deg> but got " +
-                                "a distance of <%s deg> between angles " +
-                                "<%s> and <%s> (expected: <%s> but was <%s>)",
-                        Rounding.fastRound(toleranceDeg),
-                        Rounding.fastRound(minimumDeltaDeg),
-                        a,
-                        b,
-                        a,
-                        b
-                )
+            minimumDeltaDeg <= toleranceDeg,
+            StringUtils.format(
+                "Expected a maximum distance of <%s deg> but got " +
+                "a distance of <%s deg> between angles " +
+                "<%s> and <%s> (expected: <%s> but was <%s>)",
+                Rounding.fastRound(toleranceDeg),
+                Rounding.fastRound(minimumDeltaDeg),
+                a,
+                b,
+                a,
+                b
+            )
         );
     }
 
@@ -178,9 +177,7 @@ public class AssertionUtils {
      *                  equal to this value, the angles are considered
      *                  near. Otherwise, the angles are not near.
      */
-    public static void assertIsNear(Angle a,
-                                    Angle b,
-                                    Angle tolerance) {
+    public static void assertIsNear(Angle a, Angle b, Angle tolerance) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
         ValidationUtils.validate(tolerance, "tolerance");
@@ -188,13 +185,8 @@ public class AssertionUtils {
         assertIsNearWithoutValidation(a, b, tolerance);
     }
 
-    public static void assertIsNear(Angle a,
-                                    Angle b) {
-        assertIsNear(
-                a,
-                b,
-                Geometry.toleranceAngle
-        );
+    public static void assertIsNear(Angle a, Angle b) {
+        assertIsNear(a, b, Geometry.toleranceAngle);
     }
 
     /**
@@ -218,10 +210,12 @@ public class AssertionUtils {
      *                       equal to this value, the angles are considered
      *                       near. Otherwise, the angles are not near.
      */
-    public static void assertIsNearWithoutValidation(PointXYZ a,
-                                                     PointXYZ b,
-                                                     double tolerance,
-                                                     Angle angleTolerance) {
+    public static void assertIsNearWithoutValidation(
+        PointXYZ a,
+        PointXYZ b,
+        double tolerance,
+        Angle angleTolerance
+    ) {
         assertIsNearWithoutValidation(a, b, tolerance);
         assertIsNearWithoutValidation(a.z(), b.z(), angleTolerance);
     }
@@ -246,10 +240,12 @@ public class AssertionUtils {
      *                       equal to this value, the angles are considered
      *                       near. Otherwise, the angles are not near.
      */
-    public static void assertIsNear(PointXYZ a,
-                                    PointXYZ b,
-                                    double tolerance,
-                                    Angle angleTolerance) {
+    public static void assertIsNear(
+        PointXYZ a,
+        PointXYZ b,
+        double tolerance,
+        Angle angleTolerance
+    ) {
         ValidationUtils.validate(a, "a");
         ValidationUtils.validate(b, "b");
         ValidationUtils.validate(tolerance, "tolerance");
@@ -258,34 +254,28 @@ public class AssertionUtils {
         assertIsNearWithoutValidation(a, b, tolerance, angleTolerance);
     }
 
-    public static void assertEquals(Angle expected,
-                                    Angle actual) {
+    public static void assertEquals(Angle expected, Angle actual) {
         assertIsNear(expected, actual, Geometry.toleranceAngle);
     }
 
-    public static void assertEquals(PointXY expected,
-                                    PointXY actual) {
+    public static void assertEquals(PointXY expected, PointXY actual) {
         assertIsNear(expected, actual, Geometry.tolerancePointXY);
     }
 
-    public static void assertEquals(PointXYZ expected,
-                                    PointXYZ actual) {
-        assertIsNear(expected, actual,
-                Geometry.tolerancePointXYZ, Geometry.toleranceAngle);
+    public static void assertEquals(PointXYZ expected, PointXYZ actual) {
+        assertIsNear(
+            expected,
+            actual,
+            Geometry.tolerancePointXYZ,
+            Geometry.toleranceAngle
+        );
     }
 
-    public static void assertEquals(Object a,
-                                    Object b) {
+    public static void assertEquals(Object a, Object b) {
         Assertions.assertEquals(a, b);
     }
 
-    public static void assertIsNear(PointXYZ a,
-                                    PointXYZ b) {
-        assertIsNear(
-                a,
-                b,
-                Geometry.tolerancePointXYZ,
-                Geometry.toleranceAngle
-        );
+    public static void assertIsNear(PointXYZ a, PointXYZ b) {
+        assertIsNear(a, b, Geometry.tolerancePointXYZ, Geometry.toleranceAngle);
     }
 }

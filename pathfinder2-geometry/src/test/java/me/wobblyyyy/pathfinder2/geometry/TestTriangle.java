@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestTriangle {
+
     @Test
     public void testIsInsideTriangle() {
         PointXY a = new PointXY(0, 0);

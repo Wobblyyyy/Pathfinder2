@@ -30,10 +30,9 @@ public class TalonSRXMotor extends AbstractMotor {
      */
     public TalonSRXMotor(TalonSRX talon) {
         super(
-                (power) -> talon.set(TalonSRXControlMode.PercentOutput, power),
-                talon::getMotorOutputPercent
+            power -> talon.set(TalonSRXControlMode.PercentOutput, power),
+            talon::getMotorOutputPercent
         );
-
         this.talon = talon;
     }
 

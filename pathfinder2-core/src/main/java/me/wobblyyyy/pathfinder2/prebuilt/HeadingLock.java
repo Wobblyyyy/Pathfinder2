@@ -10,12 +10,11 @@
 
 package me.wobblyyyy.pathfinder2.prebuilt;
 
+import java.util.function.Function;
+import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
-
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * A modifier that controls the heading of the robot by using a turn controller
@@ -38,9 +37,11 @@ public class HeadingLock implements Function<Translation, Translation> {
      * @param getCurrentAngle a supplier that returns the robot's current
      *                        heading.
      */
-    public HeadingLock(Angle target,
-                       Controller turnController,
-                       Supplier<Angle> getCurrentAngle) {
+    public HeadingLock(
+        Angle target,
+        Controller turnController,
+        Supplier<Angle> getCurrentAngle
+    ) {
         this.target = target;
         this.turnController = turnController;
         this.getCurrentAngle = getCurrentAngle;
@@ -49,12 +50,9 @@ public class HeadingLock implements Function<Translation, Translation> {
     @Override
     public Translation apply(Translation translation) {
         return new Translation(
-                translation.vx(),
-                translation.vz(),
-                turnController.calculate(
-                        getCurrentAngle.get().deg(),
-                        target.deg()
-                )
+            translation.vx(),
+            translation.vz(),
+            turnController.calculate(getCurrentAngle.get().deg(), target.deg())
         );
     }
 }

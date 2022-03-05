@@ -28,9 +28,7 @@ public class SimulatedMotor implements Motor {
     /**
      * Create a new SimulatedMotor.
      */
-    public SimulatedMotor() {
-
-    }
+    public SimulatedMotor() {}
 
     /**
      * Create a new SimulatedMotor with an initial power value.

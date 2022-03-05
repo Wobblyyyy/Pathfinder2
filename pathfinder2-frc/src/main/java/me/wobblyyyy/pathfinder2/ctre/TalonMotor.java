@@ -30,10 +30,9 @@ public class TalonMotor extends AbstractMotor {
      */
     public TalonMotor(BaseTalon talon) {
         super(
-                (power) -> talon.set(ControlMode.PercentOutput, power),
-                talon::getMotorOutputPercent
+            power -> talon.set(ControlMode.PercentOutput, power),
+            talon::getMotorOutputPercent
         );
-
         this.talon = talon;
     }
 
@@ -45,8 +44,7 @@ public class TalonMotor extends AbstractMotor {
      *                     {@link BaseTalon} constructor requires it as a
      *                     parameter, so... yeah...
      */
-    public TalonMotor(int deviceNumber,
-                      String model) {
+    public TalonMotor(int deviceNumber, String model) {
         this(new BaseTalon(deviceNumber, model));
     }
 

@@ -74,24 +74,30 @@ public class TrajectoryTarget {
      *                       robot has reached its target point. This only
      *                       impacts {@code PRECISE} targets.
      */
-    public TrajectoryTarget(PointXYZ target,
-                            TargetPrecision precision,
-                            double speed,
-                            double tolerance,
-                            Angle angleTolerance) {
+    public TrajectoryTarget(
+        PointXYZ target,
+        TargetPrecision precision,
+        double speed,
+        double tolerance,
+        Angle angleTolerance
+    ) {
         if (target == null) throw new NullPointException(
-                "Cannot create a trajectory target with a null point!");
+            "Cannot create a trajectory target with a null point!"
+        );
 
         if (speed <= 0 || speed > 1) throw new InvalidSpeedException(
-                "Cannot create a trajectory target with a speed value " +
-                        "less than or equal to 0 or greater than 1!");
+            "Cannot create a trajectory target with a speed value " +
+            "less than or equal to 0 or greater than 1!"
+        );
 
         if (tolerance < 0) throw new InvalidToleranceException(
-                "Cannot create a trajectory target with a tolerance " +
-                        "value less than 0!");
+            "Cannot create a trajectory target with a tolerance " +
+            "value less than 0!"
+        );
 
         if (angleTolerance == null) throw new NullAngleException(
-                "Cannot create a trajectory target with a null angle!");
+            "Cannot create a trajectory target with a null angle!"
+        );
 
         this.target = target;
         this.precision = precision;

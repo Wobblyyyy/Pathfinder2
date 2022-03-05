@@ -24,29 +24,26 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestGenericFollowerGenerator {
+
     @Test
     public void testGeneration() {
-        Robot robot = new Robot(
-                new SimulatedDrive(),
-                new SimulatedOdometry()
-        );
+        Robot robot = new Robot(new SimulatedDrive(), new SimulatedOdometry());
 
         Controller controller = new GenericTurnController(0.1);
 
         Trajectory trajectory = new LinearTrajectory(
-                new PointXYZ(10, 10, 10),
-                0.5,
-                0.1,
-                Angle.fromDeg(3)
+            new PointXYZ(10, 10, 10),
+            0.5,
+            0.1,
+            Angle.fromDeg(3)
         );
 
-        GenericFollowerGenerator generator = new GenericFollowerGenerator(controller);
+        GenericFollowerGenerator generator = new GenericFollowerGenerator(
+            controller
+        );
 
         Follower follower = generator.generate(robot, trajectory);
 
-        Assertions.assertEquals(
-                trajectory,
-                follower.getTrajectory()
-        );
+        Assertions.assertEquals(trajectory, follower.getTrajectory());
     }
 }

@@ -23,6 +23,7 @@ import me.wobblyyyy.pathfinder2.geometry.Translation;
  * @since 0.1.0
  */
 public class Average {
+
     /*
      * If you want to be able to get the average of some set of data, but
      * there's not an existing method to get the average, feel free to add
@@ -94,8 +95,7 @@ public class Average {
         return sum / numbers.length;
     }
 
-    public static double of(int maxIndex,
-                            double... numbers) {
+    public static double of(int maxIndex, double... numbers) {
         double sum = 0;
         int j = 0;
 

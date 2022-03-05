@@ -31,8 +31,7 @@ public class BufferedEncoder implements Encoder {
      *                   change smoother, while a smaller buffer means change
      *                   will occur more quickly but be more rough.
      */
-    public BufferedEncoder(Encoder encoder,
-                           int bufferSize) {
+    public BufferedEncoder(Encoder encoder, int bufferSize) {
         this.encoder = encoder;
         this.average = new RollingAverage(bufferSize);
     }

@@ -10,11 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.trajectory.multi.target;
 
-import me.wobblyyyy.pathfinder2.geometry.Angle;
-import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-
 import java.util.ArrayList;
 import java.util.List;
+import me.wobblyyyy.pathfinder2.geometry.Angle;
+import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
 /**
  * A builder used for building arrays of {@link TrajectoryTarget}, designed
@@ -41,9 +40,7 @@ public class MultiTargetBuilder {
     /**
      * Create a new {@code MultiTargetBuilder}.
      */
-    public MultiTargetBuilder() {
-
-    }
+    public MultiTargetBuilder() {}
 
     /**
      * Set the precision of the builder.
@@ -102,13 +99,13 @@ public class MultiTargetBuilder {
      */
     public MultiTargetBuilder addTargetPoint(PointXYZ targetPoint) {
         targets.add(
-                new TrajectoryTarget(
-                        targetPoint,
-                        precision,
-                        speed,
-                        tolerance,
-                        angleTolerance
-                )
+            new TrajectoryTarget(
+                targetPoint,
+                precision,
+                speed,
+                tolerance,
+                angleTolerance
+            )
         );
 
         return this;

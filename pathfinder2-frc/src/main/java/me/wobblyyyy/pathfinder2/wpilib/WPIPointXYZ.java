@@ -14,11 +14,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
 public class WPIPointXYZ extends PointXYZ {
+
     public WPIPointXYZ(Pose2d pose) {
-        super(
-                pose.getX(),
-                pose.getY(),
-                pose.getRotation().getDegrees()
-        );
+        super(pose.getX(), pose.getY(), pose.getRotation().getDegrees());
     }
 }

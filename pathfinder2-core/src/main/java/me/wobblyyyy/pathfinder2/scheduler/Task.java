@@ -64,9 +64,11 @@ public class Task {
      * @see #newTaskWithMaximumTime(Trajectory, double)
      * @see #newWaitTask(double)
      */
-    public Task(Trajectory trajectory,
-                double minTimeMilliseconds,
-                double maxTimeMilliseconds) {
+    public Task(
+        Trajectory trajectory,
+        double minTimeMilliseconds,
+        double maxTimeMilliseconds
+    ) {
         this.trajectory = trajectory;
         this.minTimeMilliseconds = minTimeMilliseconds;
         this.maxTimeMilliseconds = maxTimeMilliseconds;
@@ -88,14 +90,12 @@ public class Task {
      * @see #newTaskWithMaximumTime(Trajectory, double)
      * @see #newWaitTask(double)
      */
-    public static Task newTask(Trajectory trajectory,
-                               double minTimeMilliseconds,
-                               double maxTimeMilliseconds) {
-        return new Task(
-                trajectory,
-                minTimeMilliseconds,
-                maxTimeMilliseconds
-        );
+    public static Task newTask(
+        Trajectory trajectory,
+        double minTimeMilliseconds,
+        double maxTimeMilliseconds
+    ) {
+        return new Task(trajectory, minTimeMilliseconds, maxTimeMilliseconds);
     }
 
     /**
@@ -112,9 +112,9 @@ public class Task {
      */
     public static Task newUntimedTask(Trajectory trajectory) {
         return new Task(
-                trajectory,
-                Double.NEGATIVE_INFINITY,
-                Double.POSITIVE_INFINITY
+            trajectory,
+            Double.NEGATIVE_INFINITY,
+            Double.POSITIVE_INFINITY
         );
     }
 
@@ -128,12 +128,14 @@ public class Task {
      *                            its execution finishes.
      * @return a new task, with a minimum time.
      */
-    public static Task newTaskWithMinimumTime(Trajectory trajectory,
-                                              double minTimeMilliseconds) {
+    public static Task newTaskWithMinimumTime(
+        Trajectory trajectory,
+        double minTimeMilliseconds
+    ) {
         return new Task(
-                trajectory,
-                minTimeMilliseconds,
-                Double.POSITIVE_INFINITY
+            trajectory,
+            minTimeMilliseconds,
+            Double.POSITIVE_INFINITY
         );
     }
 
@@ -147,12 +149,14 @@ public class Task {
      *                            is forcibly marked as finished.
      * @return a new task, with a maximum time.
      */
-    public static Task newTaskWithMaximumTime(Trajectory trajectory,
-                                              double maxTimeMilliseconds) {
+    public static Task newTaskWithMaximumTime(
+        Trajectory trajectory,
+        double maxTimeMilliseconds
+    ) {
         return new Task(
-                trajectory,
-                Double.NEGATIVE_INFINITY,
-                maxTimeMilliseconds
+            trajectory,
+            Double.NEGATIVE_INFINITY,
+            maxTimeMilliseconds
         );
     }
 
@@ -166,9 +170,9 @@ public class Task {
      */
     public static Task newWaitTask(double howLongToWaitMilliseconds) {
         return new Task(
-                new EmptyTrajectory(),
-                howLongToWaitMilliseconds,
-                howLongToWaitMilliseconds + 1
+            new EmptyTrajectory(),
+            howLongToWaitMilliseconds,
+            howLongToWaitMilliseconds + 1
         );
     }
 
@@ -238,7 +242,9 @@ public class Task {
      * @return whether the minimum time limit is valid.
      */
     public boolean isMinimumTimeLimitValid(double currentTimeMilliseconds) {
-        return calculateTimeDelta(currentTimeMilliseconds) >= minTimeMilliseconds;
+        return (
+            calculateTimeDelta(currentTimeMilliseconds) >= minTimeMilliseconds
+        );
     }
 
     /**
@@ -248,7 +254,9 @@ public class Task {
      * @return whether the maximum time limit is valid.
      */
     public boolean isMaximumTimeLimitValid(double currentTimeMilliseconds) {
-        return calculateTimeDelta(currentTimeMilliseconds) <= maxTimeMilliseconds;
+        return (
+            calculateTimeDelta(currentTimeMilliseconds) <= maxTimeMilliseconds
+        );
     }
 
     /**
@@ -260,8 +268,10 @@ public class Task {
      * @see #isMaximumTimeLimitValid(double)
      */
     public boolean areTimeLimitsValid(double currentTimeMilliseconds) {
-        return isMaximumTimeLimitValid(currentTimeMilliseconds) &&
-                isMaximumTimeLimitValid(currentTimeMilliseconds);
+        return (
+            isMaximumTimeLimitValid(currentTimeMilliseconds) &&
+            isMaximumTimeLimitValid(currentTimeMilliseconds)
+        );
     }
 
     /**

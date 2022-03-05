@@ -23,12 +23,12 @@ package me.wobblyyyy.pathfinder2.exceptions;
  * @since 0.0.0
  */
 public class InvalidSpeedException extends RuntimeException {
+
     public InvalidSpeedException(String s) {
         super(s);
     }
 
-    public static void throwIfInvalid(String message,
-                                      double speed) {
+    public static void throwIfInvalid(String message, double speed) {
         if (speed < 0 || speed > 1) {
             throw new InvalidSpeedException(message);
         }

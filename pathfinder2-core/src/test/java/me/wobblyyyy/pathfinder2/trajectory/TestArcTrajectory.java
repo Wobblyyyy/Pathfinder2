@@ -27,21 +27,30 @@ public class TestArcTrajectory extends GenericTrajectoryTester {
     private static final Angle[] ANGLES = new Angle[24];
 
     static {
-        for (int i = 0; i < ANGLES.length; i++)
-            ANGLES[i] = Angle.fromDeg(i * 15);
+        for (int i = 0; i < ANGLES.length; i++) ANGLES[i] =
+            Angle.fromDeg(i * 15);
     }
 
-    private void testSingleArcTrajectory(Angle startAngle,
-                                         Angle size,
-                                         Angle targetHeading) {
-        Trajectory trajectory = new ArcTrajectory(new PointXYZ(), RADIUS,
-                speed, ANGLE_STEP, targetHeading, startAngle,
-                startAngle.add(size));
+    private void testSingleArcTrajectory(
+        Angle startAngle,
+        Angle size,
+        Angle targetHeading
+    ) {
+        Trajectory trajectory = new ArcTrajectory(
+            new PointXYZ(),
+            RADIUS,
+            speed,
+            ANGLE_STEP,
+            targetHeading,
+            startAngle,
+            startAngle.add(size)
+        );
 
         pathfinder.followTrajectory(trajectory);
 
-        PointXYZ end = new PointXY().inDirection(RADIUS,
-                startAngle.add(size)).withHeading(targetHeading);
+        PointXYZ end = new PointXY()
+            .inDirection(RADIUS, startAngle.add(size))
+            .withHeading(targetHeading);
 
         pathfinder.tickUntil(1_000);
         assertPositionIs(end);
@@ -49,9 +58,10 @@ public class TestArcTrajectory extends GenericTrajectoryTester {
 
     @Test
     private void testNonTurningArcTrajectories() {
-        for (Angle startAngle : ANGLES)
-            for (Angle size : ANGLES)
-                for (Angle targetHeading : ANGLES)
-                    testSingleArcTrajectory(startAngle, size, targetHeading);
+        for (Angle startAngle : ANGLES) for (Angle size : ANGLES) for (Angle targetHeading : ANGLES) testSingleArcTrajectory(
+            startAngle,
+            size,
+            targetHeading
+        );
     }
 }

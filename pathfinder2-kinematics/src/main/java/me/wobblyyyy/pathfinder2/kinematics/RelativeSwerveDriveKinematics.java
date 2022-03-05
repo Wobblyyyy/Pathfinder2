@@ -10,10 +10,9 @@
 
 package me.wobblyyyy.pathfinder2.kinematics;
 
+import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
-
-import java.util.function.Supplier;
 
 /**
  * The simplest form of swerve drive kinematics. This class operates very
@@ -33,7 +32,8 @@ import java.util.function.Supplier;
  * @author Colin Robertson
  * @since 0.0.0
  */
-public class RelativeSwerveDriveKinematics implements Kinematics<RelativeSwerveState> {
+public class RelativeSwerveDriveKinematics
+    implements Kinematics<RelativeSwerveState> {
     /**
      * The front right module's kinematics.
      */
@@ -112,22 +112,24 @@ public class RelativeSwerveDriveKinematics implements Kinematics<RelativeSwerveS
      *                              a negative turn multiplier will mean the
      *                              chassis will turn in the opposite direction.
      */
-    public RelativeSwerveDriveKinematics(RelativeSwerveModuleKinematics moduleKinematics,
-                                         Supplier<Angle> frontRightModuleAngle,
-                                         Supplier<Angle> frontLeftModuleAngle,
-                                         Supplier<Angle> backRightModuleAngle,
-                                         Supplier<Angle> backLeftModuleAngle,
-                                         double turnMultiplier) {
+    public RelativeSwerveDriveKinematics(
+        RelativeSwerveModuleKinematics moduleKinematics,
+        Supplier<Angle> frontRightModuleAngle,
+        Supplier<Angle> frontLeftModuleAngle,
+        Supplier<Angle> backRightModuleAngle,
+        Supplier<Angle> backLeftModuleAngle,
+        double turnMultiplier
+    ) {
         this(
-                moduleKinematics,
-                moduleKinematics,
-                moduleKinematics,
-                moduleKinematics,
-                frontRightModuleAngle,
-                frontLeftModuleAngle,
-                backRightModuleAngle,
-                backLeftModuleAngle,
-                turnMultiplier
+            moduleKinematics,
+            moduleKinematics,
+            moduleKinematics,
+            moduleKinematics,
+            frontRightModuleAngle,
+            frontLeftModuleAngle,
+            backRightModuleAngle,
+            backLeftModuleAngle,
+            turnMultiplier
         );
     }
 
@@ -153,15 +155,17 @@ public class RelativeSwerveDriveKinematics implements Kinematics<RelativeSwerveS
      *                              a negative turn multiplier will mean the
      *                              chassis will turn in the opposite direction.
      */
-    public RelativeSwerveDriveKinematics(RelativeSwerveModuleKinematics frontRightKinematics,
-                                         RelativeSwerveModuleKinematics frontLeftKinematics,
-                                         RelativeSwerveModuleKinematics backRightKinematics,
-                                         RelativeSwerveModuleKinematics backLeftKinematics,
-                                         Supplier<Angle> frontRightModuleAngle,
-                                         Supplier<Angle> frontLeftModuleAngle,
-                                         Supplier<Angle> backRightModuleAngle,
-                                         Supplier<Angle> backLeftModuleAngle,
-                                         double turnMultiplier) {
+    public RelativeSwerveDriveKinematics(
+        RelativeSwerveModuleKinematics frontRightKinematics,
+        RelativeSwerveModuleKinematics frontLeftKinematics,
+        RelativeSwerveModuleKinematics backRightKinematics,
+        RelativeSwerveModuleKinematics backLeftKinematics,
+        Supplier<Angle> frontRightModuleAngle,
+        Supplier<Angle> frontLeftModuleAngle,
+        Supplier<Angle> backRightModuleAngle,
+        Supplier<Angle> backLeftModuleAngle,
+        double turnMultiplier
+    ) {
         this.frontRightKinematics = frontRightKinematics;
         this.frontLeftKinematics = frontLeftKinematics;
         this.backRightKinematics = backRightKinematics;
@@ -190,20 +194,20 @@ public class RelativeSwerveDriveKinematics implements Kinematics<RelativeSwerveS
         double vz = translation.vz() * turnMultiplier;
 
         double frontRightTurn = frontRightKinematics.calculate(
-                frontRightModuleAngle.get(),
-                angle.add(Angle.fromDeg(vz))
+            frontRightModuleAngle.get(),
+            angle.add(Angle.fromDeg(vz))
         );
         double frontLeftTurn = frontLeftKinematics.calculate(
-                frontLeftModuleAngle.get(),
-                angle.add(Angle.fromDeg(-vz))
+            frontLeftModuleAngle.get(),
+            angle.add(Angle.fromDeg(-vz))
         );
         double backRightTurn = backRightKinematics.calculate(
-                backRightModuleAngle.get(),
-                angle.add(Angle.fromDeg(vz))
+            backRightModuleAngle.get(),
+            angle.add(Angle.fromDeg(vz))
         );
         double backLeftTurn = backLeftKinematics.calculate(
-                backLeftModuleAngle.get(),
-                angle.add(Angle.fromDeg(-vz))
+            backLeftModuleAngle.get(),
+            angle.add(Angle.fromDeg(-vz))
         );
 
         double frontRightDrive = translation.magnitude();
@@ -211,24 +215,36 @@ public class RelativeSwerveDriveKinematics implements Kinematics<RelativeSwerveS
         double backRightDrive = translation.magnitude();
         double backLeftDrive = translation.magnitude();
 
-        RelativeSwerveModuleState frontRightState = new RelativeSwerveModuleState(frontRightTurn, frontRightDrive);
-        RelativeSwerveModuleState frontLeftState = new RelativeSwerveModuleState(frontLeftTurn, frontLeftDrive);
-        RelativeSwerveModuleState backRightState = new RelativeSwerveModuleState(backRightTurn, backRightDrive);
-        RelativeSwerveModuleState backLeftState = new RelativeSwerveModuleState(backLeftTurn, backLeftDrive);
+        RelativeSwerveModuleState frontRightState = new RelativeSwerveModuleState(
+            frontRightTurn,
+            frontRightDrive
+        );
+        RelativeSwerveModuleState frontLeftState = new RelativeSwerveModuleState(
+            frontLeftTurn,
+            frontLeftDrive
+        );
+        RelativeSwerveModuleState backRightState = new RelativeSwerveModuleState(
+            backRightTurn,
+            backRightDrive
+        );
+        RelativeSwerveModuleState backLeftState = new RelativeSwerveModuleState(
+            backLeftTurn,
+            backLeftDrive
+        );
 
         return new RelativeSwerveState(
-                frontRightState,
-                frontLeftState,
-                backRightState,
-                backLeftState
+            frontRightState,
+            frontLeftState,
+            backRightState,
+            backLeftState
         );
     }
 
     @Override
     public Translation toTranslation(RelativeSwerveState state) {
         throw new RuntimeException(
-                "Cannot convert a swerve state to a translation " +
-                        "using the relaive swerve kinematics."
+            "Cannot convert a swerve state to a translation " +
+            "using the relaive swerve kinematics."
         );
     }
 
@@ -252,20 +268,20 @@ public class RelativeSwerveDriveKinematics implements Kinematics<RelativeSwerveS
         double vz = translation.vz() * turnMultiplier;
 
         double frontRightTurn = frontRightKinematics.calculate(
-                frontRightModuleAngle.get(),
-                angle.add(Angle.fromDeg(vz))
+            frontRightModuleAngle.get(),
+            angle.add(Angle.fromDeg(vz))
         );
         double frontLeftTurn = frontLeftKinematics.calculate(
-                frontLeftModuleAngle.get(),
-                angle.add(Angle.fromDeg(-vz))
+            frontLeftModuleAngle.get(),
+            angle.add(Angle.fromDeg(-vz))
         );
         double backRightTurn = backRightKinematics.calculate(
-                backRightModuleAngle.get(),
-                angle.add(Angle.fromDeg(vz))
+            backRightModuleAngle.get(),
+            angle.add(Angle.fromDeg(vz))
         );
         double backLeftTurn = backLeftKinematics.calculate(
-                backLeftModuleAngle.get(),
-                angle.add(Angle.fromDeg(-vz))
+            backLeftModuleAngle.get(),
+            angle.add(Angle.fromDeg(-vz))
         );
 
         double frontRightDrive = translation.magnitude();
@@ -274,35 +290,35 @@ public class RelativeSwerveDriveKinematics implements Kinematics<RelativeSwerveS
         double backLeftDrive = translation.magnitude();
 
         RelativeSwerveModuleState frontRightState = RelativeSwerveModuleState.optimized(
-                angle,
-                frontRightDrive,
-                frontRightModuleAngle.get(),
-                frontRightKinematics
+            angle,
+            frontRightDrive,
+            frontRightModuleAngle.get(),
+            frontRightKinematics
         );
         RelativeSwerveModuleState frontLeftState = RelativeSwerveModuleState.optimized(
-                angle,
-                frontLeftDrive,
-                frontLeftModuleAngle.get(),
-                frontLeftKinematics
+            angle,
+            frontLeftDrive,
+            frontLeftModuleAngle.get(),
+            frontLeftKinematics
         );
         RelativeSwerveModuleState backRightState = RelativeSwerveModuleState.optimized(
-                angle,
-                backRightDrive,
-                backRightModuleAngle.get(),
-                backRightKinematics
+            angle,
+            backRightDrive,
+            backRightModuleAngle.get(),
+            backRightKinematics
         );
         RelativeSwerveModuleState backLeftState = RelativeSwerveModuleState.optimized(
-                angle,
-                backLeftDrive,
-                backLeftModuleAngle.get(),
-                backLeftKinematics
+            angle,
+            backLeftDrive,
+            backLeftModuleAngle.get(),
+            backLeftKinematics
         );
 
         return new RelativeSwerveState(
-                frontRightState,
-                frontLeftState,
-                backRightState,
-                backLeftState
+            frontRightState,
+            frontLeftState,
+            backRightState,
+            backLeftState
         );
     }
 }

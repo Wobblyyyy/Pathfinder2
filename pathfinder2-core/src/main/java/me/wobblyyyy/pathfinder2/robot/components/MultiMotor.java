@@ -10,9 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.robot.components;
 
-import me.wobblyyyy.pathfinder2.utils.ArrayUtils;
-
 import java.util.List;
+import me.wobblyyyy.pathfinder2.utils.ArrayUtils;
 
 /**
  * A wrapper that encapsulates several motors. This is most useful for
@@ -25,23 +24,22 @@ public class MultiMotor implements Motor {
     private final List<Motor> motors;
 
     public MultiMotor(Motor... motors) {
-        if (motors.length == 0)
-            throw new IllegalArgumentException(
-                    "Motors array may not have a length of 0!"
-            );
+        if (motors.length == 0) throw new IllegalArgumentException(
+            "Motors array may not have a length of 0!"
+        );
 
         this.motors = ArrayUtils.toList(motors);
     }
 
     public void addMotor(Motor motor) {
-        if (motor == null)
-            throw new NullPointerException("Cannot add a null motor!");
+        if (motor == null) throw new NullPointerException(
+            "Cannot add a null motor!"
+        );
 
         motors.add(motor);
     }
 
-    public void addMotor(Motor motor,
-                         boolean isInverted) {
+    public void addMotor(Motor motor, boolean isInverted) {
         addMotor(motor.applyInversions(isInverted, isInverted));
     }
 
