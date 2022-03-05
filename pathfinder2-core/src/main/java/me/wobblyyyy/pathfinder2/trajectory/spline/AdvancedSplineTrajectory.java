@@ -23,6 +23,7 @@ import me.wobblyyyy.pathfinder2.math.Min;
 import me.wobblyyyy.pathfinder2.math.MinMax;
 import me.wobblyyyy.pathfinder2.math.Spline;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
  * A {@link Trajectory} that utilizes multiple splines to control values
@@ -124,52 +125,16 @@ public class AdvancedSplineTrajectory implements Trajectory {
         double tolerance,
         Angle angleTolerance
     ) {
-        if (spline == null) throw new IllegalArgumentException(
-            "The 'spline' argument of the AdvancedSplineTrajectory " +
-            "constructor was null!"
-        );
-
-        if (angleSpline == null) throw new IllegalArgumentException(
-            "The 'angleSpline' argument of the AdvancedSplineTrajectory " +
-            "constructor was null!"
-        );
-
-        if (speedSpline == null) throw new IllegalArgumentException(
-            "The 'speedSpline' argument of the AdvancedSplineTrajectory " +
-            "constructor was null!"
-        );
+        ValidationUtils.validate(spline, "spline");
+        ValidationUtils.validate(angleSpline, "angleSpline");
+        ValidationUtils.validate(speedSpline, "speedSpline");
+        ValidationUtils.validate(step, "step");
+        ValidationUtils.validate(tolerance, "tolerance");
+        ValidationUtils.validate(angleTolerance, "angleTolerance");
 
         InvalidToleranceException.throwIfInvalid(
-            "Invalid tolerance in AdvancedSplineTrajectory " +
-            "constructor! Make sure this value is greater " +
-            "than or equal to zero.",
+            "Invalid tolerance value!",
             tolerance
-        );
-
-        if (step == 0) throw new IllegalArgumentException(
-            "Attempted to create an AdvancedSplineTrajectory with " +
-            "a step value of 0. Please make sure this number " +
-            "is NOT equal to zero. Or just don't have " +
-            "working code - it's up to you, really."
-        );
-
-        if (tolerance < 0) throw new InvalidToleranceException(
-            "Attempted to create a LinearTrajectory instance with a " +
-            "tolerance value less than 0. Tolerance values must " +
-            "be greater than or equal to 0."
-        );
-
-        if (angleTolerance == null) throw new NullAngleException(
-            "Attempted to create a LinearTrajectory instance with " +
-            "a null angle tolerance value. Make sure whatever " +
-            "angle tolerance you pass isn't null next time, " +
-            "okay? Cool."
-        );
-
-        if (angleTolerance.deg() < 0) throw new IllegalArgumentException(
-            "Attempted to create a LinearTrajectory instance with " +
-            "an invalid angle tolerance! The angle tolerance " +
-            "must be positive."
         );
 
         double startX = spline.getStartPoint().x();

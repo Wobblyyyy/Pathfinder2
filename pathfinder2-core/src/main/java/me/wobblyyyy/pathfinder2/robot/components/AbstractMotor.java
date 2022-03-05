@@ -12,7 +12,6 @@ package me.wobblyyyy.pathfinder2.robot.components;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
