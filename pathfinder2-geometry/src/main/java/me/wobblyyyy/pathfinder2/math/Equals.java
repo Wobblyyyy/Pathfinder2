@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.math;
 
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
+import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
@@ -34,7 +35,7 @@ public class Equals {
                                                 double tolerance) {
         return Math.abs(a - b) <= tolerance;
     }
-    
+
     /**
      * Soft-equals - are two numbers within a given distance of another?
      *
@@ -133,5 +134,42 @@ public class Equals {
         }
 
         return Math.abs(a - b) <= tolerance;
+    }
+
+    /**
+     * Soft-equals - are two {@link Angle}s within a given distance of another?
+     *
+     * @param a         one of the two angles.
+     * @param b         one of the two angles.
+     * @param tolerance the maximum allowable value that's still considered
+     *                  to be "equal."
+     * @return true if the {@link Angle}s are "equal" and false if not.
+     */
+    public static boolean softWithoutValidation(Angle a,
+                                                Angle b,
+                                                Angle tolerance) {
+        double minimumDeltaDeg = Math.abs(Angle.angleDeltaDeg(a, b));
+        double toleranceDeg = Math.abs(tolerance.deg());
+
+        return minimumDeltaDeg <= toleranceDeg;
+    }
+
+    /**
+     * Soft-equals - are two {@link Angle}s within a given distance of another?
+     *
+     * @param a         one of the two angles.
+     * @param b         one of the two angles.
+     * @param tolerance the maximum allowable value that's still considered
+     *                  to be "equal."
+     * @return true if the {@link Angle}s are "equal" and false if not.
+     */
+    public static boolean soft(Angle a,
+                               Angle b,
+                               Angle tolerance) {
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(b, "b");
+        ValidationUtils.validate(tolerance, "tolerance");
+
+        return softWithoutValidation(a, b, tolerance);
     }
 }
