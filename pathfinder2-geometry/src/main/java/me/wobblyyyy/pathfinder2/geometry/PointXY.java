@@ -216,6 +216,26 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     }
 
     /**
+     * Add two points together by creating another point with an X value
+     * of the sum of A and B's X values and a Y value of the sum of A and
+     * B's Y values.
+     *
+     * @param a a point.
+     * @param x the X value to add.
+     * @param y the Y value to add.
+     * @return a new point, created by adding the component X and Y values of
+     * each of the points together.
+     */
+    public static PointXY add(PointXY a,
+                              double x,
+                              double y) {
+        return new PointXY(
+                a.x + x,
+                a.y + y
+        );
+    }
+
+    /**
      * Subtract point b from point a.
      *
      * @param a the first point.
@@ -556,7 +576,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
                                       Angle angle) {
         ValidationUtils.validate(base, "base");
         ValidationUtils.validate(distance, "distance");
-        Angle.checkArgument(angle);
+        ValidationUtils.validate(angle, "angle");
 
         return new PointXY(
                 base.x() + (distance * angle.cos()),

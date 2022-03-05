@@ -15,6 +15,14 @@ import me.wobblyyyy.pathfinder2.geometry.Circle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 
+/**
+ * @author Colin Robertson
+ * @since 1.0.0
+ * @deprecated it doesn't really work, and to be honest, I'm really not in
+ * the mood to refactor code right now, so I'm just going to suggest that
+ * you don't use it.
+ */
+@Deprecated
 public class ArcTrajectory implements Trajectory {
     private final Circle circle;
     private final double radius;

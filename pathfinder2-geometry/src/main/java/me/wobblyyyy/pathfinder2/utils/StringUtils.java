@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.utils;
 
+import java.util.function.Consumer;
+
 /**
  * String-related utilities.
  *
@@ -116,6 +118,11 @@ public class StringUtils {
             if (c == '%') {
                 char type = template.charAt(++i);
                 int maxLength = -1;
+
+                if (type == 'n') {
+                    buffer.append('\n');
+                    continue;
+                }
 
                 if (Character.isDigit(type)) {
                     StringBuilder numberBuilder = new StringBuilder(5);
@@ -235,6 +242,30 @@ public class StringUtils {
                                      String endString,
                                      Object... objects) {
         return startString + formatArray(separator, objects) + endString;
+    }
+
+    /**
+     * Format and print a string.
+     *
+     * @param consumer the consumer that will accept the formatted string.
+     * @param template the template to use for the string.
+     * @param sources  sources to use for formatting the string.
+     */
+    public static void printf(Consumer<String> consumer,
+                              String template,
+                              Object... sources) {
+        consumer.accept(format(template, sources));
+    }
+
+    /**
+     * Format and print a string.
+     *
+     * @param template the template to use for the string.
+     * @param sources  sources to use for formatting the string.
+     */
+    public static void printf(String template,
+                              Object... sources) {
+        printf(System.out::println, template, sources);
     }
 }
 
