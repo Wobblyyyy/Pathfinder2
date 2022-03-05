@@ -230,6 +230,9 @@ public class PointXYZ extends PointXY {
      */
     public static PointXYZ add(PointXYZ a,
                                PointXYZ b) {
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(b, "b");
+
         return new PointXYZ(
                 a.x() + b.x(),
                 a.y() + b.y(),
@@ -246,8 +249,8 @@ public class PointXYZ extends PointXY {
      */
     public static PointXYZ multiply(PointXYZ a,
                                     PointXYZ b) {
-        if (a == null || b == null)
-            throw new NullPointerException("Cannot multiply a null point!");
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(b, "b");
 
         return new PointXYZ(
                 a.x() * b.x(),
@@ -265,8 +268,8 @@ public class PointXYZ extends PointXY {
      */
     public static PointXYZ multiply(PointXYZ a,
                                     double b) {
-        if (a == null)
-            throw new NullPointerException("Cannot multiply a null point!");
+        ValidationUtils.validate(a, "a");
+        ValidationUtils.validate(b, "b");
 
         return new PointXYZ(
                 a.x() * b,
@@ -316,12 +319,7 @@ public class PointXYZ extends PointXY {
         if (!PointXY.isNear(a, b, tolerance))
             return false;
 
-        ValidationUtils.validate(angleTolerance, "angleTolerance");
-
-        double angleToleranceDeg = Math.abs(angleTolerance.deg());
-        double minimumDeltaDeg = Math.abs(Angle.minimumDelta(a.z, b.z));
-
-        return minimumDeltaDeg <= angleToleranceDeg;
+        return Equals.soft(a.z, b.z, angleTolerance);
     }
 
     /**

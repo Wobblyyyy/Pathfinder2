@@ -16,6 +16,57 @@ import org.junit.jupiter.api.Test;
 import me.wobblyyyy.pathfinder2.utils.AssertionUtils;
 
 public class TestPointXYZ {
+    private static final PointXYZ a = new PointXYZ(0, 0, 0);
+    private static final PointXYZ b = new PointXYZ(1, 0, 0);
+    private static final PointXYZ c = new PointXYZ(0, 0, Angle.fromDeg(90));
+    private static final PointXYZ d = new PointXYZ(0, 0, Angle.fromDeg(180));
+    private static final PointXYZ e = new PointXYZ(10, 10, Angle.fromDeg(180));
+    private static final PointXYZ f = new PointXYZ(-10, -10, Angle.fromDeg(180));
+
+    private static void testAdd(PointXYZ expected,
+                                PointXYZ a,
+                                PointXYZ b) {
+        Assertions.assertEquals(
+                expected,
+                a.add(b)
+        );
+
+        Assertions.assertEquals(
+                expected,
+                b.add(a)
+        );
+
+        Assertions.assertEquals(
+                expected,
+                (a.multiply(-1)).add(b.multiply(-1)).multiply(-1)
+        );
+    }
+
+    @Test
+    public void testAdd() {
+        testAdd(new PointXYZ(1, 0, 0), a, b);
+        testAdd(new PointXYZ(0, 0, 90), a, c);
+        testAdd(new PointXYZ(1, 0, 90), b, c);
+        testAdd(new PointXYZ(0, 0, 0), a, a);
+        testAdd(new PointXYZ(0, 0, 0), e, f);
+        testAdd(new PointXYZ(0, 0, 180), a, d);
+        testAdd(new PointXYZ(10, 10, 270), c, e);
+        testAdd(new PointXYZ(-10, -10, 270), c, f);
+    }
+
+    @Test
+    public void testMultiply() {
+        Assertions.assertEquals(
+                new PointXYZ(10, 10, 0),
+                new PointXYZ(-10, -10, 0).multiply(-1)
+        );
+
+        Assertions.assertEquals(
+                new PointXYZ(10, 10, 90),
+                new PointXYZ(-10, -10, Angle.fixedDeg(-90)).multiply(-1)
+        );
+    }
+
     @Test
     public void testReflectX() {
         PointXYZ point = new PointXYZ(10, 10, 0);
@@ -132,5 +183,29 @@ public class TestPointXYZ {
                 new Translation(-1, 0, 0),
                 new PointXYZ(1, 0, 180)
         );
+    }
+
+    @Test
+    public void testIsNear() {
+        Assertions.assertTrue(PointXYZ.isNear(
+                new PointXYZ(0, 0, 0),
+                new PointXYZ(0, 0, 0),
+                0,
+                Angle.fromDeg(0)
+        ));
+
+        Assertions.assertTrue(PointXYZ.isNear(
+                new PointXYZ(0, 0, 0),
+                new PointXYZ(0.5, 0.5, 0),
+                1,
+                Angle.fromDeg(0)
+        ));
+
+        Assertions.assertTrue(PointXYZ.isNear(
+                new PointXYZ(0, 0, 0),
+                new PointXYZ(1, 1, 5),
+                2,
+                Angle.fromDeg(5)
+        ));
     }
 }

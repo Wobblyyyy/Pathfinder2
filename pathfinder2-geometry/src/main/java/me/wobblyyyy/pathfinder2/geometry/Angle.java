@@ -553,7 +553,7 @@ public class Angle implements Comparable<Angle>, Serializable {
                 "null! In case you couldn't guess, that... well, " +
                 "it probably shouldn't be null.", b);
 
-        return Equals.soft(a.rad(), b.rad(), Geometry.toleranceAngle.rad());
+        return Equals.soft(a, b, Geometry.toleranceAngle);
     }
 
     /**
