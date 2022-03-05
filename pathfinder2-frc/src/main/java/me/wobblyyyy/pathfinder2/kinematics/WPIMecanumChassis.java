@@ -35,7 +35,7 @@ public class WPIMecanumChassis implements Drive {
     private final Motor frontLeftMotor;
     private final Motor backRightMotor;
     private final Motor backLeftMotor;
-    private MecanumDriveKinematics kinematics;
+    private final MecanumDriveKinematics kinematics;
     private Function<Translation, Translation> modifier;
     private Translation translation;
 

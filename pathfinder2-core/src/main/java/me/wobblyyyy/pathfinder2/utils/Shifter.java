@@ -22,6 +22,7 @@ import me.wobblyyyy.pathfinder2.listening.ListenerMode;
  * @author Colin Robertson
  * @since 0.8.0
  */
+@SuppressWarnings("deprecation")
 public class Shifter {
     private final int minGear;
     private final int maxGear;
@@ -61,6 +62,7 @@ public class Shifter {
         this(minGear, currentGear, maxGear, false, gear -> {});
     }
 
+    @SuppressWarnings("deprecation")
     public Shifter(
         int minGear,
         int currentGear,

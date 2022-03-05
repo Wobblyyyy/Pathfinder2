@@ -27,14 +27,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
+@SuppressWarnings("NewClassNamingConvention")
 @TestInstance(Lifecycle.PER_CLASS)
 public class TestableRobot {
-    public double maxTimeMs = 1_000;
+    public final double maxTimeMs = 1_000;
     public SimulatedRobot robot = new SimulatedRobot();
-    public double tolerance = 2;
-    public Angle angleTolerance = Angle.fromDeg(5);
-    public double speed = 0.5;
-    public double turnCoefficient = -0.05;
+    public final double tolerance = 2;
+    public final Angle angleTolerance = Angle.fromDeg(5);
+    public final double speed = 0.5;
+    public final double turnCoefficient = -0.05;
     public Pathfinder pathfinder;
     private boolean hasBeforeEachBeenCalled = false;
 
@@ -87,7 +88,7 @@ public class TestableRobot {
         if (timer.elapsedMs() >= maxTimeMs) throw new RuntimeException(
             StringUtils.format(
                 "Trajectory <%s> to target <%s> took <%s> milliseconds " +
-                "to execute indiciating there was an issue " +
+                "to execute indicating there was an issue " +
                 "following the trajectory.",
                 trajectory,
                 target,

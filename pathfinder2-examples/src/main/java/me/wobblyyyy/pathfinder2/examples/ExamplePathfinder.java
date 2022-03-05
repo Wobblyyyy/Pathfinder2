@@ -43,7 +43,6 @@ import me.wobblyyyy.pathfinder2.trajectory.builder.LinearTrajectoryBuilder;
  * @author Colin Robertson
  * @since 0.1.0
  */
-@SuppressWarnings("FieldCanBeLocal")
 public class ExamplePathfinder {
     private static final double SPEED = 0.5;
     private static final double TOLERANCE = 1.0;

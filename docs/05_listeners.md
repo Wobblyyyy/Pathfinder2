@@ -21,7 +21,7 @@ of Pathfinder is using.
 
 ### If you used a listener manager
 If you register a listener by using the `pathfinder#getListenerManager()`'s
-`bind`, your listener will automataically be updated whenever Pathfinder's
+`bind`, your listener will automatically be updated whenever Pathfinder's
 `tick()` method is called.
 
 ### If you did not use a listener manager
@@ -134,6 +134,7 @@ This `Supplier` of type T should accept input for the binding. This input
 can be anything at all. This is frequently a `Supplier<Boolean>`, as it
 allows you to bind something to a button. For example, here's a basic
 binding attached to a button.
+
 ```java
 public class Example {
     /**
@@ -151,12 +152,12 @@ public class Example {
     public void bindButton() {
         // print a message whenever a button is pressed
         pathfinder.getListenerManager()
-            .bind(
-                ListenerMode.CONDITION_NEWLY_MET,
-                this::aButton,
-                (isPressed) -> isPressed,
-                (isPressed) -> System.out.println("A button has been pressed!");
-            );
+                .bind(
+                        ListenerMode.CONDITION_NEWLY_MET,
+                        this::aButton,
+                        (isPressed) -> isPressed,
+                        (isPressed) -> System.out.println("A button has been pressed!");
+            )
     }
 }
 ```

@@ -244,7 +244,7 @@ public class RelativeSwerveDriveKinematics
     public Translation toTranslation(RelativeSwerveState state) {
         throw new RuntimeException(
             "Cannot convert a swerve state to a translation " +
-            "using the relaive swerve kinematics."
+            "using the relative swerve kinematics."
         );
     }
 

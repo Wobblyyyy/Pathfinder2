@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-import me.wobblyyyy.pathfinder2.math.Spline;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.trajectory.multi.segment.MultiSegmentTrajectory;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
@@ -24,7 +23,7 @@ import me.wobblyyyy.pathfinder2.utils.Trio;
 
 public class MultiSplineBuilder {
     private final List<Node> nodes = new ArrayList<>();
-    private Node defaultNode = new Node();
+    private final Node defaultNode = new Node();
 
     public MultiSplineBuilder() {
         defaultNode.mode = InterpolationMode.DEFAULT;
@@ -50,7 +49,6 @@ public class MultiSplineBuilder {
         List<NodeTrio> trios,
         List<Node> allNodes
     ) {
-        return;
         /*
         for (NodeTrio trio : trios) {
             PointXYZ a = trio.getA().point();
@@ -59,7 +57,7 @@ public class MultiSplineBuilder {
 
             if (!Spline.areMonotonic(a, b, c))
                 throw new IllegalArgumentException(StringUtils.format(
-                            "Failed to verify monotonicty because one or " +
+                            "Failed to verify monotonicity because one or " +
                             "more trios (group of 3 adjacent points) were " +
                             "not monotonic. The set of three points that " +
                             "are not monotonic are %s, %s, and %s. " +

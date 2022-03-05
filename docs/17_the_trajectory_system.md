@@ -42,7 +42,7 @@ Pathfinder.
 - [`MutableLinearTrajectory`](../pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/trajectory/MutableLinearTrajectory.java):
   Just like `LinearTrajectory`, but it's mutable - that's really all I can say.
 - [`FastTrajectory`](../pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/trajectory/FastTrajectory.java):
-  Similiar to `LinearTrajectory` in the sense that it moves to a single target
+  Similar to `LinearTrajectory` in the sense that it moves to a single target
   point at a linear speed, but `FastTrajectory` will correct if it overshoots
   the target. Additionally, `FastTrajectory` does not require the robot's
   heading to be correct in order for the trajectory to be finished.

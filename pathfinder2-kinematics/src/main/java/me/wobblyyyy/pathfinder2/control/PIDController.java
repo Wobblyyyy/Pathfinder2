@@ -23,7 +23,7 @@ import me.wobblyyyy.pathfinder2.math.MinMax;
  * @since 0.15.0
  */
 public class PIDController extends AbstractController {
-    private MiniPID pid;
+    private final MiniPID pid;
 
     public PIDController(double p, double i, double d) {
         this(p, i, d, 0.02);

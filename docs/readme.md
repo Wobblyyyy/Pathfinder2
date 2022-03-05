@@ -18,7 +18,7 @@ be browsed from GitHub.
   fairly important concept to understand in order to maximize the benefit you
   get from utilizing the library.
 - [Controllers](./02_controllers.md):
-  Open-loop controllers are a concept used widely in robotics. This is a breif
+  Open-loop controllers are a concept used widely in robotics. This is a brief
   overview on what they are and how to use them.
 - [Linear trajectories](./03_linear_trajectory.md):
   Linear trajectories are the simplest form of trajectories and the logical

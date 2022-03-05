@@ -21,7 +21,7 @@ The `Trajectory` interface has three methods:
   neither of those suit you, try something right in the middle.
 
 ## Example implementation
-Here's a really quick `Trajectory` implementation. This is similiar to the
+Here's a really quick `Trajectory` implementation. This is similar to the
 `LinearTrajectory` provided within Pathfinder, except without a few of the
 bells and whistles. I would encourage you to use `LinearTrajectory` over
 this implementation: this is just for the purpose of demonstrating a correct

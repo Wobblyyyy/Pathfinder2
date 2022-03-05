@@ -33,8 +33,8 @@ public class ApacheSpline implements Spline {
     private final PolynomialSplineFunction function;
     private final PointXY startPoint;
     private final PointXY endPoint;
-    private double minX;
-    private double maxX;
+    private final double minX;
+    private final double maxX;
 
     /**
      * Create a new {@code ApacheSpline}.

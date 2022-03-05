@@ -254,10 +254,11 @@ of the robot.
 
 #### Setting the robot's translation
 `setTranslation(Translation)` will set the robot's translation.
+
 ```java
 public class ExampleSetTranslation {
     public void example() {
-        Pathfinder pathfinder = new Pathfinder(...);
+        Pathfinder pathfinder = new Pathfinder(...)
         Translation translation = new Translation(0.5, 0.5, 0);
         pathfinder.setTranslation(translation);
     }
@@ -609,7 +610,7 @@ be able to be interpolated. Those conditions are as follows:
 - The X values must move in the same direction. If the X values are decreasing,
   all of them must decrease. If the X values are increasing, all of the values
   must then increase.
-- Y values must be monotonic. This is similiar to the restrictions placed on
+- Y values must be monotonic. This is similar to the restrictions placed on
   X values - they must all move in the same direction. Y can either increase
   or decrease throughout the spline, but it PROBABLY can't do both.
 - Each X value should be unique.
@@ -620,7 +621,7 @@ constructor provide useful exceptions, but no promises.
 
 ##### How splines work
 Here's the answer: spline interpolation. Basically, you input an X value and
-get out a Y value. It's similiar to a linear equation, or any equation, for
+get out a Y value. It's similar to a linear equation, or any equation, for
 that matter.
 
 ##### When to use a spline
@@ -818,7 +819,7 @@ of Pathfinder is using.
 
 ##### If you used a listener manager
 If you register a listener by using the `pathfinder#getListenerManager()`'s
-`bind`, your listener will automataically be updated whenever Pathfinder's
+`bind`, your listener will automatically be updated whenever Pathfinder's
 `tick()` method is called.
 
 ##### If you did not use a listener manager
@@ -931,6 +932,7 @@ This `Supplier` of type T should accept input for the binding. This input
 can be anything at all. This is frequently a `Supplier<Boolean>`, as it
 allows you to bind something to a button. For example, here's a basic
 binding attached to a button.
+
 ```java
 public class Example {
     /**
@@ -948,12 +950,12 @@ public class Example {
     public void bindButton() {
         // print a message whenever a button is pressed
         pathfinder.getListenerManager()
-            .bind(
-                ListenerMode.CONDITION_NEWLY_MET,
-                this::aButton,
-                (isPressed) -> isPressed,
-                (isPressed) -> System.out.println("A button has been pressed!");
-            );
+                .bind(
+                        ListenerMode.CONDITION_NEWLY_MET,
+                        this::aButton,
+                        (isPressed) -> isPressed,
+                        (isPressed) -> System.out.println("A button has been pressed!");
+            )
     }
 }
 ```

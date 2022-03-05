@@ -37,7 +37,7 @@ public class StringUtils {
 
         switch (type) {
             case 's':
-                builder.append(nextSource.toString());
+                builder.append(nextSource);
                 break;
             case 'i':
                 builder.append(Integer.parseInt(nextSource.toString()));

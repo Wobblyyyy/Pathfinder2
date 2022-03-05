@@ -22,9 +22,10 @@ import me.wobblyyyy.pathfinder2.utils.*;
  * do just about anything with pathfinder's tick system.
  */
 
-@SuppressWarnings("InfiniteLoopStatement")
+@SuppressWarnings({ "InfiniteLoopStatement", "deprecation" })
 public class ExampleTeleOp {
 
+    @SuppressWarnings("deprecation")
     public void exampleTeleOpListeners() {
         Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
 

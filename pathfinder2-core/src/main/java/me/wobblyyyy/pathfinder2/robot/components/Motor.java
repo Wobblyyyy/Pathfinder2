@@ -14,7 +14,7 @@ package me.wobblyyyy.pathfinder2.robot.components;
  * A (very simple) motor interface. For almost all purposes, it's generally
  * a better idea to use a more abstract implementation of this interface. In
  * Pathfinder, motors should only have power values between -1 and 1. A
- * motor should be capable of recieving an input via {@link #setPower(double)}
+ * motor should be capable of receiving an input via {@link #setPower(double)}
  * and then spinning according to that input.
  *
  * @author Colin Robertson
@@ -76,7 +76,7 @@ public interface Motor {
     /**
      * Invert the motor by applying an inversion to both the
      * {@link #setPower(double)} and {@link #getPower()} methods. This method
-     * calls {@link applyInversions(boolean, boolean)} with both parameters
+     * calls {@link #applyInversions(boolean, boolean)} with both parameters
      * set to true.
      *
      * @return a new {@code Motor}.
@@ -88,7 +88,7 @@ public interface Motor {
     /**
      * Invert the motor by applying an inversion to both the
      * {@link #setPower(double)} and {@link #getPower()} methods. This method
-     * calls {@link applyInversions(boolean, boolean)} with both parameters
+     * calls {@link #applyInversions(boolean, boolean)} with both parameters
      * set to {@code isInverted}.
      *
      * @param isInverted should the motor be inverted?
@@ -111,12 +111,8 @@ public interface Motor {
         double getPowerMultiplier
     ) {
         return new AbstractMotor(
-            power -> {
-                setPower(power * setPowerMultiplier);
-            },
-            () -> {
-                return getPower() * getPowerMultiplier;
-            }
+            power -> setPower(power * setPowerMultiplier),
+            () -> getPower() * getPowerMultiplier
         );
     }
 

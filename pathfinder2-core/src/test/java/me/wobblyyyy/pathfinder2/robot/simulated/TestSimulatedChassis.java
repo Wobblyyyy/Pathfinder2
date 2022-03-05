@@ -495,6 +495,7 @@ public class TestSimulatedChassis {
         assertPositionIs(new PointXYZ(14, 15, 0));
     }
 
+    @SuppressWarnings("deprecation")
     public void testArcTrajectory() {
         ArcTrajectory arc = new ArcTrajectory(
             new PointXYZ(5, 5, 0),

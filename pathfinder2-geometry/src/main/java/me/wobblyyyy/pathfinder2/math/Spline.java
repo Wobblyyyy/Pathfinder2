@@ -123,6 +123,7 @@ public interface Spline extends Equation {
         return areMonotonic(values);
     }
 
+    @SuppressWarnings("DuplicatedCode")
     static boolean areMonotonic(PointXY... points) {
         double[] x = new double[points.length];
         double[] y = new double[points.length];

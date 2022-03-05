@@ -70,8 +70,8 @@ import me.wobblyyyy.pathfinder2.trajectory.multi.segment.MultiSegmentTrajectory;
  * {@link #multiply(double)}, which multiplies all inputted and outputted
  * values, essentially scaling the trajectory. There's also
  * {@link #reflectX(double)} and {@link #reflectY(double)}, which allow you
- * to create trajectories that are exact mirrors of eachother without
- * having to recreate or recalculate any of the postions.
+ * to create trajectories that are exact mirrors of each other without
+ * having to recreate or recalculate any of the positions.
  * </p>
  *
  * @author Colin Robertson
@@ -81,7 +81,7 @@ public interface Trajectory extends Serializable {
     /**
      * Get the next marker that the robot should attempt to navigate to. This
      * should always be a point along the trajectory. This method may be
-     * stateful, meaning its invokation modifies the {@code Trajectory} it
+     * stateful, meaning its invocation modifies the {@code Trajectory} it
      * belongs to.
      *
      * <p>
@@ -122,7 +122,7 @@ public interface Trajectory extends Serializable {
      * can move on to the next trajectory or stop. If the robot hasn't finished
      * it's trajectory, meaning it should still continue executing it, this
      * method should return false. This method should typically not return
-     * false after returning true. If this method's invokation changes the
+     * false after returning true. If this method's invocation changes the
      * state of the {@code Trajectory}, the results of this method may be
      * inaccurate, as this method may be called from anywhere within
      * Pathfinder.
@@ -464,7 +464,7 @@ public interface Trajectory extends Serializable {
         );
 
         return new Trajectory() {
-            ElapsedTimer timer = new ElapsedTimer();
+            final ElapsedTimer timer = new ElapsedTimer();
 
             @Override
             public PointXYZ nextMarker(PointXYZ current) {
@@ -479,9 +479,9 @@ public interface Trajectory extends Serializable {
 
                 if (elapsedMs < minimumTimeMs) return true; else if (
                     elapsedMs < maximumTimeMs
-                ) return isDoneFunction.apply(current); else if (
+                ) return isDoneFunction.apply(current); else return (
                     elapsedMs > maximumTimeMs
-                ) return true; else return false;
+                );
             }
 
             @Override
@@ -538,7 +538,7 @@ public interface Trajectory extends Serializable {
     /**
      * Reflect the entire trajectory over a specified axis.
      *
-     * @param xReflectionAxis the axis to reflect the trajectory over.
+     * @param yReflectionAxis the axis to reflect the trajectory over.
      * @return a reflected trajectory. This will not modify any of the
      * values of the base trajectory - rather, it'll simply reflect all
      * inputted points over a specified axis.
@@ -596,6 +596,20 @@ public interface Trajectory extends Serializable {
             this
         );
 
+        return getTrajectory(
+            offset,
+            nextMarkerFunction,
+            isDoneFunction,
+            speedFunction
+        );
+    }
+
+    default Trajectory getTrajectory(
+        PointXYZ offset,
+        Function<PointXYZ, PointXYZ> nextMarkerFunction,
+        Function<PointXYZ, Boolean> isDoneFunction,
+        Function<PointXYZ, Double> speedFunction
+    ) {
         return new Trajectory() {
 
             @Override
@@ -678,25 +692,12 @@ public interface Trajectory extends Serializable {
             .subtract(target)
             .withHeading(Angle.fromDeg(0));
 
-        return new Trajectory() {
-
-            @Override
-            public PointXYZ nextMarker(PointXYZ current) {
-                return nextMarkerFunction
-                    .apply(current.add(difference))
-                    .add(difference);
-            }
-
-            @Override
-            public boolean isDone(PointXYZ current) {
-                return isDoneFunction.apply(current.add(difference));
-            }
-
-            @Override
-            public double speed(PointXYZ current) {
-                return speedFunction.apply(current.add(difference));
-            }
-        };
+        return getTrajectory(
+            difference,
+            nextMarkerFunction,
+            isDoneFunction,
+            speedFunction
+        );
     }
 
     default Trajectory multiply(PointXYZ multiplier) {
@@ -723,6 +724,7 @@ public interface Trajectory extends Serializable {
         return multiply(multiplier, multiplier, 1);
     }
 
+    @SuppressWarnings("DuplicatedCode")
     default Trajectory multiply(
         double xMultiplier,
         double yMultiplier,
@@ -765,6 +767,7 @@ public interface Trajectory extends Serializable {
         };
     }
 
+    @SuppressWarnings("DuplicatedCode")
     default Trajectory add(
         double xMultiplier,
         double yMultiplier,
@@ -786,23 +789,12 @@ public interface Trajectory extends Serializable {
             Angle.fromDeg(zMultiplier)
         );
 
-        return new Trajectory() {
-
-            @Override
-            public PointXYZ nextMarker(PointXYZ current) {
-                return nextMarkerFunction.apply(current.add(mult)).add(mult);
-            }
-
-            @Override
-            public boolean isDone(PointXYZ current) {
-                return isDoneFunction.apply(current.add(mult));
-            }
-
-            @Override
-            public double speed(PointXYZ current) {
-                return speedFunction.apply(current.add(mult));
-            }
-        };
+        return getTrajectory(
+            mult,
+            nextMarkerFunction,
+            isDoneFunction,
+            speedFunction
+        );
     }
 
     /**
@@ -933,7 +925,7 @@ public interface Trajectory extends Serializable {
      * so... I had to create a static class to avoid cluttering the main
      * {@code Trajectory} interface with useless default methods.
      */
-    static class InternalTrajectoryUtils {
+    class InternalTrajectoryUtils {
 
         static Function<PointXYZ, PointXYZ> nextMarkerFunction(
             Trajectory trajectory

@@ -232,7 +232,7 @@ public class CoreMath {
     }
 
     /**
-     * A method to take both the raw X and Y coordinates and convert them to an equivalent polar cooordinate
+     * A method to take both the raw X and Y coordinates and convert them to an equivalent polar coordinate
      *
      * @param rawXCoordinate - The raw x coordinate that is still relative to the robot's position and not the local coordinate plane
      * @param rawYCoordinate - The raw y coordinate that is still relative to the robot's position and not the local coordinate plane
@@ -285,9 +285,10 @@ public class CoreMath {
             rightOffset,
             frontBackOffset
         );
-        double xVal = currentFrontBackPosition;
         double yVal = (currentLeftPosition + currentRightPosition) / 2;
-        double tanVal = xVal == 0 ? 0 : yVal / xVal;
+        double tanVal = currentFrontBackPosition == 0
+            ? 0
+            : yVal / currentFrontBackPosition;
         return getConvertedCoordinate(
             relativePolarCoordinate,
             Math.atan(tanVal)
@@ -343,7 +344,7 @@ public class CoreMath {
      * @param leftChange      - The current reported left encoder's positional change (in inches)
      * @param rightChange     - The current reported right encoder's positional change (in inches)
      * @param frontBackChange - The current reported front/back encoder's positional change (in inches)
-     * @param leftOffset      - The horizontal offset of the left oodometry wheel from the robot's center (in inches)
+     * @param leftOffset      - The horizontal offset of the left odometry wheel from the robot's center (in inches)
      * @param rightOffset     - The horizontal offset of the right odometry wheel from the robot's center (in inches)
      * @param frontBackOffset - The vertical offset of the front/back odometry wheel from the robot's center (in inches)
      * @param previousHeading - The robot's previous heading (in radians)

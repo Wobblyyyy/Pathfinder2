@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Used for creating more complex suppliers. Similiar to (but better) than
+ * Used for creating more complex suppliers. Similar to (but better) than
  * {@link SupplierFilter}. There are some warnings about possible heap
  * pollution, but to be honest, I wouldn't worry about them. If something
  * goes wrong, sucks! Who cares if the heap gets polluted? What did the heap
@@ -16,6 +16,7 @@ import java.util.function.Supplier;
  * @author Colin Robertson
  * @since 0.10.9
  */
+@SuppressWarnings("deprecation")
 public class SupplierFactory {
 
     private SupplierFactory() {}

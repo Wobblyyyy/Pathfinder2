@@ -12,9 +12,6 @@ package me.wobblyyyy.pathfinder2.follower;
 
 import java.util.function.Consumer;
 import me.wobblyyyy.pathfinder2.control.Controller;
-import me.wobblyyyy.pathfinder2.exceptions.NullControllerException;
-import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
-import me.wobblyyyy.pathfinder2.exceptions.NullTrajectoryException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;

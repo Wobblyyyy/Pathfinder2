@@ -33,7 +33,7 @@ Code time!
 public class PathfinderGuide {
     // You shouldn't actually use "new Motor()" for each of these - you
     // should make/use your own motors.
-    private Drive drive = new MeccanumDrive(
+    private final Drive drive = new MeccanumDrive(
             new Motor(),
             new Motor(),
             new Motor(),
@@ -42,7 +42,7 @@ public class PathfinderGuide {
 
     // Once again, you shouldn't use "simulated odometry" - you should
     // implement your own, maybe check out three wheel odometry?
-    private Odometry odometry = new SimulatedOdometry();
+    private final Odometry odometry = new SimulatedOdometry();
 }
 ```
 
@@ -54,7 +54,7 @@ Next up, we have to construct a robot.
 public class PathfinderGuide {
     // ...
 
-    private Robot robot = new Robot(drive, odometry);
+    private final Robot robot = new Robot(drive, odometry);
 }
 ```
 
@@ -64,10 +64,10 @@ can get Pathfinder actually working.
 ```java
 public class PathfinderGuide {
     // you'll have to figure out a turn controller that works for you
-    private Controller turnController = new GenericTurnController(0.5);
+    private final Controller turnController = new GenericTurnController(0.5);
 
     // you can read some documentation on this if you're curious
-    private FollowerGenerator followerGenerator = new GenericFollowerGenerator(turnController);
+    private final FollowerGenerator followerGenerator = new GenericFollowerGenerator(turnController);
 }
 ```
 
@@ -76,7 +76,7 @@ Okay, Pathfinder time!
 ```java
 public class PathfinderGuide {
     // ...
-    private Pathfinder pathfinder = new Pathfinder(robot, followerGenerator);
+    private final Pathfinder pathfinder = new Pathfinder(robot, followerGenerator);
 }
 ```
 
@@ -84,7 +84,7 @@ There we go! In total, we have...
 
 ```java
 public class PathfinderGuide {
-    private Drive drive = new MeccanumDrive(
+    private final Drive drive = new MeccanumDrive(
             new Motor(),
             new Motor(),
             new Motor(),
@@ -93,15 +93,15 @@ public class PathfinderGuide {
 
     // Once again, you shouldn't use "simulated odometry" - you should
     // implement your own, maybe check out three wheel odometry?
-    private Odometry odometry = new SimulatedOdometry();
+    private final Odometry odometry = new SimulatedOdometry();
 
-    private Robot robot = new Robot(drive, odometry);
+    private final Robot robot = new Robot(drive, odometry);
 
-    private Controller turnController = new GenericTurnController(0.05);
+    private final Controller turnController = new GenericTurnController(0.05);
 
-    private FollowerGenerator followerGenerator = new GenericFollowerGenerator(turnController);
+    private final FollowerGenerator followerGenerator = new GenericFollowerGenerator(turnController);
 
-    private Pathfinder pathfinder = new Pathfinder(robot, followerGenerator);
+    private final Pathfinder pathfinder = new Pathfinder(robot, followerGenerator);
 }
 ```
 

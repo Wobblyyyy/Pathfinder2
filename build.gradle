@@ -33,6 +33,10 @@ allprojects {
     }
 }
 
+compileJava {
+    dependsOn(spotlessApply)
+}
+
 spotless {
     java {
         target fileTree('.') {

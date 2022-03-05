@@ -18,10 +18,10 @@ package me.wobblyyyy.pathfinder2.math;
  * @since 1.1.0
  */
 public class RangeNode {
-    public static RangeNode POSITIVE_INFINITY = inclusive(
+    public static final RangeNode POSITIVE_INFINITY = inclusive(
         Double.POSITIVE_INFINITY
     );
-    public static RangeNode NEGATIVE_INFINITY = inclusive(
+    public static final RangeNode NEGATIVE_INFINITY = inclusive(
         Double.NEGATIVE_INFINITY
     );
 

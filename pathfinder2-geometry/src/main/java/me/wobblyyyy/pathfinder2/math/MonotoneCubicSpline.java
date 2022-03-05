@@ -62,8 +62,8 @@ public class MonotoneCubicSpline implements Spline {
     private final double[] my;
     private final double[] mm;
 
-    private PointXY start;
-    private PointXY end;
+    private final PointXY start;
+    private final PointXY end;
 
     private boolean isInverted;
     private boolean isXY = false;
@@ -112,8 +112,8 @@ public class MonotoneCubicSpline implements Spline {
         double[] y = new double[yInitial.length];
 
         // make sure they're both valid arrays before continuing
-        xInitial = DoubleUtils.validate(xInitial);
-        yInitial = DoubleUtils.validate(yInitial);
+        DoubleUtils.validate(xInitial);
+        DoubleUtils.validate(yInitial);
 
         // copy over the data from the initial array to the actual array
         System.arraycopy(xInitial, 0, x, 0, x.length);
@@ -243,6 +243,11 @@ public class MonotoneCubicSpline implements Spline {
     }
 
     public static MonotoneCubicSpline fromPoints(PointXY[] points) {
+        return getMonotoneCubicSpline(points);
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    public static MonotoneCubicSpline getMonotoneCubicSpline(PointXY[] points) {
         double[] x = new double[points.length];
         double[] y = new double[points.length];
 
@@ -255,39 +260,15 @@ public class MonotoneCubicSpline implements Spline {
     }
 
     public static MonotoneCubicSpline fromPoints(PointXYZ[] points) {
-        double[] x = new double[points.length];
-        double[] y = new double[points.length];
-
-        for (int i = 0; i < points.length; i++) {
-            x[i] = points[i].x();
-            y[i] = points[i].y();
-        }
-
-        return new MonotoneCubicSpline(x, y);
+        return getMonotoneCubicSpline(points);
     }
 
     public MonotoneCubicSpline fromVarArgs(PointXY... points) {
-        double[] x = new double[points.length];
-        double[] y = new double[points.length];
-
-        for (int i = 0; i < points.length; i++) {
-            x[i] = points[i].x();
-            y[i] = points[i].y();
-        }
-
-        return new MonotoneCubicSpline(x, y);
+        return getMonotoneCubicSpline(points);
     }
 
     public MonotoneCubicSpline fromVarArgs(PointXYZ... points) {
-        double[] x = new double[points.length];
-        double[] y = new double[points.length];
-
-        for (int i = 0; i < points.length; i++) {
-            x[i] = points[i].x();
-            y[i] = points[i].y();
-        }
-
-        return new MonotoneCubicSpline(x, y);
+        return getMonotoneCubicSpline(points);
     }
 
     private static double reflectX(double x, double axis) {

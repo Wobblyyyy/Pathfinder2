@@ -44,12 +44,12 @@ public class RelativeMecanumKinematics implements Kinematics<MecanumState> {
     private final double maxMagnitude;
 
     /**
-     * The kinematic's turn magnitude.
+     * The kinematics' turn magnitude.
      */
     private final double turnMagnitude;
 
     /**
-     * The kinematic's angle offset.
+     * The kinematics' angle offset.
      */
     private final Angle angleOffset;
 

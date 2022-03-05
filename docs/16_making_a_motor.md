@@ -72,7 +72,7 @@ public interface VeryCoolMotor {
 As you can see, it's exactly the same as the `Motor` interface: this is just
 for the purpose of demonstration.
 
-Here's how you'd create an abstact motor with that.
+Here's how you'd create an abstract motor with that.
 ```java
 VeryCoolMotor vcm = null;
 

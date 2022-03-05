@@ -18,7 +18,7 @@ import me.wobblyyyy.pathfinder2.math.Spline;
  * Modes splines can use. Changing the mode a spline operates in will
  * change the underlying {@link Spline} that's being used by the trajectory.
  * You can create your own custom spline interpolator generator if you
- * so desire by using the {@link CUSTOM} option.
+ * so desire by using the {@link #CUSTOM} option.
  *
  * @author Colin Robertson
  * @since 1.0.0

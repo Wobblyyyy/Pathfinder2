@@ -26,98 +26,100 @@ public class Core {
     /**
      * The default speed value for new instances of {@code Pathfinder}.
      */
-    public static double pathfinderDefaultSpeed = -1;
+    public static final double pathfinderDefaultSpeed = -1;
 
     /**
      * The default tolerance value for new instances of {@code Pathfinder}.
      */
-    public static double pathfinderDefaultTolerance = -1;
+    public static final double pathfinderDefaultTolerance = -1;
 
     /**
      * The default angle tolerance value for new instances of
      * {@code Pathfinder}.
      */
-    public static Angle pathfinderDefaultAngleTolerance = null;
+    public static final Angle pathfinderDefaultAngleTolerance = null;
 
     /**
      * The default timeout value for new instances of {@code Pathfinder}.
      */
-    public static double pathfinderDefaultTimeout = Double.MAX_VALUE;
+    public static final double pathfinderDefaultTimeout = Double.MAX_VALUE;
 
     /**
      * The default is minimal value for new instances of {@code Pathfinder}.
      */
-    public static boolean pathfinderDefaultIsMinimal = false;
+    public static final boolean pathfinderDefaultIsMinimal = false;
 
     /**
      * The default random string length for new instances of
      * {@code Pathfinder}.
      */
-    public static int pathfinderRandomStringLength = 10;
+    public static final int pathfinderRandomStringLength = 10;
 
     /**
      * The default wait sleep time value (in milliseconds) for new instances
      * of {@code Pathfinder}.
      */
-    public static int pathfinderWaitSleepTimeMs = 10;
+    public static final int pathfinderWaitSleepTimeMs = 10;
 
     /**
      * The default coefficient for the
      * {@link Pathfinder#splineTo(me.wobblyyyy.pathfinder2.geometry.PointXYZ...)}
      * method.
      */
-    public static double pathfinderSplineStepCoefficient = 10;
+    public static final double pathfinderSplineStepCoefficient = 10;
 
     /**
      * The default coefficient for the
      * {@link Pathfinder#splineTo(me.wobblyyyy.pathfinder2.geometry.PointXYZ...)}
      * method.
      */
-    public static double pathfinderStepDivisor = 20;
+    public static final double pathfinderStepDivisor = 20;
 
     /**
      * The default speed value for new instances of {@code Pathfinder}.
      */
-    public static Translation pathfinderDefaultTranslation = Translation.ZERO;
+    public static final Translation pathfinderDefaultTranslation =
+        Translation.ZERO;
 
     /**
      * The minimum delay (in milliseconds) between snapshots when using
      * the movement recorder.
      */
-    public static double movementRecorderMinDelayMs = 25;
+    public static final double movementRecorderMinDelayMs = 25;
 
     /**
      * The default tolerance value for determining if two
      * {@link LinearTrajectory} instances are equal.
      */
-    public static double linearTrajectoryTolerance = 0.01;
+    public static final double linearTrajectoryTolerance = 0.01;
 
     /**
      * The default format for a trajectory.
      */
-    public static String linearTrajectoryFormat =
+    public static final String linearTrajectoryFormat =
         "Linear trajectory to %s at %s speed (tolerance %s %s)";
 
     /**
      * The multiplier that will be applied to the trajectory's speed
      * whenever the {@code isDone(PointXYZ)} method return trues.
      */
-    public static double linearTrajectoryIsDoneSpeedMultiplier = 0;
+    public static final double linearTrajectoryIsDoneSpeedMultiplier = 0;
 
-    public static double advancedSplineTrajectoryTolerance = 0.01;
+    public static final double advancedSplineTrajectoryTolerance = 0.01;
 
-    public static double advancedSplineTrajectoryDuplicateOffset = 0.01;
+    public static final double advancedSplineTrajectoryDuplicateOffset = 0.01;
 
-    public static int listenerBuilderDefaultPriority = 0;
+    public static final int listenerBuilderDefaultPriority = 0;
 
-    public static double listenerBuilderDefaultExpiration = Double.MAX_VALUE;
+    public static final double listenerBuilderDefaultExpiration =
+        Double.MAX_VALUE;
 
-    public static int listenerBuilderDefaultMaximumExecutions =
+    public static final int listenerBuilderDefaultMaximumExecutions =
         Integer.MAX_VALUE;
 
-    public static int listenerBuilderDefaultCooldownMs = 0;
+    public static final int listenerBuilderDefaultCooldownMs = 0;
 
-    public static int listenerManagerRandomStringLength = 10;
+    public static final int listenerManagerRandomStringLength = 10;
 
     private Core() {}
 }

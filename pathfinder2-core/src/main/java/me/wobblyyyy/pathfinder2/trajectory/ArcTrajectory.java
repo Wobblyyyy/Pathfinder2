@@ -22,6 +22,7 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
  * the mood to refactor code right now, so I'm just going to suggest that
  * you don't use it.
  */
+@SuppressWarnings("UnusedAssignment")
 @Deprecated
 public class ArcTrajectory implements Trajectory {
     private final Circle circle;

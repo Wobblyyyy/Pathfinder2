@@ -211,7 +211,7 @@ public class TestLinearTrajectory {
     @Test
     public void testMultipleTrajectories() {
         // look... nobody said tests have to be written WELL...
-        // i am sincerly sorry for whatever this mess is
+        // i am sincerely sorry for whatever this mess is
 
         Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
 
@@ -251,7 +251,7 @@ public class TestLinearTrajectory {
         pathfinder.followTrajectories(a, b, c, d, e);
 
         int lastFollowers = pathfinder.getExecutorManager().howManyFollowers();
-        int followers = 0;
+        int followers;
 
         setPos(o, new PointXYZ(0, 0, 0));
         pathfinder.tick();
@@ -300,6 +300,5 @@ public class TestLinearTrajectory {
         Assertions.assertFalse(pathfinder.isActive());
         followers = pathfinder.getExecutorManager().howManyFollowers();
         Assertions.assertEquals(lastFollowers - 1, followers);
-        lastFollowers = followers;
     }
 }

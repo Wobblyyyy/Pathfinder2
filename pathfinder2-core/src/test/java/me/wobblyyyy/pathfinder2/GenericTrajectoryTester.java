@@ -44,13 +44,14 @@ import org.junit.jupiter.api.*;
  * @author Colin Robertson
  * @since 1.4.1
  */
+@SuppressWarnings("BusyWait")
 public class GenericTrajectoryTester {
-    public double speed = 0.5;
-    public double tolerance = 2;
-    public Angle angleTolerance = Angle.fromDeg(5);
-    public double step = 0.25;
-    public double turnCoefficient = -0.25;
-    public double maximumExecutionTimeMs = 1_000;
+    public final double speed = 0.5;
+    public final double tolerance = 2;
+    public final Angle angleTolerance = Angle.fromDeg(5);
+    public final double step = 0.25;
+    public final double turnCoefficient = -0.25;
+    public final double maximumExecutionTimeMs = 1_000;
 
     public SimulatedOdometry odometry;
     public SimulatedWrapper wrapper;

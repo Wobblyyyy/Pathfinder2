@@ -61,7 +61,7 @@ public class AssertionUtils {
     }
 
     /**
-     * Assert that two points are within given tolerances of eachother. This
+     * Assert that two points are within given tolerances of each other. This
      * uses {@link Assertions#assertTrue(boolean, String)} to assert that
      * the distance between the two objects is less than the tolerance. This
      * WILL NOT perform any validation.
@@ -100,7 +100,7 @@ public class AssertionUtils {
     }
 
     /**
-     * Assert that two points are within given tolerances of eachother. This
+     * Assert that two points are within given tolerances of each other. This
      * uses {@link Assertions#assertTrue(boolean, String)} to assert that
      * the distance between the two objects is less than the tolerance.
      *
@@ -127,7 +127,7 @@ public class AssertionUtils {
     }
 
     /**
-     * Assert that two angles are within given tolerances of eachother. This
+     * Assert that two angles are within given tolerances of each other. This
      * uses {@link Assertions#assertTrue(boolean, String)} to assert that
      * the distance between the two objects is less than the tolerance. This
      * WILL NOT perform any validation.
@@ -165,7 +165,7 @@ public class AssertionUtils {
     }
 
     /**
-     * Assert that two angles are within given tolerances of eachother. This
+     * Assert that two angles are within given tolerances of each other. This
      * uses {@link Assertions#assertTrue(boolean, String)} to assert that
      * the distance between the two objects is less than the tolerance.
      *
@@ -190,7 +190,7 @@ public class AssertionUtils {
     }
 
     /**
-     * Assert that two points are within given tolerances of eachother. This
+     * Assert that two points are within given tolerances of each other. This
      * uses {@link Assertions#assertTrue(boolean, String)} to assert that
      * the distance between the two objects is less than the tolerance. This
      * WILL NOT perform any data validation.
@@ -221,7 +221,7 @@ public class AssertionUtils {
     }
 
     /**
-     * Assert that two points are within given tolerances of eachother. This
+     * Assert that two points are within given tolerances of each other. This
      * uses {@link Assertions#assertTrue(boolean, String)} to assert that
      * the distance between the two objects is less than the tolerance.
      *

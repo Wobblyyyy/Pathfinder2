@@ -11,10 +11,10 @@
 package me.wobblyyyy.pathfinder2.kinematics;
 
 public class RelativeSwerveState {
-    private RelativeSwerveModuleState fr;
-    private RelativeSwerveModuleState fl;
-    private RelativeSwerveModuleState br;
-    private RelativeSwerveModuleState bl;
+    private final RelativeSwerveModuleState fr;
+    private final RelativeSwerveModuleState fl;
+    private final RelativeSwerveModuleState br;
+    private final RelativeSwerveModuleState bl;
 
     public RelativeSwerveState(
         RelativeSwerveModuleState fr,

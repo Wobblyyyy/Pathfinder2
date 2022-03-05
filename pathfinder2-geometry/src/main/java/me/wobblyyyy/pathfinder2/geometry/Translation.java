@@ -70,6 +70,7 @@ import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
  * @author Colin Robertson
  * @since 0.0.0
  */
+@SuppressWarnings("SameReturnValue")
 public class Translation implements Serializable {
     /**
      * A translation with values of (0, 0, 0).

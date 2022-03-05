@@ -30,7 +30,7 @@ public class Range implements Serializable, Comparable<Range> {
      * Create a new {@code Range} with two {@link RangeNode}s.
      *
      * @param minimum the range's minimum node.
-     * @param minimum the range's maximum node.
+     * @param maximum the range's maximum node.
      */
     public Range(RangeNode minimum, RangeNode maximum) {
         if (minimum.node() < maximum.node()) throw new IllegalArgumentException(
@@ -70,7 +70,7 @@ public class Range implements Serializable, Comparable<Range> {
      *
      * @param minimum the range's minimum value (exclusive).
      * @param maximum the range's maximum value (exclusive).
-     * @return
+     * @return an exclusive range.
      */
     public static Range exclusive(double minimum, double maximum) {
         return new Range(
@@ -132,9 +132,7 @@ public class Range implements Serializable, Comparable<Range> {
         double bMin = b.minimum.node();
         double bMax = b.maximum.node();
 
-        if (aMin > bMax) return false; else if (
-            bMin > aMax
-        ) return false; else return true;
+        if (aMin > bMax) return false; else return !(bMin > aMax);
     }
 
     /**
@@ -169,10 +167,10 @@ public class Range implements Serializable, Comparable<Range> {
     }
 
     /**
-     * Does the range exlucde a value?
+     * Does the range exclude a value?
      *
      * @param value the value to test.
-     * @return if the range exlucdes the value, true. Otherwise, false
+     * @return if the range excludes the value, true. Otherwise, false
      */
     public boolean excludes(double value) {
         return !includes(value);

@@ -49,7 +49,7 @@ public class LinearTrajectory implements Trajectory {
      * Should Pathfinder dance? Please note that this should ALWAYS be false
      * in any project that's used in competition. This is just for fun.
      */
-    public static boolean SHOULD_SHUFFLE = false;
+    public static final boolean SHOULD_SHUFFLE = false;
     /**
      * The trajectory's target point.
      */

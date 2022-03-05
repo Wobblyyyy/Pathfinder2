@@ -113,7 +113,6 @@ public abstract class AbstractThreeAxisGyroscope implements ThreeAxisGyroscope {
             case USE_ROLL_AS_ANGLE:
                 return getRoll();
             case USE_PITCH_AS_ANGLE:
-                return getPitch();
             case DEFAULT:
             case USE_YAW_AS_ANGLE:
                 return getPitch();

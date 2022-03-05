@@ -38,9 +38,9 @@ import me.wobblyyyy.pathfinder2.utils.StringUtils;
  * @since 0.6.1
  */
 public class AdvancedSplineTrajectoryBuilder {
-    public static InterpolationMode DEFAULT_INTERPOLATION_MODE =
+    public static final InterpolationMode DEFAULT_INTERPOLATION_MODE =
         InterpolationMode.DEFAULT;
-    public static Consumer<String> DEFAULT_LOGGER = msg -> {};
+    public static final Consumer<String> DEFAULT_LOGGER = msg -> {};
 
     private final List<Double> xValues = new ArrayList<>();
     private final List<Double> yValues = new ArrayList<>();

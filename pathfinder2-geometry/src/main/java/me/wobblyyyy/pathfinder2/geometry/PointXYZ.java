@@ -287,6 +287,7 @@ public class PointXYZ extends PointXY {
      * @return a new {@code PointXYZ} instance with an X value of 0, a Y
      * value of 0, and a Z value of 0 degrees.
      */
+    @SuppressWarnings("SameReturnValue")
     public static PointXYZ zero() {
         return PointXYZ.ZERO;
     }
@@ -642,7 +643,7 @@ public class PointXYZ extends PointXY {
     /**
      * Add a Z value to this point and return it.
      *
-     * @param y the value to add.
+     * @param zDegrees the value to add.
      * @return the new point.
      */
     public PointXYZ addZ(double zDegrees) {
@@ -652,7 +653,7 @@ public class PointXYZ extends PointXY {
     /**
      * Add a Z value to this point and return it.
      *
-     * @param y the value to add.
+     * @param z the value to add.
      * @return the new point.
      */
     public PointXYZ addZ(Angle z) {
@@ -836,7 +837,7 @@ public class PointXYZ extends PointXY {
     /**
      * Is {@code this} point close to another point?
      *
-     * @param b              the point.
+     * @param a              the point.
      * @param tolerance      the maximum distance value.
      * @param angleTolerance the maximum angle delta distance value.
      * @return if the `distance(a, b)` method call returns a value less than

@@ -186,7 +186,7 @@ public class MutableLinearTrajectory implements Trajectory {
             if (current == null) return false;
             if (isDoneXY(current) && isDoneHeading(current)) isFinished = true;
         } else {
-            return isFinished;
+            return true;
         }
 
         return isFinished && canFinish;

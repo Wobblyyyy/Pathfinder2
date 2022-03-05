@@ -5,7 +5,7 @@
 ## The `AdvancedSplineTrajectory` class
 `AdvancedSplineTrajectory` implements the `Trajectory` interface and uses
 several splines to guide the robot along a path. The robot's speed, target
-position, and target angle are all independent of eachother and are controlled
+position, and target angle are all independent of each other and are controlled
 by their own individual splines.
 
 ### Creating a spline trajectory

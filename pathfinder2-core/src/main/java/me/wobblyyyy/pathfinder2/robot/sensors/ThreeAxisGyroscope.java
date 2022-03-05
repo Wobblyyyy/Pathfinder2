@@ -73,7 +73,7 @@ public interface ThreeAxisGyroscope extends Gyroscope {
     /**
      * Set the roll value's offset.
      *
-     * @param rollOffset the offset for the roll value.
+     * @param yawOffset the offset for the roll value.
      * @return {@code this}, used for method chaining.
      */
     ThreeAxisGyroscope setYawOffset(Angle yawOffset);

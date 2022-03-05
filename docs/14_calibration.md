@@ -209,7 +209,7 @@ public class ExampleModifier {
 ```
 
 ### Calibrating drive train
-Drive train calibration is very similiar to odometry calibration. You just
+Drive train calibration is very similar to odometry calibration. You just
 need to make sure your robot goes forwards when you tell it to go forwards
 and rightwards when you tell it to go rightwards... you get the point.
 
@@ -220,7 +220,7 @@ correctly. Such, I'd like to save you a potential headache and give you a
 quick PSA on calibrating your motors, the right way.
 
 The basic premise of motor calibration is that you should test a singular
-motor, have it spin forwards, and make sure it actually spun forwarads. If
+motor, have it spin forwards, and make sure it actually spun forwards. If
 it didn't, try inverting the motor.
 
 After you've calibrated each motor individually, try testing all four at
@@ -276,7 +276,7 @@ public class ExampleDrive implements Drive {
 #### Drive train modifiers
 Drive train modifiers are not as useful on drive trains as they are on
 odometry systems. However, drive train modifiers are still useful (and
-sometimes neccesary).
+sometimes necessary).
 
 ##### X and Y are swapped
 This is a pretty common modifier. It's also pretty simple, thankfully.

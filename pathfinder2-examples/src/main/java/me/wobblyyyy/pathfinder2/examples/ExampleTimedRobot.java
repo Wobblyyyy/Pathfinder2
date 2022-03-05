@@ -26,7 +26,7 @@ public class ExampleTimedRobot extends TimedRobot {
     private final Joystick leftJoystick = new Joystick(0);
     private final Joystick rightJoystick = new Joystick(1);
 
-    private Controller controller = new ProportionalController(0.01);
+    private final Controller controller = new ProportionalController(0.01);
     private Drive drive;
     private Odometry odometry;
     private Robot robot;

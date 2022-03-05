@@ -33,7 +33,5 @@ public class TestMovementRecorder {
         ElapsedTimer timer = new ElapsedTimer(true);
 
         while (timer.elapsedSeconds() < 2) pf.tick();
-
-        return;
     }
 }

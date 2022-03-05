@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
@@ -231,7 +232,7 @@ public class ArrayUtils {
     public static <T> List<T> toList(T[] arr) {
         List<T> list = new ArrayList<>(arr.length);
 
-        for (T t : arr) list.add(t);
+        Collections.addAll(list, arr);
 
         return list;
     }
@@ -414,8 +415,7 @@ public class ArrayUtils {
     /**
      * Compare two arrays to see if they're equal.
      *
-     * @param a the first of the two arrays.
-     * @param b the second of the two arrays.
+     * @param arrays the first of the two arrays.
      * @return if each of the elements in the arrays are equal, return true.
      * Otherwise, return false.
      */

@@ -1,6 +1,6 @@
 # Fast Trajectory
 The [`FastTrajectory`](./pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/trajectory/FastTrajectory.java)
-is similiar to the `LinearTrajectory`, except that it doesn't require the
+is similar to the `LinearTrajectory`, except that it doesn't require the
 robot to compensate for potential error, and it doesn't require the robot
 to meet the desired heading before completion.
 

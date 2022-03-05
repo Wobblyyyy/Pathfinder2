@@ -17,8 +17,9 @@ package me.wobblyyyy.pathfinder2.utils;
  * @since 0.7.1
  */
 public class RandomString {
-    public static char[] LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-    public static char[] NUMBERS = "123456789".toCharArray();
+    public static final char[] LETTERS =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+    public static final char[] NUMBERS = "123456789".toCharArray();
 
     public static char randomLetter() {
         return LETTERS[(int) Math.floor(Math.random() * LETTERS.length)];

@@ -26,7 +26,7 @@ public class Rounding {
     /**
      * The default number of places to round to.
      */
-    public static int DEFAULT_PLACES = 3;
+    public static final int DEFAULT_PLACES = 3;
 
     /**
      * Round a number value to an integer.

@@ -3,7 +3,7 @@ This tutorial covers how to set up a basic Pathfinder-enabled robot.
 
 The [calibration guide](./14_calibration.md) is a great starting point for
 trying to make sure your robot is properly set up. You should (almost
-certainly) give this a breif look-over before diving into the library.
+certainly) give this a brief look-over before diving into the library.
 
 ## Setting up the drive train
 Before you begin using Pathfinder, you'll need to make sure your drivetrain

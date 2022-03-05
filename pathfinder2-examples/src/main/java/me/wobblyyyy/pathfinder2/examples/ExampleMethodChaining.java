@@ -49,7 +49,6 @@ public class ExampleMethodChaining {
      * Pathfinder has finished following its path. There's a variety of
      * ways to improve upon this that we can explore later.
      */
-    @SuppressWarnings("DuplicatedCode")
     public void autonomousDrive() {
         pathfinder
             .goTo(new PointXYZ(0, 0, 0))

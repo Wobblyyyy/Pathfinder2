@@ -26,6 +26,7 @@ public class TestArcTrajectory extends GenericTrajectoryTester {
             Angle.fromDeg(i * 15);
     }
 
+    @SuppressWarnings("deprecation")
     private void testSingleArcTrajectory(
         Angle startAngle,
         Angle size,

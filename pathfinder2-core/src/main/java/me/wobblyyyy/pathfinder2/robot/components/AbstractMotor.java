@@ -30,21 +30,12 @@ import java.util.function.Supplier;
  * no point in wasting resources trying to do so.
  * </p>
  *
- * <p>
- * You can override the following methods instead of passing functional
- * interfaces to a constructor:
- * <ul>
- *     <li>{@link #rawGetPower()}</li>
- *     <li>{@link #rawSetPower(double)}</li>
- * </ul>
- * </p>
- *
  * @author Colin Robertson
  * @since 0.0.0
  */
 public class AbstractMotor extends BaseMotor {
-    private Consumer<Double> setPower;
-    private Supplier<Double> getPower;
+    private final Consumer<Double> setPower;
+    private final Supplier<Double> getPower;
 
     /**
      * Create a new {@code AbstractMotor} using a {@link Supplier} and a
