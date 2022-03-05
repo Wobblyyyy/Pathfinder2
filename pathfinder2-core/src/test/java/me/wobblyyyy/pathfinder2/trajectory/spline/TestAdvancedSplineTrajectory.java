@@ -153,4 +153,23 @@ public class TestAdvancedSplineTrajectory extends TestableRobot {
                 new PointXYZ(130, 120, 0)
         );
     }
+
+    @Test
+    public void testBackwardsLongLinearSpline() {
+        testSplineTo(
+                new PointXYZ(10, 0, 0).multiply(-1),
+                new PointXYZ(20, 10, 0).multiply(-1),
+                new PointXYZ(30, 20, 0).multiply(-1),
+                new PointXYZ(40, 30, 0).multiply(-1),
+                new PointXYZ(50, 40, 0).multiply(-1),
+                new PointXYZ(60, 50, 0).multiply(-1),
+                new PointXYZ(70, 60, 0).multiply(-1),
+                new PointXYZ(80, 70, 0).multiply(-1),
+                new PointXYZ(90, 80, 0).multiply(-1),
+                new PointXYZ(100, 90, 0).multiply(-1),
+                new PointXYZ(110, 100, 0).multiply(-1),
+                new PointXYZ(120, 110, 0).multiply(-1),
+                new PointXYZ(130, 120, 0).multiply(-1)
+        );
+    }
 }
