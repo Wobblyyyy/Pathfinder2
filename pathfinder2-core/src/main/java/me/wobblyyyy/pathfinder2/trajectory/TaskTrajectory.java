@@ -97,8 +97,7 @@ public class TaskTrajectory implements Trajectory {
         boolean validMin = elapsedTime > minTimeMs;
         boolean validMax = elapsedTime < maxTimeMs;
 
-        if (!validMin) isDone = false;
-        else if (!validMax) isDone = true;
+        if (!validMin) isDone = false; else if (!validMax) isDone = true;
 
         if (!hasExecuted) {
             timer.start();

@@ -10,17 +10,15 @@
 
 package me.wobblyyyy.pathfinder2.wpilib;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-
+import me.wobblyyyy.pathfinder2.TestableRobot;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import me.wobblyyyy.pathfinder2.TestableRobot;
-import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 public class TestCommandTaskTrajectory extends TestableRobot {
     private Runnable runInitialize;
@@ -36,28 +34,30 @@ public class TestCommandTaskTrajectory extends TestableRobot {
         runInitialize = () -> {};
         runExecute = () -> {};
         runIsFinished = () -> false;
-        runEnd = (wasInterrupted) -> {};
-        command = new CommandBase() {
-            @Override
-            public void initialize() {
-                runInitialize.run();
-            }
+        runEnd = wasInterrupted -> {};
+        command =
+            new CommandBase() {
 
-            @Override
-            public void execute() {
-                runExecute.run();
-            }
+                @Override
+                public void initialize() {
+                    runInitialize.run();
+                }
 
-            @Override
-            public boolean isFinished() {
-                return runIsFinished.get();
-            }
+                @Override
+                public void execute() {
+                    runExecute.run();
+                }
 
-            @Override
-            public void end(boolean wasInterrupted) {
-                runEnd.accept(wasInterrupted);
-            }
-        };
+                @Override
+                public boolean isFinished() {
+                    return runIsFinished.get();
+                }
+
+                @Override
+                public void end(boolean wasInterrupted) {
+                    runEnd.accept(wasInterrupted);
+                }
+            };
         trajectory = new CommandTaskTrajectory(command);
     }
 

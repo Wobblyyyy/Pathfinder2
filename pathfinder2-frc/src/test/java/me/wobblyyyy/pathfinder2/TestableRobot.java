@@ -62,7 +62,7 @@ public class TestableRobot {
     @AfterEach
     public void afterEach() {
         robot.setPosition(new PointXYZ());
-        
+
         hasBeforeEachBeenCalled = false;
     }
 

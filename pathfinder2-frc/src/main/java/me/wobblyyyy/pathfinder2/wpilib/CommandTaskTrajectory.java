@@ -38,12 +38,13 @@ public class CommandTaskTrajectory implements Trajectory {
      *                state of the provided {@code Command}.
      */
     public CommandTaskTrajectory(Command command) {
-        trajectory = new TaskTrajectoryBuilder()
-            .setInitial(command::initialize)
-            .setDuring(command::execute)
-            .setOnFinish(() -> command.end(false))
-            .setIsFinished(command::isFinished)
-            .build();
+        trajectory =
+            new TaskTrajectoryBuilder()
+                .setInitial(command::initialize)
+                .setDuring(command::execute)
+                .setOnFinish(() -> command.end(false))
+                .setIsFinished(command::isFinished)
+                .build();
     }
 
     @Override
