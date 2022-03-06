@@ -91,12 +91,22 @@ public class ProportionalController extends AbstractController {
 
     @Override
     public String toString() {
+        double min = getMin();
+        double max = getMax();
+
+        String minString = Double.isInfinite(min)
+            ? ""
+            : StringUtils.concat(" min: ", StringUtils.wrap(min));
+        String maxString = Double.isInfinite(min)
+            ? ""
+            : StringUtils.concat(" max: ", StringUtils.wrap(max));
+
         return StringUtils.format(
-            "ProportionalController (coeff: <%s> min: <%s> max: <%s> target: <%s>)",
+            "ProportionalController (coeff: <%s> target: <%s>%s%s)",
             coefficient,
-            getMin(),
-            getMax(),
-            getTarget()
+            getTarget(),
+            minString,
+            maxString
         );
     }
 }

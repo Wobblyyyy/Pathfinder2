@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.geometry;
 
 import java.io.Serializable;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.math.Rounding;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
@@ -169,6 +170,17 @@ public class Translation implements Serializable {
 
     /**
      * Create a new {@code Translation} by using the X and Y values of the
+     * provided point.
+     *
+     * @param point the point to create a {@code Translation} based on.
+     * @param vz    the translation's vz value.
+     */
+    public static Translation fromPointXY(PointXY point, double vz) {
+        return new Translation(point.x(), point.y(), vz);
+    }
+
+    /**
+     * Create a new {@code Translation} by using the X and Y values of the
      * provided point. The point will have a vz value of the degrees value
      * of the point.
      *
@@ -196,24 +208,29 @@ public class Translation implements Serializable {
      * @see <a href="https://pdocs.kauailabs.com/navx-mxp/examples/field-oriented-drive/">Field-oriented drive</a>
      */
     public static Translation absoluteToRelative(
-        Translation translation,
+        Translation absoluteTranslation,
         Angle heading
     ) {
-        ValidationUtils.validate(translation, "translation");
+        ValidationUtils.validate(absoluteTranslation, "absoluteTranslation");
         ValidationUtils.validate(heading, "heading");
 
-        /*
-        PointXY point = PointXY.ZERO.inDirection(
-                translation.magnitude(),
-                translation.angle().add(heading)
-        );
-        */
-
-        PointXY point = translation
+        PointXY point = absoluteTranslation
             .point()
             .rotate(PointXY.ZERO, heading.multiply(-1));
+        Translation relativeTranslation = fromPointXY(
+            point,
+            absoluteTranslation.vz()
+        );
 
-        return new Translation(point.x(), point.y(), translation.vz());
+        Logger.trace(
+            Translation.class,
+            "Converted absolute %s to relative %s (heading: %s)",
+            absoluteTranslation,
+            relativeTranslation,
+            heading
+        );
+
+        return relativeTranslation;
     }
 
     /**

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
@@ -61,6 +62,15 @@ public class FollowerExecutor {
         ValidationUtils.validate(followers, "followers");
 
         for (Follower follower : followers) ValidationUtils.validate(follower);
+
+        Logger.trace(
+            FollowerExecutor.class,
+            "Created FollowerExecutor (odometry: <%s> drive: <%s> " +
+            "followers: <%s>)",
+            odometry,
+            drive,
+            followers
+        );
 
         this.odometry = odometry;
         this.drive = drive;

@@ -15,23 +15,49 @@ import java.util.Map;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 /**
- * Pathfinder's main logging API.
+ * Pathfinder's main logging API. The logging level Pathfinder uses can be
+ * configured using {@Link #setLoggingLevel(LogLevel)}. By default, Pathfinder
+ * will use the logging level {@link LogLevel#WARN}, which will only output
+ * warnings.
+ *
+ * <p>
+ * All of the log outputs included in Pathfinder's source code can be
+ * disabled by changing {@link #arePathfinderLogsEnabled}. You can do that
+ * using the following methods:
+ * <ul>
+ *     <li>{@link #setArePathfinderLogsEnabled(boolean)}</li>
+ *     <li>{@link #enablePathfinderLogging()}</li>
+ *     <li>{@link #disablePathfinderLogging()}</li>
+ * </ul>
+ * If you're using the default logging level ({@link LogLevel#WARN}), you
+ * likely won't need to change this setting, as Pathfinder only emits logs
+ * with severity levels of {@code WARN} or above ({@code ERROR} and
+ * {@code FATAL}) if something has gone wrong enough that you should probably
+ * know about it.
+ * </p>
  *
  * @author Colin Robertson
  * @since 2.0.0
  */
 public class Logger {
-    private static LogLevel loggingLevel = LogLevel.DEBUG;
+    private static LogLevel loggingLevel = LogLevel.WARN;
     private static Map<Object, String> map = new HashMap<>();
+    private static boolean arePathfinderLogsEnabled = true;
 
-    static {
-        addFilter("", "me.wobblyyyy", LogFilter.INCLUDES);
-    }
-
+    /**
+     * Get the current logging level.
+     *
+     * @return the current logging level.
+     */
     public static LogLevel getLoggingLevel() {
         return loggingLevel;
     }
 
+    /**
+     * Set Pathfinder's logging level.
+     *
+     * @param loggingLevel the logging level to use.
+     */
     public static void setLoggingLevel(LogLevel loggingLevel) {
         Logger.loggingLevel = loggingLevel;
     }
@@ -46,11 +72,39 @@ public class Logger {
         map.remove(key);
     }
 
+    /**
+     * Set whether Pathfinder's built-in logs should be outputted.
+     *
+     * @param arePathfinderLogsEnabled true if Pathfinder's default logs should
+     *                                 be outputted. False if Pathfinder's
+     *                                 default logs should not be outputted.
+     */
+    public static void setArePathfinderLogsEnabled(
+        boolean arePathfinderLogsEnabled
+    ) {
+        Logger.arePathfinderLogsEnabled = arePathfinderLogsEnabled;
+    }
+
+    /**
+     * Enable Pathfinder's built-in logs.
+     */
+    public static void enablePathfinderLogging() {
+        setArePathfinderLogsEnabled(true);
+    }
+
+    /**
+     * Disable Pathfinder's built-in logs.
+     */
+    public static void disablePathfinderLogging() {
+        setArePathfinderLogsEnabled(false);
+    }
+
     private static void internalLog(
         LogLevel level,
         String tag,
         String message
     ) {
+        // don't log if the logging level is too low
         if (!loggingLevel.shouldLog(level)) return;
 
         // (hopefully) over-allocate the StringBuilder used inside of
@@ -355,6 +409,16 @@ public class Logger {
         String messageFormat,
         Object... formatSpecifiers
     ) {
+        // if pathfinder's logs are disabled, check to see if the source
+        // of the log is within pathfinder
+        if (!arePathfinderLogsEnabled) {
+            if (InternalPathfinderLogger.output == null) return;
+
+            String className = tag.getName();
+
+            if (className.contains("me.wobblyyyy.pathfinder2")) return;
+        }
+
         log(level, tag.getSimpleName(), messageFormat, formatSpecifiers);
     }
 

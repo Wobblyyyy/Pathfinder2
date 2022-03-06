@@ -18,6 +18,7 @@ import me.wobblyyyy.pathfinder2.exceptions.NullTrajectoryException;
 import me.wobblyyyy.pathfinder2.follower.Follower;
 import me.wobblyyyy.pathfinder2.follower.FollowerGenerator;
 import me.wobblyyyy.pathfinder2.follower.GenericFollower;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.robot.Robot;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
@@ -48,12 +49,17 @@ public class GenericFollowerGenerator implements FollowerGenerator {
      *                       {@link GenericFollower}s.
      */
     public GenericFollowerGenerator(Controller turnController) {
-        if (turnController == null) {
-            throw new NullControllerException(
-                "Can't create a generic follower generator with " +
-                "a null turn controller!"
-            );
-        }
+        if (turnController == null) throw new NullControllerException(
+            "Can't create a generic follower generator with " +
+            "a null turn controller!"
+        );
+
+        Logger.trace(
+            GenericFollowerGenerator.class,
+            "Created new GenericFollowerGenerator (controller: <%s>)",
+            turnController
+        );
+
         this.turnController = turnController;
     }
 

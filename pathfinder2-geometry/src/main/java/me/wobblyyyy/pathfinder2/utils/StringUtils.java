@@ -297,4 +297,50 @@ public class StringUtils {
     public static boolean excludesIgnoreCase(String base, String search) {
         return !includesIgnoreCase(base, search);
     }
+
+    public static String concat(String... strings) {
+        int length = 0;
+        for (String string : strings) length += string.length();
+
+        StringBuilder builder = new StringBuilder(length);
+        for (String string : strings) builder.append(string);
+
+        return builder.toString();
+    }
+
+    public static String wrap(String prefix, String suffix, String string) {
+        return concat(prefix, suffix, string);
+    }
+
+    public static String wrap(char prefix, char suffix, Object obj) {
+        String string = obj.toString();
+
+        StringBuilder builder = new StringBuilder(string.length() + 2);
+
+        builder.append(prefix);
+        builder.append(string);
+        builder.append(suffix);
+
+        return builder.toString();
+    }
+
+    public static String wrapWithBraces(Object obj) {
+        return wrap('(', ')', obj);
+    }
+
+    public static String wrapWithSquareBraces(Object obj) {
+        return wrap('[', ']', obj);
+    }
+
+    public static String wrapWithCurlyBraces(Object obj) {
+        return wrap('{', '}', obj);
+    }
+
+    public static String wrapWithDiamondBraces(Object obj) {
+        return wrap('<', '>', obj);
+    }
+
+    public static String wrap(Object obj) {
+        return wrapWithDiamondBraces(obj);
+    }
 }
