@@ -12,6 +12,8 @@ package me.wobblyyyy.pathfinder2.movement;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.logging.Logger;
+import me.wobblyyyy.pathfinder2.math.Rounding;
 import me.wobblyyyy.pathfinder2.math.Velocity;
 import me.wobblyyyy.pathfinder2.time.Time;
 
@@ -73,11 +75,18 @@ public class MovementProfiler {
 
         if (this.timeMs == 0) this.timeMs = timeMs;
 
+        Logger.trace(
+            MovementProfiler.class,
+            "Current position: %s, previous position: %s",
+            position,
+            this.position
+        );
+
         double deltaMs = fixValue(timeMs - this.timeMs);
         double deltaSec = fixValue(deltaMs / 1_000);
-        double dx = fixValue(position.distanceX(this.position));
-        double dy = fixValue(position.distanceY(this.position));
-        double dxy = fixValue(position.distance(this.position));
+        double dx = fixValue(this.position.distanceX(position));
+        double dy = fixValue(this.position.distanceY(position));
+        double dxy = fixValue(this.position.distance(position));
         double dzDeg = fixValue(position.z().deg() - this.position.z().deg());
         double dxPs = fixValue(dx / deltaSec);
         double dyPs = fixValue(dy / deltaSec);
@@ -100,6 +109,38 @@ public class MovementProfiler {
         this.yUnitsPerSec = dyPs;
         this.zDegreesPerSec = dyPs;
         this.timeMs = timeMs;
+
+        Logger.trace(
+            MovementProfiler.class,
+            "delta ms: %s, delta sec: %s, dx: %s, dy: %s, dxy: %s, dzDeg: %s" +
+            ", dxPs: %s, dyPs: %s, dzDegPs: %s, d: %s, dXp: %s, dYp: %s, dZp" +
+            ": %s, dXps: %s, dYps: %s, dZps: %s, dps: %s, angle: %s, " +
+            "position: %s, xUnitsPerSec: %s, yUnitsPerSec: %s, zDegreesPer" +
+            "Sec: %s, timeMs: %s",
+            Rounding.fastRound(deltaMs),
+            Rounding.fastRound(deltaSec),
+            Rounding.fastRound(dx),
+            Rounding.fastRound(dy),
+            Rounding.fastRound(dxy),
+            Rounding.fastRound(dzDeg),
+            Rounding.fastRound(dxPs),
+            Rounding.fastRound(dyPs),
+            Rounding.fastRound(dzDegPs),
+            Rounding.fastRound(d),
+            Rounding.fastRound(dXp),
+            Rounding.fastRound(dYp),
+            Rounding.fastRound(dZp),
+            Rounding.fastRound(dXps),
+            Rounding.fastRound(dYps),
+            Rounding.fastRound(dZps),
+            Rounding.fastRound(dps),
+            angle,
+            position,
+            Rounding.fastRound(xUnitsPerSec),
+            Rounding.fastRound(yUnitsPerSec),
+            Rounding.fastRound(zDegreesPerSec),
+            Rounding.fastRound(timeMs)
+        );
 
         MovementSnapshot snapshot = new MovementSnapshot()
             .setAccelerationXY(dps)

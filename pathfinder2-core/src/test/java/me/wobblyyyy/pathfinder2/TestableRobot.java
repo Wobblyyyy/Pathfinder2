@@ -121,4 +121,8 @@ public class TestableRobot {
             }
         );
     }
+
+    public void setPosition(PointXYZ position) {
+        robot.setPosition(position);
+    }
 }

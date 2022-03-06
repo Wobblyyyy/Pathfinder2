@@ -16,6 +16,7 @@ import java.util.List;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 /**
  * A measurement of velocity - motion in a given direction. This velocity can
@@ -194,5 +195,14 @@ public class Velocity implements Serializable {
         }
 
         return nearestVelocities;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(
+            "(speed: %s, direction: %s)",
+            speed,
+            direction
+        );
     }
 }
