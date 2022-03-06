@@ -281,4 +281,20 @@ public class StringUtils {
     public static void printf(String template, Object... sources) {
         printf(System.out::println, template, sources);
     }
+
+    public static boolean includes(String base, String search) {
+        return base.contains(search);
+    }
+
+    public static boolean includesIgnoreCase(String base, String search) {
+        return includes(base.toLowerCase(), search.toLowerCase());
+    }
+
+    public static boolean excludes(String base, String search) {
+        return !includes(base, search);
+    }
+
+    public static boolean excludesIgnoreCase(String base, String search) {
+        return !includesIgnoreCase(base, search);
+    }
 }
