@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.control;
 
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
@@ -144,5 +145,15 @@ public abstract class AbstractController implements Controller {
         setTarget(target);
 
         return calculate(value);
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(
+            "Controller (target: <%s> min: <%s> max: <%s>)",
+            getTarget(),
+            getMin(),
+            getMax()
+        );
     }
 }

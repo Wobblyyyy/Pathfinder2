@@ -15,6 +15,7 @@ import java.util.List;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.math.MonotoneCubicSpline;
 import me.wobblyyyy.pathfinder2.math.Spline;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 /**
  * A wrapper class for using {@link Spline}s with {@link Angle}s.
@@ -87,5 +88,14 @@ public class AngleSpline {
 
             return new AngleSpline(unboxedX, angles);
         }
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(
+            "AngleSpline (start: <%s> end: <%s>)",
+            Angle.fixedDeg(spline.getStartPoint().y()),
+            Angle.fixedDeg(spline.getEndPoint().y())
+        );
     }
 }

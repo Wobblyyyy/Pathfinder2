@@ -10,11 +10,14 @@
 
 package me.wobblyyyy.pathfinder2.listening;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.time.Time;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
@@ -355,5 +358,23 @@ public class Listener implements Tickable {
         if (!hasBeenNotMet) hasBeenNotMet = true;
 
         return true;
+    }
+
+    private static List<Boolean> convertList(Supplier<Boolean>[] list) {
+        List<Boolean> ret = new ArrayList<>(list.length);
+
+        for (Supplier<Boolean> s : list) ret.add(s.get());
+
+        return ret;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(
+            "Listener (mode: <%s> inputs: <%s> priority: <%s>)",
+            mode,
+            convertList(input),
+            priority
+        );
     }
 }

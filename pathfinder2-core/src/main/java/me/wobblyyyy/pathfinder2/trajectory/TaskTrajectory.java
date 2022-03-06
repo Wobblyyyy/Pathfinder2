@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.trajectory;
 import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 /**
  * A task-oriented {@code Trajectory} interface that does not require the
@@ -125,5 +126,14 @@ public class TaskTrajectory implements Trajectory {
      */
     public void end() {
         isFinished = () -> true;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(
+            "TaskTrajectory (min: <%s> max: <%s>)",
+            minTimeMs,
+            maxTimeMs
+        );
     }
 }

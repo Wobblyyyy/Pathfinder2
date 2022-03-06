@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.math;
 
 import me.wobblyyyy.pathfinder2.geometry.LinearEquation;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 /**
  * A spline based on a linear equation.
@@ -44,5 +45,13 @@ public class LinearSpline implements Spline {
     @Override
     public PointXY getEndPoint() {
         return interpolate(0);
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(
+            "LinearSpline (slope: <%s>)",
+            equation.getSlope()
+        );
     }
 }

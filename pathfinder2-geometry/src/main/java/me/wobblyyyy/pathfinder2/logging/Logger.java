@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.logging;
 
+import java.util.HashMap;
+import java.util.Map;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 /**
@@ -19,8 +21,12 @@ import me.wobblyyyy.pathfinder2.utils.StringUtils;
  * @since 2.0.0
  */
 public class Logger {
-    // private static LogLevel loggingLevel = LogLevel.WARN;
     private static LogLevel loggingLevel = LogLevel.DEBUG;
+    private static Map<Object, String> map = new HashMap<>();
+
+    static {
+        addFilter("", "me.wobblyyyy", LogFilter.INCLUDES);
+    }
 
     public static LogLevel getLoggingLevel() {
         return loggingLevel;
@@ -28,6 +34,16 @@ public class Logger {
 
     public static void setLoggingLevel(LogLevel loggingLevel) {
         Logger.loggingLevel = loggingLevel;
+    }
+
+    public static void addFilter(Object key, String filter, LogFilter mode) {
+        map.put(key, filter);
+        InternalPathfinderLogger.filters.put(filter, mode);
+    }
+
+    public static void removeFilter(Object key) {
+        InternalPathfinderLogger.filters.remove(map.get(key));
+        map.remove(key);
     }
 
     private static void internalLog(

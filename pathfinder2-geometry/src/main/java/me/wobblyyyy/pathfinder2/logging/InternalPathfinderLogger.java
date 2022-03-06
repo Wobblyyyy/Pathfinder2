@@ -46,19 +46,19 @@ public class InternalPathfinderLogger {
 
                 switch (mode) {
                     case INCLUDES:
-                        if (StringUtils.includes(message, string)) return;
+                        if (!StringUtils.includes(message, string)) return;
                         break;
                     case EXCLUDES:
-                        if (StringUtils.excludes(message, string)) return;
+                        if (!StringUtils.excludes(message, string)) return;
                         break;
                     case INCLUDES_IGNORE_CASE:
                         if (
-                            StringUtils.includesIgnoreCase(message, string)
+                            !StringUtils.includesIgnoreCase(message, string)
                         ) return;
                         break;
                     case EXCLUDES_IGNORE_CASE:
                         if (
-                            StringUtils.excludesIgnoreCase(message, string)
+                            !StringUtils.excludesIgnoreCase(message, string)
                         ) return;
                         break;
                 }

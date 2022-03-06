@@ -17,6 +17,7 @@ import me.wobblyyyy.pathfinder2.math.Min;
 import me.wobblyyyy.pathfinder2.math.MinMax;
 import me.wobblyyyy.pathfinder2.math.Spline;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 /**
  * The most simple spline-based trajectory - there's a single spline that
@@ -118,5 +119,10 @@ public class SplineTrajectory implements Trajectory {
     @Override
     public double speed(PointXYZ current) {
         return speed;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format("SplineTrajectory (spline: <%s>)", spline);
     }
 }

@@ -272,6 +272,7 @@ public interface Trajectory extends Serializable {
         Function<PointXYZ, Double> speedFunction = InternalTrajectoryUtils.speedFunction(
             this
         );
+        Supplier<String> _toString = this::toString;
 
         return new Trajectory() {
             boolean hasStarted = false;
@@ -302,6 +303,11 @@ public interface Trajectory extends Serializable {
             @Override
             public double speed(PointXYZ current) {
                 return speedFunction.apply(current);
+            }
+
+            @Override
+            public String toString() {
+                return _toString.get();
             }
         };
     }
@@ -350,6 +356,7 @@ public interface Trajectory extends Serializable {
         Function<PointXYZ, Double> speedFunction = InternalTrajectoryUtils.speedFunction(
             this
         );
+        Supplier<String> _toString = this::toString;
 
         return new Trajectory() {
             boolean hasStarted = false;
@@ -387,6 +394,11 @@ public interface Trajectory extends Serializable {
 
                 return speed;
             }
+
+            @Override
+            public String toString() {
+                return _toString.get();
+            }
         };
     }
 
@@ -414,6 +426,7 @@ public interface Trajectory extends Serializable {
         Function<PointXYZ, Double> speedFunction = InternalTrajectoryUtils.speedFunction(
             this
         );
+        Supplier<String> _toString = this::toString;
 
         return new Trajectory() {
 
@@ -432,6 +445,11 @@ public interface Trajectory extends Serializable {
             @Override
             public double speed(PointXYZ current) {
                 return speedModifier.apply(speedFunction.apply(current));
+            }
+
+            @Override
+            public String toString() {
+                return _toString.get();
             }
         };
     }
@@ -462,6 +480,7 @@ public interface Trajectory extends Serializable {
         Function<PointXYZ, Double> speedFunction = InternalTrajectoryUtils.speedFunction(
             this
         );
+        Supplier<String> _toString = this::toString;
 
         return new Trajectory() {
             final ElapsedTimer timer = new ElapsedTimer();
@@ -488,6 +507,11 @@ public interface Trajectory extends Serializable {
             public double speed(PointXYZ current) {
                 return speedFunction.apply(current);
             }
+
+            @Override
+            public String toString() {
+                return _toString.get();
+            }
         };
     }
 
@@ -509,6 +533,7 @@ public interface Trajectory extends Serializable {
         Function<PointXYZ, Double> speedFunction = InternalTrajectoryUtils.speedFunction(
             this
         );
+        Supplier<String> _toString = this::toString;
 
         return new Trajectory() {
 
@@ -532,6 +557,11 @@ public interface Trajectory extends Serializable {
                     current.reflectOverX(xReflectionAxis)
                 );
             }
+
+            @Override
+            public String toString() {
+                return _toString.get();
+            }
         };
     }
 
@@ -553,6 +583,7 @@ public interface Trajectory extends Serializable {
         Function<PointXYZ, Double> speedFunction = InternalTrajectoryUtils.speedFunction(
             this
         );
+        Supplier<String> _toString = this::toString;
 
         return new Trajectory() {
 
@@ -576,6 +607,11 @@ public interface Trajectory extends Serializable {
                     current.reflectOverY(yReflectionAxis)
                 );
             }
+
+            @Override
+            public String toString() {
+                return _toString.get();
+            }
         };
     }
 
@@ -595,12 +631,14 @@ public interface Trajectory extends Serializable {
         Function<PointXYZ, Double> speedFunction = InternalTrajectoryUtils.speedFunction(
             this
         );
+        Supplier<String> _toString = this::toString;
 
         return getTrajectory(
             offset,
             nextMarkerFunction,
             isDoneFunction,
-            speedFunction
+            speedFunction,
+            _toString
         );
     }
 
@@ -608,7 +646,8 @@ public interface Trajectory extends Serializable {
         PointXYZ offset,
         Function<PointXYZ, PointXYZ> nextMarkerFunction,
         Function<PointXYZ, Boolean> isDoneFunction,
-        Function<PointXYZ, Double> speedFunction
+        Function<PointXYZ, Double> speedFunction,
+        Supplier<String> _toString
     ) {
         return new Trajectory() {
 
@@ -627,6 +666,11 @@ public interface Trajectory extends Serializable {
             @Override
             public double speed(PointXYZ current) {
                 return speedFunction.apply(current.add(offset));
+            }
+
+            @Override
+            public String toString() {
+                return _toString.get();
             }
         };
     }
@@ -648,6 +692,7 @@ public interface Trajectory extends Serializable {
         Function<PointXYZ, Double> speedFunction = InternalTrajectoryUtils.speedFunction(
             this
         );
+        Supplier<String> _toString = this::toString;
 
         return new Trajectory() {
 
@@ -666,6 +711,11 @@ public interface Trajectory extends Serializable {
             @Override
             public double speed(PointXYZ current) {
                 return speedFunction.apply(current.rotate(center, angle));
+            }
+
+            @Override
+            public String toString() {
+                return _toString.get();
             }
         };
     }
@@ -687,6 +737,7 @@ public interface Trajectory extends Serializable {
         Function<PointXYZ, Double> speedFunction = InternalTrajectoryUtils.speedFunction(
             this
         );
+        Supplier<String> _toString = this::toString;
 
         PointXYZ difference = origin
             .subtract(target)
@@ -696,7 +747,8 @@ public interface Trajectory extends Serializable {
             difference,
             nextMarkerFunction,
             isDoneFunction,
-            speedFunction
+            speedFunction,
+            _toString
         );
     }
 
@@ -739,6 +791,7 @@ public interface Trajectory extends Serializable {
         Function<PointXYZ, Double> speedFunction = InternalTrajectoryUtils.speedFunction(
             this
         );
+        Supplier<String> _toString = this::toString;
 
         PointXYZ mult = new PointXYZ(
             xMultiplier,
@@ -764,6 +817,11 @@ public interface Trajectory extends Serializable {
             public double speed(PointXYZ current) {
                 return speedFunction.apply(current.multiply(mult));
             }
+
+            @Override
+            public String toString() {
+                return _toString.get();
+            }
         };
     }
 
@@ -782,6 +840,7 @@ public interface Trajectory extends Serializable {
         Function<PointXYZ, Double> speedFunction = InternalTrajectoryUtils.speedFunction(
             this
         );
+        Supplier<String> _toString = this::toString;
 
         PointXYZ mult = new PointXYZ(
             xMultiplier,
@@ -793,7 +852,8 @@ public interface Trajectory extends Serializable {
             mult,
             nextMarkerFunction,
             isDoneFunction,
-            speedFunction
+            speedFunction,
+            _toString
         );
     }
 
@@ -827,6 +887,7 @@ public interface Trajectory extends Serializable {
         Function<PointXYZ, Double> speedFunction = InternalTrajectoryUtils.speedFunction(
             this
         );
+        Supplier<String> _toString = this::toString;
 
         return new Trajectory() {
 
@@ -847,6 +908,11 @@ public interface Trajectory extends Serializable {
             @Override
             public double speed(PointXYZ current) {
                 return speedFunction.apply(current);
+            }
+
+            @Override
+            public String toString() {
+                return _toString.get();
             }
         };
     }
@@ -869,6 +935,7 @@ public interface Trajectory extends Serializable {
         Function<PointXYZ, Double> speedFunction = InternalTrajectoryUtils.speedFunction(
             this
         );
+        Supplier<String> _toString = this::toString;
 
         return new Trajectory() {
 
@@ -889,6 +956,11 @@ public interface Trajectory extends Serializable {
             @Override
             public double speed(PointXYZ current) {
                 return speedFunction.apply(current);
+            }
+
+            @Override
+            public String toString() {
+                return _toString.get();
             }
         };
     }

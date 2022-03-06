@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.math;
 import java.util.Arrays;
 import me.wobblyyyy.pathfinder2.exceptions.SplineException;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import org.apache.commons.math3.analysis.interpolation.AkimaSplineInterpolator;
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
@@ -140,5 +141,15 @@ public class ApacheSpline implements Spline {
     public enum Interpolator {
         CUBIC,
         AKIMA,
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(
+            "ApacheSpline (interpolator: <%s> start: <%s> end: <%s>)",
+            interpolator,
+            getStartPoint(),
+            getEndPoint()
+        );
     }
 }
