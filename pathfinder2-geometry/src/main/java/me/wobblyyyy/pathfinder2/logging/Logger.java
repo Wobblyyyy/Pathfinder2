@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.logging;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 /**
@@ -19,6 +20,15 @@ import me.wobblyyyy.pathfinder2.utils.StringUtils;
  * configured using {@Link #setLoggingLevel(LogLevel)}. By default, Pathfinder
  * will use the logging level {@link LogLevel#WARN}, which will only output
  * warnings.
+ *
+ * <p>
+ * To actually enable logging, you'll have to set Pathfinder's logging
+ * output like so:
+ * <ul>
+ *     <li>{@link #useSystemOutput()}</li>
+ *     <li>{@link #setOutput(Consumer)}</li>
+ * </ul>
+ * </p>
  *
  * <p>
  * All of the log outputs included in Pathfinder's source code can be
@@ -70,6 +80,14 @@ public class Logger {
     public static void removeFilter(Object key) {
         InternalPathfinderLogger.filters.remove(map.get(key));
         map.remove(key);
+    }
+
+    public static void setOutput(Consumer<String> output) {
+        InternalPathfinderLogger.setOutput(output);
+    }
+
+    public static void useSystemOutput() {
+        setOutput(System.out::print);
     }
 
     /**

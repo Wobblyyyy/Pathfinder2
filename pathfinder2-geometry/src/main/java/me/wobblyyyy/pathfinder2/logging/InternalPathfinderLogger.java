@@ -22,8 +22,7 @@ import me.wobblyyyy.pathfinder2.utils.StringUtils;
  * @since 2.0.0
  */
 public class InternalPathfinderLogger {
-    // protected static Consumer<String> output = null;
-    protected static Consumer<String> output = System.out::print;
+    protected static Consumer<String> output = null;
     protected static boolean shouldFilter = true;
     protected static Map<String, LogFilter> filters = new HashMap<>();
 
