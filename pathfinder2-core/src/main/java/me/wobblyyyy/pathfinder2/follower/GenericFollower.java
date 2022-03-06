@@ -15,7 +15,9 @@ import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
@@ -63,10 +65,24 @@ public class GenericFollower implements Follower {
         ValidationUtils.validate(trajectory, "trajectory");
         ValidationUtils.validate(turnController, "turnController");
 
+        Logger.debug(
+            GenericFollower.class,
+            "Created GenericFollower (trajectory: <%s> turn controller: <%s>)",
+            trajectory,
+            turnController
+        );
+
         this.trajectory = trajectory;
         this.turnController = turnController;
 
         turnController.setTarget(0);
+
+        Logger.trace(
+            GenericFollower.class,
+            "Set target of turn controller <%s> to <%s>",
+            turnController,
+            turnController.getTarget()
+        );
     }
 
     /**
@@ -95,9 +111,22 @@ public class GenericFollower implements Follower {
         ValidationUtils.validate(current, "current");
         ValidationUtils.validate(consumer, "consumer");
 
+        Logger.trace(
+            GenericFollower.class,
+            "Ticking follower (current pos: <%s>)",
+            current,
+            consumer
+        );
+
         // if the trajectory is done, we should stop executing this method
         // right here.
         if (trajectory.isDone(current)) {
+            Logger.debug(
+                GenericFollower.class,
+                "Finished follower for trajectory <%s>",
+                trajectory
+            );
+
             // because the trajectory has finished, we give the robot a
             // translation of zero - there's no point in moving anymore, right?
             consumer.accept(Translation.ZERO);
@@ -139,6 +168,17 @@ public class GenericFollower implements Follower {
             turn
         );
 
+        Logger.trace(
+            GenericFollower.class,
+            "Next marker: <%s>, speed: <%s>, angle delta: <%s deg>, " +
+            "turn value: <%s>, current translation: <%s>",
+            nextMarker,
+            speed,
+            angleDelta,
+            turn,
+            translation
+        );
+
         // use the consumer to accept a translation we create.
         // instead of creating an absolute translation, which would only help
         // if the robot is facing straight forwards, we have to use a relative
@@ -149,5 +189,10 @@ public class GenericFollower implements Follower {
 
         // we're not done yet, so return false.
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format("Follower for trajectory <%s>", trajectory);
     }
 }

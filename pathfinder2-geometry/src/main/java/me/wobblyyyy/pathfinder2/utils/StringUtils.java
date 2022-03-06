@@ -99,6 +99,8 @@ public class StringUtils {
         int bufferSize,
         Object... sources
     ) {
+        if (sources.length == 0) return template;
+
         if (bufferSize < 0) throw new IllegalArgumentException(
             "Buffer size must " +
             "be a positive integer (or zero) but it was " +
@@ -106,8 +108,6 @@ public class StringUtils {
         );
 
         ValidationUtils.validate(template, "template");
-
-        for (Object source : sources) ValidationUtils.validate(source);
 
         StringBuilder buffer = new StringBuilder(bufferSize);
 

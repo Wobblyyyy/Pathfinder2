@@ -20,6 +20,7 @@ import me.wobblyyyy.pathfinder2.follower.FollowerGenerator;
 import me.wobblyyyy.pathfinder2.follower.GenericFollower;
 import me.wobblyyyy.pathfinder2.robot.Robot;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 /**
  * A {@link FollowerGenerator} that generates a lovely {@link GenericFollower}.
@@ -88,5 +89,13 @@ public class GenericFollowerGenerator implements FollowerGenerator {
 
     public Controller getTurnController() {
         return turnController;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(
+            "GenericFollowerGenerator (turn controller: <%s>)",
+            turnController
+        );
     }
 }

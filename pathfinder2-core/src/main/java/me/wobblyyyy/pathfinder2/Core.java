@@ -99,6 +99,18 @@ public class Core {
     public static final String linearTrajectoryFormat =
         "Linear trajectory to %s at %s speed (tolerance %s %s)";
 
+    public static final String fastTrajectoryFormat =
+        "Fast trajectory from %s to %s at %s speed";
+
+    public static final String advancedSplineTrajectoryFormat =
+        "Advanced spline trajectory following spline %s (tolerance %s %s)";
+
+    public static final String commandTaskTrajectoryFormat =
+        "CommandTaskTrajectory";
+
+    public static final String timedTrajectoryFormat =
+        "Timed trajectory (translation: <%s> time: <%s ms>)";
+
     /**
      * The multiplier that will be applied to the trajectory's speed
      * whenever the {@code isDone(PointXYZ)} method return trues.

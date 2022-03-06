@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.control;
 
 import me.wobblyyyy.pathfinder2.math.MinMax;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
@@ -86,5 +87,16 @@ public class ProportionalController extends AbstractController {
         ValidationUtils.validate(delta, "delta");
 
         return MinMax.clip(delta * coefficient, getMin(), getMax());
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(
+            "ProportionalController (coeff: <%s> min: <%s> max: <%s> target: <%s>)",
+            coefficient,
+            getMin(),
+            getMax(),
+            getTarget()
+        );
     }
 }

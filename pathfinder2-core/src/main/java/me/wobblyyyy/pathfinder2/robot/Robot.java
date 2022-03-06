@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.robot;
 
 import me.wobblyyyy.pathfinder2.exceptions.NullDriveException;
 import me.wobblyyyy.pathfinder2.exceptions.NullOdometryException;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
@@ -91,5 +92,14 @@ public class Robot {
         ValidationUtils.validate(odometry, "odometry");
         this.odometry = odometry;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(
+            "Robot (odometry: <%s> drive: <%s>)",
+            odometry,
+            drive
+        );
     }
 }

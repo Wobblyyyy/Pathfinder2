@@ -92,4 +92,21 @@ public class MultiSegmentTrajectory implements Trajectory {
 
         return 0.0;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("MultiSegmentTrajectory (");
+
+        for (Trajectory trajectory : trajectories) {
+            builder.append(trajectory);
+            builder.append(',');
+        }
+
+        if (trajectories.size() > 0) builder.setLength(builder.length() - 1);
+
+        builder.append(')');
+        return builder.toString();
+    }
 }

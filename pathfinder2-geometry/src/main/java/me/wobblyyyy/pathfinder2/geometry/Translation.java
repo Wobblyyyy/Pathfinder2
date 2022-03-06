@@ -12,6 +12,7 @@ package me.wobblyyyy.pathfinder2.geometry;
 
 import java.io.Serializable;
 import me.wobblyyyy.pathfinder2.math.Equals;
+import me.wobblyyyy.pathfinder2.math.Rounding;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
@@ -579,7 +580,12 @@ public class Translation implements Serializable {
 
     @Override
     public String toString() {
-        return StringUtils.format(Geometry.formatTranslation, vx, vy, vz);
+        return StringUtils.format(
+            Geometry.formatTranslation,
+            Rounding.fastRound(vx),
+            Rounding.fastRound(vy),
+            Rounding.fastRound(vz)
+        );
     }
 
     @Override

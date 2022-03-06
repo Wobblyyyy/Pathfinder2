@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.robot.simulated;
 import java.util.function.Function;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.Drive;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
@@ -83,5 +84,13 @@ public class SimulatedDrive implements Drive {
     @Override
     public void setDriveModifier(Function<Translation, Translation> modifier) {
         this.modifier = modifier;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(
+            "SimulatedDrive (translation: <%s>)",
+            translation
+        );
     }
 }

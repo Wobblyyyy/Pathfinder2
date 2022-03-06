@@ -10,9 +10,11 @@
 
 package me.wobblyyyy.pathfinder2.trajectory;
 
+import me.wobblyyyy.pathfinder2.Core;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
 import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 /**
  * Another rather simple type of trajectory. Like the {@link LinearTrajectory},
@@ -136,5 +138,10 @@ public class FastTrajectory implements Trajectory {
     @Override
     public double speed(PointXYZ current) {
         return speed;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(Core.fastTrajectoryFormat, start, end, speed);
     }
 }

@@ -17,6 +17,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import me.wobblyyyy.pathfinder2.Core;
 import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.utils.RandomString;
 import me.wobblyyyy.pathfinder2.utils.Toggle;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
@@ -61,6 +62,14 @@ public class ListenerManager implements Tickable {
     public ListenerManager addListener(String name, Listener listener) {
         ValidationUtils.validate(name, "name");
         ValidationUtils.validate(listener, "listener");
+
+        Logger.debug(
+            ListenerManager.class,
+            "Adding listener (name: <%s> listener: <%s> total listeners: <%s>)",
+            name,
+            listener,
+            listeners.size() + 1
+        );
 
         listeners.put(name, listener);
 

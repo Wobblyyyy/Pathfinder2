@@ -19,12 +19,24 @@ import me.wobblyyyy.pathfinder2.utils.StringUtils;
  * @since 2.0.0
  */
 public class Logger {
+    // private static LogLevel loggingLevel = LogLevel.WARN;
+    private static LogLevel loggingLevel = LogLevel.DEBUG;
+
+    public static LogLevel getLoggingLevel() {
+        return loggingLevel;
+    }
+
+    public static void setLoggingLevel(LogLevel loggingLevel) {
+        Logger.loggingLevel = loggingLevel;
+    }
 
     private static void internalLog(
         LogLevel level,
         String tag,
         String message
     ) {
+        if (!loggingLevel.shouldLog(level)) return;
+
         // (hopefully) over-allocate the StringBuilder used inside of
         // sizedFormat so that there's no need to re-allocate the builder's
         // buffer during formatting
@@ -201,7 +213,7 @@ public class Logger {
      *                         from {@link StringUtils}. If this has a length
      *                         of 0, nothing will be formatted.
      */
-    public static void warning(
+    public static void warn(
         String tag,
         String messageFormat,
         Object... formatSpecifiers
@@ -442,7 +454,7 @@ public class Logger {
      *                         from {@link StringUtils}. If this has a length
      *                         of 0, nothing will be formatted.
      */
-    public static void warning(
+    public static void warn(
         Class<?> tag,
         String messageFormat,
         Object... formatSpecifiers

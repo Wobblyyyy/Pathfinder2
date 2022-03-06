@@ -27,6 +27,7 @@ import me.wobblyyyy.pathfinder2.listening.Listener;
 import me.wobblyyyy.pathfinder2.listening.ListenerBuilder;
 import me.wobblyyyy.pathfinder2.listening.ListenerManager;
 import me.wobblyyyy.pathfinder2.listening.ListenerMode;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.math.Spline;
 import me.wobblyyyy.pathfinder2.math.Velocity;
 import me.wobblyyyy.pathfinder2.movement.MovementProfiler;
@@ -352,6 +353,15 @@ public class Pathfinder {
         );
         if (generator == null) throw new NullPointerException(
             "Follower generator cannot be null!"
+        );
+
+        Logger.debug(
+            Pathfinder.class,
+            "Created new Pathfinder instance (robot: <%s> generator: <%s> " +
+            "turnController: <%s>)",
+            robot,
+            generator,
+            turnController
         );
 
         this.robot = robot;
@@ -916,6 +926,12 @@ public class Pathfinder {
      * @return {@code this}, used for method chaining.
      */
     public Pathfinder loadPlugin(PathfinderPlugin plugin) {
+        Logger.info(
+            Pathfinder.class,
+            "Loading plugin with name <%s>",
+            plugin.getName()
+        );
+
         pluginManager.loadPlugin(plugin);
         plugin.onLoad(this);
 

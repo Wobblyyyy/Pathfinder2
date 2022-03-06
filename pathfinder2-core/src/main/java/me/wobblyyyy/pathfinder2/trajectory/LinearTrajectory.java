@@ -17,6 +17,7 @@ import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.exceptions.NullPointException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
@@ -144,6 +145,16 @@ public class LinearTrajectory implements Trajectory {
             "must be positive."
         );
 
+        Logger.debug(
+            LinearTrajectory.class,
+            "Created linear trajectory (target: <%s> speed: <%s> " +
+            "tolerance: <%s> angle tolerance: <%s>)",
+            target,
+            speed,
+            tolerance,
+            angleTolerance
+        );
+
         this.target = target;
         this.speed = speed;
         this.tolerance = tolerance;
@@ -189,13 +200,35 @@ public class LinearTrajectory implements Trajectory {
     }
 
     private boolean isDoneXY(PointXYZ current) {
-        return current.isNear(this.target, this.tolerance);
+        boolean isNear = current.isNear(this.target, this.tolerance);
+
+        Logger.trace(
+            LinearTrajectory.class,
+            "isDoneXY: <%s> (current: <%s> target: <%s> tolerance: <%s>)",
+            isNear,
+            current,
+            target,
+            tolerance
+        );
+
+        return isNear;
     }
 
     private boolean isDoneHeading(PointXYZ current) {
-        return current
+        boolean isNear = current
             .z()
             .isCloseDeg(target.z().fix(), angleTolerance.fix().deg());
+
+        Logger.trace(
+            LinearTrajectory.class,
+            "isDoneHeading: <%s> (current: <%s> target: <%s> tolerance: <%s>)",
+            isNear,
+            current.z(),
+            target.z(),
+            angleTolerance
+        );
+
+        return isNear;
     }
 
     @Override

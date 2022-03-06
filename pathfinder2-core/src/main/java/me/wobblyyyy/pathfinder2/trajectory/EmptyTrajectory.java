@@ -37,4 +37,9 @@ public class EmptyTrajectory implements Trajectory {
     public double speed(PointXYZ current) {
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return "EmptyTrajectory";
+    }
 }

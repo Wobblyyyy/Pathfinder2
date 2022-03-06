@@ -13,16 +13,17 @@ package me.wobblyyyy.pathfinder2.trajectory.spline;
 import me.wobblyyyy.pathfinder2.Core;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidSpeedException;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
-import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.math.Max;
 import me.wobblyyyy.pathfinder2.math.Min;
 import me.wobblyyyy.pathfinder2.math.MinMax;
 import me.wobblyyyy.pathfinder2.math.Spline;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
@@ -141,9 +142,35 @@ public class AdvancedSplineTrajectory implements Trajectory {
         double endX = spline.getEndPoint().x();
         this.isDecreasing = startX > endX;
 
+        Logger.debug(
+            AdvancedSplineTrajectory.class,
+            "Created AdvancedSplineTrajectory (start point: <%s> end " +
+            "point: <%s> is decreasing: <%s> spline: <%s> angle spline: <%s> " +
+            "step: <%s> speed spline: <%s> tolerance: <%s> angle tolerance: <%s>)",
+            spline.getStartPoint(),
+            spline.getEndPoint(),
+            isDecreasing,
+            spline,
+            angleSpline,
+            step,
+            speedSpline,
+            tolerance,
+            angleTolerance
+        );
+
         // if the step value is positive when it should be negative
-        if ((isDecreasing && step > 0 || (!isDecreasing && step < 0))) step *=
-            -1;
+        if ((isDecreasing && step > 0 || (!isDecreasing && step < 0))) {
+            Logger.info(
+                AdvancedSplineTrajectory.class,
+                "Inverted step for trajectory with spline <%s> (was " +
+                "originally <%s> but is now <%s>)",
+                spline,
+                step,
+                step * -1
+            );
+
+            step *= -1;
+        }
 
         this.spline = spline;
         this.angleSpline = angleSpline;
@@ -267,5 +294,15 @@ public class AdvancedSplineTrajectory implements Trajectory {
         }
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(
+            Core.advancedSplineTrajectoryFormat,
+            spline,
+            tolerance,
+            angleTolerance
+        );
     }
 }

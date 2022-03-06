@@ -11,10 +11,12 @@
 package me.wobblyyyy.pathfinder2.wpilib;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import me.wobblyyyy.pathfinder2.Core;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.trajectory.TaskTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.TaskTrajectoryBuilder;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 /**
  * Wrapper for an instance of {@link TaskTrajectory} that is linked to a
@@ -67,5 +69,10 @@ public class CommandTaskTrajectory implements Trajectory {
      */
     public void end() {
         trajectory.end();
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(Core.commandTaskTrajectoryFormat);
     }
 }

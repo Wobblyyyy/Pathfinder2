@@ -15,6 +15,7 @@ import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.AbstractOdometry;
 import me.wobblyyyy.pathfinder2.time.Time;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
@@ -120,5 +121,13 @@ public class SimulatedOdometry extends AbstractOdometry {
 
     public void setTranslation(Translation translation) {
         setVelocity(translation.angle(), translation.magnitude());
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(
+            "SimulatedOdometry (pos: <%s>)",
+            currentPosition
+        );
     }
 }

@@ -10,10 +10,12 @@
 
 package me.wobblyyyy.pathfinder2.trajectory;
 
+import me.wobblyyyy.pathfinder2.Core;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.time.Time;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 /**
  * A trajectory that will go in a certain direction for a certain amount
@@ -101,5 +103,14 @@ public class TimedTrajectory implements Trajectory {
     @Override
     public double speed(PointXYZ current) {
         return speed;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(
+            Core.timedTrajectoryFormat,
+            translation,
+            timeoutMs
+        );
     }
 }

@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.utils;
 
 import me.wobblyyyy.pathfinder2.exceptions.ValidationException;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 
 /**
  * Validation utilities.
@@ -27,15 +28,26 @@ public class ValidationUtils {
         String parameterName,
         String customMessage
     ) {
-        if (Double.isNaN(value)) throw new ValidationException(
-            StringUtils.format(
-                "Failed to validate double <%s> because " +
-                "the value was not a number! Value: <%s> (%s)",
-                parameterName,
+        if (Double.isNaN(value)) {
+            Logger.error(
+                ValidationUtils.class,
+                "Could not validate (value: <%s> parameterName: <%s> " +
+                "customMesssage: <%s>) because it was NaN!",
                 value,
+                parameterName,
                 customMessage
-            )
-        );
+            );
+
+            throw new ValidationException(
+                StringUtils.format(
+                    "Failed to validate double <%s> because " +
+                    "the value was not a number! Value: <%s> (%s)",
+                    parameterName,
+                    value,
+                    customMessage
+                )
+            );
+        }
 
         return value;
     }
@@ -49,15 +61,26 @@ public class ValidationUtils {
         String parameterName,
         String customMessage
     ) {
-        if (Double.isInfinite(value)) throw new ValidationException(
-            StringUtils.format(
-                "Failed to validate double <%s> because " +
-                "the value was infinite! Value: <%s> (%s)",
-                parameterName,
+        if (Double.isInfinite(value)) {
+            Logger.error(
+                ValidationUtils.class,
+                "Could not validate (value: <%s> parameterName: <%s> " +
+                "customMesssage: <%s>) because it was infinite!",
                 value,
+                parameterName,
                 customMessage
-            )
-        );
+            );
+
+            throw new ValidationException(
+                StringUtils.format(
+                    "Failed to validate double <%s> because " +
+                    "the value was infinite! Value: <%s> (%s)",
+                    parameterName,
+                    value,
+                    customMessage
+                )
+            );
+        }
 
         return value;
     }
@@ -213,13 +236,23 @@ public class ValidationUtils {
         String parameterName,
         String customMessage
     ) {
-        if (t == null) throw new ValidationException(
-            StringUtils.format(
-                "Failed to validate object <%s> because it was null! (%s)",
+        if (t == null) {
+            Logger.error(
+                ValidationUtils.class,
+                "Could not validate object <%s> because it was null! " +
+                "(customMessage: %s)",
                 parameterName,
                 customMessage
-            )
-        );
+            );
+
+            throw new ValidationException(
+                StringUtils.format(
+                    "Failed to validate object <%s> because it was null! (%s)",
+                    parameterName,
+                    customMessage
+                )
+            );
+        }
 
         return t;
     }
