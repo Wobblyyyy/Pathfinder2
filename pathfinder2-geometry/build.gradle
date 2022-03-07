@@ -52,12 +52,12 @@ publishing {
 }
 
 jmh {
-    warmup = '100ms'
-    warmupForks = 1
-    warmupIterations = 1
-    iterations = 2
-    fork = 1
-    timeOnIteration = '1s'
-    jmhTimeout = '100ms'
-    timeUnit = 's'
+    warmup = project.jmhTime
+    warmupForks = project.jmhWarmupForks
+    warmupIterations = project.jmhWarmupIterations
+    iterations = project.jmhIterations
+    fork = project.jmhForks
+    timeOnIteration = project.jmhTime
+    jmhTimeout = project.jmhTime
+    timeUnit = project.jmhTimeUnit
 }

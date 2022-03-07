@@ -19,90 +19,90 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.infra.Blackhole;
 
 @State(Scope.Benchmark)
-public class BenchmarkPointXY {
-    private static final PointXY[] points = new PointXY[] {
-        new PointXY(0, 0),
-        new PointXY(10, 0),
-        new PointXY(0, 10),
-        new PointXY(10, 10),
-        new PointXY(-10, -10),
-        new PointXY(-10, 0),
-        new PointXY(0, -10),
-        new PointXY(0, 0),
+public class BenchmarkPointXYZ {
+    private static final PointXYZ[] points = new PointXYZ[] {
+        new PointXYZ(0, 0, 0),
+        new PointXYZ(10, 0, 45),
+        new PointXYZ(0, 10, 90),
+        new PointXYZ(10, 10, 135),
+        new PointXYZ(-10, -10, 180),
+        new PointXYZ(-10, 0, 215),
+        new PointXYZ(0, -10, 270),
+        new PointXYZ(0, 315)
     };
 
-    private static void forPoint(Consumer<PointXY> consumer) {
-        for (PointXY a : points)
+    private static void forPoint(Consumer<PointXYZ> consumer) {
+        for (PointXYZ a : points)
             consumer.accept(a);
     }
 
-    private static void forPointCombos(BiConsumer<PointXY, PointXY> consumer) {
-        for (PointXY a : points)
-            for (PointXY b : points)
+    private static void forPointCombos(BiConsumer<PointXYZ, PointXYZ> consumer) {
+        for (PointXYZ a : points)
+            for (PointXYZ b : points)
                 consumer.accept(a, b);
     }
 
     @Benchmark
-    public void addPointXY(Blackhole bh) {
+    public void addPointXYZ(Blackhole bh) {
         forPointCombos((a, b) -> {
-            bh.consume(PointXY.add(a, b));
+            bh.consume(PointXYZ.add(a, b));
         });
     }
 
     @Benchmark
-    public void multiplyPointXY(Blackhole bh) {
+    public void multiplyPointXYZ(Blackhole bh) {
         forPointCombos((a, b) -> {
-            bh.consume(PointXY.multiply(a, b));
+            bh.consume(PointXYZ.multiply(a, b));
         });
     }
 
     @Benchmark
     public void inDirection1(Blackhole bh) {
         forPoint((a) -> {
-            bh.consume(PointXY.inDirection(a, 5, Angle.DEG_0));
+            bh.consume(PointXYZ.inDirection(a, 5, Angle.DEG_0));
         });
     }
 
     @Benchmark
     public void inDirection2(Blackhole bh) {
         forPoint((a) -> {
-            bh.consume(PointXY.inDirection(a, 10, Angle.DEG_0));
+            bh.consume(PointXYZ.inDirection(a, 10, Angle.DEG_0));
         });
     }
 
     @Benchmark
     public void inDirection3(Blackhole bh) {
         forPoint((a) -> {
-            bh.consume(PointXY.inDirection(a, 10, Angle.DEG_45));
+            bh.consume(PointXYZ.inDirection(a, 10, Angle.DEG_45));
         });
     }
 
     @Benchmark
     public void inDirection4(Blackhole bh) {
         forPoint((a) -> {
-            bh.consume(PointXY.inDirection(a, 10, Angle.DEG_315));
+            bh.consume(PointXYZ.inDirection(a, 10, Angle.DEG_315));
         });
     }
 
     @Benchmark
     public void inDirection5(Blackhole bh) {
         forPoint((a) -> {
-            bh.consume(PointXY.inDirection(a, -10, Angle.DEG_315));
+            bh.consume(PointXYZ.inDirection(a, -10, Angle.DEG_315));
         });
     }
 
     @Benchmark
     public void benchmarkAvg(Blackhole bh) {
         forPointCombos((a, b) -> {
-            bh.consume(PointXY.avg(a, b));
+            bh.consume(PointXYZ.avg(a, b));
         });
     }
 
     @Benchmark
     public void benchmarkIsNear(Blackhole bh) {
         forPointCombos((a, b) -> {
-            bh.consume(PointXY.isNear(a, b, 0.1));
-            bh.consume(PointXY.isNear(a, b, 20));
+            bh.consume(PointXYZ.isNear(a, b, 0.1));
+            bh.consume(PointXYZ.isNear(a, b, 20));
         });
     }
 
