@@ -7,13 +7,11 @@
  * This project is licensed under the GNU GPL V3 license.
  * <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL V3</a>
  */
-//file:noinspection GroovyAssignabilityCheck
-//file:noinspection GroovyAssignabilityCheck
-//file:noinspection GroovyAssignabilityCheck
 
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'me.champeau.jmh'
 }
 
 repositories {
@@ -51,4 +49,15 @@ publishing {
             from components.java
         }
     }
+}
+
+jmh {
+    warmup = '100ms'
+    warmupForks = 1
+    warmupIterations = 1
+    iterations = 2
+    fork = 1
+    timeOnIteration = '1s'
+    jmhTimeout = '100ms'
+    timeUnit = 's'
 }
