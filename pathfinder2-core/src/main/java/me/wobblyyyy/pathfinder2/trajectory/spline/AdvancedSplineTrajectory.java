@@ -230,22 +230,25 @@ public class AdvancedSplineTrajectory implements Trajectory {
 
     @Override
     public boolean isDone(PointXYZ current) {
-        if (current == null) throw new IllegalArgumentException(
-            "The robot's current point " +
-            "was null, which it shouldn't be. I'd suggest you " +
-            "fix that, because that would be pretty cool."
+        ValidationUtils.validate(current, "current");
+
+        boolean isDoneXY = isDoneXY(current);
+        boolean isDoneZ = isDoneZ(current);
+
+        Logger.trace(
+            AdvancedSplineTrajectory.class,
+            "isDoneXY: <%s> isDoneZ: <%s> current: <%s>",
+            isDoneXY,
+            isDoneZ,
+            current
         );
 
-        return isDoneXY(current) && isDoneZ(current);
+        return isDoneXY && isDoneZ;
     }
 
     @Override
     public double speed(PointXYZ current) {
-        if (current == null) throw new IllegalArgumentException(
-            "The robot's current point " +
-            "was null, which it shouldn't be. I'd suggest you " +
-            "fix that, because that would be pretty cool."
-        );
+        ValidationUtils.validate(current, "current");
 
         double speed = speedSpline.interpolateY(
             MinMax.clip(current.x(), minX, maxX)
