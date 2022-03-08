@@ -217,4 +217,39 @@ public class TestPointXYZ {
             )
         );
     }
+
+    @Test
+    public void testParsePointXYZ() {
+        Assertions.assertEquals(new PointXYZ(0, 0, 0), PointXYZ.parse(""));
+
+        Assertions.assertEquals(
+            new PointXYZ(10, 10, 0),
+            PointXYZ.parse("10, 10")
+        );
+
+        Assertions.assertEquals(
+            new PointXYZ(10, 10, 0),
+            PointXYZ.parse("10, 10, ")
+        );
+
+        Assertions.assertEquals(
+            new PointXYZ(10, 10, 0),
+            PointXYZ.parse("10, 10, 0 deg")
+        );
+
+        Assertions.assertEquals(
+            new PointXYZ(10, 10, 0),
+            PointXYZ.parse("10, 10, 0 rad")
+        );
+
+        Assertions.assertEquals(
+            new PointXYZ(10, 10, 0),
+            PointXYZ.parse("10, 10, 0 d")
+        );
+
+        Assertions.assertEquals(
+            new PointXYZ(10, 10, 0),
+            PointXYZ.parse("10, 10, 0 r")
+        );
+    }
 }

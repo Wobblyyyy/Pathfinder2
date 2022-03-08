@@ -148,6 +148,7 @@ public class PointXY implements Comparable<PointXY>, Serializable {
             case '8':
             case '9':
             case '.':
+            case '-':
                 builder.append(c);
                 break;
             case ',':

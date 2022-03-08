@@ -119,6 +119,72 @@ public class PointXYZ extends PointXY {
         this(point.x(), point.y(), point.z);
     }
 
+    public static PointXYZ parse(String string) {
+        if (string.length() == 0) return ZERO;
+        char[] chars = string.toCharArray();
+        List<Double> list = new ArrayList<>(2);
+        StringBuilder builder = new StringBuilder(string.length());
+
+        Angle.AngleUnit unit;
+        if (StringUtils.includesIgnoreCase(string, "deg")) {
+            unit = Angle.AngleUnit.DEGREES;
+        } else if (StringUtils.includesIgnoreCase(string, "rad")) {
+            unit = Angle.AngleUnit.RADIANS;
+        } else if (StringUtils.includesIgnoreCase(string, "r")) {
+            unit = Angle.AngleUnit.RADIANS;
+        } else if (StringUtils.includesIgnoreCase(string, "d")) {
+            unit = Angle.AngleUnit.DEGREES;
+        } else {
+            unit = Angle.AngleUnit.DEGREES;
+        }
+
+        for (char c : chars) switch (c) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case '.':
+            case '-':
+                builder.append(c);
+                break;
+            case ',':
+                if (builder.length() == 0) continue;
+                list.add(Double.parseDouble(builder.toString()));
+                builder.setLength(0);
+                break;
+            default:
+                continue;
+        }
+
+        if (builder.length() != 0) list.add(
+            Double.parseDouble(builder.toString())
+        );
+
+        if (list.size() == 2) list.add(Double.valueOf(0));
+
+        if (list.size() != 3) throw new IllegalArgumentException(
+            StringUtils.format(
+                "Could not parse PointXYZ for String '%s'! Expected 3 values " +
+                "but got %s. Parsed values: <%s>",
+                string,
+                list.size(),
+                list
+            )
+        );
+
+        return new PointXYZ(
+            list.get(0),
+            list.get(1),
+            Angle.angle(unit, list.get(2))
+        );
+    }
+
     /**
      * Create a new {@code PointXYZ} and convert the provided values from
      * meters to inches.
