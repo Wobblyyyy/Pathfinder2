@@ -21,6 +21,18 @@ public class Command {
     private final int minimumArguments;
     private final int maximumArguments;
 
+    public Command(String command, BiConsumer<Pathfinder, String[]> executor) {
+        this(command, executor, 0, 1);
+    }
+
+    public Command(
+        String command,
+        BiConsumer<Pathfinder, String[]> executor,
+        int arguments
+    ) {
+        this(command, executor, arguments, arguments);
+    }
+
     public Command(
         String command,
         BiConsumer<Pathfinder, String[]> executor,
@@ -46,7 +58,8 @@ public class Command {
                 "Invalid argument count! Expected " +
                 "at least %s and at most %s, but got %s!",
                 minimumArguments,
-                maximumArguments
+                maximumArguments,
+                argumentCount
             )
         );
 

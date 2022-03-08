@@ -1,0 +1,88 @@
+/*
+ * Copyright (c) 2022.
+ *
+ * This file is part of the "Pathfinder2" project, available here:
+ * <a href="https://github.com/Wobblyyyy/Pathfinder2">GitHub</a>
+ *
+ * This project is licensed under the GNU GPL V3 license.
+ * <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL V3</a>
+ */
+
+package me.wobblyyyy.pathfinder2.commands;
+
+import me.wobblyyyy.pathfinder2.geometry.Angle;
+import me.wobblyyyy.pathfinder2.geometry.PointXY;
+import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.logging.Logger;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
+
+public class MovementCommands {
+
+    private MovementCommands() {}
+
+    public static Command GO_TO_COMMAND = new Command(
+        "goTo",
+        (pathfinder, args) -> {
+            String string = StringUtils.concat(args);
+            int commas = StringUtils.count(string, ',');
+
+            if (commas == 1) {
+                PointXY point = PointXY.parse(string);
+
+                Logger.debug(
+                    MovementCommands.class,
+                    "going to PointXY %s (input: <%s>)",
+                    point,
+                    string
+                );
+
+                pathfinder.goTo(point);
+            } else {
+                PointXYZ point = PointXYZ.parse(string);
+
+                Logger.debug(
+                    MovementCommands.class,
+                    "going to PointXYZ %s (input: <%s>)",
+                    point,
+                    string
+                );
+
+                pathfinder.goTo(point);
+            }
+        },
+        1,
+        Integer.MAX_VALUE
+    );
+
+    public static Command SPLINE_TO_COMMAND = new Command(
+        "splineTo",
+        (pathfinder, args) -> {
+            double speed = pathfinder.getSpeed();
+            double tolerance = pathfinder.getTolerance();
+            Angle angleTolerance = pathfinder.getAngleTolerance();
+            int startIndex = 0;
+
+            if (!StringUtils.includes(args[0], ",")) {
+                speed = Double.parseDouble(args[0]);
+                tolerance = Double.parseDouble(args[1]);
+                angleTolerance = Angle.parse(args[2]);
+                startIndex = 3;
+            }
+
+            PointXYZ[] points = new PointXYZ[args.length];
+
+            for (int i = startIndex; i < args.length; i++) {
+                points[i] = PointXYZ.parse(args[i]);
+            }
+
+            pathfinder.splineTo(speed, tolerance, angleTolerance, points);
+        },
+        2,
+        Integer.MAX_VALUE
+    );
+
+    public static void addMovementCommands(CommandRegistry registry) {
+        registry.add(GO_TO_COMMAND);
+        registry.add(SPLINE_TO_COMMAND);
+    }
+}

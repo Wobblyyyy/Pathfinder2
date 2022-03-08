@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.robot.simulated;
 
+import java.util.function.Function;
+import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.Drive;
@@ -27,9 +29,11 @@ public class SimulatedRobot extends Robot implements Drive, Odometry {
     private Translation translation = Translation.ZERO;
     private PointXYZ offset = PointXYZ.zero();
     private PointXYZ position = PointXYZ.zero();
+    private Function<Translation, Translation> dm = t -> t;
 
     @Override
     public void setTranslation(Translation translation) {
+        translation = dm.apply(translation);
         this.translation = translation;
         position = position.applyTranslation(translation);
     }
@@ -46,6 +50,18 @@ public class SimulatedRobot extends Robot implements Drive, Odometry {
 
     public void setPosition(PointXYZ position) {
         this.position = position;
+    }
+
+    public void setPosition(double x, double y) {
+        setPosition(new PointXYZ(x, y, position.z()));
+    }
+
+    public void setPosition(double x, double y, Angle z) {
+        setPosition(new PointXYZ(x, y, z));
+    }
+
+    public void setPosition(double x, double y, double z) {
+        setPosition(x, y, Angle.fromDeg(z));
     }
 
     @Override
@@ -66,5 +82,15 @@ public class SimulatedRobot extends Robot implements Drive, Odometry {
     @Override
     public PointXYZ getOffset() {
         return offset;
+    }
+
+    @Override
+    public void setDriveModifier(Function<Translation, Translation> dm) {
+        this.dm = dm;
+    }
+
+    @Override
+    public Function<Translation, Translation> getDriveModifier() {
+        return dm;
     }
 }

@@ -16,6 +16,7 @@ import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
+import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedRobot;
 import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ public class TestHeadingLock {
     @Test
     public void testHeadingLockAlongLine() {
         Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
-        SimulatedOdometry odometry = (SimulatedOdometry) pathfinder.getOdometry();
+        SimulatedRobot odometry = (SimulatedRobot) pathfinder.getOdometry();
         pathfinder.loadBundledPlugins();
         pathfinder.lockHeading(new PointXY(10, 10));
         pathfinder.followTrajectory(
@@ -37,25 +38,25 @@ public class TestHeadingLock {
             )
         );
 
-        odometry.setRawPosition(new PointXYZ(0, 0, 0));
+        odometry.setPosition(new PointXYZ(0, 0, 0));
         pathfinder.tick();
         Assertions.assertEquals(-0.45, pathfinder.getTranslation().vz());
 
-        odometry.setRawPosition(new PointXYZ(0, 0, 45));
+        odometry.setPosition(new PointXYZ(0, 0, 45));
         pathfinder.tick();
         Assertions.assertEquals(0, pathfinder.getTranslation().vz());
 
-        odometry.setRawPosition(new PointXYZ(0, 0, 90));
+        odometry.setPosition(new PointXYZ(0, 0, 90));
         pathfinder.tick();
         Assertions.assertEquals(0.45, pathfinder.getTranslation().vz());
 
-        odometry.setRawPosition(0, 5, 0);
+        odometry.setPosition(0, 5, 0);
         pathfinder.tick();
         Assertions.assertTrue(
             Equals.soft(-0.265, pathfinder.getTranslation().vz(), 0.01)
         );
 
-        odometry.setRawPosition(5, 5, 0);
+        odometry.setPosition(5, 5, 0);
         pathfinder.tick();
         Assertions.assertTrue(
             Equals.soft(-0.45, pathfinder.getTranslation().vz(), 0.01)

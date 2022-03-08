@@ -298,6 +298,85 @@ public class StringUtils {
         return !includesIgnoreCase(base, search);
     }
 
+    /**
+     * Count how many instances of {@code search} are contained in the
+     * provided {@code string} parameter.
+     *
+     * @param string the string to search.
+     * @param search the characters to search for.
+     * @return the amount of instances of {@code search} in {@code string}.
+     */
+    public static int count(String string, String search) {
+        int count = 0;
+
+        while (string.contains(search)) {
+            string = string.replaceFirst(search, "");
+            count++;
+        }
+
+        return count;
+    }
+
+    /**
+     * Count how many instances of {@code search} are contained in the
+     * provided {@code string} parameter.
+     *
+     * @param string the string to search.
+     * @param search the characters to search for.
+     * @return the amount of instances of {@code search} in {@code string}.
+     */
+    public static int count(String string, char search) {
+        return count(string, String.valueOf(search));
+    }
+
+    /**
+     * Count how many instances of {@code search} are contained in the
+     * provided {@code string} parameter.
+     *
+     * @param string the string to search.
+     * @param search the characters to search for.
+     * @return the amount of instances of {@code search} in {@code string}.
+     */
+    public static int count(String string, int search) {
+        return count(string, String.valueOf(search));
+    }
+
+    /**
+     * Count how many instances of {@code search} are contained in the
+     * provided {@code string} parameter.
+     *
+     * @param string the string to search.
+     * @param search the characters to search for.
+     * @return the amount of instances of {@code search} in {@code string}.
+     */
+    public static int count(String string, float search) {
+        return count(string, String.valueOf(search));
+    }
+
+    /**
+     * Count how many instances of {@code search} are contained in the
+     * provided {@code string} parameter.
+     *
+     * @param string the string to search.
+     * @param search the characters to search for.
+     * @return the amount of instances of {@code search} in {@code string}.
+     */
+    public static int count(String string, double search) {
+        return count(string, String.valueOf(search));
+    }
+
+    /**
+     * Count how many instances of {@code search} are contained in the
+     * provided {@code string} parameter.
+     *
+     * @param string the string to search.
+     * @param search the characters to search for.
+     * @return the amount of instances of {@code search} in {@code string}.
+     */
+    public static int count(String string, byte search) {
+        return count(string, String.valueOf(search));
+    }
+
     public static String concat(String... strings) {
         int length = 0;
         for (String string : strings) length += string.length();

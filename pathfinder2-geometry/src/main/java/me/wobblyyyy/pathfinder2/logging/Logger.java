@@ -649,4 +649,25 @@ public class Logger {
     ) {
         log(LogLevel.TRACE, tag, messageFormat, formatSpecifiers);
     }
+
+    public static void run(LogLevel level, Runnable runnable) {
+        LogLevel previousLevel = getLoggingLevel();
+        Consumer<String> previousOutput = InternalPathfinderLogger.getOutput();
+
+        setLoggingLevel(level);
+        setOutput(System.out::print);
+
+        runnable.run();
+
+        setLoggingLevel(previousLevel);
+        setOutput(previousOutput);
+    }
+
+    public static void debug(Runnable runnable) {
+        run(LogLevel.DEBUG, runnable);
+    }
+
+    public static void trace(Runnable runnable) {
+        run(LogLevel.TRACE, runnable);
+    }
 }

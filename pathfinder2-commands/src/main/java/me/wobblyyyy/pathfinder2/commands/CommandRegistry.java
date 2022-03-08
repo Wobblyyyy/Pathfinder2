@@ -16,11 +16,23 @@ import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 public class CommandRegistry {
-    private final Map<String, Command> commands = new HashMap<>();
+    private final Map<String, Command> commands = new HashMap<>(100);
     private final Pathfinder pathfinder;
 
     public CommandRegistry(Pathfinder pathfinder) {
         this.pathfinder = pathfinder;
+    }
+
+    public static CommandRegistry createDefaultRegistry(Pathfinder pathfinder) {
+        CommandRegistry registry = new CommandRegistry(pathfinder);
+        loadDefaultCommands(registry);
+        return registry;
+    }
+
+    public static void loadDefaultCommands(CommandRegistry registry) {
+        SetterCommands.addSetterCommands(registry);
+        MovementCommands.addMovementCommands(registry);
+        TickCommands.addTickCommands(registry);
     }
 
     public void add(Command command) {
@@ -62,7 +74,7 @@ public class CommandRegistry {
         return this;
     }
 
-    public CommandRegistry execute(String[] allArguments) {
+    public CommandRegistry execute(String... allArguments) {
         return execute(pathfinder, allArguments);
     }
 }

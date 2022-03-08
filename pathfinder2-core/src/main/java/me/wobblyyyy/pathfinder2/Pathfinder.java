@@ -47,6 +47,7 @@ import me.wobblyyyy.pathfinder2.robot.simulated.EmptyDrive;
 import me.wobblyyyy.pathfinder2.robot.simulated.EmptyOdometry;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedDrive;
 import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
+import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedRobot;
 import me.wobblyyyy.pathfinder2.scheduler.Scheduler;
 import me.wobblyyyy.pathfinder2.scheduler.Task;
 import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
@@ -615,11 +616,12 @@ public class Pathfinder {
      * {@link SimulatedDrive} and {@link Odometry} of {@link SimulatedOdometry}.
      */
     public static Pathfinder newSimulatedPathfinder(double coefficient) {
-        Drive drive = new SimulatedDrive();
-        Odometry odometry = new SimulatedOdometry();
-        Robot robot = new Robot(drive, odometry);
+        Robot robot = new SimulatedRobot();
 
-        return new Pathfinder(robot, coefficient);
+        return new Pathfinder(robot, coefficient)
+            .setSpeed(0.5)
+            .setTolerance(2)
+            .setAngleTolerance(Angle.fromDeg(5));
     }
 
     /**

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.math.Rounding;
 import me.wobblyyyy.pathfinder2.utils.ArrayUtils;
@@ -120,9 +121,14 @@ public class PointXYZ extends PointXY {
     }
 
     public static PointXYZ parse(String string) {
+        Logger.debug(PointXYZ.class, "parsing input <%s>", string);
+
         if (string.length() == 0) return ZERO;
+        if (StringUtils.count(string, ',') == 1) {
+            return PointXY.parse(string).withZ(Angle.DEG_0);
+        }
         char[] chars = string.toCharArray();
-        List<Double> list = new ArrayList<>(2);
+        List<Double> list = new ArrayList<>(3);
         StringBuilder builder = new StringBuilder(string.length());
 
         Angle.AngleUnit unit;
@@ -178,11 +184,20 @@ public class PointXYZ extends PointXY {
             )
         );
 
-        return new PointXYZ(
-            list.get(0),
-            list.get(1),
-            Angle.angle(unit, list.get(2))
+        double x = list.get(0);
+        double y = list.get(1);
+        Angle z = Angle.angle(unit, list.get(2));
+
+        Logger.debug(
+            PointXYZ.class,
+            "parse input: <%s> x: <%s> y: <%s> z: <%s>",
+            string,
+            x,
+            y,
+            z
         );
+
+        return new PointXYZ(x, y, z);
     }
 
     /**
