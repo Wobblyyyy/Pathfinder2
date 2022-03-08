@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.commands;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.utils.AssertionUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -114,6 +115,31 @@ public class TestMovementCommands {
             pathfinder.getPosition(),
             2,
             Angle.fromDeg(5)
+        );
+    }
+
+    @Test
+    public void testSplineToWithParameters() {
+        Logger.debug(
+            () -> {
+                registry.execute(
+                    "splineTo",
+                    "0.5",
+                    "2",
+                    "5 deg",
+                    "0,0,15",
+                    "5,10,30",
+                    "10,15,45",
+                    "15,25,60"
+                );
+                pathfinder.tickUntil(100);
+                AssertionUtils.assertIsNear(
+                    new PointXYZ(15, 25, 60),
+                    pathfinder.getPosition(),
+                    2,
+                    Angle.fromDeg(5)
+                );
+            }
         );
     }
 }

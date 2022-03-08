@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.commands;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
@@ -69,13 +71,16 @@ public class MovementCommands {
                 startIndex = 3;
             }
 
-            PointXYZ[] points = new PointXYZ[args.length];
+            List<PointXYZ> points = new ArrayList<>();
 
             for (int i = startIndex; i < args.length; i++) {
-                points[i] = PointXYZ.parse(args[i]);
+                points.add(PointXYZ.parse(args[i]));
             }
 
-            pathfinder.splineTo(speed, tolerance, angleTolerance, points);
+            PointXYZ[] pointArray = new PointXYZ[points.size()];
+            points.toArray(pointArray);
+
+            pathfinder.splineTo(speed, tolerance, angleTolerance, pointArray);
         },
         2,
         Integer.MAX_VALUE
