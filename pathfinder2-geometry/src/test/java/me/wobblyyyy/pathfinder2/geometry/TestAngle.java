@@ -12,6 +12,8 @@ package me.wobblyyyy.pathfinder2.geometry;
 
 import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.exceptions.ValidationException;
+import me.wobblyyyy.pathfinder2.logging.LogLevel;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -191,5 +193,23 @@ public class TestAngle {
             ValidationException.class,
             () -> new Angle(0, Double.NEGATIVE_INFINITY)
         );
+    }
+
+    @Test
+    public void testParseAngle() {
+        Angle deg = Angle.fromDeg(45);
+        Angle rad = Angle.fromRad(45);
+
+        Angle[] angles = new Angle[] {
+            Angle.parse("45 deg"),
+            Angle.parse("45 rad"),
+            Angle.parse("45d"),
+            Angle.parse("45r"),
+            Angle.parse("45"),
+        };
+
+        for (Angle angle : angles) {
+            Assertions.assertTrue(deg.equals(angle) || rad.equals(angle));
+        }
     }
 }

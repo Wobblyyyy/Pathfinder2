@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.geometry;
 import java.io.Serializable;
 import me.wobblyyyy.pathfinder2.exceptions.InvalidToleranceException;
 import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.math.Rounding;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
@@ -290,6 +291,62 @@ public class Angle implements Comparable<Angle>, Serializable {
     }
 
     /**
+     * Parse an angle from a string.
+     *
+     * <p>
+     * Examples:
+     * <code><pre>
+     * Angle a = Angle.parse("45 deg");             // 45 degrees
+     * Angle b = Angle.parse("45 rad");             // 45 radians
+     * Angle c = Angle.parse("45d");                // 45 degrees
+     * Angle d = Angle.parse("45r");                // 45 radians
+     * Angle d = Angle.parse("45");                 // 45 degrees
+     * </pre></code>
+     * </p>
+     *
+     * @param string the angle to parse.
+     * @return the parsed angle.
+     */
+    public static Angle parse(String string) {
+        if (string.length() == 0) return Angle.ZERO;
+
+        AngleUnit unit;
+
+        if (StringUtils.includesIgnoreCase(string, "deg")) {
+            unit = AngleUnit.DEGREES;
+        } else if (StringUtils.includesIgnoreCase(string, "rad")) {
+            unit = AngleUnit.RADIANS;
+        } else if (StringUtils.includesIgnoreCase(string, "r")) {
+            unit = AngleUnit.RADIANS;
+        } else if (StringUtils.includesIgnoreCase(string, "d")) {
+            unit = AngleUnit.DEGREES;
+        } else {
+            unit = AngleUnit.DEGREES;
+        }
+
+        char[] chars = string.toCharArray();
+        StringBuilder builder = new StringBuilder(string.length());
+        for (char c : chars) switch (c) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case '.':
+                builder.append(c);
+            default:
+                continue;
+        }
+
+        return angle(unit, Double.parseDouble(builder.toString()));
+    }
+
+    /**
      * Fix a value.
      *
      * @param value the value to fix.
@@ -429,9 +486,13 @@ public class Angle implements Comparable<Angle>, Serializable {
      * @return a new angle.
      */
     public static Angle angle(AngleUnit unit, double value) {
-        if (unit == AngleUnit.RADIANS) return fromRad(
-            value
-        ); else return fromDeg(value);
+        Logger.trace(Angle.class, "unit: <%s> value: <%s>", unit, value);
+
+        if (unit == AngleUnit.RADIANS) {
+            return fromRad(value);
+        } else {
+            return fromDeg(value);
+        }
     }
 
     /**
