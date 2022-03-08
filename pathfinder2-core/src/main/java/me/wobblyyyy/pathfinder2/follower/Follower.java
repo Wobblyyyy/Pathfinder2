@@ -16,6 +16,7 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXY;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
@@ -117,16 +118,30 @@ public interface Follower {
         double speed,
         double turn
     ) {
-        return Translation.absoluteToRelative(
-            // We start by creating an absolute translation using the
-            // "getAbsoluteTranslation" method. From there, we convert it to
-            // a relative one. Complicated stuff, right?
-            getAbsoluteTranslation(current, target, speed, turn),
-            // Translation.absoluteToRelative requires a heading value that
-            // represents the robot's current heading to generate the
-            // new relative translation - that's exactly what this is.
+        Translation absoluteTranslation = getAbsoluteTranslation(
+            current,
+            target,
+            speed,
+            turn
+        );
+
+        Translation relativeTranslation = absoluteTranslation.toRelative(
             current.z()
         );
+
+        Logger.trace(
+            Follower.class,
+            "absolute translation: <%s> relative translation: <%s> " +
+            "current: <%s> target: <%s> speed: <%s> turn: <%s>",
+            absoluteTranslation,
+            relativeTranslation,
+            current,
+            target,
+            speed,
+            turn
+        );
+
+        return relativeTranslation;
     }
 
     /**

@@ -254,6 +254,13 @@ public class AdvancedSplineTrajectory implements Trajectory {
             MinMax.clip(current.x(), minX, maxX)
         );
 
+        Logger.trace(
+            AdvancedSplineTrajectory.class,
+            "speed: <%s> current: <%s>",
+            speed,
+            current
+        );
+
         if (speed < 0 || speed > 1) throw new InvalidSpeedException(
             "AdvancedSplineTrajectory " +
             "calculated an invalid speed value, make sure your " +

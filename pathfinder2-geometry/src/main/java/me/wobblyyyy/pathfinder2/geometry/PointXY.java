@@ -588,8 +588,9 @@ public class PointXY implements Comparable<PointXY>, Serializable {
             )
         );
 
-        if (distanceX(a, b) > tolerance || distanceY(a, b) > tolerance)
-            return false;
+        if (
+            distanceX(a, b) > tolerance || distanceY(a, b) > tolerance
+        ) return false;
 
         return Math.abs(distance(a, b)) <= Math.abs(tolerance);
     }

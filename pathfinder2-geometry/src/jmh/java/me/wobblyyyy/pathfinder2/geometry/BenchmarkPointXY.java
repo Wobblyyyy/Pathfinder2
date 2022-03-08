@@ -12,7 +12,6 @@ package me.wobblyyyy.pathfinder2.geometry;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
@@ -32,81 +31,94 @@ public class BenchmarkPointXY {
     };
 
     private static void forPoint(Consumer<PointXY> consumer) {
-        for (PointXY a : points)
-            consumer.accept(a);
+        for (PointXY a : points) consumer.accept(a);
     }
 
     private static void forPointCombos(BiConsumer<PointXY, PointXY> consumer) {
-        for (PointXY a : points)
-            for (PointXY b : points)
-                consumer.accept(a, b);
+        for (PointXY a : points) for (PointXY b : points) consumer.accept(a, b);
     }
 
     @Benchmark
     public void addPointXY(Blackhole bh) {
-        forPointCombos((a, b) -> {
-            bh.consume(PointXY.add(a, b));
-        });
+        forPointCombos(
+            (a, b) -> {
+                bh.consume(PointXY.add(a, b));
+            }
+        );
     }
 
     @Benchmark
     public void multiplyPointXY(Blackhole bh) {
-        forPointCombos((a, b) -> {
-            bh.consume(PointXY.multiply(a, b));
-        });
+        forPointCombos(
+            (a, b) -> {
+                bh.consume(PointXY.multiply(a, b));
+            }
+        );
     }
 
     @Benchmark
     public void inDirection1(Blackhole bh) {
-        forPoint((a) -> {
-            bh.consume(PointXY.inDirection(a, 5, Angle.DEG_0));
-        });
+        forPoint(
+            a -> {
+                bh.consume(PointXY.inDirection(a, 5, Angle.DEG_0));
+            }
+        );
     }
 
     @Benchmark
     public void inDirection2(Blackhole bh) {
-        forPoint((a) -> {
-            bh.consume(PointXY.inDirection(a, 10, Angle.DEG_0));
-        });
+        forPoint(
+            a -> {
+                bh.consume(PointXY.inDirection(a, 10, Angle.DEG_0));
+            }
+        );
     }
 
     @Benchmark
     public void inDirection3(Blackhole bh) {
-        forPoint((a) -> {
-            bh.consume(PointXY.inDirection(a, 10, Angle.DEG_45));
-        });
+        forPoint(
+            a -> {
+                bh.consume(PointXY.inDirection(a, 10, Angle.DEG_45));
+            }
+        );
     }
 
     @Benchmark
     public void inDirection4(Blackhole bh) {
-        forPoint((a) -> {
-            bh.consume(PointXY.inDirection(a, 10, Angle.DEG_315));
-        });
+        forPoint(
+            a -> {
+                bh.consume(PointXY.inDirection(a, 10, Angle.DEG_315));
+            }
+        );
     }
 
     @Benchmark
     public void inDirection5(Blackhole bh) {
-        forPoint((a) -> {
-            bh.consume(PointXY.inDirection(a, -10, Angle.DEG_315));
-        });
+        forPoint(
+            a -> {
+                bh.consume(PointXY.inDirection(a, -10, Angle.DEG_315));
+            }
+        );
     }
 
     @Benchmark
     public void benchmarkAvg(Blackhole bh) {
-        forPointCombos((a, b) -> {
-            bh.consume(PointXY.avg(a, b));
-        });
+        forPointCombos(
+            (a, b) -> {
+                bh.consume(PointXY.avg(a, b));
+            }
+        );
     }
 
     @Benchmark
     public void benchmarkIsNear(Blackhole bh) {
-        forPointCombos((a, b) -> {
-            bh.consume(PointXY.isNear(a, b, 0.1));
-            bh.consume(PointXY.isNear(a, b, 20));
-        });
+        forPointCombos(
+            (a, b) -> {
+                bh.consume(PointXY.isNear(a, b, 0.1));
+                bh.consume(PointXY.isNear(a, b, 20));
+            }
+        );
     }
 
-    public void benchmarkAngleTo(Blackhole bh) {
-
-    }
+    public void benchmarkAngleTo(Blackhole bh) {}
 }

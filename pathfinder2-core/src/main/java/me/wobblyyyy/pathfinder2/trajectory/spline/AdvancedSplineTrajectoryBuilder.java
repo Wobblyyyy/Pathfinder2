@@ -22,6 +22,7 @@ import me.wobblyyyy.pathfinder2.exceptions.NullAngleException;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.geometry.SlopeIntercept;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.math.ApacheSpline;
 import me.wobblyyyy.pathfinder2.math.ApacheSpline.Interpolator;
 import me.wobblyyyy.pathfinder2.math.LinearSpline;
@@ -346,11 +347,27 @@ public class AdvancedSplineTrajectoryBuilder {
 
         AngleSpline angleSpline = new AngleSpline(x, z);
 
+        /*
         Spline speedSpline;
         if (sameSpeedValue) speedSpline =
             new LinearSpline(
                 new SlopeIntercept(0, speed[0])
             ); else speedSpline = new MonotoneCubicSpline(x, speed);
+        */
+
+        Spline speedSpline = new MonotoneCubicSpline(x, speed);
+
+        Logger.debug(
+            AdvancedSplineTrajectoryBuilder.class,
+            "spline: <%s> angleSpline: <%s> speedSpline: <%s> step: <%s> " +
+            "tolerance: <%s> angleTolerance: <%s>",
+            spline,
+            angleSpline,
+            speedSpline,
+            step,
+            tolerance,
+            angleTolerance
+        );
 
         return new AdvancedSplineTrajectory(
             spline,

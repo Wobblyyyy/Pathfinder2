@@ -23,11 +23,11 @@ project.ext {
     projectName = 'me.wobblyyyy'
     projectVersion = 'v2.0.0'
 
-    jmhTime = '100ms'
+    jmhTime = '200ms'
     jmhWarmupIterations = 5
     jmhIterations = 5
-    jmhWarmupForks = 1
-    jmhForks = 1
+    jmhWarmupForks = 2
+    jmhForks = 2
     jmhTimeUnit = 's'
 }
 
