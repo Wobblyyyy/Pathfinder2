@@ -12,7 +12,6 @@ package me.wobblyyyy.pathfinder2.commands;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
@@ -50,12 +49,14 @@ public class CommandRegistry {
             Command command = commands.get(cmd);
             command.execute(pathfinder, arguments);
         } else {
-            throw new IllegalArgumentException(StringUtils.format(
-                "Invalid command '%s'! In general, you should check to " +
-                "see if the command is valid BEFORE attempting to execute " +
-                "it, just to remove the cost of throwing an exception.",
-                cmd
-            ));
+            throw new IllegalArgumentException(
+                StringUtils.format(
+                    "Invalid command '%s'! In general, you should check to " +
+                    "see if the command is valid BEFORE attempting to execute " +
+                    "it, just to remove the cost of throwing an exception.",
+                    cmd
+                )
+            );
         }
 
         return this;

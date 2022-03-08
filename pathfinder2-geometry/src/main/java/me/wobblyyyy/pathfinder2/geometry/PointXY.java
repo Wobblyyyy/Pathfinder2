@@ -113,6 +113,70 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     }
 
     /**
+     * Parse a {@code PointXY} from a {@link String}.
+     *
+     * <p>
+     * Example format:
+     * <code><pre>
+     * PointXY a = PointXY.parse("0, 0");                // (0, 0)
+     * PointXY b = PointXY.parse("     1.0, .5 ");       // (1, 0.5)
+     * PointXY c = PointXY.parse("10, 20,);              // (10, 20)
+     * PointXY d = PointXY.parse("rawefawef10, 20,");    // (10, 20)
+     * </pre></code>
+     * </p>
+     *
+     * @param string the string to parse. See the JavaDoc for
+     *               {@link PointXY#parse(String)} to learn more about the
+     *               format of this string.
+     * @return a parsed {@code PointXY}.
+     */
+    public static PointXY parse(String string) {
+        if (string.length() == 0) return ZERO;
+        char[] chars = string.toCharArray();
+        List<Double> list = new ArrayList<>(2);
+        StringBuilder builder = new StringBuilder(string.length());
+
+        for (char c : chars) switch (c) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case '.':
+                builder.append(c);
+                break;
+            case ',':
+                if (builder.length() == 0) continue;
+                list.add(Double.parseDouble(builder.toString()));
+                builder.setLength(0);
+                break;
+            default:
+                continue;
+        }
+
+        if (builder.length() != 0) list.add(
+            Double.parseDouble(builder.toString())
+        );
+
+        if (list.size() != 2) throw new IllegalArgumentException(
+            StringUtils.format(
+                "Could not parse PointXY for String '%s'! Expected 2 values " +
+                "but got %s. Parsed values: <%s>",
+                string,
+                list.size(),
+                list
+            )
+        );
+
+        return new PointXY(list.get(0), list.get(1));
+    }
+
+    /**
      * Create a new {@code PointXY} and convert the provided values from
      * meters to inches.
      *

@@ -11,7 +11,6 @@
 package me.wobblyyyy.pathfinder2.commands;
 
 import java.util.function.BiConsumer;
-
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;

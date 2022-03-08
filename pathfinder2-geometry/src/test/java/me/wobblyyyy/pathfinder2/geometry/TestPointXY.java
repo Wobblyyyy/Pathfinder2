@@ -184,4 +184,25 @@ public class TestPointXY {
 
         testRotations(angles);
     }
+
+    @Test
+    public void testParsePointXY() {
+        // a
+        Assertions.assertEquals(new PointXY(0, 0), PointXY.parse("0, 0"));
+
+        // b
+        Assertions.assertEquals(
+            new PointXY(1, 0.5),
+            PointXY.parse("     1.0, .5 ")
+        );
+
+        // c
+        Assertions.assertEquals(new PointXY(10, 20), PointXY.parse("10, 20"));
+
+        // d
+        Assertions.assertEquals(
+            new PointXY(10, 20),
+            PointXY.parse("rawefawef10, 20,")
+        );
+    }
 }

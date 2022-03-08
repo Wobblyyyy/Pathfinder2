@@ -68,7 +68,7 @@ public class TestCommandTaskTrajectory extends TestableRobot {
         pathfinder.tick();
         Assertions.assertTrue(pathfinder.isActive());
         runIsFinished = () -> true;
-        pathfinder.tick();
+        pathfinder.tickUntil(1_000);
         Assertions.assertFalse(pathfinder.isActive());
     }
 }
