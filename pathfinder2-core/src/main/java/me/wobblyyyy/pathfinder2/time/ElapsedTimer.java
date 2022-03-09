@@ -16,6 +16,16 @@ package me.wobblyyyy.pathfinder2.time;
  * the functionality of {@code ElapsedTimer} has been effectively
  * encapsulated in the {@link Time} class: {@link Time#runFor(double, Runnable)}
  *
+ * <p>
+ * As of Pathfinder v2.1.0, there are some new methods here:
+ * <ul>
+ *     <li>{@link #wait(double)}</li>
+ *     <li>{@link #waitThenRun(Runnable, double)}</li>
+ *     <li>{@link #runThenWait(Runnable, double)}</li>
+ *     <li>{@link #runFor(Runnable, double)}</li>
+ * </ul>
+ * </p>
+ *
  * @author Colin Robertson
  * @since 0.2.4
  */
@@ -42,6 +52,51 @@ public class ElapsedTimer {
         if (shouldStart) {
             start();
         }
+    }
+
+    /**
+     * Wait for a certain amount of time then run a {@code Runnable}.
+     *
+     * @param runnable the runnable to run.
+     * @param timeMs   how long to wait for, in milliseconds.
+     */
+    public static void waitThenRun(Runnable runnable, double timeMs) {
+        wait(timeMs);
+        runnable.run();
+    }
+
+    /**
+     * Wait for a certain amount of time.
+     *
+     * @param timeMs   how long to wait for, in milliseconds.
+     */
+    public static void wait(double timeMs) {
+        ElapsedTimer timer = new ElapsedTimer(true);
+        while (timer.isElapsedLessThan(timeMs)) ;
+    }
+
+    /**
+     * Run a {@code Runnable} then wait for a certain amount of time.
+     *
+     * @param runnable the runnable to run.
+     * @param timeMs   how long to wait for, in milliseconds.
+     */
+    public static void runThenWait(Runnable runnable, double timeMs) {
+        runnable.run();
+        wait(timeMs);
+    }
+
+    /**
+     * Run a {@code Runnable} for a certain amount of time (in milliseconds).
+     * This will execute the {@code Runnable} repeatedly until the specified
+     * amount of time has elapsed.
+     *
+     * @param runnable the runnable to run.
+     * @param timeMs   how long to run the runnable for.
+     */
+    public static void runFor(Runnable runnable, double timeMs) {
+        ElapsedTimer timer = new ElapsedTimer(true);
+        while (timer.isElapsedLessThan(timeMs)) runnable.run();
     }
 
     /**
