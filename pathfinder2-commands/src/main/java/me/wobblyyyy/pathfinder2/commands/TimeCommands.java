@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.commands;
 
+import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
 
 public class TimeCommands {
@@ -19,7 +20,9 @@ public class TimeCommands {
     public static Command WAIT_COMMAND = new Command(
         "wait",
         (pathfinder, args) -> {
-            ElapsedTimer.wait(Double.parseDouble(args[0]));
+            double time = Double.parseDouble(args[0]);
+            Logger.debug(TimeCommands.class, "waiting for <%s> ms", time);
+            ElapsedTimer.wait(time);
         },
         1
     );

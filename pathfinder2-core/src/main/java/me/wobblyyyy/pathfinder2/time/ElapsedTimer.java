@@ -72,7 +72,7 @@ public class ElapsedTimer {
      */
     public static void wait(double timeMs) {
         ElapsedTimer timer = new ElapsedTimer(true);
-        while (timer.isElapsedLessThan(timeMs));
+        while (!timer.isElapsedLessThan(timeMs));
     }
 
     /**
