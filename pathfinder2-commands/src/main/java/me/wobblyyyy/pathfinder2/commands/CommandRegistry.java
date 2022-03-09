@@ -53,6 +53,7 @@ public class CommandRegistry {
         ScriptingCommands.addScriptingCommands(registry);
         TimeCommands.addTimeCommands(registry);
         TrajectoryCommands.addTrajectoryCommands(registry);
+        TestCommands.addTestCommands(registry);
     }
 
     public void unsafeAdd(Command command) {

@@ -99,20 +99,26 @@ public class TestScript {
 
     @Test
     public void testSetTranslationScript() {
-        Logger.debug(
-            () -> {
-                Script script = Script.load(
-                    registry,
-                    "me/wobblyyyy/pathfinder2/commands/testSetTranslation.pf"
-                );
-
-                script.execute();
-            }
+        Script script = Script.load(
+            registry,
+            "me/wobblyyyy/pathfinder2/commands/testSetTranslation.pf"
         );
+
+        script.execute();
 
         Assertions.assertEquals(
             new Translation(0.5, -0.5, 0.3),
             pathfinder.getTranslation()
         );
+    }
+
+    @Test
+    public void testAssertIsNearScript() {
+        Script script = Script.load(
+            registry,
+            "me/wobblyyyy/pathfinder2/commands/testAssertIsNear.pf"
+        );
+
+        script.execute();
     }
 }
