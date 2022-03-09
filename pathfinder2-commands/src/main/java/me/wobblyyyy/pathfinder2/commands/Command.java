@@ -10,11 +10,31 @@
 
 package me.wobblyyyy.pathfinder2.commands;
 
+import java.util.Arrays;
 import java.util.function.BiConsumer;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
+/**
+ * A {@code Command} should recieve a set of {@link String} arguments and an
+ * instance of {@link Pathfinder} and perform a certain action based on the
+ * provided arguments. The {@code Command} system allows you to operate
+ * Pathfinder by using strings, allowing you to create what are, in essence,
+ * executable scripts. Each command has a minimum and maximum amount of
+ * arguments. Commands may have anywhere from 0 to {@link Integer#MAX_VALUE}
+ * arguments, although I cannot fathom why you'd ever need to have thousands
+ * of parameters.
+ *
+ * <p>
+ * Please note that this is nothing like the {@code Command} system in
+ * {@code wpilib}!
+ * </p>
+ *
+ * @author Colin Robertson
+ * @since 2.0.0
+ * @see CommandRegistry
+ */
 public class Command {
     private final String command;
     private final BiConsumer<Pathfinder, String[]> executor;
@@ -33,6 +53,18 @@ public class Command {
         this(command, executor, arguments, arguments);
     }
 
+    /**
+     * Create a new {@code Command}. If the command is executed with too many
+     * or too few arguments, an {@link IllegalArgumentException} will be
+     * thrown.
+     *
+     * @param command          the {@link String} representation of the command.
+     * @param executor         a {@code BiConsumer} responsible for handling
+     *                         the execution of the command.
+     * @param minimumArguments the minimum amount of arguments.
+     * @param maximumArguments the maximum amount of arguments.
+     * @see #validArgumentCount(int)
+     */
     public Command(
         String command,
         BiConsumer<Pathfinder, String[]> executor,
@@ -48,22 +80,28 @@ public class Command {
     public void execute(Pathfinder pathfinder, String[] arguments) {
         ValidationUtils.validate(arguments, "arguments");
 
-        int argumentCount = arguments.length;
+        int count = arguments.length;
 
-        boolean tooFewArgs = argumentCount < minimumArguments;
-        boolean tooManyArgs = argumentCount > maximumArguments;
-
-        if (tooFewArgs || tooManyArgs) throw new IllegalArgumentException(
+        if (!validArgumentCount(count)) throw new IllegalArgumentException(
             StringUtils.format(
                 "Invalid argument count! Expected " +
-                "at least %s and at most %s, but got %s!",
+                "at least %s and at most %s, but got %s! The arguments " +
+                "you provided was/were: %s",
                 minimumArguments,
                 maximumArguments,
-                argumentCount
+                count,
+                Arrays.toString(arguments)
             )
         );
 
         executor.accept(pathfinder, arguments);
+    }
+
+    public boolean validArgumentCount(int argumentCount) {
+        return (
+            argumentCount >= minimumArguments &&
+            maximumArguments >= argumentCount
+        );
     }
 
     public String getCommand() {

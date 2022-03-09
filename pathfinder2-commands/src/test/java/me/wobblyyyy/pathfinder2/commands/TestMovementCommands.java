@@ -120,26 +120,22 @@ public class TestMovementCommands {
 
     @Test
     public void testSplineToWithParameters() {
-        Logger.debug(
-            () -> {
-                registry.execute(
-                    "splineTo",
-                    "0.5",
-                    "2",
-                    "5 deg",
-                    "0,0,15",
-                    "5,10,30",
-                    "10,15,45",
-                    "15,25,60"
-                );
-                pathfinder.tickUntil(100);
-                AssertionUtils.assertIsNear(
-                    new PointXYZ(15, 25, 60),
-                    pathfinder.getPosition(),
-                    2,
-                    Angle.fromDeg(5)
-                );
-            }
+        registry.execute(
+            "splineTo",
+            "0.5",
+            "2",
+            "5 deg",
+            "0,0,15",
+            "5,10,30",
+            "10,15,45",
+            "15,25,60"
+        );
+        pathfinder.tickUntil(100);
+        AssertionUtils.assertIsNear(
+            new PointXYZ(15, 25, 60),
+            pathfinder.getPosition(),
+            2,
+            Angle.fromDeg(5)
         );
     }
 }
