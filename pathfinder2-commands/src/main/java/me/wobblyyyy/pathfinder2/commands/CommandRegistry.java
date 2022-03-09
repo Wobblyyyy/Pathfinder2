@@ -67,11 +67,13 @@ public class CommandRegistry {
 
         for (Map.Entry<String, Command> entry : commands.entrySet()) {
             if (entry.getKey().equals(commandText)) {
-                throw new IllegalArgumentException(StringUtils.format(
-                    "Attempted to add a command with text '%s' but failed " +
-                    "because a command with that text already exists!",
-                    commandText
-                ));
+                throw new IllegalArgumentException(
+                    StringUtils.format(
+                        "Attempted to add a command with text '%s' but failed " +
+                        "because a command with that text already exists!",
+                        commandText
+                    )
+                );
             }
         }
 
@@ -177,11 +179,7 @@ public class CommandRegistry {
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
             boolean shouldAdd = true;
-            Logger.debug(
-                CommandRegistry.class,
-                "parsing line <%s>",
-                line
-            );
+            Logger.debug(CommandRegistry.class, "parsing line <%s>", line);
             if (shouldAppend) {
                 int lastIdx = realLines.size() - 1;
                 String lastLine = realLines.get(lastIdx);
@@ -216,6 +214,7 @@ public class CommandRegistry {
         );
 
         for (String string : realLines) {
+            if (string.length() == 0) continue;
             String[] arguments = string.split(" ");
             Logger.debug(
                 CommandRegistry.class,

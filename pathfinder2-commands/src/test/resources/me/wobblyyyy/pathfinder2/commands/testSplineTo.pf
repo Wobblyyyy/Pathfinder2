@@ -1,0 +1,13 @@
+def pointA 0,0,0
+def pointB 5,10,0
+def pointC 10,20,0
+def pointD 15,30,0
+def pointE 20,45,0
+
+splineTo $pointA \
+    $pointB \
+    $pointC \
+    $pointD \
+    $pointE
+
+tickUntil

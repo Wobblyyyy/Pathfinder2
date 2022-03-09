@@ -13,12 +13,13 @@ package me.wobblyyyy.pathfinder2.commands;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.utils.AssertionUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class TestCommandRegistry {
+public class TestScript {
     private Pathfinder pathfinder;
     private CommandRegistry registry;
 
@@ -29,48 +30,38 @@ public class TestCommandRegistry {
     }
 
     @Test
-    public void testParseSingleLine() {
+    public void testGoToScript() {
+        Script script = Script.load(
+            registry,
+            "me/wobblyyyy/pathfinder2/commands/testGoTo.pf"
+        );
+
         Assertions.assertFalse(pathfinder.isActive());
-        registry.parse("goTo 10,10,0");
+        script.execute();
         Assertions.assertTrue(pathfinder.isActive());
+        pathfinder.tick();
+        Assertions.assertTrue(pathfinder.isActive());
+        pathfinder.tickUntil();
+        Assertions.assertFalse(pathfinder.isActive());
+        AssertionUtils.assertIsNear(
+            new PointXYZ(0, 0, 0),
+            pathfinder.getPosition(),
+            2,
+            Angle.fromDeg(5)
+        );
     }
 
     @Test
-    public void testParseTwoLines() {
-        Assertions.assertFalse(pathfinder.isActive());
-        registry.parse("goTo 10,10,0", "tickUntil");
-        Assertions.assertFalse(pathfinder.isActive());
-    }
+    public void testSplineToScript() {
+        Script script = Script.load(
+            registry,
+            "me/wobblyyyy/pathfinder2/commands/testSplineTo.pf"
+        );
 
-    @Test
-    public void testParseTwoLinesWithLineBreak() {
-        Assertions.assertFalse(pathfinder.isActive());
-        registry.parse("goTo\\", "10,10,0", "tickUntil");
-        Assertions.assertFalse(pathfinder.isActive());
-    }
-
-    @Test
-    public void testParseManyLines() {
-        Assertions.assertFalse(pathfinder.isActive());
-
-        String[] lines = new String[] {
-            "def a 0,0,0",
-            "def b 5,10,0",
-            "def c 10,20,0",
-            "def d 15,25,0",
-            "def e 20,30,0",
-            "splineTo $a\\",
-            "$b\\",
-            "$c\\",
-            "$d\\",
-            "$e",
-            "tickUntil",
-        };
-
-        registry.parse(lines);
+        script.execute();
 
         AssertionUtils.assertIsNear(
-            new PointXYZ(20, 30, 0),
+            new PointXYZ(20, 45, 0),
             pathfinder.getPosition(),
             2,
             Angle.fromDeg(5)
