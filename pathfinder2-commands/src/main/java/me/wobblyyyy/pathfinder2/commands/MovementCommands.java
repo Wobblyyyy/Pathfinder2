@@ -86,8 +86,41 @@ public class MovementCommands {
         Integer.MAX_VALUE
     );
 
+    public static Command GO_TO_X_COMMAND = new Command(
+        "",
+        (pathfinder, args) -> {
+            pathfinder.goTo(
+                pathfinder.getPosition().withX(Double.parseDouble(args[0]))
+            );
+        },
+        1
+    );
+
+    public static Command GO_TO_Y_COMMAND = new Command(
+        "",
+        (pathfinder, args) -> {
+            pathfinder.goTo(
+                pathfinder.getPosition().withY(Double.parseDouble(args[0]))
+            );
+        },
+        1
+    );
+
+    public static Command GO_TO_Z_COMMAND = new Command(
+        "",
+        (pathfinder, args) -> {
+            pathfinder.goTo(
+                pathfinder.getPosition().withZ(Angle.parse(args[0]))
+            );
+        },
+        1
+    );
+
     public static void addMovementCommands(CommandRegistry registry) {
         registry.unsafeAdd(GO_TO_COMMAND);
         registry.unsafeAdd(SPLINE_TO_COMMAND);
+        registry.unsafeAdd(GO_TO_X_COMMAND);
+        registry.unsafeAdd(GO_TO_Y_COMMAND);
+        registry.unsafeAdd(GO_TO_Z_COMMAND);
     }
 }

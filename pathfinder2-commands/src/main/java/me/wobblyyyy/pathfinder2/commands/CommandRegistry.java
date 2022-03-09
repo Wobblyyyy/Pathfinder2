@@ -51,6 +51,8 @@ public class CommandRegistry {
         MovementCommands.addMovementCommands(registry);
         TickCommands.addTickCommands(registry);
         ScriptingCommands.addScriptingCommands(registry);
+        TimeCommands.addTimeCommands(registry);
+        TrajectoryCommands.addTrajectoryCommands(registry);
     }
 
     public void unsafeAdd(Command command) {
