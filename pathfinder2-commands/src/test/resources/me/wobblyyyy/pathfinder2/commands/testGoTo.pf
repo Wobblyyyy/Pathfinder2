@@ -1,0 +1,11 @@
+def pointA 0,0,0
+def pointB 10,0,0
+def pointC 10,10,0
+def pointD 0,10,0
+def pointE 0,0,0
+
+goTo $pointA
+goTo $pointB
+goTo $pointC
+goTo $pointD
+goTo $pointE
