@@ -67,4 +67,32 @@ public class TestScript {
             Angle.fromDeg(5)
         );
     }
+
+    @Test
+    public void testSetValuesAndSplineToScript() {
+        pathfinder.setSpeed(0.2);
+        pathfinder.setTolerance(0.1);
+        pathfinder.setAngleTolerance(Angle.fromDeg(45));
+
+        Script script = Script.load(
+            registry,
+            "me/wobblyyyy/pathfinder2/commands/testSetValuesAndSplineTo.pf"
+        );
+
+        script.execute();
+
+        Assertions.assertEquals(0.5, pathfinder.getSpeed());
+        Assertions.assertEquals(2, pathfinder.getTolerance());
+        Assertions.assertEquals(
+            Angle.fromDeg(5),
+            pathfinder.getAngleTolerance()
+        );
+
+        AssertionUtils.assertIsNear(
+            new PointXYZ(20, 45, 0),
+            pathfinder.getPosition(),
+            2,
+            Angle.fromDeg(5)
+        );
+    }
 }
