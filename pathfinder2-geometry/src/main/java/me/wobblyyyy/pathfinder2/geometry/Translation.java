@@ -176,6 +176,7 @@ public class Translation implements Serializable {
      * @return the parsed {@code Translation}.
      */
     public static Translation parse(String string) {
+        Logger.debug(Translation.class, "parsing input <%s>", string);
         if (string.length() == 0) return ZERO;
         char[] chars = string.toCharArray();
         List<Double> list = new ArrayList<>(3);
@@ -222,6 +223,15 @@ public class Translation implements Serializable {
         double vx = list.get(0);
         double vy = list.get(1);
         double vz = list.get(2);
+
+        Logger.debug(
+            Translation.class,
+            "parse input: <%s> vx: <%s> vy: <%s> vz: <%s>",
+            string,
+            vx,
+            vy,
+            vz
+        );
 
         return new Translation(vx, vy, vz);
     }

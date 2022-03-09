@@ -13,6 +13,7 @@ package me.wobblyyyy.pathfinder2.commands;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.utils.AssertionUtils;
 import org.junit.jupiter.api.Assertions;
@@ -93,6 +94,25 @@ public class TestScript {
             pathfinder.getPosition(),
             2,
             Angle.fromDeg(5)
+        );
+    }
+
+    @Test
+    public void testSetTranslationScript() {
+        Logger.debug(
+            () -> {
+                Script script = Script.load(
+                    registry,
+                    "me/wobblyyyy/pathfinder2/commands/testSetTranslation.pf"
+                );
+
+                script.execute();
+            }
+        );
+
+        Assertions.assertEquals(
+            new Translation(0.5, -0.5, 0.3),
+            pathfinder.getTranslation()
         );
     }
 }
