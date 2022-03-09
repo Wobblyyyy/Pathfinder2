@@ -1,0 +1,41 @@
+def pointA 0,0,0
+def pointB 10,0,0
+def pointC 10,10,0
+def pointD 0,10,0
+
+def pointE 0,0,45
+def pointF 10,0,45
+def pointG 10,10,45
+def pointH 0,10,45
+
+goTo $pointA
+tickUntil
+assertIsNear $pointA
+
+goTo $pointB
+tickUntil
+assertIsNear $pointB
+
+goTo $pointC
+tickUntil
+assertIsNear $pointC
+
+goTo $pointD
+tickUntil
+assertIsNear $pointD
+
+goTo $pointE
+tickUntil
+assertIsNear $pointE
+
+goTo $pointF
+tickUntil
+assertIsNear $pointF
+
+goTo $pointG
+tickUntil
+assertIsNear $pointG
+
+goTo $pointH
+tickUntil
+assertIsNear $pointH

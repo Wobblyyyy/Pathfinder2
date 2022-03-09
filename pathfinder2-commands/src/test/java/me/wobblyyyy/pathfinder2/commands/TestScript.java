@@ -121,4 +121,14 @@ public class TestScript {
 
         script.execute();
     }
+
+    @Test
+    public void testLongScript() {
+        Script script = Script.load(
+            registry,
+            "me/wobblyyyy/pathfinder2/commands/testLongScript.pf"
+        );
+
+        script.execute();
+    }
 }
