@@ -30,7 +30,7 @@ public class TestTimeCommands {
     @Test
     public void testWaitCommand() {
         ElapsedTimer timer = new ElapsedTimer(true);
-        registry.execute("wait", "1000");
-        Assertions.assertTrue(timer.elapsedMs() >= 1_000);
+        registry.execute("wait", "3");
+        Assertions.assertTrue(timer.elapsedMs() >= 3);
     }
 }
