@@ -181,30 +181,28 @@ public class Translation implements Serializable {
         List<Double> list = new ArrayList<>(3);
         StringBuilder builder = new StringBuilder(string.length());
 
-        for (char c : chars) {
-            switch (c) {
-                case 0:
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                case '0':
-                case '.':
-                case '-':
-                    break;
-                case ',':
-                    if (builder.length() == 0) continue;
-                    list.add(Double.parseDouble(builder.toString()));
-                    builder.setLength(0);
-                    break;
-                default:
-                    continue;
-            }
+        for (char c : chars) switch (c) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case '.':
+            case '-':
+                builder.append(c);
+                break;
+            case ',':
+                if (builder.length() == 0) continue;
+                list.add(Double.parseDouble(builder.toString()));
+                builder.setLength(0);
+                break;
+            default:
+                continue;
         }
 
         if (builder.length() != 0) list.add(

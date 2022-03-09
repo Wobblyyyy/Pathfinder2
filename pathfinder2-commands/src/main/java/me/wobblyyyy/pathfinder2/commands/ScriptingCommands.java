@@ -40,6 +40,6 @@ public class ScriptingCommands {
     );
 
     public static void addScriptingCommands(CommandRegistry registry) {
-        registry.add(DEF_COMMAND);
+        registry.unsafeAdd(DEF_COMMAND);
     }
 }

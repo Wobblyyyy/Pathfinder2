@@ -152,4 +152,32 @@ public class TestTranslation {
             d.toRelative(Angle.fromDeg(360))
         );
     }
+
+    @Test
+    public void testParseTranslation() {
+        Assertions.assertEquals(
+            new Translation(0, 0, 0),
+            Translation.parse("0, 0, 0")
+        );
+
+        Assertions.assertEquals(
+            new Translation(1, 0, 0),
+            Translation.parse("1, 0, 0")
+        );
+
+        Assertions.assertEquals(
+            new Translation(0, 1, 0),
+            Translation.parse("0, 1, 0")
+        );
+
+        Assertions.assertEquals(
+            new Translation(0, 0, 1),
+            Translation.parse("0, 0, 1")
+        );
+
+        Assertions.assertEquals(
+            new Translation(-0.1, -0.2, -0.3),
+            Translation.parse("-0.1, -.2,           -.3")
+        );
+    }
 }

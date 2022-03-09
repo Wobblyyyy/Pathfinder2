@@ -657,7 +657,14 @@ public class Logger {
         setLoggingLevel(level);
         setOutput(System.out::print);
 
-        runnable.run();
+        try {
+            runnable.run();
+        } catch (RuntimeException e) {
+            setLoggingLevel(previousLevel);
+            setOutput(previousOutput);
+
+            throw e;
+        }
 
         setLoggingLevel(previousLevel);
         setOutput(previousOutput);

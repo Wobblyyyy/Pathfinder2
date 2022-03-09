@@ -10,7 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.commands;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import me.wobblyyyy.pathfinder2.Pathfinder;
@@ -50,13 +53,29 @@ public class CommandRegistry {
         ScriptingCommands.addScriptingCommands(registry);
     }
 
+    public void unsafeAdd(Command command) {
+        commands.put(command.getCommand(), command);
+    }
+
     /**
      * Add a command to the registry.
      *
      * @param command the command to add to the registry.
      */
     public void add(Command command) {
-        commands.put(command.getCommand(), command);
+        String commandText = command.getCommand();
+
+        for (Map.Entry<String, Command> entry : commands.entrySet()) {
+            if (entry.getKey().equals(commandText)) {
+                throw new IllegalArgumentException(StringUtils.format(
+                    "Attempted to add a command with text '%s' but failed " +
+                    "because a command with that text already exists!",
+                    commandText
+                ));
+            }
+        }
+
+        unsafeAdd(command);
     }
 
     public boolean isCommand(String command) {
@@ -139,5 +158,73 @@ public class CommandRegistry {
      */
     public CommandRegistry execute(String... allArguments) {
         return execute(pathfinder, allArguments);
+    }
+
+    public CommandRegistry parse(String... lines) {
+        for (int i = 0; i < lines.length; i++) {
+            lines[i] = lines[i].trim();
+        }
+
+        List<String> realLines = new ArrayList<>(lines.length);
+        boolean shouldAppend = false;
+
+        Logger.debug(
+            CommandRegistry.class,
+            "Parsing arguments <%s>",
+            Arrays.toString(lines)
+        );
+
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            boolean shouldAdd = true;
+            Logger.debug(
+                CommandRegistry.class,
+                "parsing line <%s>",
+                line
+            );
+            if (shouldAppend) {
+                int lastIdx = realLines.size() - 1;
+                String lastLine = realLines.get(lastIdx);
+                String newLine = StringUtils.concat(lastLine, " ", line);
+                realLines.set(lastIdx, newLine);
+                Logger.debug(
+                    CommandRegistry.class,
+                    "processing linebreak (lastIdx: <%s> lastLine: <%s> " +
+                    "newLine: <%s> realLines: <%s>)",
+                    lastIdx,
+                    lastLine,
+                    newLine,
+                    realLines
+                );
+                shouldAdd = false;
+            }
+            if (line.endsWith("\\")) {
+                shouldAppend = true;
+                line = line.substring(0, line.length() - 1);
+            } else {
+                shouldAppend = false;
+            }
+            if (shouldAdd) {
+                realLines.add(line);
+            }
+        }
+
+        Logger.debug(
+            CommandRegistry.class,
+            "Finished parsing. Lines: <%s>",
+            realLines
+        );
+
+        for (String string : realLines) {
+            String[] arguments = string.split(" ");
+            Logger.debug(
+                CommandRegistry.class,
+                "Processing arguments <%s>",
+                Arrays.toString(arguments)
+            );
+            execute(arguments);
+        }
+
+        return this;
     }
 }

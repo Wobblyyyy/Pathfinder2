@@ -87,7 +87,7 @@ public class MovementCommands {
     );
 
     public static void addMovementCommands(CommandRegistry registry) {
-        registry.add(GO_TO_COMMAND);
-        registry.add(SPLINE_TO_COMMAND);
+        registry.unsafeAdd(GO_TO_COMMAND);
+        registry.unsafeAdd(SPLINE_TO_COMMAND);
     }
 }

@@ -41,7 +41,7 @@ public class TickCommands {
     );
 
     public static void addTickCommands(CommandRegistry registry) {
-        registry.add(TICK_COMMAND);
-        registry.add(TICK_UNTIL_COMMAND);
+        registry.unsafeAdd(TICK_COMMAND);
+        registry.unsafeAdd(TICK_UNTIL_COMMAND);
     }
 }

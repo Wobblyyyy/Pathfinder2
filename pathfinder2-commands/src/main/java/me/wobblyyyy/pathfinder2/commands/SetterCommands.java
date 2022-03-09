@@ -11,6 +11,7 @@
 package me.wobblyyyy.pathfinder2.commands;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
+import me.wobblyyyy.pathfinder2.geometry.Translation;
 
 public class SetterCommands {
 
@@ -37,9 +38,41 @@ public class SetterCommands {
         }
     );
 
+    public static Command SET_TRANSLATION_COMMAND = new Command(
+        "setTranslation",
+        (pathfinder, args) -> {
+            pathfinder.setTranslation(Translation.parse(args[0]));
+        }
+    );
+
+    public static Command SET_VX_COMMAND = new Command(
+        "setVx",
+        (pathfinder, args) -> {
+            pathfinder.setVx(Double.parseDouble(args[0]));
+        }
+    );
+
+    public static Command SET_VY_COMMAND = new Command(
+        "setVy",
+        (pathfinder, args) -> {
+            pathfinder.setVy(Double.parseDouble(args[0]));
+        }
+    );
+
+    public static Command SET_VZ_COMMAND = new Command(
+        "setVz",
+        (pathfinder, args) -> {
+            pathfinder.setVz(Double.parseDouble(args[0]));
+        }
+    );
+
     public static void addSetterCommands(CommandRegistry registry) {
-        registry.add(SET_SPEED_COMMAND);
-        registry.add(SET_TOLERANCE_COMMAND);
-        registry.add(SET_ANGLE_TOLERANCE_COMMAND);
+        registry.unsafeAdd(SET_SPEED_COMMAND);
+        registry.unsafeAdd(SET_TOLERANCE_COMMAND);
+        registry.unsafeAdd(SET_ANGLE_TOLERANCE_COMMAND);
+        registry.unsafeAdd(SET_TRANSLATION_COMMAND);
+        registry.unsafeAdd(SET_VX_COMMAND);
+        registry.unsafeAdd(SET_VY_COMMAND);
+        registry.unsafeAdd(SET_VZ_COMMAND);
     }
 }
