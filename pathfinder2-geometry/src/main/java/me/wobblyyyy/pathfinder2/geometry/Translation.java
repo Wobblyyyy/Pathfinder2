@@ -11,6 +11,8 @@
 package me.wobblyyyy.pathfinder2.geometry;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.math.Equals;
 import me.wobblyyyy.pathfinder2.math.Rounding;
@@ -156,6 +158,74 @@ public class Translation implements Serializable {
      */
     public Translation(Translation translation) {
         this(translation.vx, translation.vy, translation.vz);
+    }
+
+    /**
+     * Parse a {@code Translation} from a {@link String}.
+     *
+     * <p>
+     * Examples:
+     * <code><pre>
+     * Translation a = Translation.parse("0, 0, 0");        // (0, 0, 0)
+     * Translation a = Translation.parse("1, 0, 0");        // (1, 0, 0)
+     * Translation a = Translation.parse("0.5, 0.3, 0.1");  // (0.5, 0.3, 0.1)
+     * </pre></code>
+     * </p>
+     *
+     * @param string the string to parse.
+     * @return the parsed {@code Translation}.
+     */
+    public static Translation parse(String string) {
+        if (string.length() == 0) return ZERO;
+        char[] chars = string.toCharArray();
+        List<Double> list = new ArrayList<>(3);
+        StringBuilder builder = new StringBuilder(string.length());
+
+        for (char c : chars) {
+            switch (c) {
+                case 0:
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                case '0':
+                case '.':
+                case '-':
+                    break;
+                case ',':
+                    if (builder.length() == 0) continue;
+                    list.add(Double.parseDouble(builder.toString()));
+                    builder.setLength(0);
+                    break;
+                default:
+                    continue;
+            }
+        }
+
+        if (builder.length() != 0) list.add(
+            Double.parseDouble(builder.toString())
+        );
+
+        if (list.size() != 3) throw new IllegalArgumentException(
+            StringUtils.format(
+                "Could not parse Translation for String '%s'! Expected 3 values " +
+                "but got %s. Parsed values: <%s>",
+                string,
+                list.size(),
+                list
+            )
+        );
+
+        double vx = list.get(0);
+        double vy = list.get(1);
+        double vz = list.get(2);
+
+        return new Translation(vx, vy, vz);
     }
 
     /**
