@@ -89,7 +89,7 @@ public class TestScript {
         );
 
         AssertionUtils.assertIsNear(
-            new PointXYZ(20, 45, 0),
+            new PointXYZ(0, 0, 0),
             pathfinder.getPosition(),
             2,
             Angle.fromDeg(5)
