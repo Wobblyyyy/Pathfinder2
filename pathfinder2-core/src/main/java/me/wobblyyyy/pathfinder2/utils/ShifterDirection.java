@@ -25,5 +25,5 @@ public enum ShifterDirection {
     /**
      * Down.
      */
-    DOWN,
+    DOWN
 }

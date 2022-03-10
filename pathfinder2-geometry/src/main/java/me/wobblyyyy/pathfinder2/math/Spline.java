@@ -156,7 +156,7 @@ public interface Spline extends Equation {
             PointXY[] array = new PointXY[] {
                 points.get(i),
                 points.get(i + 1),
-                points.get(i + 2),
+                points.get(i + 2)
             };
 
             if (!areMonotonic(array)) return false;

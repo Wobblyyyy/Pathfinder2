@@ -27,7 +27,7 @@ public class BenchmarkPointXY {
         new PointXY(-10, -10),
         new PointXY(-10, 0),
         new PointXY(0, -10),
-        new PointXY(0, 0),
+        new PointXY(0, 0)
     };
 
     private static void forPoint(Consumer<PointXY> consumer) {

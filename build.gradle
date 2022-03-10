@@ -59,14 +59,7 @@ spotless {
         prettier([
             'prettier': '2.0.5',
             'prettier-plugin-java': '0.8.0'
-        ]).config([
-            'tabWidth': 4,
-            'printWidth': 80,
-            'useTabs': false,
-            'semi': true,
-            'singleQuote': false,
-            'bracketSpacing': true
-        ])
+        ]).configFile('.prettierrc.yml')
     }
 
     groovyGradle {

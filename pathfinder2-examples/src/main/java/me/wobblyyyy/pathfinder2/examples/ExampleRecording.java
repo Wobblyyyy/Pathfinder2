@@ -61,7 +61,7 @@ import me.wobblyyyy.pathfinder2.robot.simulated.SimulatedOdometry;
     {
         "FieldCanBeLocal",
         "ConstantConditions",
-        "LoopConditionNotUpdatedInsideLoop",
+        "LoopConditionNotUpdatedInsideLoop"
     }
 )
 public class ExampleRecording {

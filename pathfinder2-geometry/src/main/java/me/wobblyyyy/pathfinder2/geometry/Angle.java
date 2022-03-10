@@ -1480,6 +1480,6 @@ public class Angle implements Comparable<Angle>, Serializable {
          * </ul>
          * </p>
          */
-        DEGREES,
+        DEGREES
     }
 }

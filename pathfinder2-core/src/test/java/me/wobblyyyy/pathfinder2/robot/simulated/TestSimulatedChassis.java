@@ -441,7 +441,7 @@ public class TestSimulatedChassis {
                 .add(new PointXYZ(18, 5, 0))
                 .add(new PointXYZ(20, 10, 0))
                 .add(new PointXYZ(22, 12, 0))
-                .build(),
+                .build()
         };
 
         for (Trajectory spline : splines) pathfinder.followTrajectory(spline);

@@ -742,6 +742,6 @@ public class Translation implements Serializable {
         /**
          * The vz axis.
          */
-        Z,
+        Z
     }
 }

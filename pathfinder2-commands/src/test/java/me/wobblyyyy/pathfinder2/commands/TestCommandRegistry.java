@@ -64,7 +64,7 @@ public class TestCommandRegistry {
             "$c\\",
             "$d\\",
             "$e",
-            "tickUntil",
+            "tickUntil"
         };
 
         registry.parse(lines);

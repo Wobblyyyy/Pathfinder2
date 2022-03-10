@@ -32,5 +32,5 @@ public enum TargetPrecision {
      * target. This means the robot doesn't have to adjust and compensate
      * for any movement error, making the trajectory able to move more quickly.
      */
-    FAST,
+    FAST
 }

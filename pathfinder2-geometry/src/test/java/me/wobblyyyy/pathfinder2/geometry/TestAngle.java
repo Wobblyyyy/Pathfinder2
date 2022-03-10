@@ -205,7 +205,7 @@ public class TestAngle {
             Angle.parse("45 rad"),
             Angle.parse("45d"),
             Angle.parse("45r"),
-            Angle.parse("45"),
+            Angle.parse("45")
         };
 
         for (Angle angle : angles) {

@@ -132,6 +132,6 @@ public class Gamepad {
         BUTTON_X,
         BUTTON_Y,
         BUTTON_START,
-        BUTTON_SELECT,
+        BUTTON_SELECT
     }
 }

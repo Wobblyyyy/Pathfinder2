@@ -30,7 +30,7 @@ public class RelativeMecanumKinematics implements Kinematics<MecanumState> {
         Angle.DEG_45, // FRONT LEFT
         Angle.DEG_315, // FRONT RIGHT
         Angle.DEG_315, // BACK LEFT
-        Angle.DEG_45, // BACK RIGHT
+        Angle.DEG_45 // BACK RIGHT
     };
 
     /**

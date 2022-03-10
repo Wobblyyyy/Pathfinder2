@@ -67,5 +67,5 @@ public enum ListenerMode {
      * been not met even once before, the listener will automatically remove
      * itself from the listener manager so it can't be executed again.
      */
-    CONDITION_ALWAYS_MET,
+    CONDITION_ALWAYS_MET
 }

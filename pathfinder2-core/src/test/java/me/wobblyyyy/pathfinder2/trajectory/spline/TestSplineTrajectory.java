@@ -32,7 +32,7 @@ public class TestSplineTrajectory extends GenericTrajectoryTester {
         new PointXYZ(0, 0, 0),
         new PointXYZ(5, 6, 0),
         new PointXYZ(10, 18, 0),
-        new PointXYZ(15, 30, 0),
+        new PointXYZ(15, 30, 0)
     };
 
     private static final List<PointXYZ[]> ALL_POINTS = new ArrayList<PointXYZ[]>() {

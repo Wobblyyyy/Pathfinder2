@@ -140,7 +140,7 @@ public class ApacheSpline implements Spline {
 
     public enum Interpolator {
         CUBIC,
-        AKIMA,
+        AKIMA
     }
 
     @Override

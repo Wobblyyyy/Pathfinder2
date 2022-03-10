@@ -230,6 +230,6 @@ public class DualJoystick {
         /**
          * The right joystick's Y axis.
          */
-        RIGHT_Y,
+        RIGHT_Y
     }
 }

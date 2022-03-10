@@ -25,5 +25,5 @@ public enum LedPattern {
     SOLID_YELLOW,
     SOLID_CYAN,
     SOLID_LIGHT_BLUE,
-    SOLID_PURPLE,
+    SOLID_PURPLE
 }

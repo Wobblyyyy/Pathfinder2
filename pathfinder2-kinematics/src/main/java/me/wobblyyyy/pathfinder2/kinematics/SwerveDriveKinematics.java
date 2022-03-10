@@ -74,7 +74,7 @@ public class SwerveDriveKinematics implements Kinematics<SwerveState> {
                 frontRightPosition,
                 frontLeftPosition,
                 backRightPosition,
-                backLeftPosition,
+                backLeftPosition
             }
         );
     }

@@ -27,7 +27,7 @@ public class BenchmarkTranslation {
         new Translation(1, 1, 0),
         new Translation(1, 0, 1),
         new Translation(0, 1, 1),
-        new Translation(1, 1, 1),
+        new Translation(1, 1, 1)
     };
 
     private static void forTranslation(Consumer<Translation> consumer) {
