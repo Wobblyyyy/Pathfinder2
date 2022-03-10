@@ -34,6 +34,9 @@ be browsed from GitHub.
   Listeners are baked into Pathfinder by default and allow you to listen for
   certain events by making use of functional interfaces and Pathfinder's
   `tick()` method. These can help to greatly simplify making user controls.
+- [Commands](./18_commands.md):
+  The `pathfinder2-commands` module implements basic scripting functionality
+  into Pathfinder.
 - [Custom trajectory implementation](./06_custom_trajectory.md):
   If you'd like to REALLY customize Pathfinder and none of the default
   `Trajectory` implementations satisfy your needs, this is a guide on creating
