@@ -1,6 +1,6 @@
 base_name="core"
 version=$1
-artifacts=("geometry" "kinematics" "core" "frc" "OdometryCore", "commands")
+artifacts=("geometry" "kinematics" "core" "frc" "OdometryCore" "commands")
 
 echo "removing build directory"
 rm -r -f "build"
