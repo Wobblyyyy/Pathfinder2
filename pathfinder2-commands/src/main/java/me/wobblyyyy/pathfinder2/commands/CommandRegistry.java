@@ -124,13 +124,16 @@ public class CommandRegistry {
                     arguments[i],
                     i
                 );
+
                 for (Map.Entry<String, Object> e : entries) {
                     String str = e.getKey();
+
                     if (str.startsWith(ScriptingCommands.DEF_PREFIX)) {
                         String name = str.replaceFirst(
                             ScriptingCommands.DEF_PREFIX,
                             ""
                         );
+
                         if (arguments[i].startsWith('$' + name)) {
                             arguments[i] = (String) e.getValue();
                         }
@@ -165,7 +168,25 @@ public class CommandRegistry {
         return execute(pathfinder, allArguments);
     }
 
+    /**
+     * Execute several {@link String}s, each of which is a "line," which is
+     * a command and several arguments. The {@code lines} parameter may have
+     * incomplete lines, so long as they are suffixed with a "\", indicating
+     * that the line is incomplete (this functions very much like the backslash
+     * character in Bash scripts).
+     *
+     * <p>
+     * I'm going to be completely honest here - I'm really lazy and don't
+     * currently have the energy to document this correctly, so if you want
+     * to know more about what this method does, check out its implementation
+     * in {@link Script}.
+     * </p>
+     *
+     * @param lines the lines to parse.
+     * @return {@code this}, used for method chaining.
+     */
     public CommandRegistry parse(String... lines) {
+        // this is a pretty bad way of doing this, i know...
         List<String> realLines = new ArrayList<>(lines.length);
         boolean shouldAppend = false;
 
