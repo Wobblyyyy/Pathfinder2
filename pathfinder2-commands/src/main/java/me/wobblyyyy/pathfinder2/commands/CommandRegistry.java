@@ -166,10 +166,6 @@ public class CommandRegistry {
     }
 
     public CommandRegistry parse(String... lines) {
-        for (int i = 0; i < lines.length; i++) {
-            lines[i] = lines[i].trim();
-        }
-
         List<String> realLines = new ArrayList<>(lines.length);
         boolean shouldAppend = false;
 
@@ -180,9 +176,23 @@ public class CommandRegistry {
         );
 
         for (int i = 0; i < lines.length; i++) {
-            String line = lines[i];
+            String line = lines[i].trim();
+
+            int indexOfComment = line.indexOf("//");
+            if (indexOfComment > -1) {
+                line = line.substring(0, indexOfComment);
+                Logger.debug(
+                    CommandRegistry.class,
+                    "trimming line <%s> at index <%s> to remove comment",
+                    line,
+                    indexOfComment
+                );
+            }
+
             boolean shouldAdd = true;
+
             Logger.debug(CommandRegistry.class, "parsing line <%s>", line);
+
             if (shouldAppend) {
                 int lastIdx = realLines.size() - 1;
                 String lastLine = realLines.get(lastIdx);
@@ -199,12 +209,14 @@ public class CommandRegistry {
                 );
                 shouldAdd = false;
             }
+
             if (line.endsWith("\\")) {
                 shouldAppend = true;
                 line = line.substring(0, line.length() - 1);
             } else {
                 shouldAppend = false;
             }
+
             if (shouldAdd) {
                 realLines.add(line);
             }

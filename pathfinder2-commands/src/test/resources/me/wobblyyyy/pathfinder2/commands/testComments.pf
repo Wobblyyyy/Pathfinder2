@@ -1,0 +1,11 @@
+// this line has no content, other than a comment
+def abc 10,15,180deg // this line has a definition AND a comment
+def xyz 15,10,90deg // this line also has a definition AND a comment
+
+goTo $abc
+tickUntil
+assertIsNear $abc
+
+goTo $xyz
+tickUntil
+assertIsNear $xyz

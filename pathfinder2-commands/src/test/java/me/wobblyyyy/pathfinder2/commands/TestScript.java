@@ -131,4 +131,14 @@ public class TestScript {
 
         script.execute();
     }
+
+    @Test
+    public void testCommentsScript() {
+        Script script = Script.load(
+            registry,
+            "me/wobblyyyy/pathfinder2/commands/testComments.pf"
+        );
+
+        script.execute();
+    }
 }
