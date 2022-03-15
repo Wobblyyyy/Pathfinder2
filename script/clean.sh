@@ -1,4 +1,4 @@
-artifacts=("geometry" "kinematics" "core" "frc" "OdometryCore")
+artifacts=("geometry" "kinematics" "core" "frc" "OdometryCore" "commands")
 
 for artifact in ${artifacts[@]}; do
     path="pathfinder2-$artifact"
