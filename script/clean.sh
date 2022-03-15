@@ -1,3 +1,6 @@
+# remove everything from the /build/ and /bin/ directories for all of the
+# modules in the project, then reformat the entire codebase
+
 artifacts=("geometry" "kinematics" "core" "frc" "OdometryCore" "commands")
 
 for artifact in ${artifacts[@]}; do

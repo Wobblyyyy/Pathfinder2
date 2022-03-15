@@ -1,3 +1,7 @@
+# build the project and copy all of the JAR files to the ./build/ directory
+# this script requires you to provide a single parameter, which is the
+# version of the JAR file to copy
+
 base_name="core"
 version=$1
 artifacts=("geometry" "kinematics" "core" "frc" "OdometryCore" "commands")
