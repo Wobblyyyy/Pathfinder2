@@ -99,15 +99,27 @@ public class Core {
     public static final String linearTrajectoryFormat =
         "Linear trajectory to %s at %s speed (tolerance %s %s)";
 
+    /**
+     * Format for {@code FastTrajectory}'s {@code toString()} method.
+     */
     public static final String fastTrajectoryFormat =
         "Fast trajectory from %s to %s at %s speed";
 
+    /**
+     * Format for {@code AdvancedSplineTrajectory}'s {@code toString()} method.
+     */
     public static final String advancedSplineTrajectoryFormat =
         "Advanced spline trajectory following spline %s (tolerance %s %s)";
 
+    /**
+     * Format for {@code CommandTaskTrajectory}'s {@code toString()} method.
+     */
     public static final String commandTaskTrajectoryFormat =
         "CommandTaskTrajectory";
 
+    /**
+     * Format for {@code TimedTrajectory}'s {@code toString()} method.
+     */
     public static final String timedTrajectoryFormat =
         "Timed trajectory (translation: <%s> time: <%s ms>)";
 
@@ -117,20 +129,44 @@ public class Core {
      */
     public static final double linearTrajectoryIsDoneSpeedMultiplier = 0;
 
+    /**
+     * Tolerance used in determining if two {@code AdvancedSplineTrajectory}s
+     * are the same.
+     */
     public static final double advancedSplineTrajectoryTolerance = 0.01;
 
+    /**
+     * Tolerance used in determining if two {@code AdvancedSplineTrajectory}s
+     * are the same.
+     */
     public static final double advancedSplineTrajectoryDuplicateOffset = 0.01;
 
+    /**
+     * The default priority for {@code ListenerBuilder} instances.
+     */
     public static final int listenerBuilderDefaultPriority = 0;
 
+    /**
+     * The default expiration for {@code ListenerBuilder} instances.
+     */
     public static final double listenerBuilderDefaultExpiration =
         Double.MAX_VALUE;
 
+    /**
+     * The default maximum executions for {@code ListenerBuilder} instances.
+     */
     public static final int listenerBuilderDefaultMaximumExecutions =
         Integer.MAX_VALUE;
 
+    /**
+     * The default cooldown (ms) for {@code ListenerBuilder} instances.
+     */
     public static final int listenerBuilderDefaultCooldownMs = 0;
 
+    /**
+     * The length of random strings for automatically-generated keys for
+     * {@code ListenerManager}.
+     */
     public static final int listenerManagerRandomStringLength = 10;
 
     private Core() {}
