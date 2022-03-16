@@ -200,22 +200,22 @@ public class AdvancedSplineTrajectory implements Trajectory {
         );
     }
 
+    private double clipX(double x) {
+        return MinMax.clip(x, minX, maxX);
+    }
+
     @Override
     public PointXYZ nextMarker(PointXYZ current) {
-        double x = current.x() + step;
-
-        if (x > maxX) x = maxX; else if (x < minX) x = minX;
-
+        double x = clipX(current.x() + step);
         PointXY interpolatedPoint = spline.interpolate(x);
         Angle interpolatedAngle = angleSpline.getAngleTarget(x);
-
         return interpolatedPoint.withHeading(interpolatedAngle);
     }
 
     private boolean isDoneXY(PointXYZ current) {
-        if (
-            current.isNear(spline.getEndPoint(), tolerance)
-        ) hasCompletedTrajectory = true;
+        if (current.isNear(spline.getEndPoint(), tolerance)) {
+            hasCompletedTrajectory = true;
+        }
 
         return hasCompletedTrajectory;
     }
@@ -250,9 +250,7 @@ public class AdvancedSplineTrajectory implements Trajectory {
     public double speed(PointXYZ current) {
         ValidationUtils.validate(current, "current");
 
-        double speed = speedSpline.interpolateY(
-            MinMax.clip(current.x(), minX, maxX)
-        );
+        double speed = speedSpline.interpolateY(clipX(current.x()));
 
         Logger.trace(
             AdvancedSplineTrajectory.class,
@@ -279,6 +277,7 @@ public class AdvancedSplineTrajectory implements Trajectory {
             boolean sameSpline = spline.equals(t.spline);
             boolean sameAngleSpline = angleSpline.equals(t.angleSpline);
             boolean sameSpeedSpline = speedSpline.equals(t.speedSpline);
+
             boolean sameStep = Equals.soft(
                 step,
                 t.step,
