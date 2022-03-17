@@ -10,17 +10,40 @@
 
 package me.wobblyyyy.pathfinder2.kinematics;
 
+import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
+import me.wobblyyyy.pathfinder2.math.Average;
 
 public class TankKinematics implements Kinematics<TankState> {
+    private final double turnCoefficient;
+    private final double trackWidth;
+
+    public TankKinematics(double turnCoefficient, double trackWidth) {
+        this.turnCoefficient = turnCoefficient;
+        this.trackWidth = trackWidth;
+    }
 
     @Override
     public TankState calculate(Translation translation) {
-        return null;
+        Angle angle = translation.angle().subtract(Angle.fromDeg(90)).fix();
+
+        double turn = translation.vz() + (angle.deg() * turnCoefficient);
+
+        return new TankState(
+            translation.vy() + (trackWidth / 2 * turn),
+            translation.vy() - (trackWidth / 2 * turn)
+        );
     }
 
     @Override
     public Translation toTranslation(TankState state) {
-        return null;
+        double right = state.right();
+        double left = state.left();
+
+        return new Translation(
+            0,
+            Average.of(right, left),
+            (right - left) / trackWidth
+        );
     }
 }
