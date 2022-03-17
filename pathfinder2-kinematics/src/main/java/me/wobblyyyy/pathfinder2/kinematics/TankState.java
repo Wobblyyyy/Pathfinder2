@@ -10,19 +10,44 @@
 
 package me.wobblyyyy.pathfinder2.kinematics;
 
+import me.wobblyyyy.pathfinder2.math.Equals;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
+
+/**
+ * A state for a tank (or differential) drive train.
+ *
+ * @author Colin Robertson
+ * @since 2.1.1
+ */
 public class TankState {
     private final double right;
     private final double left;
 
+    /**
+     * Create a new {@code TankState}.
+     *
+     * @param right the state of the right side of the drive train.
+     * @param left  the state of the left side of the drive train.
+    */
     public TankState(double right, double left) {
         this.right = right;
         this.left = left;
     }
 
+    /**
+     * Get the state's right component.
+     *
+     * @return the state's right component.
+    */
     public double right() {
         return right;
     }
 
+    /**
+     * Get the state's left component.
+     *
+     * @return the state's left component.
+    */
     public double left() {
         return left;
     }
@@ -37,5 +62,28 @@ public class TankState {
 
     public TankState multiply(double multiplier) {
         return new TankState(right * multiplier, left * multiplier);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof TankState) {
+            TankState t = (TankState) obj;
+
+            boolean sameRight = Equals.soft(right, t.right, 0.01);
+            boolean sameLeft = Equals.soft(left, t.left, 0.01);
+
+            return sameRight && sameLeft;
+        }
+        
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.format(
+            "(r: %s, l: %s)",
+            right,
+            left
+        );
     }
 }
