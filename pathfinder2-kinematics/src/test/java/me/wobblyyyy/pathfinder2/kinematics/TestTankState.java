@@ -67,5 +67,6 @@ public class TestTankState {
         testAddTankStates(0, 1, 0, 0);
         testAddTankStates(0, 0, 1, 0);
         testAddTankStates(0, 0, 0, 1);
+        testAddTankStates(-1.0, -1.0, 1.0, 1.0);
     }
 }

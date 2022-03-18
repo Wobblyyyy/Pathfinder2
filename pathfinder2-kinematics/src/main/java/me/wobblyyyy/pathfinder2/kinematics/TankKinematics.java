@@ -12,7 +12,9 @@ package me.wobblyyyy.pathfinder2.kinematics;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.math.Average;
+import me.wobblyyyy.pathfinder2.math.Min;
 
 public class TankKinematics implements Kinematics<TankState> {
     private final double turnCoefficient;
@@ -25,9 +27,22 @@ public class TankKinematics implements Kinematics<TankState> {
 
     @Override
     public TankState calculate(Translation translation) {
-        Angle angle = translation.angle().subtract(Angle.fromDeg(90)).fix();
+        Angle translationAngle = translation.angle();
 
-        double turn = translation.vz() + (angle.deg() * turnCoefficient);
+        double turnDistance = Min.magnitude(
+            Angle.minimumDelta(Angle.DEG_90, translationAngle),
+            Angle.minimumDelta(Angle.DEG_270, translationAngle)
+        ) * translation.magnitude();
+        double turn = translation.vz() + (turnDistance * turnCoefficient);
+
+        Logger.trace(
+            TankKinematics.class,
+            "coeff: %s%nangle: %s%nturn: %s%ndeg: %s%n%n",
+            turnCoefficient,
+            translation.angle(),
+            turn,
+            turnDistance
+        );
 
         return new TankState(
             translation.vy() + (trackWidth / 2 * turn),
