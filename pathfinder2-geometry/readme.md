@@ -20,7 +20,5 @@ This package has been designed to be used outside of FIRST robotics environments
 Pathfinder2's core. Because most of this code is just really simple math and trigonometry, there's not very much
 extensive test documentation. You can feel free to add some if you'd like.
 
-# To-Do
-
-- Have loving relationships with people and acquire currency. Of course, what else?
-- Oh. Probably something related to geometry.
+## Dependencies
+This module depends on... nothing!
