@@ -17,6 +17,32 @@ things to know about Pathfinder, and those are as follows.
   - As the robot moves rightwards, its X position increases.
   - As the robot moves leftwards, its X position decreases.
 
+## Pathfinder's axes
+I was planning on creating a nice little diagram in GIMP, but my laptop is
+fairly low on battery right now and I'm not going to waste it on making an
+image when I can do (just about) the same thing using some good old fashioned
+ASCII art. Pretend your robot is at the very center (the little `+`) and is
+facing forwards (the front of the robot is facing towards the `y+`). It's
+pretty much layed out just like a cartesian coordinate plane - crazy!
+
+```
+              y+
+
+              ^
+              |
+              |
+              |
+              |
+x-  <---------+--------->  x+
+              |
+              |
+              |
+              |
+              v
+
+              y-
+```
+
 # Help! My robot isn't moving!
 There are quite a few potential causes for an immobile robot, which can make
 it frustrating to debug.

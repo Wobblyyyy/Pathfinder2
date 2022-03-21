@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import me.wobblyyyy.pathfinder2.geometry.Translation;
+import me.wobblyyyy.pathfinder2.logging.Logger;
 
 public class TestTankKinematics {
     private static final double TRACK_WIDTH = 2.0;
@@ -27,41 +28,93 @@ public class TestTankKinematics {
         return kinematics(TURN_COEFFICIENT);
     }
 
-    private static TankState getTankState(Translation translation) {
-        return kinematics().calculate(translation);
-    }
-
     private static void testToTankState(
         TankState expectedState,
         Translation translation
     ) {
         Assertions.assertEquals(
             expectedState,
-            getTankState(translation)
+            kinematics().calculate(translation)
+        );
+    }
+
+    private static void testFromTankState(
+        Translation expectedTranslation,
+        TankState state
+    ) {
+        Assertions.assertEquals(
+            expectedTranslation,
+            kinematics().toTranslation(state)
         );
     }
 
     @Test
     public void testForwards() {
-        testToTankState(new TankState(1, 1), new Translation(0, 1, 0));
-        testToTankState(new TankState(0.5, 0.5), new Translation(0, 0.5, 0));
+        TankState stateA = new TankState(1, 1);
+        TankState stateB = stateA.multiply(0.5);
+
+        Translation translationA = new Translation(0, 1, 0);
+        Translation translationB = translationA.multiply(0.5);
+
+        testToTankState(stateA, translationA);
+        testToTankState(stateB, translationB);
+
+        testFromTankState(translationA, stateA);
+        testFromTankState(translationB, stateB);
     }
 
     @Test
     public void testBackwards() {
-        testToTankState(new TankState(-1, -1), new Translation(0, -1, 0));
-        testToTankState(new TankState(-0.5, -0.5), new Translation(0, -0.5, 0));
+        TankState stateA = new TankState(-1, -1);
+        TankState stateB = stateA.multiply(0.5);
+
+        Translation translationA = new Translation(0, -1, 0);
+        Translation translationB = translationA.multiply(0.5);
+
+        testToTankState(stateA, translationA);
+        testToTankState(stateB, translationB);
+
+        testFromTankState(translationA, stateA);
+        testFromTankState(translationB, stateB);
     }
 
     @Test
     public void testRightwards() {
-        testToTankState(new TankState(-1, 1), new Translation(1, 0, 0));
-        testToTankState(new TankState(-0.5, 0.5), new Translation(0.5, 0, 0));
+        TankState stateA = new TankState(-1, 1);
+        TankState stateB = stateA.multiply(0.5);
+        TankState stateC = stateB.multiply(0.5);
+        TankState stateD = stateC.multiply(0.5);
+
+        Translation translationA = new Translation(1, 0, 0);
+        Translation translationB = translationA.multiply(0.5);
+        Translation translationC = translationB.multiply(0.5);
+        Translation translationD = translationC.multiply(0.5);
+
+        testToTankState(stateA, translationA);
+        testToTankState(stateB, translationB);
+        testToTankState(stateC, translationC);
+        testToTankState(stateD, translationD);
     }
 
     @Test
     public void testLeftwards() {
-        testToTankState(new TankState(1, -1), new Translation(-1, 0, 0));
-        testToTankState(new TankState(0.5, -0.5), new Translation(-0.5, 0, 0));
+        TankState stateA = new TankState(-1, 1).multiply(-1);
+        TankState stateB = stateA.multiply(0.5);
+        TankState stateC = stateB.multiply(0.5);
+        TankState stateD = stateC.multiply(0.5);
+
+        Translation translationA = new Translation(1, 0, 0).multiply(-1);
+        Translation translationB = translationA.multiply(0.5);
+        Translation translationC = translationB.multiply(0.5);
+        Translation translationD = translationC.multiply(0.5);
+
+        testToTankState(stateA, translationA);
+        testToTankState(stateB, translationB);
+        testToTankState(stateC, translationC);
+        testToTankState(stateD, translationD);
+
+        Logger.trace(() -> {
+            testFromTankState(translationA, stateA.add(new TankState(0.25, 0)));
+        });
     }
 }

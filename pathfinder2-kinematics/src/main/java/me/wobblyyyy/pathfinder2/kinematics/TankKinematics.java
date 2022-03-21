@@ -16,10 +16,49 @@ import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.math.Average;
 import me.wobblyyyy.pathfinder2.math.Min;
 
+/**
+ * Kinematics for a tank drive (also commonly known as a "differential drive").
+ * A tank drive, in the (hopefully unlikely) event you were unaware, is a type
+ * of chassis that applies power along two different axes to move the robot.
+ *
+ * @author Colin Robertson
+ * @since 2.1.1
+ */
 public class TankKinematics implements Kinematics<TankState> {
     private final double turnCoefficient;
     private final double trackWidth;
 
+    /**
+     * Create a new instance of {@code TankKinematics}.
+     *
+     * @param trackWidth      the track width of the chassis. This should be
+     *                        in whatever unit you're using for the rest of
+     *                        Pathfinder. "Track width" is the measurement
+     *                        between the two sides of the robot.
+    */
+    public TankKinematics(double trackWidth) {
+        this(1.0 / 90.0, trackWidth);
+    }
+
+    /**
+     * Create a new instance of {@code TankKinematics}.
+     *
+     * @param turnCoefficient the turn coefficient to use for the kinematics.
+     *                        By default, this value is 1 / 90. Because a
+     *                        tank drive can only move along one axis -
+     *                        forwards and backwards - you need a way to
+     *                        convert translations with multiple axes into
+     *                        a translation that can be applied to a
+     *                        differential drive chassis. If a translation
+     *                        has a horizontal component (say (1, 0, 0)), this
+     *                        value will be used in calculating a
+     *                        {@link TankState} that can be applied to the
+     *                        chassis.
+     * @param trackWidth      the track width of the chassis. This should be
+     *                        in whatever unit you're using for the rest of
+     *                        Pathfinder. "Track width" is the measurement
+     *                        between the two sides of the robot.
+    */
     public TankKinematics(double turnCoefficient, double trackWidth) {
         this.turnCoefficient = turnCoefficient;
         this.trackWidth = trackWidth;
@@ -37,9 +76,9 @@ public class TankKinematics implements Kinematics<TankState> {
 
         Logger.trace(
             TankKinematics.class,
-            "coeff: %s%nangle: %s%nturn: %s%ndeg: %s%n%n",
+            "coeff: <%s> angle: <%s> turn: <%s> turn distance: <%s>",
             turnCoefficient,
-            translation.angle(),
+            translationAngle,
             turn,
             turnDistance
         );
@@ -55,10 +94,16 @@ public class TankKinematics implements Kinematics<TankState> {
         double right = state.right();
         double left = state.left();
 
-        return new Translation(
-            0,
-            Average.of(right, left),
-            (right - left) / trackWidth
+        double vy = Average.of(right, left);
+        double vz = (right - left) / trackWidth;
+
+        Logger.trace(
+            TankKinematics.class,
+            "vy: <%s> vz: <%s>",
+            vy,
+            vz
         );
+
+        return new Translation(0, vy, vz);
     }
 }

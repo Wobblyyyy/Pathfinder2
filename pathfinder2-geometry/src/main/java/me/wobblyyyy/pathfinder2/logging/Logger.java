@@ -659,7 +659,7 @@ public class Logger {
 
         try {
             runnable.run();
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             setLoggingLevel(previousLevel);
             setOutput(previousOutput);
 
