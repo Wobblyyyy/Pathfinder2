@@ -112,9 +112,5 @@ public class TestTankKinematics {
         testToTankState(stateB, translationB);
         testToTankState(stateC, translationC);
         testToTankState(stateD, translationD);
-
-        Logger.trace(() -> {
-            testFromTankState(translationA, stateA.add(new TankState(0.25, 0)));
-        });
     }
 }

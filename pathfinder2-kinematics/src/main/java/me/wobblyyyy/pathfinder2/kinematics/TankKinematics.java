@@ -21,6 +21,15 @@ import me.wobblyyyy.pathfinder2.math.Min;
  * A tank drive, in the (hopefully unlikely) event you were unaware, is a type
  * of chassis that applies power along two different axes to move the robot.
  *
+ * <p>
+ * By default, this value is 1 / 90. Because a tank drive can only move along
+ * one axis - forwards and backwards - you need a way to convert translations
+ * with multiple axes into a translation that can be applied to a differential
+ * drive chassis. If a translation has a horizontal component (say (1, 0, 0)),
+ * this value will be used in calculating a {@link TankState} that can be
+ * applied to the chassis.
+ * </p>
+ *
  * @author Colin Robertson
  * @since 2.1.1
  */
@@ -95,7 +104,7 @@ public class TankKinematics implements Kinematics<TankState> {
         double left = state.left();
 
         double vy = Average.of(right, left);
-        double vz = (right - left) / trackWidth;
+        double vz = (left - right) / trackWidth;
 
         Logger.trace(
             TankKinematics.class,
