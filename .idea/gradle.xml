@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/pathfinder2-frc" />
             <option value="$PROJECT_DIR$/pathfinder2-geometry" />
             <option value="$PROJECT_DIR$/pathfinder2-kinematics" />
+            <option value="$PROJECT_DIR$/pathfinder2-pi" />
           </set>
         </option>
       </GradleProjectSettings>

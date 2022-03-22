@@ -1,0 +1,56 @@
+/*
+ * Copyright (c) 2022.
+ *
+ * This file is part of the "Pathfinder2" project, available here:
+ * <a href="https://github.com/Wobblyyyy/Pathfinder2">GitHub</a>
+ *
+ * This project is licensed under the GNU GPL V3 license.
+ * <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL V3</a>
+ */
+
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+
+    withSourcesJar()
+    withJavadocJar()
+}
+
+dependencies {
+    implementation project(':pathfinder2-core')
+    implementation project(':pathfinder2-geometry')
+    implementation project(':pathfinder2-kinematics')
+
+    implementation 'com.pi4j:pi4j-core:2.1.1'
+    implementation 'com.pi4j:pi4j-library-pigpio:2.1.1'
+    implementation 'com.pi4j:pi4j-plugin-pigpio:2.1.1'
+    implementation 'com.pi4j:pi4j-plugin-raspberrypi:2.1.1'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = project.projectName
+            version = project.projectVersion
+            artifactId = 'pi'
+            from components.java
+        }
+    }
+}
