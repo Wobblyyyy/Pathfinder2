@@ -3850,15 +3850,9 @@ public class Pathfinder {
         );
     }
 
-    /*
-     * I'm not entirely sure why you'd ever need any of these methods (even
-     * the toString method is rather pointless) but I'm putting them here
-     * anyways. so epic, right? so epic.
-     */
-
     @Override
     public int hashCode() {
-        return 0;
+        return robot.hashCode() + generator.hashCode();
     }
 
     @Override
