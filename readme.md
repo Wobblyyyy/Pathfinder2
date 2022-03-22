@@ -45,6 +45,9 @@ get everything installed, and then head over to the
 
 <h2 align="center">Example Code</h2>
 
+Check out an example FRC project
+[here](https://github.com/Wobblyyyy/MecanumPathfinderFRC)!
+
 Here's a demonstration of Pathfinder's utilization of lambda expressions to
 write simple and readable code.
 ```java
