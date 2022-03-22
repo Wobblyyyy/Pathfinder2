@@ -40,7 +40,7 @@ import me.wobblyyyy.pathfinder2.utils.NotNull;
  * {@link Translation}s so your robot can correctly follow them.
  * </p>
  *
- * @author Colin Robetson
+ * @author Colin Robertson
  * @since 0.0.0
  */
 public class MecanumDrive implements Drive {
