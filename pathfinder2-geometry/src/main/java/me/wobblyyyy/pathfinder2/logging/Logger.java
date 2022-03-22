@@ -17,7 +17,7 @@ import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 /**
  * Pathfinder's main logging API. The logging level Pathfinder uses can be
- * configured using {@Link #setLoggingLevel(LogLevel)}. By default, Pathfinder
+ * configured using {@link #setLoggingLevel(LogLevel)}. By default, Pathfinder
  * will use the logging level {@link LogLevel#WARN}, which will only output
  * warnings.
  *

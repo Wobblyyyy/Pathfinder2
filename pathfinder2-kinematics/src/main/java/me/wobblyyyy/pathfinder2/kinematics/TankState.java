@@ -28,7 +28,7 @@ public class TankState {
      *
      * @param right the state of the right side of the drive train.
      * @param left  the state of the left side of the drive train.
-    */
+     */
     public TankState(double right, double left) {
         this.right = right;
         this.left = left;
@@ -38,7 +38,7 @@ public class TankState {
      * Get the state's right component.
      *
      * @return the state's right component.
-    */
+     */
     public double right() {
         return right;
     }
@@ -47,13 +47,25 @@ public class TankState {
      * Get the state's left component.
      *
      * @return the state's left component.
-    */
+     */
     public double left() {
         return left;
     }
 
     public TankState add(TankState state) {
         return new TankState(right + state.right, left + state.left);
+    }
+
+    public TankState addRight(double right) {
+        return add(new TankState(right, 0));
+    }
+
+    public TankState addLeft(double left) {
+        return add(new TankState(0, left));
+    }
+
+    public TankState add(double right, double left) {
+        return add(new TankState(right, left));
     }
 
     public TankState multiply(TankState state) {
@@ -74,16 +86,12 @@ public class TankState {
 
             return sameRight && sameLeft;
         }
-        
+
         return false;
     }
 
     @Override
     public String toString() {
-        return StringUtils.format(
-            "(r: %s, l: %s)",
-            right,
-            left
-        );
+        return StringUtils.format("(r: %s, l: %s)", right, left);
     }
 }

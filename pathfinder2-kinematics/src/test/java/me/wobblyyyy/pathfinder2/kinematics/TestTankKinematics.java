@@ -10,11 +10,10 @@
 
 package me.wobblyyyy.pathfinder2.kinematics;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.logging.Logger;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TestTankKinematics {
     private static final double TRACK_WIDTH = 2.0;
@@ -94,6 +93,11 @@ public class TestTankKinematics {
         testToTankState(stateB, translationB);
         testToTankState(stateC, translationC);
         testToTankState(stateD, translationD);
+
+        testFromTankState(new Translation(0, 0, -1), stateA);
+        testFromTankState(new Translation(0, 0, -0.5), stateB);
+        testFromTankState(new Translation(0, 0, -0.25), stateC);
+        testFromTankState(new Translation(0, 0, -0.125), stateD);
     }
 
     @Test
@@ -112,5 +116,10 @@ public class TestTankKinematics {
         testToTankState(stateB, translationB);
         testToTankState(stateC, translationC);
         testToTankState(stateD, translationD);
+
+        testFromTankState(new Translation(0, 0, 1), stateA);
+        testFromTankState(new Translation(0, 0, 0.5), stateB);
+        testFromTankState(new Translation(0, 0, 0.25), stateC);
+        testFromTankState(new Translation(0, 0, 0.125), stateD);
     }
 }

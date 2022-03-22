@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestTankState {
+
     private static void testTankStateConstructor(double right, double left) {
         TankState state = new TankState(right, left);
 
@@ -39,10 +40,7 @@ public class TestTankState {
         double bRight = b.right();
         double bLeft = b.left();
 
-        TankState sum = new TankState(
-            aRight + bRight,
-            aLeft + bLeft
-        );
+        TankState sum = new TankState(aRight + bRight, aLeft + bLeft);
 
         Assertions.assertEquals(sum, a.add(b));
     }

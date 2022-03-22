@@ -13,14 +13,14 @@ package me.wobblyyyy.pathfinder2.logging;
 /**
  * Different logging severity levels. I'd encourage you to use the highest
  * logging level you can while still providing useful information. The
- * default logging level is {@link WARN}.
+ * default logging level is {@link #WARN}.
  *
  * @author Colin Robertson
  * @since 2.0.0
  */
 public enum LogLevel {
     /**
-     * Silence all logs. Nothing (including {@link FATAL}) will be logged.
+     * Silence all logs. Nothing (including {@link #FATAL}) will be logged.
      */
     NONE(6),
 

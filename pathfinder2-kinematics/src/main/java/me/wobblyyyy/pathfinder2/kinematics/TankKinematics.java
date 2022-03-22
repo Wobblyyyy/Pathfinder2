@@ -44,7 +44,7 @@ public class TankKinematics implements Kinematics<TankState> {
      *                        in whatever unit you're using for the rest of
      *                        Pathfinder. "Track width" is the measurement
      *                        between the two sides of the robot.
-    */
+     */
     public TankKinematics(double trackWidth) {
         this(1.0 / 90.0, trackWidth);
     }
@@ -67,7 +67,7 @@ public class TankKinematics implements Kinematics<TankState> {
      *                        in whatever unit you're using for the rest of
      *                        Pathfinder. "Track width" is the measurement
      *                        between the two sides of the robot.
-    */
+     */
     public TankKinematics(double turnCoefficient, double trackWidth) {
         this.turnCoefficient = turnCoefficient;
         this.trackWidth = trackWidth;
@@ -77,10 +77,12 @@ public class TankKinematics implements Kinematics<TankState> {
     public TankState calculate(Translation translation) {
         Angle translationAngle = translation.angle();
 
-        double turnDistance = Min.magnitude(
-            Angle.minimumDelta(Angle.DEG_90, translationAngle),
-            Angle.minimumDelta(Angle.DEG_270, translationAngle)
-        ) * translation.magnitude();
+        double turnDistance =
+            Min.magnitude(
+                Angle.minimumDelta(Angle.DEG_90, translationAngle),
+                Angle.minimumDelta(Angle.DEG_270, translationAngle)
+            ) *
+            translation.magnitude();
         double turn = translation.vz() + (turnDistance * turnCoefficient);
 
         Logger.trace(
@@ -104,11 +106,13 @@ public class TankKinematics implements Kinematics<TankState> {
         double left = state.left();
 
         double vy = Average.of(right, left);
-        double vz = (left - right) / trackWidth;
+        double vz = (right - left) / trackWidth;
 
         Logger.trace(
             TankKinematics.class,
-            "vy: <%s> vz: <%s>",
+            "r: <%s> l: <%s> vy: <%s> vz: <%s>",
+            right,
+            left,
             vy,
             vz
         );

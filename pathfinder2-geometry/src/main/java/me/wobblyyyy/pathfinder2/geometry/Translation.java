@@ -278,7 +278,7 @@ public class Translation implements Serializable {
      * relative translation into a robot relative one.
      * </p>
      *
-     * @param translation the original (absolute) {@code Translation}.
+     * @param absoluteTranslation the original (absolute) {@code Translation}.
      * @param heading     the heading the robot is currently facing. This value
      *                    should almost always come directly from the robot's
      *                    odometry system.
