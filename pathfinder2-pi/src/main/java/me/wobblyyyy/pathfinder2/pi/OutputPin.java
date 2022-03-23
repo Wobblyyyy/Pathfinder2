@@ -18,14 +18,16 @@ public class OutputPin {
         DigitalState initialState,
         String provider
     ) {
-        this.config = DigitalOutput.newConfigBuilder(context)
-            .id(id)
-            .name(name)
-            .address(address)
-            .shutdown(shutdownState)
-            .initial(initialState)
-            .provider(provider)
-            .build();
+        this.config =
+            DigitalOutput
+                .newConfigBuilder(context)
+                .id(id)
+                .name(name)
+                .address(address)
+                .shutdown(shutdownState)
+                .initial(initialState)
+                .provider(provider)
+                .build();
 
         this.output = context.create(this.config);
     }

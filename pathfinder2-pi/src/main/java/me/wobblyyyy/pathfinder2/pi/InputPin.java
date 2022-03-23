@@ -18,14 +18,16 @@ public class InputPin {
         long debounce,
         String provider
     ) {
-        this.config = DigitalInput.newConfigBuilder(context)
-            .id(id)
-            .name(name)
-            .address(address)
-            .pull(pullResistance)
-            .debounce(debounce)
-            .provider(provider)
-            .build();
+        this.config =
+            DigitalInput
+                .newConfigBuilder(context)
+                .id(id)
+                .name(name)
+                .address(address)
+                .pull(pullResistance)
+                .debounce(debounce)
+                .provider(provider)
+                .build();
 
         this.input = context.create(this.config);
     }
