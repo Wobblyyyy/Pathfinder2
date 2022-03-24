@@ -24,6 +24,8 @@ public class ArduinoInput implements ArduinoBus {
     public ArduinoInput(ArduinoInterface arduino, String id) {
         this.arduino = arduino;
         this.id = id;
+
+        arduino.addBus(this);
     }
 
     @Override

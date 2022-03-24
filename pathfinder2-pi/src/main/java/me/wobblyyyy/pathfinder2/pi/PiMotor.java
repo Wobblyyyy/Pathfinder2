@@ -14,6 +14,13 @@ import me.wobblyyyy.pathfinder2.arduino.ArduinoInterface;
 import me.wobblyyyy.pathfinder2.arduino.ArduinoOutput;
 import me.wobblyyyy.pathfinder2.robot.components.Motor;
 
+/**
+ * Pi-specific {@code Motor} implementation, reliant on using an Arduino
+ * to transmit motor power.
+ *
+ * @author Colin Robertson
+ * @since 2.1.1
+ */
 public class PiMotor extends ArduinoOutput implements Motor {
     private double power;
 

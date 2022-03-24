@@ -25,6 +25,8 @@ public class ArduinoOutput implements ArduinoBus {
     public ArduinoOutput(ArduinoInterface arduino, String id) {
         this.arduino = arduino;
         this.id = id;
+
+        arduino.addBus(this);
     }
 
     private void realUpdate() {}
@@ -41,6 +43,16 @@ public class ArduinoOutput implements ArduinoBus {
         return id;
     }
 
+    /**
+     * Write information to the {@code Arduino}. This will not actually
+     * transmit any data over the serial bus - rather, it'll update the
+     * internal {@link #value} value. In order for this value to actually
+     * be updated, the {@link #update()} method will need to be called
+     * first. This <em>should</em> be done via the
+     * {@link ArduinoInterface#update} method, but that's not required.
+     *
+     * @param value the value to write.
+    */
     public void write(double value) {
         this.value = value;
     }

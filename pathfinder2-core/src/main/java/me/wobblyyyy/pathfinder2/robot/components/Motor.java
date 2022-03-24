@@ -17,34 +17,52 @@ package me.wobblyyyy.pathfinder2.robot.components;
  * motor should be capable of receiving an input via {@link #setPower(double)}
  * and then spinning according to that input.
  *
+ * <p>
+ * A "power value" is defined such that the motor will free spin at the same
+ * velocity if given the same power. For example, if a given motor were to
+ * spin at 100 RPM when given a power value of 1.0, it should always spin at
+ * (or at least very close to) 100 RPM when given that same power value.
+ * Furthermore, an ideal motor should spin at a speed directly proportional
+ * to the power value inputted. A power value of -1.0 should cause the motor
+ * to spin at -100 RPM. Likewise:
+ * <ul>
+ *     <li>-0.5 power/speed: -50 RPM</li>
+ *     <li>0.0 power/speed: 0 RPM</li>
+ *     <li>0.5 power/speed: RPM</li>
+ * </ul>
+ * </p>
+ *
+ * <p>
+ * Unless the underlying motor implementation is capable of reading a power
+ * (or speed) value from the motor hardware itself, the {@link #getPower()}
+ * method should return the last power value that was set to the motor.
+ * Note that this method SHOULD NOT be used for positional tracking purposes.
+ * </p>
+ *
  * @author Colin Robertson
  * @see AbstractMotor
+ * @see BaseMotor
  * @since 0.0.0
  */
 public interface Motor {
     /**
      * Get a power value from the motor. This method should return whatever
-     * power the motor is currently operating at.
+     * power the motor is currently operating at. In most cases, this should
+     * return the last power value that was set to the motor.
      *
      * <p>
-     * In some cases, it may be preferable to store a value inside of the
-     * program instead of polling the motor to determine the power it's
-     * operating at. This can preserve some CPU cycles, but to be honest,
-     * the difference is minimal.
+     * This method SHOULD NOT be used for positional tracking purposes. The
+     * accuracy of using motor power for tracking a robot's position is so
+     * limited that you'd likely be better off guessing.
      * </p>
      *
-     * @return the motor's current power.
+     * @return the motor's current power. Frequently, this will be the last
+     * power value that was set to the motor.
      */
     double getPower();
 
     /**
      * Set power to the motor.
-     *
-     * <p>
-     * Typically, this power value should fit within the range of -1.0 to
-     * +1.0. This isn't required, but it's common enough I feel I should make
-     * a note of it.
-     * </p>
      *
      * @param power the power value to set to the motor. Conventionally, this
      *              value should be between -1 and 1, representing full speed
