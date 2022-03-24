@@ -130,7 +130,10 @@ public class Translation implements Serializable {
     }
 
     /**
-     * Create a new {@code Translation} using three translational values.
+     * Create a new {@code Translation} using three translational values. None
+     * of the values ({@code vx}, {@code vy}, and {@code vz}) may be NaN
+     * (specified by {@link Double#isNaN()}) nor infinite (specified by
+     * {@link Double#isInfinite()}).
      *
      * @param vx the robot's translation along its X axis. This value should
      *           not have any units, but should be scaled the same as vy.
@@ -158,6 +161,39 @@ public class Translation implements Serializable {
      */
     public Translation(Translation translation) {
         this(translation.vx, translation.vy, translation.vz);
+    }
+
+    /**
+     * Compare two {@code Translation}s to see if they have the same X value.
+     *
+     * @param a one of the two translations.
+     * @param b one of the two translations.
+     * @return true if they have the same value. Otherwise, false.
+     */
+    public static boolean sameVx(Translation a, Translation b) {
+        return Equals.soft(a.vx, b.vx, Geometry.toleranceTranslation);
+    }
+
+    /**
+     * Compare two {@code Translation}s to see if they have the same Y value.
+     *
+     * @param a one of the two translations.
+     * @param b one of the two translations.
+     * @return true if they have the same value. Otherwise, false.
+     */
+    public static boolean sameVy(Translation a, Translation b) {
+        return Equals.soft(a.vy, b.vy, Geometry.toleranceTranslation);
+    }
+
+    /**
+     * Compare two {@code Translation}s to see if they have the same Z value.
+     *
+     * @param a one of the two translations.
+     * @param b one of the two translations.
+     * @return true if they have the same value. Otherwise, false.
+     */
+    public static boolean sameVz(Translation a, Translation b) {
+        return Equals.soft(a.vz, b.vz, Geometry.toleranceTranslation);
     }
 
     /**
@@ -673,6 +709,36 @@ public class Translation implements Serializable {
         return divide(this, a);
     }
 
+    /**
+     * Compare two {@code Translation}s to see if they have the same X value.
+     *
+     * @param a one of the two translations.
+     * @return true if they have the same value. Otherwise, false.
+     */
+    public boolean sameVx(Translation a) {
+        return sameVx(this, a);
+    }
+
+    /**
+     * Compare two {@code Translation}s to see if they have the same Y value.
+     *
+     * @param a one of the two translations.
+     * @return true if they have the same value. Otherwise, false.
+     */
+    public boolean sameVy(Translation a) {
+        return sameVy(this, a);
+    }
+
+    /**
+     * Compare two {@code Translation}s to see if they have the same Z value.
+     *
+     * @param a one of the two translations.
+     * @return true if they have the same value. Otherwise, false.
+     */
+    public boolean sameVz(Translation a) {
+        return sameVz(this, a);
+    }
+
     @Override
     public String toString() {
         return StringUtils.format(
@@ -688,21 +754,9 @@ public class Translation implements Serializable {
         if (obj instanceof Translation) {
             Translation t = (Translation) obj;
 
-            boolean sameVx = Equals.soft(
-                t.vx,
-                this.vx,
-                Geometry.toleranceTranslation
-            );
-            boolean sameVy = Equals.soft(
-                t.vy,
-                this.vy,
-                Geometry.toleranceTranslation
-            );
-            boolean sameVz = Equals.soft(
-                t.vz,
-                this.vz,
-                Geometry.toleranceTranslation
-            );
+            boolean sameVx = Translation.sameVx(this, t);
+            boolean sameVy = Translation.sameVy(this, t);
+            boolean sameVz = Translation.sameVz(this, t);
 
             return sameVx && sameVy && sameVz;
         }

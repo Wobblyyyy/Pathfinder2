@@ -30,7 +30,7 @@ public interface ArduinoBus {
      * only alphanumeric characters, underscores, and hyphens.
      *
      * @return the ID of the bus.
-    */
+     */
     String getId();
 
     /**
@@ -41,7 +41,7 @@ public interface ArduinoBus {
      * @param bus one of the objects.
      * @param obj one of the objects.
      * @return true if the objects have the same ID. Otherwise, false.
-    */
+     */
     static boolean equals(ArduinoBus bus, Object obj) {
         if (obj instanceof ArduinoBus) {
             ArduinoBus b = (ArduinoBus) obj;

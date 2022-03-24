@@ -52,7 +52,7 @@ public class ArduinoOutput implements ArduinoBus {
      * {@link ArduinoInterface#update} method, but that's not required.
      *
      * @param value the value to write.
-    */
+     */
     public void write(double value) {
         this.value = value;
     }

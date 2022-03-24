@@ -40,7 +40,18 @@ public class Equals {
     }
 
     /**
-     * Soft-equals - are two numbers within a given distance of another?
+     * Soft-equals - are two numbers within a given distance of another? If
+     * the absolute value of {@code a} minus {@code b} is less than or equal
+     * to {@code tolerance}, this will return true. Otherwise, this will
+     * return false.
+     *
+     * <p>
+     * For the purpose of specificity, the implementation of this method is
+     * provided below.
+     * <code><pre>
+     * return Math.abs(a - b) {@code <=} tolerance;
+     * </pre></code>
+     * </p>
      *
      * @param a         the first of the two numbers.
      * @param b         the second of the two numbers.

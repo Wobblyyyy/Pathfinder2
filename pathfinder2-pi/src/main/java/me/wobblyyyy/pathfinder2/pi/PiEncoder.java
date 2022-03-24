@@ -24,6 +24,7 @@ import me.wobblyyyy.pathfinder2.robot.sensors.Encoder;
  */
 public class PiEncoder extends ArduinoInput implements Encoder {
     private final AbstractEncoder encoder = new AbstractEncoder() {
+
         @Override
         public int getRawTicks() {
             return (int) read();
