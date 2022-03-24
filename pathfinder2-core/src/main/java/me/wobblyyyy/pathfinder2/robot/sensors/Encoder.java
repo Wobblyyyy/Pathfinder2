@@ -11,14 +11,29 @@
 package me.wobblyyyy.pathfinder2.robot.sensors;
 
 /**
- * An interface for encoders.
+ * An interface for encoders. If you'd like to track the angle an encoder
+ * is facing, check out {@link AngleEncoder} instead. An encoder should report
+ * a quantity (named "ticks") that represents how far the motor has spun since
+ * tracking the position of the motor has begun. If a motor were to spin
+ * forwards for 10 seconds, and then spin backwards for 10 seconds, at the same
+ * speed (in both directions), assuming the motor and encoder are both
+ * completely accurate, the encoder should have a position of 0. If it were to
+ * spin forwards for 10 seconds, it should have a position double that of if it
+ * were to spin forwards for 5 seconds.
+ *
+ * <p>
+ * For most use cases, it's advisable to use {@link AbstractEncoder} instead.
+ * </p>
  *
  * @author Colin Robertson
+ * @see AngleEncoder
+ * @see AbstractEncoder
  * @since 0.5.0
  */
 public interface Encoder {
     /**
-     * Get the current ticks reading of the encoder.
+     * Get the current ticks reading of the encoder. This should factor in
+     * the encoder's offset, as specified by {@link #setOffset(int)}.
      *
      * @return the current ticks reading of the encoder.
      */

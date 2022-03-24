@@ -70,6 +70,9 @@ Pathfinder.
   Sort of like a `MultiSegmentTrajectory` of many linear trajectories: a
   `MultiTargetTrajectory` will guide the robot to a series of points.
 
+### Creating a custom trajectory implementation
+There's a whole guide available [here](./06_custom_trajectory.md).
+
 ## Further reading
 - [Linear trajectories](./03_linear_trajectory.md)
 - [Spline trajectories](./04_advanced_spline_trajectory.md)
