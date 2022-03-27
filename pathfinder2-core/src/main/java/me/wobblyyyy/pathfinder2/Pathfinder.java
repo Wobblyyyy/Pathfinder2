@@ -63,6 +63,7 @@ import me.wobblyyyy.pathfinder2.utils.Button;
 import me.wobblyyyy.pathfinder2.utils.NotNull;
 import me.wobblyyyy.pathfinder2.utils.RandomString;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
+import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 import me.wobblyyyy.pathfinder2.zones.Zone;
 import me.wobblyyyy.pathfinder2.zones.ZoneProcessor;
 
@@ -3179,6 +3180,60 @@ public class Pathfinder {
         );
 
         return this;
+    }
+
+    /**
+     * Go to a certain X value. This will use the robot's current position
+     * in conjunction with a provided value to create a new point, and then
+     * this will call the {@link #goTo(PointXYZ)} method, providing the
+     * newly created point as a parameter.
+     *
+     * @param x the value to go to.
+     * @return this instance of Pathfinder, used for method chaining.
+     * @see #setSpeed(double)
+     * @see #setTolerance(double)
+     * @see #setAngleTolerance(Angle)
+     */
+    public Pathfinder goToX(double x) {
+        ValidationUtils.validate(x, "x");
+
+        return goTo(getPosition().withX(x));
+    }
+
+    /**
+     * Go to a certain Y value. This will use the robot's current position
+     * in conjunction with a provided value to create a new point, and then
+     * this will call the {@link #goTo(PointXYZ)} method, providing the
+     * newly created point as a parameter.
+     *
+     * @param y the value to go to.
+     * @return this instance of Pathfinder, used for method chaining.
+     * @see #setSpeed(double)
+     * @see #setTolerance(double)
+     * @see #setAngleTolerance(Angle)
+     */
+    public Pathfinder goToY(double y) {
+        ValidationUtils.validate(y, "y");
+
+        return goTo(getPosition().withY(y));
+    }
+
+    /**
+     * Go to a certain Z value. This will use the robot's current position
+     * in conjunction with a provided value to create a new point, and then
+     * this will call the {@link #goTo(PointXYZ)} method, providing the
+     * newly created point as a parameter.
+     *
+     * @param z the value to go to.
+     * @return this instance of Pathfinder, used for method chaining.
+     * @see #setSpeed(double)
+     * @see #setTolerance(double)
+     * @see #setAngleTolerance(Angle)
+     */
+    public Pathfinder goToZ(Angle z) {
+        ValidationUtils.validate(z, "z");
+
+        return goTo(getPosition().withZ(z));
     }
 
     /**
