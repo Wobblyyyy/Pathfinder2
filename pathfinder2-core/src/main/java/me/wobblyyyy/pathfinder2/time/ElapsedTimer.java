@@ -30,6 +30,13 @@ package me.wobblyyyy.pathfinder2.time;
  * @since 0.2.4
  */
 public class ElapsedTimer {
+    /**
+     * The time the elapsed timer started at. If the timer has not started yet,
+     * this value will be 0. If the timer has already started, this will be
+     * the time the timer started in, in milliseconds.
+     *
+     * @see Time#longMs()
+     */
     private long start = 0;
 
     /**
@@ -135,6 +142,11 @@ public class ElapsedTimer {
         return getElapsed();
     }
 
+    /**
+     * Get the elapsed time, in seconds.
+     *
+     * @return the elapsed time, in seconds.
+    */
     public double elapsedSeconds() {
         return getElapsed() / 1_000d;
     }
@@ -201,5 +213,14 @@ public class ElapsedTimer {
 
     public boolean hasStarted() {
         return start != 0;
+    }
+
+    /**
+     * Reset the timer. If you were to call the {@link #getElapsed()} method
+     * immediately after calling this method, assuming this method call
+     * is instantaneous, it would return {@code 0}.
+     */
+    public void reset() {
+        start = Time.longMs();
     }
 }
