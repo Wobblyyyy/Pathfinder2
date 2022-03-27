@@ -17,6 +17,9 @@ be browsed from GitHub.
   The `Trajectory` system is the core of Pathfinder's movement. Such, it's a
   fairly important concept to understand in order to maximize the benefit you
   get from utilizing the library.
+- [Ticking Pathfinder](./19_ticking_pathfinder.md):
+  A complete (or at least hopefully complete) guide to ticking Pathfinder.
+  Ticking is key to operating Pathfinder.
 - [Controllers](./02_controllers.md):
   Open-loop controllers are a concept used widely in robotics. This is a brief
   overview on what they are and how to use them.
