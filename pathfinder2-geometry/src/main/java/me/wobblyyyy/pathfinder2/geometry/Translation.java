@@ -120,6 +120,13 @@ public class Translation implements Serializable {
      * Create a new {@code Translation} using two translational values. This
      * translation will have a {@code vz} value (rotation) of 0.
      *
+     * <p>
+     * If you'd like to stop the robot, it's suggested you use
+     * {@link Translation#ZERO} instead of instantiating a new
+     * {@code Translation} and providing the constructor with vx and vy
+     * values of {@code 0}.
+     * </p>
+     *
      * @param vx the robot's translation along its X axis. This value should
      *           not have any units, but should be scaled the same as vy.
      * @param vy the robot's translation along its Y axis. This value should
@@ -134,6 +141,13 @@ public class Translation implements Serializable {
      * of the values ({@code vx}, {@code vy}, and {@code vz}) may be NaN
      * (specified by {@link Double#isNaN()}) nor infinite (specified by
      * {@link Double#isInfinite()}).
+     *
+     * <p>
+     * If you'd like to stop the robot, it's suggested you use
+     * {@link Translation#ZERO} instead of instantiating a new
+     * {@code Translation} and providing the constructor with {@code 0},
+     * {@code 0}, and {@code 0}.
+     * </p>
      *
      * @param vx the robot's translation along its X axis. This value should
      *           not have any units, but should be scaled the same as vy.
