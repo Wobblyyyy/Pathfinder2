@@ -1680,10 +1680,37 @@ public class Pathfinder {
      * </ul>
      * </p>
      *
-     * @return this instance of Pathfinder, used for method chaining.
+     * @return {@code this}, used for method chaining.
      */
     public Pathfinder tick() {
         return runPreTick().runExecutorTick().runOnTick().runPostTick();
+    }
+
+    /**
+     * Tick Pathfinder for a certain amount of time, specified in milliseconds.
+     * This will block the current thread until the provided amount of time
+     * (in milliseconds) has elapsed. The {@link #tick()} method will be
+     * called as frequently as possible while the amount of elapsed time
+     * is less than the provided time.
+     *
+     * <p>
+     * This method makes use of {@link ElapsedTimer} to measure the elapsed
+     * time. More specifically: {@link ElapsedTimer#runFor(Runnable, double)}
+     * </p>
+     *
+     * @param timeMs the amount of time, in milliseconds, that Pathfinder
+     *               should be continually ticked for.
+     * @return {@code this}, used for method chaining.
+     * @see #tick()
+     * @see #tickUntil()
+     * @see #tickUntil(double)
+    */
+    public Pathfinder tickFor(double timeMs) {
+        ValidationUtils.validate(timeMs, "timeMs");
+
+        ElapsedTimer.runFor(this::tick, timeMs);
+
+        return this;
     }
 
     /**
