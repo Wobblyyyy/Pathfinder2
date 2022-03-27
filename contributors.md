@@ -9,6 +9,7 @@
 <h1>Contributors</h1>
 
 <h2>Adding yourself</h2>
+
 Follow the following format:
 ```
 - NAME
