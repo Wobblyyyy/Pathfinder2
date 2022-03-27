@@ -8,6 +8,12 @@
 
 <h1>Contributing</h1>
 
+<h2>Contributors</h2>
+
+See [contributors.md](./contributors.md). Whenever you modify any code in the
+Pathfinder project, be sure to properly credit yourself in the `contributors.md`
+file. Or else.
+
 <h2>Copyright</h2>
 
 Any code you add or update in Pathfinder will be licensed to the Pathfinder
