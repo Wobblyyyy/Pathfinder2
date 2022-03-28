@@ -88,6 +88,12 @@ My rule for new features is this: if adding a new feature wouldn't harm any
 other functionality, then go ahead. I have absolutely no objection to adding new
 features to the library.
 
+<h4>Corresponding tests</h4>
+
+Whenever you add any new features to the library, you should also add
+corresponding tests. These tests should cover any functionality that you added
+to the library.
+
 <h2>Before pushing code</h2>
 
 <h3>Formatting</h3>
