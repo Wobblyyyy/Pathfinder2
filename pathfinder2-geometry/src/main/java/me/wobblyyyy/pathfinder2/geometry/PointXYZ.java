@@ -905,6 +905,25 @@ public class PointXYZ extends PointXY {
         );
     }
 
+    /**
+     * Check to see if an {@link Object} is equal to {@code this}.
+     *
+     * <p>
+     * If the provided {@link Object} is an instance of {@link PointXYZ}, this
+     * method will check if the points have the same X and Y values, as well
+     * as if the points have angles that are equal, as determined by
+     * {@link Angle#equals(Angle, Angle)}.
+     * </p>
+     *
+     * <p>
+     * If the provided {@link Object} is an instance of {@link PointXY}, this
+     * method will check if the points have the same X and Y values, and if
+     * the angle of {@code this} point is 0.
+     * </p>
+     *
+     * @param obj the object to check.
+     * @return true if the objects are "equal." Otherwise, false.
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof PointXYZ) {
@@ -923,6 +942,26 @@ public class PointXYZ extends PointXY {
             boolean sameZ = Angle.equals(p.z, this.z);
 
             return sameX && sameY && sameZ;
+        } else if (obj instanceof PointXY) {
+            PointXY p = (PointXY) obj;
+
+            boolean sameX = Equals.soft(
+                p.x(),
+                this.x(),
+                Geometry.tolerancePointXY
+            );
+            boolean sameY = Equals.soft(
+                p.y(),
+                this.y(),
+                Geometry.tolerancePointXY
+            );
+            boolean zeroZ = Equals.soft(
+                0,
+                this.z().deg(),
+                Geometry.tolerancePointXY
+            );
+
+            return sameX && sameY && zeroZ;
         }
 
         return false;

@@ -252,4 +252,17 @@ public class TestPointXYZ {
             PointXYZ.parse("10, 10, 0 r")
         );
     }
+
+    @Test
+    public void testEquals() {
+        Assertions.assertEquals(PointXYZ.ZERO, PointXYZ.ZERO);
+        Assertions.assertEquals(new PointXYZ(10, 0, 0), new PointXYZ(10, 0, 0));
+        Assertions.assertEquals(new PointXYZ(0, 10, 0), new PointXYZ(0, 10, 0));
+        Assertions.assertEquals(new PointXYZ(0, 0, 10), new PointXYZ(0, 0, 10));
+        Assertions.assertEquals(new PointXYZ(0, 0, 0), new PointXY(0, 0));
+        Assertions.assertEquals(new PointXY(0, 0), new PointXYZ(0, 0, 0));
+        Assertions.assertEquals(new PointXYZ(7, 8, 0), new PointXY(7, 8));
+        Assertions.assertEquals(new PointXY(7, 8), new PointXYZ(7, 8, 0));
+        Assertions.assertNotEquals(new PointXYZ(7, 8, 15), new PointXY(7, 8));
+    }
 }

@@ -632,6 +632,21 @@ public class Angle implements Comparable<Angle>, Serializable {
         return Equals.soft(a, b, Geometry.toleranceAngle);
     }
 
+    public static boolean equals(Object objA, Object objB) {
+        if (!(objA instanceof Angle)) {
+            return false;
+        }
+
+        if (!(objB instanceof Angle)) {
+            return false;
+        }
+
+        Angle a = (Angle) objA;
+        Angle b = (Angle) objB;
+
+        return equals(a, b);
+    }
+
     /**
      * Are two angles close in radians?
      *
