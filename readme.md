@@ -21,8 +21,8 @@
 Pathfinder2 is a continuation of the
 original [Pathfinder](https://github.com/Wobblyyyy/Pathfinder) library: a
 streamlined motion planning and control system designed for FIRST events, such
-as [FIRST Robotics Competition](https://www.firstinspires.org/robotics/frc)
-and [FIRST Tech Challenge](https://www.firstinspires.org/robotics/ftc).
+as the [FIRST Robotics Competition](https://www.firstinspires.org/robotics/frc)
+and the [FIRST Tech Challenge](https://www.firstinspires.org/robotics/ftc).
 - Track the position of a wheeled mobile robot using a variety of odometry
   implementations.
 - Dynamically correct for movement error and drift.
