@@ -862,6 +862,39 @@ public class PointXYZ extends PointXY {
         return new PointXYZ(x(), y, this.z);
     }
 
+    /**
+     * Multiply the X value of {@code this} point by {@code multiplier} and
+     * return a new point with the new value.
+     *
+     * @param multiplier the multiplier to apply.
+     * @return the multiplied point.
+     */
+    public PointXYZ multiplyX(double multiplier) {
+        return new PointXYZ(x() * multiplier, y(), z);
+    }
+
+    /**
+     * Multiply the Y value of {@code this} point by {@code multiplier} and
+     * return a new point with the new value.
+     *
+     * @param multiplier the multiplier to apply.
+     * @return the multiplied point.
+     */
+    public PointXYZ multiplyY(double multiplier) {
+        return new PointXYZ(x(), y() * multiplier, z);
+    }
+
+    /**
+     * Multiply the Y value of {@code this} point by {@code multiplier} and
+     * return a new point with the new value.
+     *
+     * @param multiplier the multiplier to apply.
+     * @return the multiplied point.
+     */
+    public PointXYZ multiplyZ(double multiplier) {
+        return new PointXYZ(x(), y(), z.multiply(multiplier));
+    }
+
     @Override
     public String toString() {
         return StringUtils.format(

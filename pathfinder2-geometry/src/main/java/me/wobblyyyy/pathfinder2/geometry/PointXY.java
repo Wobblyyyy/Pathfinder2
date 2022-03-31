@@ -1706,6 +1706,28 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     }
 
     /**
+     * Multiply the X value of {@code this} point by {@code multiplier} and
+     * return a new point with the new value.
+     *
+     * @param multiplier the multiplier to apply.
+     * @return the multiplied point.
+     */
+    public PointXY multiplyX(double multiplier) {
+        return new PointXY(this.x * multiplier, this.y);
+    }
+
+    /**
+     * Multiply the Y value of {@code this} point by {@code multiplier} and
+     * return a new point with the new value.
+     *
+     * @param multiplier the multiplier to apply.
+     * @return the multiplied point.
+     */
+    public PointXY multiplyY(double multiplier) {
+        return new PointXY(this.x, this.y * multiplier);
+    }
+
+    /**
      * Compare two {@code PointXY}s. This has a tolerance of 0.01: if
      * (0, 0) was compared to (0.005, 0), it would still say they're equal.
      */
