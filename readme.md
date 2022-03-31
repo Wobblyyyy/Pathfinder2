@@ -26,7 +26,7 @@ and [FIRST Tech Challenge](https://www.firstinspires.org/robotics/ftc).
 - Track the position of a wheeled mobile robot using a variety of odometry
   implementations.
 - Dynamically correct for movement error and drift.
-- Plan complex routes using the 
+- Plan complex routes using the
   [Trajectory](./docs/17_the_trajectory_system.md)
   system. Follow splines, arcs, lines, equations, the little green light at
   the end of the tunnel - whatever you want, it's really up to you.
@@ -40,8 +40,35 @@ and [FIRST Tech Challenge](https://www.firstinspires.org/robotics/ftc).
   evidence to support that, but we're all about swag here.
 
 Want to get started? Check out the [releases guide](project_releases.md) to
-get everything installed, and then head over to the 
+get everything installed, and then head over to the
 [documentation portal](https://wobblyyyy.github.io/docs/pathfinder2/documentation.html).
+
+<h2 align="center">Summary</h2>
+
+Pathfinder handles everything related to your robot's movement. It abstracts
+away much of the tedious movement-related code many robot codebases are bogged
+down with and allows you to focus on what else your robot can do. In addition
+to providing a robust interface for precisely controlling your robot's
+movement, Pathfinder provides a wide array of robotics-related utilities and
+tools.
+
+Want your robot to move to a certain point on the field? Simple:
+```java
+pathfinder.goTo(new PointXY(10, 15));
+```
+
+`PointXY` is a simple Cartesian coordinate with X and Y values. Now let's say
+you want to make your robot move to the same point, but turn to 45 degrees.
+```java
+// method 1
+pathfinder.goTo(new PointXYZ(10, 15, Angle.fromDeg(45)));
+
+// method 2
+pathfinder.goToZ(Angle.fromDeg(45));
+```
+
+Pathfinder is capable of significantly more than simple movement - splines,
+motion profiling, recording and playback - the list goes on.
 
 <h2 align="center">Example Code</h2>
 
@@ -51,26 +78,17 @@ Check out an example FRC project
 Here's a demonstration of Pathfinder's utilization of lambda expressions to
 write simple and readable code.
 ```java
-// make the robot follow a spline. this could be used for autonomous movement
 pathfinder
-    .setSpeed(0.5) // a value, 0-1, how fast the robot is
-    .setTolerance(2) // how much tolerance pathfinder will use when
-                     // evaluating if the robot is at a certain position
-    .setAngleTolerance(Angle.fixedDeg(5)) // same thing as tolerance, but
-                                          // it's an angle
-    .splineTo(                                     // create a spline with 3
-        new PointXYZ(10, 10, Angle.fixedDeg(90)),  // very lovely points.
-        new PointXYZ(20, 30, Angle.fixedDeg(45)),  // splines can have a lot
-        new PointXYZ(30, 50, Angle.fixedDeg(180))  // more cool features that
-                                                   // are explained later on
+    .setSpeed(0.5)
+    .setTolerance(2)
+    .setAngleTolerance(Angle.fixedDeg(5))
+    .splineTo(
+        new PointXYZ(10, 10, Angle.fixedDeg(90)),
+        new PointXYZ(20, 30, Angle.fixedDeg(45)),
+        new PointXYZ(30, 50, Angle.fixedDeg(180))
     )
-    .tickUntil(); // "tick" pathfinder until it's done. "ticking" is basically
-                  // updating the robot - it'll evaluate it's current position,
-                  // and it'll use that to determine where it should move.
-                  // pathfinder DOES NOT WORK unless you use the tick method!
+    .tickUntil();
 
-// add listeners for the A and B buttons, as well as either of the triggers.
-// this is very useful for making tele-op code
 pathfinder.getListenerManager()
     .bindButton(gampad::a, (isPressed) -> {
         // code to be executed whenever the A button is pressed
@@ -79,29 +97,17 @@ pathfinder.getListenerManager()
         // code to be executed whenever the B button is pressed
     })
     .bind(new ListenerBuilder()
-        .setMode(ListenerMode.CONDITION_IS_MET) // the listener will be active
-                                                // whenever the condition is
-                                                // met
-
-        .addInput(() -> SupplierFilter.anyTrue( // if either of the two
-                                                // conditions are true, the
-                                                // supplier will return true,
-                                                // meaning the listener
-                                                // will be activated
+        .setMode(ListenerMode.CONDITION_IS_MET)
+        .addInput(() -> SupplierFilter.anyTrue(
             () -> gamepad.rightTrigger() > 0,
             () -> gamepad.leftTrigger() > 0
         ))
         .setWhenTriggered(() -> {
             // code to be executed whenever either trigger is pressed
         })
-        .setPriority(10) // how important the listener is - higher priorities
-                         // are executed first
-        .setExpiration(Double.MAX_VALUE), // the timestamp (ms since epoch)
-                                          // that will cause the listener to
-                                          // "expire," basically making it no
-                                          // longer listen
-        .setMaximumExecutions(Double.MAX_VALUE) // the max amount of times
-                                                // the listener can be called
+        .setPriority(10)
+        .setExpiration(Double.MAX_VALUE),
+        .setMaximumExecutions(Double.MAX_VALUE)
     );
 
 // whenever pathfinder is "ticked" (updated, basically), set the robot's
@@ -128,7 +134,7 @@ Installation instructions have been moved [here](project_releases.md).
 
 Here's all of the sources of documentation I can think of right now.
 
-- [Documentation portal](https://wobblyyyy.github.io/docs/pathfinder2/documentation.html) - 
+- [Documentation portal](https://wobblyyyy.github.io/docs/pathfinder2/documentation.html) -
   the hub for documentation for this library.
 - [Project tutorial](.github/project_tutorial.md) - this is a basic tutorial
   that walks through the fundamentals of the library. This is probably the best
@@ -136,7 +142,7 @@ Here's all of the sources of documentation I can think of right now.
 - [Examples](pathfinder2-examples) - several example usages of the project. Each
   of the classes contained in this module will contain more specific
   documentation explaining what the example is demonstrating.
-- [JavaDoc](https://wobblyyyy.github.io/JavaDocs/Pathfinder2/0.7.0) - JavaDoc 
+- [JavaDoc](https://wobblyyyy.github.io/JavaDocs/Pathfinder2/0.7.0) - JavaDoc
   for the Pathfinder2 library. This is the most fine-grained documentation, and I'd
   encourage you to check this out once you're comfortable with the library.
 - [Video guides](https://google.com) - (not yet available) video guides on using
