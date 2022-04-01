@@ -25,6 +25,20 @@ controller. With that being said, however, the `PIDController` should work
 perfectly fine. _As a brief aside, if you're using wpilib, you can use use
 `WPIPIDController` if you'd like._
 
+## Tuning your controller
+Unfortunately, there's no magic way to immediately tune a controller.
+Depending on what the controller is being used for, it'll have to be tuned
+differently. The most common controller application in Pathfinder (and the only
+application of the `Controller` interface that's required in order to have a
+robot capable of turning) is a "turn controller," which is, in essence,
+responsible for... well, making your robot turn. Crazy, I know.
+
+### Example: tuning a proportional turn controller
+We're going to use a `ProportionalController` here, because it's the simplest
+type of controller, meaning it'll be the most easy to explain. Before we
+actually start tuning anything, we'll need to learn how a proportional
+controller works.
+
 ## Further reading
 - [Open-loop controller](https://en.wikipedia.org/wiki/Open-loop_controller)
 - [PID controller](https://en.wikipedia.org/wiki/PID_controller)
