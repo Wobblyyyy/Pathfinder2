@@ -33,11 +33,39 @@ application of the `Controller` interface that's required in order to have a
 robot capable of turning) is a "turn controller," which is, in essence,
 responsible for... well, making your robot turn. Crazy, I know.
 
-### Example: tuning a proportional turn controller
+### Example: how a proportional controller works
 We're going to use a `ProportionalController` here, because it's the simplest
 type of controller, meaning it'll be the most easy to explain. Before we
 actually start tuning anything, we'll need to learn how a proportional
 controller works.
+
+Let's start by taking a look at the `calculate` method in the
+`ProportionalController` class:
+```java
+@Override
+public double calculate(double value) {
+    // find the difference between the current and target values
+    double delta = getTarget() - value;
+
+    // multiply delta by the controller's coefficient and ensure it fits
+    // in between the minimum and maximum values
+    return MinMax.clip(delta * coefficient, getMin(), getMax());
+}
+```
+
+As an example: say the controller's target is 10, and `value` is 2. `delta`
+would then be `8` (10 - 2 = 8). If the controller's coefficient is 0.1, the
+controller would then return 0.1 * 8, which is 0.8. If the controller's
+coefficient were negative (say, -0.01), the `calculate` method would then
+return -0.08 instead.
+
+### Example: how Pathfinder utilizes a turn controller
+As you've probably figured out by now, Pathfinder uses a controller to control
+your robot's rotation. This controller will ALWAYS have a target value of 0,
+and will ALWAYS be provided with the minimum delta to the target angle, in
+degrees. _Say you're facing 45 degrees and you want to be facing 90 degrees -
+the controller's target would be 0, but the controller's input would be 45
+(target - current, or, in this case, 90 - 45)._
 
 ## Further reading
 - [Open-loop controller](https://en.wikipedia.org/wiki/Open-loop_controller)
