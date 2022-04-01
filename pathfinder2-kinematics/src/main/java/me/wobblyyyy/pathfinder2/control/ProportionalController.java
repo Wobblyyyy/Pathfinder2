@@ -80,12 +80,8 @@ public class ProportionalController extends AbstractController {
      */
     @Override
     public double calculate(double value) {
-        double delta = getTarget() - value;
-
         ValidationUtils.validate(value, "value");
-        ValidationUtils.validate(value, "coefficient");
-        ValidationUtils.validate(delta, "delta");
-
+        double delta = getTarget() - value;
         return MinMax.clip(delta * coefficient, getMin(), getMax());
     }
 
