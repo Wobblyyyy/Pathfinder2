@@ -4,11 +4,12 @@ that you have a controller (a device which receives an input, and based on
 that input, determines an output). The controller's input is some arbitrary
 value (this is usually from a sensor on the robot or a joystick) and it outputs
 a value that will hopefully minimize the controller's "error" (how far from
-its target the contoller currently is).
+its target the controller currently is).
 
 ## Available controllers
 - [`ProportionalController`](../pathfinder2-kinematics/src/main/java/me/wobblyyyy/pathfinder2/control/ProportionalController.java)
 - [`PIDController`](../pathfinder2-kinematics/src/main/java/me/wobblyyyy/pathfinder2/control/PIDController.java)
+- [`WPIPIDController`](../pathfinder2-frc/src/main/java/me/wobblyyyy/pathfinder2/wpilib/WPIPIDController.java)
 - [`AbstractController`](../pathfinder2-kinematics/src/main/java/me/wobblyyyy/pathfinder2/control/AbstractController.java)
 - [`SplineController`](../pathfinder2-kinematics/src/main/java/me/wobblyyyy/pathfinder2/control/SplineController.java)
 - [`Controller` interface](../pathfinder2-kinematics/src/main/java/me/wobblyyyy/pathfinder2/control/Controller.java)
@@ -65,7 +66,51 @@ your robot's rotation. This controller will ALWAYS have a target value of 0,
 and will ALWAYS be provided with the minimum delta to the target angle, in
 degrees. _Say you're facing 45 degrees and you want to be facing 90 degrees -
 the controller's target would be 0, but the controller's input would be 45
-(target - current, or, in this case, 90 - 45)._
+(target - current, or, in this case, 90 - 45)._ 
+
+Here are a couple more examples:
++---+-------------------------+------------------------+------------------+
+| # | Current angle (degrees) | Target angle (degrees) | Controller input |
+|---|-------------------------|------------------------|------------------|
+| 1 | 45                      | 90                     | 45               |
+| 2 | 45                      | 0                      | -45              |
+| 3 | 45                      | 135                    | 90               |
+| 4 | 0                       | 270                    | -90              |
+| 5 | 0                       | 90                     | 90               |
+| 6 | 90                      | 45                     | -45              |
++---+-------------------------+------------------------+------------------+
+
+#### Important notice about turn controllers
+- __The maximum value a controller will ever receive as input is 180.__
+- __Turn controller coefficients should almost always be negative.__
+
+### Determining a good coefficient
+The only way to determine what coefficient will work best for your specific use
+case is to test it... over... and over... and over... and over again. However,
+you can try to figure out a good starting point, to reduce the amount of time
+it takes to tune the controller.
+
+Say you're using a `ProportionalController`, right? How would you figure out
+what a decent coefficient might be? Recall the maximum value this controller
+will ever receive as input is 180, and the minimum is -180. The controller will
+calculate `vz` values for your robot, which, in most cases, will only ever be
+between -1 and 1, inclusive (note it CAN be outside of this range, but it's
+somewhat uncommon). Given that we know our input will be between -180 and 180,
+and our output will be between -1 and 1, the "ideal" coefficient would
+logically have to be 0.005.
+
+I'll tell you that this is NOT actually the ideal coefficient: your robot will
+turn to slow. Where would I suggest you start? Try -0.05.
+
+### Setting up a `Controller` as a turn controller
+This is completely optional, but it might be helpful. This sets the minimum and
+maximum values a controller can output.
+```java
+Controller controller =
+    new ProportionalController(-0.05)
+        .setMin(-1.0)
+        .setMax(1.0);
+```
 
 ## Further reading
 - [Open-loop controller](https://en.wikipedia.org/wiki/Open-loop_controller)
