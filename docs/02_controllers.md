@@ -66,7 +66,7 @@ your robot's rotation. This controller will ALWAYS have a target value of 0,
 and will ALWAYS be provided with the minimum delta to the target angle, in
 degrees. _Say you're facing 45 degrees and you want to be facing 90 degrees -
 the controller's target would be 0, but the controller's input would be 45
-(target - current, or, in this case, 90 - 45)._ 
+(target - current, or, in this case, 90 - 45)._
 
 Here are a couple more examples:
 
@@ -109,6 +109,57 @@ Controller controller =
     new ProportionalController(-0.05)
         .setMin(-1.0)
         .setMax(1.0);
+```
+
+## Custom controller
+If, for whatever reason, you need to create your own custom controller, you
+should extend `AbstractController`. The `calculate` method should ALWAYS call
+the following methods:
+- `getTarget()`
+- `getMin()`
+- `getMax()`
+
+This ensures that your controller functions as intended.
+
+## Minimums and maximums
+The `Controller` interface specifies four methods:
+- `getMin()`
+- `getMax()`
+- `setMin()`
+- `setMax()`
+
+As you could probably infer, these methods deal with the controller's minimum
+and maximum. If the controller is implemented properly, this will modify the
+range of the controller's output.
+- The value returned by `getMin()` is also the lowest value the `calculate`
+  method (and it's overloads) should ever return.
+- The value returned by `getMax()` is also the highest value the `calculate`
+  method (and it's overloads) should ever return.
+
+### Example of minimums and maximums
+```java
+Controller controller = new ProportionalController(1);
+
+controller.calculate(0, 1);       // 1
+controller.calculate(0, -1);      // -1
+controller.calculate(0, 100);     // 100
+controller.calculate(0, -100);    // -100
+
+controller.setMin(-1);
+controller.setMax(1);
+
+controller.calculate(0, 1);       // 1
+controller.calculate(0, -1);      // -1
+controller.calculate(0, 100);     // 1
+controller.calculate(0, -100);    // -1
+
+controller.setMin(-0.5);
+controller.setMax(0.5);
+
+controller.calculate(0, 1);       // 0.5
+controller.calculate(0, -1);      // -0.5
+controller.calculate(0, 100);     // 0.5
+controller.calculate(0, -100);    // -0.5
 ```
 
 ## Further reading
