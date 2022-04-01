@@ -69,7 +69,7 @@ the controller's target would be 0, but the controller's input would be 45
 (target - current, or, in this case, 90 - 45)._ 
 
 Here are a couple more examples:
-+---+-------------------------+------------------------+------------------+
+
 | # | Current angle (degrees) | Target angle (degrees) | Controller input |
 |---|-------------------------|------------------------|------------------|
 | 1 | 45                      | 90                     | 45               |
@@ -78,7 +78,6 @@ Here are a couple more examples:
 | 4 | 0                       | 270                    | -90              |
 | 5 | 0                       | 90                     | 90               |
 | 6 | 90                      | 45                     | -45              |
-+---+-------------------------+------------------------+------------------+
 
 #### Important notice about turn controllers
 - __The maximum value a controller will ever receive as input is 180.__
