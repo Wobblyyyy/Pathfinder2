@@ -11,6 +11,7 @@ its target the controller currently is).
 - [`PIDController`](../pathfinder2-kinematics/src/main/java/me/wobblyyyy/pathfinder2/control/PIDController.java)
 - [`WPIPIDController`](../pathfinder2-frc/src/main/java/me/wobblyyyy/pathfinder2/wpilib/WPIPIDController.java)
 - [`AbstractController`](../pathfinder2-kinematics/src/main/java/me/wobblyyyy/pathfinder2/control/AbstractController.java)
+- [`BangBangController`](../pathfinder2-kinematics/src/main/java/me/wobblyyyy/pathfinder2/control/BangBangController.java)
 - [`SplineController`](../pathfinder2-kinematics/src/main/java/me/wobblyyyy/pathfinder2/control/SplineController.java)
 - [`Controller` interface](../pathfinder2-kinematics/src/main/java/me/wobblyyyy/pathfinder2/control/Controller.java)
 - [`control` package](../pathfinder2-kinematics/src/main/java/me/wobblyyyy/pathfinder2/control/)
