@@ -2512,6 +2512,85 @@ public class Pathfinder {
         return this;
     }
 
+    /**
+     * Execute a {@link Runnable} action until either (1) the elapsed time, in
+     * milliseconds, exceeds {@code maximumTimeMs} or (2) the {@code condition}
+     * supplier returns false.
+     *
+     * @param maximumTimeMs the maximum time, in milliseconds, this method
+     *                      will be allowed to execute for.
+     * @param condition     the condition that must be true in order for
+     *                      this method to continue execution.
+     * @param action        the action that will be run repeatedly.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder asLongAs(
+        double maximumTimeMs,
+        Supplier<Boolean> condition,
+        Runnable action
+    ) {
+        ElapsedTimer timer = new ElapsedTimer(true);
+
+        while (condition.get() && timer.isElapsedLessThan(maximumTimeMs)) {
+            action.run();
+        }
+
+        return this;
+    }
+
+    /**
+     * Execute a {@link Runnable} action until either (1) the elapsed time, in
+     * milliseconds, exceeds {@code maximumTimeMs} or (2) the {@code predicate}
+     * {@link Predicate} returns false.
+     *
+     * @param maximumTimeMs the maximum time, in milliseconds, this method
+     *                      will be allowed to execute for.
+     * @param predicate     a {@link Predicate} that must return true in order
+     *                      order for the method to continue executing. If the
+     *                      predicate returns false, the method's execution
+     *                      will terminate.
+     * @param action        the action that will be run repeatedly.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder asLongAs(
+        double maximumTimeMs,
+        Predicate<Pathfinder> predicate,
+        Runnable action
+    ) {
+        return asLongAs(maximumTimeMs, () -> predicate.test(this), action);
+    }
+
+    /**
+     * Execute a {@link Runnable} action until the {@code condition} supplier
+     * returns false.
+     *
+     * @param condition the condition that must be true in order for
+     *                  this method to continue execution.
+     * @param action    the action that will be run repeatedly.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder asLongAs(Supplier<Boolean> condition, Runnable action) {
+        return asLongAs(Double.MAX_VALUE, condition, action);
+    }
+
+    /**
+     * Execute a {@link Runnable} action until the {@code supplier}
+     * {@link Predicate} returns false.
+     *
+     * @param predicate a {@link Predicate} that must return true in order
+     *                  order for the method to continue executing. If the
+     *                  predicate returns false, the method's execution
+     *                  will terminate.
+     * @param action    the action that will be run repeatedly.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder asLongAs(
+        Predicate<Pathfinder> predicate,
+        Runnable action
+    ) {
+        return asLongAs(Double.MAX_VALUE, predicate, action);
+    }
+
     /*
      * the waitUntil and waitAsLongAs methods have to use busy waiting
      * because JDK8 doesn't support the Thread#onSpinWait method, which
