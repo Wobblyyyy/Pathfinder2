@@ -899,9 +899,9 @@ public class PointXYZ extends PointXY {
     public String toString() {
         return StringUtils.format(
             Geometry.formatPointXYZ,
-            Rounding.fastRound(x()),
-            Rounding.fastRound(y()),
-            Rounding.fastRound(z.deg())
+            StringUtils.roundAndFormatNumber(x()),
+            StringUtils.roundAndFormatNumber(y()),
+            StringUtils.roundAndFormatNumber(z.deg())
         );
     }
 

@@ -443,12 +443,6 @@ public class PointXY implements Comparable<PointXY>, Serializable {
         // get the general idea.
         double distance = Math.hypot(b.x - a.x, b.y - a.y);
 
-        ValidationUtils.validate(
-            distance,
-            "distance",
-            StringUtils.format("point a: <%s>, point b: <%s>", a, b)
-        );
-
         return distance;
     }
 
@@ -1768,8 +1762,8 @@ public class PointXY implements Comparable<PointXY>, Serializable {
     public String toString() {
         return StringUtils.format(
             Geometry.formatPointXY,
-            Rounding.fastRound(x),
-            Rounding.fastRound(y)
+            StringUtils.roundAndFormatNumber(x),
+            StringUtils.roundAndFormatNumber(y)
         );
     }
 

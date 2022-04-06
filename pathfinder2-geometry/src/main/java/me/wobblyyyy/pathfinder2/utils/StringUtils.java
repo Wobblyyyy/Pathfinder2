@@ -79,7 +79,7 @@ public class StringUtils {
         int decimalIndex = str.indexOf('.');
         int length = str.length();
 
-        if (decimalIndex < 4 && length < 5) {
+        if (decimalIndex < 4) {
             if (length < 5) {
                 return str;
             }
@@ -91,6 +91,10 @@ public class StringUtils {
         int offset = (decimalIndex % 3) - 1;
         int counter = 1;
 
+        for (int i = 0; i < offset; i++) {
+            builder.append(str.charAt(i));
+        }
+
         for (int i = offset; i < length; i++) {
             if (i < decimalIndex) {
                 if (counter-- == 0) {
@@ -99,7 +103,9 @@ public class StringUtils {
                 }
             }
 
-            builder.append(str.charAt(i));
+            if (offset > -1) {
+                builder.append(str.charAt(i));
+            }
         }
 
         return builder.toString();
