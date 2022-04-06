@@ -273,6 +273,59 @@ public class ExampleDrive implements Drive {
 }
 ```
 
+#### Using `ImprovedAbstractDrive`
+It's suggested that you extend `ImprovedAbstractDrive` instead of implementing
+the `Drive` interface, as it reduces the complexity of your code. All you
+need to do to extend `ImprovedAbstractDrive` is implement the
+`abstractSetTranslation(Translation)`, like so:
+```java
+import me.wobblyyyy.pathfinder2.robot.ImprovedAbstractDrive;
+
+public class ExampleDrive extends ImprovedAbstractDrive {
+    @Override
+    public void abstractSetTranslation(Translation translation) {
+        // code to set power to the motors would go here
+    }
+}
+```
+
+Here's an example with for a mecanum drivetrain.
+```java
+public class ExampleDrive extends ImprovedAbstractDrive {
+    private final RelativeMecanumKinematics kinematics;
+
+    private final Motor frontRight;
+    private final Motor frontLeft;
+    private final Motor backRight;
+    private final Motor backLeft;
+
+    public ExampleDrive(
+        Motor frontRight,
+        Motor frontLeft,
+        Motor backRight,
+        Motor backLeft
+    ) {
+        kinematics = new RelativeMecanumKinematics(0, 1, Angle.fromDeg(0));
+
+        this.frontRight = frontRight;
+        this.frontLeft = frontLeft;
+        this.backRight = backRight;
+        this.backLeft = backLeft;
+    }
+
+    @Override
+    public void abstractSetTranslation(Translation translation) {
+        // code to set power to the motors would go here
+        MecanumState state = kinematics.calculate(translation);
+
+        frontRight.setPower(state.fr());
+        frontLeft.setPower(state.fl());
+        backRight.setPower(state.br());
+        backLeft.setPower(state.bl());
+    }
+}
+```
+
 #### Drive train modifiers
 Drive train modifiers are not as useful on drive trains as they are on
 odometry systems. However, drive train modifiers are still useful (and
