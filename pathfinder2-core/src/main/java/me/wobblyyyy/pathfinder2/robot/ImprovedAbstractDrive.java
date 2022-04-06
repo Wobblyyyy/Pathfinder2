@@ -18,6 +18,45 @@ import me.wobblyyyy.pathfinder2.geometry.Translation;
  * a drive system is implement the {@link #abstractSetTranslation(Translation)}
  * method.
  *
+ * <p>
+ * Here's an example implementation of this class.
+ * <code><pre>
+ * public class ExampleDrive extends ImprovedAbstractDrive {
+ *     private final RelativeMecanumKinematics kinematics;
+ *
+ *     private final Motor frontRight;
+ *     private final Motor frontLeft;
+ *     private final Motor backRight;
+ *     private final Motor backLeft;
+ *
+ *     public ExampleDrive(
+ *         Motor frontRight,
+ *         Motor frontLeft,
+ *         Motor backRight,
+ *         Motor backLeft
+ *     ) {
+ *         kinematics = new RelativeMecanumKinematics(0, 1, Angle.fromDeg(0));
+ *
+ *         this.frontRight = frontRight;
+ *         this.frontLeft = frontLeft;
+ *         this.backRight = backRight;
+ *         this.backLeft = backLeft;
+ *     }
+ *
+ *     @Override
+ *     public void abstractSetTranslation(Translation translation) {
+ *         // code to set power to the motors would go here
+ *         MecanumState state = kinematics.calculate(translation);
+ *
+ *         frontRight.setPower(state.fr());
+ *         frontLeft.setPower(state.fl());
+ *         backRight.setPower(state.br());
+ *         backLeft.setPower(state.bl());
+ *     }
+ * }
+ * </pre></code>
+ * </p>
+ *
  * @author Colin Robertson
  * @since 1.4.2
  */
@@ -38,6 +77,8 @@ public abstract class ImprovedAbstractDrive implements Drive {
 
     @Override
     public void setTranslation(Translation translation) {
+        translation = modifier.apply(translation);
+
         this.translation = translation;
 
         abstractSetTranslation(translation);
