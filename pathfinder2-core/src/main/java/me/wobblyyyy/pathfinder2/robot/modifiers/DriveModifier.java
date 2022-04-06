@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.robot.modifiers;
 
+import java.util.function.Function;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 
 /**
@@ -19,6 +20,15 @@ import me.wobblyyyy.pathfinder2.geometry.Translation;
  * @since 0.0.0
  */
 public class DriveModifier {
+    public static Function<Translation, Translation> SWAP_XY =
+        DriveModifier::swapXY;
+    public static Function<Translation, Translation> INVERT_X =
+        DriveModifier::invertX;
+    public static Function<Translation, Translation> INVERT_Y =
+        DriveModifier::invertY;
+    public static Function<Translation, Translation> INVERT_Z =
+        DriveModifier::invertZ;
+
     /**
      * Should X and Y be swapped?
      */
@@ -33,6 +43,26 @@ public class DriveModifier {
      * Should Y be inverted (multiplied by -1)?
      */
     private boolean invertY;
+
+    public static Translation swapXY(Translation translation) {
+        return new Translation(
+            translation.vy(),
+            translation.vz(),
+            translation.vz()
+        );
+    }
+
+    public static Translation invertX(Translation translation) {
+        return translation.multiply(-1, 1, 1);
+    }
+
+    public static Translation invertY(Translation translation) {
+        return translation.multiply(1, -1, 1);
+    }
+
+    public static Translation invertZ(Translation translation) {
+        return translation.multiply(1, 1, -1);
+    }
 
     /**
      * Should X and Y be swapped?
