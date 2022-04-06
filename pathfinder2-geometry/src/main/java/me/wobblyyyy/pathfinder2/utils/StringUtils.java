@@ -12,6 +12,8 @@ package me.wobblyyyy.pathfinder2.utils;
 
 import java.util.function.Consumer;
 
+import me.wobblyyyy.pathfinder2.math.Rounding;
+
 /**
  * String-related utilities.
  *
@@ -63,6 +65,67 @@ public class StringUtils {
         if (maxLength > 0) if (
             builder.length() - previousLength > maxLength
         ) builder.setLength(previousLength + maxLength);
+    }
+
+    /**
+     * Format a number so that it has commas in it. This will NOT round the
+     * number.
+     *
+     * @param number the number to format.
+     * @return the formatted number.
+    */
+    public static String formatNumber(double number) {
+        String str = String.valueOf(number);
+        int decimalIndex = str.indexOf('.');
+        int length = str.length();
+
+        if (decimalIndex < 4 && length < 5) {
+            if (length < 5) {
+                return str;
+            }
+
+            decimalIndex = length;
+        }
+
+        StringBuilder builder = new StringBuilder(16);
+        int offset = (decimalIndex % 3) - 1;
+        int counter = 1;
+
+        for (int i = offset; i < length; i++) {
+            if (i < decimalIndex) {
+                if (counter-- == 0) {
+                    builder.append(',');
+                    counter = 2;
+                }
+            }
+
+            builder.append(str.charAt(i));
+        }
+
+        return builder.toString();
+    }
+
+    /**
+     * Round a number, then apply {@link #formatNumber(double)}.
+     *
+     * @param number the number to round and format.
+     * @param places how many places to round the number to.
+     * @return the rounded and formatted number.
+    */
+    public static String roundAndFormatNumber(double number, int places) {
+        double rounded = Rounding.fastRound(number, places);
+
+        return formatNumber(rounded);
+    }
+
+    /**
+     * Round a number, then apply {@link #formatNumber(double)}.
+     *
+     * @param number the number to round and format.
+     * @return the rounded and formatted number.
+    */
+    public static String roundAndFormatNumber(double number) {
+        return roundAndFormatNumber(number, 3);
     }
 
     /**

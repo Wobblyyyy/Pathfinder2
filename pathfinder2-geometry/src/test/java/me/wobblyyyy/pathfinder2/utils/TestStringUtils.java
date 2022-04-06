@@ -30,4 +30,15 @@ public class TestStringUtils {
             StringUtils.format(template, 10.0, 10.0, 100.0, 100)
         );
     }
+
+    @Test
+    public void testFormatNumber() {
+        double a = 1_000;
+        double b = 1_000.56;
+        double c = 1_234_567.890;
+
+        Assertions.assertEquals("1,000.0", StringUtils.formatNumber(a));
+        Assertions.assertEquals("1,000.56", StringUtils.formatNumber(b));
+        Assertions.assertEquals("1,234,567.89", StringUtils.formatNumber(c));
+    }
 }
