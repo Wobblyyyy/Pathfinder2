@@ -11,7 +11,6 @@
 package me.wobblyyyy.pathfinder2.utils;
 
 import java.util.function.Consumer;
-
 import me.wobblyyyy.pathfinder2.math.Rounding;
 
 /**
@@ -75,7 +74,7 @@ public class StringUtils {
      *
      * @param number the number to format.
      * @return the formatted number.
-    */
+     */
     public static String formatNumber(double number) {
         String str = String.valueOf(number);
         int decimalIndex = str.indexOf('.');
@@ -119,7 +118,7 @@ public class StringUtils {
      * @param number the number to round and format.
      * @param places how many places to round the number to.
      * @return the rounded and formatted number.
-    */
+     */
     public static String roundAndFormatNumber(double number, int places) {
         double rounded = Rounding.fastRound(number, places);
 
@@ -131,7 +130,7 @@ public class StringUtils {
      *
      * @param number the number to round and format.
      * @return the rounded and formatted number.
-    */
+     */
     public static String roundAndFormatNumber(double number) {
         return roundAndFormatNumber(number, 3);
     }
