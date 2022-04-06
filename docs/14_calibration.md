@@ -331,6 +331,20 @@ Drive train modifiers are not as useful on drive trains as they are on
 odometry systems. However, drive train modifiers are still useful (and
 sometimes necessary).
 
+#### Prebuilt modifiers
+Check out the `DriveModifier` class for some prebuilt modifiers you can use.
+```java
+public class ExampleModifier {
+    public void testDrive() {
+        Drive drive = new ExampleDrive();
+        drive.setModifier(DriveModifier.SWAP_XY);
+        drive.setModifier(DriveModifier.INVERT_X);
+        drive.setModifier(DriveModifier.INVERT_Y);
+        drive.setModifier(DriveModifier.INVERT_Z);
+    }
+}
+```
+
 ##### X and Y are swapped
 This is a pretty common modifier. It's also pretty simple, thankfully.
 ```java
