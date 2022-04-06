@@ -45,7 +45,9 @@ public class StringUtils {
                 builder.append(Integer.parseInt(nextSource.toString()));
                 break;
             case 'd':
-                builder.append(Double.parseDouble(nextSource.toString()));
+                double number = Double.parseDouble(nextSource.toString());
+                double rounded = Rounding.fastRound(number);
+                builder.append(formatNumber(rounded));
                 break;
             case 'f':
                 builder.append(Float.parseFloat(nextSource.toString()));
