@@ -57,10 +57,10 @@ Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01)
     .setTolerance(2)
     .setAngleTolerance(Angle.fromDeg(5))
     .splineTo(
-            new PointXYZ(0, 0, 0),
-            new PointXYZ(1, 2, 0),
-            new PointXYZ(2, 4, 0),
-            new PointXYZ(3, 8, 0)
+        new PointXYZ(0, 0, 0),
+        new PointXYZ(1, 2, 0),
+        new PointXYZ(2, 4, 0),
+        new PointXYZ(3, 8, 0)
     )
     .tickUntil();
 ```
@@ -84,10 +84,15 @@ math library in your project, like so:
 implementation 'org.apache.commons:commons-math3:3.6.1'
 ```
 
+From an outside perspective, there aren't any major differences between the
+types of spline interpolation.
+
 ### Rules for making splines
 There are a couple guidelines to keep in mind while creating splines.
-- Make sure there are no duplicate X/Y values. If there are any duplicate
-  X or Y values, the spline's interpolation... won't work.
+- Make sure there are no duplicate X values. If there are any duplicate
+  X values, the spline's interpolation... won't work. _Previous versions of
+  Pathfinder required unique X and Y pairs, but that's since been updated: the
+  only requirement now is that there are unique X values._
 - Ensure X values are monotonic. It doesn't matter if they're increasing or
   decreasing, they just all need to be moving in the same direction.
 - Y values should be monotonic... sometimes. If you attempt to create a spline
