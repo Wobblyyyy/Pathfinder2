@@ -215,11 +215,12 @@ public class TestAdvancedSplineTrajectory extends TestableRobot {
     public void testMonotoneCubicSplineWithRepeatedXValues() {
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> testSplineTo(
-                new PointXYZ(5, 1, 1),
-                new PointXYZ(5, 2, 2),
-                new PointXYZ(5, 3, 3)
-            )
+            () ->
+                testSplineTo(
+                    new PointXYZ(5, 1, 1),
+                    new PointXYZ(5, 2, 2),
+                    new PointXYZ(5, 3, 3)
+                )
         );
     }
 

@@ -61,10 +61,10 @@ public class TimeSpan {
      * Create a new {@code TimeSpan} by copying another {@code TimeSpan}.
      *
      * @param timeSpan the {@code TimeSpan} to copy.
-    */
+     */
     @SuppressWarnings("CopyConstructorMissesField")
     public TimeSpan(TimeSpan timeSpan) {
-       this(timeSpan.startTimeMs, timeSpan.stopTimeMs);
+        this(timeSpan.startTimeMs, timeSpan.stopTimeMs);
     }
 
     /**
@@ -74,7 +74,7 @@ public class TimeSpan {
      * @param startTimeMs   the {@code TimeSpan}'s start time, in milliseconds.
      * @param elapsedTimeMs the amount of time that has elapsed.
      * @return a new {@code TimeSpan}.
-    */
+     */
     public static TimeSpan elapsed(double startTimeMs, double elapsedTimeMs) {
         return new TimeSpan(startTimeMs, startTimeMs + elapsedTimeMs);
     }
@@ -115,10 +115,7 @@ public class TimeSpan {
      * @return an added {@code TimeSpan}.
      */
     public TimeSpan add(double timeToAddMs) {
-        return new TimeSpan(
-            startTimeMs,
-            stopTimeMs + timeToAddMs
-        );
+        return new TimeSpan(startTimeMs, stopTimeMs + timeToAddMs);
     }
 
     /**
@@ -149,9 +146,9 @@ public class TimeSpan {
                 0.01
             );
             boolean sameStopTimeMs = Equals.soft(
-                    this.stopTimeMs,
-                    t.stopTimeMs,
-                    0.01
+                this.stopTimeMs,
+                t.stopTimeMs,
+                0.01
             );
 
             return sameStartTimeMs && sameStopTimeMs;

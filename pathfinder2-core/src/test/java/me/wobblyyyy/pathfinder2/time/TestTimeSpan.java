@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestTimeSpan {
+
     @Test
     public void testCreateTimeSpan() {
         TimeSpan a = new TimeSpan(0, 0);
@@ -22,7 +23,10 @@ public class TestTimeSpan {
 
     @Test
     public void testCannotCreateInvalidTimeSpan() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new TimeSpan(0, -1));
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> new TimeSpan(0, -1)
+        );
     }
 
     @Test

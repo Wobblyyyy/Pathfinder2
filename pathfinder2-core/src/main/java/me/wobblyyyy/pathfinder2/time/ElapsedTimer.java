@@ -128,7 +128,7 @@ public class ElapsedTimer {
      * Get a {@code TimeSpan} representing the amount of elapsed time.
      *
      * @return a new {@code TimeSpan} representing an amount of elapsed time.
-    */
+     */
     public TimeSpan getTimeSpan() {
         return new TimeSpan(start, getElapsed());
     }
@@ -225,7 +225,7 @@ public class ElapsedTimer {
      *
      * @return if {@code this} has already started, return true. If
      * {@code this} has not yet started, return false.
-    */
+     */
     public boolean hasStarted() {
         return start != 0;
     }
