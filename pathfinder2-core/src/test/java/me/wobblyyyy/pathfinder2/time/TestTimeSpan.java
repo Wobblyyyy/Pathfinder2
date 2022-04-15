@@ -43,6 +43,6 @@ public class TestTimeSpan {
         Assertions.assertEquals(TimeSpan.elapsed(0, 200), a.add(100));
 
         Assertions.assertEquals(TimeSpan.elapsed(100, 300), b.add(c));
-        Assertions.assertEquals(TimeSpan.elapsed(100, 300), b.add(300));
+        Assertions.assertEquals(TimeSpan.elapsed(100, 400), b.add(300));
     }
 }
