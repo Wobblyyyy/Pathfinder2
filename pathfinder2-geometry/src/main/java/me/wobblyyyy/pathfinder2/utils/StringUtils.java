@@ -79,12 +79,13 @@ public class StringUtils {
         String str = String.valueOf(number);
         int decimalIndex = str.indexOf('.');
         int length = str.length();
+        boolean invalidDecimalIdx = decimalIndex < 4;
 
-        if (decimalIndex < 4) {
-            if (length < 5) {
-                return str;
-            }
+        if (length < 5 || invalidDecimalIdx) {
+            return str;
+        }
 
+        if (invalidDecimalIdx) {
             decimalIndex = length;
         }
 
