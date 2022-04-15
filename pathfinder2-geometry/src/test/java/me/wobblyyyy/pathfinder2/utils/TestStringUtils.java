@@ -37,10 +37,12 @@ public class TestStringUtils {
         double b = 1_000.56;
         double c = 1_234_567.890;
         int d = 0;
+        double e = 100;
 
         Assertions.assertEquals("1,000.0", StringUtils.formatNumber(a));
         Assertions.assertEquals("1,000.56", StringUtils.formatNumber(b));
         Assertions.assertEquals("1,234,567.89", StringUtils.formatNumber(c));
         Assertions.assertEquals("0.0", StringUtils.formatNumber(d));
+        Assertions.assertEquals("100.0", StringUtils.formatNumber(e));
     }
 }
