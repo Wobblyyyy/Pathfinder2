@@ -15,18 +15,29 @@ import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
 /**
- * A period of elapsed time.
+ * A period of elapsed time. Each {@code TimeSpan} represents a period of time,
+ * in milliseconds, greater than or equal to 0, of elapsed time. To create
+ * a {@code TimeSpan}, you can either:
+ *
+ * <ul>
+ *     <li>Use the {@link TimeSpan#TimeSpan(double, double)} constructor</li>
+ *     <li>Use the {@link TimeSpan#elapsed(double, double)} method</li>
+ * </ul>
  *
  * @author Colin Robertson
  * @since 2.1.1
  */
 public class TimeSpan {
+    public static final TimeSpan ZERO = new TimeSpan(0, 0);
+
     private final double startTimeMs;
     private final double stopTimeMs;
     private final double totalTimeMs;
 
     /**
-     * Create a new {@code TimeSpan}.
+     * Create a new {@code TimeSpan}. The {@code TimeSpan}'s total elapsed time
+     * must be greater than or equal to 0 milliseconds. If it's less than 0, an
+     * {@link IllegalArgumentException} will be thrown.
      *
      * @param startTimeMs the {@code TimeSpan}'s start time, in milliseconds.
      * @param stopTimeMs  the {@code TimeSpan}'s stop time, in milliseconds.
@@ -46,11 +57,24 @@ public class TimeSpan {
         }
     }
 
+    /**
+     * Create a new {@code TimeSpan} by copying another {@code TimeSpan}.
+     *
+     * @param timeSpan the {@code TimeSpan} to copy.
+    */
     @SuppressWarnings("CopyConstructorMissesField")
     public TimeSpan(TimeSpan timeSpan) {
        this(timeSpan.startTimeMs, timeSpan.stopTimeMs);
     }
 
+    /**
+     * Create a new {@code TimeSpan} based on a start time (given in
+     * milliseconds) and an amount of elapsed time (also given in milliseconds).
+     *
+     * @param startTimeMs   the {@code TimeSpan}'s start time, in milliseconds.
+     * @param elapsedTimeMs the amount of time that has elapsed.
+     * @return a new {@code TimeSpan}.
+    */
     public static TimeSpan elapsed(double startTimeMs, double elapsedTimeMs) {
         return new TimeSpan(startTimeMs, startTimeMs + elapsedTimeMs);
     }
