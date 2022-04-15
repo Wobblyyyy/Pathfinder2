@@ -17,14 +17,14 @@ you don't, just because of the amount of boilerplate code you'd have to write.
 Instead, you can make use of `AdvancedSplineTrajectoryBuilder`.
 ```java
 Trajectory trajectory = new AdvancedSplineTrajectoryBuilder()
-        .setSpeed(0.5)
-        .setTolerance(2)
-        .setAngleTolerance(Angle.fromDeg(5))
-        .setStep(0.2)
-        .add(new PointXYZ(5, 5, 0))
-        .add(new PointXYZ(10, 15, 0))
-        .add(new PointXYZ(12, 20, 0))
-        .build();
+    .setSpeed(0.5)
+    .setTolerance(2)
+    .setAngleTolerance(Angle.fromDeg(5))
+    .setStep(0.2)
+    .add(new PointXYZ(5, 5, 0))
+    .add(new PointXYZ(10, 15, 0))
+    .add(new PointXYZ(12, 20, 0))
+    .build();
 ```
 
 #### `SplineBuilderFactory`
@@ -33,17 +33,17 @@ further, you could use a `SplineBuilderFactory` to reduce boilerplate code
 when using multiple trajectories.
 ```java
 SplineBuilderFactory factory = new SplineBuilderFactory()
-        .setStep(0.1)
-        .setSpeed(0.5)
-        .setTolerance(2)
-        .setAngleTolerance(Angle.fromDeg(5));
+    .setStep(0.1)
+    .setSpeed(0.5)
+    .setTolerance(2)
+    .setAngleTolerance(Angle.fromDeg(5));
 
 Trajectory a = factory.builder().add(new PointXYZ(5, 5, 0))
-        .add(new PointXYZ(10, 3, 0)).add(new PointXYZ(12, 0, 0)).build();
+    .add(new PointXYZ(10, 3, 0)).add(new PointXYZ(12, 0, 0)).build();
 Trajectory b = factory.builder().add(new PointXYZ(0, 0, 0))
-        .add(new PointXYZ(10, 3, 0)).add(new PointXYZ(20, 5, 0)).build();
+    .add(new PointXYZ(10, 3, 0)).add(new PointXYZ(20, 5, 0)).build();
 Trajectory c = factory.builder().add(new PointXYZ(5, 5, 0))
-        .add(new PointXYZ(10, 3, 0)).add(new PointXYZ(12, 0, 0)).build();
+    .add(new PointXYZ(10, 3, 0)).add(new PointXYZ(12, 0, 0)).build();
 ```
 
 #### Pathfinder's "splineTo" methods
@@ -53,16 +53,16 @@ code required. You can go a step further and use the convenience method
 (or any builders), you just need to set some values.
 ```java
 Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01)
-        .setSpeed(0.5)
-        .setTolerance(2)
-        .setAngleTolerance(Angle.fromDeg(5))
-        .splineTo(
-                new PointXYZ(0, 0, 0),
-                new PointXYZ(1, 2, 0),
-                new PointXYZ(2, 4, 0),
-                new PointXYZ(3, 8, 0)
-        )
-        .tickUntil();
+    .setSpeed(0.5)
+    .setTolerance(2)
+    .setAngleTolerance(Angle.fromDeg(5))
+    .splineTo(
+            new PointXYZ(0, 0, 0),
+            new PointXYZ(1, 2, 0),
+            new PointXYZ(2, 4, 0),
+            new PointXYZ(3, 8, 0)
+    )
+    .tickUntil();
 ```
 
 Would you look at that? You can generate a spline trajectory and follow it

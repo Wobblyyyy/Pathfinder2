@@ -210,4 +210,34 @@ public class TestAdvancedSplineTrajectory extends TestableRobot {
             new PointXYZ(130, 120, 0).multiply(-1)
         );
     }
+
+    @Test
+    public void testMonotoneCubicSplineWithRepeatedXValues() {
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> testSplineTo(
+                new PointXYZ(5, 1, 1),
+                new PointXYZ(5, 2, 2),
+                new PointXYZ(5, 3, 3)
+            )
+        );
+    }
+
+    @Test
+    public void testMonotoneCubicSplineWithRepeatedYValues() {
+        testSplineTo(
+            new PointXYZ(1, 5, 1),
+            new PointXYZ(2, 5, 2),
+            new PointXYZ(3, 5, 3)
+        );
+    }
+
+    @Test
+    public void testMonotoneCubicSplineWithRepeatedZValues() {
+        testSplineTo(
+            new PointXYZ(1, 1, 5),
+            new PointXYZ(2, 2, 5),
+            new PointXYZ(3, 3, 5)
+        );
+    }
 }
