@@ -21,9 +21,9 @@ public class BenchmarkFastTrajectory extends GenericTrajectoryBenchmarker {
     private static final double speed = 0.5;
 
     private static final Trajectory trajectory = new FastTrajectory(
-            new PointXYZ(0, 0, 0),
-            new PointXYZ(-10, -10, 45),
-            speed
+        new PointXYZ(0, 0, 0),
+        new PointXYZ(-10, -10, 45),
+        speed
     );
 
     @Benchmark
