@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+import me.wobblyyyy.pathfinder2.exceptions.ValidationException;
 import me.wobblyyyy.pathfinder2.utils.AssertionUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -264,5 +265,29 @@ public class TestPointXYZ {
         Assertions.assertEquals(new PointXYZ(7, 8, 0), new PointXY(7, 8));
         Assertions.assertEquals(new PointXY(7, 8), new PointXYZ(7, 8, 0));
         Assertions.assertNotEquals(new PointXYZ(7, 8, 15), new PointXY(7, 8));
+    }
+
+    @Test
+    public void testInvalidPointXYZConstructorX() {
+        Assertions.assertThrows(
+            ValidationException.class,
+            () -> new PointXYZ(Double.NEGATIVE_INFINITY, 0, 0)
+        );
+    }
+
+    @Test
+    public void testInvalidPointXYZConstructorY() {
+        Assertions.assertThrows(
+            ValidationException.class,
+            () -> new PointXYZ(0, Double.NEGATIVE_INFINITY, 0)
+        );
+    }
+
+    @Test
+    public void testInvalidPointXYZConstructorZ() {
+        Assertions.assertThrows(
+            ValidationException.class,
+            () -> new PointXYZ(0, 0, Double.NEGATIVE_INFINITY)
+        );
     }
 }

@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.geometry;
 
+import me.wobblyyyy.pathfinder2.exceptions.ValidationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -203,6 +204,22 @@ public class TestPointXY {
         Assertions.assertEquals(
             new PointXY(10, 20),
             PointXY.parse("rawefawef10, 20,")
+        );
+    }
+
+    @Test
+    public void testInvalidPointXYConstructorX() {
+        Assertions.assertThrows(
+            ValidationException.class,
+            () -> new PointXY(Double.NEGATIVE_INFINITY, 0)
+        );
+    }
+
+    @Test
+    public void testInvalidPointXYConstructorY() {
+        Assertions.assertThrows(
+            ValidationException.class,
+            () -> new PointXY(0, Double.NEGATIVE_INFINITY)
         );
     }
 }
