@@ -38,10 +38,28 @@ to use multiple threads if you'd like, but it has not been tested, and it's
 quite likely you'll encounter some issues somewhere along the way.
 
 ## The normal `tick()` method
-Placeholder text.
+Internally, `tick()` uses `me.wobblyyyy.pathfinder2.TickProcessor` to
+manipulate the subsystems of Pathfinder. Specifically, there are four
+components to a single "tick."
+- `runPreTick()`
+- `runExecutorTick()`
+- `runOnTick()`
+- `runPostTick()`
+
+The "tick" method is the base method for ticking Pathfinder, and every other
+variant of it is based upon it. `tickUntil` and its derivatives, for example,
+all call `tick()` in a loop.
 
 ## `tickUntil` and its derivatives
-More placeholder text.
+`tickUntil` ticks Pathfinder until a certain condition is met (or a certain
+condition is not met). Some methods include parameters for:
+- A timeout, in milliseconds
+- A `Supplier<Boolean>` that indicates if Pathfinder should continue ticking.
+  If the supplier returns `true`, the `tickUntil` method will continue
+  execution. If it returns false, it will stop.
+- A `Runnble` (or `Consumer<Pathfinder>`) that will be executed after every
+  tick. The `Consumer<Pathfinder>` accepts the instance of Pathfinder that
+  the method is being called from.
 
 ## Ticking Pathfinder for a specific amount of time
 Even more placeholder text.
