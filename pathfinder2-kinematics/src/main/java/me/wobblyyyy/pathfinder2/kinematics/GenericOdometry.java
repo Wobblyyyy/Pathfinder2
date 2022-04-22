@@ -26,7 +26,7 @@ public class GenericOdometry<T> {
     private final Angle gyroOffset;
     private final double updateIntervalMs;
     private PointXYZ position;
-    private double previousTimeMs;
+    private double previousTimeMs = -1;
     private Angle previousAngle;
 
     public GenericOdometry(
@@ -76,7 +76,7 @@ public class GenericOdometry<T> {
         Angle gyroAngle,
         T state
     ) {
-        double period = previousTimeMs > 0
+        double period = previousTimeMs > -1
             ? (currentTimeMs - previousTimeMs)
             : 0.0;
 
@@ -87,6 +87,8 @@ public class GenericOdometry<T> {
         }
 
         previousTimeMs = currentTimeMs;
+
+        period /= 1_000;
 
         Angle angle = gyroAngle.add(gyroOffset);
         Translation translation = kinematics.toTranslation(state);

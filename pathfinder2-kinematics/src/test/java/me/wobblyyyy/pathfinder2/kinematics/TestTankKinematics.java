@@ -122,4 +122,40 @@ public class TestTankKinematics {
         testFromTankState(new Translation(0, 0, 0.25), stateC);
         testFromTankState(new Translation(0, 0, 0.125), stateD);
     }
+
+    @Test
+    public void testTranslationFromTankStateTurnRightwards() {
+        TankState stateA = new TankState(-1, 1);
+        TankState stateB = stateA.multiply(0.5);
+        TankState stateC = stateB.multiply(0.5);
+        TankState stateD = stateC.multiply(0.5);
+
+        Translation translationA = new Translation(0, 0, -1);
+        Translation translationB = translationA.multiply(0.5);
+        Translation translationC = translationB.multiply(0.5);
+        Translation translationD = translationC.multiply(0.5);
+
+        testFromTankState(translationA, stateA);
+        testFromTankState(translationB, stateB);
+        testFromTankState(translationC, stateC);
+        testFromTankState(translationD, stateD);
+    }
+
+    @Test
+    public void testTranslationFromTankStateTurnLeftwards() {
+        TankState stateA = new TankState(1, -1);
+        TankState stateB = stateA.multiply(0.5);
+        TankState stateC = stateB.multiply(0.5);
+        TankState stateD = stateC.multiply(0.5);
+
+        Translation translationA = new Translation(0, 0, 1);
+        Translation translationB = translationA.multiply(0.5);
+        Translation translationC = translationB.multiply(0.5);
+        Translation translationD = translationC.multiply(0.5);
+
+        testFromTankState(translationA, stateA);
+        testFromTankState(translationB, stateB);
+        testFromTankState(translationC, stateC);
+        testFromTankState(translationD, stateD);
+    }
 }
