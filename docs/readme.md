@@ -37,6 +37,9 @@ be browsed from GitHub.
   Listeners are baked into Pathfinder by default and allow you to listen for
   certain events by making use of functional interfaces and Pathfinder's
   `tick()` method. These can help to greatly simplify making user controls.
+- [Making a tank drive](./20_making_a_tank_drive.md):
+  A differential drive/tank drive is one of the most common types of
+  drivetrain. This is a guide that explains how to make a differential drive.
 - [Commands](./18_commands.md):
   The `pathfinder2-commands` module implements basic scripting functionality
   into Pathfinder.
