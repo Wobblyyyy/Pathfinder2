@@ -16,4 +16,4 @@ documentation, I guess) covers the following:
 > Because the rate of rotation (source:
 > [Columbia](http://www.cs.columbia.edu/~allen/F17/NOTES/icckinematics.pdf))
 
-![Tank](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.army-technology.com%2Fprojects%2Foplot-m-main-battle-tank-ukraine%2F&psig=AOvVaw1zb_woxS3uDGClYprgmfE0&ust=1650725861488000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCJCYzpb3p_cCFQAAAAAdAAAAABBY)
+![Tank](https://cdn.mos.cms.futurecdn.net/A8yMchdMoP3Qk87eEp4gMZ-1200-80.jpg)
