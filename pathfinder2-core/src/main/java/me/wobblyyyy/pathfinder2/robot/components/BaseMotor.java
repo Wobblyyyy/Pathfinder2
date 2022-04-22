@@ -288,8 +288,12 @@ public abstract class BaseMotor implements Motor {
 
         if (isSetInverted) power = power * -1;
 
-        if (isLazy) if (Math.abs(lastPower - power) >= maxLazyPowerGap) accept(
-            power
-        ); else accept(power);
+        if (isLazy) {
+            if (Math.abs(lastPower - power) >= maxLazyPowerGap) {
+                accept(power);
+            }
+        } else {
+            accept(power);
+        }
     }
 }
