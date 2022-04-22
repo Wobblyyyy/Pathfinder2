@@ -95,8 +95,7 @@ how far (in your unit of choice) the wheels that move the robot are from
 each other (side-to-side distance, that is).
 
 ### Wrapper `Motor`
-Before anything else, you'll need to make a wrapper class that implements
-the `Motor` interface.
+You'll need to make a wrapper class that implements the `Motor` interface.
 ```java
 public class MotorWrapper extends BaseMotor {
     private final DcMotor motor;
@@ -110,4 +109,66 @@ public class MotorWrapper extends BaseMotor {
         motor.setPower(power);
     }
 }
+```
+
+### Setting up `TankDriveKinematics`
+You'll also need an instance of `TankDriveKinematics` in order to calculate
+power values based on `Translation`s.
+```java
+// -0.05 is a decent starting place, but you'll need to fine-tune this value
+// values with a higher absolute value will make the robot turn more
+// dramatically, while values with a lower absolute value will make the robot
+// turn at a slower pace
+double TURN_COEFFICIENT = -0.05;
+double ROBOT_WIDTH = 12;
+
+TankDriveKinematics kinematics = new TankDriveKinematics(
+    TURN_COEFFICIENT,
+    ROBOT_WIDTH
+);
+```
+
+#### Using `TankDriveKinematics`
+Assuming you have an instance of `TankDriveKinematics` set up, you can now
+calculate `TankState`s from `Translation`s.
+```java
+double TURN_COEFFICIENT = -0.05;
+double ROBOT_WIDTH = 12;
+
+TankDriveKinematics kinematics = new TankDriveKinematics(
+    TURN_COEFFICIENT,
+    ROBOT_WIDTH
+);
+
+Translation translation = new Translation(0, 1, 0);
+TankState state = kinematics.calculate(translation);
+
+// would get set to (the) right motor(s)
+double right = state.right();
+
+// would get set to (the) left motor(s)
+double left = state.left();
+```
+
+### Using `TankDrive`
+Pathfinder provides a `TankDrive` class to simplify the coding for robots that
+use a tank/differential drive.
+```java
+TankDriveKinematics kinematics = new TankDriveKinematics(-0.05, 12);
+
+DcMotor dcFrontRight = hardwareMap.get(DcMotor.class, "frontRight");
+DcMotor dcFrontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
+DcMotor dcBackRight = hardwareMap.get(DcMotor.class, "backRight");
+DcMotor dcBackLeft = hardwareMap.get(DcMotor.class, "backLeft");
+
+Motor right = new MultiMotor(
+    new MotorWrapper(dcFrontRight),
+    new MotorWrapper(dcBackRight),
+);
+Motor left = new MultiMotor(
+    new MotorWrapper(dcFrontLeft),
+    new MotorWrapper(dcBackLeft),
+);
+
+TankDrive drive = new TankDrive(right, left, kinematics);
 ```
