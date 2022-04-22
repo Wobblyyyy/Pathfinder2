@@ -50,6 +50,14 @@ public class EncoderTracker {
         this.isInverted = isInverted;
     }
 
+    /**
+     * Create a new {@code EncoderTracker}.
+     *
+     * @param converter  an {@link EncoderConverter} that will convert ticks
+     *                   to rotations and distance.
+     * @param getTicks   a supplier that returns the encoder's outputted
+     *                   tick value.
+     */
     public EncoderTracker(
         EncoderConverter converter,
         Supplier<Integer> getTicks
