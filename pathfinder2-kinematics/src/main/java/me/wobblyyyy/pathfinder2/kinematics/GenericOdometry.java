@@ -113,9 +113,9 @@ public class GenericOdometry<T> {
             c = (1 - cos) / dt;
         }
 
-        PointXYZ newPosition = position.add(
-            new PointXYZ(dx * s - dy * c, dx * c + dy * s, angle)
-        );
+        PointXYZ newPosition = position
+            .add(new PointXYZ(dx * s - dy * c, dx * c + dy * s, 0))
+            .withZ(angle);
 
         previousAngle = angle;
         position = newPosition;
