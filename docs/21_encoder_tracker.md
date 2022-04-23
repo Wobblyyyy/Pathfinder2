@@ -29,6 +29,13 @@ The parameters are:
   you never know...
 
 ## Creating an `EncoderTracker`
+In order to create an `EncoderTracker`, you'll need an `EncoderConverter`
+and a `Supplier`. The `EncoderConverter` should have values that will allow
+the `EncoderTracker` to convert encoder counts to distance traveled. The
+`Supplier` should return the encoder's "counts" value. This example uses
+`DcMotor` from the FTC SDK. If you're unaware, `getCurrentPosition` is
+a method of the `DcMotor` class that returns the counts of the encoder
+that's attached to the motor.
 ```java
 DcMotor right = hardwareMap.get(DcMotor.class, "right");
 DcMotor left = hardwareMap.get(DcMotor.class, "left");
@@ -41,3 +48,9 @@ EncoderConverter converter = new EncoderConverter(1_024, 12.0);
 EncoderTracker rightTracker = new EncoderTracker(converter, rightTicks);
 EncoderTracker leftTracker = new EncoderTracker(converter, leftTicks);
 ```
+
+## Use cases for `EncoderTracker`
+The most prominent use case for `EncoderTracker` is to track the velocity
+of an encoder. You need to track the velocity of encoders in order to
+integrate the robot's velocity over time to calculate the position of
+the robot.
