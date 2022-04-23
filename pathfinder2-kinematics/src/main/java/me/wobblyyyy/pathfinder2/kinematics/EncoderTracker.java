@@ -80,11 +80,8 @@ public class EncoderTracker {
      */
     public double getSpeedWithTime(double elapsedSeconds) {
         int currentTicks = isInverted ? -getTicks.get() : getTicks.get();
-        if (!hasUpdated) {
-            hasUpdated = true;
-            lastTicks = currentTicks;
-        }
         int elapsedTicks = currentTicks - lastTicks;
+        lastTicks = currentTicks;
         double elapsedDistance = converter.distanceFromTicks(elapsedTicks);
         return elapsedDistance / elapsedSeconds;
     }
