@@ -83,6 +83,7 @@ public class GenericOdometry<T> {
         // if not enough time has elapsed, return the robot's position
         // instead of updating the position
         if (period < updateIntervalMs) {
+            previousTimeMs = currentTimeMs;
             return position;
         }
 
