@@ -10,6 +10,7 @@
 
 package me.wobblyyyy.pathfinder2.control;
 
+import me.wobblyyyy.pathfinder2.math.MinMax;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 
@@ -175,6 +176,10 @@ public abstract class AbstractController implements Controller {
         setTarget(target);
 
         return calculate(value);
+    }
+
+    public double clip(double value) {
+        return MinMax.clip(value, min, minMagnitude, max, maxMagnitude);
     }
 
     @Override

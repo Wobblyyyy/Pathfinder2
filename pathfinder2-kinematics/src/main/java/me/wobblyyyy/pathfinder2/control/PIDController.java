@@ -35,11 +35,7 @@ public class PIDController extends AbstractController {
 
     @Override
     public double calculate(double value) {
-        return MinMax.clip(
-            pid.getOutput(value, getTarget()),
-            getMin(),
-            getMax()
-        );
+        return clip(pid.getOutput(value, getTarget()));
     }
 
     public PIDController setP(double p) {
