@@ -14,35 +14,18 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestMinMax {
+
     @Test
     public void testSimpleClip() {
-        Assertions.assertEquals(
-            0.25,
-            MinMax.clip(0.25, 0, 1)
-        );
-        Assertions.assertEquals(
-            0.1,
-            MinMax.clip(0.25, 0, 0.1)
-        );
-        Assertions.assertEquals(
-            0.3,
-            MinMax.clip(0.25, 0.3, 1)
-        );
+        Assertions.assertEquals(0.25, MinMax.clip(0.25, 0, 1));
+        Assertions.assertEquals(0.1, MinMax.clip(0.25, 0, 0.1));
+        Assertions.assertEquals(0.3, MinMax.clip(0.25, 0.3, 1));
     }
 
     @Test
     public void testClipWithMagnitude() {
-        Assertions.assertEquals(
-            0.25,
-            MinMax.clip(0.25, 0, 0, 1, 1)
-        );
-        Assertions.assertEquals(
-            0.1,
-            MinMax.clip(0.25, 0, 0, 1, 0.1)
-        );
-        Assertions.assertEquals(
-            -0.1,
-            MinMax.clip(-0.25, -1, 0, 1, 0.1)
-        );
+        Assertions.assertEquals(0.25, MinMax.clip(0.25, 0, 0, 1, 1));
+        Assertions.assertEquals(0.1, MinMax.clip(0.25, 0, 0, 1, 0.1));
+        Assertions.assertEquals(-0.1, MinMax.clip(-0.25, -1, 0, 1, 0.1));
     }
 }
