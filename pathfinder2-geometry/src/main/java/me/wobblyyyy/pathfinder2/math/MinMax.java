@@ -65,6 +65,27 @@ public class MinMax {
         return Math.max(Math.min(value, max), min);
     }
 
+    /**
+     * Clip a value by ensuring the value is at least {@code min}, is at
+     * most {@code max}, and the value's absolute value is at least
+     * {@code minMagnitude} and the value's absolute value is at most
+     * {@code maxMagnitude}.
+     *
+     * @param value        the value to clip.
+     * @param min          the minimum value.
+     * @param minMagnitude the value's minimum magnitude.
+     * @param max          the maximum value.
+     * @param maxMagnitude the value's maximum magnitude.
+     * @return
+     * @return the clipped value. If the value is less than the minimum, the
+     * minimum will be returned. If the value is greater than the maximum,
+     * the maximum will be returned. If the value's absolute value is less
+     * than the minimum magnitude, the minimum magnitude will be returned (it
+     * will be negative if {@code value} was negative). If the value's
+     * absolute value is greater than the maximum magnitude, the maximum
+     * magnitude will be returned (it will be negative if {@code value} was
+     * negative).
+     */
     public static double clip(
         double value,
         double min,
