@@ -13,72 +13,134 @@ package me.wobblyyyy.pathfinder2.odometry;
 import java.util.function.Supplier;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-import me.wobblyyyy.pathfinder2.kinematics.EncoderTracker;
-import me.wobblyyyy.pathfinder2.kinematics.GenericOdometry;
-import me.wobblyyyy.pathfinder2.kinematics.TankState;
+import me.wobblyyyy.pathfinder2.kinematics.DifferentialDriveOdometry;
+import me.wobblyyyy.pathfinder2.kinematics.EncoderConverter;
 import me.wobblyyyy.pathfinder2.robot.AbstractOdometry;
-import me.wobblyyyy.pathfinder2.time.Time;
 
 /**
  * Odometry for a tank drive chassis. This uses two encoders - one on the
  * right side of the chassis and one on the left side of the chassis - to
- * measure the robot's velocity over time. Based on that velocity, the robot's
- * position will be calculated.
+ * calculate the robot's position. Based on that velocity, the robot's position
+ * will be calculated.
  *
  * @author Colin Robertson
  * @since 2.2.0
  */
 public class TankDriveOdometry extends AbstractOdometry {
-    private final EncoderTracker rightTracker;
-    private final EncoderTracker leftTracker;
+    private final DifferentialDriveOdometry odometry;
+    private final Supplier<Double> getRightDistance;
+    private final Supplier<Double> getLeftDistance;
     private final Supplier<Angle> getGyroAngle;
-    private final GenericOdometry<TankState> tankOdometry;
 
     /**
-     * Create a new instance of {@TankDriveOdometry}.
+     * Create a new instance of {@code TankDriveOdometry}.
      *
-     * @param rightTracker an {@code EncoderTracker} for the right side of
-     *                     the tank drive chassis.
-     * @param leftTracker  an {@code EncoderTracker} for the left side of
-     *                     the tank drive chassis.
-     * @param getGyroAngle a {@code Supplier<Angle>} that returns the angle
-     *                     of the chassis, as determined by a gyroscope.
-     * @param tankOdometry an instance of {@code GenericOdometry<TankState>}
-     *                     that is used in calculating the robot's position.
-     */
+     * @param getRightDistance a {@code Supplier} that returns the distance
+     *                         the right side of the chassis has moved.
+     * @param getLeftDistance  a {@code Supplier} that returns the distance
+     *                         the left side of the chassis has moved.
+     * @param getGyroAngle     a {@code Supplier} that returns the angle of
+     *                         the chassis.
+    */
     public TankDriveOdometry(
-        EncoderTracker rightTracker,
-        EncoderTracker leftTracker,
-        Supplier<Angle> getGyroAngle,
-        GenericOdometry<TankState> tankOdometry
+        Supplier<Double> getRightDistance,
+        Supplier<Double> getLeftDistance,
+        Supplier<Angle> getGyroAngle
     ) {
-        this.rightTracker = rightTracker;
-        this.leftTracker = leftTracker;
+        this(
+            new DifferentialDriveOdometry(getGyroAngle.get(), PointXYZ.ZERO),
+            getRightDistance,
+            getLeftDistance,
+            getGyroAngle
+        );
+    }
+
+    /**
+     * Create a new instance of {@code TankDriveOdometry}.
+     *
+     * @param odometry         the {@code DifferentialDriveOdometry} instance
+     *                         used in calculating the robot's position.
+     * @param getRightDistance a {@code Supplier} that returns the distance
+     *                         the right side of the chassis has moved.
+     * @param getLeftDistance  a {@code Supplier} that returns the distance
+     *                         the left side of the chassis has moved.
+     * @param getGyroAngle     a {@code Supplier} that returns the angle of
+     *                         the chassis.
+    */
+    public TankDriveOdometry(
+        DifferentialDriveOdometry odometry,
+        Supplier<Double> getRightDistance,
+        Supplier<Double> getLeftDistance,
+        Supplier<Angle> getGyroAngle
+    ) {
+        this.odometry = odometry;
+        this.getRightDistance = getRightDistance;
+        this.getLeftDistance = getLeftDistance;
         this.getGyroAngle = getGyroAngle;
-        this.tankOdometry = tankOdometry;
     }
 
-    public PointXYZ updateWithTime(
-        double rightSpeed,
-        double leftSpeed,
-        double time
+    /**
+     * Create a new instance of {@code TankDriveOdometry}.
+     *
+     * @param converter            a converter that converts encoder counts
+     *                             into distance traveled.
+     * @param getRightEncoderCount a {@code Supplier} that returns the
+     *                             right encoder's total counts.
+     * @param getLeftEncoderCount  a {@code Supplier} that returns the
+     *                             left encoder's total counts.
+     * @param getGyroAngle         a {@code Supplier} that returns the angle
+     *                             the chassis is currently facing.
+    */
+    public TankDriveOdometry(
+        EncoderConverter converter,
+        Supplier<Integer> getRightEncoderCount,
+        Supplier<Integer> getLeftEncoderCount,
+        Supplier<Angle> getGyroAngle
     ) {
-        TankState state = new TankState(rightSpeed, leftSpeed);
-
-        return tankOdometry.updateWithTime(time, getGyroAngle.get(), state);
+        this(
+            new DifferentialDriveOdometry(getGyroAngle.get(), PointXYZ.ZERO),
+            converter,
+            getRightEncoderCount,
+            getLeftEncoderCount,
+            getGyroAngle
+        );
     }
 
-    public PointXYZ updateWithTime(double time) {
-        double rightSpeed = rightTracker.getSpeed();
-        double leftSpeed = leftTracker.getSpeed();
-
-        return updateWithTime(rightSpeed, leftSpeed, time);
+    /**
+     * Create a new instance of {@code TankDriveOdometry}.
+     *
+     * @param odometry             the odometry instance used in calculating
+     *                             the robot's position.
+     * @param converter            a converter that converts encoder counts
+     *                             into distance traveled.
+     * @param getRightEncoderCount a {@code Supplier} that returns the
+     *                             right encoder's total counts.
+     * @param getLeftEncoderCount  a {@code Supplier} that returns the
+     *                             left encoder's total counts.
+     * @param getGyroAngle         a {@code Supplier} that returns the angle
+     *                             the chassis is currently facing.
+    */
+    public TankDriveOdometry(
+        DifferentialDriveOdometry odometry,
+        EncoderConverter converter,
+        Supplier<Integer> getRightEncoderCount,
+        Supplier<Integer> getLeftEncoderCount,
+        Supplier<Angle> getGyroAngle
+    ) {
+        this(
+            odometry,
+            () -> converter.distanceFromTicks(getRightEncoderCount.get()),
+            () -> converter.distanceFromTicks(getLeftEncoderCount.get()),
+            getGyroAngle
+        );
     }
 
     @Override
     public PointXYZ getRawPosition() {
-        double time = Time.ms();
+        Angle angle = getGyroAngle.get();
+        double right = getRightDistance.get();
+        double left = getLeftDistance.get();
 
-        return updateWithTime(time);
+        return odometry.update(angle, right, left);
     }
 }
