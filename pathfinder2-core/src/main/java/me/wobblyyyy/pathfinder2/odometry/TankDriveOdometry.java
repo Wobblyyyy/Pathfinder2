@@ -41,7 +41,7 @@ public class TankDriveOdometry extends AbstractOdometry {
      *                         the left side of the chassis has moved.
      * @param getGyroAngle     a {@code Supplier} that returns the angle of
      *                         the chassis.
-    */
+     */
     public TankDriveOdometry(
         Supplier<Double> getRightDistance,
         Supplier<Double> getLeftDistance,
@@ -66,7 +66,7 @@ public class TankDriveOdometry extends AbstractOdometry {
      *                         the left side of the chassis has moved.
      * @param getGyroAngle     a {@code Supplier} that returns the angle of
      *                         the chassis.
-    */
+     */
     public TankDriveOdometry(
         DifferentialDriveOdometry odometry,
         Supplier<Double> getRightDistance,
@@ -90,7 +90,7 @@ public class TankDriveOdometry extends AbstractOdometry {
      *                             left encoder's total counts.
      * @param getGyroAngle         a {@code Supplier} that returns the angle
      *                             the chassis is currently facing.
-    */
+     */
     public TankDriveOdometry(
         EncoderConverter converter,
         Supplier<Integer> getRightEncoderCount,
@@ -119,7 +119,7 @@ public class TankDriveOdometry extends AbstractOdometry {
      *                             left encoder's total counts.
      * @param getGyroAngle         a {@code Supplier} that returns the angle
      *                             the chassis is currently facing.
-    */
+     */
     public TankDriveOdometry(
         DifferentialDriveOdometry odometry,
         EncoderConverter converter,

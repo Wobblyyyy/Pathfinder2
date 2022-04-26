@@ -48,6 +48,16 @@ public abstract class AbstractController implements Controller {
     private double max = Double.POSITIVE_INFINITY;
 
     /**
+     * The controller's minimum magnitude.
+     */
+    private double minMagnitude = Double.NEGATIVE_INFINITY;
+
+    /**
+     * The controller's maximum magnitude.
+     */
+    private double maxMagnitude = Double.POSITIVE_INFINITY;
+
+    /**
      * The controller's target value.
      */
     private double target = 0.0;
@@ -94,6 +104,26 @@ public abstract class AbstractController implements Controller {
         ValidationUtils.validate(max, "max");
 
         this.max = max;
+    }
+
+    @Override
+    public double getMinMagnitude() {
+        return minMagnitude;
+    }
+
+    @Override
+    public void setMinMagnitude(double minMagnitude) {
+        this.minMagnitude = minMagnitude;
+    }
+
+    @Override
+    public double getMaxMagnitude() {
+        return maxMagnitude;
+    }
+
+    @Override
+    public void setMaxMagnitude(double maxMagnitude) {
+        this.maxMagnitude = maxMagnitude;
     }
 
     /**

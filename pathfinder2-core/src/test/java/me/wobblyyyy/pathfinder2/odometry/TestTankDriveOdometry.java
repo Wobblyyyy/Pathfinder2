@@ -10,5 +10,4 @@
 
 package me.wobblyyyy.pathfinder2.odometry;
 
-public class TestTankDriveOdometry {
-}
+public class TestTankDriveOdometry {}

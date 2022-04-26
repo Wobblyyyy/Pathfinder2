@@ -62,6 +62,34 @@ public interface Controller {
     void setMax(double max);
 
     /**
+     * Get the controller's minimum magnitude.
+     *
+     * @return the controller's minimum magnitude.
+     */
+    double getMinMagnitude();
+
+    /**
+     * Set the controller's minimum magnitude.
+     *
+     * @param minMagnitude the controller's minimum magnitude.
+     */
+    void setMinMagnitude(double minMagnitude);
+
+    /**
+     * Get the controller's maximum magnitude.
+     *
+     * @return the controller's maximum magnitude.
+     */
+    double getMaxMagnitude();
+
+    /**
+     * Set the controller's maximum magnitude.
+     *
+     * @param maxMagnitude the controller's maximum magnitude.
+     */
+    void setMaxMagnitude(double maxMagnitude);
+
+    /**
      * Reset the controller. Some controllers have no use for this method,
      * but it's there anyways because my code sucks and I'm too lazy to
      * change it.

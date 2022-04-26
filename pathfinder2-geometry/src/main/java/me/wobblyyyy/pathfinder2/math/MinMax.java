@@ -65,6 +65,29 @@ public class MinMax {
         return Math.max(Math.min(value, max), min);
     }
 
+    public static double clip(
+        double value,
+        double min,
+        double minMagnitude,
+        double max,
+        double maxMagnitude
+    ) {
+        double abs = Math.abs(value);
+        boolean isNegative = value < 0;
+
+        if (value < min) {
+            return min;
+        } else if (value > max) {
+            return max;
+        } else if (abs < minMagnitude) {
+            return isNegative ? minMagnitude * -1 : minMagnitude;
+        } else if (abs > maxMagnitude) {
+            return isNegative ? maxMagnitude * -1 : maxMagnitude;
+        } else {
+            return value;
+        }
+    }
+
     /**
      * Clip a value by ensuring it's between the minimum and maximum values.
      *
