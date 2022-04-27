@@ -13,7 +13,9 @@ package me.wobblyyyy.pathfinder2.robot.components;
 import me.wobblyyyy.pathfinder2.time.Time;
 
 /**
- * An abstract implementation of {@code Servo}.
+ * An abstract implementation of {@code Servo}. This class provides an
+ * implementation of the {@link #getVelocity()} method specified in
+ * {@link Servo}.
  *
  * @author Colin Robertson
  * @since 2.4.0
@@ -31,7 +33,25 @@ public abstract class AbstractServo implements Servo {
         return currentPosition;
     }
 
+    /**
+     * Set position to the servo, along with a time stamp.
+     *
+     * @param position      the position to set to the servo.
+     * @param currentTimeMs the time stamp that the position was set to the
+     *                      servo. This is used for calculating the velocity
+     *                      of the servo.
+     */
     public void setPositionWithTime(double position, double currentTimeMs) {
+        if (position < 0) {
+            throw new IllegalArgumentException(
+                "Servo position may not be less than 0, but was " + position
+            );
+        } else if (position > 1) {
+            throw new IllegalArgumentException(
+                "Servo position may not be greater than 1, but was " + position
+            );
+        }
+
         abstractSetPosition(position);
         lastPosition = currentPosition;
         lastPosMs = currentPosMs;
