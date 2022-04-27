@@ -17,6 +17,14 @@ import me.wobblyyyy.pathfinder2.kinematics.DifferentialDriveOdometry;
 import me.wobblyyyy.pathfinder2.kinematics.EncoderConverter;
 import me.wobblyyyy.pathfinder2.robot.AbstractOdometry;
 
+/**
+ * {@code Odometry} implementation that uses two encoders and a gyroscope
+ * to determine the position of a tank drive. This uses
+ * {@link DifferentialDriveOdometry} to calculate the robot's position.
+ *
+ * @author Colin Robertson
+ * @since 2.3.0
+ */
 public class DifferentialOdometry extends AbstractOdometry {
     private final DifferentialDriveOdometry odometry;
     private final EncoderConverter converter;
@@ -24,9 +32,31 @@ public class DifferentialOdometry extends AbstractOdometry {
     private final Supplier<Integer> getLeftTicks;
     private final Supplier<Angle> getGyroAngle;
 
-    private int previousRightTicks;
-    private int previousLeftTicks;
-
+    /**
+     * Create a new {@code DifferentialOdometry} instance.
+     *
+     * @param odometry      {@code DifferentialDriveOdometry} instance, used
+     *                      to calculate the robot's position. If you're
+     *                      unsure of how you should instantiate
+     *                      {@code DifferentialDriveOdometry}, just provide
+     *                      the gyroscope's current angle as "gyroAngle"
+     *                      and {@link PointXYZ#ZERO} as the initial position.
+     * @param converter     used in converting encoder tick values to distance
+     *                      values. You can generally find the counts per
+     *                      revolution and wheel circumference values by
+     *                      reading your encoder's documentation and measuring
+     *                      your wheel.
+     * @param getRightTicks a {@code Supplier<Integer>} that returns the
+     *                      ticks of the right encoder. This value should
+     *                      come directly from the encoder and should not
+     *                      be adjusted.
+     * @param getLeftTicks  a {@code Supplier<Integer>} that returns the
+     *                      ticks of the left encoder. This value should
+     *                      come directly from the encoder and should not
+     *                      be adjusted.
+     * @param getGyroAngle  a {@code Supplier<Angle>} that returns the
+     *                      angle of the chassis.
+     */
     public DifferentialOdometry(
         DifferentialDriveOdometry odometry,
         EncoderConverter converter,
@@ -45,12 +75,6 @@ public class DifferentialOdometry extends AbstractOdometry {
     public PointXYZ getRawPosition() {
         int rightTicks = getRightTicks.get();
         int leftTicks = getLeftTicks.get();
-
-        int deltaRight = rightTicks - previousRightTicks;
-        int deltaLeft = leftTicks - previousLeftTicks;
-
-        previousRightTicks = rightTicks;
-        previousLeftTicks = leftTicks;
 
         double rightDistance = converter.distanceFromTicks(rightTicks);
         double leftDistance = converter.distanceFromTicks(leftTicks);
