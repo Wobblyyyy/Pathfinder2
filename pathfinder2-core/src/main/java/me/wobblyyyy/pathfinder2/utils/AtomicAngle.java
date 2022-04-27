@@ -13,6 +13,12 @@ package me.wobblyyyy.pathfinder2.utils;
 import java.util.concurrent.atomic.AtomicReference;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 
+/**
+ * {@code AtomicReference} for {@link Angle}.
+ *
+ * @author Colin Robertson
+ * @since 2.4.0
+ */
 public class AtomicAngle extends AtomicReference<Angle> {
 
     public AtomicAngle() {
