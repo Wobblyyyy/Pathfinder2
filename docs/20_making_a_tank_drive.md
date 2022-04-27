@@ -8,6 +8,7 @@ documentation, I guess) covers the following:
 - Making a tank drive controllable via `Translation`s
 - Tracking the position by using odometry
 - Complete example
+- Tips for effective use of a tank drive
 
 ## What's a tank drive?
 > Many mobile robots use a drive mechanism known as differential drive. It
@@ -298,3 +299,23 @@ public class ExampleTankDrive extends LinearOpMode {
     }
 }
 ```
+
+## Tips for effective use of a tank drive
+Now that you've built a tank drive and what not, you might want to know a few
+things about how to operate your robot so that you can effectively utilize
+your robot.
+- Avoid using `Translation`s when you're manually controlling the robot! A
+  tank drive can be controlled better by 2 joystick inputs than via
+  `Translation`s (at least when a human is driving the robot).
+- Limit movement along the X axis. Moving along the X axis requires the robot
+  to turn, which can slow the robot down significantly. When possible, only
+  move along the robot's Y axis (or turn).
+- Face the direction you're moving, all the time. Make sure your adjacent
+  trajectories allow for this by stopping the robot facing the
+  correct orientation.
+- Avoid small X adjustments. These are particularly challenging for Pathfinder
+  to deal with: in order to move along the X axis, the robot must first turn.
+  After turning, the robot must then move a certain amount of distance. If
+  there's any slip, or any inaccuracies, the robot's position will be messed
+  up, and it'll fall into an infinite loop of trying to correct for an
+  increasingly inaccurate position.

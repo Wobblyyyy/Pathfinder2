@@ -442,6 +442,26 @@ public class Angle implements Comparable<Angle>, Serializable {
      *
      * @param rad the value to create the angle based on.
      * @return a new angle.
+     */
+    public static Angle rad(double rad) {
+        return fromRad(rad);
+    }
+
+    /**
+     * Create a new angle from a degrees value.
+     *
+     * @param deg the value to create the angle based on.
+     * @return a new angle.
+     */
+    public static Angle deg(double deg) {
+        return fromDeg(deg);
+    }
+
+    /**
+     * Create a new angle from a radians value.
+     *
+     * @param rad the value to create the angle based on.
+     * @return a new angle.
      * @see #fixRad(double)
      */
     public static Angle fixedRad(double rad) {

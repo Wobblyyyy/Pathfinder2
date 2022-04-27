@@ -158,4 +158,19 @@ public class TestTankKinematics {
         testFromTankState(translationC, stateC);
         testFromTankState(translationD, stateD);
     }
+
+    @Test
+    public void testTurning() {
+        TankKinematics kinematics = kinematics();
+        Logger.trace(
+            () -> {
+                kinematics.calculate(new Translation(0, 1, 0));
+                kinematics.calculate(new Translation(0, 1, 0.5));
+                kinematics.calculate(new Translation(1, 1, 0));
+                kinematics.calculate(new Translation(1, 1, 0.5));
+                kinematics.calculate(new Translation(1, 0, 0));
+                kinematics.calculate(new Translation(1, 0, 0.5));
+            }
+        );
+    }
 }

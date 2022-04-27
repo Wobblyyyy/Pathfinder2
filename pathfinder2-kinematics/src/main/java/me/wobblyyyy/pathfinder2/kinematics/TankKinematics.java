@@ -22,7 +22,7 @@ import me.wobblyyyy.pathfinder2.math.Min;
  * of chassis that applies power along two different axes to move the robot.
  *
  * <p>
- * By default, this value is 1 / 90. Because a tank drive can only move along
+ * By default, this value is 1 / 180. Because a tank drive can only move along
  * one axis - forwards and backwards - you need a way to convert translations
  * with multiple axes into a translation that can be applied to a differential
  * drive chassis. If a translation has a horizontal component (say (1, 0, 0)),
@@ -40,13 +40,13 @@ public class TankKinematics implements Kinematics<TankState> {
     /**
      * Create a new instance of {@code TankKinematics}.
      *
-     * @param trackWidth      the track width of the chassis. This should be
-     *                        in whatever unit you're using for the rest of
-     *                        Pathfinder. "Track width" is the measurement
-     *                        between the two sides of the robot.
+     * @param trackWidth the track width of the chassis. This should be
+     *                   in whatever unit you're using for the rest of
+     *                   Pathfinder. "Track width" is the measurement
+     *                   between the two sides of the robot.
      */
     public TankKinematics(double trackWidth) {
-        this(1.0 / 90.0, trackWidth);
+        this(1.0 / 180.0, trackWidth);
     }
 
     /**
@@ -73,6 +73,22 @@ public class TankKinematics implements Kinematics<TankState> {
         this.trackWidth = trackWidth;
     }
 
+    /**
+     * Convert two joystick values into a {@link Translation}. If this
+     * {@code Translation} is then fed to a differential drive chassis,
+     * the robot should move according to the joystick values.
+     *
+     * @param right the right joystick value.
+     * @param left  the left joystick value.
+     * @return a {@code Translation} that represents the {@code right} and
+     * {@code left} joystick values.
+     */
+    public static Translation fromJoysticks(double right, double left) {
+        double average = Average.of(right, left);
+
+        return new Translation(0, Average.of(right, left), right - average);
+    }
+
     @Override
     public TankState calculate(Translation translation) {
         Angle translationAngle = translation.angle();
@@ -85,19 +101,12 @@ public class TankKinematics implements Kinematics<TankState> {
             translation.magnitude();
         double turn = translation.vz() + (turnDistance * turnCoefficient);
 
-        Logger.trace(
-            TankKinematics.class,
-            "coeff: <%s> angle: <%s> turn: <%s> turn distance: <%s>",
-            turnCoefficient,
-            translationAngle,
-            turn,
-            turnDistance
-        );
+        double right = translation.vy() + turn;
+        double left = translation.vy() - turn;
 
-        return new TankState(
-            translation.vy() + (trackWidth / 2 * turn),
-            translation.vy() - (trackWidth / 2 * turn)
-        );
+        Logger.trace(TankKinematics.class, "r: <%s> l: <%s>", right, left);
+
+        return new TankState(right, left);
     }
 
     @Override
