@@ -192,7 +192,9 @@ public class LinearTrajectory implements Trajectory {
             // position, so that robot will stop trying to overcorrect. the heading
             // value MUST remain the same as the target value or the trajectory
             // may stop before reaching the correct angle
-            if (isDoneXY(current)) return current.withHeading(this.target);
+            if (isDoneXY(current)) {
+                return current.withHeading(this.target);
+            }
         }
 
         // otherwise, return the actual marker point
@@ -233,7 +235,9 @@ public class LinearTrajectory implements Trajectory {
 
     @Override
     public boolean isDone(PointXYZ current) {
-        if (current == null) return false;
+        if (current == null) {
+            return false;
+        }
 
         return isDoneXY(current) && isDoneHeading(current);
     }
