@@ -42,6 +42,16 @@ public class StateRecording implements Serializable {
         return records;
     }
 
+    public StateRecord getLastRecord() {
+        int index = records.size() - 1;
+
+        if (index < 0) {
+            return null;
+        }
+
+        return records.get(index);
+    }
+
     public StateRecording addRecord(StateRecord record) {
         ValidationUtils.validate(record, "record");
 

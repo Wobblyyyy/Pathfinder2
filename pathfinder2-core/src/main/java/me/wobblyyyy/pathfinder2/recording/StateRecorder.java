@@ -10,7 +10,9 @@
 
 package me.wobblyyyy.pathfinder2.recording;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import me.wobblyyyy.pathfinder2.exceptions.IllegalStateRecordException;
 import me.wobblyyyy.pathfinder2.exceptions.StateRecorderException;
@@ -29,6 +31,7 @@ import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 public class StateRecorder {
     private final Map<String, Recordable<?>> nodes = new HashMap<>();
 
+    private StateRecord lastRecord = null;
     private int index = 0;
     private double lastTimeMs = 0;
     private StateRecording recording = null;
@@ -178,6 +181,8 @@ public class StateRecorder {
         recording = new StateRecording(size);
 
         isRecording = true;
+        lastTimeMs = 0;
+        index = 0;
 
         return this;
     }
@@ -216,6 +221,8 @@ public class StateRecorder {
         return this;
     }
 
+    private void cleanseRecord(StateRecord record) {}
+
     /**
      * Update the {@code StateRecorder}. If a recording is currently underway,
      * this will record the robot's current state and add it to the ongoing
@@ -233,6 +240,33 @@ public class StateRecorder {
         if (elapsedTimeMs >= recording.getIntervalMs()) {
             if (isRecording) {
                 StateRecord record = createNewRecord();
+
+                lastRecord = recording.getLastRecord();
+
+                if (lastRecord != null) {
+                    Map<String, Object> lastMap = lastRecord.getMap();
+                    Map<String, Object> map = record.getMap();
+
+                    List<String> toRemove = new ArrayList<>(map.size());
+                    for (Map.Entry<String, Object> entry : map.entrySet()) {
+                        String key = entry.getKey();
+                        Object value = entry.getValue();
+
+                        if (!lastMap.containsKey(key)) {
+                            continue;
+                        }
+
+                        Object lastValue = lastMap.get(key);
+
+                        if (lastValue.equals(value)) {
+                            toRemove.add(key);
+                        }
+                    }
+
+                    for (String str : toRemove) {
+                        map.remove(str);
+                    }
+                }
 
                 recording.addRecord(record);
             } else if (isPlayingBack) {
