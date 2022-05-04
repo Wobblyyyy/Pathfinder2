@@ -31,6 +31,7 @@ import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
 public class StateRecorder {
     private final Map<String, Recordable<?>> nodes = new HashMap<>();
 
+    private boolean shouldOptimize = true;
     private StateRecord lastRecord = null;
     private int index = 0;
     private double lastTimeMs = 0;
@@ -242,33 +243,34 @@ public class StateRecorder {
                 StateRecord record = createNewRecord();
 
                 lastRecord = recording.getLastRecord();
+                recording.addRecord(record);
 
-                if (lastRecord != null) {
-                    Map<String, Object> lastMap = lastRecord.getMap();
-                    Map<String, Object> map = record.getMap();
+                if (shouldOptimize) {
+                    if (lastRecord != null) {
+                        Map<String, Object> lastMap = lastRecord.getMap();
+                        Map<String, Object> map = record.getMap();
 
-                    List<String> toRemove = new ArrayList<>(map.size());
-                    for (Map.Entry<String, Object> entry : map.entrySet()) {
-                        String key = entry.getKey();
-                        Object value = entry.getValue();
+                        List<String> toRemove = new ArrayList<>(map.size());
+                        for (Map.Entry<String, Object> entry : map.entrySet()) {
+                            String key = entry.getKey();
+                            Object value = entry.getValue();
 
-                        if (!lastMap.containsKey(key)) {
-                            continue;
+                            if (!lastMap.containsKey(key)) {
+                                continue;
+                            }
+
+                            Object lastValue = lastMap.get(key);
+
+                            if (lastValue.equals(value)) {
+                                toRemove.add(key);
+                            }
                         }
 
-                        Object lastValue = lastMap.get(key);
-
-                        if (lastValue.equals(value)) {
-                            toRemove.add(key);
+                        for (String str : toRemove) {
+                            map.remove(str);
                         }
-                    }
-
-                    for (String str : toRemove) {
-                        map.remove(str);
                     }
                 }
-
-                recording.addRecord(record);
             } else if (isPlayingBack) {
                 int recordingSize = recording.getRecords().size();
 
@@ -315,5 +317,11 @@ public class StateRecorder {
      */
     public boolean isPlayingBack() {
         return isPlayingBack;
+    }
+
+    public StateRecorder setShouldOptimize(boolean shouldOptimize) {
+        this.shouldOptimize = shouldOptimize;
+
+        return this;
     }
 }
