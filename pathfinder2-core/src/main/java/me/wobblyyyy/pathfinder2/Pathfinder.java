@@ -40,6 +40,8 @@ import me.wobblyyyy.pathfinder2.prebuilt.HeadingLock;
 import me.wobblyyyy.pathfinder2.recording.MovementPlayback;
 import me.wobblyyyy.pathfinder2.recording.MovementRecorder;
 import me.wobblyyyy.pathfinder2.recording.MovementRecording;
+import me.wobblyyyy.pathfinder2.recording.Recordable;
+import me.wobblyyyy.pathfinder2.recording.StateRecorder;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.robot.Robot;
@@ -123,6 +125,18 @@ import me.wobblyyyy.pathfinder2.zones.ZoneProcessor;
  * check out: {@link #setIsMinimal(boolean)}
  * </p>
  *
+ * <p>
+ * Using {@link StateRecorder}, Pathfinder can record the state of your robot,
+ * allowing you to play it back later. This is different from movement
+ * recording in that it records the state of several components of your robot
+ * (ex: every motor) and plays back that exact state, removing any room for
+ * error in playing back an existing path. To get started, first add some
+ * {@link Recordable} nodes using {@link #addRecordable(String, Recordable)}.
+ * Next, use {@link #getRecorder()} to access the {@link StateRecorder}.
+ * From there, check out the documentation in the {@link StateRecorder} class
+ * to learn how to record and play back the state of your robot.
+ * </p>
+ *
  * @author Colin Robertson
  * @see #goTo(PointXY)
  * @see #goTo(PointXYZ)
@@ -204,6 +218,11 @@ public class Pathfinder {
     private final MovementPlayback playback;
 
     /**
+     * A manager used for recording the state of several {@code Recordable}s.
+     */
+    private final StateRecorder recorder;
+
+    /**
      * A manager for {@link PathfinderPlugin}s.
      */
     private final PathfinderPluginManager pluginManager;
@@ -217,47 +236,58 @@ public class Pathfinder {
      * Used in event listeners.
      */
     private final ListenerManager listenerManager;
+
     /**
      * A modifiable map of operations to be run after every tick.
      */
     private final Map<String, Consumer<Pathfinder>> onTickOperations;
+
     /**
      * A map that can be used to communicate between classes.
      */
     private final Map<String, Object> dataMap;
+
     /**
      * The speed Pathfinder will use in creating linear trajectories.
      */
     private double speed = Core.pathfinderDefaultSpeed;
+
     /**
      * The tolerance Pathfinder will use in creating linear trajectories.
      */
     private double tolerance = Core.pathfinderDefaultTolerance;
+
     /**
      * The angle tolerance Pathfinder will use in creating linear trajectories.
      */
     private Angle angleTolerance = Core.pathfinderDefaultAngleTolerance;
+
     /**
      * The default tick until timeout.
      */
     private double defaultTimeout = Core.pathfinderDefaultTimeout;
+
     /**
      * The default tick until should run supplier.
      */
     private Supplier<Boolean> defaultShouldRun = () -> true;
+
     /**
      * The default tick until completion consumer.
      */
     private Consumer<Pathfinder> defaultOnCompletion = pathfinder -> {};
+
     /**
      * The default tick until on tick consumer.
      */
     private BiConsumer<Pathfinder, Double> defaultOnTick = (pathfinder, aDouble) -> {};
+
     /**
      * Last tick, what was the currently active drive modifier? Or
      * something like that.
      */
     private Function<Translation, Translation> lastDriveModifier = null;
+
     /**
      * Is Pathfinder operating in minimal mode?
      */
@@ -278,6 +308,7 @@ public class Pathfinder {
      *     <li>{@link Scheduler}</li>
      *     <li>{@link MovementRecorder}</li>
      *     <li>{@link MovementPlayback}</li>
+     *     <li>{@link StateRecorder}</li>
      *     <li>{@link PathfinderPluginManager}</li>
      *     <li>{@link MovementProfiler}</li>
      *     <li>{@link ListenerManager}</li>
@@ -375,6 +406,7 @@ public class Pathfinder {
         this.movementRecorder =
             new MovementRecorder(this, Core.movementRecorderMinDelayMs);
         this.playback = new MovementPlayback(this);
+        this.recorder = new StateRecorder();
         this.pluginManager = new PathfinderPluginManager();
         this.profiler = new MovementProfiler();
         this.listenerManager = new ListenerManager(this);
@@ -405,6 +437,7 @@ public class Pathfinder {
      *     <li>{@link Scheduler}</li>
      *     <li>{@link MovementRecorder}</li>
      *     <li>{@link MovementPlayback}</li>
+     *     <li>{@link StateRecorder}</li>
      *     <li>{@link PathfinderPluginManager}</li>
      *     <li>{@link MovementProfiler}</li>
      *     <li>{@link ListenerManager}</li>
@@ -481,6 +514,7 @@ public class Pathfinder {
      *     <li>{@link Scheduler}</li>
      *     <li>{@link MovementRecorder}</li>
      *     <li>{@link MovementPlayback}</li>
+     *     <li>{@link StateRecorder}</li>
      *     <li>{@link PathfinderPluginManager}</li>
      *     <li>{@link MovementProfiler}</li>
      *     <li>{@link ListenerManager}</li>
@@ -545,6 +579,7 @@ public class Pathfinder {
      *     <li>{@link Scheduler}</li>
      *     <li>{@link MovementRecorder}</li>
      *     <li>{@link MovementPlayback}</li>
+     *     <li>{@link StateRecorder}</li>
      *     <li>{@link PathfinderPluginManager}</li>
      *     <li>{@link MovementProfiler}</li>
      *     <li>{@link ListenerManager}</li>
@@ -1447,6 +1482,31 @@ public class Pathfinder {
      */
     public MovementPlayback getPlayback() {
         return playback;
+    }
+
+    /**
+     * Get Pathfinder's {@code StateRecorder} instance. In order to record,
+     * you first need to add recordable nodes. To add a node to this
+     * {@code StateRecorder}, use {@link #addRecordable(String, Recordable)}.
+     *
+     * @return Pathfinder's {@code StateRecorder}.
+     */
+    public StateRecorder getRecorder() {
+        return recorder;
+    }
+
+    /**
+     * Add a {@code Recordable} to Pathfinder's {@code StateRecorder}.
+     *
+     * @param name       the name of the node. This should be the same name
+     *                   used in any recordings you plan on playing back.
+     * @param recordable the {@code Recordable} to add.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder addRecordable(String name, Recordable<?> recordable) {
+        recorder.putNode(name, recordable);
+
+        return this;
     }
 
     /**
