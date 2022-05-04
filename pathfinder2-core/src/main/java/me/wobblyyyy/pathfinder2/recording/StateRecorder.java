@@ -355,6 +355,10 @@ public class StateRecorder {
     public void update(double currentTimeMs) {
         double elapsedTimeMs = currentTimeMs - lastTimeMs;
 
+        if (recording == null) {
+            return;
+        }
+
         if (elapsedTimeMs >= recording.getIntervalMs()) {
             if (isRecording) {
                 StateRecord record = createNewRecord();

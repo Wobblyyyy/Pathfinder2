@@ -1681,6 +1681,7 @@ public class Pathfinder {
             playback,
             profiler,
             movementRecorder,
+            recorder,
             listenerManager,
             this::runOnTickOperations
         );

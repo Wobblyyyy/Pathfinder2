@@ -16,6 +16,7 @@ import me.wobblyyyy.pathfinder2.movement.MovementProfiler;
 import me.wobblyyyy.pathfinder2.plugin.PathfinderPluginManager;
 import me.wobblyyyy.pathfinder2.recording.MovementPlayback;
 import me.wobblyyyy.pathfinder2.recording.MovementRecorder;
+import me.wobblyyyy.pathfinder2.recording.StateRecorder;
 import me.wobblyyyy.pathfinder2.scheduler.Scheduler;
 import me.wobblyyyy.pathfinder2.zones.ZoneProcessor;
 
@@ -64,6 +65,7 @@ public class TickProcessor {
         MovementPlayback movementPlayback,
         MovementProfiler movementProfiler,
         MovementRecorder movementRecorder,
+        StateRecorder recorder,
         ListenerManager listenerManager,
         Runnable runOnTickOperations
     ) {
@@ -73,6 +75,8 @@ public class TickProcessor {
             movementPlayback.tick();
             movementProfiler.capture(pathfinder.getPosition());
             movementRecorder.tick();
+
+            recorder.update();
 
             listenerManager.tick(pathfinder);
             runOnTickOperations.run();
