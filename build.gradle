@@ -21,7 +21,7 @@ repositories {
 
 project.ext {
     projectName = 'me.wobblyyyy'
-    projectVersion = 'v2.4.0'
+    projectVersion = 'v3.0.0-alpha'
 
     jmhTime = '200ms'
     jmhWarmupIterations = 5
