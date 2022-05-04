@@ -93,7 +93,7 @@ import me.wobblyyyy.pathfinder2.zones.ZoneProcessor;
  *     <li>{@link #getExecutorManager()}</li>
  *     <li>{@link #getPluginManager()}</li>
  *     <li>{@link #getPlayback()}</li>
- *     <li>{@link #getRecorder()}</li>
+ *     <li>{@link #getMovementRecorder()}</li>
  *     <li>{@link #getListenerManager()}</li>
  * </ul>
  * Many of these can be disabled using minimal mode, which is explained in
@@ -196,7 +196,7 @@ public class Pathfinder {
     /**
      * A manager for recording Pathfinder's movement.
      */
-    private final MovementRecorder recorder;
+    private final MovementRecorder movementRecorder;
 
     /**
      * A manager for playing back recordings.
@@ -372,7 +372,7 @@ public class Pathfinder {
         this.executorManager = new ExecutorManager(robot);
         this.zoneProcessor = new ZoneProcessor();
         this.scheduler = new Scheduler(this);
-        this.recorder =
+        this.movementRecorder =
             new MovementRecorder(this, Core.movementRecorderMinDelayMs);
         this.playback = new MovementPlayback(this);
         this.pluginManager = new PathfinderPluginManager();
@@ -1408,8 +1408,8 @@ public class Pathfinder {
      *
      * @return Pathfinder's movement recorder.
      */
-    public MovementRecorder getRecorder() {
-        return recorder;
+    public MovementRecorder getMovementRecorder() {
+        return movementRecorder;
     }
 
     /**
@@ -1620,7 +1620,7 @@ public class Pathfinder {
             pluginManager,
             playback,
             profiler,
-            recorder,
+            movementRecorder,
             listenerManager,
             this::runOnTickOperations
         );
@@ -1664,7 +1664,7 @@ public class Pathfinder {
      *     <li>Executor manager ({@link #getExecutorManager()})</li>
      *     <li>Playback manager ({@link #getPlayback()})</li>
      *     <li>Motion profiler ({@link #getProfiler()})</li>
-     *     <li>Recording manager ({@link #getRecorder()})</li>
+     *     <li>Recording manager ({@link #getMovementRecorder()})</li>
      *     <li>On tick operations ({@link #onTickOperations})</li>
      *     <li>Plugin post-tick ({@link PathfinderPluginManager#postTick(Pathfinder)})</li>
      * </ol>

@@ -27,7 +27,7 @@ public class TestMovementRecorder {
         odometry.setTranslation(translation);
         pf.setTranslation(translation);
 
-        pf.getRecorder().start();
+        pf.getMovementRecorder().start();
         pf.tick();
 
         ElapsedTimer timer = new ElapsedTimer(true);

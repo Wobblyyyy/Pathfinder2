@@ -82,13 +82,13 @@ public class ExampleRecording {
     public void record() {
         boolean condition = true;
 
-        pathfinder.getRecorder().start();
+        pathfinder.getMovementRecorder().start();
 
         while (condition) {
             pathfinder.tick();
         }
 
-        recording = pathfinder.getRecorder().getRecording();
+        recording = pathfinder.getMovementRecorder().getRecording();
     }
 
     public void playback() {
