@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.robot.components;
 
+import me.wobblyyyy.pathfinder2.recording.Recordable;
+
 /**
  * A rotary actuator that provides precise control over position, velocity,
  * and acceleration. A {@code Servo} has a minimum and maximum position of
@@ -24,7 +26,7 @@ package me.wobblyyyy.pathfinder2.robot.components;
  * @author Colin Robertson
  * @since 2.4.0
  */
-public interface Servo {
+public interface Servo extends Recordable<Double> {
     /**
      * Set the position of the servo. This will command the servo to move
      * to the provided position. This method should not block the program's
@@ -82,5 +84,18 @@ public interface Servo {
      */
     default double getVelocity() {
         return 0;
+    }
+
+    @Override
+    default Double getRecordingValue() {
+        return getPosition();
+    }
+
+    @Override
+    default void setRecordingValue(Object obj) {
+        if (obj instanceof Double) {
+            Double d = (Double) obj;
+            setPosition(d);
+        }
     }
 }
