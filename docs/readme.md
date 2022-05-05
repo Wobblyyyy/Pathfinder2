@@ -43,6 +43,10 @@ be browsed from GitHub.
 - [Commands](./18_commands.md):
   The `pathfinder2-commands` module implements basic scripting functionality
   into Pathfinder.
+- [Recording](./22_recording.md):
+  State recording allows you to record your robot's actions and play them
+  back later on. Example use case: you could record 30 seconds of Tele-Op
+  gameplay and play it back during autonomous.
 - [Custom trajectory implementation](./06_custom_trajectory.md):
   If you'd like to REALLY customize Pathfinder and none of the default
   `Trajectory` implementations satisfy your needs, this is a guide on creating
