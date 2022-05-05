@@ -263,26 +263,6 @@ public class Pathfinder {
     private Angle angleTolerance = Core.pathfinderDefaultAngleTolerance;
 
     /**
-     * The default tick until timeout.
-     */
-    private double defaultTimeout = Core.pathfinderDefaultTimeout;
-
-    /**
-     * The default tick until should run supplier.
-     */
-    private Supplier<Boolean> defaultShouldRun = () -> true;
-
-    /**
-     * The default tick until completion consumer.
-     */
-    private Consumer<Pathfinder> defaultOnCompletion = pathfinder -> {};
-
-    /**
-     * The default tick until on tick consumer.
-     */
-    private BiConsumer<Pathfinder, Double> defaultOnTick = (pathfinder, aDouble) -> {};
-
-    /**
      * Last tick, what was the currently active drive modifier? Or
      * something like that.
      */
@@ -1214,94 +1194,6 @@ public class Pathfinder {
     }
 
     /**
-     * Get the default timeout.
-     *
-     * @return the default timeout.
-     */
-    public double getDefaultTimeout() {
-        return this.defaultTimeout;
-    }
-
-    /**
-     * Set the default timeout.
-     *
-     * @param defaultTimeout the default timeout.
-     * @return this, used for method chaining.
-     */
-    public Pathfinder setDefaultTimeout(double defaultTimeout) {
-        this.defaultTimeout = defaultTimeout;
-
-        return this;
-    }
-
-    /**
-     * Get the default "should run" supplier.
-     *
-     * @return the default "should run" supplier.
-     */
-    public Supplier<Boolean> getDefaultShouldRun() {
-        return this.defaultShouldRun;
-    }
-
-    /**
-     * Set the default "should run" supplier.
-     *
-     * @param defaultShouldRun the default "should run" supplier.
-     * @return this, used for method chaining.
-     */
-    public Pathfinder setDefaultShouldRun(Supplier<Boolean> defaultShouldRun) {
-        this.defaultShouldRun = defaultShouldRun;
-
-        return this;
-    }
-
-    /**
-     * Get the default "on completion" consumer.
-     *
-     * @return the default "on completion" consumer.
-     */
-    public Consumer<Pathfinder> getDefaultOnCompletion() {
-        return this.defaultOnCompletion;
-    }
-
-    /**
-     * Set the default "on completion" consumer.
-     *
-     * @param defaultOnCompletion the default "on completion" consumer.
-     * @return this, used for method chaining.
-     */
-    public Pathfinder setDefaultOnCompletion(
-        Consumer<Pathfinder> defaultOnCompletion
-    ) {
-        this.defaultOnCompletion = defaultOnCompletion;
-
-        return this;
-    }
-
-    /**
-     * Get the default "on tick" consumer.
-     *
-     * @return the default "on tick" consumer.
-     */
-    public BiConsumer<Pathfinder, Double> getDefaultOnTick() {
-        return this.defaultOnTick;
-    }
-
-    /**
-     * Set the default "on tick" consumer.
-     *
-     * @param defaultOnTick the default "on tick" consumer.
-     * @return this, used for method chaining.
-     */
-    public Pathfinder setDefaultOnTick(
-        BiConsumer<Pathfinder, Double> defaultOnTick
-    ) {
-        this.defaultOnTick = defaultOnTick;
-
-        return this;
-    }
-
-    /**
      * Get {@code this} instance of Pathfinder's {@link ZoneProcessor}.
      *
      * @return a {@link ZoneProcessor}.
@@ -1775,6 +1667,56 @@ public class Pathfinder {
     }
 
     /**
+     * Tick Pathfinder according to a {@code TickConfig}.
+     *
+     * @param config the ticking configuration to use.
+     * @return {@code this}, used for method chaining.
+     */
+    public Pathfinder tickUntil(TickConfig config) {
+        double delayMs = config.getDelayMs();
+
+        if (delayMs > 0) {
+            ElapsedTimer delayTimer = new ElapsedTimer(true);
+
+            while (delayTimer.elapsedMs() <= delayMs);
+        }
+
+        double timeoutMs = config.getTimeoutMs();
+        ElapsedTimer timer = new ElapsedTimer(true);
+
+        List<Supplier<Boolean>> shouldContinueRunning = config.getShouldContinueRunning();
+        List<Supplier<Boolean>> shouldStopRunning = config.getShouldStopRunning();
+        List<Runnable> onTick = config.getOnTick();
+        List<Runnable> onFinish = config.getOnFinish();
+
+        while (timer.elapsedMs() <= timeoutMs) {
+            for (Supplier<Boolean> supplier : shouldContinueRunning) {
+                if (!supplier.get()) {
+                    break;
+                }
+            }
+
+            for (Supplier<Boolean> supplier : shouldStopRunning) {
+                if (supplier.get()) {
+                    break;
+                }
+            }
+
+            tick();
+
+            for (Runnable runnable : onTick) {
+                runnable.run();
+            }
+        }
+
+        for (Runnable runnable : onFinish) {
+            runnable.run();
+        }
+
+        return this;
+    }
+
+    /**
      * Tick Pathfinder until it finishes whatever path is currently being
      * executed.
      *
@@ -1840,27 +1782,6 @@ public class Pathfinder {
     public Pathfinder tickUntil(
         Supplier<Boolean> shouldContinueRunning,
         Consumer<Pathfinder> onTick
-    ) {
-        return tickUntil(Double.MAX_VALUE, shouldContinueRunning, onTick);
-    }
-
-    /**
-     * Tick Pathfinder while the provided supplier returns true.
-     *
-     * @param shouldContinueRunning a supplier, indicating whether Pathfinder
-     *                              should still continue running.
-     * @param onTick                a {@link Consumer} that will be executed
-     *                              after every successful tick. This consumer
-     *                              accepts two parameters - first the instance
-     *                              of Pathfinder that is running. Second, a
-     *                              double value representing the total elapsed
-     *                              time (in milliseconds) that the tick
-     *                              until method has been running for.
-     * @return this instance of Pathfinder, used for method chaining.
-     */
-    public Pathfinder tickUntil(
-        Supplier<Boolean> shouldContinueRunning,
-        BiConsumer<Pathfinder, Double> onTick
     ) {
         return tickUntil(Double.MAX_VALUE, shouldContinueRunning, onTick);
     }
@@ -2089,375 +2010,6 @@ public class Pathfinder {
         }
 
         return this;
-    }
-
-    /**
-     * Use the {@link #tickUntil(double, Supplier, BiConsumer)} method with
-     * default values.
-     *
-     * @return {@code this}, used for method chaining.
-     * @see #setDefaultTimeout(double)
-     * @see #setDefaultShouldRun(Supplier)
-     * @see #setDefaultOnTick(BiConsumer)
-     */
-    public Pathfinder defaultTickUntil() {
-        return tickUntil(defaultTimeout, defaultShouldRun, defaultOnTick);
-    }
-
-    /**
-     * Use the {@link #tickUntil(double, Supplier, BiConsumer)} method with
-     * default values.
-     *
-     * @param timeoutMs the maximum amount of time, in milliseconds, that
-     *                  this can run for. After this amount of time has
-     *                  elapsed, this method will finish its execution,
-     *                  regardless of whether the path has been completed.
-     * @return {@code this}, used for method chaining.
-     * @see #setDefaultTimeout(double)
-     * @see #setDefaultShouldRun(Supplier)
-     * @see #setDefaultOnTick(BiConsumer)
-     */
-    public Pathfinder defaultTickUntil(double timeoutMs) {
-        return tickUntil(timeoutMs, defaultShouldRun, defaultOnTick);
-    }
-
-    /**
-     * Use the {@link #tickUntil(double, Supplier, BiConsumer)} method with
-     * default values.
-     *
-     * @param shouldRun a supplier that indicates whether the method should
-     *                  continue executing. If this supplier returns false,
-     *                  the method will finish executing.
-     * @return {@code this}, used for method chaining.
-     * @see #setDefaultTimeout(double)
-     * @see #setDefaultShouldRun(Supplier)
-     * @see #setDefaultOnTick(BiConsumer)
-     */
-    public Pathfinder defaultTickUntil(Supplier<Boolean> shouldRun) {
-        return tickUntil(defaultTimeout, shouldRun, defaultOnTick);
-    }
-
-    /**
-     * Use the {@link #tickUntil(double, Supplier, BiConsumer)} method with
-     * default values.
-     *
-     * @param onTick code that should be run once per tick. This consumer
-     *               accepts {@code this} instance of Pathfinder, as well
-     *               as a {@code Double} value representing the elapsed
-     *               time, in milliseconds.
-     * @return {@code this}, used for method chaining.
-     * @see #setDefaultTimeout(double)
-     * @see #setDefaultShouldRun(Supplier)
-     * @see #setDefaultOnTick(BiConsumer)
-     */
-    public Pathfinder defaultTickUntil(BiConsumer<Pathfinder, Double> onTick) {
-        return tickUntil(defaultTimeout, defaultShouldRun, onTick);
-    }
-
-    /**
-     * Use the {@link #tickUntil(double, Supplier, BiConsumer)} method with
-     * default values.
-     *
-     * @param timeoutMs the maximum amount of time, in milliseconds, that
-     *                  this can run for. After this amount of time has
-     *                  elapsed, this method will finish its execution,
-     *                  regardless of whether the path has been completed.
-     * @param shouldRun a supplier that indicates whether the method should
-     *                  continue executing. If this supplier returns false,
-     *                  the method will finish executing.
-     * @return {@code this}, used for method chaining.
-     * @see #setDefaultTimeout(double)
-     * @see #setDefaultShouldRun(Supplier)
-     * @see #setDefaultOnTick(BiConsumer)
-     */
-    public Pathfinder defaultTickUntil(
-        double timeoutMs,
-        Supplier<Boolean> shouldRun
-    ) {
-        return tickUntil(timeoutMs, shouldRun, defaultOnTick);
-    }
-
-    /**
-     * Use the {@link #tickUntil(double, Supplier, BiConsumer)} method with
-     * default values.
-     *
-     * @param timeoutMs the maximum amount of time, in milliseconds, that
-     *                  this can run for. After this amount of time has
-     *                  elapsed, this method will finish its execution,
-     *                  regardless of whether the path has been completed.
-     * @param onTick    code that should be run once per tick. This consumer
-     *                  accepts {@code this} instance of Pathfinder, as well
-     *                  as a {@code Double} value representing the elapsed
-     *                  time, in milliseconds.
-     * @return {@code this}, used for method chaining.
-     * @see #setDefaultTimeout(double)
-     * @see #setDefaultShouldRun(Supplier)
-     * @see #setDefaultOnTick(BiConsumer)
-     */
-    public Pathfinder defaultTickUntil(
-        double timeoutMs,
-        BiConsumer<Pathfinder, Double> onTick
-    ) {
-        return tickUntil(timeoutMs, defaultShouldRun, onTick);
-    }
-
-    /**
-     * Use the {@link #tickUntil(double, Supplier, BiConsumer)} method with
-     * default values.
-     *
-     * @param shouldRun a supplier that indicates whether the method should
-     *                  continue executing. If this supplier returns false,
-     *                  the method will finish executing.
-     * @param onTick    code that should be run once per tick. This consumer
-     *                  accepts {@code this} instance of Pathfinder, as well
-     *                  as a {@code Double} value representing the elapsed
-     *                  time, in milliseconds.
-     * @return {@code this}, used for method chaining.
-     * @see #setDefaultTimeout(double)
-     * @see #setDefaultShouldRun(Supplier)
-     * @see #setDefaultOnTick(BiConsumer)
-     */
-    public Pathfinder defaultTickUntil(
-        Supplier<Boolean> shouldRun,
-        BiConsumer<Pathfinder, Double> onTick
-    ) {
-        return tickUntil(defaultTimeout, shouldRun, onTick);
-    }
-
-    /**
-     * Use the {@link #tickUntil(double, Supplier, BiConsumer)} method with
-     * default values.
-     *
-     * @param timeoutMs the maximum amount of time, in milliseconds, that
-     *                  this can run for. After this amount of time has
-     *                  elapsed, this method will finish its execution,
-     *                  regardless of whether the path has been completed.
-     * @param shouldRun a supplier that indicates whether the method should
-     *                  continue executing. If this supplier returns false,
-     *                  the method will finish executing.
-     * @param onTick    code that should be run once per tick. This consumer
-     *                  accepts {@code this} instance of Pathfinder, as well
-     *                  as a {@code Double} value representing the elapsed
-     *                  time, in milliseconds.
-     * @return {@code this}, used for method chaining.
-     * @see #setDefaultTimeout(double)
-     * @see #setDefaultShouldRun(Supplier)
-     * @see #setDefaultOnTick(BiConsumer)
-     */
-    public Pathfinder defaultTickUntil(
-        double timeoutMs,
-        Supplier<Boolean> shouldRun,
-        BiConsumer<Pathfinder, Double> onTick
-    ) {
-        return tickUntil(timeoutMs, shouldRun, onTick);
-    }
-
-    /**
-     * Use the {@link #andThen(Consumer, double, Supplier, BiConsumer)} with
-     * default values.
-     *
-     * @return {@code this}, used for method chaining.
-     * @see #setDefaultOnCompletion(Consumer)
-     * @see #setDefaultTimeout(double)
-     * @see #setDefaultShouldRun(Supplier)
-     * @see #setDefaultOnTick(BiConsumer)
-     */
-    public Pathfinder defaultAndThen() {
-        return andThen(
-            defaultOnCompletion,
-            defaultTimeout,
-            defaultShouldRun,
-            defaultOnTick
-        );
-    }
-
-    /**
-     * Use the {@link #andThen(Consumer, double, Supplier, BiConsumer)} with
-     * default values.
-     *
-     * @param timeoutMs the maximum amount of time, in milliseconds, that
-     *                  this can run for. After this amount of time has
-     *                  elapsed, this method will finish its execution,
-     *                  regardless of whether the path has been completed.
-     * @return {@code this}, used for method chaining.
-     * @see #setDefaultOnCompletion(Consumer)
-     * @see #setDefaultTimeout(double)
-     * @see #setDefaultShouldRun(Supplier)
-     * @see #setDefaultOnTick(BiConsumer)
-     */
-    public Pathfinder defaultAndThen(double timeoutMs) {
-        return andThen(
-            defaultOnCompletion,
-            timeoutMs,
-            defaultShouldRun,
-            defaultOnTick
-        );
-    }
-
-    /**
-     * Use the {@link #andThen(Consumer, double, Supplier, BiConsumer)} with
-     * default values.
-     *
-     * @param onCompletion code that should be executed upon the completion.
-     * @return {@code this}, used for method chaining.
-     * @see #setDefaultOnCompletion(Consumer)
-     * @see #setDefaultTimeout(double)
-     * @see #setDefaultShouldRun(Supplier)
-     * @see #setDefaultOnTick(BiConsumer)
-     */
-    public Pathfinder defaultAndThen(Consumer<Pathfinder> onCompletion) {
-        return andThen(
-            onCompletion,
-            defaultTimeout,
-            defaultShouldRun,
-            defaultOnTick
-        );
-    }
-
-    /**
-     * Use the {@link #andThen(Consumer, double, Supplier, BiConsumer)} with
-     * default values.
-     *
-     * @param shouldRun a supplier that indicates whether the method should
-     *                  continue executing. If this supplier returns false,
-     *                  the method will finish executing.
-     * @return {@code this}, used for method chaining.
-     * @see #setDefaultOnCompletion(Consumer)
-     * @see #setDefaultTimeout(double)
-     * @see #setDefaultShouldRun(Supplier)
-     * @see #setDefaultOnTick(BiConsumer)
-     */
-    public Pathfinder defaultAndThen(Supplier<Boolean> shouldRun) {
-        return andThen(
-            defaultOnCompletion,
-            defaultTimeout,
-            shouldRun,
-            defaultOnTick
-        );
-    }
-
-    /**
-     * Use the {@link #andThen(Consumer, double, Supplier, BiConsumer)} with
-     * default values.
-     *
-     * @param onTick code that should be run once per tick. This consumer
-     *               accepts {@code this} instance of Pathfinder, as well
-     *               as a {@code Double} value representing the elapsed
-     *               time, in milliseconds.
-     * @return {@code this}, used for method chaining.
-     * @see #setDefaultOnCompletion(Consumer)
-     * @see #setDefaultTimeout(double)
-     * @see #setDefaultShouldRun(Supplier)
-     * @see #setDefaultOnTick(BiConsumer)
-     */
-    public Pathfinder defaultAndThen(BiConsumer<Pathfinder, Double> onTick) {
-        return andThen(
-            defaultOnCompletion,
-            defaultTimeout,
-            defaultShouldRun,
-            onTick
-        );
-    }
-
-    /**
-     * Use the {@link #andThen(Consumer, double, Supplier, BiConsumer)} with
-     * default values.
-     *
-     * @param onCompletion code that should be executed upon the completion.
-     * @param timeoutMs    the maximum amount of time, in milliseconds, that
-     *                     this can run for. After this amount of time has
-     *                     elapsed, this method will finish its execution,
-     *                     regardless of whether the path has been completed.
-     * @return {@code this}, used for method chaining.
-     * @see #setDefaultOnCompletion(Consumer)
-     * @see #setDefaultTimeout(double)
-     * @see #setDefaultShouldRun(Supplier)
-     * @see #setDefaultOnTick(BiConsumer)
-     */
-    public Pathfinder defaultAndThen(
-        Consumer<Pathfinder> onCompletion,
-        double timeoutMs
-    ) {
-        return andThen(
-            onCompletion,
-            timeoutMs,
-            defaultShouldRun,
-            defaultOnTick
-        );
-    }
-
-    /**
-     * Use the {@link #andThen(Consumer, double, Supplier, BiConsumer)} with
-     * default values.
-     *
-     * @param onCompletion code that should be executed upon the completion.
-     * @param shouldRun    a supplier that indicates whether the method should
-     *                     continue executing. If this supplier returns false,
-     *                     the method will finish executing.
-     * @return {@code this}, used for method chaining.
-     * @see #setDefaultOnCompletion(Consumer)
-     * @see #setDefaultTimeout(double)
-     * @see #setDefaultShouldRun(Supplier)
-     * @see #setDefaultOnTick(BiConsumer)
-     */
-    public Pathfinder defaultAndThen(
-        Consumer<Pathfinder> onCompletion,
-        Supplier<Boolean> shouldRun
-    ) {
-        return andThen(onCompletion, defaultTimeout, shouldRun, defaultOnTick);
-    }
-
-    /**
-     * Use the {@link #andThen(Consumer, double, Supplier, BiConsumer)} with
-     * default values.
-     *
-     * @param onCompletion code that should be executed upon the completion.
-     * @param onTick       code that should be run once per tick. This consumer
-     *                     accepts {@code this} instance of Pathfinder, as well
-     *                     as a {@code Double} value representing the elapsed
-     *                     time, in milliseconds.
-     * @return {@code this}, used for method chaining.
-     * @see #setDefaultOnCompletion(Consumer)
-     * @see #setDefaultTimeout(double)
-     * @see #setDefaultShouldRun(Supplier)
-     * @see #setDefaultOnTick(BiConsumer)
-     */
-    public Pathfinder defaultAndThen(
-        Consumer<Pathfinder> onCompletion,
-        BiConsumer<Pathfinder, Double> onTick
-    ) {
-        return andThen(onCompletion, defaultTimeout, defaultShouldRun, onTick);
-    }
-
-    /**
-     * Use the {@link #andThen(Consumer, double, Supplier, BiConsumer)} with
-     * default values.
-     *
-     * @param onCompletion code that should be executed upon the completion.
-     * @param timeoutMs    the maximum amount of time, in milliseconds, that
-     *                     this can run for. After this amount of time has
-     *                     elapsed, this method will finish its execution,
-     *                     regardless of whether the path has been completed.
-     * @param shouldRun    a supplier that indicates whether the method should
-     *                     continue executing. If this supplier returns false,
-     *                     the method will finish executing.
-     * @param onTick       code that should be run once per tick. This consumer
-     *                     accepts {@code this} instance of Pathfinder, as well
-     *                     as a {@code Double} value representing the elapsed
-     *                     time, in milliseconds.
-     * @return {@code this}, used for method chaining.
-     * @see #setDefaultOnCompletion(Consumer)
-     * @see #setDefaultTimeout(double)
-     * @see #setDefaultShouldRun(Supplier)
-     * @see #setDefaultOnTick(BiConsumer)
-     */
-    public Pathfinder defaultAndThen(
-        Consumer<Pathfinder> onCompletion,
-        double timeoutMs,
-        Supplier<Boolean> shouldRun,
-        BiConsumer<Pathfinder, Double> onTick
-    ) {
-        return andThen(onCompletion, timeoutMs, shouldRun, onTick);
     }
 
     /**
