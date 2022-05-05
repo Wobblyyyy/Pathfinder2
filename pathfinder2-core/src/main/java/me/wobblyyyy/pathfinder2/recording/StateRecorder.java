@@ -260,6 +260,28 @@ public class StateRecorder {
     }
 
     /**
+     * Temporarily pause the recording.
+     *
+     * @return {@code this}, used for method chaining.
+     */
+    public StateRecorder pauseRecording() {
+        isRecording = false;
+
+        return this;
+    }
+
+    /**
+     * Resume a paused recording.
+     *
+     * @return {@code this}, used for method chaining.
+     */
+    public StateRecorder resumeRecording() {
+        isRecording = true;
+
+        return this;
+    }
+
+    /**
      * Set the {@link #isRecording} flag to false, stopping any ongoing
      * recording.
      *
@@ -296,6 +318,28 @@ public class StateRecorder {
         isPlayingBack = true;
         lastTimeMs = 0;
         index = 0;
+
+        return this;
+    }
+
+    /**
+     * Temporarily pause the playback of a recording.
+     *
+     * @return {@code this}, used for method chaining.
+     */
+    public StateRecorder pausePlayback() {
+        isPlayingBack = false;
+
+        return this;
+    }
+
+    /**
+     * Resume a paused playback.
+     *
+     * @return {@code this}, used for method chaining.
+     */
+    public StateRecorder resumePlayback() {
+        isPlayingBack = false;
 
         return this;
     }
