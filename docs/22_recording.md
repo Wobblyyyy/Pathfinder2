@@ -154,8 +154,29 @@ recorder.startPlayback(recording);
 recorder.stopPlayback();
 ```
 
-This will stop playing the recording back. There is no way to simply pause
-the recording - you'll have to start from the beginning of the recording.
+### Pausing a recording or playback
+Pause and resume methods are provided for this purpose exactly.
+
+#### Pausing recording
+```java
+StateRecorder recorder; // assume this is initialized elsewhere
+
+recorder.startRecording(50, 10_000);
+recorder.pauseRecording();
+recorder.resumeRecording();
+recorder.stopRecording();
+```
+
+#### Pausing playback
+```java
+StateRecorder recorder; // assume this is initialized elsewhere
+StateRecording recording; // assume this is initialized elsewhere
+
+recorder.startPlayback(recording);
+recorder.pausePlayback();
+recorder.resumePlayback();
+recorder.stopPlayback();
+```
 
 # Example
 Click [here](https://github.com/Wobblyyyy/Pathfinder2/blob/master/pathfinder2-examples/src/main/java/me/wobblyyyy/pathfinder2/examples/ExampleStateRecording.java).
