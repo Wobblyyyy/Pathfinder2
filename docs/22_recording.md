@@ -158,4 +158,4 @@ This will stop playing the recording back. There is no way to simply pause
 the recording - you'll have to start from the beginning of the recording.
 
 # Example
-Click [here](./pathfinder2-examples/src/main/java/me/wobblyyyy/pathfinder2/examples/ExampleStateRecording.java)
+Click [here](https://github.com/Wobblyyyy/Pathfinder2/blob/master/pathfinder2-examples/src/main/java/me/wobblyyyy/pathfinder2/examples/ExampleStateRecording.java).
