@@ -31,8 +31,7 @@ public class RecordableDouble implements Recordable<Double> {
     @Override
     public void setRecordingValue(Object obj) {
         if (obj instanceof Double) {
-            Double d = (Double) obj;
-            value = d;
+            value = (Double) obj;
         }
     }
 }

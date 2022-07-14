@@ -156,7 +156,6 @@ public class PointXY implements Comparable<PointXY>, Serializable {
                 builder.setLength(0);
                 break;
             default:
-                continue;
         }
 
         if (builder.length() != 0) list.add(
@@ -440,9 +439,8 @@ public class PointXY implements Comparable<PointXY>, Serializable {
         // sqrt((Bx-Ax)^2+(By-Ay)^2)
         // Obviously, there's some minor formatting issues there, but you
         // get the general idea.
-        double distance = Math.hypot(b.x - a.x, b.y - a.y);
 
-        return distance;
+        return Math.hypot(b.x - a.x, b.y - a.y);
     }
 
     /**

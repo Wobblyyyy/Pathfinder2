@@ -31,8 +31,7 @@ public class RecordableBoolean implements Recordable<Boolean> {
     @Override
     public void setRecordingValue(Object obj) {
         if (obj instanceof Boolean) {
-            Boolean b = (Boolean) obj;
-            value = b;
+            value = (Boolean) obj;
         }
     }
 }

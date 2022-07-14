@@ -253,7 +253,6 @@ public class Translation implements Serializable {
                 builder.setLength(0);
                 break;
             default:
-                continue;
         }
 
         if (builder.length() != 0) list.add(

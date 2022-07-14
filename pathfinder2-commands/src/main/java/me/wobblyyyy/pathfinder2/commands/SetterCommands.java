@@ -17,49 +17,49 @@ public class SetterCommands {
 
     private SetterCommands() {}
 
-    public static Command SET_SPEED_COMMAND = new Command(
+    public static final Command SET_SPEED_COMMAND = new Command(
         "setSpeed",
         (pathfinder, args) -> {
             pathfinder.setSpeed(Double.parseDouble(args[0]));
         }
     );
 
-    public static Command SET_TOLERANCE_COMMAND = new Command(
+    public static final Command SET_TOLERANCE_COMMAND = new Command(
         "setTolerance",
         (pathfinder, args) -> {
             pathfinder.setTolerance(Double.parseDouble(args[0]));
         }
     );
 
-    public static Command SET_ANGLE_TOLERANCE_COMMAND = new Command(
+    public static final Command SET_ANGLE_TOLERANCE_COMMAND = new Command(
         "setAngleTolerance",
         (pathfinder, args) -> {
             pathfinder.setAngleTolerance(Angle.parse(args[0]));
         }
     );
 
-    public static Command SET_TRANSLATION_COMMAND = new Command(
+    public static final Command SET_TRANSLATION_COMMAND = new Command(
         "setTranslation",
         (pathfinder, args) -> {
             pathfinder.setTranslation(Translation.parse(args[0]));
         }
     );
 
-    public static Command SET_VX_COMMAND = new Command(
+    public static final Command SET_VX_COMMAND = new Command(
         "setVx",
         (pathfinder, args) -> {
             pathfinder.setVx(Double.parseDouble(args[0]));
         }
     );
 
-    public static Command SET_VY_COMMAND = new Command(
+    public static final Command SET_VY_COMMAND = new Command(
         "setVy",
         (pathfinder, args) -> {
             pathfinder.setVy(Double.parseDouble(args[0]));
         }
     );
 
-    public static Command SET_VZ_COMMAND = new Command(
+    public static final Command SET_VZ_COMMAND = new Command(
         "setVz",
         (pathfinder, args) -> {
             pathfinder.setVz(Double.parseDouble(args[0]));

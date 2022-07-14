@@ -10,6 +10,8 @@
 
 package me.wobblyyyy.pathfinder2.utils;
 
+import java.util.Arrays;
+
 public class DoubleQueue {
     private final double[] data;
     private int maxIndex = 0;
@@ -48,9 +50,7 @@ public class DoubleQueue {
     }
 
     public DoubleQueue clear() {
-        for (int i = 0; i < data.length; i++) {
-            data[i] = 0;
-        }
+        Arrays.fill(data, 0);
 
         maxIndex = 0;
 

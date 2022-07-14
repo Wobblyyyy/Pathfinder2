@@ -341,7 +341,6 @@ public class Angle implements Comparable<Angle>, Serializable {
             case '-':
                 builder.append(c);
             default:
-                continue;
         }
 
         return angle(unit, Double.parseDouble(builder.toString()));

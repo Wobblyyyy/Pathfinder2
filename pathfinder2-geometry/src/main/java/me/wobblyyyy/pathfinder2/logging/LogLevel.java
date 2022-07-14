@@ -66,7 +66,7 @@ public enum LogLevel {
      */
     TRACE(0);
 
-    int value;
+    final int value;
 
     LogLevel(int value) {
         this.value = value;

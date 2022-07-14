@@ -19,7 +19,7 @@ public class TickCommands {
 
     private TickCommands() {}
 
-    public static Command TICK_COMMAND = new Command(
+    public static final Command TICK_COMMAND = new Command(
         "tick",
         (pathfinder, args) -> {
             pathfinder.tick();
@@ -27,7 +27,7 @@ public class TickCommands {
         0
     );
 
-    public static Command TICK_UNTIL_COMMAND = new Command(
+    public static final Command TICK_UNTIL_COMMAND = new Command(
         "tickUntil",
         (pathfinder, args) -> {
             if (args.length == 0) {

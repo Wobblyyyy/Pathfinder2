@@ -19,7 +19,7 @@ public class ScriptingCommands {
 
     private ScriptingCommands() {}
 
-    public static Command DEF_COMMAND = new Command(
+    public static final Command DEF_COMMAND = new Command(
         "def",
         (pathfinder, args) -> {
             String name = args[0];

@@ -18,7 +18,7 @@ import me.wobblyyyy.pathfinder2.robot.ImprovedAbstractDrive;
 import me.wobblyyyy.pathfinder2.robot.components.Motor;
 
 /**
- * Tank drive implementation. Makes use of {@link TankDriveKinematics}.
+ * Tank drive implementation. Makes use of {@link TankKinematics}.
  *
  * @author Colin Robertson
  * @since 2.1.1

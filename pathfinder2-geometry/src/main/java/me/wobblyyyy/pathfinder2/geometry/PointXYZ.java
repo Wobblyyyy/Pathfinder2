@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.List;
 import me.wobblyyyy.pathfinder2.logging.Logger;
 import me.wobblyyyy.pathfinder2.math.Equals;
-import me.wobblyyyy.pathfinder2.math.Rounding;
 import me.wobblyyyy.pathfinder2.utils.ArrayUtils;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.utils.ValidationUtils;
@@ -165,7 +164,6 @@ public class PointXYZ extends PointXY {
                 builder.setLength(0);
                 break;
             default:
-                continue;
         }
 
         if (builder.length() != 0) list.add(
@@ -1013,7 +1011,7 @@ public class PointXYZ extends PointXY {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return super.hashCode() + z.hashCode();
     }
 
     @Override

@@ -465,13 +465,9 @@ public class StringUtils {
     public static String wrap(char prefix, char suffix, Object obj) {
         String string = obj.toString();
 
-        StringBuilder builder = new StringBuilder(string.length() + 2);
+        String builder = prefix + string + suffix;
 
-        builder.append(prefix);
-        builder.append(string);
-        builder.append(suffix);
-
-        return builder.toString();
+        return builder;
     }
 
     public static String wrapWithBraces(Object obj) {

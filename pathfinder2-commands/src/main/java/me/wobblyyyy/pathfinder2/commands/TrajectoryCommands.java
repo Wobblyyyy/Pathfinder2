@@ -20,7 +20,7 @@ public class TrajectoryCommands {
 
     private TrajectoryCommands() {}
 
-    public static Command LINEAR_TRAJECTORY_COMMAND = new Command(
+    public static final Command LINEAR_TRAJECTORY_COMMAND = new Command(
         "linearTrajectory",
         (pathfinder, args) -> {
             PointXYZ target = PointXYZ.parse(args[0]);
@@ -40,7 +40,7 @@ public class TrajectoryCommands {
         4
     );
 
-    public static Command FAST_TRAJECTORY_COMMAND = new Command(
+    public static final Command FAST_TRAJECTORY_COMMAND = new Command(
         "fastTrajectory",
         (pathfinder, args) -> {
             PointXYZ initial;

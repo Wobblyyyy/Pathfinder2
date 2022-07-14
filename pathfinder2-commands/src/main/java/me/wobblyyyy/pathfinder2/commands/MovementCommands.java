@@ -22,7 +22,7 @@ public class MovementCommands {
 
     private MovementCommands() {}
 
-    public static Command GO_TO_COMMAND = new Command(
+    public static final Command GO_TO_COMMAND = new Command(
         "goTo",
         (pathfinder, args) -> {
             String string = StringUtils.concat(args);
@@ -56,7 +56,7 @@ public class MovementCommands {
         Integer.MAX_VALUE
     );
 
-    public static Command SPLINE_TO_COMMAND = new Command(
+    public static final Command SPLINE_TO_COMMAND = new Command(
         "splineTo",
         (pathfinder, args) -> {
             double speed = pathfinder.getSpeed();
@@ -86,7 +86,7 @@ public class MovementCommands {
         Integer.MAX_VALUE
     );
 
-    public static Command GO_TO_X_COMMAND = new Command(
+    public static final Command GO_TO_X_COMMAND = new Command(
         "",
         (pathfinder, args) -> {
             pathfinder.goTo(
@@ -96,7 +96,7 @@ public class MovementCommands {
         1
     );
 
-    public static Command GO_TO_Y_COMMAND = new Command(
+    public static final Command GO_TO_Y_COMMAND = new Command(
         "",
         (pathfinder, args) -> {
             pathfinder.goTo(
@@ -106,7 +106,7 @@ public class MovementCommands {
         1
     );
 
-    public static Command GO_TO_Z_COMMAND = new Command(
+    public static final Command GO_TO_Z_COMMAND = new Command(
         "",
         (pathfinder, args) -> {
             pathfinder.goTo(

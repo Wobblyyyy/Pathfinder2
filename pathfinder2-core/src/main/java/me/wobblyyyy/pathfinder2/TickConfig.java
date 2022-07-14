@@ -28,10 +28,14 @@ import java.util.function.Supplier;
 public class TickConfig {
     private double delayMs = 0;
     private double timeoutMs = Double.MAX_VALUE;
-    private List<Supplier<Boolean>> shouldContinueRunning = new ArrayList<>(3);
-    private List<Supplier<Boolean>> shouldStopRunning = new ArrayList<>(3);
-    private List<Runnable> onTick = new ArrayList<>(3);
-    private List<Runnable> onFinish = new ArrayList<>(3);
+    private final List<Supplier<Boolean>> shouldContinueRunning = new ArrayList<>(
+        3
+    );
+    private final List<Supplier<Boolean>> shouldStopRunning = new ArrayList<>(
+        3
+    );
+    private final List<Runnable> onTick = new ArrayList<>(3);
+    private final List<Runnable> onFinish = new ArrayList<>(3);
 
     /**
      * Set the configuration's delay, in milliseconds. The default delay is

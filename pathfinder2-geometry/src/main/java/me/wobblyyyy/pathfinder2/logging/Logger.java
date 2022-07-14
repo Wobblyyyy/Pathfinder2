@@ -51,7 +51,7 @@ import me.wobblyyyy.pathfinder2.utils.StringUtils;
  */
 public class Logger {
     private static LogLevel loggingLevel = LogLevel.WARN;
-    private static Map<Object, String> map = new HashMap<>();
+    private static final Map<Object, String> map = new HashMap<>();
     private static boolean arePathfinderLogsEnabled = true;
 
     /**

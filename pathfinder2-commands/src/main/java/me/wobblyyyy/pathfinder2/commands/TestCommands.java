@@ -18,7 +18,7 @@ public class TestCommands {
 
     private TestCommands() {}
 
-    public static Command ASSERT_IS_NEAR_COMMAND = new Command(
+    public static final Command ASSERT_IS_NEAR_COMMAND = new Command(
         "assertIsNear",
         (pathfinder, args) -> {
             PointXYZ target = PointXYZ.parse(args[0]);

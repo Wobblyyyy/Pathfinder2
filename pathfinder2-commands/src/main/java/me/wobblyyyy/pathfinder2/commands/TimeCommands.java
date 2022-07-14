@@ -17,7 +17,7 @@ public class TimeCommands {
 
     private TimeCommands() {}
 
-    public static Command WAIT_COMMAND = new Command(
+    public static final Command WAIT_COMMAND = new Command(
         "wait",
         (pathfinder, args) -> {
             double time = Double.parseDouble(args[0]);
