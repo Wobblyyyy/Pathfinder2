@@ -58,7 +58,7 @@ public class ExampleThreeWheelOdometry {
         // provide the encoder's count. note that leftEncoder, rightEncoder,
         // and centerEncoder must all be initialized, or a NullPointerException
         // will show up whenever trying to determine the robot's position.
-        // 
+        //
         // specifically in FTC, it is likely easier to not use the Encoder
         // interface provided with Pathfinder, and rather get values directly
         // from the motors, like so:
