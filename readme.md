@@ -1,20 +1,10 @@
 <h2 align="center">Important Notice</h2>
 
-Hi there! At the time of writing this, I'm now enrolled in university, studying
-computer engineering and computer science. Such, I don't have very much time,
-and especially not enough to maintain a project of this size. I hate to say it,
-but this project will likely remain dormant until either (a) I have enough time
-to maintain it or (b) someone else comes along and wants to continue the
-project.
+This project is no longer actively being developed. If anyone is interested in
+continuing the development of this project, please let me know!
 
-If anyone is interested in possibly maintaining or continuing this project,
-please let me know! Additionally, if you end up using this project in your code
-and need support, I'd be glad to answer any questions. This is the largest solo
-project I've worked on, and I'm content with how it turned out, although I do
-wish I had more time to improve documentation and flesh out some details.
-
-You can reach me through Discord (`wobblyyyy#6733`) or e-mail
-(`carobertson1000@gmail.com`).
+I'd be happy to help you with using this project. You can reach me through
+Discord (`wobblyyyy#6733`) or e-mail (`carobertson1000@gmail.com`).
 
 <p align="center">
 <img src="media/pathfinder2-logo.png" alt="Pathfinder2">
